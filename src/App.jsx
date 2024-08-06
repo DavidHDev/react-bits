@@ -8,7 +8,7 @@ export default function App() {
       <div className='app-container'>
         <Sidebar />
         <Routes>
-          <Route path="/" element={<Navigate to="/text-animations/split-text" />} />
+          <Route exact path="/" element={<Navigate to="/text-animations/split-text" />} />
           <Route path="/:category/:subcategory" element={<CategoryPage />} />
         </Routes>
       </div>
