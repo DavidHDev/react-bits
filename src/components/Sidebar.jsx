@@ -31,27 +31,21 @@ const Sidebar = () => {
 
   return (
     <>
-      <div>
-        <IconButton
-          ref={btnRef}
-          icon={<HamburgerIcon />}
-          onClick={() => setDrawerOpen(true)}
-          display={{ md: 'none' }}
-          position="fixed"
-          top="1rem"
-          left="1rem"
-          zIndex="overlay"
-        />
-        <Image
-          position="fixed"
-          src={Logo}
-          width="75px"
-          top="1.5rem"
-          left="4.5rem"
-        >
-
-        </Image>
-      </div>
+      <Box position="fixed" top={0} zIndex="overlay" p={"1em"} w={"100%"} bgColor={'#000'}>
+        <Flex alignItems="center" gap={"1em"}>
+          <IconButton
+            ref={btnRef}
+            icon={<HamburgerIcon />}
+            onClick={() => setDrawerOpen(true)}
+            display={{ md: 'none' }}
+          />
+          <Image
+            src={Logo}
+            width="75px"
+          >
+          </Image>
+        </Flex>
+      </Box>
 
       <Drawer
         isOpen={isDrawerOpen}
@@ -69,7 +63,7 @@ const Sidebar = () => {
           <DrawerBody>
             <VStack align="stretch" spacing={5} mt={10}>
               {CATEGORIES.map(category => (
-                <Category key={category.name} category={category} hoverColor={linkHoverColor} handleClick={() => setDrawerOpen(false)}/>
+                <Category key={category.name} category={category} hoverColor={linkHoverColor} handleClick={() => setDrawerOpen(false)} />
               ))}
             </VStack>
           </DrawerBody>
