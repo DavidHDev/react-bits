@@ -1,5 +1,4 @@
 import { Box } from "@chakra-ui/react";
-
 import { useState } from "react";
 import { BlurText } from "../content/TextAnimations/BlurText/BlurText";
 import { CODE_EXAMPLES } from "../constants/ExampleConstants";
