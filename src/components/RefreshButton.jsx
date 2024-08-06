@@ -9,9 +9,9 @@ const RefreshButton = ({ onClick }) => {
       top={3}
       right={3}
       rounded="xl"
-      backgroundColor='#00F0FF'
+      backgroundColor='#fff'
       color="black"
-      _hover={{ backgroundColor: '#00F0FF' }}
+      _hover={{ backgroundColor: '#fff' }}
       _active={{ backgroundColor: '#00F0FF' }}
       transition="background-color 0.3s ease"
       onClick={onClick}

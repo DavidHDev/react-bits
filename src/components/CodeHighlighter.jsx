@@ -2,7 +2,7 @@ import { Box, Button } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
-import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { synthwave84 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const CodeHighlighter = ({ language, codeString, showLineNumbers = true }) => {
   const [copied, setCopied] = useState(false);
@@ -19,7 +19,7 @@ const CodeHighlighter = ({ language, codeString, showLineNumbers = true }) => {
 
   return (
     <Box position="relative" mb={5}>
-      <SyntaxHighlighter language={language} style={dracula} showLineNumbers={showLineNumbers} className="code-highlighter">
+      <SyntaxHighlighter language={language} style={synthwave84} showLineNumbers={showLineNumbers} className="code-highlighter">
         {codeString}
       </SyntaxHighlighter>
       <Button
