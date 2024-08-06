@@ -1,6 +1,8 @@
-# Welcome to React Bits!
 
+<div align="center">
+# Welcome to React Bits!
 Your go-to for animated React components, and other goodies!
+</div>
 
 <div align="center">
 	<br>
