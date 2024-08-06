@@ -8,10 +8,10 @@ const CodeExample = ({ codeObject }) => {
         const key = value[0];
         const codeString = value[1];
         return (
-          <>
+          <div key={codeString}>
             <h2 className="demo-title">{key}</h2>
-            <CodeHighlighter key={codeString} language={getLanguage(key)} codeString={codeString} />
-          </>
+            <CodeHighlighter language={getLanguage(key)} codeString={codeString} />
+          </div>
         )
       })}
     </>

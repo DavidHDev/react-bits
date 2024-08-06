@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-  border-right: 1px solid #fff;
+  border-right: 1px solid #ffffff17;
 }
 
 .sidebar-logo {
@@ -19,4 +19,19 @@
     left: -3px;
     width: 120px;
   }
+}
+
+.active-sidebar-item {
+  background-color: #111;
+  border: 1px solid #ffffff17;
+  border-radius: 10px;
+  color: #00f0ff;
+  padding: .5em .5em .5em .7em;
+  transition: padding .3s ease;
+}
+
+.sidebar-item {
+  padding: .5em;
+  border: 1px solid transparent;
+  transition: padding .5s ease, background-color .5s ease, border .5s ease;
 }

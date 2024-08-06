@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // Assuming you have the logo imported already
 import Logo from '../assets/bits-logo.svg';
@@ -28,6 +28,8 @@ const Sidebar = () => {
   const sidebarBgColor = useColorModeValue('gray.100', 'black');
   const linkHoverColor = useColorModeValue('gray.800', 'gray');
   const btnRef = useRef();
+
+  const location = useLocation(); // Get the current location;
 
   return (
     <>
@@ -62,7 +64,7 @@ const Sidebar = () => {
           <DrawerBody>
             <VStack align="stretch" spacing={5} mt={10}>
               {CATEGORIES.map(category => (
-                <Category key={category.name} category={category} hoverColor={linkHoverColor} handleClick={() => setDrawerOpen(false)} />
+                <Category key={category.name} category={category} hoverColor={linkHoverColor} location={location} handleClick={() => setDrawerOpen(false)} />
               ))}
             </VStack>
           </DrawerBody>
@@ -74,7 +76,7 @@ const Sidebar = () => {
         </Flex>
         <VStack align="stretch" spacing={5}>
           {CATEGORIES.map(category => (
-            <Category key={category.name} category={category} hoverColor={linkHoverColor} />
+            <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />
           ))}
         </VStack>
       </Box>
@@ -82,7 +84,7 @@ const Sidebar = () => {
   );
 };
 
-const Category = ({ category, handleClick }) => {
+const Category = ({ category, handleClick, location }) => {
   // Function to format the string for URLs by replacing spaces with dashes
   const formatForURL = (str) => str.replace(/\s+/g, '-').toLowerCase();
 
@@ -90,11 +92,16 @@ const Category = ({ category, handleClick }) => {
     <Box>
       <Text className='category-name' mb={2}>{category.name}</Text>
       <Stack spacing={1} pl={4}>
-        {category.subcategories.map(sub => (
-          <Link key={sub} to={`/${formatForURL(category.name)}/${formatForURL(sub)}`} style={{ padding: '4px' }} onClick={handleClick}>
-            {sub}
-          </Link>
-        ))}
+        {category.subcategories.map(sub => {
+          const path = `/${formatForURL(category.name)}/${formatForURL(sub)}`;
+          const isActive = location.pathname === path; // Determine if this is the active link
+          return (
+            <Link className={isActive ? 'active-sidebar-item' : 'sidebar-item'} key={sub} to={`/${formatForURL(category.name)}/${formatForURL(sub)}`} onClick={handleClick}>
+              {sub}
+            </Link>
+          )
+        }
+        )}
       </Stack>
     </Box>
   );
