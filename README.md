@@ -26,7 +26,7 @@ Your go-to for animated React components, and other goodies!
 The setup for this project is very straightforward <br>
 <br>
 
-#### Clone The Project
+#### Clone The Project (fork for contributions)
 
 ```sh
 git clone https://github.com/DavidHDev/react-bits.git .
