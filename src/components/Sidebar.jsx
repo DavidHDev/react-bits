@@ -95,7 +95,7 @@ const Sidebar = () => {
             <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />
           ))}
         </VStack>
-        <Divider mb={5} />
+        <Divider my={5} />
         <Button
           as="a"
           href="https://github.com/DavidHDev/react-bits" // Replace with your GitHub URL
