@@ -8,7 +8,8 @@ Your go-to for animated React components, and other goodies!
 	<img src="./src/assets/bits-logo.svg" alt="react-haiku" height="200">
 	<br>
 	<br>
-	<b>A clean & lightweight collection of React Hooks & Utilities!</b>
+	<b>Plural noun: "bits" - a small piece, part, or quantity of something.</b>
+	<b>In our case - React Snippets For Components & More!</b>
 	<br>
 	<br>
 	<br>
