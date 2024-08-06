@@ -31,13 +31,12 @@ const Sidebar = () => {
 
   return (
     <>
-      <Box position="fixed" top={0} zIndex="overlay" p={"1em"} w={"100%"} bgColor={'#000'}>
+      <Box display={{ md: 'none' }} position="fixed" top={0} zIndex="overlay" p={"1em"} w={"100%"} bgColor={'#000'}>
         <Flex alignItems="center" gap={"1em"}>
           <IconButton
             ref={btnRef}
             icon={<HamburgerIcon />}
             onClick={() => setDrawerOpen(true)}
-            display={{ md: 'none' }}
           />
           <Image
             src={Logo}
