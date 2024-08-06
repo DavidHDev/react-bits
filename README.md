@@ -8,11 +8,6 @@ Your go-to for animated React components, and other goodies!
 	<img src="./src/assets/bits-logo.svg" alt="react-haiku" height="200">
 	<br>
 	<br>
-	<b>React code snippets</b>
-	<br>
-	<br>
-	<br>
-	<br>
 	<hr>
 </div>
 
