@@ -13,6 +13,8 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Image,
+  Button,
+  Divider,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
@@ -20,6 +22,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 // Assuming you have the logo imported already
 import Logo from '../assets/bits-logo.svg';
+import GitHub from '../assets/github.svg';
 import { useRef, useState } from 'react';
 import { CATEGORIES } from '../constants/CategoryConstants';
 
@@ -67,6 +70,19 @@ const Sidebar = () => {
                 <Category key={category.name} category={category} hoverColor={linkHoverColor} location={location} handleClick={() => setDrawerOpen(false)} />
               ))}
             </VStack>
+            <Button
+              as="a"
+              href="https://github.com/DavidHDev/react-bits" // Replace with your GitHub URL
+              target="_blank"
+              rel="noopener noreferrer"
+              bgColor={"white"}
+              color={"black"}
+              className='github-button'
+              width="100%"
+            >
+              <Image width={25} src={GitHub} mr={2} />
+              GitHub
+            </Button>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
@@ -79,6 +95,20 @@ const Sidebar = () => {
             <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />
           ))}
         </VStack>
+        <Divider mb={5} />
+        <Button
+          as="a"
+          href="https://github.com/DavidHDev/react-bits" // Replace with your GitHub URL
+          target="_blank"
+          rel="noopener noreferrer"
+          bgColor={"white"}
+          color={"black"}
+          className='github-button'
+          width="100%"
+        >
+          <Image width={25} src={GitHub} mr={2} />
+          GitHub
+        </Button>
       </Box>
     </>
   );

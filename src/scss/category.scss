@@ -15,14 +15,16 @@
     text-transform: uppercase;
     opacity: 0.5;
     letter-spacing: -0.5px;
-    font-size: 2rem;
+    font-size: 1.4rem;
+    font-weight: 300;
     margin: 0;
   }
 
   .sub-category {
     line-height: 1em;
     font-size: 6rem;
-    font-weight: bolder;
+    color: #00f0ff;
+    font-weight: 900;
   }
 }
 
@@ -34,7 +36,7 @@
 
 .demo-container {
   width: 100%;
-  margin-top: 2em;
+  margin-top: 1em;
   background-color: #111;
   border: 1px solid #ffffff17;
   padding: 1em;
@@ -53,7 +55,7 @@
 .demo-title {
   font-weight: bolder;
   margin-top: 0.5em;
-  font-size: 3rem;
+  font-size: 2rem;
 
   &::first-letter {
     text-transform: uppercase;

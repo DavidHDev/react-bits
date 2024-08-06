@@ -26,17 +26,42 @@
   border: 1px solid #ffffff17;
   border-radius: 10px;
   color: #00f0ff;
-  padding: .5em .5em .5em .7em;
-  transition: padding .3s ease;
+  padding: 0.5em 0.5em 0.5em 0.7em;
+  transition: padding 0.3s ease;
 }
 
 .sidebar-item {
-  padding: .5em;
+  padding: 0.5em;
   border: 1px solid transparent;
-  transition: opacity .3s ease, padding .5s ease, background-color .5s ease, border .5s ease;
+  transition:
+    opacity 0.3s ease,
+    padding 0.5s ease,
+    background-color 0.5s ease,
+    border 0.5s ease;
 
   &:hover {
     opacity: 0.5;
-    transition: .3s ease;
+    transition: 0.3s ease;
+  }
+}
+
+.github-button {
+  border: 1px solid transparent;
+  transition: 0.3s ease;
+
+  img {
+    transition: 0.3s ease;
+  }
+
+  &:hover {
+    border: 1px solid #fff;
+    background-color: #000 !important;
+    color: #fff;
+    transition: 0.3s ease;
+
+    img {
+      filter: invert(100%);
+      transition: 0.3s ease;
+    }
   }
 }
