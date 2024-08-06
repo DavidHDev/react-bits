@@ -33,5 +33,10 @@
 .sidebar-item {
   padding: .5em;
   border: 1px solid transparent;
-  transition: padding .5s ease, background-color .5s ease, border .5s ease;
+  transition: opacity .3s ease, padding .5s ease, background-color .5s ease, border .5s ease;
+
+  &:hover {
+    opacity: 0.5;
+    transition: .3s ease;
+  }
 }

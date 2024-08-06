@@ -74,7 +74,7 @@ const Sidebar = () => {
         <Flex justify="start" align="center" mb={10} className='sidebar-logo'>
           <img src={Logo} alt="Company Logo" />
         </Flex>
-        <VStack align="stretch" spacing={5}>
+        <VStack align="stretch" spacing={4}>
           {CATEGORIES.map(category => (
             <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />
           ))}
@@ -91,7 +91,7 @@ const Category = ({ category, handleClick, location }) => {
   return (
     <Box>
       <Text className='category-name' mb={2}>{category.name}</Text>
-      <Stack spacing={1} pl={4}>
+      <Stack spacing={1} pl={2}>
         {category.subcategories.map(sub => {
           const path = `/${formatForURL(category.name)}/${formatForURL(sub)}`;
           const isActive = location.pathname === path; // Determine if this is the active link
