@@ -1,0 +1,69 @@
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.main > div {
+  position: absolute;
+  will-change: transform;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  opacity: 0.6;
+}
+
+.main > div:nth-child(1) {
+  width: 60px;
+  height: 60px;
+}
+
+.main > div:nth-child(2) {
+  width: 125px;
+  height: 125px;
+}
+
+.main > div:nth-child(3) {
+  width: 75px;
+  height: 75px;
+}
+
+.main > div::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.main > div:nth-child(2)::after {
+  top: 35px;
+  left: 35px;
+  width: 35px;
+  height: 35px;
+}
+
+.main > div:nth-child(3)::after {
+  top: 25px;
+  left: 25px;
+  width: 25px;
+  height: 25px;
+}
+
+.main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: url("#blob");
+  overflow: hidden;
+  background: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}

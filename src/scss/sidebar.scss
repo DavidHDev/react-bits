@@ -1,0 +1,22 @@
+.sidebar,
+.sidebar-mobile {
+  background-color: #000 !important;
+  min-width: 300px;
+}
+
+.sidebar {
+  border-right: 1px solid #fff;
+}
+
+.sidebar-logo {
+  margin-top: 1em;
+  border-radius: 20px;
+  border-bottom: none;
+  width: 100%;
+
+  img {
+    position: relative;
+    left: -3px;
+    width: 120px;
+  }
+}
