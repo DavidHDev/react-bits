@@ -70,6 +70,7 @@ const Sidebar = () => {
                 <Category key={category.name} category={category} hoverColor={linkHoverColor} location={location} handleClick={() => setDrawerOpen(false)} />
               ))}
             </VStack>
+            <Divider my={5} />
             <Button
               as="a"
               href="https://github.com/DavidHDev/react-bits" // Replace with your GitHub URL
@@ -79,6 +80,7 @@ const Sidebar = () => {
               color={"black"}
               className='github-button'
               width="100%"
+              mb={"5em"}
             >
               <Image width={25} src={GitHub} mr={2} />
               GitHub
