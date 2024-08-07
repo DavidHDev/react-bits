@@ -65,7 +65,7 @@
 .demo-details {
   font-size: 1.6rem;
   margin-bottom: 1em;
-  margin-top: 2em;
+  margin-top: 1em;
 
   span {
     background-color: #00f0ff;
@@ -75,6 +75,14 @@
     font-size: 1.2rem;
     padding: 0.2em 0.3em;
   }
+}
+
+.demo-extra-info {
+  margin-top: 1em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: #999;
 }
 
 @media only screen and (max-width: 767px) {
