@@ -1,0 +1,32 @@
+.stack {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.stack > div {
+  background-size: auto 85%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 45vh;
+  max-width: 300px;
+  height: 85vh;
+  max-height: 285px;
+  will-change: transform;
+  user-select: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 50px rgba(129, 129, 129, 0.1);
+
+  &:hover {
+    cursor: grab;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
