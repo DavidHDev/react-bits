@@ -42,8 +42,6 @@ const LandingPage = () => {
             px={6}
             fontSize={14}
             letterSpacing={'-.4px'}
-            target="_blank"
-            rel="noopener noreferrer"
             bgColor={"white"}
             to="/text-animations/split-text"
             color={"black"}
