@@ -21,7 +21,6 @@
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.26.0",
     "react-syntax-highlighter": "^15.5.0",
-    "react-use-measure": "^2.1.1",
     "sass": "^1.77.8"
   },
   "devDependencies": {

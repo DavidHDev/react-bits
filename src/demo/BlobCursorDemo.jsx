@@ -14,7 +14,7 @@ const BlobCursorDemo = () => {
       </Box>
 
       <p className="demo-details">
-        This component uses <span>@react-spring/web</span> and <span>react-use-measure</span> for the animation.
+        This component uses <span>@react-spring/web</span> for the animation.
       </p>
 
       <CodeExample codeObject={blobCursor} />
