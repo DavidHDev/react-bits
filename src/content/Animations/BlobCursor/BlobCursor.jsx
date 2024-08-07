@@ -41,6 +41,20 @@ export default function BlobCursor() {
     };
   }, [updatePosition]);
 
+  useEffect(() => {
+    const mainElement = ref.current;
+
+    if (mainElement) {
+      mainElement.addEventListener('mousemove', handleMove);
+      mainElement.addEventListener('touchmove', handleMove);
+
+      return () => {
+        mainElement.removeEventListener('mousemove', handleMove);
+        mainElement.removeEventListener('touchmove', handleMove);
+      };
+    }
+  }, [handleMove]);
+
   return (
     <div className='container'>
       <svg style={{ position: 'absolute', width: 0, height: 0 }}>
@@ -55,8 +69,6 @@ export default function BlobCursor() {
       <div
         ref={ref}
         className='main'
-        onMouseMove={handleMove}
-        onTouchMove={handleMove}
       >
         {trail.map((props, index) => (
           <animated.div key={index} style={{ transform: props.xy.to(trans) }} />
