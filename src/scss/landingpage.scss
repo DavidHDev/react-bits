@@ -125,6 +125,16 @@
   }
 }
 
+.component-card {
+  background: transparent;
+  transition: 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease;
+  }
+}
+
 .component-subtitle {
   font-size: 14px;
   color: #999;

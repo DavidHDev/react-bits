@@ -37,7 +37,7 @@ const LandingPage = () => {
         </Text>
         <Flex gap={4} direction={{ base: 'column', sm: 'row' }}>
           <Button
-            as="a"
+            as={Link}
             h={'36px'}
             px={6}
             fontSize={14}
@@ -45,13 +45,12 @@ const LandingPage = () => {
             target="_blank"
             rel="noopener noreferrer"
             bgColor={"white"}
+            to="/text-animations/split-text"
             color={"black"}
             className="get-started-button"
             width="100%"
           >
-            <Link to="/text-animations/split-text">
-              Get Started
-            </Link>
+            Get Started
           </Button>
           <Button
             as="a"
@@ -71,7 +70,7 @@ const LandingPage = () => {
           >
             <Image src={GitHub} filter={"invert(100%)"} w={'16px'} mr={1} />
             GitHub
-            <StarIcon color={"#00f0ff"} boxSize={3} ml={4} mr={1} position="relative" top="-.5px"/>
+            <StarIcon color={"#00f0ff"} boxSize={3} ml={4} mr={1} position="relative" top="-.5px" />
             {stars ? <BlurText delay={20} text={String(stars)} /> : <Box><Spinner boxSize={2} /></Box>}
           </Button>
         </Flex>
@@ -93,15 +92,15 @@ const LandingPage = () => {
                 as={Link}
                 to={path}
                 key={`${category.name}-${index}`}
-                bg="black"
                 minW={250}
                 minH={190}
                 color="white"
-                boxShadow="md"
-                transition="background-color 0.2s"
+                className="component-card"
               >
                 <Flex direction="column" h={"100%"} justifyContent="flex-end">
-                  <Box width={"100%"} h={150} borderRadius="2xl" bg={gradientBackground} />
+                  <Box width={"100%"} h={150} borderRadius="2xl" bg={gradientBackground}>
+
+                  </Box>
                   <Text className="component-title" letterSpacing="-1px" mt={2} fontSize="l" fontWeight="500">
                     <span>&lt;</span>{componentString} <span>/&gt;</span>
                   </Text>

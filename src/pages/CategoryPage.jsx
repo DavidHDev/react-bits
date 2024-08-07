@@ -1,22 +1,9 @@
 import { useParams } from 'react-router-dom';
-import SplitTextDemo from '../demo/SplitTextDemo';
-import BlurTextDemo from '../demo/BlurTextDemo';
-import BlobCursorDemo from '../demo/BlobCursorDemo';
 import { Helmet } from 'react-helmet-async';
-import WaveTextDemo from '../demo/WaveTextDemo';
-import AnimatedContainerDemo from '../demo/AnimatedContainerDemo';
+import { componentMap } from '../constants/ComponentMap';
 
 const CategoryPage = () => {
   const { category, subcategory } = useParams(); // Extract category and subcategory from the URL
-
-  const componentMap = {
-    'split-text': SplitTextDemo,
-    'blur-text': BlurTextDemo,
-    'blob-cursor': BlobCursorDemo,
-    'wave-text': WaveTextDemo,
-    'animated-container': AnimatedContainerDemo
-    // Map other subcategories to their components here
-  };
 
   const decodeLabel = (label) => label
     .split('-')

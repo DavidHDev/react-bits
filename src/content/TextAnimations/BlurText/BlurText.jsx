@@ -3,7 +3,7 @@ import { useSprings, animated } from '@react-spring/web';
 
 import './BlurText.scss';
 
-export const BlurText = ({ text, delay = 200, className = '' }) => {
+export const BlurText = ({ text = 'Hello', delay = 200, className = '' }) => {
   const words = text.split(' ');
   const [inView, setInView] = useState(false);
   const ref = useRef();

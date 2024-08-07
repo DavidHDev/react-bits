@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import './SplitText.scss';
 
-export const SplitText = ({ text, className = '', delay = 100 }) => {
+export const SplitText = ({ text = 'Hello', className = '', delay = 100 }) => {
   const letters = text.split('');
   const [inView, setInView] = useState(false);
   const ref = useRef();
