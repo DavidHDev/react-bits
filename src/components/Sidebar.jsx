@@ -11,18 +11,15 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   Image,
-  Button,
-  Divider,
+  Divider
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 import { Link, useLocation } from 'react-router-dom';
 
 // Assuming you have the logo imported already
 import Logo from '../assets/bits-logo.svg';
-import GitHub from '../assets/github.svg';
 import { useRef, useState } from 'react';
 import { CATEGORIES } from '../constants/CategoryConstants';
 
@@ -38,79 +35,55 @@ const Sidebar = () => {
     <>
       <Box display={{ md: 'none' }} position="fixed" top={0} zIndex="overlay" p={"1em"} w={"100%"} bgColor={'#000'}>
         <Flex alignItems="center" gap={"1em"}>
-          <IconButton
-            ref={btnRef}
-            icon={<HamburgerIcon />}
-            onClick={() => setDrawerOpen(true)}
-          />
-          <Image
-            src={Logo}
-            width="75px"
-          >
-          </Image>
+          <IconButton ref={btnRef} icon={<HamburgerIcon />} onClick={() => setDrawerOpen(true)} />
+          <Link to="/">
+            <Image src={Logo} height="25px" />
+          </Link>
         </Flex>
       </Box>
 
-      <Drawer
-        isOpen={isDrawerOpen}
-        placement="left"
-        onClose={() => setDrawerOpen(false)}
-        finalFocusRef={btnRef}
-        size="full"
-      >
+      <Drawer isOpen={isDrawerOpen} placement="left" onClose={() => setDrawerOpen(false)} finalFocusRef={btnRef} size="full">
         <DrawerOverlay />
         <DrawerContent className='sidebar-mobile'>
-          <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px" className='sidebar-logo'>
-            <img src={Logo} alt="Company Logo" />
+          <DrawerHeader py={0} h={"72px"} borderBottomWidth="1px" className='sidebar-logo'>
+            <Flex alignItems="center">
+              <IconButton
+                size="md"
+                icon={<CloseIcon boxSize={3} />}
+                aria-label="Close Menu"
+                onClick={() => setDrawerOpen(false)}
+              />
+              <Link to="/">
+                <Image height="25px" src={Logo} alt="Bits Logo" />
+              </Link>
+            </Flex>
           </DrawerHeader>
-          <DrawerBody>
-            <VStack align="stretch" spacing={5} mt={10}>
+          <DrawerBody pb={'6em'}>
+            <VStack align="stretch" spacing={5} mt={8}>
               {CATEGORIES.map(category => (
                 <Category key={category.name} category={category} hoverColor={linkHoverColor} location={location} handleClick={() => setDrawerOpen(false)} />
               ))}
             </VStack>
-            <Divider my={5} />
-            <Button
-              as="a"
-              href="https://github.com/DavidHDev/react-bits" // Replace with your GitHub URL
-              target="_blank"
-              rel="noopener noreferrer"
-              bgColor={"white"}
-              color={"black"}
-              className='github-button'
-              width="100%"
-              mb={"5em"}
-            >
-              <Image width={25} src={GitHub} mr={2} />
-              GitHub
-            </Button>
+            <Divider my={4} />
+            <p className='useful-links'>Useful Links</p>
+            <Flex direction="column">
+              <Link className="nav-link mobile-nav-link" to="https://github.com/DavidHDev/react-bits" target='_blank' display="block" mb={2} onClick={() => setDrawerOpen(false)}>
+                GitHub<ArrowForwardIcon boxSize={7} transform={"rotate(-45deg)"} position="relative" top="-1px" />
+              </Link>
+              <Link className="nav-link mobile-nav-link" to="https://davidhaz.com/" target='_blank' display="block" mb={2} onClick={() => setDrawerOpen(false)}>
+                Who made this?<ArrowForwardIcon boxSize={7} transform={"rotate(-45deg)"} position="relative" top="-1px" />
+              </Link>
+            </Flex>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-      <Box as="nav" pos="relative" left="0" top="0" height="100vh" className='sidebar' overflowY="auto" bg={sidebarBgColor} w={{ base: 0, md: 60 }} p={5} display={{ base: 'none', md: 'block' }}>
-        <Flex justify="start" align="center" mb={10} className='sidebar-logo'>
-          <img src={Logo} alt="Company Logo" />
-        </Flex>
-        <VStack align="stretch" spacing={4}>
+
+      <Box as="nav" pos="relative" left="0" height="100vh" className='sidebar' overflowY="auto" bg={sidebarBgColor} w={{ base: 0, md: 60 }} p={5} display={{ base: 'none', md: 'block' }}>
+        <VStack align="stretch" spacing={4} mt={{ base: 0, md: '57px' }}>
           {CATEGORIES.map(category => (
             <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />
           ))}
         </VStack>
-        <Divider my={5} />
-        <Button
-          as="a"
-          href="https://github.com/DavidHDev/react-bits" // Replace with your GitHub URL
-          target="_blank"
-          rel="noopener noreferrer"
-          bgColor={"white"}
-          color={"black"}
-          className='github-button'
-          width="100%"
-        >
-          <Image width={25} src={GitHub} mr={2} />
-          GitHub
-        </Button>
       </Box>
     </>
   );

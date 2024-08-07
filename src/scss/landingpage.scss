@@ -1,0 +1,131 @@
+.landing-menu-close {
+  position: relative;
+  top: 6px !important;
+  right: 1.5em !important;
+  background-color: #111 !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.nav-link {
+  transition: 0.3s ease;
+
+  svg {
+    transition: 0.3s ease;
+  }
+
+  &:hover {
+    opacity: 0.7;
+    transition: 0.3s ease;
+
+    svg {
+      transform: rotate(0deg);
+      transition: 0.3s ease;
+    }
+  }
+}
+
+.mobile-nav-link {
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.useful-links {
+  opacity: 0.5;
+  text-transform: uppercase;
+}
+
+.nav-divider {
+  margin: 1em 0;
+}
+
+.landing-text {
+  font-weight: 600;
+  color: hsl(0deg 0% 100% / 70%);
+  font-size: 1.125rem;
+
+  span {
+    color: #fff;
+    text-decoration: underline;
+  }
+}
+
+.landing-main {
+  overflow: hidden;
+}
+
+.landing-main-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  opacity: 0.1;
+  background-color: #999;
+  background-image: repeating-radial-gradient(circle at -50% 0, transparent 0, #999 100px),
+    repeating-linear-gradient(#999, #111);
+
+  &::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 9;
+    left: 0;
+    top: 0;
+    background-image: linear-gradient(to bottom, #000, #00000026);
+  }
+}
+
+.landing-gray-overlay {
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  position: absolute;
+  z-index: 0;
+  mix-blend-mode: overlay;
+  background: radial-gradient(circle at center bottom, #00f0ff, /* Starting color */ rgba(0, 0, 0, 0) 50%);
+}
+
+.get-started-button {
+  font-weight: 600 !important;
+
+  &:hover {
+    background-color: #fff !important;
+    opacity: 0.9;
+  }
+}
+
+.github-button-landing {
+  font-weight: 6500 !important;
+}
+
+.blob {
+  position: absolute;
+  opacity: 1;
+  mix-blend-mode: overlay;
+  width: 600px;
+}
+
+.components-title {
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-size: 2rem;
+}
+
+.component-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.component-title {
+  span {
+    color: #999;
+  }
+}
+
+.component-subtitle {
+  font-size: 14px;
+  color: #999;
+}

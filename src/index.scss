@@ -1,7 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
-@import url('./scss/sidebar.scss');
-@import url('./scss/category.scss');
+@import url("./scss/sidebar.scss");
+@import url("./scss/category.scss");
+@import url("./scss/landingpage.scss");
+
+@import url("./content/TextAnimations/SplitText/SplitText.scss");
+@import url("./content/TextAnimations/BlurText/BlurText.scss");
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
