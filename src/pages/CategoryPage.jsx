@@ -4,6 +4,7 @@ import BlurTextDemo from '../demo/BlurTextDemo';
 import BlobCursorDemo from '../demo/BlobCursorDemo';
 import { Helmet } from 'react-helmet-async';
 import WaveTextDemo from '../demo/WaveTextDemo';
+import AnimatedContainerDemo from '../demo/AnimatedContainerDemo';
 
 const CategoryPage = () => {
   const { category, subcategory } = useParams(); // Extract category and subcategory from the URL
@@ -12,7 +13,8 @@ const CategoryPage = () => {
     'split-text': SplitTextDemo,
     'blur-text': BlurTextDemo,
     'blob-cursor': BlobCursorDemo,
-    'wave-text': WaveTextDemo
+    'wave-text': WaveTextDemo,
+    'animated-container': AnimatedContainerDemo
     // Map other subcategories to their components here
   };
 
