@@ -71,7 +71,7 @@ const LandingPage = () => {
           >
             <Image src={GitHub} filter={"invert(100%)"} w={'16px'} mr={1} />
             GitHub
-            <StarIcon color={"#00f0ff"} boxSize={3} ml={4} mr={1} />
+            <StarIcon color={"#00f0ff"} boxSize={3} ml={4} mr={1} position="relative" top="-.5px"/>
             {stars ? <BlurText delay={20} text={String(stars)} /> : <Box><Spinner boxSize={2} /></Box>}
           </Button>
         </Flex>
