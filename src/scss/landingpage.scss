@@ -129,13 +129,34 @@
   background: transparent;
   transition: 0.3s ease;
 
+  img {
+    transition: 0.5s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
   &:hover {
     transform: scale(1.05);
     transition: 0.3s ease;
+
+    img {
+      transform: scale(0.8);
+      transition: 0.5s ease;
+    }
   }
 }
 
 .component-subtitle {
   font-size: 14px;
   color: #999;
+}
+
+.wave-text {
+  mix-blend-mode: lighten;
+}
+
+.follow-cursor {
+  position: relative;
+  top: 10px;
+  transform: scale(0.95);
 }

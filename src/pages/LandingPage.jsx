@@ -8,6 +8,7 @@ import { StarIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { CATEGORIES } from "../constants/CategoryConstants";
 import { BlurText } from "../content/TextAnimations/BlurText/BlurText";
+import { landingImageMap } from "../constants/LandingImageMap";
 
 const LandingPage = () => {
   const [stars, setStars] = useState(0);
@@ -82,8 +83,11 @@ const LandingPage = () => {
             if (subcategoryCount >= 6) return null;
             subcategoryCount += 1;
             const componentString = `${subcategory.replace(/\s+/g, '')}`;
+            const subcategoryString = subcategory.toLowerCase().replace(/\s+/g, '-');
             const path = `/${category.name.toLowerCase().replace(/\s+/g, '-')}/${subcategory.toLowerCase().replace(/\s+/g, '-')}`;
             const gradientBackground = getRandomGradient();
+
+            const image = landingImageMap[subcategoryString];
 
             return (
               <Box
@@ -96,9 +100,9 @@ const LandingPage = () => {
                 className="component-card"
               >
                 <Flex direction="column" h={"100%"} justifyContent="flex-end">
-                  <Box width={"100%"} h={150} borderRadius="2xl" bg={gradientBackground}>
-
-                  </Box>
+                  <Flex justifyContent="center" alignItems="center" width={"100%"} h={150} borderRadius="2xl" bg={gradientBackground}>
+                    <Image w={100} src={image} className={subcategoryString} />
+                  </Flex>
                   <Text className="component-title" letterSpacing="-1px" mt={2} fontSize="l" fontWeight="500">
                     <span>&lt;</span>{componentString} <span>/&gt;</span>
                   </Text>

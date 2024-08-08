@@ -19,15 +19,15 @@ export const getStarsCount = async () => {
 // Function to generate random linear gradients
 export const getRandomGradient = () => {
   const colors = [
-    '#E0F7FA', // Light Blue
-    '#B2EBF2', // Lighter Blue
+    // '#E0F7FA', // Light Blue
+    // '#B2EBF2', // Lighter Blue
     '#80DEEA', // Lighter Teal
     '#4DD0E1', // Teal
     '#26C6DA', // Darker Teal
     '#00BCD4', // Cyan
-    '#B2DFDB', // Light Teal
-    '#E0F2F1', // Light Green/Teal
-    '#FFFFFF', // White
+    // '#B2DFDB', // Light Teal
+    // '#E0F2F1', // Light Green/Teal
+    // '#FFFFFF', // White
   ];
 
   const randomColor = () => colors[Math.floor(Math.random() * colors.length)];
