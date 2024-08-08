@@ -1,0 +1,35 @@
+// Customize the card below as you desire
+
+.card {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: url("https://res.cloudinary.com/practicaldev/image/fetch/s--8mUhEkXE--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/km2w1ppw3yw9pd9na7mu.gif");
+  background-size: cover;
+  border-radius: 5px;
+  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+  transition:
+    box-shadow 0.5s,
+    opacity 0.5s;
+  will-change: transform;
+  border: 1px solid #424242;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.card:hover {
+  box-shadow: 0px 30px 100px -10px rgba(0, 0, 0, 0.4);
+}
+
+.card > div {
+  will-change: transform;
+  height: 100%;
+  margin: 0vw 0;
+}
+
+.card > div > * {
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  margin: 0vw 0;
+}
