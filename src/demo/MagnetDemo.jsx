@@ -47,7 +47,7 @@ const MagnetDemo = () => {
       </Flex>
 
       <p className="demo-details">
-        This component uses <span>@react-spring/web</span> for the animation.
+        This component is dependency-free.
       </p>
 
       <CodeExample codeObject={magnet} />
