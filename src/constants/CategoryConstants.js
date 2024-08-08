@@ -5,7 +5,7 @@ export const CATEGORIES = [
   },
   {
     name: 'Animations',
-    subcategories: ['Animated Container', 'Blob Cursor', 'Fade'],
+    subcategories: ['Animated Container', 'Blob Cursor', 'Follow Cursor', 'Fade'],
   },
   {
     name: 'Components',

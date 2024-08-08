@@ -22,6 +22,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+input[type="color"] {
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 0;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: 1px solid #ffffff1c;
+  border-radius: 15px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: 15px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: 1px solid #ffffff1c;
+  border-radius: 15px;
+}
+
 *,
 *::before,
 *::after {
