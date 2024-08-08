@@ -1,6 +1,7 @@
 import AnimatedContainerDemo from "../demo/AnimatedContainerDemo";
 import BlobCursorDemo from "../demo/BlobCursorDemo";
 import BlurTextDemo from "../demo/BlurTextDemo";
+import DockDemo from "../demo/DockDemo";
 import FadeDemo from "../demo/FadeDemo";
 import FollowCursorDemo from "../demo/FollowCursorDemo";
 import MagnetDemo from "../demo/MagnetDemo";
@@ -17,6 +18,7 @@ export const componentMap = {
   'follow-cursor': FollowCursorDemo,
   'magnet': MagnetDemo,
   'fade': FadeDemo,
-  'stack': StackDemo
+  'stack': StackDemo,
+  'dock': DockDemo
   // Map other subcategories to their components here
 };

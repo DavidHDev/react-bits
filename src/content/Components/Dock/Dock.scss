@@ -1,0 +1,82 @@
+// You might need to adjust this CSS code to make the icons smaller on mobile
+
+.dock-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+}
+
+.dock {
+  display: flex;
+  pointer-events: auto;
+  border: 1px solid #ffffff1c;
+  padding: 0.8em;
+  border-radius: 20px;
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+
+/* Dock item styles */
+.dock-item {
+  background-color: #000;
+  margin: 5px;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ffffff1c;
+  display: flex;
+  position: relative;
+  z-index: 0;
+  font-size: 1.5em;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.1s ease-out,
+    background-color 0.3s ease-out;
+  will-change: transform;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.dock-item:hover {
+  z-index: 2;
+  background-color: #111;
+  transition: background-color 0.3s ease;
+}
+
+/* Positioning styles */
+.dock-container.left {
+  top: 0;
+  left: 1em;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+}
+
+.dock-container.right {
+  top: 0;
+  right: 1em;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.dock-container.top {
+  top: 1em;
+  left: 0;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.dock-container.bottom {
+  bottom: 1em;
+  left: 0;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+}

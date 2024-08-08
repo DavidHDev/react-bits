@@ -23,6 +23,8 @@ import Logo from '../assets/bits-logo.svg';
 import { useRef, useState } from 'react';
 import { CATEGORIES } from '../constants/CategoryConstants';
 
+const scrollToTop = () => window.scrollTo(0, 0);
+
 const Sidebar = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const sidebarBgColor = useColorModeValue('gray.100', 'black');
@@ -61,7 +63,7 @@ const Sidebar = () => {
           <DrawerBody pb={'6em'}>
             <VStack align="stretch" spacing={5} mt={8}>
               {CATEGORIES.map(category => (
-                <Category key={category.name} category={category} hoverColor={linkHoverColor} location={location} handleClick={() => setDrawerOpen(false)} />
+                <Category key={category.name} category={category} hoverColor={linkHoverColor} location={location} handleClick={() => { setDrawerOpen(false); scrollToTop(); }} />
               ))}
             </VStack>
             <Divider my={4} />
@@ -101,7 +103,7 @@ const Category = ({ category, handleClick, location }) => {
           const path = `/${formatForURL(category.name)}/${formatForURL(sub)}`;
           const isActive = location.pathname === path; // Determine if this is the active link
           return (
-            <Link className={isActive ? 'active-sidebar-item' : 'sidebar-item'} key={sub} to={`/${formatForURL(category.name)}/${formatForURL(sub)}`} onClick={handleClick}>
+            <Link className={isActive ? 'active-sidebar-item' : 'sidebar-item'} key={sub} to={`/${formatForURL(category.name)}/${formatForURL(sub)}`} onClick={() => { handleClick(); scrollToTop() }}>
               {sub}
             </Link>
           )
