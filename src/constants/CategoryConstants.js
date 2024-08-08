@@ -9,6 +9,6 @@ export const CATEGORIES = [
   },
   {
     name: 'Components',
-    subcategories: ['Stack', 'Dock', 'Grid'],
+    subcategories: ['Stack', 'Dock', 'Masonry'],
   }
 ];

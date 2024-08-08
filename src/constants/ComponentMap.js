@@ -5,6 +5,7 @@ import DockDemo from "../demo/DockDemo";
 import FadeDemo from "../demo/FadeDemo";
 import FollowCursorDemo from "../demo/FollowCursorDemo";
 import MagnetDemo from "../demo/MagnetDemo";
+import MasonryDemo from "../demo/MasonryDemo";
 import SplitTextDemo from "../demo/SplitTextDemo";
 import StackDemo from "../demo/StackDemo";
 import WaveTextDemo from "../demo/WaveTextDemo";
@@ -19,6 +20,7 @@ export const componentMap = {
   'magnet': MagnetDemo,
   'fade': FadeDemo,
   'stack': StackDemo,
-  'dock': DockDemo
+  'dock': DockDemo,
+  'masonry': MasonryDemo
   // Map other subcategories to their components here
 };
