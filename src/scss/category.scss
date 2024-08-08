@@ -57,6 +57,12 @@
   margin-top: 0.5em;
   font-size: 2rem;
 
+  span {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 500;
+  }
+
   &::first-letter {
     text-transform: uppercase;
   }

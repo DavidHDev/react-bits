@@ -3,6 +3,7 @@ import BlobCursorDemo from "../demo/BlobCursorDemo";
 import BlurTextDemo from "../demo/BlurTextDemo";
 import FadeDemo from "../demo/FadeDemo";
 import FollowCursorDemo from "../demo/FollowCursorDemo";
+import MagnetDemo from "../demo/MagnetDemo";
 import SplitTextDemo from "../demo/SplitTextDemo";
 import StackDemo from "../demo/StackDemo";
 import WaveTextDemo from "../demo/WaveTextDemo";
@@ -14,6 +15,7 @@ export const componentMap = {
   'wave-text': WaveTextDemo,
   'animated-container': AnimatedContainerDemo,
   'follow-cursor': FollowCursorDemo,
+  'magnet': MagnetDemo,
   'fade': FadeDemo,
   'stack': StackDemo
   // Map other subcategories to their components here
