@@ -471,7 +471,7 @@ const to = (i) => ({
 const from = () => ({ x: 0, rot: 0, scale: 1.5, y: -1000 });
 
 const trans = (r, s) =>
-  \`perspective(1500px) rotateX(30deg) rotateY(\${r / 10}deg) rotateZ(\${r}deg) scale(\${s})\`;
+  \`rotateY(\${r / 10}deg) rotateZ(\${r}deg) scale(\${s})\`;
 
 function Stack() {
   const [gone] = useState(() => new Set());
@@ -541,8 +541,9 @@ function Stack() {
 export default Stack;`,
     css: `.stack {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  top: 20%;
+  width: 200px;
+  height: 250px;
   will-change: transform;
   display: flex;
   align-items: center;
@@ -555,13 +556,13 @@ export default Stack;`,
   background-repeat: no-repeat;
   background-position: center center;
   width: 45vh;
-  max-width: 300px;
+  max-width: 200px;
   height: 85vh;
-  max-height: 285px;
+  max-height: 250px;
   will-change: transform;
   user-select: none;
   border-radius: 10px;
-  box-shadow: 0 5px 50px rgba(129, 129, 129, 0.1);
+  box-shadow: 0 5px 50px rgba(129, 129, 129, 0.05);
 
   &:hover {
     cursor: grab;
@@ -570,8 +571,7 @@ export default Stack;`,
   &:active {
     cursor: grabbing;
   }
-}
-`
+}`
   },
 
   // ! FOLLOW-CURSOR ------------------------------------------------------------------------

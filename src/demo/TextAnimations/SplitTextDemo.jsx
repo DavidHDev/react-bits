@@ -23,9 +23,11 @@ const SplitTextDemo = () => {
           <SplitText key={counter} text="Hello!" className="split-text-demo" />
           <RefreshButton onClick={reRender} />
         </Box>
-        <p className="demo-details">
-          This component uses <span>@react-spring/web</span> for the animation.
-        </p>
+
+        <h2 className="demo-title-extra">Dependencies</h2>
+        <div className="demo-details">
+          <span>@react-spring/web</span>
+        </div>
       </PreviewTab>
 
       <CodeTab>

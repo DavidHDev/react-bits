@@ -3,15 +3,11 @@ import { Helmet } from 'react-helmet-async';
 import { componentMap } from '../constants/ComponentMap';
 import { useEffect, useRef } from 'react';
 import { Box } from '@chakra-ui/react';
+import { decodeLabel } from '../utils/utils';
 
 const CategoryPage = () => {
   const { category, subcategory } = useParams(); // Extract category and subcategory from the URL
   const scrollRef = useRef(null);
-
-  const decodeLabel = (label) => label
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
 
   const SubcategoryComponent = componentMap[subcategory];
 

@@ -10,12 +10,13 @@
   position: absolute;
   right: 0;
   padding: 5em 4em 4em 2em;
+  min-height: 100vh;
 
   .main-category {
     text-transform: uppercase;
     opacity: 0.5;
     letter-spacing: -0.5px;
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 300;
     margin: 0;
   }
@@ -39,7 +40,7 @@
 .demo-container {
   width: 100%;
   margin-top: 1em;
-  background-color: #000;
+  background: linear-gradient(to top, #000, #111);
   border: 1px solid #ffffff1c;
   padding: 1em;
   border-radius: 20px;
@@ -70,23 +71,75 @@
   }
 }
 
+.demo-title-extra,
+.demo-title-contribute {
+  margin: 1em 0 0.5em 0;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.demo-title-contribute {
+  margin-top: 2em;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.contribute-container {
+  background: linear-gradient(to bottom, #111, #000);
+  border: 1px solid #161616;
+  border-radius: 20px;
+  margin-top: 1em;
+  padding-bottom: 4em;
+}
+
+.contribute-button {
+  background: linear-gradient(to bottom, #111, #000) !important;
+  border: 1px solid #222;
+  transition: 0.5s ease;
+
+  span {
+    color: #a1a1aa;
+  }
+
+  &:hover {
+    color: #00f0ff;
+    transition: 0.5s ease;
+  }
+}
+
 .demo-details {
   font-size: 1.6rem;
   margin-bottom: 1em;
-  margin-top: 1em;
+  margin-top: 0em;
+  display: flex;
+  gap: 0.3em;
 
   span {
-    background-color: #00f0ff;
+    background-color: #222;
     white-space: nowrap;
-    color: #000;
-    border-radius: 10px;
-    font-size: 1.2rem;
-    padding: 0.2em 0.3em;
+    color: #fff;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    padding: 0.5em 1em;
+    transition: 0.3s ease;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #111;
+      transition: 0.3s ease;
+    }
   }
+}
+
+.preview-options {
+  margin-top: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #ffffff1c;
 }
 
 .demo-extra-info {
   margin-top: 1em;
+  margin-bottom: 1em;
   display: flex;
   align-items: center;
   gap: 0.5em;
@@ -94,7 +147,6 @@
 }
 
 .coming-soon {
-
   a {
     color: #00f0ff;
     text-decoration: underline;

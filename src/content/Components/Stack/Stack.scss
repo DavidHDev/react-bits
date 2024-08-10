@@ -1,7 +1,8 @@
 .stack {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  top: 20%;
+  width: 200px;
+  height: 250px;
   will-change: transform;
   display: flex;
   align-items: center;
@@ -14,13 +15,13 @@
   background-repeat: no-repeat;
   background-position: center center;
   width: 45vh;
-  max-width: 300px;
+  max-width: 200px;
   height: 85vh;
-  max-height: 285px;
+  max-height: 250px;
   will-change: transform;
   user-select: none;
   border-radius: 10px;
-  box-shadow: 0 5px 50px rgba(129, 129, 129, 0.1);
+  box-shadow: 0 5px 50px rgba(129, 129, 129, 0.05);
 
   &:hover {
     cursor: grab;

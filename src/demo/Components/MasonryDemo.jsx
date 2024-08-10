@@ -3,6 +3,7 @@ import Masonry from "../../content/Components/Masonry/Masonry";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 import CodeExample from '../../components/code/CodeExample';
+import { CodeTab, PreviewTab, TabbedLayout } from "../../components/common/TabbedLayout";
 
 const MasonryDemo = () => {
   const data = [
@@ -21,23 +22,27 @@ const MasonryDemo = () => {
   const { masonry } = CODE_EXAMPLES;
 
   return (
-    <>
-      <h2 className="demo-title">Demo</h2>
-      <Box position="relative" className="demo-container" overflow="hidden">
-        <Masonry data={data} />
-      </Box>
+    <TabbedLayout>
+      <PreviewTab>
+        <Box position="relative" className="demo-container" overflow="hidden">
+          <Masonry data={data} />
+        </Box>
 
-      <p className="demo-extra-info">
-        <InfoOutlineIcon position="relative" />Demo best viewed on desktop, try resizing the window!
-      </p>
+        <p className="demo-extra-info">
+          <InfoOutlineIcon position="relative" />Preview best viewed on desktop, try resizing the window!
+        </p>
 
-      <p className="demo-details">
-        This component uses <span>@react-spring/web</span> for the animation.
-      </p>
+        <h2 className="demo-title-extra">Dependencies</h2>
+        <div className="demo-details">
+          <span>@react-spring/web</span>
+        </div>
+      </PreviewTab>
 
-      <CodeExample codeObject={masonry} />
+      <CodeTab>
+        <CodeExample codeObject={masonry} />
+      </CodeTab>
 
-    </>
+    </TabbedLayout>
   );
 }
 

@@ -2,23 +2,29 @@ import { Flex } from "@chakra-ui/react";
 import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 import Stack from "../../content/Components/Stack/Stack";
 import CodeExample from '../../components/code/CodeExample';
+import { CodeTab, PreviewTab, TabbedLayout } from "../../components/common/TabbedLayout";
 
 const StackDemo = () => {
   const { stack } = CODE_EXAMPLES;
 
   return (
-    <>
-      <h2 className="demo-title">Demo</h2>
-      <Flex overflow="hidden" justifyContent="center" alignItems="center" minH={400} position="relative" pb={"4em"} className="demo-container">
-        <Stack />
-      </Flex>
+    <TabbedLayout>
+      <PreviewTab>
+        <Flex overflow="hidden" justifyContent="center" alignItems="center" minH={400} position="relative" pb={"4em"} className="demo-container">
+          <Stack />
+        </Flex>
 
-      <p className="demo-details">
-        This component uses <span>@react-spring/web</span> for the animation and <span>react-use-gesture</span> for drag gestures.
-      </p>
+        <h2 className="demo-title-extra">Dependencies</h2>
+        <div className="demo-details">
+          <span>@react-spring/web</span>
+          <span>react-use-gesture</span>
+        </div>
+      </PreviewTab>
 
-      <CodeExample codeObject={stack} />
-    </>
+      <CodeTab>
+        <CodeExample codeObject={stack} />
+      </CodeTab>
+    </TabbedLayout>
 
   );
 }

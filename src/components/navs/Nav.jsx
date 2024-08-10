@@ -1,10 +1,27 @@
-import { Box, Divider, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Flex, IconButton, Image, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Flex, Icon, IconButton, Image, Spinner, useDisclosure } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/logos/bits-logo.svg';
 import { ArrowForwardIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { IoLogoGithub } from "react-icons/io";
+import { TiStarFullOutline } from "react-icons/ti";
+import { useEffect, useState } from 'react';
+import { getStarsCount } from '../../utils/utils';
+import { BlurText } from '../../content/TextAnimations/BlurText/BlurText';
 
 const Nav = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [stars, setStars] = useState(0);
+
+  useEffect(() => {
+    const fetchStars = async () => {
+      const count = await getStarsCount();
+      setTimeout(() => {
+        setStars(count);
+      }, 1000);
+    };
+
+    fetchStars();
+  }, []);
 
   return (
     <Box position={'fixed'} zIndex={1} top={0} left={0} className='main-nav' pl={'5em'} pr={'4em'} w={"100%"} borderBottom={"1px solid #ffffff1c"}>
@@ -24,6 +41,12 @@ const Nav = () => {
 
         {/* Links for larger screens */}
         <Flex display={{ base: 'none', md: 'flex' }} alignItems="center" gap={8}>
+          <Button bg="white" color="black" fontSize="xs" h={8} _hover={{ bg: 'white', transform: 'scale(0.95)' }}>
+            <Icon as={IoLogoGithub} />
+            &nbsp;Star on GitHub
+            <Icon ml={2} mr={0.5} as={TiStarFullOutline} />
+            {stars ? <BlurText delay={20} text={String(stars)} /> : <Box><Spinner boxSize={2} /></Box>}
+          </Button>
           <Link className="nav-link" to="/text-animations/split-text" mx={2} fontWeight="bold">
             Docs
           </Link>

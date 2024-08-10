@@ -28,3 +28,8 @@ export const getRandomGradient = () => {
   const randomColor = () => colors[Math.floor(Math.random() * colors.length)];
   return `linear-gradient(135deg, ${randomColor()}, ${randomColor()})`;
 }
+
+export const decodeLabel = (label) => label
+  .split('-')
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');

@@ -5,6 +5,7 @@ import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 import RefreshButton from "../../components/common/RefreshButton";
 import WaveText from "../../content/TextAnimations/WaveText/WaveText";
 import CodeExample from '../../components/code/CodeExample';
+import { CodeTab, PreviewTab, TabbedLayout } from "../../components/common/TabbedLayout";
 
 const WaveTextDemo = () => {
   const { waveText } = CODE_EXAMPLES;
@@ -15,19 +16,23 @@ const WaveTextDemo = () => {
   };
 
   return (
-    <>
-      <h2 className="demo-title">Demo</h2>
-      <Box position="relative" className="demo-container">
-        <WaveText key={counter} />
-        <RefreshButton onClick={reRender} />
-      </Box>
+    <TabbedLayout>
+      <PreviewTab>
+        <Box position="relative" className="demo-container">
+          <WaveText key={counter} />
+          <RefreshButton onClick={reRender} />
+        </Box>
 
-      <p className="demo-details">
-        This component uses <span>@react-spring/web</span> for the animation.
-      </p>
+        <h2 className="demo-title-extra">Dependencies</h2>
+        <div className="demo-details">
+          <span>@react-spring/web</span>
+        </div>
+      </PreviewTab>
 
-      <CodeExample codeObject={waveText} />
-    </>
+      <CodeTab>
+        <CodeExample codeObject={waveText} />
+      </CodeTab>
+    </TabbedLayout>
 
   );
 }
