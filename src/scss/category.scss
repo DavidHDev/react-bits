@@ -91,6 +91,14 @@
   color: #999;
 }
 
+.coming-soon {
+
+  a {
+    color: #00f0ff;
+    text-decoration: underline;
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .category-page {
     padding-top: 6em;

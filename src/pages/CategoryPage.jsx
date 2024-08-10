@@ -24,7 +24,9 @@ const CategoryPage = () => {
           <SubcategoryComponent />
         </>
       ) : (
-        <p>This component is not available yet.</p>
+        <p className='coming-soon'>This component is work in progress. <br />
+          Follow the project on <a href="https://github.com/DavidHDev/react-bits" target="_blank" rel="noreferrer">GitHub</a> for regular updates.
+        </p>
       )}
     </div>
   );

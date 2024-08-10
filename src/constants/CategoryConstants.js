@@ -5,10 +5,10 @@ export const CATEGORIES = [
   },
   {
     name: 'Animations',
-    subcategories: ['Animated Container', 'Blob Cursor', 'Follow Cursor', 'Magnet', 'Fade'],
+    subcategories: ['Animated Container', 'Blob Cursor', 'Follow Cursor', 'Magnet', 'Fade', 'Persistent Drag'],
   },
   {
     name: 'Components',
-    subcategories: ['Stack', 'Dock', 'Masonry'],
+    subcategories: ['Stack', 'Dock', 'Masonry', 'Splash'],
   }
 ];
