@@ -98,12 +98,17 @@ const Category = ({ category, handleClick, location }) => {
   return (
     <Box>
       <Text className='category-name' mb={2}>{category.name}</Text>
-      <Stack spacing={1} pl={2}>
+      <Stack spacing={0.5} pl={0}>
         {category.subcategories.map(sub => {
           const path = `/${formatForURL(category.name)}/${formatForURL(sub)}`;
           const isActive = location.pathname === path; // Determine if this is the active link
+
           return (
-            <Link className={isActive ? 'active-sidebar-item' : 'sidebar-item'} key={sub} to={`/${formatForURL(category.name)}/${formatForURL(sub)}`} onClick={() => { handleClick(); scrollToTop() }}>
+            <Link
+              key={path}
+              className={isActive ? 'sidebar-item active-sidebar-item' : 'sidebar-item'}
+              to={path}
+            >
               {sub}
             </Link>
           )

@@ -6,6 +6,27 @@
 
 .sidebar {
   border-right: 1px solid #ffffff1c;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #000;
+    border-radius: 50px;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background: #222;
+    }
+  }
 }
 
 .sidebar-logo {
@@ -21,27 +42,45 @@
   }
 }
 
-.active-sidebar-item {
-  background-color: #000;
-  border: 1px solid #ffffff1c;
-  border-radius: 10px;
-  color: #00f0ff;
-  padding: 0.5em 0.5em 0.5em 0.7em;
-  transition: padding 0.3s ease;
-}
-
 .sidebar-item {
-  padding: 0.5em;
-  border: 1px solid transparent;
-  transition:
-    opacity 0.3s ease,
-    padding 0.5s ease,
-    background-color 0.5s ease,
-    border 0.5s ease;
+  position: relative;
+  color: #a1a1aa;
+  padding: 0.4em 0;
+  transition: 0.3s ease;
 
   &:hover {
-    opacity: 0.5;
-    transition: 0.3s ease;
+    text-decoration: underline;
+  }
+
+  &:before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: #00f0ff;
+    position: absolute;
+    left: 0em;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+}
+
+.active-sidebar-item {
+  width: fit-content;
+  padding: 0.4em 0.4em 0.4em 1em;
+  color: #fff;
+  position: relative;
+  transition: 0.3s ease;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:before {
+    opacity: 1;
+    transition: opacity 0.3s ease;
   }
 }
 

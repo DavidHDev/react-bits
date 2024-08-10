@@ -6,7 +6,7 @@ import GitHub from '../assets/github.svg';
 import Blob from '../assets/blob.svg';
 import { StarIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import { CATEGORIES } from "../constants/CategoryConstants";
+import { SHOWCASE } from "../constants/CategoryConstants";
 import { BlurText } from "../content/TextAnimations/BlurText/BlurText";
 import { landingImageMap } from "../constants/LandingImageMap";
 
@@ -78,7 +78,7 @@ const LandingPage = () => {
       <Text className="components-title" mt={6} mb={2}>Components</Text>
 
       <SimpleGrid className="components-grid" columns={{ base: 1, md: 3 }} spacing={6} mb={6} p={4} >
-        {CATEGORIES.map((category) =>
+        {SHOWCASE.map((category) =>
           category.subcategories.map((subcategory, index) => {
             if (subcategoryCount >= 6) return null;
             subcategoryCount += 1;
@@ -118,7 +118,7 @@ const LandingPage = () => {
 
       <Button as={Link} to="/text-animations/split-text" border={"1px solid #ffffff1c"} fontSize="sm" mb={16}>Browse more</Button>
 
-      <Text color={"#999"} fontSize="sm" mb={12}>© 2024 David Haz. All rights reserved.</Text>
+      <Text color={"#a1a1aa"} fontSize="sm" mb={12}>© 2024 David Haz. All rights reserved.</Text>
     </Flex>
   );
 };

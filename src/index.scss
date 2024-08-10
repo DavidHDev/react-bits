@@ -22,6 +22,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 input[type="color"] {
   border-radius: 15px;
   cursor: pointer;

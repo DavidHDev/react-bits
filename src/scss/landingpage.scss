@@ -62,9 +62,9 @@
   height: 100%;
   background-color: #000000;
   opacity: 0.1;
-  background-color: #999;
-  background-image: repeating-radial-gradient(circle at -50% 0, transparent 0, #999 100px),
-    repeating-linear-gradient(#999, #111);
+  background-color: #a1a1aa;
+  background-image: repeating-radial-gradient(circle at -50% 0, transparent 0, #a1a1aa 100px),
+    repeating-linear-gradient(#a1a1aa, #111);
 
   &::before {
     content: "";
@@ -121,7 +121,7 @@
 
 .component-title {
   span {
-    color: #999;
+    color: #a1a1aa;
   }
 }
 
@@ -148,7 +148,7 @@
 
 .component-subtitle {
   font-size: 14px;
-  color: #999;
+  color: #a1a1aa;
 }
 
 .wave-text {

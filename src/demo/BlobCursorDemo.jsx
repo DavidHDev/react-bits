@@ -31,7 +31,7 @@ const BlobCursorDemo = () => {
             setShape(shape === 'circle' ? 'square' : 'circle');
           }}
         >
-          Shape: <Text color={"#999"}>&nbsp;{String(shape)}</Text>
+          Shape: <Text color={"#a1a1aa"}>&nbsp;{String(shape)}</Text>
         </Button>
         <Flex alignItems="center"
           fontSize="xs"

@@ -36,7 +36,7 @@ const AnimatedContainerDemo = () => {
             reRender();
           }}
         >
-          Direction: <Text color={"#999"}>&nbsp;{String(direction)}</Text>
+          Direction: <Text color={"#a1a1aa"}>&nbsp;{String(direction)}</Text>
         </Button>
         <Button
           fontSize="xs"
@@ -46,7 +46,7 @@ const AnimatedContainerDemo = () => {
             reRender();
           }}
         >
-          Distance: <Text color="#999">&nbsp;{String(distance)}</Text>
+          Distance: <Text color="#a1a1aa">&nbsp;{String(distance)}</Text>
         </Button>
         <Button
           fontSize="xs"

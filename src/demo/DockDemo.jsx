@@ -44,7 +44,7 @@ const DockDemo = () => {
           <Button
             fontSize="xs"
             h={8}
-            bg="#999"
+            bg="#a1a1aa"
             isDisabled
             _disabled={{ bg: '#222', cursor: 'not-allowed', _hover: { bg: '#222' } }}
           >
@@ -106,7 +106,7 @@ const DockDemo = () => {
           <Button
             fontSize="xs"
             h={8}
-            bg="#999"
+            bg="#a1a1aa"
             isDisabled
             _disabled={{ bg: '#222', cursor: 'not-allowed', _hover: { bg: '#222' } }}
           >

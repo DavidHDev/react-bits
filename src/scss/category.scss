@@ -1,13 +1,13 @@
 .category-name {
-  text-transform: uppercase;
-  opacity: 0.5;
-  letter-spacing: -0.5px;
-  font-size: 16px;
+  color: white;
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-size: 18px;
 }
 
 .category-page {
   width: 100%;
-  padding: 2em 4em;
+  padding: 5em 2em 4em 2em;
   max-height: 100vh;
   overflow-y: auto;
 
@@ -59,7 +59,7 @@
 
   span {
     font-size: 0.8rem;
-    color: #999;
+    color: #a1a1aa;
     font-weight: 500;
   }
 
@@ -88,7 +88,7 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
-  color: #999;
+  color: #a1a1aa;
 }
 
 .coming-soon {
