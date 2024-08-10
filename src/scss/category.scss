@@ -6,10 +6,10 @@
 }
 
 .category-page {
-  width: 100%;
-  padding: 5em 2em 4em 2em;
-  max-height: 100vh;
-  overflow-y: auto;
+  width: calc(100% - 314px);
+  position: absolute;
+  right: 0;
+  padding: 5em 4em 4em 2em;
 
   .main-category {
     text-transform: uppercase;
@@ -32,6 +32,8 @@
   border: 1px solid #ffffff1c !important;
   border-radius: 20px !important;
   background: #000 !important;
+  font-size: 14px !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 238, 255, 0.08) !important;
 }
 
 .demo-container {
@@ -101,6 +103,7 @@
 
 @media only screen and (max-width: 767px) {
   .category-page {
+    width: 100%;
     padding-top: 6em;
     padding-left: 1em;
     padding-right: 1em;

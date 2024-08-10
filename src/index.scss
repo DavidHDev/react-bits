@@ -65,4 +65,12 @@ body {
 
 .app-container {
   display: flex;
+  padding: 0 4em;
+}
+
+.main-nav {
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 32px 0 rgba(0, 238, 255, 0.05);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }

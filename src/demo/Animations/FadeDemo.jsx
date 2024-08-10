@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import RefreshButton from "../components/RefreshButton";
-import Fade from "../content/Animations/Fade/Fade";
+import RefreshButton from "../../components/common/RefreshButton";
+import Fade from "../../content/Animations/Fade/Fade";
 import { useState } from "react";
-import CodeExample from "../components/CodeExample";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
+import CodeExample from "../../components/code/CodeExample";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 
 const FadeDemo = () => {
   const [counter, setCounter] = useState(0);

@@ -19,9 +19,9 @@ import { ArrowForwardIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { Link, useLocation } from 'react-router-dom';
 
 // Assuming you have the logo imported already
-import Logo from '../assets/bits-logo.svg';
+import Logo from '../../assets/logos/bits-logo.svg';
 import { useRef, useState } from 'react';
-import { CATEGORIES } from '../constants/CategoryConstants';
+import { CATEGORIES } from '../../constants/CategoryConstants';
 
 const scrollToTop = () => window.scrollTo(0, 0);
 
@@ -35,7 +35,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <Box display={{ md: 'none' }} position="fixed" top={0} zIndex="overlay" p={"1em"} w={"100%"} bgColor={'#000'}>
+      <Box display={{ md: 'none' }} position="fixed" top={0} left={0} zIndex="overlay" p={"1em"} w={"100%"} bgColor={'#000'}>
         <Flex alignItems="center" gap={"1em"}>
           <IconButton ref={btnRef} icon={<HamburgerIcon />} onClick={() => setDrawerOpen(true)} />
           <Link to="/">
@@ -80,8 +80,8 @@ const Sidebar = () => {
         </DrawerContent>
       </Drawer>
 
-      <Box as="nav" pos="relative" left="0" height="100vh" className='sidebar' overflowY="auto" bg={sidebarBgColor} w={{ base: 0, md: 60 }} p={5} display={{ base: 'none', md: 'block' }}>
-        <VStack align="stretch" spacing={4} mt={{ base: 0, md: '57px' }}>
+      <Box as="nav" position="fixed" top={'57px'} height="100vh" className='sidebar' overflowY="auto" bg={sidebarBgColor} w={{ base: 0, md: 60 }} p={5} display={{ base: 'none', md: 'block' }}>
+        <VStack align="stretch" spacing={4}>
           {CATEGORIES.map(category => (
             <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />
           ))}
@@ -108,6 +108,7 @@ const Category = ({ category, handleClick, location }) => {
               key={path}
               className={isActive ? 'sidebar-item active-sidebar-item' : 'sidebar-item'}
               to={path}
+              onClick={handleClick}
             >
               {sub}
             </Link>

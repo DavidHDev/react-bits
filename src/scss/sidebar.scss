@@ -1,11 +1,11 @@
 .sidebar,
 .sidebar-mobile {
   background-color: #000 !important;
-  min-width: 300px;
+  min-width: 250px;
 }
 
 .sidebar {
-  border-right: 1px solid #ffffff1c;
+  // border-right: 1px solid #ffffff1c;
 
   &::-webkit-scrollbar {
     width: 10px;

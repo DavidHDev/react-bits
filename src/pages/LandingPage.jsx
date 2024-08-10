@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { getRandomGradient, getStarsCount } from "../utils/utils";
 import { Box, Button, Flex, Image, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
-import Logo from '../assets/bits-logo.svg';
-import GitHub from '../assets/github.svg';
-import Blob from '../assets/blob.svg';
+import Logo from '../assets/logos/bits-logo.svg';
+import GitHub from '../assets/logos/github.svg';
+import Blob from '../assets/landing/blob.svg';
 import { StarIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { SHOWCASE } from "../constants/CategoryConstants";

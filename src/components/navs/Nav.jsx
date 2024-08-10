@@ -1,13 +1,13 @@
 import { Box, Divider, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Flex, IconButton, Image, useDisclosure } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import Logo from '../assets/bits-logo.svg'
+import Logo from '../../assets/logos/bits-logo.svg';
 import { ArrowForwardIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 const Nav = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box position={'fixed'} zIndex={1} top={0} bg="black" px={6} w={"100%"} borderBottom={"1px solid #ffffff1c"}>
+    <Box position={'fixed'} zIndex={1} top={0} left={0} className='main-nav' pl={'5em'} pr={'4em'} w={"100%"} borderBottom={"1px solid #ffffff1c"}>
       <Flex h={14} alignItems="center" justifyContent="space-between">
         <Link to="/">
           <Image src={Logo} alt="Logo" height="25px" />

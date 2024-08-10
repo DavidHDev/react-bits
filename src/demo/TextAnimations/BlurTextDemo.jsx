@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { useState } from "react";
-import { BlurText } from "../content/TextAnimations/BlurText/BlurText";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import CodeExample from "../components/CodeExample";
-import RefreshButton from "../components/RefreshButton";
+import { BlurText } from "../../content/TextAnimations/BlurText/BlurText";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import CodeExample from "../../components/code/CodeExample";
+import RefreshButton from "../../components/common/RefreshButton";
 
 const BlurTextDemo = () => {
   const { blurText } = CODE_EXAMPLES;

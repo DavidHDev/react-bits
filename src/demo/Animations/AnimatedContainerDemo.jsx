@@ -1,9 +1,10 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { AnimatedContainer } from "../content/Animations/AnimatedContainer/AnimatedContainer";
 import { useState } from "react";
-import RefreshButton from "../components/RefreshButton";
-import CodeExample from "../components/CodeExample";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import RefreshButton from "../../components/common/RefreshButton";
+import { AnimatedContainer } from '../../content/Animations/AnimatedContainer/AnimatedContainer';
+import CodeExample from "../../components/code/CodeExample";
+
 
 const AnimatedContainerDemo = () => {
   const [counter, setCounter] = useState(0);

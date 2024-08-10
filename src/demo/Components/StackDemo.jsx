@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import CodeExample from "../components/CodeExample";
-import Stack from "../content/Components/Stack/Stack";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import Stack from "../../content/Components/Stack/Stack";
+import CodeExample from '../../components/code/CodeExample';
 
 const StackDemo = () => {
   const { stack } = CODE_EXAMPLES;

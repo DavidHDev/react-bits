@@ -1,13 +1,13 @@
 import { Box } from "@chakra-ui/react";
-import { SplitText } from "../content/TextAnimations/SplitText/SplitText";
 
 import { useState } from "react";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import RefreshButton from "../components/RefreshButton";
-import CodeExample from "../components/CodeExample";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import RefreshButton from "../../components/common/RefreshButton";
+import WaveText from "../../content/TextAnimations/WaveText/WaveText";
+import CodeExample from '../../components/code/CodeExample';
 
-const SplitTextDemo = () => {
-  const { splitText } = CODE_EXAMPLES;
+const WaveTextDemo = () => {
+  const { waveText } = CODE_EXAMPLES;
   const [counter, setCounter] = useState(0);
 
   const reRender = () => {
@@ -18,7 +18,7 @@ const SplitTextDemo = () => {
     <>
       <h2 className="demo-title">Demo</h2>
       <Box position="relative" className="demo-container">
-        <SplitText key={counter} text="Hello!" className="split-text-demo" />
+        <WaveText key={counter} />
         <RefreshButton onClick={reRender} />
       </Box>
 
@@ -26,10 +26,10 @@ const SplitTextDemo = () => {
         This component uses <span>@react-spring/web</span> for the animation.
       </p>
 
-      <CodeExample codeObject={splitText} />
+      <CodeExample codeObject={waveText} />
     </>
 
   );
 }
 
-export default SplitTextDemo;
+export default WaveTextDemo;

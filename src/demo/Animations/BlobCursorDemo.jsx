@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import BlobCursor from "../content/Animations/BlobCursor/BlobCursor";
-import CodeExample from "../components/CodeExample";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
+import BlobCursor from "../../content/Animations/BlobCursor/BlobCursor";
 import { WarningIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import CodeExample from '../../components/code/CodeExample';
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 
 const BlobCursorDemo = () => {
   const [shape, setShape] = useState('circle');

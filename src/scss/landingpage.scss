@@ -157,6 +157,16 @@
 
 .follow-cursor {
   position: relative;
-  top: 10px;
-  transform: scale(0.95);
+  top: -10px;
+  left: -15px;
+}
+
+.blob-cursor {
+  position: relative;
+  top: -10px;
+  left: -16px;
+}
+
+.animated-container {
+  transform: scale(0.9);
 }

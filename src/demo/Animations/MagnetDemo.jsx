@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import CodeExample from "../components/CodeExample";
-import Magnet from "../content/Animations/Magnet/Magnet";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import CodeExample from "../../components/code/CodeExample";
+import Magnet from "../../content/Animations/Magnet/Magnet";
 import { useState } from "react";
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 

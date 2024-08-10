@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import CodeExample from "../components/CodeExample";
-import FollowCursor from "../content/Animations/FollowCursor/FollowCursor";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import CodeExample from "../../components/code/CodeExample";
+import FollowCursor from "../../content/Animations/FollowCursor/FollowCursor";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 

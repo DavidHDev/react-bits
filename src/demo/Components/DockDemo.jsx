@@ -1,9 +1,9 @@
 import { Box, Button, ButtonGroup, Divider, Flex, Text } from "@chakra-ui/react";
-import Dock from "../content/Components/Dock/Dock";
+import Dock from "../../content/Components/Dock/Dock";
 import { useState } from "react";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import CodeExample from "../components/CodeExample";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import CodeExample from "../../components/code/CodeExample";
 
 const DockDemo = () => {
   const [position, setPosition] = useState('bottom');

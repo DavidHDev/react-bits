@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import Masonry from "../content/Components/Masonry/Masonry";
+import Masonry from "../../content/Components/Masonry/Masonry";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
-import { CODE_EXAMPLES } from "../constants/ExampleConstants";
-import CodeExample from "../components/CodeExample";
+import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
+import CodeExample from '../../components/code/CodeExample';
 
 const MasonryDemo = () => {
   const data = [

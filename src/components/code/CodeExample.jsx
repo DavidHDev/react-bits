@@ -1,4 +1,4 @@
-import { getLanguage } from "../utils/utils";
+import { getLanguage } from "../../utils/utils";
 import CodeHighlighter from "./CodeHighlighter";
 
 const CodeExample = ({ codeObject }) => {
