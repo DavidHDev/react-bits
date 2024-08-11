@@ -41,7 +41,7 @@ const Nav = () => {
 
         {/* Links for larger screens */}
         <Flex display={{ base: 'none', md: 'flex' }} alignItems="center" gap={8}>
-          <Button bg="white" color="black" fontSize="xs" h={8} _hover={{ bg: 'white', transform: 'scale(0.95)' }}>
+          <Button as="a" href='https://github.com/DavidHDev/react-bits' rel='noreferrer' target='_blank' bg="white" color="black" fontSize="xs" h={8} _hover={{ bg: 'white', transform: 'scale(0.95)' }}>
             <Icon as={IoLogoGithub} />
             &nbsp;Star on GitHub
             <Icon ml={2} mr={0.5} as={TiStarFullOutline} />
