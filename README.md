@@ -48,17 +48,21 @@ This project is always open to improvements and contributions, you can check the
 - [Split Text](https://www.reactbits.dev/text-animations/split-text)
 - [Blur Text](https://www.reactbits.dev/text-animations/blur-text)
 - [Wave Text](https://www.reactbits.dev/text-animations/wave-text)
+- [Shiny Text](https://www.reactbits.dev/text-animations/shiny-text)
 
 ### ANIMATIONS
 
 - [Animated Container](https://www.reactbits.dev/animations/animated-container)
 - [Blob Cursor](https://www.reactbits.dev/animations/blob-cursor)
+- [Follow Cursor](https://www.reactbits.dev/animations/follow-cursor)
+- [Magnet](https://www.reactbits.dev/animations/magnet)
+- [Fade](https://www.reactbits.dev/animations/fade)
 
 ### COMPONENTS
 
 - [Stack](https://www.reactbits.dev/components/stack)
 - [Dock](https://www.reactbits.dev/components/dock)
-- [Grid](https://www.reactbits.dev/components/grid)
+- [Masonry](https://www.reactbits.dev/components/masonry)
 
 ## Maintainers
 
