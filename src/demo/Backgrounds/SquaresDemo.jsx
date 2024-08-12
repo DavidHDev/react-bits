@@ -18,7 +18,7 @@ const SquaresDemo = () => {
     <TabbedLayout>
       <PreviewTab>
         <Box direction="relative" minH={200} className="demo-container" overflow="hidden">
-          <Box w={"100%"} h={500} border={'1px solid #222'} borderRadius={"20px"} overflow="hidden">
+          <Box w={"100%"} h={500} border={'1px solid #222'} borderRadius={"10px"} overflow="hidden">
             <Squares squareSize={size} speed={speed} direction={direction} borderColor={borderColor} hoverFillColor={hoverColor} />
           </Box>
         </Box>
