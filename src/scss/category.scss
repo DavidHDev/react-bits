@@ -55,6 +55,24 @@
   font-weight: bolder;
 }
 
+.shiny-text-demo {
+  font-weight: 300;
+}
+
+.shiny-button {
+  cursor: pointer;
+  border: 1px solid #353535;
+  background-color: #111;
+  padding: 0.4em 1.2em;
+  border-radius: 50px;
+  transition: 0.3s ease;
+
+  &:hover {
+    background-color: #222;
+    transition: 0.3s ease;
+  }
+}
+
 .demo-title {
   font-weight: bolder;
   margin-top: 0.5em;
@@ -80,7 +98,8 @@
 
 .demo-title-contribute {
   margin-top: 2em;
-  font-size: 1.6rem;
+  margin-bottom: 1em;
+  font-size: 1.2rem;
   text-align: center;
 }
 

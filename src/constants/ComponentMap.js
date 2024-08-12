@@ -9,6 +9,7 @@ import MasonryDemo from "../demo/Components/MasonryDemo";
 import SplitTextDemo from "../demo/TextAnimations/SplitTextDemo";
 import StackDemo from "../demo/Components/StackDemo";
 import WaveTextDemo from "../demo/TextAnimations/WaveTextDemo";
+import ShinyTextDemo from "../demo/TextAnimations/ShinyTextDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -21,6 +22,7 @@ export const componentMap = {
   'fade': FadeDemo,
   'stack': StackDemo,
   'dock': DockDemo,
-  'masonry': MasonryDemo
+  'masonry': MasonryDemo,
+  'shiny-text': ShinyTextDemo
   // Map other subcategories to their components here
 };

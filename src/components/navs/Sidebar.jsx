@@ -80,7 +80,7 @@ const Sidebar = () => {
         </DrawerContent>
       </Drawer>
 
-      <Box as="nav" position="fixed" top={'57px'} height="100vh" className='sidebar' overflowY="auto" bg={sidebarBgColor} w={{ base: 0, md: 60 }} p={5} display={{ base: 'none', md: 'block' }}>
+      <Box as="nav" position="fixed" top={'57px'} height="calc(100vh - 57px)" className='sidebar' overflowY="auto" bg={sidebarBgColor} w={{ base: 0, md: 60 }} p={5} display={{ base: 'none', md: 'block' }}>
         <VStack align="stretch" spacing={4}>
           {CATEGORIES.map(category => (
             <Category key={category.name} category={category} location={location} hoverColor={linkHoverColor} />

@@ -5,6 +5,7 @@
 }
 
 .sidebar {
+  padding-bottom: 6em !important;
   // border-right: 1px solid #ffffff1c;
 
   &::-webkit-scrollbar {
@@ -44,8 +45,9 @@
 
 .sidebar-item {
   position: relative;
+  font-size: 0.9rem;
   color: #a1a1aa;
-  padding: 0.4em 0;
+  padding: 0.25em 0;
   transition: 0.3s ease;
 
   &:hover {

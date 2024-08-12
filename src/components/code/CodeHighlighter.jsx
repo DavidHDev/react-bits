@@ -1,8 +1,10 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Icon } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 import { synthwave84 } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import { FiCopy, FiCheckSquare } from "react-icons/fi";
 
 const CodeHighlighter = ({ language, codeString, showLineNumbers = true }) => {
   const [copied, setCopied] = useState(false);
@@ -28,14 +30,19 @@ const CodeHighlighter = ({ language, codeString, showLineNumbers = true }) => {
         top={3}
         right={3}
         rounded="xl"
-        backgroundColor={copied ? 'green.500' : '#00F0FF'}
+        fontWeight={500}
+        fontSize="xs"
+        backgroundColor={copied ? '#3EFF5D' : '#00F0FF'}
         color="black"
         _hover={{ backgroundColor: '#00F0FF' }}
         _active={{ backgroundColor: '#00F0FF' }}
         transition="background-color 0.3s ease"
         onClick={handleCopy}
       >
-        {copied ? 'Copied!' : 'Copy Code'}
+        {copied
+          ? <span><Icon position="relative" top={'2px'} as={FiCheckSquare} />&nbsp;Copied</span>
+          : <span><Icon position="relative" top={'2px'} as={FiCopy} />&nbsp;Copy</span>
+        }
       </Button>
     </Box>
   );

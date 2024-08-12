@@ -8,15 +8,16 @@ const RefreshButton = ({ onClick }) => {
       position="absolute"
       top={3}
       right={3}
+      p={2}
       rounded="xl"
-      backgroundColor='#fff'
-      color="black"
-      _hover={{ backgroundColor: '#fff' }}
-      _active={{ backgroundColor: '#00F0FF' }}
+      backgroundColor='#222'
+      color="white"
+      _hover={{ backgroundColor: '#333' }}
+      _active={{ backgroundColor: '#333' }}
       transition="background-color 0.3s ease"
       onClick={onClick}
     >
-      <RepeatIcon boxSize={6} />
+      <RepeatIcon boxSize={4} />
     </Button>
   );
 }
