@@ -7,8 +7,10 @@ export const CATEGORIES = [
       'Blur Text',
       'Wave Text',
       'Shiny Text',
-      // 'Gradient Text'
+      'Gradient Text'
+      // 'Decrypt Hover',
       // 'Flip Text',
+      // 'Word Cloud',
       // 'Count Up'
     ]
   },
@@ -18,10 +20,23 @@ export const CATEGORIES = [
       'Animated Container',
       'Blob Cursor',
       'Follow Cursor',
+      // 'Trail Cursor',
+      // 'Emoji Cursor',
+      // 'Wave Cursor',
+      // 'Liquid Cursor',
+      // 'Distortion Cursor',
+      // 'Crosshair',
+      // 'Crystal Ball',
+      // 'Spotlights',
       'Magnet',
       'Fade',
       // 'Persistent Drag', 
-      // 'Beam'
+      // 'Beam Border',
+      // 'Star Border',
+      // 'Lens Blur,
+      // 'Marbles',
+      // 'Clump',
+      // 'Ballpit'
     ]
   },
   {
@@ -31,22 +46,40 @@ export const CATEGORIES = [
       'Dock',
       'Masonry',
       // 'Bento', 
-      // 'Global Search', 
+      // 'Global Search',
+      // 'Gradient Input',
+      // 'Spotlight Card,
+      // 'Blur Card',
+      // 'Trail Card',
+      // 'Dynamic Background',
+      // 'Decay Card',
+      // 'List Reveal',
+      // 'Liquid Menu',
+      // 'Textured Glass',
+      // '3D Gallery',
+      // 'Expandable Card',
+      // 'Progress Lines',
+      // '3D Carousel',
+      // 'Hover Stack'
+      // 'Infinite Scroll'
       // 'Marquee', 
       // 'Avatar', 
-      // 'Avatar Group'
+      // 'Avatar Group',
+      // 'Evervault Card',
     ],
   },
   // {
   //   name: 'Backgrounds',
   //   subcategories: [
-  //     // 'Squares',
-  //     // 'Particles',
-  //     // 'Grain',
-  //     // 'Threads',
-  //     // 'Gradient',
-  //     // 'Dots',
-  //     // 'Waves'
+  //     'Hyperspeed',
+  //     'Grid Motion',
+  //     'Squares',
+  //     'Particles',
+  //     'Grain',
+  //     'Threads',
+  //     'Gradient',
+  //     'Dots',
+  //     'Waves'
   //   ],
   // }
 ];
