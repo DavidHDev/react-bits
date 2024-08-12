@@ -9,6 +9,7 @@ import { useRef, useState } from "react";
 
 const CrosshairDemo = () => {
   const containerRef = useRef(null);
+  const [linkText, setLinkText] = useState('Aim.. aand..')
   const { crosshair } = CODE_EXAMPLES;
 
   const [targeted, setTargeted] = useState(true);
@@ -20,7 +21,12 @@ const CrosshairDemo = () => {
           <Crosshair containerRef={targeted ? null : containerRef} />
 
           <Flex direction="column" justifyContent="center" alignItems="center">
-            <Text _hover={{ color: 'cyan' }} textAlign="center" fontWeight={900} fontSize={{ base: '2rem', md: '4rem' }} as="a" href="https://github.com/DavidHDev/react-bits">Star on GitHub</Text>
+            <Text _hover={{ color: 'cyan' }} transition=".3s ease" textAlign="center" fontWeight={900} fontSize={{ base: '2rem', md: '4rem' }} as="a" href="https://github.com/DavidHDev/react-bits"
+              onMouseEnter={() => setLinkText('Shoot!!!')}
+              onMouseLeave={() => setLinkText('Aim.. aand..')}
+            >
+              {linkText}
+            </Text>
             <Text position="relative" top="-10px" color="#444">(hover me)</Text>
           </Flex>
         </Box>
