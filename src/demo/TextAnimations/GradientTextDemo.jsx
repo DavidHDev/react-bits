@@ -44,7 +44,7 @@ const GradientTextDemo = () => {
 
         <div className="preview-options">
           <h2 className="demo-title-extra">Options</h2>
-          <Flex gap={4}>
+          <Flex gap={4} wrap="wrap">
             <Flex gap={2} alignItems="center">
               Colors &nbsp;- <Input fontSize="xs" type="text" w='auto' h={8} px={2} onChange={(e) => setColors(e.target.value)} value={colors} />
             </Flex>
