@@ -56,14 +56,14 @@
 
   &:before {
     content: "";
-    width: 4px;
-    height: 4px;
+    width: 1px;
+    height: 16px;
     background-color: #fff;
     position: absolute;
-    left: 0em;
+    left: -17px;
     top: 50%;
     transform: translateY(-50%);
-    border-radius: 50%;
+    border-radius: 5px;
     opacity: 0;
     transition: opacity 0.3s ease;
   }
@@ -71,7 +71,7 @@
 
 .active-sidebar-item {
   width: fit-content;
-  padding: 0.25em 0.25em 0.25em 0.8em;
+  padding: 0.25em 0.25em 0.25em 0em;
   color: #fff;
   position: relative;
   transition: 0.3s ease;
