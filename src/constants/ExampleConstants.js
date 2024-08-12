@@ -1871,7 +1871,7 @@ const Component = () => {
 
   return (
     <div ref={containerRef} style={{ height: '300px', overflow: 'hidden' }}>
-      <Crosshair containerRef={containerRef} /> // containerRef defaults to "window" if not provided
+      <Crosshair containerRef={containerRef} color='#ffffff'/> // containerRef defaults to "window" if not provided
     </div>
   )
 };`,
