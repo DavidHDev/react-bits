@@ -1,84 +1,65 @@
 // TabbedLayout.js
 import React from "react";
-import { Tabs, TabList, Tab, TabPanels, TabPanel, Flex, Icon, Button, Text, Box } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import {
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Flex,
+  Icon,
+} from "@chakra-ui/react";
 import { FiCode, FiEye, FiHeart } from "react-icons/fi";
-import { TbBug, TbBulb } from "react-icons/tb";
+import ContributionSection from "./ContributionSection";
 
+const tabStyles = {
+  _selected: { color: "#fff", bg: "#111" },
+  borderRadius: "10px",
+  bg: "#000",
+  fontSize: "14px",
+  border: "1px solid #ffffff1c",
+  height: 9,
+  padding: "0.5rem 1rem",
+  transition: "background-color 0.3s",
+  "&:hover": { bg: "#222" },
+};
 
 const TabbedLayout = ({ children }) => {
-  const { subcategory, category } = useParams(); // Extract subcategory from the URL
+  const contentMap = {
+    PreviewTab: null,
+    CodeTab: null
+  };
 
-  const previewContent = React.Children.toArray(children).find(
-    (child) => child.type === PreviewTab
-  );
-  const codeContent = React.Children.toArray(children).find(
-    (child) => child.type === CodeTab
-  );
-  const contributeContent = React.Children.toArray(children).find(
-    (child) => child.type === ContributeTab
-  );
+  React.Children.forEach(children, (child) => {
+    if (Object.prototype.hasOwnProperty.call(contentMap, child.type.name)) {
+      contentMap[child.type.name] = child;
+    }
+  });
 
   return (
-    <Tabs mt={4}>
-      <TabList borderBottom={"1px solid #ffffff1c"} justifyContent="space-between">
+    <Tabs mt={4} variant="unstyled">
+      <TabList justifyContent="space-between">
         <Flex>
-          <Tab
-            _selected={{ color: "#00f0ff", borderBottomColor: "#00f0ff" }}
-            sx={{
-              transition: "color 0.3s",
-              "&:hover": {
-                color: "#00f0ff",
-              },
-            }}
-          >
-            <Icon as={FiEye} />&nbsp;Preview
+          <Tab sx={tabStyles}>
+            <Icon as={FiEye} />
+            &nbsp;Preview
           </Tab>
-          <Tab
-            _selected={{ color: "#00f0ff", borderBottomColor: "#00f0ff" }}
-            sx={{
-              transition: "color 0.3s",
-              "&:hover": {
-                color: "#00f0ff",
-              },
-            }}
-          >
-            <Icon as={FiCode} />&nbsp;Code
+          <Tab sx={{ ...tabStyles, marginLeft: "0.5rem" }}>
+            <Icon as={FiCode} />
+            &nbsp;Code
           </Tab>
         </Flex>
-
-        <Tab
-          _selected={{ color: "#00f0ff", borderBottomColor: "#00f0ff" }}
-          sx={{
-            paddingLeft: 0,
-            paddingRight: 0,
-            transition: "color 0.3s",
-            "&:hover": {
-              color: "#00f0ff",
-            },
-          }}
-        >
-          <Icon as={FiHeart} />&nbsp;Contribute
+        <Tab sx={tabStyles}>
+          <Icon as={FiHeart} />
+          &nbsp;Contribute
         </Tab>
       </TabList>
 
       <TabPanels>
-        <TabPanel p={0}>{previewContent}</TabPanel>
-        <TabPanel p={0}>{codeContent}</TabPanel>
+        <TabPanel p={0}>{contentMap.PreviewTab}</TabPanel>
+        <TabPanel p={0}>{contentMap.CodeTab}</TabPanel>
         <TabPanel p={0}>
-          <Box className="contribute-container">
-            <h2 className="demo-title-contribute">Help us improve this component!</h2>
-            <Flex gap={2} justifyContent="center" alignItems="center" direction={{ base: 'column', md: 'row' }}>
-              <Button cursor="pointer" href={`https://github.com/DavidHDev/react-bits/issues/new?title=[BUG]:+${category}/${subcategory}&labels=bug&labels=bug&template=bug.md`} as="a" rel="noreferrer" target="_blank" fontSize="sm" height={9} rounded="xl" className="contribute-button">
-                <Icon as={TbBug} />&nbsp;Report an issue
-              </Button>
-              <Text mx={2} color="#a1a1aa">or</Text>
-              <Button cursor="pointer" href={`https://github.com/DavidHDev/react-bits/issues/new?title=[FEAT]:+${category}/${subcategory}&labels=enhancement&labels=enhancement&template=feature-request.md`} as="a" rel="noreferrer" target="_blank" fontSize="sm" height={9} rounded="xl" className="contribute-button">
-                <Icon as={TbBulb} />&nbsp;Request a feature
-              </Button>
-            </Flex>
-          </Box>
-          {contributeContent}
+          <ContributionSection />
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -88,6 +69,5 @@ const TabbedLayout = ({ children }) => {
 // Helper components to wrap tab content
 const PreviewTab = ({ children }) => <>{children}</>;
 const CodeTab = ({ children }) => <>{children}</>;
-const ContributeTab = ({ children }) => <>{children}</>;
 
-export { TabbedLayout, PreviewTab, CodeTab, ContributeTab };
+export { TabbedLayout, PreviewTab, CodeTab };

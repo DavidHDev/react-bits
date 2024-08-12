@@ -40,8 +40,8 @@ const CodeHighlighter = ({ language, codeString, showLineNumbers = true }) => {
         onClick={handleCopy}
       >
         {copied
-          ? <span><Icon position="relative" top={'2px'} as={FiCheckSquare} />&nbsp;Copied</span>
-          : <span><Icon position="relative" top={'2px'} as={FiCopy} />&nbsp;Copy</span>
+          ? <Icon as={FiCheckSquare} />
+          : <Icon as={FiCopy} />
         }
       </Button>
     </Box>
