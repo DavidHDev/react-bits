@@ -5,7 +5,7 @@ Welcome to React Bits, your go-to for animated React components, and other goodi
 <div align="center">
 	<br>
 	<br>
-	<img src="./src/assets/bits-logo.svg" alt="react-bits logo" height="200">
+	<img src="./src/assets/logos/bits-logo.svg" alt="react-bits logo" height="200">
 	<br>
 	<br>
 </div>
