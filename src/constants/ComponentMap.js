@@ -11,6 +11,7 @@ import StackDemo from "../demo/Components/StackDemo";
 import WaveTextDemo from "../demo/TextAnimations/WaveTextDemo";
 import ShinyTextDemo from "../demo/TextAnimations/ShinyTextDemo";
 import GradientTextDemo from "../demo/TextAnimations/GradientTextDemo";
+import SquaresDemo from "../demo/Backgrounds/SquaresDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -26,5 +27,6 @@ export const componentMap = {
   'masonry': MasonryDemo,
   'shiny-text': ShinyTextDemo,
   'gradient-text': GradientTextDemo,
+  'squares': SquaresDemo,
   // Map other subcategories to their components here
 };

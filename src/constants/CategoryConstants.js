@@ -68,20 +68,20 @@ export const CATEGORIES = [
       // 'Evervault Card',
     ],
   },
-  // {
-  //   name: 'Backgrounds',
-  //   subcategories: [
-  //     'Hyperspeed',
-  //     'Grid Motion',
-  //     'Squares',
-  //     'Particles',
-  //     'Grain',
-  //     'Threads',
-  //     'Gradient',
-  //     'Dots',
-  //     'Waves'
-  //   ],
-  // }
+  {
+    name: 'Backgrounds',
+    subcategories: [
+      // 'Hyperspeed',
+      // 'Grid Motion',
+      'Squares',
+      // 'Particles',
+      // 'Grain',
+      // 'Threads',
+      // 'Gradient',
+      // 'Dots',
+      // 'Waves'
+    ],
+  }
 ];
 
 // Used for landing page showcased components
