@@ -24,7 +24,7 @@ const CodeOptions = ({ children }) => {
             },
           }}
         >
-          <Icon as={TbBrandCss3} />&nbsp;CSS
+          <Icon as={TbBrandCss3} />&nbsp;Default
         </Tab>
         <Tab
           _selected={{ color: "#00f0ff", borderBottomColor: "#00f0ff" }}
