@@ -12,6 +12,7 @@ import WaveTextDemo from "../demo/TextAnimations/WaveTextDemo";
 import ShinyTextDemo from "../demo/TextAnimations/ShinyTextDemo";
 import GradientTextDemo from "../demo/TextAnimations/GradientTextDemo";
 import SquaresDemo from "../demo/Backgrounds/SquaresDemo";
+import CrosshairDemo from "../demo/Animations/CrosshairDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -28,5 +29,6 @@ export const componentMap = {
   'shiny-text': ShinyTextDemo,
   'gradient-text': GradientTextDemo,
   'squares': SquaresDemo,
+  'crosshair': CrosshairDemo
   // Map other subcategories to their components here
 };

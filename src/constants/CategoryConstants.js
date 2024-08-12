@@ -25,7 +25,7 @@ export const CATEGORIES = [
       // 'Wave Cursor',
       // 'Liquid Cursor',
       // 'Distortion Cursor',
-      // 'Crosshair',
+      'Crosshair',
       // 'Crystal Ball',
       // 'Spotlights',
       'Magnet',
