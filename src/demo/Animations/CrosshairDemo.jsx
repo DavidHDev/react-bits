@@ -10,6 +10,7 @@ import { useRef, useState } from "react";
 const CrosshairDemo = () => {
   const containerRef = useRef(null);
   const [linkText, setLinkText] = useState('Aim.. aand..')
+  const [color, setColor] = useState('#ffffff');
   const { crosshair } = CODE_EXAMPLES;
 
   const [targeted, setTargeted] = useState(true);
@@ -18,7 +19,7 @@ const CrosshairDemo = () => {
     <TabbedLayout>
       <PreviewTab>
         <Box ref={containerRef} position="relative" className="demo-container" minH={300} overflow="hidden">
-          <Crosshair containerRef={targeted ? null : containerRef} />
+          <Crosshair containerRef={targeted ? null : containerRef} color={color} />
 
           <Flex direction="column" justifyContent="center" alignItems="center">
             <Text _hover={{ color: 'cyan' }} transition=".3s ease" textAlign="center" fontWeight={900} fontSize={{ base: '2rem', md: '4rem' }} as="a" href="https://github.com/DavidHDev/react-bits"
@@ -43,6 +44,15 @@ const CrosshairDemo = () => {
             >
               Active on: <Text color={targeted ? "lightgreen" : "coral"}>&nbsp;{targeted ? 'Viewport' : 'Container'}</Text>
             </Button>
+            <Flex alignItems="center"
+              fontSize="xs"
+              h={8}
+              onClick={() => {
+
+              }}
+            >
+              Color:&nbsp;&nbsp;<input type="color" value={color} style={{ height: '22px', outline: 'none', border: 'none' }} onChange={(e) => setColor(e.target.value)} />
+            </Flex>
           </Flex>
         </div>
 
