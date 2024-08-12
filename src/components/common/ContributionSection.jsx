@@ -8,7 +8,7 @@ const ContributionSection = () => {
 
   return (
     <Box className="contribute-container">
-      <h2 className="demo-title-contribute">Help us improve this component!</h2>
+      <Text fontSize={{base: '1rem', md: '1.3rem'}} className="demo-title-contribute">Help us improve this component!</Text>
       <Flex
         gap={2}
         justifyContent="center"
@@ -25,11 +25,12 @@ const ContributionSection = () => {
           height={9}
           rounded="xl"
           className="contribute-button"
+          w={{ base: '90%', md: 'auto' }}
         >
           <Icon as={TbBug} />
           &nbsp;Report an issue
         </Button>
-        <Text mx={2} color="#a1a1aa">
+        <Text mx={2} color="#a1a1aa" display={{ base: 'none', md: 'inline' }}>
           or
         </Text>
         <Button
@@ -42,6 +43,7 @@ const ContributionSection = () => {
           height={9}
           rounded="xl"
           className="contribute-button"
+          w={{ base: '90%', md: 'auto' }}
         >
           <Icon as={TbBulb} />
           &nbsp;Request a feature
