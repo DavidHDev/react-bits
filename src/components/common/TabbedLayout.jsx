@@ -31,8 +31,10 @@ const TabbedLayout = ({ children }) => {
   };
 
   React.Children.forEach(children, (child) => {
-    if (Object.prototype.hasOwnProperty.call(contentMap, child.type.name)) {
-      contentMap[child.type.name] = child;
+    if (child.type === PreviewTab) {
+      contentMap.PreviewTab = child;
+    } else if (child.type === CodeTab) {
+      contentMap.CodeTab = child;
     }
   });
 
