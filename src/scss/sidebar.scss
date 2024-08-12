@@ -56,9 +56,9 @@
 
   &:before {
     content: "";
-    width: 8px;
-    height: 8px;
-    background-color: #00f0ff;
+    width: 4px;
+    height: 4px;
+    background-color: #fff;
     position: absolute;
     left: 0em;
     top: 50%;
@@ -71,7 +71,7 @@
 
 .active-sidebar-item {
   width: fit-content;
-  padding: 0.4em 0.4em 0.4em 1em;
+  padding: 0.25em 0.25em 0.25em 0.8em;
   color: #fff;
   position: relative;
   transition: 0.3s ease;

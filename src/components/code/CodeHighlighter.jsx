@@ -27,14 +27,14 @@ const CodeHighlighter = ({ language, codeString, showLineNumbers = true }) => {
       <Button
         size="sm"
         position="absolute"
-        top={3}
-        right={3}
+        top={2.5}
+        right={2.5}
         rounded="xl"
         fontWeight={500}
         fontSize="xs"
-        backgroundColor={copied ? '#3EFF5D' : '#00F0FF'}
-        color="black"
-        _hover={{ backgroundColor: '#00F0FF' }}
+        backgroundColor={copied ? '#3EFF5D' : '#111'}
+        color={copied ? 'black' : 'white'}
+        _hover={{ backgroundColor: `${copied ? '#3EFF5D' : '#222'}` }}
         _active={{ backgroundColor: '#00F0FF' }}
         transition="background-color 0.3s ease"
         onClick={handleCopy}
