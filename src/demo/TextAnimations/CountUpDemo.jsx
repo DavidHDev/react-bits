@@ -9,7 +9,6 @@ import CodeExample from '../../components/code/CodeExample';
 import CountUp from "../../content/TextAnimations/CountUp/CountUp";
 import GradientText from "../../content/TextAnimations/GradientText/GradientText";
 import { TbFlame } from "react-icons/tb";
-import { InfoOutlineIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import PropTable from "../../components/common/PropTable";
 
@@ -20,7 +19,7 @@ const CountUpDemo = () => {
   const [counter3, setCounter3] = useState(0);
 
   const [startCounting, setStartCounting] = useState(false);
-  const [startCounting2, setStartCounting2] = useState(false);
+  // const [startCounting2, setStartCounting2] = useState(false);
 
   const reRender = () => {
     setCounter((prevCounter) => prevCounter + 1);
@@ -145,12 +144,12 @@ const CountUpDemo = () => {
 
         </p>
         <Flex direction="column" justifyContent="center" alignItems="center" position="relative" className="demo-container" minH={200}>
-          <Button onClick={() => setStartCounting2(true)}>Start</Button>
+          {/* <Button onClick={() => setStartCounting2(true)}>Start</Button> */}
 
           <GradientText>
             <CountUp
               key={counter3}
-              startWhen={startCounting2}
+              // startWhen={startCounting2}
               from={0}
               to={100}
               separator=","
@@ -159,7 +158,7 @@ const CountUpDemo = () => {
             />
           </GradientText>
 
-          {startCounting2 && <RefreshButton onClick={reRender3} />}
+          <RefreshButton onClick={reRender3} />
         </Flex>
 
         <h2 className="demo-title-extra">Dependencies</h2>
