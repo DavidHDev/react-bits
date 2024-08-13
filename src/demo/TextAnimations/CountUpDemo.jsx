@@ -136,7 +136,13 @@ const CountUpDemo = () => {
 
         <h2 className="demo-title-extra"><Icon as={TbFlame} position="relative" top={'4px'} />Hot tip</h2>
         <p className="demo-extra-info">
-          <InfoOutlineIcon position="relative" />You can wrap the counter with other components such as <Link to='/text-animations/gradient-text/'><GradientText>&lt;GradientText /&gt;</GradientText></Link>
+          <Flex>
+            <span>
+              You can wrap the counter with other components such as&nbsp;
+              <Link style={{ display: 'inline', whiteSpace: 'nowrap' }} to='/text-animations/gradient-text/'>&lt;GradientText /&gt;</Link>
+            </span>
+          </Flex>
+
         </p>
         <Flex direction="column" justifyContent="center" alignItems="center" position="relative" className="demo-container" minH={200}>
           <Button onClick={() => setStartCounting2(true)}>Start</Button>
