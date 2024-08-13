@@ -13,6 +13,7 @@ import ShinyTextDemo from "../demo/TextAnimations/ShinyTextDemo";
 import GradientTextDemo from "../demo/TextAnimations/GradientTextDemo";
 import SquaresDemo from "../demo/Backgrounds/SquaresDemo";
 import CrosshairDemo from "../demo/Animations/CrosshairDemo";
+import CountUpDemo from "../demo/TextAnimations/CountUpDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -29,6 +30,7 @@ export const componentMap = {
   'shiny-text': ShinyTextDemo,
   'gradient-text': GradientTextDemo,
   'squares': SquaresDemo,
-  'crosshair': CrosshairDemo
+  'crosshair': CrosshairDemo,
+  'count-up': CountUpDemo
   // Map other subcategories to their components here
 };

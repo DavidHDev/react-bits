@@ -7,16 +7,16 @@ import Nav from './components/navs/Nav';
 export default function App() {
   return (
     <Router>
-        <Nav />
-        <Routes>
-          <Route exact path="/" element={<LandingPage />} />
-          <Route path="/:category/:subcategory" element={
-            <div className='app-container'>
-              <Sidebar />
-              <CategoryPage />
-            </div>
-          } />
-        </Routes>
+      <Nav />
+      <Routes>
+        <Route exact path="/" element={<LandingPage />} />
+        <Route path="/:category/:subcategory" element={
+          <div className='app-container'>
+            <Sidebar />
+            <CategoryPage />
+          </div>
+        } />
+      </Routes>
     </Router>
   )
 }

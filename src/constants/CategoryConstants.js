@@ -7,11 +7,11 @@ export const CATEGORIES = [
       'Blur Text',
       'Wave Text',
       'Shiny Text',
-      'Gradient Text'
+      'Gradient Text',
       // 'Decrypt Hover',
       // 'Flip Text',
       // 'Word Cloud',
-      // 'Count Up'
+      'Count Up'
     ]
   },
   {
