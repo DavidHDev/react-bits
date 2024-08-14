@@ -35,6 +35,6 @@ export const componentMap = {
   'crosshair': CrosshairDemo,
   'count-up': CountUpDemo,
   'hyperspeed': HyperspeedDemo,
-  '3d-gallery': RollingGalleryDemo
+  'rolling-gallery': RollingGalleryDemo
   // Map other subcategories to their components here
 };
