@@ -56,7 +56,7 @@ export const CATEGORIES = [
       // 'List Reveal',
       // 'Liquid Menu',
       // 'Textured Glass',
-      // '3D Gallery',
+      'Rolling Gallery',
       // 'Expandable Card',
       // 'Progress Lines',
       // '3D Carousel',

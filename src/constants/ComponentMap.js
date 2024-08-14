@@ -15,6 +15,7 @@ import SquaresDemo from "../demo/Backgrounds/SquaresDemo";
 import CrosshairDemo from "../demo/Animations/CrosshairDemo";
 import CountUpDemo from "../demo/TextAnimations/CountUpDemo";
 import HyperspeedDemo from "../demo/Backgrounds/HyperspeedDemo";
+import RollingGalleryDemo from "../demo/Components/RollingGalleryDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -33,6 +34,7 @@ export const componentMap = {
   'squares': SquaresDemo,
   'crosshair': CrosshairDemo,
   'count-up': CountUpDemo,
-  'hyperspeed': HyperspeedDemo
+  'hyperspeed': HyperspeedDemo,
+  '3d-gallery': RollingGalleryDemo
   // Map other subcategories to their components here
 };
