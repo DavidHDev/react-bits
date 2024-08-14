@@ -48,7 +48,7 @@ export const CATEGORIES = [
       // 'Bento', 
       // 'Global Search',
       // 'Gradient Input',
-      // 'Spotlight Card,
+      'Spotlight Card',
       // 'Blur Card',
       // 'Trail Card',
       // 'Dynamic Background',
