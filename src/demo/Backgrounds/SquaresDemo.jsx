@@ -2,7 +2,7 @@ import { Box, Button, ButtonGroup, Flex, Input } from "@chakra-ui/react";
 import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 import CodeExample from "../../components/code/CodeExample";
 import { CodeTab, PreviewTab, TabbedLayout } from "../../components/common/TabbedLayout";
-import Squares from "../../content/Backgrounds/Squares";
+import Squares from "../../content/Backgrounds/Squares/Squares";
 import { useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 

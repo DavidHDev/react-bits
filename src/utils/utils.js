@@ -1,5 +1,5 @@
 export const getLanguage = (key) => {
-  if (key === 'code' || key === 'usage' || key === 'tailwind') return 'jsx';
+  if (key === 'code' || key === 'usage' || key === 'tailwind' || key === 'presets') return 'jsx';
   if (key === 'installation') return 'bash';
   if (key === 'css') return 'css';
 }

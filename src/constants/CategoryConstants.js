@@ -71,7 +71,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
-      // 'Hyperspeed',
+      'Hyperspeed',
       // 'Grid Motion',
       'Squares',
       // 'Particles',

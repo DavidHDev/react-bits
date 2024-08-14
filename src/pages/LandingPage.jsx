@@ -94,7 +94,7 @@ const LandingPage = () => {
                 as={Link}
                 to={path}
                 key={`${category.name}-${index}`}
-                minW={{base: '70vw', md: 250}}
+                minW={{ base: '70vw', md: 250 }}
                 minH={190}
                 color="white"
                 className="component-card"
