@@ -4,6 +4,7 @@ import './GridMotion.scss';
 
 const GridMotion = ({ items = [], gradientColor = 'black' }) => {
   const gridRef = useRef(null);
+  const rowRefs = useRef([]); // Array of refs for each row
   const mouseXRef = useRef(window.innerWidth / 2);
 
   // Ensure the grid has 28 items (4 rows x 7 columns) by default
@@ -19,33 +20,33 @@ const GridMotion = ({ items = [], gradientColor = 'black' }) => {
     };
 
     const updateMotion = () => {
-      const grid = gridRef.current;
-      const rows = grid.querySelectorAll('.row');
       const maxMoveAmount = 300;
       const baseDuration = 0.8; // Base duration for inertia
       const inertiaFactors = [0.6, 0.4, 0.3, 0.2]; // Different inertia for each row, outer rows slower
 
-      rows.forEach((row, index) => {
-        const direction = index % 2 === 0 ? 1 : -1;
-        const moveAmount = ((mouseXRef.current / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
+      rowRefs.current.forEach((row, index) => {
+        if (row) {
+          const direction = index % 2 === 0 ? 1 : -1;
+          const moveAmount = ((mouseXRef.current / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
 
-        // Apply inertia and staggered stop
-        gsap.to(row, {
-          x: moveAmount,
-          duration: baseDuration + inertiaFactors[index % inertiaFactors.length],
-          ease: 'power3.out',
-          overwrite: 'auto',
-        });
+          // Apply inertia and staggered stop
+          gsap.to(row, {
+            x: moveAmount,
+            duration: baseDuration + inertiaFactors[index % inertiaFactors.length],
+            ease: 'power3.out',
+            overwrite: 'auto',
+          });
+        }
       });
     };
 
-    const animationLoop = gsap.ticker.add(updateMotion);
+    const removeAnimationLoop = gsap.ticker.add(updateMotion);
 
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      animationLoop.kill();
+      removeAnimationLoop(); // Properly remove the ticker listener
     };
   }, []);
 
@@ -59,7 +60,11 @@ const GridMotion = ({ items = [], gradientColor = 'black' }) => {
       >
         <div className="grid">
           {[...Array(4)].map((_, rowIndex) => (
-            <div key={rowIndex} className="row">
+            <div
+              key={rowIndex}
+              className="row"
+              ref={(el) => (rowRefs.current[rowIndex] = el)} // Set each row's ref
+            >
               {[...Array(7)].map((_, itemIndex) => {
                 const content = combinedItems[rowIndex * 7 + itemIndex];
                 return (
