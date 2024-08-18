@@ -32,7 +32,7 @@ export const CATEGORIES = [
       'Fade',
       // 'Persistent Drag', 
       // 'Beam Border',
-      // 'Star Border',
+      'Star Border',
       // 'Lens Blur,
       // 'Marbles',
       // 'Clump',

@@ -1,4 +1,3 @@
-// SplitTextDemo.js
 import { Box, Button, Flex, Icon } from "@chakra-ui/react";
 
 import { useState } from "react";

@@ -17,6 +17,7 @@ import CountUpDemo from "../demo/TextAnimations/CountUpDemo";
 import HyperspeedDemo from "../demo/Backgrounds/HyperspeedDemo";
 import RollingGalleryDemo from "../demo/Components/RollingGalleryDemo";
 import SpotlightCardDemo from "../demo/Components/SpotlightCardDemo";
+import StarBorderDemo from "../demo/Animations/StarBorderDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -37,6 +38,7 @@ export const componentMap = {
   'count-up': CountUpDemo,
   'hyperspeed': HyperspeedDemo,
   'rolling-gallery': RollingGalleryDemo,
-  'spotlight-card': SpotlightCardDemo
+  'spotlight-card': SpotlightCardDemo,
+  'star-border': StarBorderDemo
   // Map other subcategories to their components here
 };

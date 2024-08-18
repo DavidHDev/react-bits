@@ -1,4 +1,3 @@
-// SplitTextDemo.js
 import { Box } from "@chakra-ui/react";
 import { SplitText } from "../../content/TextAnimations/SplitText/SplitText";
 

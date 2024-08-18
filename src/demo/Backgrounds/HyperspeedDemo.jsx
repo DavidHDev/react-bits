@@ -1,4 +1,3 @@
-// SplitTextDemo.js
 import { Box, Select, Text } from "@chakra-ui/react";
 import { CodeTab, PreviewTab, TabbedLayout } from "../../components/common/TabbedLayout";
 import Hyperspeed from "../../content/Backgrounds/Hyperspeed/Hyperspeed";

@@ -1,4 +1,3 @@
-// SplitTextDemo.js
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 
 import { CODE_EXAMPLES } from "../../constants/ExampleConstants";

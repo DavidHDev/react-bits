@@ -1,4 +1,3 @@
-// SplitTextDemo.js
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { CODE_EXAMPLES } from "../../constants/ExampleConstants";
 import { CodeTab, PreviewTab, TabbedLayout } from "../../components/common/TabbedLayout";
