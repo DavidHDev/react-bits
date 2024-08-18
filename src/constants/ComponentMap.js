@@ -18,6 +18,7 @@ import HyperspeedDemo from "../demo/Backgrounds/HyperspeedDemo";
 import RollingGalleryDemo from "../demo/Components/RollingGalleryDemo";
 import SpotlightCardDemo from "../demo/Components/SpotlightCardDemo";
 import StarBorderDemo from "../demo/Animations/StarBorderDemo";
+import ElasticSliderDemo from "../demo/Components/ElasticSliderDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -39,6 +40,7 @@ export const componentMap = {
   'hyperspeed': HyperspeedDemo,
   'rolling-gallery': RollingGalleryDemo,
   'spotlight-card': SpotlightCardDemo,
-  'star-border': StarBorderDemo
+  'star-border': StarBorderDemo,
+  'elastic-slider': ElasticSliderDemo
   // Map other subcategories to their components here
 };

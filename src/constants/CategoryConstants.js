@@ -54,6 +54,7 @@ export const CATEGORIES = [
       // 'Dynamic Background',
       // 'Decay Card',
       // 'List Reveal',
+      'Elastic Slider',
       // 'Liquid Menu',
       // 'Textured Glass',
       'Rolling Gallery',
