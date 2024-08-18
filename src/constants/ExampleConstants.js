@@ -4963,7 +4963,7 @@ export default GridMotion;`,
 .row__item-content {
   padding: 1rem;
   text-align: center;
-  z-index: -1; // Ensure content is on top of the background
+  z-index: 1; // Ensure content is on top of the background
 }
 
 .fullview {
