@@ -4788,7 +4788,7 @@ const items = [
 <GridMotion items={items} />`,
     code: `import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import './GridMotion.scss';
+import './GridMotion.css';
 
 const GridMotion = ({ items = [], gradientColor = 'black' }) => {
   const gridRef = useRef(null);
