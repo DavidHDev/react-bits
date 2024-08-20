@@ -1,0 +1,25 @@
+.content {
+  position: relative;
+}
+
+.svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+  will-change: transform;
+}
+
+.card-text {
+  position: absolute;
+  bottom: 1.2em;
+  letter-spacing: -.5px;
+  font-weight: 900;
+  left: 1em;
+  font-size: 2.5rem;
+  line-height: 1.5em;
+}
+
+.card-text::first-line {
+  font-size: 6rem;
+}

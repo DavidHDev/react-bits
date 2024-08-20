@@ -52,7 +52,7 @@ export const CATEGORIES = [
       // 'Blur Card',
       // 'Trail Card',
       // 'Dynamic Background',
-      // 'Decay Card',
+      'Decay Card',
       // 'List Reveal',
       'Elastic Slider',
       // 'Liquid Menu',
