@@ -24,7 +24,7 @@ const Nav = () => {
   }, []);
 
   return (
-    <Box position={'fixed'} zIndex={1} top={0} left={0} className='main-nav' pl={{base: '1.5em', md: '5em'}} pr={{base: '1.5em', md: '4em'}} w={"100%"} borderBottom={"1px solid #ffffff1c"}>
+    <Box position={'fixed'} zIndex={100} top={0} left={0} className='main-nav' pl={{base: '1.5em', md: '5em'}} pr={{base: '1.5em', md: '4em'}} w={"100%"} borderBottom={"1px solid #ffffff1c"}>
       <Flex h={14} alignItems="center" justifyContent="space-between">
         <Link to="/">
           <Image src={Logo} alt="Logo" height="25px" />
