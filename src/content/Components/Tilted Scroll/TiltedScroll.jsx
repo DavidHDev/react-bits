@@ -1,7 +1,7 @@
 import React from 'react';
-import './SkewedInfiniteScroll.css'; 
+import './TiltedScroll.css'; 
 
-const SkewedInfiniteScroll = () => {
+const TiltedScroll = () => {
   const items = [
     { id: '1', text: 'Item' },
     { id: '2', text: 'Another Item' },
@@ -43,4 +43,4 @@ const SkewedInfiniteScroll = () => {
   );
 };
 
-export default SkewedInfiniteScroll;
+export default TiltedScroll;
