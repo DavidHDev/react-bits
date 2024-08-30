@@ -4,7 +4,6 @@ import CategoryPage from './pages/CategoryPage'
 import LandingPage from './pages/LandingPage'
 import Nav from './components/navs/Nav';
 
-
 export default function App() {
   return (
     <Router>
