@@ -42,6 +42,7 @@ export const CATEGORIES = [
   {
     name: 'Components',
     subcategories: [
+      'Skewed Infinite Scroll',
       'Stack',
       'Dock',
       'Masonry',

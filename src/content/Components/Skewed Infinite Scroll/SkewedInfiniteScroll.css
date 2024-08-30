@@ -1,0 +1,77 @@
+/* SkewedInfiniteScroll.css */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .inner-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; 
+    overflow: hidden;
+    mask-composite: intersect;
+    mask-image: 
+      linear-gradient(to right, transparent, black 5rem),
+      linear-gradient(to left, transparent, black 5rem),
+      linear-gradient(to bottom, transparent, black 5rem),
+      linear-gradient(to top, transparent, black 5rem);
+  }
+  
+  .scroll-grid {
+    margin: auto;
+    display: grid;
+    height: 250px;
+    width: 300px;
+    animation: skew-scroll 20s linear infinite;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.25rem; /* gap-5 equivalent */
+  }
+  
+  .scroll-grid.sm-grid-cols-2 {
+    width: 600px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .grid-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    space-x: 0.5rem; 
+    border-radius: 0.375rem; 
+    border: 1px solid #e5e7eb; 
+    padding: 0.625rem 1.25rem;
+    box-shadow: 0 4px 6px rgba(181, 9, 9, 0.1); 
+    transition: all 0.3s ease;
+  }
+  
+  .grid-item:hover {
+    transform: translateY(-0.25rem) translateX(0.25rem) scale(1.025);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .grid-item.dark {
+    border-color: #1f2937; 
+  }
+  
+  .icon {
+    height: 1.5rem; 
+    width: 1.5rem; 
+    color: #00f0ff;
+    margin-right: 10px;
+  }
+  
+  .item-text {
+    color: #4b5563; 
+  }
+  
+  /* Keyframes for skew-scroll animation */
+  @keyframes skew-scroll {
+    0% {
+      transform: rotateX(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0);
+    }
+    100% {
+      transform: rotateX(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%);
+    }
+  }
+  
