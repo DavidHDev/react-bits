@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.scss'
+
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { HelmetProvider } from 'react-helmet-async';
 

@@ -1,5 +1,4 @@
-import React from 'react';
-import './TiltedScroll.css'; 
+import './TiltedScroll.scss'; 
 
 const TiltedScroll = () => {
   const items = [

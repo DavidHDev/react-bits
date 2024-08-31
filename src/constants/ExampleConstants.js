@@ -615,14 +615,13 @@ const Fade = ({ children, blur = false }) => {
 export default Fade;`
   },
 
-// Tilted Scroll
+// ! Tilted Scroll ------------------------------------------------------------------------
 tiltedScroll:{
   usage:`import TiltedScroll from './TiltedScroll'
 
 <TiltedScroll />`,
 
-  code:`import React from 'react';
-import './TiltedScroll.css'; 
+  code:`import './TiltedScroll.css'; 
 
 const TiltedScroll = () => {
   const items = [
@@ -817,17 +816,8 @@ export default TiltedScroll;
               'rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%)',
           },
         },
-      },
-   `
-
-
+      },`
 },
-
-
-
-
-
-
 
   // ! STACK ------------------------------------------------------------------------
   stack: {

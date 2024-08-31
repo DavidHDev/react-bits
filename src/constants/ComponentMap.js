@@ -47,6 +47,6 @@ export const componentMap = {
   'elastic-slider': ElasticSliderDemo,
   'grid-motion': GridMotionDemo,
   'decay-card': DecayCardDemo,
-  'tilted-scroll':TiltedScrollDemo
+  'tilted-scroll': TiltedScrollDemo
   // Map other subcategories to their components here
 };
