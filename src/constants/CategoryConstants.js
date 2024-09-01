@@ -42,7 +42,6 @@ export const CATEGORIES = [
   {
     name: 'Components',
     subcategories: [
-      'Tilted Scroll',
       'Stack',
       'Dock',
       'Masonry',
@@ -50,6 +49,7 @@ export const CATEGORIES = [
       // 'Global Search',
       // 'Gradient Input',
       'Spotlight Card',
+      'Tilted Scroll',
       // 'Blur Card',
       // 'Trail Card',
       // 'Dynamic Background',

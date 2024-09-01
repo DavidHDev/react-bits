@@ -615,13 +615,13 @@ const Fade = ({ children, blur = false }) => {
 export default Fade;`
   },
 
-// ! Tilted Scroll ------------------------------------------------------------------------
-tiltedScroll:{
-  usage:`import TiltedScroll from './TiltedScroll'
+  // ! TILTED SCROLL ------------------------------------------------------------------------
+  tiltedScroll: {
+    usage: `import TiltedScroll from './TiltedScroll'
 
 <TiltedScroll />`,
 
-  code:`import './TiltedScroll.css'; 
+    code: `import './TiltedScroll.css'; 
 
 const TiltedScroll = () => {
   const items = [
@@ -666,7 +666,7 @@ const TiltedScroll = () => {
 };
 
 export default TiltedScroll;`,
-  css:`.container {
+    css: `.container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -740,7 +740,7 @@ export default TiltedScroll;`,
       transform: rotateX(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%);
     }
   } `,
-   tailwind:`import React from 'react';
+    tailwind: `import React from 'react';
 const TiltedScroll = () => {
   const items = [
     { id: '1', text: 'Item' },
@@ -801,8 +801,11 @@ const TiltedScroll = () => {
 
 export default TiltedScroll;
 
-//tailwind.config.js  
-  "animation: {
+//tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      "animation: {
         'skew-scroll': 'skew-scroll 20s linear infinite',
       },
       keyframes: {
@@ -816,8 +819,12 @@ export default TiltedScroll;
               'rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%)',
           },
         },
-      },`
-},
+      }
+    }
+  },
+  plugins: [],
+};`
+  },
 
   // ! STACK ------------------------------------------------------------------------
   stack: {
