@@ -21,6 +21,7 @@ import StarBorderDemo from "../demo/Animations/StarBorderDemo";
 import ElasticSliderDemo from "../demo/Components/ElasticSliderDemo";
 import GridMotionDemo from "../demo/Backgrounds/GridMotionDemo";
 import DecayCardDemo from "../demo/Components/DecayCardDemo";
+import TiltedScrollDemo from "../demo/Components/TiltedScrollDemo";
 
 export const componentMap = {
   'split-text': SplitTextDemo,
@@ -45,6 +46,7 @@ export const componentMap = {
   'star-border': StarBorderDemo,
   'elastic-slider': ElasticSliderDemo,
   'grid-motion': GridMotionDemo,
-  'decay-card': DecayCardDemo
+  'decay-card': DecayCardDemo,
+  'tilted-scroll': TiltedScrollDemo
   // Map other subcategories to their components here
 };
