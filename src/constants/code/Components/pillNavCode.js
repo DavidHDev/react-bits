@@ -25,6 +25,7 @@ import logo from '/path/to/logo.svg';
   pillColor="#ffffff"
   hoveredPillTextColor="#ffffff"
   pillTextColor="#000000"
+  onMobileMenuClick
 />`,
   code,
   css,
