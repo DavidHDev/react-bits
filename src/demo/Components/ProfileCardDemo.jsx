@@ -160,7 +160,7 @@ const ProfileCardDemo = () => {
             handle="javicodes"
             status="Online"
             contactText="Contact Me"
-            avatarUrl="/assets/demo/person.png"
+            avatarUrl="/assets/demo/person.webp"
             iconUrl={showIcon ? '/assets/demo/iconpattern.png' : ''}
             showUserInfo={showUserInfo}
             showBehindGradient={showBehindGradient}
