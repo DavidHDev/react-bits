@@ -17,6 +17,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   const cornersRef = useRef<NodeListOf<HTMLDivElement>>(null);
   const spinTl = useRef<gsap.core.Timeline>(null);
   const dotRef = useRef<HTMLDivElement>(null);
+  const lastPosRef = useRef<{ x: number; y: number }>({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const constants = useMemo(
     () => ({
       borderWidth: 3,
@@ -28,6 +29,8 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
   const moveCursor = useCallback((x: number, y: number) => {
     if (!cursorRef.current) return;
+    // remember last pointer position (used on mobile when mousemove isn't available)
+    lastPosRef.current = { x, y };
     gsap.to(cursorRef.current, {
       x,
       y,
@@ -83,7 +86,12 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     createSpinTimeline();
 
     const moveHandler = (e: MouseEvent) => moveCursor(e.clientX, e.clientY);
+    const pointerMoveHandler = (e: PointerEvent) => {
+      if (e.clientX == null || e.clientY == null) return;
+      moveCursor(e.clientX, e.clientY);
+    };
     window.addEventListener('mousemove', moveHandler);
+    window.addEventListener('pointermove', pointerMoveHandler, { passive: true });
 
     const scrollHandler = () => {
       if (!activeTarget || !cursorRef.current) return;
@@ -120,6 +128,9 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
     window.addEventListener('mousedown', mouseDownHandler);
     window.addEventListener('mouseup', mouseUpHandler);
+    // pointer equivalents for touch devices
+    window.addEventListener('pointerdown', mouseDownHandler);
+    window.addEventListener('pointerup', mouseUpHandler);
 
     const enterHandler = (e: MouseEvent) => {
       const directTarget = e.target as Element;
@@ -220,7 +231,8 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       };
 
       isAnimatingToTarget = true;
-      updateCorners();
+      // if we don't have a real mouse event (mobile), use last known pointer position
+      updateCorners(lastPosRef.current?.x, lastPosRef.current?.y);
 
       setTimeout(() => {
         isAnimatingToTarget = false;
@@ -303,8 +315,13 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
     return () => {
       window.removeEventListener('mousemove', moveHandler);
+      window.removeEventListener('pointermove', pointerMoveHandler);
       window.removeEventListener('mouseover', enterHandler);
       window.removeEventListener('scroll', scrollHandler);
+      window.removeEventListener('mousedown', mouseDownHandler);
+      window.removeEventListener('mouseup', mouseUpHandler);
+      window.removeEventListener('pointerdown', mouseDownHandler);
+      window.removeEventListener('pointerup', mouseUpHandler);
 
       if (activeTarget) {
         cleanupTarget(activeTarget);

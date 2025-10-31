@@ -7,6 +7,7 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
   const cornersRef = useRef(null);
   const spinTl = useRef(null);
   const dotRef = useRef(null);
+  const lastPosRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const constants = useMemo(
     () => ({
       borderWidth: 3,
@@ -18,6 +19,8 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
 
   const moveCursor = useCallback((x, y) => {
     if (!cursorRef.current) return;
+    // remember last pointer position (used on mobile when mousemove isn't available)
+    lastPosRef.current = { x, y };
     gsap.to(cursorRef.current, {
       x,
       y,
@@ -73,7 +76,13 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
     createSpinTimeline();
 
     const moveHandler = e => moveCursor(e.clientX, e.clientY);
+    const pointerMoveHandler = e => {
+      // pointer events cover touch + mouse
+      if (e.clientX == null || e.clientY == null) return;
+      moveCursor(e.clientX, e.clientY);
+    };
     window.addEventListener('mousemove', moveHandler);
+    window.addEventListener('pointermove', pointerMoveHandler, { passive: true });
 
     const scrollHandler = () => {
       if (!activeTarget || !cursorRef.current) return;
@@ -98,7 +107,6 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
     //---------------------------------------------------------------
     // This code for onclick animation
 
-    window.addEventListener('mousemove', moveHandler);
     const mouseDownHandler = () => {
       if (!dotRef.current) return;
       gsap.to(dotRef.current, { scale: 0.7, duration: 0.3 });
@@ -114,6 +122,9 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
 
     window.addEventListener('mousedown', mouseDownHandler);
     window.addEventListener('mouseup', mouseUpHandler);
+    // pointer equivalents for touch devices
+    window.addEventListener('pointerdown', mouseDownHandler);
+    window.addEventListener('pointerup', mouseUpHandler);
 
     //----------------------------------------------------------------
     const enterHandler = e => {
@@ -216,7 +227,8 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
       };
 
       isAnimatingToTarget = true;
-      updateCorners();
+      // if we don't have a real mouse event (mobile), use last known pointer position
+      updateCorners(lastPosRef.current?.x, lastPosRef.current?.y);
 
       setTimeout(() => {
         isAnimatingToTarget = false;
@@ -299,6 +311,7 @@ const TargetCursor = ({ targetSelector = '.cursor-target', spinDuration = 2, hid
 
     return () => {
       window.removeEventListener('mousemove', moveHandler);
+      window.removeEventListener('pointermove', pointerMoveHandler);
       window.removeEventListener('mouseover', enterHandler);
       window.removeEventListener('scroll', scrollHandler);
 
