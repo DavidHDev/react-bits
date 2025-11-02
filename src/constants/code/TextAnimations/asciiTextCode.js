@@ -6,14 +6,18 @@ import tsTailwind from '@ts-tailwind/TextAnimations/ASCIIText/ASCIIText.tsx?raw'
 export const asciiText = {
   dependencies: `three`,
   usage: `// Component ported and enhanced from https://codepen.io/JuanFuentes/pen/eYEeoyE
-  
+
+// NOTE: The component uses position: absolute and width/height: 100%, which requires a parent container with explicit dimensions.
+
 import ASCIIText from './ASCIIText';
 
-<ASCIIText
-  text='hello_world'
-  enableWaves={true}
-  asciiFontSize={8}
-/>`,
+<div className="relative w-full h-[500px]">
+  <ASCIIText
+    text='hello_world'
+    enableWaves={true}
+    asciiFontSize={8}
+  />
+</div>`,
   code,
   tailwind,
   tsCode,
