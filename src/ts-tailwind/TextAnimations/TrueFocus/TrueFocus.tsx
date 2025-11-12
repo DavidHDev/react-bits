@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 
 interface TrueFocusProps {
   sentence?: string;
+  separator?: string;
   manualMode?: boolean;
   blurAmount?: number;
   borderColor?: string;
@@ -20,6 +21,7 @@ interface FocusRect {
 
 const TrueFocus: React.FC<TrueFocusProps> = ({
   sentence = 'True Focus',
+  separator = ' ',
   manualMode = false,
   blurAmount = 5,
   borderColor = 'green',
@@ -27,7 +29,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
   animationDuration = 0.5,
   pauseBetweenAnimations = 1
 }) => {
-  const words = sentence.split(' ');
+  const words = sentence.split(separator);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);

@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 
 const TrueFocus = ({
   sentence = 'True Focus',
+  separator = ' ',
   manualMode = false,
   blurAmount = 5,
   borderColor = 'green',
@@ -10,7 +11,7 @@ const TrueFocus = ({
   animationDuration = 0.5,
   pauseBetweenAnimations = 1
 }) => {
-  const words = sentence.split(' ');
+  const words = sentence.split(separator);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lastActiveIndex, setLastActiveIndex] = useState(null);
   const containerRef = useRef(null);
