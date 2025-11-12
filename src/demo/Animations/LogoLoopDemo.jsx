@@ -8,6 +8,7 @@ import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import useForceRerender from '../../hooks/useForceRerender';
 
 import { logoLoop } from '../../constants/code/Animations/logoLoopCode';
@@ -45,10 +46,18 @@ const LogoLoopDemo = () => {
   const [speed, setSpeed] = useState(100);
   const [logoHeight, setLogoHeight] = useState(60);
   const [gap, setGap] = useState(60);
-  const [pauseOnHover, setPauseOnHover] = useState(true);
+  const [hoverSpeed, setHoverSpeed] = useState(0);
   const [fadeOut, setFadeOut] = useState(true);
   const [scaleOnHover, setScaleOnHover] = useState(true);
   const [direction, setDirection] = useState('left');
+  const [useCustomRender, setUseCustomRender] = useState(false);
+
+  const directionOptions = [
+    { value: 'left', label: 'Left' },
+    { value: 'right', label: 'Right' },
+    { value: 'up', label: 'Up' },
+    { value: 'down', label: 'Down' }
+  ];
 
   const propData = [
     {
@@ -66,9 +75,10 @@ const LogoLoopDemo = () => {
     },
     {
       name: 'direction',
-      type: "'left' | 'right'",
+      type: "'left' | 'right' | 'up' | 'down'",
       default: "'left'",
-      description: 'Direction of the logo animation loop.'
+      description:
+        'Direction of the logo animation loop. Supports horizontal (left/right) and vertical (up/down) scrolling.'
     },
     {
       name: 'width',
@@ -89,10 +99,11 @@ const LogoLoopDemo = () => {
       description: 'Gap between logos in pixels.'
     },
     {
-      name: 'pauseOnHover',
-      type: 'boolean',
-      default: 'true',
-      description: 'Whether to pause the animation when hovering over the component.'
+      name: 'hoverSpeed',
+      type: 'number | undefined',
+      default: '0',
+      description:
+        'Speed when hovering over the component. Set to 0 to pause, or a lower value for deceleration effect.'
     },
     {
       name: 'fadeOut',
@@ -111,6 +122,13 @@ const LogoLoopDemo = () => {
       type: 'boolean',
       default: 'false',
       description: 'Whether to scale logos on hover.'
+    },
+    {
+      name: 'renderItem',
+      type: '(item: LogoItem, key: React.Key) => React.ReactNode',
+      default: 'undefined',
+      description:
+        'Custom render function for each logo item. Allows full control over item rendering for animations, tooltips, etc.'
     },
     {
       name: 'ariaLabel',
@@ -145,14 +163,44 @@ const LogoLoopDemo = () => {
             speed={speed}
             direction={direction}
             scaleOnHover={scaleOnHover}
-            pauseOnHover={pauseOnHover}
+            hoverSpeed={hoverSpeed}
             fadeOut={fadeOut}
             fadeOutColor="#060010"
             ariaLabel="Our tech stack"
+            renderItem={
+              useCustomRender
+                ? item => (
+                    <div
+                      style={{
+                        padding: '8px',
+                        border: '2px solid #8b5cf6',
+                        borderRadius: '8px',
+                        background: 'rgba(139, 92, 246, 0.1)'
+                      }}
+                    >
+                      {'node' in item ? (
+                        item.node
+                      ) : (
+                        <img src={item.src} alt={item.alt} style={{ height: `${logoHeight}px` }} />
+                      )}
+                    </div>
+                  )
+                : undefined
+            }
           />
         </Box>
 
         <Customize>
+          <PreviewSelect
+            title="Direction"
+            options={directionOptions}
+            value={direction}
+            onChange={value => {
+              setDirection(value);
+              forceRerender();
+            }}
+          />
+
           <PreviewSlider
             title="Speed"
             min={0}
@@ -162,6 +210,19 @@ const LogoLoopDemo = () => {
             valueUnit="px/s"
             onChange={value => {
               setSpeed(value);
+              forceRerender();
+            }}
+          />
+
+          <PreviewSlider
+            title="Hover Speed"
+            min={0}
+            max={200}
+            step={10}
+            value={hoverSpeed}
+            valueUnit="px/s"
+            onChange={value => {
+              setHoverSpeed(value);
               forceRerender();
             }}
           />
@@ -193,26 +254,6 @@ const LogoLoopDemo = () => {
           />
 
           <PreviewSwitch
-            title="Direction"
-            isChecked={direction === 'right'}
-            onChange={checked => {
-              setDirection(checked ? 'right' : 'left');
-              forceRerender();
-            }}
-            checkedLabel="Right"
-            uncheckedLabel="Left"
-          />
-
-          <PreviewSwitch
-            title="Pause on Hover"
-            isChecked={pauseOnHover}
-            onChange={checked => {
-              setPauseOnHover(checked);
-              forceRerender();
-            }}
-          />
-
-          <PreviewSwitch
             title="Fade Out"
             isChecked={fadeOut}
             onChange={checked => {
@@ -226,6 +267,15 @@ const LogoLoopDemo = () => {
             isChecked={scaleOnHover}
             onChange={checked => {
               setScaleOnHover(checked);
+              forceRerender();
+            }}
+          />
+
+          <PreviewSwitch
+            title="Use Custom Render"
+            isChecked={useCustomRender}
+            onChange={checked => {
+              setUseCustomRender(checked);
               forceRerender();
             }}
           />
