@@ -117,6 +117,13 @@ export default function Carousel({
     } else if (offset > DRAG_BUFFER || velocity > VELOCITY_THRESHOLD) {
       if (loop && currentIndex === 0) {
         setCurrentIndex(items.length - 1);
+      } else if (loop && currentIndex === items.length) {
+        // Jump directly to real last item without animation
+        setIsResetting(true);
+        const lastItemIndex = items.length - 1;
+        x.set(-(lastItemIndex * trackItemOffset));
+        setCurrentIndex(lastItemIndex);
+        setTimeout(() => setIsResetting(false), 50);
       } else {
         setCurrentIndex(prev => Math.max(prev - 1, 0));
       }
