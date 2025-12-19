@@ -4,7 +4,6 @@ import { Box } from '@chakra-ui/react';
 import { useDebounce } from 'react-haiku';
 
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
 import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
@@ -48,6 +47,12 @@ const OrbDemo = () => {
       type: 'boolean',
       default: 'false',
       description: 'Force hover animations even when the orb is not actually hovered.'
+    },
+    {
+      name: 'backgroundColor',
+      type: 'string',
+      default: 'transparent',
+      description: 'The background color of the container (Hex, RGB).'
     }
   ];
 
@@ -61,14 +66,11 @@ const OrbDemo = () => {
             hue={debouncedHue}
             forceHoverState={forceHoverState}
           />
-
-          {/* For Demo Purposes Only */}
           <BackgroundContent pillText="New Background" headline="This orb is hiding something, try hovering!" />
         </Box>
 
         <Customize>
           <PreviewSlider title="Hue Shift" min={0} max={360} step={1} value={hue} onChange={setHue} />
-
           <PreviewSlider
             title="Hover Intensity"
             min={0}
@@ -77,13 +79,11 @@ const OrbDemo = () => {
             value={hoverIntensity}
             onChange={setHoverIntensity}
           />
-
           <PreviewSwitch
             title="Rotate On Hover"
             isChecked={rotateOnHover}
             onChange={checked => setRotateOnHover(checked)}
           />
-
           <PreviewSwitch
             title="Force Hover State"
             isChecked={forceHoverState}

@@ -2,7 +2,31 @@ import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle, Vec3 } from 'ogl';
 import './Orb.css';
 
-export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = true, forceHoverState = false }) {
+// SAFE color parser (No DOM manipulation)
+const parseColor = color => {
+  // If it's a hex code like #ffffff
+  if (color.startsWith('#')) {
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return [r, g, b];
+  }
+  // Handle basic named colors manually for safety
+  if (color === 'white') return [255, 255, 255];
+  if (color === 'black') return [0, 0, 0];
+
+  // Default to black if unknown
+  return [0, 0, 0];
+};
+
+export default function Orb({
+  hue = 0,
+  hoverIntensity = 0.2,
+  rotateOnHover = true,
+  forceHoverState = false,
+  backgroundColor = 'transparent'
+}) {
   const ctnDom = useRef(null);
 
   const vert = /* glsl */ `
@@ -25,6 +49,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     uniform float hover;
     uniform float rot;
     uniform float hoverIntensity;
+    uniform float bgLightness; 
     varying vec2 vUv;
 
     vec3 rgb2yiq(vec3 c) {
@@ -90,8 +115,15 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     }
 
     vec4 extractAlpha(vec3 colorIn) {
-      float a = max(max(colorIn.r, colorIn.g), colorIn.b);
-      return vec4(colorIn.rgb / (a + 1e-5), a);
+      vec4 finalColor;
+      if (bgLightness > 0.5) {
+        float a = max(max(1.0 - colorIn.r, 1.0 - colorIn.g), 1.0 - colorIn.b);
+        finalColor = vec4(colorIn.rgb, a);
+      } else {
+        float a = max(max(colorIn.r, colorIn.g), colorIn.b);
+        finalColor = vec4(colorIn.rgb / (a + 1e-5), a);
+      }
+      return finalColor;
     }
 
     const vec3 baseColor1 = vec3(0.611765, 0.262745, 0.996078);
@@ -137,6 +169,10 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       col = (col + v1) * v2 * v3;
       col = clamp(col, 0.0, 1.0);
       
+      if (bgLightness > 0.5) {
+        col = 1.0 - col; 
+      }
+
       return extractAlpha(col);
     }
 
@@ -167,6 +203,13 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     const container = ctnDom.current;
     if (!container) return;
 
+    // Apply background color to container
+    container.style.backgroundColor = backgroundColor;
+
+    // Calculate lightness safe way
+    const rgb = parseColor(backgroundColor);
+    const lightness = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
+
     const renderer = new Renderer({ alpha: true, premultipliedAlpha: false });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -184,7 +227,8 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
         hue: { value: hue },
         hover: { value: 0 },
         rot: { value: 0 },
-        hoverIntensity: { value: hoverIntensity }
+        hoverIntensity: { value: hoverIntensity },
+        bgLightness: { value: lightness }
       }
     });
 
@@ -263,8 +307,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       container.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
+  }, [hue, hoverIntensity, rotateOnHover, forceHoverState, backgroundColor]);
 
   return <div ref={ctnDom} className="orb-container" />;
 }
