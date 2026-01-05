@@ -83,6 +83,7 @@ const components = {
   'gooey-nav': () => import('../demo/Components/GooeyNavDemo'),
   'chroma-grid': () => import('../demo/Components/ChromaGridDemo'),
   'profile-card': () => import('../demo/Components/ProfileCardDemo'),
+  'recipe-card': () => import('../demo/Components/RecipeCardDemo'),
   'card-swap': () => import('../demo/Components/CardSwapDemo'),
   'model-viewer': () => import('../demo/Components/ModelViewerDemo'),
   'fluid-glass': () => import('../demo/Components/FluidGlassDemo'),

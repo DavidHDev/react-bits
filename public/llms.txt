@@ -114,6 +114,7 @@ Notes:
 - [Pill Nav](https://www.reactbits.dev/components/pill-nav): Minimal pill nav with sliding active highlight + smooth easing. CLI: `PillNav`.
 - [Pixel Card](https://www.reactbits.dev/components/pixel-card): Card content revealed through pixel expansion transition. CLI: `PixelCard`.
 - [Profile Card](https://www.reactbits.dev/components/profile-card): Animated profile card glare with 3D hover effect. CLI: `ProfileCard`.
+- [Recipe Card](https://www.reactbits.dev/components/recipe-card): Interactive recipe card with 3D flip animation revealing cooking details and floating visual elements. CLI: `RecipeCard`.
 - [Reflective Card](https://www.reactbits.dev/components/reflective-card): Card with dynamic webcam reflection and glare effects that respond to cursor movement. CLI: `ReflectiveCard`.
 - [Scroll Stack](https://www.reactbits.dev/components/scroll-stack): Overlapping card stack reveals on scroll with depth layering. CLI: `ScrollStack`.
 - [Spotlight Card](https://www.reactbits.dev/components/spotlight-card): Dynamic spotlight follows cursor casting gradient illumination. CLI: `SpotlightCard`.

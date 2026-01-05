@@ -103,6 +103,7 @@ export const CATEGORIES = [
       'Model Viewer',
       'Lanyard',
       'Profile Card',
+      'Recipe Card',
       'Dock',
       'Gooey Nav',
       'Pixel Card',

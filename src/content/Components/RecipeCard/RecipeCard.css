@@ -1,0 +1,200 @@
+.card {
+  overflow: visible;
+  width: 220px; /* increased */
+  height: 295px; /* increased */
+  position: relative;
+} 
+
+.content {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 300ms;
+  box-shadow: 0px 0px 10px 1px #000000ee;
+  border-radius: 5px;
+  position: relative;
+}
+
+.front, .back {
+  background-color: var(--back-color, #151515);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.back {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.back::before {
+  position: absolute;
+  content: ' ';
+  display: block;
+  width: 220px; /* wider band */
+  height: 170%; /* slightly taller */
+  background: linear-gradient(90deg, transparent, var(--glow-color, #ff9966), var(--glow-color, #ff9966), var(--glow-color, #ff9966), var(--glow-color, #ff9966), transparent);
+  animation: rotation_481 5000ms infinite linear;
+} 
+
+.back-content {
+  position: absolute;
+  width: 99%;
+  height: 99%;
+  background-color: var(--back-color, #151515);
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.card:hover .content {
+  transform: rotateY(180deg);
+}
+
+@keyframes rotation_481 {
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+.front {
+  transform: rotateY(180deg);
+  color: white;
+}
+
+.front .front-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 14px; /* increased */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.front-content .badge {
+  background-color: #00000055;
+  padding: 4px 12px; /* slightly larger */
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+  width: fit-content;
+}
+
+.description {
+  box-shadow: 0px 0px 10px 8px #00000088; /* slightly stronger */
+  width: 100%;
+  padding: 12px; /* increased */
+  background-color: #00000099;
+  backdrop-filter: blur(5px);
+  border-radius: 5px;
+}
+
+.title {
+  font-size: 13px; /* increased */
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title p {
+  width: 50%;
+}
+
+.card-footer {
+  color: #ffffff88;
+  margin-top: 6px;
+  font-size: 10px; /* increased */
+} 
+
+.front .img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.circle {
+  width: 110px; /* increased */
+  height: 110px; /* increased */
+  border-radius: 50%;
+  background-color: var(--circle-primary, #ffbb66);
+  position: relative;
+  filter: blur(18px);
+  animation: floating 2600ms infinite linear;
+} 
+
+#bottom {
+  background-color: var(--circle-secondary, #ff8866);
+  left: 40px; /* nudged */
+  top: -10px; /* nudged */
+  width: 190px; /* increased */
+  height: 190px; /* increased */
+  animation-delay: -800ms;
+} 
+
+#right {
+  background-color: var(--circle-tertiary, #ff2233);
+  left: 180px; /* nudged */
+  top: -90px; /* nudged */
+  width: 40px; /* increased */
+  height: 40px; /* increased */
+  animation-delay: -1800ms;
+} 
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@media (max-width: 520px) {
+  .card {
+    width: 200px; /* slightly reduced for mobile */
+    height: 270px;
+  }
+
+  .circle {
+    width: 90px;
+    height: 90px;
+    filter: blur(12px);
+  }
+
+  #bottom {
+    width: 140px;
+    height: 140px;
+    left: 30px;
+    top: -10px;
+  }
+
+  #right {
+    left: 150px;
+    top: -70px;
+    width: 30px;
+    height: 30px;
+  }
+}
