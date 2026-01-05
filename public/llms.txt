@@ -151,6 +151,7 @@ Notes:
 - [Orb](https://www.reactbits.dev/backgrounds/orb): Floating energy orb with customizable hover effect. CLI: `Orb`.
 - [Particles](https://www.reactbits.dev/backgrounds/particles): Configurable particle system. CLI: `Particles`.
 - [Pixel Blast](https://www.reactbits.dev/backgrounds/pixel-blast): Exploding pixel particle bursts with optional liquid postprocessing. CLI: `PixelBlast`.
+- [Pixel Snow](https://www.reactbits.dev/backgrounds/pixel-snow): Falling pixelated snow effect with customizable density and speed. CLI: `PixelSnow`.
 - [Plasma](https://www.reactbits.dev/backgrounds/plasma): Organic plasma gradients swirl + morph with smooth turbulence. CLI: `Plasma`.
 - [Prism](https://www.reactbits.dev/backgrounds/prism): Rotating prism with configurable intensity, size, and colors. CLI: `Prism`.
 - [Prismatic Burst](https://www.reactbits.dev/backgrounds/prismatic-burst): Burst of light rays with controllable color, distortion, amount. CLI: `PrismaticBurst`.
