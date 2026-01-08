@@ -962,11 +962,18 @@ function SplashCursor({
       return hash;
     }
 
+    // Get canvas offset for coordinate adjustment
+    function getCanvasOffset() {
+      const rect = canvas.getBoundingClientRect();
+      return { x: rect.left, y: rect.top };
+    }
+
     // Named event handlers for proper cleanup
     function handleMouseDown(e) {
       let pointer = pointers[0];
-      let posX = scaleByPixelRatio(e.clientX);
-      let posY = scaleByPixelRatio(e.clientY);
+      const offset = getCanvasOffset();
+      let posX = scaleByPixelRatio(e.clientX - offset.x);
+      let posY = scaleByPixelRatio(e.clientY - offset.y);
       updatePointerDownData(pointer, -1, posX, posY);
       clickSplat(pointer);
     }
@@ -974,8 +981,9 @@ function SplashCursor({
     let firstMouseMoveHandled = false;
     function handleMouseMove(e) {
       let pointer = pointers[0];
-      let posX = scaleByPixelRatio(e.clientX);
-      let posY = scaleByPixelRatio(e.clientY);
+      const offset = getCanvasOffset();
+      let posX = scaleByPixelRatio(e.clientX - offset.x);
+      let posY = scaleByPixelRatio(e.clientY - offset.y);
       if (!firstMouseMoveHandled) {
         let color = generateColor();
         updatePointerMoveData(pointer, posX, posY, color);
@@ -988,9 +996,10 @@ function SplashCursor({
     function handleTouchStart(e) {
       const touches = e.targetTouches;
       let pointer = pointers[0];
+      const offset = getCanvasOffset();
       for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
+        let posX = scaleByPixelRatio(touches[i].clientX - offset.x);
+        let posY = scaleByPixelRatio(touches[i].clientY - offset.y);
         updatePointerDownData(pointer, touches[i].identifier, posX, posY);
       }
     }
@@ -998,9 +1007,10 @@ function SplashCursor({
     function handleTouchMove(e) {
       const touches = e.targetTouches;
       let pointer = pointers[0];
+      const offset = getCanvasOffset();
       for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
+        let posX = scaleByPixelRatio(touches[i].clientX - offset.x);
+        let posY = scaleByPixelRatio(touches[i].clientY - offset.y);
         updatePointerMoveData(pointer, posX, posY, pointer.color);
       }
     }
@@ -1045,21 +1055,20 @@ function SplashCursor({
   return (
     <div
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
+        position: "relative",
         zIndex: 50,
         pointerEvents: 'none',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        overflow: 'hidden'
       }}
     >
       <canvas
         ref={canvasRef}
         id="fluid"
         style={{
-          width: '100vw',
-          height: '100vh',
+          width: '100%',
+          height: '100%',
           display: 'block'
         }}
       />
