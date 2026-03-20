@@ -57,7 +57,8 @@ const Masonry = ({
   scaleOnHover = true,
   hoverScale = 0.95,
   blurToFocus = true,
-  colorShiftOnHover = false
+  colorShiftOnHover = false,
+  adjustHeight = false
 }) => {
   const columns = useMedia(
     ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'],
@@ -102,13 +103,13 @@ const Masonry = ({
     preloadImages(items.map(i => i.img)).then(() => setImagesReady(true));
   }, [items]);
 
-  const grid = useMemo(() => {
-    if (!width) return [];
+  const { grid, containerHeight } = useMemo(() => {
+    if (!width) return { grid: [], containerHeight: 0 };
 
     const colHeights = new Array(columns).fill(0);
     const columnWidth = width / columns;
 
-    return items.map(child => {
+    const gridItems = items.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
       const height = child.height / 2;
@@ -118,6 +119,11 @@ const Masonry = ({
 
       return { ...child, x, y, w: columnWidth, h: height };
     });
+
+    return {
+      grid: gridItems,
+      containerHeight: colHeights.length ? Math.max(...colHeights) + 12 : 0
+    };
   }, [columns, items, width]);
 
   const hasMounted = useRef(false);
@@ -214,7 +220,7 @@ const Masonry = ({
   };
 
   return (
-    <div ref={containerRef} className="list">
+    <div ref={containerRef} className="list" style={adjustHeight ? { height: `${containerHeight}px` } : undefined}>
       {grid.map(item => {
         return (
           <div

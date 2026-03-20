@@ -113,6 +113,12 @@ const MasonryDemo = () => {
         type: 'boolean',
         default: 'false',
         description: 'Whether to show a color overlay effect on hover.'
+      },
+      {
+        name: 'adjustHeight',
+        type: 'boolean',
+        default: 'false',
+        description: 'Automatically adjusts container height to fit all items and prevent overlap.'
       }
     ],
     []
@@ -221,6 +227,7 @@ const MasonryDemo = () => {
               scaleOnHover={scaleOnHover}
               blurToFocus={blurToFocus}
               colorShiftOnHover={colorShiftOnHover}
+              autoAdjust={false}
             />
           </Box>
 

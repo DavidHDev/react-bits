@@ -40,6 +40,7 @@ const items = [
   hoverScale={0.95}
   blurToFocus={true}
   colorShiftOnHover={false}
+  adjustHeight={false}
 />
 `,
   code,
