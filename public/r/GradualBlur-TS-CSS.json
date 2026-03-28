@@ -8,7 +8,7 @@
 		{
 			"type": "registry:component",
 			"path": "GradualBlur/GradualBlur.css",
-			"content": ".gradual-blur-inner {\r\n  position: relative;\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.gradual-blur-inner > div {\r\n  -webkit-backdrop-filter: inherit;\r\n  backdrop-filter: inherit;\r\n}\r\n\r\n.gradual-blur {\r\n  isolation: isolate;\r\n}\r\n\r\n@supports not (backdrop-filter: blur(1px)) {\r\n  .gradual-blur-inner > div {\r\n    background: rgba(0, 0, 0, 0.3);\r\n    opacity: 0.5;\r\n  }\r\n}\r\n\r\n.gradual-blur-fixed {\r\n  position: fixed !important;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  pointer-events: none;\r\n  z-index: 1000;\r\n}\r\n"
+			"content": ".gradual-blur-inner {\n  position: relative;\n  width: 100%;\n  height: 100%;\n}\n\n.gradual-blur-inner > div {\n  -webkit-backdrop-filter: inherit;\n  backdrop-filter: inherit;\n}\n\n.gradual-blur {\n  isolation: isolate;\n}\n\n@supports not (backdrop-filter: blur(1px)) {\n  .gradual-blur-inner > div {\n    background: rgba(0, 0, 0, 0.3);\n    opacity: 0.5;\n  }\n}\n\n.gradual-blur-fixed {\n  position: fixed !important;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  pointer-events: none;\n  z-index: 1000;\n}\n"
 		},
 		{
 			"type": "registry:component",
