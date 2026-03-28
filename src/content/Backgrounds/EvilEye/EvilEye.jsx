@@ -4,11 +4,7 @@ import './EvilEye.css';
 
 function hexToVec3(hex) {
   const h = hex.replace('#', '');
-  return [
-    parseInt(h.slice(0, 2), 16) / 255,
-    parseInt(h.slice(2, 4), 16) / 255,
-    parseInt(h.slice(4, 6), 16) / 255
-  ];
+  return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
 }
 
 function generateNoiseTexture(size = 256) {
@@ -181,7 +177,7 @@ export default function EvilEye({
       width: 256,
       height: 256,
       generateMipmaps: false,
-      flipY: false,
+      flipY: false
     });
     noiseTexture.minFilter = gl.LINEAR;
     noiseTexture.magFilter = gl.LINEAR;
@@ -260,7 +256,18 @@ export default function EvilEye({
       container.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [eyeColor, intensity, pupilSize, irisWidth, glowIntensity, scale, noiseScale, pupilFollow, flameSpeed, backgroundColor]);
+  }, [
+    eyeColor,
+    intensity,
+    pupilSize,
+    irisWidth,
+    glowIntensity,
+    scale,
+    noiseScale,
+    pupilFollow,
+    flameSpeed,
+    backgroundColor
+  ]);
 
   return <div ref={containerRef} className="evil-eye-container" />;
 }

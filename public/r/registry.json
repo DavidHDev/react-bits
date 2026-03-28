@@ -528,9 +528,7 @@
 			"title": "GradualBlur",
 			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
 			"type": "registry:component",
-			"dependencies": [
-				"mathjs@^14.6.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -548,9 +546,7 @@
 			"title": "GradualBlur",
 			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
 			"type": "registry:component",
-			"dependencies": [
-				"mathjs@^14.6.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -564,9 +560,7 @@
 			"title": "GradualBlur",
 			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
 			"type": "registry:component",
-			"dependencies": [
-				"mathjs@^14.6.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -584,9 +578,7 @@
 			"title": "GradualBlur",
 			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
 			"type": "registry:component",
-			"dependencies": [
-				"mathjs@^14.6.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7198,15 +7190,15 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.js"
-				},
-				{
-					"type": "registry:component",
 					"path": "Hyperspeed/Hyperspeed.css"
 				},
 				{
 					"type": "registry:component",
 					"path": "Hyperspeed/Hyperspeed.jsx"
+				},
+				{
+					"type": "registry:component",
+					"path": "Hyperspeed/HyperSpeedPresets.js"
 				}
 			]
 		},
@@ -7223,11 +7215,11 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.js"
+					"path": "Hyperspeed/Hyperspeed.jsx"
 				},
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.jsx"
+					"path": "Hyperspeed/HyperSpeedPresets.js"
 				}
 			]
 		},
@@ -7244,15 +7236,15 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.ts"
-				},
-				{
-					"type": "registry:component",
 					"path": "Hyperspeed/Hyperspeed.css"
 				},
 				{
 					"type": "registry:component",
 					"path": "Hyperspeed/Hyperspeed.tsx"
+				},
+				{
+					"type": "registry:component",
+					"path": "Hyperspeed/HyperSpeedPresets.ts"
 				}
 			]
 		},
@@ -7269,11 +7261,11 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.ts"
+					"path": "Hyperspeed/Hyperspeed.tsx"
 				},
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.tsx"
+					"path": "Hyperspeed/HyperSpeedPresets.ts"
 				}
 			]
 		},

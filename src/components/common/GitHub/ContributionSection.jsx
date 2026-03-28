@@ -14,7 +14,7 @@ const BTN_STYLE = {
   _hover: { bg: colors.bgHover },
   color: '#fff',
   h: 10,
-  w: { base: '90%', md: 'auto' },
+  w: { base: '90%', md: 'auto' }
 };
 
 const ContributionSection = () => {

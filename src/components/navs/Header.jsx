@@ -12,15 +12,7 @@ import {
   Text,
   createListCollection
 } from '@chakra-ui/react';
-import {
-  User2,
-  HeartIcon,
-  ArrowRight,
-  MenuIcon,
-  SearchIcon,
-  X,
-  ToolCase
-} from 'lucide-react';
+import { User2, HeartIcon, ArrowRight, MenuIcon, SearchIcon, X, ToolCase } from 'lucide-react';
 import { TbLibrary } from 'react-icons/tb';
 
 import { TOOLS } from '../../constants/Tools';
@@ -379,7 +371,12 @@ const MobileDrawer = ({ isOpen, onClose }) => (
               <RouterLink to={GITHUB_URL} target="_blank" onClick={onClose} style={{ color: colors.accentMuted }}>
                 GitHub <Icon boxSize={4} as={ArrowRight} transform="rotate(-45deg)" />
               </RouterLink>
-              <RouterLink to="https://x.com/davidhdev" target="_blank" onClick={onClose} style={{ color: colors.accentMuted }}>
+              <RouterLink
+                to="https://x.com/davidhdev"
+                target="_blank"
+                onClick={onClose}
+                style={{ color: colors.accentMuted }}
+              >
                 Who made this? <Icon boxSize={4} as={ArrowRight} transform="rotate(-45deg)" />
               </RouterLink>
             </Flex>

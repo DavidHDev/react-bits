@@ -37,11 +37,21 @@ const DEFAULT_PROPS = {
 const RadarDemo = () => {
   const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const {
-    speed, scale, ringCount, spokeCount, ringThickness, spokeThickness,
-    sweepSpeed, sweepWidth, sweepLobes,
-    color, backgroundColor,
-    falloff, brightness,
-    enableMouseInteraction, mouseInfluence
+    speed,
+    scale,
+    ringCount,
+    spokeCount,
+    ringThickness,
+    spokeThickness,
+    sweepSpeed,
+    sweepWidth,
+    sweepLobes,
+    color,
+    backgroundColor,
+    falloff,
+    brightness,
+    enableMouseInteraction,
+    mouseInfluence
   } = props;
 
   const propData = useMemo(

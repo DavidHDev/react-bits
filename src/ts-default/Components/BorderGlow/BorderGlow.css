@@ -27,7 +27,7 @@
 .border-glow-card::before,
 .border-glow-card::after,
 .border-glow-card > .edge-light {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -59,14 +59,13 @@
 
   opacity: calc((var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
 
-  mask-image:
-    conic-gradient(
-      from var(--cursor-angle) at center,
-      black calc(var(--cone-spread) * 1%),
-      transparent calc((var(--cone-spread) + 15) * 1%),
-      transparent calc((100 - var(--cone-spread) - 15) * 1%),
-      black calc((100 - var(--cone-spread)) * 1%)
-    );
+  mask-image: conic-gradient(
+    from var(--cursor-angle) at center,
+    black calc(var(--cone-spread) * 1%),
+    transparent calc((var(--cone-spread) + 15) * 1%),
+    transparent calc((100 - var(--cone-spread) - 15) * 1%),
+    black calc((100 - var(--cone-spread)) * 1%)
+  );
 }
 
 /* colored mesh-gradient background fill near edges */
@@ -83,8 +82,7 @@
     var(--gradient-base, linear-gradient(#c299ff 0 100%)) padding-box;
 
   mask-image:
-    linear-gradient(to bottom, black, black),
-    radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%),
+    linear-gradient(to bottom, black, black), radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%),
     radial-gradient(ellipse at 66% 66%, black 5%, transparent 40%),
     radial-gradient(ellipse at 33% 33%, black 5%, transparent 40%),
     radial-gradient(ellipse at 66% 33%, black 5%, transparent 40%),
@@ -92,7 +90,9 @@
     conic-gradient(from var(--cursor-angle) at center, transparent 5%, black 15%, black 85%, transparent 95%);
 
   mask-composite: subtract, add, add, add, add, add;
-  opacity: calc(var(--fill-opacity, 0.5) * (var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
+  opacity: calc(
+    var(--fill-opacity, 0.5) * (var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity))
+  );
   mix-blend-mode: soft-light;
 }
 
@@ -102,17 +102,20 @@
   pointer-events: none;
   z-index: 1;
 
-  mask-image:
-    conic-gradient(
-      from var(--cursor-angle) at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%
-    );
+  mask-image: conic-gradient(
+    from var(--cursor-angle) at center,
+    black 2.5%,
+    transparent 10%,
+    transparent 90%,
+    black 97.5%
+  );
 
   opacity: calc((var(--edge-proximity) - var(--edge-sensitivity)) / (100 - var(--edge-sensitivity)));
   mix-blend-mode: plus-lighter;
 }
 
 .border-glow-card > .edge-light::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: var(--glow-padding);
   border-radius: inherit;

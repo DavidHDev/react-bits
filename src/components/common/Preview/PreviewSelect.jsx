@@ -57,11 +57,7 @@ const PreviewSelect = ({
 
           <Portal>
             <Select.Positioner>
-              <Select.Content
-                bg={colors.bgBody}
-                border={`1px solid ${colors.borderSecondary}`}
-                borderRadius="10px"
-              >
+              <Select.Content bg={colors.bgBody} border={`1px solid ${colors.borderSecondary}`} borderRadius="10px">
                 {collection.items.map(val => (
                   <Select.Item
                     key={val}

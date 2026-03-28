@@ -451,7 +451,10 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    box-shadow 120ms ease;
   box-shadow: 0 4px 16px rgba(82, 39, 255, 0.25);
 }
 

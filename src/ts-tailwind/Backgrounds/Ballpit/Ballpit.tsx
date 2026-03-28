@@ -430,7 +430,7 @@ class Y extends MeshPhysicalMaterial {
     thicknessPower: { value: 2 },
     thicknessScale: { value: 10 }
   };
-  defines: { USE_UV: string; };
+  defines: { USE_UV: string };
 
   constructor(params: any) {
     super(params);

@@ -26,12 +26,7 @@ const DiamondSponsor = ({ sponsor }) => {
 
   if (sponsor.url) {
     return (
-      <a
-        href={buildSponsorUrl(sponsor.url, 'diamond')}
-        target="_blank"
-        rel="noopener"
-        className="sponsor-card-link"
-      >
+      <a href={buildSponsorUrl(sponsor.url, 'diamond')} target="_blank" rel="noopener" className="sponsor-card-link">
         {content}
       </a>
     );

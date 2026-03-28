@@ -1,15 +1,4 @@
-import {
-  Text,
-  Code,
-  Stack,
-  VStack,
-  HStack,
-  Flex,
-  Button,
-  Icon,
-  Box,
-  Tooltip,
-} from '@chakra-ui/react';
+import { Text, Code, Stack, VStack, HStack, Flex, Button, Icon, Box, Tooltip } from '@chakra-ui/react';
 import { TbCopy, TbCopyCheckFilled } from 'react-icons/tb';
 import { useActiveRoute } from '../../hooks/useActiveRoute';
 import { useOptions } from '../context/OptionsContext/useOptions';
@@ -52,8 +41,6 @@ const CliInstallation = ({ deps }) => {
       setMode('cli');
     }
   }, [hasManual, mode, setMode]);
-
-
 
   const [copied, setCopied] = useState(false);
   const codeRef = useRef(null);

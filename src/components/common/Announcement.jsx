@@ -10,7 +10,7 @@ const STORAGE_KEYS = {
 
 const checkIfMobile = () => window.innerWidth < 768 || 'ontouchstart' in window;
 
-const parseMessageWithLinks = (message) => {
+const parseMessageWithLinks = message => {
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   const parts = [];
   let lastIndex = 0;
@@ -74,7 +74,7 @@ const Announcement = () => {
     localStorage.setItem(STORAGE_KEYS.userClosed, 'true');
   };
 
-  const shareToX = (text) => {
+  const shareToX = text => {
     const tweetText = encodeURIComponent(text);
     window.open(`https://twitter.com/intent/tweet?text=${tweetText}`, '_blank');
   };

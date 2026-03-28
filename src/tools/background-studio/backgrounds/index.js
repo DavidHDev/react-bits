@@ -818,7 +818,15 @@ export const BACKGROUNDS = [
       { name: 'warpIntensity', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.1, label: 'Warp Intensity' },
       { name: 'rotation', type: 'number', default: -45, min: -180, max: 180, step: 1, label: 'Rotation' },
       { name: 'edgeFadeWidth', type: 'number', default: 0.0, min: 0, max: 1, step: 0.05, label: 'Edge Fade Width' },
-      { name: 'colorCycleSpeed', type: 'number', default: 1.0, min: 0.1, max: 5, step: 0.1, label: 'Color Cycle Speed' },
+      {
+        name: 'colorCycleSpeed',
+        type: 'number',
+        default: 1.0,
+        min: 0.1,
+        max: 5,
+        step: 0.1,
+        label: 'Color Cycle Speed'
+      },
       { name: 'brightness', type: 'number', default: 0.2, min: 0.1, max: 3, step: 0.1, label: 'Brightness' },
       { name: 'color1', type: 'color', default: '#ffffff', label: 'Color 1' },
       { name: 'color2', type: 'color', default: '#ffffff', label: 'Color 2' },
@@ -855,8 +863,24 @@ export const BACKGROUNDS = [
       { name: 'scale', type: 'number', default: 0.5, min: 0.1, max: 3, step: 0.1, label: 'Scale' },
       { name: 'ringCount', type: 'number', default: 10, min: 1, max: 30, step: 1, label: 'Ring Count' },
       { name: 'spokeCount', type: 'number', default: 10, min: 1, max: 36, step: 1, label: 'Spoke Count' },
-      { name: 'ringThickness', type: 'number', default: 0.05, min: 0.01, max: 0.3, step: 0.01, label: 'Ring Thickness' },
-      { name: 'spokeThickness', type: 'number', default: 0.01, min: 0.01, max: 0.2, step: 0.01, label: 'Spoke Thickness' },
+      {
+        name: 'ringThickness',
+        type: 'number',
+        default: 0.05,
+        min: 0.01,
+        max: 0.3,
+        step: 0.01,
+        label: 'Ring Thickness'
+      },
+      {
+        name: 'spokeThickness',
+        type: 'number',
+        default: 0.01,
+        min: 0.01,
+        max: 0.2,
+        step: 0.01,
+        label: 'Spoke Thickness'
+      },
       { name: 'sweepSpeed', type: 'number', default: 1.0, min: 0.1, max: 5, step: 0.1, label: 'Sweep Speed' },
       { name: 'sweepWidth', type: 'number', default: 2, min: 1, max: 20, step: 1, label: 'Sweep Width' },
       { name: 'sweepLobes', type: 'number', default: 1, min: 1, max: 6, step: 1, label: 'Sweep Lobes' },

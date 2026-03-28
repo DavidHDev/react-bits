@@ -31,9 +31,16 @@ const DEFAULT_PROPS = {
 const EvilEyeDemo = () => {
   const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const {
-    eyeColor, intensity, pupilSize,
-    irisWidth, glowIntensity, scale, noiseScale,
-    pupilFollow, flameSpeed, backgroundColor
+    eyeColor,
+    intensity,
+    pupilSize,
+    irisWidth,
+    glowIntensity,
+    scale,
+    noiseScale,
+    pupilFollow,
+    flameSpeed,
+    backgroundColor
   } = props;
 
   const propData = useMemo(
@@ -250,7 +257,6 @@ const EvilEyeDemo = () => {
                 updateProp('flameSpeed', val);
               }}
             />
-
           </Customize>
           <PropTable data={propData} />
           <Dependencies dependencyList={['ogl']} />

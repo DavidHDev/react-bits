@@ -36,10 +36,19 @@ const DEFAULT_PROPS = {
 const LineWavesDemo = () => {
   const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const {
-    speed, innerLineCount, outerLineCount, warpIntensity, rotation,
-    edgeFadeWidth, colorCycleSpeed, brightness,
-    color1, color2, color3,
-    enableMouseInteraction, mouseInfluence
+    speed,
+    innerLineCount,
+    outerLineCount,
+    warpIntensity,
+    rotation,
+    edgeFadeWidth,
+    colorCycleSpeed,
+    brightness,
+    color1,
+    color2,
+    color3,
+    enableMouseInteraction,
+    mouseInfluence
   } = props;
 
   const propData = useMemo(

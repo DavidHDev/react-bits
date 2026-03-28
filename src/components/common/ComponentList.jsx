@@ -45,7 +45,7 @@ const ACTION_BTN_STYLE = {
   right: 2,
   transition: 'opacity 0.15s ease',
   _focus: { opacity: 1, pointerEvents: 'auto' },
-  _hover: { bg: colors.bgHover },
+  _hover: { bg: colors.bgHover }
 };
 
 const PILL_BTN_STYLE = {
@@ -58,7 +58,7 @@ const PILL_BTN_STYLE = {
   color: '#fff',
   fontWeight: 500,
   bg: colors.bgBody,
-  _hover: { background: colors.bgElevated },
+  _hover: { background: colors.bgElevated }
 };
 
 const slug = str => (str || '').replace(/\s+/g, '-').toLowerCase();
@@ -278,7 +278,9 @@ const ComponentList = ({ list, hasDeleteButton = false, hasFavoriteButton = fals
           opacity={controlsDisabled ? 0.6 : 1}
         >
           <InputGroup
-            startElement={<Icon as={FiSearch} color={controlsDisabled ? colors.borderSecondary : colors.accent} fontSize="16px" />}
+            startElement={
+              <Icon as={FiSearch} color={controlsDisabled ? colors.borderSecondary : colors.accent} fontSize="16px" />
+            }
             w={{ base: '100%', md: '180px' }}
           >
             <Input

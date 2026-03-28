@@ -19,11 +19,7 @@ interface LineWavesProps {
 
 function hexToVec3(hex: string): [number, number, number] {
   const h = hex.replace('#', '');
-  return [
-    parseInt(h.slice(0, 2), 16) / 255,
-    parseInt(h.slice(2, 4), 16) / 255,
-    parseInt(h.slice(4, 6), 16) / 255
-  ];
+  return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
 }
 
 const vertexShader = `
@@ -175,10 +171,7 @@ export default function LineWaves({
 
     function handleMouseMove(e: MouseEvent) {
       const rect = gl.canvas.getBoundingClientRect();
-      targetMouse = [
-        (e.clientX - rect.left) / rect.width,
-        1.0 - (e.clientY - rect.top) / rect.height
-      ];
+      targetMouse = [(e.clientX - rect.left) / rect.width, 1.0 - (e.clientY - rect.top) / rect.height];
     }
 
     function handleMouseLeave() {
@@ -258,7 +251,21 @@ export default function LineWaves({
       container.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [speed, innerLineCount, outerLineCount, warpIntensity, rotation, edgeFadeWidth, colorCycleSpeed, brightness, color1, color2, color3, enableMouseInteraction, mouseInfluence]);
+  }, [
+    speed,
+    innerLineCount,
+    outerLineCount,
+    warpIntensity,
+    rotation,
+    edgeFadeWidth,
+    colorCycleSpeed,
+    brightness,
+    color1,
+    color2,
+    color3,
+    enableMouseInteraction,
+    mouseInfluence
+  ]);
 
   return <div ref={containerRef} className="w-full h-full" />;
 }

@@ -803,7 +803,9 @@ div:has(> .props-table) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s ease, visibility 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
 }
 
 .sponsor-item-wrapper[data-tooltip]:hover::before {

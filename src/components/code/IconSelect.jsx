@@ -9,7 +9,7 @@ const TRIGGER_STYLE = {
   bg: colors.bgBody,
   border: `1px solid ${colors.borderSecondary}`,
   rounded: '15px',
-  px: 3,
+  px: 3
 };
 
 const CONTENT_STYLE = {
@@ -17,7 +17,7 @@ const CONTENT_STYLE = {
   border: `1px solid ${colors.borderSecondary}`,
   borderRadius: '15px',
   px: 2,
-  py: 2,
+  py: 2
 };
 
 const ITEM_STYLE = {
@@ -28,7 +28,7 @@ const ITEM_STYLE = {
   display: 'flex',
   alignItems: 'center',
   gap: 2,
-  _highlighted: { bg: colors.bgHover },
+  _highlighted: { bg: colors.bgHover }
 };
 
 const IconSelect = ({
@@ -39,12 +39,9 @@ const IconSelect = ({
   labelMap,
   colorMap,
   width = '150px',
-  closeOnSelect = false,
+  closeOnSelect = false
 }) => {
-  const collection = useMemo(
-    () => createListCollection({ items: collectionItems }),
-    [collectionItems]
-  );
+  const collection = useMemo(() => createListCollection({ items: collectionItems }), [collectionItems]);
 
   return (
     <Select.Root

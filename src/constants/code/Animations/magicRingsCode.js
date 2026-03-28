@@ -37,5 +37,5 @@ export const magicRings = {
   css,
   tailwind,
   tsCode,
-  tsTailwind,
+  tsTailwind
 };

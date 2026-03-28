@@ -108,7 +108,7 @@ export default function MagicRings({
   mouseInfluence = 0.2,
   hoverScale = 1.2,
   parallax = 0.05,
-  clickBurst = false,
+  clickBurst = false
 }: MagicRingsProps) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const propsRef = useRef<Required<MagicRingsProps> | null>(null);
@@ -119,10 +119,27 @@ export default function MagicRings({
   const burstRef = useRef(0);
 
   propsRef.current = {
-    color, colorTwo, speed, ringCount, attenuation, lineThickness,
-    baseRadius, radiusStep, scaleRate, opacity, blur, noiseAmount,
-    rotation, ringGap, fadeIn, fadeOut, followMouse, mouseInfluence,
-    hoverScale, parallax, clickBurst,
+    color,
+    colorTwo,
+    speed,
+    ringCount,
+    attenuation,
+    lineThickness,
+    baseRadius,
+    radiusStep,
+    scaleRate,
+    opacity,
+    blur,
+    noiseAmount,
+    rotation,
+    ringGap,
+    fadeIn,
+    fadeOut,
+    followMouse,
+    mouseInfluence,
+    hoverScale,
+    parallax,
+    clickBurst
   };
 
   useEffect(() => {
@@ -170,7 +187,7 @@ export default function MagicRings({
       uHoverAmount: { value: 0 },
       uHoverScale: { value: 1 },
       uParallax: { value: 0 },
-      uBurst: { value: 0 },
+      uBurst: { value: 0 }
     };
 
     const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, transparent: true });
@@ -196,13 +213,17 @@ export default function MagicRings({
       mouseRef.current[0] = (e.clientX - rect.left) / rect.width - 0.5;
       mouseRef.current[1] = -((e.clientY - rect.top) / rect.height - 0.5);
     };
-    const onMouseEnter = () => { isHoveredRef.current = true; };
+    const onMouseEnter = () => {
+      isHoveredRef.current = true;
+    };
     const onMouseLeave = () => {
       isHoveredRef.current = false;
       mouseRef.current[0] = 0;
       mouseRef.current[1] = 0;
     };
-    const onClick = () => { burstRef.current = 1; };
+    const onClick = () => {
+      burstRef.current = 1;
+    };
 
     mount.addEventListener('mousemove', onMouseMove);
     mount.addEventListener('mouseenter', onMouseEnter);
@@ -260,5 +281,11 @@ export default function MagicRings({
     };
   }, []);
 
-  return <div ref={mountRef} className="magic-rings-container" style={blur > 0 ? { filter: `blur(${blur}px)` } : undefined} />;
+  return (
+    <div
+      ref={mountRef}
+      className="magic-rings-container"
+      style={blur > 0 ? { filter: `blur(${blur}px)` } : undefined}
+    />
+  );
 }

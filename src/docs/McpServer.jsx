@@ -12,19 +12,21 @@ const IMG_STYLE = { width: '40px', height: '40px' };
 const CLIENTS = [
   { key: 'claude', icon: <img src={claude} alt="Claude Code Logo" style={IMG_STYLE} />, label: 'Claude Code' },
   { key: 'cursor', icon: <img src={cursor} alt="Cursor Logo" style={IMG_STYLE} />, label: 'Cursor' },
-  { key: 'vscode', icon: <img src={vscode} alt="VS Code Logo" style={IMG_STYLE} />, label: 'VS Code' },
+  { key: 'vscode', icon: <img src={vscode} alt="VS Code Logo" style={IMG_STYLE} />, label: 'VS Code' }
 ];
 
 const EXAMPLE_PROMPTS = [
   'Show me all the available backgrounds from the React Bits registry',
   'Add the Dither background from React Bits to the page, make it purple',
-  'Add a new section which fades in on scroll using FadeContent from React Bits',
+  'Add a new section which fades in on scroll using FadeContent from React Bits'
 ];
 
 const PromptList = () => (
   <ul className="docs-list">
-    {EXAMPLE_PROMPTS.map((prompt) => (
-      <li key={prompt} className="docs-list-item dim">{prompt}</li>
+    {EXAMPLE_PROMPTS.map(prompt => (
+      <li key={prompt} className="docs-list-item dim">
+        {prompt}
+      </li>
     ))}
   </ul>
 );
@@ -77,7 +79,12 @@ const McpServer = () => {
       <h3 className="docs-category-title">MCP Server</h3>
 
       <p className="docs-paragraph">
-        <a style={{ textDecoration: 'underline' }} href="https://modelcontextprotocol.io/" target="_blank" rel="noreferrer">
+        <a
+          style={{ textDecoration: 'underline' }}
+          href="https://modelcontextprotocol.io/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Model Context Protocol (MCP)
         </a>{' '}
         is an open standard that enables AI assistants to securely connect to external data sources and tools.

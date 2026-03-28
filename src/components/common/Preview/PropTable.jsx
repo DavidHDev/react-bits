@@ -7,7 +7,7 @@ const HEADER_CELL_STYLE = {
   textTransform: 'capitalize',
   fontSize: 'l',
   p: 4,
-  color: 'white',
+  color: 'white'
 };
 
 const BODY_CELL_STYLE = {
@@ -15,7 +15,7 @@ const BODY_CELL_STYLE = {
   p: 2,
   color: 'white',
   borderRight: `1px solid ${colors.borderSecondary}`,
-  bg: colors.bgBody,
+  bg: colors.bgBody
 };
 
 const CodeCell = ({ content = '' }) => (
@@ -45,22 +45,36 @@ const PropTable = ({ data }) => (
             <Table.ColumnHeader {...HEADER_CELL_STYLE}>Property</Table.ColumnHeader>
             <Table.ColumnHeader {...HEADER_CELL_STYLE}>Type</Table.ColumnHeader>
             <Table.ColumnHeader {...HEADER_CELL_STYLE}>Default</Table.ColumnHeader>
-            <Table.ColumnHeader {...HEADER_CELL_STYLE} borderRight="none">Description</Table.ColumnHeader>
+            <Table.ColumnHeader {...HEADER_CELL_STYLE} borderRight="none">
+              Description
+            </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {data.map((prop, index) => (
-            <Table.Row key={index} borderBottom={index === data.length - 1 ? 'none' : `1px solid ${colors.borderSecondary}`}>
+            <Table.Row
+              key={index}
+              borderBottom={index === data.length - 1 ? 'none' : `1px solid ${colors.borderSecondary}`}
+            >
               <Table.Cell {...BODY_CELL_STYLE} width={0}>
                 <CodeCell content={prop.name} />
               </Table.Cell>
               <Table.Cell {...BODY_CELL_STYLE} p={4} whiteSpace="nowrap" width="120px" fontSize="12px">
-                <Text fontFamily="monospace" fontWeight={500}>{prop.type}</Text>
+                <Text fontFamily="monospace" fontWeight={500}>
+                  {prop.type}
+                </Text>
               </Table.Cell>
               <Table.Cell {...BODY_CELL_STYLE} whiteSpace="nowrap">
                 <CodeCell content={prop.default?.length ? prop.default : '—'} />
               </Table.Cell>
-              <Table.Cell borderColor={colors.bgHover} p={4} color="white" bg={colors.bgBody} fontSize="12px" borderRight="none">
+              <Table.Cell
+                borderColor={colors.bgHover}
+                p={4}
+                color="white"
+                bg={colors.bgBody}
+                fontSize="12px"
+                borderRight="none"
+              >
                 <Text maxW={300}>{prop.description}</Text>
               </Table.Cell>
             </Table.Row>

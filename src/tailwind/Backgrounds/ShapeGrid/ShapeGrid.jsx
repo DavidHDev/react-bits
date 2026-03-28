@@ -120,7 +120,7 @@ const ShapeGrid = ({
           for (let row = -2; row < rows; row++) {
             const cx = col * halfW + offsetX;
             const cy = row * squareSize + squareSize / 2 + offsetY;
-            const flip = ((col + colShift + row + rowShift) % 2 + 2) % 2 !== 0;
+            const flip = (((col + colShift + row + rowShift) % 2) + 2) % 2 !== 0;
 
             const cellKey = `${col},${row}`;
             const alpha = cellOpacities.current.get(cellKey);
@@ -287,11 +287,7 @@ const ShapeGrid = ({
         const rowOffset = (col + colShift) % 2 !== 0 ? hexVert / 2 : 0;
         const row = Math.round((adjustedY - rowOffset) / hexVert);
 
-        if (
-          !hoveredSquareRef.current ||
-          hoveredSquareRef.current.x !== col ||
-          hoveredSquareRef.current.y !== row
-        ) {
+        if (!hoveredSquareRef.current || hoveredSquareRef.current.x !== col || hoveredSquareRef.current.y !== row) {
           if (hoveredSquareRef.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquareRef.current });
             if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
@@ -309,11 +305,7 @@ const ShapeGrid = ({
         const col = Math.round(adjustedX / halfW);
         const row = Math.floor(adjustedY / squareSize);
 
-        if (
-          !hoveredSquareRef.current ||
-          hoveredSquareRef.current.x !== col ||
-          hoveredSquareRef.current.y !== row
-        ) {
+        if (!hoveredSquareRef.current || hoveredSquareRef.current.x !== col || hoveredSquareRef.current.y !== row) {
           if (hoveredSquareRef.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquareRef.current });
             if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
@@ -330,11 +322,7 @@ const ShapeGrid = ({
         const col = Math.round(adjustedX / squareSize);
         const row = Math.round(adjustedY / squareSize);
 
-        if (
-          !hoveredSquareRef.current ||
-          hoveredSquareRef.current.x !== col ||
-          hoveredSquareRef.current.y !== row
-        ) {
+        if (!hoveredSquareRef.current || hoveredSquareRef.current.x !== col || hoveredSquareRef.current.y !== row) {
           if (hoveredSquareRef.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquareRef.current });
             if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
@@ -351,11 +339,7 @@ const ShapeGrid = ({
         const col = Math.floor(adjustedX / squareSize);
         const row = Math.floor(adjustedY / squareSize);
 
-        if (
-          !hoveredSquareRef.current ||
-          hoveredSquareRef.current.x !== col ||
-          hoveredSquareRef.current.y !== row
-        ) {
+        if (!hoveredSquareRef.current || hoveredSquareRef.current.x !== col || hoveredSquareRef.current.y !== row) {
           if (hoveredSquareRef.current && hoverTrailAmount > 0) {
             trailCells.current.unshift({ ...hoveredSquareRef.current });
             if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;

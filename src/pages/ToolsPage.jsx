@@ -144,7 +144,11 @@ const ToolDropdown = ({ selectedTool, onSelect, isOpen, setIsOpen }) => {
               w={6}
               h={6}
               borderRadius="8px"
-              bg={selectedTool === tool.id ? `linear-gradient(135deg, ${colors.primary} 0%, #7B4FFF 100%)` : colors.bgHover}
+              bg={
+                selectedTool === tool.id
+                  ? `linear-gradient(135deg, ${colors.primary} 0%, #7B4FFF 100%)`
+                  : colors.bgHover
+              }
               transition="all 0.15s"
             >
               <Icon as={tool.icon} boxSize={3.5} color={selectedTool === tool.id ? '#fff' : colors.accent} />

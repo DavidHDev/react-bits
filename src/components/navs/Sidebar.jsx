@@ -110,7 +110,16 @@ const HoverLine = ({ position, isVisible }) => (
 );
 
 const MobileHeader = ({ onSearchClick, onSponsorsClick, onMenuClick }) => (
-  <Box display={{ md: 'none' }} position="fixed" top="50px" left={0} zIndex="overlay" w="100%" bg={colors.bgBody} p="1em">
+  <Box
+    display={{ md: 'none' }}
+    position="fixed"
+    top="50px"
+    left={0}
+    zIndex="overlay"
+    w="100%"
+    bg={colors.bgBody}
+    p="1em"
+  >
     <Flex align="center" justify="space-between" gap="1em">
       <Link to="/">
         <Image src={Logo} h="22px" alt="React Bits logo" />

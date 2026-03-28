@@ -163,7 +163,14 @@ const SearchDialog = ({ isOpen, onClose }) => {
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Backdrop bg="rgba(0,0,0,0.9)" />
       <Dialog.Positioner placement="top">
-        <Dialog.Content bg={colors.bgBody} border={`1px solid ${colors.borderPrimary}`} rounded="xl" mx={4} w="full" maxW="600px">
+        <Dialog.Content
+          bg={colors.bgBody}
+          border={`1px solid ${colors.borderPrimary}`}
+          rounded="xl"
+          mx={4}
+          w="full"
+          maxW="600px"
+        >
           <Dialog.Body padding="1em 1em .2em 1em">
             <InputGroup startElement={<Icon as={FiSearch} color={colors.accent} fontSize="18px" />} mb={2}>
               <Input

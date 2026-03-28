@@ -23,7 +23,7 @@ const COPY_BTN_STYLE = {
   fontWeight: 500,
   border: `1px solid ${colors.borderSecondary}`,
   transition: 'background-color 0.3s ease',
-  h: 10,
+  h: 10
 };
 
 const CodeHighlighter = ({ language, codeString, showLineNumbers = true, maxLines = 25, snippetId }) => {

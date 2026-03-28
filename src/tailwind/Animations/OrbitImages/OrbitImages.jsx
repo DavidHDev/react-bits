@@ -73,7 +73,7 @@ function generateWavePath(cx, cy, w, amplitude, waves) {
 function OrbitItem({ item, index, totalItems, path, itemSize, rotation, progress, fill }) {
   const itemOffset = fill ? (index / totalItems) * 100 : 0;
 
-  const offsetDistance = useTransform(progress, (p) => {
+  const offsetDistance = useTransform(progress, p => {
     const offset = (((p + itemOffset) % 100) + 100) % 100;
     return `${offset}%`;
   });
@@ -87,7 +87,7 @@ function OrbitItem({ item, index, totalItems, path, itemSize, rotation, progress
         offsetPath: `path("${path}")`,
         offsetRotate: '0deg',
         offsetAnchor: 'center center',
-        offsetDistance,
+        offsetDistance
       }}
     >
       <div style={{ transform: `rotate(${-rotation}deg)` }}>{item}</div>
@@ -120,7 +120,7 @@ export default function OrbitImages({
   easing = 'linear',
   paused = false,
   centerContent,
-  responsive = false,
+  responsive = false
 }) {
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1);
@@ -175,13 +175,19 @@ export default function OrbitImages({
       duration,
       ease: easing,
       repeat: Infinity,
-      repeatType: 'loop',
+      repeatType: 'loop'
     });
     return () => controls.stop();
   }, [progress, duration, easing, direction, paused]);
 
-  const containerWidth = responsive ? '100%' : (typeof width === 'number' ? width : '100%');
-  const containerHeight = responsive ? 'auto' : (typeof height === 'number' ? height : (typeof width === 'number' ? width : 'auto'));
+  const containerWidth = responsive ? '100%' : typeof width === 'number' ? width : '100%';
+  const containerHeight = responsive
+    ? 'auto'
+    : typeof height === 'number'
+      ? height
+      : typeof width === 'number'
+        ? width
+        : 'auto';
 
   const items = images.map((src, index) => (
     <img
@@ -200,7 +206,7 @@ export default function OrbitImages({
       style={{
         width: containerWidth,
         height: containerHeight,
-        aspectRatio: responsive ? '1 / 1' : undefined,
+        aspectRatio: responsive ? '1 / 1' : undefined
       }}
       aria-hidden="true"
     >
@@ -210,14 +216,14 @@ export default function OrbitImages({
           width: responsive ? baseWidth : '100%',
           height: responsive ? baseWidth : '100%',
           transform: responsive ? `translate(-50%, -50%) scale(${scale})` : undefined,
-          transformOrigin: 'center center',
+          transformOrigin: 'center center'
         }}
       >
         <div
           className="relative w-full h-full"
           style={{
             transform: `rotate(${rotation}deg)`,
-            transformOrigin: 'center center',
+            transformOrigin: 'center center'
           }}
         >
           {showPath && (
@@ -247,11 +253,7 @@ export default function OrbitImages({
         </div>
       </div>
 
-      {centerContent && (
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          {centerContent}
-        </div>
-      )}
+      {centerContent && <div className="absolute inset-0 flex items-center justify-center z-10">{centerContent}</div>}
     </div>
   );
 }

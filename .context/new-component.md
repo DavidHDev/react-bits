@@ -14,6 +14,7 @@ npm run new:component -- <Category> <ComponentName>
 ```
 
 This creates:
+
 - `src/content/<Category>/<ComponentName>/<ComponentName>.jsx` (empty)
 - `src/content/<Category>/<ComponentName>/<ComponentName>.css` (empty)
 - `src/tailwind/<Category>/<ComponentName>/<ComponentName>.jsx` (empty)
@@ -32,14 +33,15 @@ After scaffolding, you fill in the 8 files (4 variants + demo + code metadata + 
 
 All four variants must produce **identical visual output and behavior**. The differences are only:
 
-| Variant | Path | Language | Styling |
-|---|---|---|---|
-| JS + CSS | `src/content/…/<Name>.jsx` + `.css` | JavaScript | CSS classes imported via `./Name.css` |
-| JS + Tailwind | `src/tailwind/…/<Name>.jsx` | JavaScript | Tailwind utility classes inline |
-| TS + CSS | `src/ts-default/…/<Name>.tsx` + `.css` | TypeScript | CSS classes imported via `./Name.css` |
-| TS + Tailwind | `src/ts-tailwind/…/<Name>.tsx` | TypeScript | Tailwind utility classes inline |
+| Variant       | Path                                   | Language   | Styling                               |
+| ------------- | -------------------------------------- | ---------- | ------------------------------------- |
+| JS + CSS      | `src/content/…/<Name>.jsx` + `.css`    | JavaScript | CSS classes imported via `./Name.css` |
+| JS + Tailwind | `src/tailwind/…/<Name>.jsx`            | JavaScript | Tailwind utility classes inline       |
+| TS + CSS      | `src/ts-default/…/<Name>.tsx` + `.css` | TypeScript | CSS classes imported via `./Name.css` |
+| TS + Tailwind | `src/ts-tailwind/…/<Name>.tsx`         | TypeScript | Tailwind utility classes inline       |
 
 ### JS + CSS variant rules
+
 - Import `'./ComponentName.css'`
 - Use named CSS classes for layout/styling (e.g. `.orbit-container`, `.orbit-item`)
 - No TypeScript, no type annotations
@@ -47,11 +49,13 @@ All four variants must produce **identical visual output and behavior**. The dif
 - `export default function ComponentName({ ... }) {}`
 
 ### JS + Tailwind variant rules
+
 - **No** CSS import
 - Replace every CSS class with Tailwind utility classes inline
 - Same logic, same props, same defaults as JS+CSS
 
 ### TS + CSS variant rules
+
 - Same CSS file content (duplicated into `ts-default/`)
 - Import `'./ComponentName.css'`
 - Add TypeScript `interface` for props
@@ -61,12 +65,14 @@ All four variants must produce **identical visual output and behavior**. The dif
 - Type motion values: `MotionValue<number>`
 
 ### TS + Tailwind variant rules
+
 - **No** CSS import
 - TypeScript interfaces + types (same as TS+CSS)
 - Tailwind utility classes inline (same as JS+Tailwind)
 - **No `cn()` utility**
 
 ### CSS file conventions
+
 - Use component-scoped class names prefixed with component name (e.g. `.orbit-container`, `.orbit-item`)
 - The CSS file in `ts-default/` is an exact copy of the one in `content/`
 - Keep styles minimal – only what's needed for layout/positioning
@@ -78,9 +84,10 @@ All four variants must produce **identical visual output and behavior**. The dif
 Location: `src/demo/<Category>/<ComponentName>Demo.jsx`
 
 ### Standard imports
+
 ```jsx
 import { useMemo } from 'react';
-import { Flex } from '@chakra-ui/react';  // or Box, depending on layout needs
+import { Flex } from '@chakra-ui/react'; // or Box, depending on layout needs
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 
 import Customize from '../../components/common/Preview/Customize';
@@ -102,10 +109,11 @@ import { camelCaseName } from '../../constants/code/<Category>/<camelCaseName>Co
 ```
 
 ### Demo structure
+
 ```jsx
 const DEFAULT_PROPS = {
   // Only include props that have demo controls
-  someProp: defaultValue,
+  someProp: defaultValue
 };
 
 const ComponentNameDemo = () => {
@@ -113,24 +121,31 @@ const ComponentNameDemo = () => {
   const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const { someProp } = props;
 
-  const propData = useMemo(() => [
-    // ALL public props documented, not just controlled ones
-    { name: 'propName', type: 'type', default: 'value', description: 'Description.' },
-  ], []);
+  const propData = useMemo(
+    () => [
+      // ALL public props documented, not just controlled ones
+      { name: 'propName', type: 'type', default: 'value', description: 'Description.' }
+    ],
+    []
+  );
 
   return (
     <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
       <TabsLayout>
         <PreviewTab>
-          <Flex overflow="hidden" justifyContent="center" alignItems="center"
-            minH="400px" position="relative" className="demo-container">
+          <Flex
+            overflow="hidden"
+            justifyContent="center"
+            alignItems="center"
+            minH="400px"
+            position="relative"
+            className="demo-container"
+          >
             <ComponentName key={key} {...controlledProps} />
             <RefreshButton onClick={forceRerender} />
           </Flex>
 
-          <Customize>
-            {/* Controls here */}
-          </Customize>
+          <Customize>{/* Controls here */}</Customize>
 
           <PropTable data={propData} />
           <Dependencies dependencyList={['dep1']} />
@@ -148,6 +163,7 @@ export default ComponentNameDemo;
 ```
 
 ### Control types
+
 ```jsx
 // Slider
 <PreviewSlider
@@ -177,6 +193,7 @@ export default ComponentNameDemo;
 ```
 
 ### When to call `forceRerender()`
+
 - Always call it for props that affect animation initialization or layout
 - For live-updating props (like autoplay toggle), it may not be needed
 - When in doubt, call it
@@ -195,7 +212,7 @@ import tsCode from '@ts-default/<Category>/<ComponentName>/<ComponentName>.tsx?r
 import tsTailwind from '@ts-tailwind/<Category>/<ComponentName>/<ComponentName>.tsx?raw';
 
 export const camelCaseName = {
-  dependencies: `dep1 dep2`,          // space-separated npm package names
+  dependencies: `dep1 dep2`, // space-separated npm package names
   usage: `import ComponentName from './ComponentName'
 
 <ComponentName
@@ -222,12 +239,15 @@ export const camelCaseName = {
 These are handled by `npm run new:component` but for reference:
 
 ### `src/constants/Components.js`
+
 ```js
 'kebab-case-name': () => import('../demo/<Category>/<ComponentName>Demo')
 ```
 
 ### `src/constants/Categories.js`
+
 Component name added to the category's subcategories array and optionally to `NEW` array:
+
 ```js
 export const NEW = ['Component Name', ...];
 // And in the subcategories:
@@ -235,6 +255,7 @@ export const NEW = ['Component Name', ...];
 ```
 
 ### `src/constants/Information.js`
+
 ```js
 'Category/ComponentName': {
   videoUrl: '/assets/video/componentname.webm',
@@ -254,33 +275,30 @@ If the component is in the `Backgrounds` category, also register it in:
 `src/tools/background-studio/backgrounds/index.js`
 
 And add `OpenInStudioButton` to the demo:
+
 ```jsx
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
 
 // After the preview, before <Customize>:
 <Flex justify="flex-end" mt={2} mb={-2}>
-  <OpenInStudioButton
-    backgroundId="kebab-case-id"
-    currentProps={{ ...controlledProps }}
-    defaultProps={DEFAULT_PROPS}
-  />
-</Flex>
+  <OpenInStudioButton backgroundId="kebab-case-id" currentProps={{ ...controlledProps }} defaultProps={DEFAULT_PROPS} />
+</Flex>;
 ```
 
 ---
 
 ## 6. Naming Conventions
 
-| Context | Format | Example |
-|---|---|---|
-| Component name | PascalCase | `OrbitImages` |
-| File names | PascalCase matching component | `OrbitImages.jsx` |
-| CSS class prefix | kebab-case component name | `.orbit-container` |
-| Route slug | kebab-case | `orbit-images` |
-| Code metadata export | camelCase | `orbitImages` |
-| Code metadata file | camelCase + `Code.js` | `orbitImagesCode.js` |
-| Category display name | Space-separated | `Orbit Images` |
-| Folder name | PascalCase | `OrbitImages/` |
+| Context               | Format                        | Example              |
+| --------------------- | ----------------------------- | -------------------- |
+| Component name        | PascalCase                    | `OrbitImages`        |
+| File names            | PascalCase matching component | `OrbitImages.jsx`    |
+| CSS class prefix      | kebab-case component name     | `.orbit-container`   |
+| Route slug            | kebab-case                    | `orbit-images`       |
+| Code metadata export  | camelCase                     | `orbitImages`        |
+| Code metadata file    | camelCase + `Code.js`         | `orbitImagesCode.js` |
+| Category display name | Space-separated               | `Orbit Images`       |
+| Folder name           | PascalCase                    | `OrbitImages/`       |
 
 ---
 

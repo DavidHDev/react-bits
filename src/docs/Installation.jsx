@@ -11,21 +11,21 @@ const ICON_STYLE = { fontSize: '50px' };
 
 const METHODS = [
   { key: 'manual', icon: <TbCopy style={ICON_STYLE} />, label: 'Manual' },
-  { key: 'cli', icon: <TbTerminal2 style={ICON_STYLE} />, label: 'CLI' },
+  { key: 'cli', icon: <TbTerminal2 style={ICON_STYLE} />, label: 'CLI' }
 ];
 
 const SHADCN_VARIANTS = [
   { code: 'JS-CSS', label: 'JavaScript + Plain CSS' },
   { code: 'JS-TW', label: 'JavaScript + Tailwind' },
   { code: 'TS-CSS', label: 'TypeScript + Plain CSS' },
-  { code: 'TS-TW', label: 'TypeScript + Tailwind' },
+  { code: 'TS-TW', label: 'TypeScript + Tailwind' }
 ];
 
 const JSREPO_VARIANTS = [
   { code: 'default', label: 'JavaScript + Plain CSS' },
   { code: 'tailwind', label: 'JavaScript + Tailwind' },
   { code: 'ts/default', label: 'TypeScript + Plain CSS' },
-  { code: 'ts/tailwind', label: 'TypeScript + Tailwind' },
+  { code: 'ts/tailwind', label: 'TypeScript + Tailwind' }
 ];
 
 const VariantList = ({ label, variants }) => (
@@ -47,8 +47,7 @@ const ManualSteps = () => (
 
     <h4 className="docs-category-subtitle">1. Pick a component</h4>
     <p className="docs-paragraph">
-      Preview components and find something you like, then head to the{' '}
-      <span className="docs-highlight">Code</span> tab.
+      Preview components and find something you like, then head to the <span className="docs-highlight">Code</span> tab.
     </p>
 
     <h4 className="docs-category-subtitle">2. Install dependencies</h4>
@@ -60,8 +59,8 @@ const ManualSteps = () => (
 
     <h4 className="docs-category-subtitle">3. Copy the code</h4>
     <p className="docs-paragraph short">
-      The <span className="docs-highlight">Code</span> tab also contains all the code you need to copy - you can use
-      the controls below to switch between technologies on the Code tab.
+      The <span className="docs-highlight">Code</span> tab also contains all the code you need to copy - you can use the
+      controls below to switch between technologies on the Code tab.
     </p>
     <div className="docs-code-options">
       <img src={codeoptions} className="code-options-img" />
