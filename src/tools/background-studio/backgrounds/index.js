@@ -415,6 +415,27 @@ export const BACKGROUNDS = [
     ]
   },
   {
+    id: 'ripple-water',
+    label: 'Ripple Water',
+    component: () => import('../../../content/Backgrounds/RippleWater/RippleWater.jsx'),
+    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/ripple-water"',
+    props: [
+      { name: 'fromColor', type: 'color', default: '#52ade3', label: 'From Color' },
+      { name: 'toColor', type: 'color', default: '#013565', label: 'To Color' },
+      { name: 'color', type: 'color', default: '#a8d8f5', label: 'Highlight Color' },
+      { name: 'waveAmplitude', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Wave Amplitude' },
+      { name: 'waveSpeed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Wave Speed' },
+      { name: 'shimmer', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Shimmer' },
+      { name: 'reflection', type: 'number', default: 0.38, min: 0, max: 1, step: 0.02, label: 'Reflection' },
+      { name: 'rippleStrength', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Ripple Strength' },
+      { name: 'rippleRadius', type: 'number', default: 6, min: 2, max: 12, step: 1, label: 'Ripple Radius' },
+      { name: 'damping', type: 'number', default: 0.985, min: 0.9, max: 0.999, step: 0.001, label: 'Damping' },
+      { name: 'spread', type: 'number', default: 0.5, min: 0.3, max: 0.7, step: 0.01, label: 'Spread' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'showHint', type: 'boolean', default: false, label: 'Show Hint' }
+    ]
+  },
+  {
     id: 'dark-veil',
     label: 'Dark Veil',
     component: () => import('../../../content/Backgrounds/DarkVeil/DarkVeil.jsx'),

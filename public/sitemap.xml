@@ -2,823 +2,853 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://reactbits.dev/</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/showcase</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/sponsors</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/favorites</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/get-started/introduction</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/get-started/installation</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/get-started/mcp</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/split-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/blur-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/circular-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/text-type</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/shuffle</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/shiny-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/text-pressure</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/curved-loop</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/fuzzy-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/gradient-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/falling-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/text-cursor</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/decrypted-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/true-focus</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/scroll-float</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/scroll-reveal</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/ascii-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/scrambled-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/rotating-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/glitch-text</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/scroll-velocity</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/variable-proximity</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/text-animations/count-up</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/animated-content</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/fade-content</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/electric-border</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/orbit-images</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/pixel-transition</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/glare-hover</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/antigravity</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/logo-loop</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/target-cursor</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/magic-rings</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/laser-flow</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/magnet-lines</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/ghost-cursor</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/gradual-blur</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/click-spark</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/magnet</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://reactbits.dev/animations/strands</loc>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/sticker-peel</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/pixel-trail</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/cubes</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/metallic-paint</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/noise</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/shape-blur</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/crosshair</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/image-trail</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/ribbons</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/splash-cursor</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/meta-balls</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/blob-cursor</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/animations/star-border</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/animated-list</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/scroll-stack</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/bubble-menu</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/magic-bento</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/circular-gallery</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/reflective-card</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/card-nav</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/stack</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/fluid-glass</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/pill-nav</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/tilted-card</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/masonry</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/glass-surface</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/dome-gallery</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/chroma-grid</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/folder</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/staggered-menu</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/model-viewer</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/lanyard</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/profile-card</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/dock</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/gooey-nav</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/pixel-card</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/carousel</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/spotlight-card</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/border-glow</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/flying-posters</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/card-swap</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/glass-icons</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/decay-card</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/flowing-menu</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/elastic-slider</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/counter</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/infinite-menu</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/stepper</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/components/bounce-cards</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://reactbits.dev/backgrounds/ferrofluid</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://reactbits.dev/backgrounds/lightfall</loc>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/liquid-ether</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/prism</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/dark-veil</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/light-pillar</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/silk</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/floating-lines</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://reactbits.dev/backgrounds/side-rays</loc>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/light-rays</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/pixel-blast</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/color-bends</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/evil-eye</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/line-waves</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/radar</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/soft-aurora</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/aurora</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/plasma</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/plasma-wave</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/particles</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/gradient-blinds</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/grainient</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/grid-scan</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/beams</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/pixel-snow</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/lightning</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/prismatic-burst</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/galaxy</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/dither</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/faulty-terminal</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/ripple-grid</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://reactbits.dev/backgrounds/ripple-water</loc>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/dot-field</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/dot-grid</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/threads</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/hyperspeed</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/iridescence</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/waves</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/grid-distortion</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/ballpit</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/orb</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/letter-glitch</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/grid-motion</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/shape-grid</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/liquid-chrome</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://reactbits.dev/backgrounds/balatro</loc>
-    <lastmod>2026-04-14</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

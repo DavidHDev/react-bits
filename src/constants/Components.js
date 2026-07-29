@@ -123,6 +123,7 @@ const backgrounds = {
   'dot-grid': () => import('../demo/Backgrounds/DotGridDemo'),
   'beams': () => import('../demo/Backgrounds/BeamsDemo'),
   'ripple-grid': () => import('../demo/Backgrounds/RippleGridDemo'),
+  'ripple-water': () => import('../demo/Backgrounds/RippleWaterDemo'),
   'dark-veil': () => import('../demo/Backgrounds/DarkVeilDemo'),
   'galaxy': () => import('../demo/Backgrounds/GalaxyDemo'),
   'light-rays': () => import('../demo/Backgrounds/LightRaysDemo'),

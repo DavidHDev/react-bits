@@ -8746,6 +8746,70 @@
 			]
 		},
 		{
+			"name": "RippleWater-JS-CSS",
+			"title": "RippleWater",
+			"description": "WebGL water surface with shimmering highlights and interactive ripple physics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RippleWater/RippleWater.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "RippleWater/RippleWater.jsx"
+				}
+			]
+		},
+		{
+			"name": "RippleWater-JS-TW",
+			"title": "RippleWater",
+			"description": "WebGL water surface with shimmering highlights and interactive ripple physics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RippleWater/RippleWater.jsx"
+				}
+			]
+		},
+		{
+			"name": "RippleWater-TS-CSS",
+			"title": "RippleWater",
+			"description": "WebGL water surface with shimmering highlights and interactive ripple physics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RippleWater/RippleWater.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "RippleWater/RippleWater.tsx"
+				}
+			]
+		},
+		{
+			"name": "RippleWater-TS-TW",
+			"title": "RippleWater",
+			"description": "WebGL water surface with shimmering highlights and interactive ripple physics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RippleWater/RippleWater.tsx"
+				}
+			]
+		},
+		{
 			"name": "Silk-JS-CSS",
 			"title": "Silk",
 			"description": "Smooth waves background with soft lighting.",

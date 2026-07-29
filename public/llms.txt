@@ -84,6 +84,7 @@ Notes:
 - [Splash Cursor](https://www.reactbits.dev/animations/splash-cursor): Liquid splash burst at cursor with curling ripples and waves. CLI: `SplashCursor`.
 - [Star Border](https://www.reactbits.dev/animations/star-border): Animated star / sparkle border orbiting content with twinkle pulses. CLI: `StarBorder`.
 - [Sticker Peel](https://www.reactbits.dev/animations/sticker-peel): Sticker corner lift + peel interaction using 3D transform and shadow depth. CLI: `StickerPeel`.
+- [Strands](https://www.reactbits.dev/animations/strands): Glowing ribbon-like strands that ripple and weave across a transparent canvas. CLI: `Strands`.
 - [Target Cursor](https://www.reactbits.dev/animations/target-cursor): A cursor follow animation with 4 corners that lock onto targets. CLI: `TargetCursor`.
 
 ## Components
@@ -138,6 +139,7 @@ Notes:
 - [Dot Grid](https://www.reactbits.dev/backgrounds/dot-grid): Animated dot grid with cursor interactions. CLI: `DotGrid`.
 - [Evil Eye](https://www.reactbits.dev/backgrounds/evil-eye): Procedural evil eye shader with animated iris, slit pupil, and fiery outer glow. CLI: `EvilEye`.
 - [Faulty Terminal](https://www.reactbits.dev/backgrounds/faulty-terminal): Terminal CRT scanline squares effect with flicker + noise. CLI: `FaultyTerminal`.
+- [Ferrofluid](https://www.reactbits.dev/backgrounds/ferrofluid): A churning magnetic fluid traced by glowing contour lines, with a cursor magnet. CLI: `Ferrofluid`.
 - [Floating Lines](https://www.reactbits.dev/backgrounds/floating-lines): 3D floating lines that react to cursor movement. CLI: `FloatingLines`.
 - [Galaxy](https://www.reactbits.dev/backgrounds/galaxy): Parallax realistic starfield with pointer interactions. CLI: `Galaxy`.
 - [Gradient Blinds](https://www.reactbits.dev/backgrounds/gradient-blinds): Layered gradient blinds with spotlight and noise distortion. CLI: `GradientBlinds`.
@@ -148,6 +150,7 @@ Notes:
 - [Hyperspeed](https://www.reactbits.dev/backgrounds/hyperspeed): Animated lines continuously moving to simulate hyperspace travel on click hold. CLI: `Hyperspeed`.
 - [Iridescence](https://www.reactbits.dev/backgrounds/iridescence): Slick iridescent shader with shifting waves. CLI: `Iridescence`.
 - [Letter Glitch](https://www.reactbits.dev/backgrounds/letter-glitch): Matrix style letter animation. CLI: `LetterGlitch`.
+- [Lightfall](https://www.reactbits.dev/backgrounds/lightfall): Colorful light streaks raining down a glowing tunnel with a cursor light. CLI: `Lightfall`.
 - [Lightning](https://www.reactbits.dev/backgrounds/lightning): Procedural lightning bolts with branching and glow flicker. CLI: `Lightning`.
 - [Light Pillar](https://www.reactbits.dev/backgrounds/light-pillar): Vertical pillar of light with glow effects. CLI: `LightPillar`.
 - [Light Rays](https://www.reactbits.dev/backgrounds/light-rays): Volumetric light rays/beams with customizable direction. CLI: `LightRays`.
@@ -164,7 +167,9 @@ Notes:
 - [Prismatic Burst](https://www.reactbits.dev/backgrounds/prismatic-burst): Burst of light rays with controllable color, distortion, amount. CLI: `PrismaticBurst`.
 - [Radar](https://www.reactbits.dev/backgrounds/radar): Radar sweep effect with concentric rings, radial spokes, and a rotating beam. CLI: `Radar`.
 - [Ripple Grid](https://www.reactbits.dev/backgrounds/ripple-grid): A grid that continuously animates with a ripple effect. CLI: `RippleGrid`.
+- [Ripple Water](https://www.reactbits.dev/backgrounds/ripple-water): WebGL water surface with shimmering highlights and interactive ripple physics. CLI: `RippleWater`.
 - [Shape Grid](https://www.reactbits.dev/backgrounds/shape-grid): Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization. CLI: `ShapeGrid`.
+- [Side Rays](https://www.reactbits.dev/backgrounds/side-rays): Animated light rays emanating from the side with customizable colors and speed. CLI: `SideRays`.
 - [Silk](https://www.reactbits.dev/backgrounds/silk): Smooth waves background with soft lighting. CLI: `Silk`.
 - [Soft Aurora](https://www.reactbits.dev/backgrounds/soft-aurora): Soft aurora borealis shader with 3D Perlin noise and cosine gradient palettes. CLI: `SoftAurora`.
 - [Threads](https://www.reactbits.dev/backgrounds/threads): Animated pattern of lines forming a fabric-like motion. CLI: `Threads`.

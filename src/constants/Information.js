@@ -1040,6 +1040,14 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/backgrounds/ripple-grid',
     tags: []
   },
+  'Backgrounds/RippleWater': {
+    videoUrl: '/assets/video/ripplewater.webm',
+    description: 'WebGL water surface with shimmering highlights and interactive ripple physics.',
+    category: 'Backgrounds',
+    name: 'RippleWater',
+    docsUrl: 'https://reactbits.dev/backgrounds/ripple-water',
+    tags: []
+  },
   'Backgrounds/Silk': {
     videoUrl: '/assets/video/silk.webm',
     description: 'Smooth waves background with soft lighting.',

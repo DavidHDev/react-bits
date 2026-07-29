@@ -1,0 +1,24 @@
+.ripple-water-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ripple-water-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ripple-water-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgb(255 255 255 / 40%);
+  font-size: 13px;
+  pointer-events: none;
+  user-select: none;
+}

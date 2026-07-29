@@ -9,7 +9,8 @@ export const NEW = [
   'Border Glow',
   'Soft Aurora',
   'Radar',
-  'Line Waves'
+  'Line Waves',
+  'Ripple Water'
 ];
 export const UPDATED = [];
 
@@ -157,6 +158,7 @@ export const CATEGORIES = [
       'Dither',
       'Faulty Terminal',
       'Ripple Grid',
+      'Ripple Water',
       'Dot Field',
       'Dot Grid',
       'Threads',
