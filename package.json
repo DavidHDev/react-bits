@@ -73,5 +73,8 @@
     "tw-animate-css": "^1.4.0",
     "typescript": "^5.7.3",
     "vite": "^5.3.4"
+  },
+  "overrides": {
+    "tar": "7.5.19"
   }
 }
