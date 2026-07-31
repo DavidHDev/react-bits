@@ -255,7 +255,13 @@ const OptionWheel = ({
 
   useEffect(
     () => () => {
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+        // Clear the id too. React StrictMode runs cleanup and then re-runs
+        // the effect on the same instance, so a leftover id would make the
+        // "already running" guard in startLoop bail out forever.
+        rafRef.current = null;
+      }
       audioRef.current?.pause();
     },
     []
