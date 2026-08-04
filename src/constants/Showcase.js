@@ -34,5 +34,11 @@ export const SHOWCASE_ITEMS = [
     url: 'https://devrajchatribin.com/about',
     using: '<CountUp />',
     image: '/assets/showcase/showcase-devraj.webp'
+  },
+  {
+    name: 'Vaya',
+    url: 'https://vaya-project.vercel.app/',
+    using: '<MagicBento />',
+    image: '/assets/showcase/showcase-vaya.webp'
   }
 ];
