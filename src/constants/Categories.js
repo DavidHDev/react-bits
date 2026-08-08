@@ -30,7 +30,8 @@ export const NEW = [
   'Option Wheel',
   'Curved Input',
   'Line Sidebar',
-  'Strands'
+  'Strands',
+  'Wave Background'
 ];
 export const UPDATED = [];
 
@@ -170,6 +171,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
+      'Wave Background',
       'Molten Metal',
       'Gradient Waves',
       'Web Threads',

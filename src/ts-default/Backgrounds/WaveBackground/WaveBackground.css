@@ -1,0 +1,26 @@
+.wave-background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.wave-background-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gradient-overlay-wave {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at center, transparent 0%, rgba(255, 255, 255, 0.6) 100%),
+    linear-gradient(to bottom, transparent 65%, #ffffff 98%);
+  pointer-events: none;
+  z-index: 1;
+}

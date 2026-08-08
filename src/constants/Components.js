@@ -178,7 +178,8 @@ const backgrounds = {
   'light-tunnel': () => import('../demo/Backgrounds/LightTunnelDemo.jsx'),
   'sliced-waves': () => import('../demo/Backgrounds/SlicedWavesDemo.jsx'),
   'acid-squares': () => import('../demo/Backgrounds/AcidSquaresDemo.jsx'),
-  'scanner': () => import('../demo/Backgrounds/ScannerDemo.jsx')
+  'scanner': () => import('../demo/Backgrounds/ScannerDemo.jsx'),
+  'wave-background': () => import('../demo/Backgrounds/WaveBackgroundDemo')
 };
 
 export const componentMap = {

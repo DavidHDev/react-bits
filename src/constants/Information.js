@@ -936,6 +936,14 @@ export const componentMetadata = {
   },
 
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
+  'Backgrounds/WaveBackground': {
+    videoUrl: '',
+    description: 'Interactive 3D canvas grid wave background with customizable colors and physics.',
+    category: 'Backgrounds',
+    name: 'WaveBackground',
+    docsUrl: 'https://reactbits.dev/backgrounds/wave-background',
+    tags: []
+  },
   'Backgrounds/Aurora': {
     videoUrl: '/assets/video/aurora.webm',
     description: 'Flowing aurora gradient background.',
