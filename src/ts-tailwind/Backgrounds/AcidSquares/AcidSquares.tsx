@@ -275,15 +275,16 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
     const pu = postProgram.uniforms as Record<string, { value: any }>;
     const mu = program.uniforms as Record<string, { value: any }>;
 
-    let rtA: InstanceType<typeof RenderTarget> | null = null;
-    let rtB: InstanceType<typeof RenderTarget> | null = null;
-    const ensureTargets = () => {
-      if (!rtA) {
+    let rtA: InstanceType<typeof RenderTarget> | undefined;
+    let rtB: InstanceType<typeof RenderTarget> | undefined;
+    const ensureTargets = (): [InstanceType<typeof RenderTarget>, InstanceType<typeof RenderTarget>] => {
+      if (!rtA || !rtB) {
         const bw = gl.drawingBufferWidth;
         const bh = gl.drawingBufferHeight;
         rtA = new RenderTarget(gl, { width: bw, height: bh, depth: false });
         rtB = new RenderTarget(gl, { width: bw, height: bh, depth: false });
       }
+      return [rtA, rtB];
     };
 
     const renderFrame = () => {
@@ -292,16 +293,16 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
       program.uniforms.uGrainIntensity.value = grainAmt;
       postProgram.uniforms.uGrainIntensity.value = grainAmt;
       if (blurRef.current > 0) {
-        ensureTargets();
+        const [targetA, targetB] = ensureTargets();
         mu.uGrain.value = 0.0;
-        renderer.render({ scene: mesh, target: rtA });
+        renderer.render({ scene: mesh, target: targetA });
         pu.uRadius.value = blurRef.current * 14.0;
-        pu.tMap.value = rtA!.texture;
+        pu.tMap.value = targetA.texture;
         pu.uDirection.value[0] = 1;
         pu.uDirection.value[1] = 0;
         pu.uGrain.value = 0.0;
-        renderer.render({ scene: postMesh, target: rtB });
-        pu.tMap.value = rtB!.texture;
+        renderer.render({ scene: postMesh, target: targetB });
+        pu.tMap.value = targetB.texture;
         pu.uDirection.value[0] = 0;
         pu.uDirection.value[1] = 1;
         pu.uGrain.value = grainOn;
@@ -329,7 +330,9 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
       pres[1] = bh;
       if (rtA) {
         rtA.setSize(bw, bh);
-        rtB!.setSize(bw, bh);
+      }
+      if (rtB) {
+        rtB.setSize(bw, bh);
       }
       renderFrame();
     };
@@ -414,9 +417,11 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
       ctxMap.delete(container);
       if (rtA) {
         gl.deleteFramebuffer(rtA.buffer);
-        gl.deleteFramebuffer(rtB!.buffer);
         rtA.textures.forEach(tex => gl.deleteTexture(tex.texture));
-        rtB!.textures.forEach(tex => gl.deleteTexture(tex.texture));
+      }
+      if (rtB) {
+        gl.deleteFramebuffer(rtB.buffer);
+        rtB.textures.forEach(tex => gl.deleteTexture(tex.texture));
       }
       try {
         container.removeChild(canvas);
