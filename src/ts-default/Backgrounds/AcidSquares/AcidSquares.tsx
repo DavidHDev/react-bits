@@ -278,14 +278,13 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
 
     let rtA: InstanceType<typeof RenderTarget> | undefined;
     let rtB: InstanceType<typeof RenderTarget> | undefined;
-    const ensureTargets = (): [InstanceType<typeof RenderTarget>, InstanceType<typeof RenderTarget>] => {
+    const ensureTargets = (): void => {
       if (!rtA || !rtB) {
         const bw = gl.drawingBufferWidth;
         const bh = gl.drawingBufferHeight;
         rtA = new RenderTarget(gl, { width: bw, height: bh, depth: false });
         rtB = new RenderTarget(gl, { width: bw, height: bh, depth: false });
       }
-      return [rtA, rtB];
     };
 
     const renderFrame = () => {
@@ -294,7 +293,10 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
       program.uniforms.uGrainIntensity.value = grainAmt;
       postProgram.uniforms.uGrainIntensity.value = grainAmt;
       if (blurRef.current > 0) {
-        const [targetA, targetB] = ensureTargets();
+        ensureTargets();
+        const targetA = rtA;
+        const targetB = rtB;
+        if (!targetA || !targetB) return;
         mu.uGrain.value = 0.0;
         renderer.render({ scene: mesh, target: targetA });
         pu.uRadius.value = blurRef.current * 14.0;

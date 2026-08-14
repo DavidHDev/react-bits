@@ -38,6 +38,9 @@ const SplitText: React.FC<SplitTextProps> = ({
   onLetterAnimationComplete
 }) => {
   const ref = useRef<HTMLElement>(null);
+  const setRef = React.useCallback((node: HTMLElement | null) => {
+    ref.current = node;
+  }, []);
   const animationCompletedRef = useRef(false);
   const onCompleteRef = useRef(onLetterAnimationComplete);
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
@@ -163,9 +166,6 @@ const SplitText: React.FC<SplitTextProps> = ({
     };
     const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`;
     const Tag = tag || 'p';
-    const setRef = (node: HTMLElement | null) => {
-      ref.current = node;
-    };
 
     return (
       <Tag ref={setRef} style={style} className={classes}>
