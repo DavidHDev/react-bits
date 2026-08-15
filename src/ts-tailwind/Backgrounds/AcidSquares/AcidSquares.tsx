@@ -294,13 +294,13 @@ const AcidSquares: React.FC<AcidSquaresProps> = ({
       if (blurRef.current > 0) {
         ensureTargets();
         mu.uGrain.value = 0.0;
-        renderer.render({ scene: mesh, target: rtA });
+        renderer.render({ scene: mesh, target: rtA! });
         pu.uRadius.value = blurRef.current * 14.0;
         pu.tMap.value = rtA!.texture;
         pu.uDirection.value[0] = 1;
         pu.uDirection.value[1] = 0;
         pu.uGrain.value = 0.0;
-        renderer.render({ scene: postMesh, target: rtB });
+        renderer.render({ scene: postMesh, target: rtB! });
         pu.tMap.value = rtB!.texture;
         pu.uDirection.value[0] = 0;
         pu.uDirection.value[1] = 1;
