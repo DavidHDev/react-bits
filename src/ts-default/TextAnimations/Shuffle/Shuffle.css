@@ -27,7 +27,11 @@
 }
 
 .shuffle-char {
-  line-height: 1;
+  /* `normal` resolves to the font's own ascent + descent. The clip wrapper is
+     sized from this box, so a fixed 1 makes the mask shorter than the glyph
+     and clips descenders on every face that has them. Line spacing is still
+     controlled by .shuffle-parent. */
+  line-height: normal;
   display: inline-block;
   text-align: center;
 }

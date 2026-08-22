@@ -129,7 +129,10 @@ const Shuffle: React.FC<ShuffleProps> = ({
 
         splitRef.current = new GSAPSplitText(el, {
           type: 'chars',
-          charsClass: 'shuffle-char',
+          // `leading-normal` overrides the parent's `leading-none` on the char
+          // itself: the clip wrapper is sized from this box, and a line-height
+          // of 1 makes the mask shorter than the glyph, clipping descenders.
+          charsClass: 'shuffle-char leading-normal',
           wordsClass: 'shuffle-word',
           linesClass: 'shuffle-line',
           smartWrap: true,
