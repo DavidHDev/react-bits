@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "GlitchText/GlitchText.css",
+			"type": "registry:file",
+			"path": "GlitchText.css",
+			"target": "@components/GlitchText.css",
 			"content": ".glitch {\n  color: #fff;\n  font-size: clamp(2rem, 10vw, 8rem);\n  white-space: nowrap;\n  font-weight: 900;\n  position: relative;\n  margin: 0 auto;\n  user-select: none;\n  cursor: pointer;\n}\n\n.glitch::after,\n.glitch::before {\n  content: attr(data-text);\n  position: absolute;\n  top: 0;\n  color: #fff;\n  background-color: #120F17;\n  overflow: hidden;\n  clip-path: inset(0 0 0 0);\n}\n\n.glitch:not(.enable-on-hover)::after {\n  left: 10px;\n  text-shadow: var(--after-shadow, -10px 0 red);\n  animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;\n}\n.glitch:not(.enable-on-hover)::before {\n  left: -10px;\n  text-shadow: var(--before-shadow, 10px 0 cyan);\n  animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;\n}\n\n.glitch.enable-on-hover::after,\n.glitch.enable-on-hover::before {\n  content: '';\n  opacity: 0;\n  animation: none;\n}\n\n.glitch.enable-on-hover:hover::after {\n  content: attr(data-text);\n  opacity: 1;\n  left: 10px;\n  text-shadow: var(--after-shadow, -10px 0 red);\n  animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;\n}\n.glitch.enable-on-hover:hover::before {\n  content: attr(data-text);\n  opacity: 1;\n  left: -10px;\n  text-shadow: var(--before-shadow, 10px 0 cyan);\n  animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;\n}\n\n@keyframes animate-glitch {\n  0% {\n    clip-path: inset(20% 0 50% 0);\n  }\n  5% {\n    clip-path: inset(10% 0 60% 0);\n  }\n  10% {\n    clip-path: inset(15% 0 55% 0);\n  }\n  15% {\n    clip-path: inset(25% 0 35% 0);\n  }\n  20% {\n    clip-path: inset(30% 0 40% 0);\n  }\n  25% {\n    clip-path: inset(40% 0 20% 0);\n  }\n  30% {\n    clip-path: inset(10% 0 60% 0);\n  }\n  35% {\n    clip-path: inset(15% 0 55% 0);\n  }\n  40% {\n    clip-path: inset(25% 0 35% 0);\n  }\n  45% {\n    clip-path: inset(30% 0 40% 0);\n  }\n  50% {\n    clip-path: inset(20% 0 50% 0);\n  }\n  55% {\n    clip-path: inset(10% 0 60% 0);\n  }\n  60% {\n    clip-path: inset(15% 0 55% 0);\n  }\n  65% {\n    clip-path: inset(25% 0 35% 0);\n  }\n  70% {\n    clip-path: inset(30% 0 40% 0);\n  }\n  75% {\n    clip-path: inset(40% 0 20% 0);\n  }\n  80% {\n    clip-path: inset(20% 0 50% 0);\n  }\n  85% {\n    clip-path: inset(10% 0 60% 0);\n  }\n  90% {\n    clip-path: inset(15% 0 55% 0);\n  }\n  95% {\n    clip-path: inset(25% 0 35% 0);\n  }\n  100% {\n    clip-path: inset(30% 0 40% 0);\n  }\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "GlitchText/GlitchText.jsx",
+			"path": "GlitchText.jsx",
 			"content": "import './GlitchText.css';\n\nconst GlitchText = ({ children, speed = 1, enableShadows = true, enableOnHover = true, className = '' }) => {\n  const inlineStyles = {\n    '--after-duration': `${speed * 3}s`,\n    '--before-duration': `${speed * 2}s`,\n    '--after-shadow': enableShadows ? '-5px 0 red' : 'none',\n    '--before-shadow': enableShadows ? '5px 0 cyan' : 'none'\n  };\n\n  const hoverClass = enableOnHover ? 'enable-on-hover' : '';\n\n  return (\n    <div className={`glitch ${hoverClass} ${className}`} style={inlineStyles} data-text={children}>\n      {children}\n    </div>\n  );\n};\n\nexport default GlitchText;\n"
 		}
 	],

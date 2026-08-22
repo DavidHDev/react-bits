@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "SpotlightCard/SpotlightCard.css",
+			"type": "registry:file",
+			"path": "SpotlightCard.css",
+			"target": "@components/SpotlightCard.css",
 			"content": ".card-spotlight {\n  position: relative;\n  border-radius: 1.5rem;\n  border: 1px solid #222;\n  background-color: #111;\n  padding: 2rem;\n  overflow: hidden;\n  --mouse-x: 50%;\n  --mouse-y: 50%;\n  --spotlight-color: rgba(255, 255, 255, 0.05);\n}\n\n.card-spotlight::before {\n  content: '';\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 80%);\n  opacity: 0;\n  transition: opacity 0.5s ease;\n  pointer-events: none;\n}\n\n.card-spotlight:hover::before,\n.card-spotlight:focus-within::before {\n  opacity: 0.6;\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "SpotlightCard/SpotlightCard.tsx",
+			"path": "SpotlightCard.tsx",
 			"content": "import React, { useRef } from 'react';\nimport './SpotlightCard.css';\n\ninterface Position {\n  x: number;\n  y: number;\n}\n\ninterface SpotlightCardProps extends React.PropsWithChildren {\n  className?: string;\n  spotlightColor?: `rgba(${number}, ${number}, ${number}, ${number})`;\n}\n\nconst SpotlightCard: React.FC<SpotlightCardProps> = ({\n  children,\n  className = '',\n  spotlightColor = 'rgba(255, 255, 255, 0.25)'\n}) => {\n  const divRef = useRef<HTMLDivElement>(null);\n\n  const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = e => {\n    if (!divRef.current) return;\n\n    const rect = divRef.current.getBoundingClientRect();\n    const x = e.clientX - rect.left;\n    const y = e.clientY - rect.top;\n\n    divRef.current.style.setProperty('--mouse-x', `${x}px`);\n    divRef.current.style.setProperty('--mouse-y', `${y}px`);\n    divRef.current.style.setProperty('--spotlight-color', spotlightColor);\n  };\n\n  return (\n    <div ref={divRef} onMouseMove={handleMouseMove} className={`card-spotlight ${className}`}>\n      {children}\n    </div>\n  );\n};\n\nexport default SpotlightCard;\n"
 		}
 	],

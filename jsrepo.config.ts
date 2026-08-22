@@ -1,4 +1,5 @@
-import { defineConfig, type RegistryItem } from 'jsrepo';
+import fs from 'node:fs';
+import { defineConfig, type RegistryItem, type RegistryItemFile } from 'jsrepo';
 import { output } from '@jsrepo/shadcn';
 import { type Category, componentMetadata, type Variant } from './src/constants/Information';
 
@@ -79,13 +80,23 @@ function defineComponent({
     ...(title === 'Lanyard' ? { dependencyResolution: 'manual' as const } : {})
   };
 
-  const filesForVariant = (basePath: string, sourceFile: string, styleFile?: string) =>
-    title === 'Lanyard'
-      ? [
-          ...(styleFile ? [{ path: `${basePath}/${styleFile}` }] : []),
-          { path: `${basePath}/${sourceFile}` }
-        ]
-      : [{ path: basePath }];
+  const filesForVariant = (basePath: string, sourceFile: string, styleFile?: string): RegistryItemFile[] => {
+    // Lanyard also ships binary assets (card.glb, lanyard.png) which can't go through the registry,
+    // so only its source files are listed instead of the whole folder.
+    if (title === 'Lanyard') {
+      return [...(styleFile ? [defineStylesheet(basePath, styleFile)] : []), { path: `${basePath}/${sourceFile}` }];
+    }
+
+    // Variants without a stylesheet can ship the whole folder as-is.
+    if (!styleFile || !fs.existsSync(`${basePath}/${styleFile}`)) return [{ path: basePath }];
+
+    // A folder can't declare a type per file, so variants that ship a stylesheet are listed file by
+    // file to give the stylesheet its own type. See defineStylesheet.
+    return fs
+      .readdirSync(basePath)
+      .sort()
+      .map(file => (file === styleFile ? defineStylesheet(basePath, file) : { path: `${basePath}/${file}` }));
+  };
 
   // this might warrant a bit of explanation
   // basically we check if the variant is included in the variants array and if so we return the item as part of an array
@@ -136,4 +147,25 @@ function defineComponent({
         ]
       : [])
   ];
+}
+
+/**
+ * Define a stylesheet to be exposed from the registry.
+ *
+ * The shadcn CLI parses every file it installs as JavaScript/TypeScript unless the file is typed as
+ * `registry:file`, so a stylesheet shipped as `registry:component` makes `shadcn add` fail with
+ * `Unexpected token (1:0)`. `registry:file` requires an explicit target, and pointing it at the
+ * `components` alias puts the stylesheet next to the component itself so the component's relative
+ * `./<Component>.css` import keeps resolving.
+ *
+ * @param basePath The path to the component folder.
+ * @param styleFile The name of the stylesheet inside that folder.
+ * @returns A RegistryItemFile object for the stylesheet.
+ */
+function defineStylesheet(basePath: string, styleFile: string): RegistryItemFile {
+  return {
+    path: `${basePath}/${styleFile}`,
+    type: 'file',
+    target: `@components/${styleFile}`
+  };
 }

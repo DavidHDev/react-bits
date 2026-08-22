@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "ScrollFloat/ScrollFloat.css",
+			"type": "registry:file",
+			"path": "ScrollFloat.css",
+			"target": "@components/ScrollFloat.css",
 			"content": ".scroll-float {\n  overflow: hidden;\n}\n\n.scroll-float-text {\n  display: inline-block;\n  font-size: clamp(1.6rem, 8vw, 10rem);\n  font-weight: 900;\n  text-align: center;\n  line-height: 1.5;\n}\n\n.char {\n  display: inline-block;\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "ScrollFloat/ScrollFloat.jsx",
+			"path": "ScrollFloat.jsx",
 			"content": "import { useEffect, useMemo, useRef } from 'react';\nimport { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\n\nimport './ScrollFloat.css';\n\ngsap.registerPlugin(ScrollTrigger);\n\nconst ScrollFloat = ({\n  children,\n  scrollContainerRef,\n  containerClassName = '',\n  textClassName = '',\n  animationDuration = 1,\n  ease = 'back.inOut(2)',\n  scrollStart = 'center bottom+=50%',\n  scrollEnd = 'bottom bottom-=40%',\n  stagger = 0.03\n}) => {\n  const containerRef = useRef(null);\n\n  const splitText = useMemo(() => {\n    const text = typeof children === 'string' ? children : '';\n    return text.split('').map((char, index) => (\n      <span className=\"char\" key={index}>\n        {char === ' ' ? '\\u00A0' : char}\n      </span>\n    ));\n  }, [children]);\n\n  useEffect(() => {\n    const el = containerRef.current;\n    if (!el) return;\n\n    const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;\n\n    const charElements = el.querySelectorAll('.char');\n\n    gsap.fromTo(\n      charElements,\n      {\n        willChange: 'opacity, transform',\n        opacity: 0,\n        yPercent: 120,\n        scaleY: 2.3,\n        scaleX: 0.7,\n        transformOrigin: '50% 0%'\n      },\n      {\n        duration: animationDuration,\n        ease: ease,\n        opacity: 1,\n        yPercent: 0,\n        scaleY: 1,\n        scaleX: 1,\n        stagger: stagger,\n        scrollTrigger: {\n          trigger: el,\n          scroller,\n          start: scrollStart,\n          end: scrollEnd,\n          scrub: true\n        }\n      }\n    );\n  }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);\n\n  return (\n    <h2 ref={containerRef} className={`scroll-float ${containerClassName}`}>\n      <span className={`scroll-float-text ${textClassName}`}>{splitText}</span>\n    </h2>\n  );\n};\n\nexport default ScrollFloat;\n"
 		}
 	],

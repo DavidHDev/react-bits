@@ -78,12 +78,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BlobCursor/BlobCursor.css"
+					"type": "registry:file",
+					"path": "BlobCursor.css",
+					"target": "@components/BlobCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BlobCursor/BlobCursor.jsx"
+					"path": "BlobCursor.jsx"
 				}
 			]
 		},
@@ -114,12 +115,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BlobCursor/BlobCursor.css"
+					"type": "registry:file",
+					"path": "BlobCursor.css",
+					"target": "@components/BlobCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BlobCursor/BlobCursor.tsx"
+					"path": "BlobCursor.tsx"
 				}
 			]
 		},
@@ -270,12 +272,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Cubes/Cubes.css"
+					"type": "registry:file",
+					"path": "Cubes.css",
+					"target": "@components/Cubes.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Cubes/Cubes.jsx"
+					"path": "Cubes.jsx"
 				}
 			]
 		},
@@ -306,12 +309,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Cubes/Cubes.css"
+					"type": "registry:file",
+					"path": "Cubes.css",
+					"target": "@components/Cubes.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Cubes/Cubes.tsx"
+					"path": "Cubes.tsx"
 				}
 			]
 		},
@@ -340,12 +344,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ElectricBorder/ElectricBorder.css"
+					"type": "registry:file",
+					"path": "ElectricBorder.css",
+					"target": "@components/ElectricBorder.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ElectricBorder/ElectricBorder.jsx"
+					"path": "ElectricBorder.jsx"
 				}
 			]
 		},
@@ -372,12 +377,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ElectricBorder/ElectricBorder.css"
+					"type": "registry:file",
+					"path": "ElectricBorder.css",
+					"target": "@components/ElectricBorder.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ElectricBorder/ElectricBorder.tsx"
+					"path": "ElectricBorder.tsx"
 				}
 			]
 		},
@@ -468,12 +474,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlareHover/GlareHover.css"
+					"type": "registry:file",
+					"path": "GlareHover.css",
+					"target": "@components/GlareHover.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlareHover/GlareHover.jsx"
+					"path": "GlareHover.jsx"
 				}
 			]
 		},
@@ -500,12 +507,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlareHover/GlareHover.css"
+					"type": "registry:file",
+					"path": "GlareHover.css",
+					"target": "@components/GlareHover.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlareHover/GlareHover.tsx"
+					"path": "GlareHover.tsx"
 				}
 			]
 		},
@@ -532,12 +540,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradualBlur/GradualBlur.css"
+					"type": "registry:file",
+					"path": "GradualBlur.css",
+					"target": "@components/GradualBlur.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradualBlur/GradualBlur.jsx"
+					"path": "GradualBlur.jsx"
 				}
 			]
 		},
@@ -564,12 +573,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradualBlur/GradualBlur.css"
+					"type": "registry:file",
+					"path": "GradualBlur.css",
+					"target": "@components/GradualBlur.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradualBlur/GradualBlur.tsx"
+					"path": "GradualBlur.tsx"
 				}
 			]
 		},
@@ -598,12 +608,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GhostCursor/GhostCursor.css"
+					"type": "registry:file",
+					"path": "GhostCursor.css",
+					"target": "@components/GhostCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GhostCursor/GhostCursor.jsx"
+					"path": "GhostCursor.jsx"
 				}
 			]
 		},
@@ -634,12 +645,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GhostCursor/GhostCursor.css"
+					"type": "registry:file",
+					"path": "GhostCursor.css",
+					"target": "@components/GhostCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GhostCursor/GhostCursor.tsx"
+					"path": "GhostCursor.tsx"
 				}
 			]
 		},
@@ -670,12 +682,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ImageTrail/ImageTrail.css"
+					"type": "registry:file",
+					"path": "ImageTrail.css",
+					"target": "@components/ImageTrail.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ImageTrail/ImageTrail.jsx"
+					"path": "ImageTrail.jsx"
 				}
 			]
 		},
@@ -706,12 +719,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ImageTrail/ImageTrail.css"
+					"type": "registry:file",
+					"path": "ImageTrail.css",
+					"target": "@components/ImageTrail.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ImageTrail/ImageTrail.tsx"
+					"path": "ImageTrail.tsx"
 				}
 			]
 		},
@@ -740,12 +754,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LogoLoop/LogoLoop.css"
+					"type": "registry:file",
+					"path": "LogoLoop.css",
+					"target": "@components/LogoLoop.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LogoLoop/LogoLoop.jsx"
+					"path": "LogoLoop.jsx"
 				}
 			]
 		},
@@ -772,12 +787,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LogoLoop/LogoLoop.css"
+					"type": "registry:file",
+					"path": "LogoLoop.css",
+					"target": "@components/LogoLoop.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LogoLoop/LogoLoop.tsx"
+					"path": "LogoLoop.tsx"
 				}
 			]
 		},
@@ -860,12 +876,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MagnetLines/MagnetLines.css"
+					"type": "registry:file",
+					"path": "MagnetLines.css",
+					"target": "@components/MagnetLines.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MagnetLines/MagnetLines.jsx"
+					"path": "MagnetLines.jsx"
 				}
 			]
 		},
@@ -892,12 +909,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MagnetLines/MagnetLines.css"
+					"type": "registry:file",
+					"path": "MagnetLines.css",
+					"target": "@components/MagnetLines.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MagnetLines/MagnetLines.tsx"
+					"path": "MagnetLines.tsx"
 				}
 			]
 		},
@@ -926,12 +944,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MetaBalls/MetaBalls.css"
+					"type": "registry:file",
+					"path": "MetaBalls.css",
+					"target": "@components/MetaBalls.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MetaBalls/MetaBalls.jsx"
+					"path": "MetaBalls.jsx"
 				}
 			]
 		},
@@ -962,12 +981,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MetaBalls/MetaBalls.css"
+					"type": "registry:file",
+					"path": "MetaBalls.css",
+					"target": "@components/MetaBalls.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MetaBalls/MetaBalls.tsx"
+					"path": "MetaBalls.tsx"
 				}
 			]
 		},
@@ -998,12 +1018,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Strands/Strands.css"
+					"type": "registry:file",
+					"path": "Strands.css",
+					"target": "@components/Strands.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Strands/Strands.jsx"
+					"path": "Strands.jsx"
 				}
 			]
 		},
@@ -1034,12 +1055,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Strands/Strands.css"
+					"type": "registry:file",
+					"path": "Strands.css",
+					"target": "@components/Strands.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Strands/Strands.tsx"
+					"path": "Strands.tsx"
 				}
 			]
 		},
@@ -1068,12 +1090,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MetallicPaint/MetallicPaint.css"
+					"type": "registry:file",
+					"path": "MetallicPaint.css",
+					"target": "@components/MetallicPaint.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MetallicPaint/MetallicPaint.jsx"
+					"path": "MetallicPaint.jsx"
 				}
 			]
 		},
@@ -1100,12 +1123,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MetallicPaint/MetallicPaint.css"
+					"type": "registry:file",
+					"path": "MetallicPaint.css",
+					"target": "@components/MetallicPaint.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MetallicPaint/MetallicPaint.tsx"
+					"path": "MetallicPaint.tsx"
 				}
 			]
 		},
@@ -1132,12 +1156,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Noise/Noise.css"
+					"type": "registry:file",
+					"path": "Noise.css",
+					"target": "@components/Noise.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Noise/Noise.jsx"
+					"path": "Noise.jsx"
 				}
 			]
 		},
@@ -1164,12 +1189,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Noise/Noise.css"
+					"type": "registry:file",
+					"path": "Noise.css",
+					"target": "@components/Noise.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Noise/Noise.tsx"
+					"path": "Noise.tsx"
 				}
 			]
 		},
@@ -1200,12 +1226,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelTrail/PixelTrail.css"
+					"type": "registry:file",
+					"path": "PixelTrail.css",
+					"target": "@components/PixelTrail.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelTrail/PixelTrail.jsx"
+					"path": "PixelTrail.jsx"
 				}
 			]
 		},
@@ -1240,12 +1267,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelTrail/PixelTrail.css"
+					"type": "registry:file",
+					"path": "PixelTrail.css",
+					"target": "@components/PixelTrail.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelTrail/PixelTrail.tsx"
+					"path": "PixelTrail.tsx"
 				}
 			]
 		},
@@ -1278,12 +1306,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelTransition/PixelTransition.css"
+					"type": "registry:file",
+					"path": "PixelTransition.css",
+					"target": "@components/PixelTransition.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelTransition/PixelTransition.jsx"
+					"path": "PixelTransition.jsx"
 				}
 			]
 		},
@@ -1314,12 +1343,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelTransition/PixelTransition.css"
+					"type": "registry:file",
+					"path": "PixelTransition.css",
+					"target": "@components/PixelTransition.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelTransition/PixelTransition.tsx"
+					"path": "PixelTransition.tsx"
 				}
 			]
 		},
@@ -1348,12 +1378,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelSwap/PixelSwap.css"
+					"type": "registry:file",
+					"path": "PixelSwap.css",
+					"target": "@components/PixelSwap.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelSwap/PixelSwap.jsx"
+					"path": "PixelSwap.jsx"
 				}
 			]
 		},
@@ -1380,12 +1411,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelSwap/PixelSwap.css"
+					"type": "registry:file",
+					"path": "PixelSwap.css",
+					"target": "@components/PixelSwap.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelSwap/PixelSwap.tsx"
+					"path": "PixelSwap.tsx"
 				}
 			]
 		},
@@ -1414,12 +1446,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Ribbons/Ribbons.css"
+					"type": "registry:file",
+					"path": "Ribbons.css",
+					"target": "@components/Ribbons.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Ribbons/Ribbons.jsx"
+					"path": "Ribbons.jsx"
 				}
 			]
 		},
@@ -1450,12 +1483,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Ribbons/Ribbons.css"
+					"type": "registry:file",
+					"path": "Ribbons.css",
+					"target": "@components/Ribbons.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Ribbons/Ribbons.tsx"
+					"path": "Ribbons.tsx"
 				}
 			]
 		},
@@ -1604,12 +1638,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StarBorder/StarBorder.css"
+					"type": "registry:file",
+					"path": "StarBorder.css",
+					"target": "@components/StarBorder.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StarBorder/StarBorder.jsx"
+					"path": "StarBorder.jsx"
 				}
 			]
 		},
@@ -1636,12 +1671,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StarBorder/StarBorder.css"
+					"type": "registry:file",
+					"path": "StarBorder.css",
+					"target": "@components/StarBorder.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StarBorder/StarBorder.tsx"
+					"path": "StarBorder.tsx"
 				}
 			]
 		},
@@ -1670,12 +1706,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StickerPeel/StickerPeel.css"
+					"type": "registry:file",
+					"path": "StickerPeel.css",
+					"target": "@components/StickerPeel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StickerPeel/StickerPeel.jsx"
+					"path": "StickerPeel.jsx"
 				}
 			]
 		},
@@ -1706,12 +1743,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StickerPeel/StickerPeel.css"
+					"type": "registry:file",
+					"path": "StickerPeel.css",
+					"target": "@components/StickerPeel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StickerPeel/StickerPeel.tsx"
+					"path": "StickerPeel.tsx"
 				}
 			]
 		},
@@ -1742,12 +1780,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TargetCursor/TargetCursor.css"
+					"type": "registry:file",
+					"path": "TargetCursor.css",
+					"target": "@components/TargetCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TargetCursor/TargetCursor.jsx"
+					"path": "TargetCursor.jsx"
 				}
 			]
 		},
@@ -1778,12 +1817,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TargetCursor/TargetCursor.css"
+					"type": "registry:file",
+					"path": "TargetCursor.css",
+					"target": "@components/TargetCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TargetCursor/TargetCursor.tsx"
+					"path": "TargetCursor.tsx"
 				}
 			]
 		},
@@ -1814,12 +1854,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LaserFlow/LaserFlow.css"
+					"type": "registry:file",
+					"path": "LaserFlow.css",
+					"target": "@components/LaserFlow.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LaserFlow/LaserFlow.jsx"
+					"path": "LaserFlow.jsx"
 				}
 			]
 		},
@@ -1850,12 +1891,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LaserFlow/LaserFlow.css"
+					"type": "registry:file",
+					"path": "LaserFlow.css",
+					"target": "@components/LaserFlow.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LaserFlow/LaserFlow.tsx"
+					"path": "LaserFlow.tsx"
 				}
 			]
 		},
@@ -1954,12 +1996,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "OrbitImages/OrbitImages.css"
+					"type": "registry:file",
+					"path": "OrbitImages.css",
+					"target": "@components/OrbitImages.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "OrbitImages/OrbitImages.jsx"
+					"path": "OrbitImages.jsx"
 				}
 			]
 		},
@@ -1990,12 +2033,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "OrbitImages/OrbitImages.css"
+					"type": "registry:file",
+					"path": "OrbitImages.css",
+					"target": "@components/OrbitImages.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "OrbitImages/OrbitImages.tsx"
+					"path": "OrbitImages.tsx"
 				}
 			]
 		},
@@ -2026,12 +2070,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MagicRings/MagicRings.css"
+					"type": "registry:file",
+					"path": "MagicRings.css",
+					"target": "@components/MagicRings.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MagicRings/MagicRings.jsx"
+					"path": "MagicRings.jsx"
 				}
 			]
 		},
@@ -2062,12 +2107,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MagicRings/MagicRings.css"
+					"type": "registry:file",
+					"path": "MagicRings.css",
+					"target": "@components/MagicRings.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MagicRings/MagicRings.tsx"
+					"path": "MagicRings.tsx"
 				}
 			]
 		},
@@ -2226,12 +2272,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CircularText/CircularText.css"
+					"type": "registry:file",
+					"path": "CircularText.css",
+					"target": "@components/CircularText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CircularText/CircularText.jsx"
+					"path": "CircularText.jsx"
 				}
 			]
 		},
@@ -2262,12 +2309,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CircularText/CircularText.css"
+					"type": "registry:file",
+					"path": "CircularText.css",
+					"target": "@components/CircularText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CircularText/CircularText.tsx"
+					"path": "CircularText.tsx"
 				}
 			]
 		},
@@ -2360,12 +2408,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CurvedLoop/CurvedLoop.css"
+					"type": "registry:file",
+					"path": "CurvedLoop.css",
+					"target": "@components/CurvedLoop.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CurvedLoop/CurvedLoop.jsx"
+					"path": "CurvedLoop.jsx"
 				}
 			]
 		},
@@ -2392,12 +2441,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CurvedLoop/CurvedLoop.css"
+					"type": "registry:file",
+					"path": "CurvedLoop.css",
+					"target": "@components/CurvedLoop.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CurvedLoop/CurvedLoop.tsx"
+					"path": "CurvedLoop.tsx"
 				}
 			]
 		},
@@ -2490,12 +2540,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FallingText/FallingText.css"
+					"type": "registry:file",
+					"path": "FallingText.css",
+					"target": "@components/FallingText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FallingText/FallingText.jsx"
+					"path": "FallingText.jsx"
 				}
 			]
 		},
@@ -2526,12 +2577,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FallingText/FallingText.css"
+					"type": "registry:file",
+					"path": "FallingText.css",
+					"target": "@components/FallingText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FallingText/FallingText.tsx"
+					"path": "FallingText.tsx"
 				}
 			]
 		},
@@ -2616,12 +2668,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlitchText/GlitchText.css"
+					"type": "registry:file",
+					"path": "GlitchText.css",
+					"target": "@components/GlitchText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlitchText/GlitchText.jsx"
+					"path": "GlitchText.jsx"
 				}
 			]
 		},
@@ -2648,12 +2701,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlitchText/GlitchText.css"
+					"type": "registry:file",
+					"path": "GlitchText.css",
+					"target": "@components/GlitchText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlitchText/GlitchText.tsx"
+					"path": "GlitchText.tsx"
 				}
 			]
 		},
@@ -2682,12 +2736,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradientText/GradientText.css"
+					"type": "registry:file",
+					"path": "GradientText.css",
+					"target": "@components/GradientText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradientText/GradientText.jsx"
+					"path": "GradientText.jsx"
 				}
 			]
 		},
@@ -2718,12 +2773,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradientText/GradientText.css"
+					"type": "registry:file",
+					"path": "GradientText.css",
+					"target": "@components/GradientText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradientText/GradientText.tsx"
+					"path": "GradientText.tsx"
 				}
 			]
 		},
@@ -2754,12 +2810,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "RotatingText/RotatingText.css"
+					"type": "registry:file",
+					"path": "RotatingText.css",
+					"target": "@components/RotatingText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "RotatingText/RotatingText.jsx"
+					"path": "RotatingText.jsx"
 				}
 			]
 		},
@@ -2790,12 +2847,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "RotatingText/RotatingText.css"
+					"type": "registry:file",
+					"path": "RotatingText.css",
+					"target": "@components/RotatingText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "RotatingText/RotatingText.tsx"
+					"path": "RotatingText.tsx"
 				}
 			]
 		},
@@ -2826,12 +2884,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrambledText/ScrambledText.css"
+					"type": "registry:file",
+					"path": "ScrambledText.css",
+					"target": "@components/ScrambledText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrambledText/ScrambledText.jsx"
+					"path": "ScrambledText.jsx"
 				}
 			]
 		},
@@ -2862,12 +2921,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrambledText/ScrambledText.css"
+					"type": "registry:file",
+					"path": "ScrambledText.css",
+					"target": "@components/ScrambledText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrambledText/ScrambledText.tsx"
+					"path": "ScrambledText.tsx"
 				}
 			]
 		},
@@ -2898,12 +2958,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollFloat/ScrollFloat.css"
+					"type": "registry:file",
+					"path": "ScrollFloat.css",
+					"target": "@components/ScrollFloat.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollFloat/ScrollFloat.jsx"
+					"path": "ScrollFloat.jsx"
 				}
 			]
 		},
@@ -2934,12 +2995,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollFloat/ScrollFloat.css"
+					"type": "registry:file",
+					"path": "ScrollFloat.css",
+					"target": "@components/ScrollFloat.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollFloat/ScrollFloat.tsx"
+					"path": "ScrollFloat.tsx"
 				}
 			]
 		},
@@ -2970,12 +3032,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollReveal/ScrollReveal.css"
+					"type": "registry:file",
+					"path": "ScrollReveal.css",
+					"target": "@components/ScrollReveal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollReveal/ScrollReveal.jsx"
+					"path": "ScrollReveal.jsx"
 				}
 			]
 		},
@@ -3006,12 +3069,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollReveal/ScrollReveal.css"
+					"type": "registry:file",
+					"path": "ScrollReveal.css",
+					"target": "@components/ScrollReveal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollReveal/ScrollReveal.tsx"
+					"path": "ScrollReveal.tsx"
 				}
 			]
 		},
@@ -3042,12 +3106,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollVelocity/ScrollVelocity.css"
+					"type": "registry:file",
+					"path": "ScrollVelocity.css",
+					"target": "@components/ScrollVelocity.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollVelocity/ScrollVelocity.jsx"
+					"path": "ScrollVelocity.jsx"
 				}
 			]
 		},
@@ -3078,12 +3143,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollVelocity/ScrollVelocity.css"
+					"type": "registry:file",
+					"path": "ScrollVelocity.css",
+					"target": "@components/ScrollVelocity.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollVelocity/ScrollVelocity.tsx"
+					"path": "ScrollVelocity.tsx"
 				}
 			]
 		},
@@ -3114,12 +3180,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ShinyText/ShinyText.css"
+					"type": "registry:file",
+					"path": "ShinyText.css",
+					"target": "@components/ShinyText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ShinyText/ShinyText.jsx"
+					"path": "ShinyText.jsx"
 				}
 			]
 		},
@@ -3150,12 +3217,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ShinyText/ShinyText.css"
+					"type": "registry:file",
+					"path": "ShinyText.css",
+					"target": "@components/ShinyText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ShinyText/ShinyText.tsx"
+					"path": "ShinyText.tsx"
 				}
 			]
 		},
@@ -3254,12 +3322,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TextCursor/TextCursor.css"
+					"type": "registry:file",
+					"path": "TextCursor.css",
+					"target": "@components/TextCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TextCursor/TextCursor.jsx"
+					"path": "TextCursor.jsx"
 				}
 			]
 		},
@@ -3290,12 +3359,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TextCursor/TextCursor.css"
+					"type": "registry:file",
+					"path": "TextCursor.css",
+					"target": "@components/TextCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TextCursor/TextCursor.tsx"
+					"path": "TextCursor.tsx"
 				}
 			]
 		},
@@ -3382,12 +3452,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TextType/TextType.css"
+					"type": "registry:file",
+					"path": "TextType.css",
+					"target": "@components/TextType.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TextType/TextType.jsx"
+					"path": "TextType.jsx"
 				}
 			]
 		},
@@ -3418,12 +3489,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TextType/TextType.css"
+					"type": "registry:file",
+					"path": "TextType.css",
+					"target": "@components/TextType.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TextType/TextType.tsx"
+					"path": "TextType.tsx"
 				}
 			]
 		},
@@ -3454,12 +3526,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TrueFocus/TrueFocus.css"
+					"type": "registry:file",
+					"path": "TrueFocus.css",
+					"target": "@components/TrueFocus.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TrueFocus/TrueFocus.jsx"
+					"path": "TrueFocus.jsx"
 				}
 			]
 		},
@@ -3490,12 +3563,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TrueFocus/TrueFocus.css"
+					"type": "registry:file",
+					"path": "TrueFocus.css",
+					"target": "@components/TrueFocus.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TrueFocus/TrueFocus.tsx"
+					"path": "TrueFocus.tsx"
 				}
 			]
 		},
@@ -3526,12 +3600,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "VariableProximity/VariableProximity.css"
+					"type": "registry:file",
+					"path": "VariableProximity.css",
+					"target": "@components/VariableProximity.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "VariableProximity/VariableProximity.jsx"
+					"path": "VariableProximity.jsx"
 				}
 			]
 		},
@@ -3562,12 +3637,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "VariableProximity/VariableProximity.css"
+					"type": "registry:file",
+					"path": "VariableProximity.css",
+					"target": "@components/VariableProximity.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "VariableProximity/VariableProximity.tsx"
+					"path": "VariableProximity.tsx"
 				}
 			]
 		},
@@ -3599,12 +3675,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Shuffle/Shuffle.css"
+					"type": "registry:file",
+					"path": "Shuffle.css",
+					"target": "@components/Shuffle.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Shuffle/Shuffle.jsx"
+					"path": "Shuffle.jsx"
 				}
 			]
 		},
@@ -3637,12 +3714,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Shuffle/Shuffle.css"
+					"type": "registry:file",
+					"path": "Shuffle.css",
+					"target": "@components/Shuffle.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Shuffle/Shuffle.tsx"
+					"path": "Shuffle.tsx"
 				}
 			]
 		},
@@ -3672,12 +3750,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ParticleText/ParticleText.css"
+					"type": "registry:file",
+					"path": "ParticleText.css",
+					"target": "@components/ParticleText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ParticleText/ParticleText.jsx"
+					"path": "ParticleText.jsx"
 				}
 			]
 		},
@@ -3704,12 +3783,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ParticleText/ParticleText.css"
+					"type": "registry:file",
+					"path": "ParticleText.css",
+					"target": "@components/ParticleText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ParticleText/ParticleText.tsx"
+					"path": "ParticleText.tsx"
 				}
 			]
 		},
@@ -3736,12 +3816,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SplitFlapText/SplitFlapText.css"
+					"type": "registry:file",
+					"path": "SplitFlapText.css",
+					"target": "@components/SplitFlapText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SplitFlapText/SplitFlapText.jsx"
+					"path": "SplitFlapText.jsx"
 				}
 			]
 		},
@@ -3768,12 +3849,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SplitFlapText/SplitFlapText.css"
+					"type": "registry:file",
+					"path": "SplitFlapText.css",
+					"target": "@components/SplitFlapText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SplitFlapText/SplitFlapText.tsx"
+					"path": "SplitFlapText.tsx"
 				}
 			]
 		},
@@ -3802,12 +3884,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "WarpText/WarpText.css"
+					"type": "registry:file",
+					"path": "WarpText.css",
+					"target": "@components/WarpText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "WarpText/WarpText.jsx"
+					"path": "WarpText.jsx"
 				}
 			]
 		},
@@ -3838,12 +3921,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "WarpText/WarpText.css"
+					"type": "registry:file",
+					"path": "WarpText.css",
+					"target": "@components/WarpText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "WarpText/WarpText.tsx"
+					"path": "WarpText.tsx"
 				}
 			]
 		},
@@ -3874,12 +3958,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StrokeText/StrokeText.css"
+					"type": "registry:file",
+					"path": "StrokeText.css",
+					"target": "@components/StrokeText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StrokeText/StrokeText.jsx"
+					"path": "StrokeText.jsx"
 				}
 			]
 		},
@@ -3910,12 +3995,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StrokeText/StrokeText.css"
+					"type": "registry:file",
+					"path": "StrokeText.css",
+					"target": "@components/StrokeText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StrokeText/StrokeText.tsx"
+					"path": "StrokeText.tsx"
 				}
 			]
 		},
@@ -3944,12 +4030,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DepthText/DepthText.css"
+					"type": "registry:file",
+					"path": "DepthText.css",
+					"target": "@components/DepthText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DepthText/DepthText.jsx"
+					"path": "DepthText.jsx"
 				}
 			]
 		},
@@ -3976,12 +4063,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DepthText/DepthText.css"
+					"type": "registry:file",
+					"path": "DepthText.css",
+					"target": "@components/DepthText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DepthText/DepthText.tsx"
+					"path": "DepthText.tsx"
 				}
 			]
 		},
@@ -4010,12 +4098,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FoldText/FoldText.css"
+					"type": "registry:file",
+					"path": "FoldText.css",
+					"target": "@components/FoldText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FoldText/FoldText.jsx"
+					"path": "FoldText.jsx"
 				}
 			]
 		},
@@ -4046,12 +4135,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FoldText/FoldText.css"
+					"type": "registry:file",
+					"path": "FoldText.css",
+					"target": "@components/FoldText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FoldText/FoldText.tsx"
+					"path": "FoldText.tsx"
 				}
 			]
 		},
@@ -4080,12 +4170,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "EchoText/EchoText.css"
+					"type": "registry:file",
+					"path": "EchoText.css",
+					"target": "@components/EchoText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "EchoText/EchoText.jsx"
+					"path": "EchoText.jsx"
 				}
 			]
 		},
@@ -4112,12 +4203,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "EchoText/EchoText.css"
+					"type": "registry:file",
+					"path": "EchoText.css",
+					"target": "@components/EchoText.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "EchoText/EchoText.tsx"
+					"path": "EchoText.tsx"
 				}
 			]
 		},
@@ -4146,12 +4238,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MaskedHeading/MaskedHeading.css"
+					"type": "registry:file",
+					"path": "MaskedHeading.css",
+					"target": "@components/MaskedHeading.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MaskedHeading/MaskedHeading.jsx"
+					"path": "MaskedHeading.jsx"
 				}
 			]
 		},
@@ -4182,12 +4275,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MaskedHeading/MaskedHeading.css"
+					"type": "registry:file",
+					"path": "MaskedHeading.css",
+					"target": "@components/MaskedHeading.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MaskedHeading/MaskedHeading.tsx"
+					"path": "MaskedHeading.tsx"
 				}
 			]
 		},
@@ -4218,12 +4312,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TextLoop/TextLoop.css"
+					"type": "registry:file",
+					"path": "TextLoop.css",
+					"target": "@components/TextLoop.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TextLoop/TextLoop.jsx"
+					"path": "TextLoop.jsx"
 				}
 			]
 		},
@@ -4254,12 +4349,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TextLoop/TextLoop.css"
+					"type": "registry:file",
+					"path": "TextLoop.css",
+					"target": "@components/TextLoop.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TextLoop/TextLoop.tsx"
+					"path": "TextLoop.tsx"
 				}
 			]
 		},
@@ -4290,12 +4386,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "AnimatedList/AnimatedList.css"
+					"type": "registry:file",
+					"path": "AnimatedList.css",
+					"target": "@components/AnimatedList.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "AnimatedList/AnimatedList.jsx"
+					"path": "AnimatedList.jsx"
 				}
 			]
 		},
@@ -4326,12 +4423,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "AnimatedList/AnimatedList.css"
+					"type": "registry:file",
+					"path": "AnimatedList.css",
+					"target": "@components/AnimatedList.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "AnimatedList/AnimatedList.tsx"
+					"path": "AnimatedList.tsx"
 				}
 			]
 		},
@@ -4362,12 +4460,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BounceCards/BounceCards.css"
+					"type": "registry:file",
+					"path": "BounceCards.css",
+					"target": "@components/BounceCards.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BounceCards/BounceCards.jsx"
+					"path": "BounceCards.jsx"
 				}
 			]
 		},
@@ -4398,12 +4497,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BounceCards/BounceCards.css"
+					"type": "registry:file",
+					"path": "BounceCards.css",
+					"target": "@components/BounceCards.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BounceCards/BounceCards.tsx"
+					"path": "BounceCards.tsx"
 				}
 			]
 		},
@@ -4434,12 +4534,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BubbleMenu/BubbleMenu.css"
+					"type": "registry:file",
+					"path": "BubbleMenu.css",
+					"target": "@components/BubbleMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BubbleMenu/BubbleMenu.jsx"
+					"path": "BubbleMenu.jsx"
 				}
 			]
 		},
@@ -4470,12 +4571,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BubbleMenu/BubbleMenu.css"
+					"type": "registry:file",
+					"path": "BubbleMenu.css",
+					"target": "@components/BubbleMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BubbleMenu/BubbleMenu.tsx"
+					"path": "BubbleMenu.tsx"
 				}
 			]
 		},
@@ -4507,12 +4609,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CardNav/CardNav.css"
+					"type": "registry:file",
+					"path": "CardNav.css",
+					"target": "@components/CardNav.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CardNav/CardNav.jsx"
+					"path": "CardNav.jsx"
 				}
 			]
 		},
@@ -4545,12 +4648,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CardNav/CardNav.css"
+					"type": "registry:file",
+					"path": "CardNav.css",
+					"target": "@components/CardNav.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CardNav/CardNav.tsx"
+					"path": "CardNav.tsx"
 				}
 			]
 		},
@@ -4582,12 +4686,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CardSwap/CardSwap.css"
+					"type": "registry:file",
+					"path": "CardSwap.css",
+					"target": "@components/CardSwap.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CardSwap/CardSwap.jsx"
+					"path": "CardSwap.jsx"
 				}
 			]
 		},
@@ -4618,12 +4723,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CardSwap/CardSwap.css"
+					"type": "registry:file",
+					"path": "CardSwap.css",
+					"target": "@components/CardSwap.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CardSwap/CardSwap.tsx"
+					"path": "CardSwap.tsx"
 				}
 			]
 		},
@@ -4655,12 +4761,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Carousel/Carousel.css"
+					"type": "registry:file",
+					"path": "Carousel.css",
+					"target": "@components/Carousel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Carousel/Carousel.jsx"
+					"path": "Carousel.jsx"
 				}
 			]
 		},
@@ -4693,12 +4800,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Carousel/Carousel.css"
+					"type": "registry:file",
+					"path": "Carousel.css",
+					"target": "@components/Carousel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Carousel/Carousel.tsx"
+					"path": "Carousel.tsx"
 				}
 			]
 		},
@@ -4730,12 +4838,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ChromaGrid/ChromaGrid.css"
+					"type": "registry:file",
+					"path": "ChromaGrid.css",
+					"target": "@components/ChromaGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ChromaGrid/ChromaGrid.jsx"
+					"path": "ChromaGrid.jsx"
 				}
 			]
 		},
@@ -4766,12 +4875,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ChromaGrid/ChromaGrid.css"
+					"type": "registry:file",
+					"path": "ChromaGrid.css",
+					"target": "@components/ChromaGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ChromaGrid/ChromaGrid.tsx"
+					"path": "ChromaGrid.tsx"
 				}
 			]
 		},
@@ -4802,12 +4912,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DepthCarousel/DepthCarousel.css"
+					"type": "registry:file",
+					"path": "DepthCarousel.css",
+					"target": "@components/DepthCarousel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DepthCarousel/DepthCarousel.jsx"
+					"path": "DepthCarousel.jsx"
 				}
 			]
 		},
@@ -4838,12 +4949,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DepthCarousel/DepthCarousel.css"
+					"type": "registry:file",
+					"path": "DepthCarousel.css",
+					"target": "@components/DepthCarousel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DepthCarousel/DepthCarousel.tsx"
+					"path": "DepthCarousel.tsx"
 				}
 			]
 		},
@@ -4874,12 +4986,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "AccordionGallery/AccordionGallery.css"
+					"type": "registry:file",
+					"path": "AccordionGallery.css",
+					"target": "@components/AccordionGallery.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "AccordionGallery/AccordionGallery.jsx"
+					"path": "AccordionGallery.jsx"
 				}
 			]
 		},
@@ -4910,12 +5023,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "AccordionGallery/AccordionGallery.css"
+					"type": "registry:file",
+					"path": "AccordionGallery.css",
+					"target": "@components/AccordionGallery.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "AccordionGallery/AccordionGallery.tsx"
+					"path": "AccordionGallery.tsx"
 				}
 			]
 		},
@@ -4947,12 +5061,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MorphSlider/MorphSlider.css"
+					"type": "registry:file",
+					"path": "MorphSlider.css",
+					"target": "@components/MorphSlider.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MorphSlider/MorphSlider.jsx"
+					"path": "MorphSlider.jsx"
 				}
 			]
 		},
@@ -4985,12 +5100,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MorphSlider/MorphSlider.css"
+					"type": "registry:file",
+					"path": "MorphSlider.css",
+					"target": "@components/MorphSlider.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MorphSlider/MorphSlider.tsx"
+					"path": "MorphSlider.tsx"
 				}
 			]
 		},
@@ -5020,12 +5136,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DriftWall/DriftWall.css"
+					"type": "registry:file",
+					"path": "DriftWall.css",
+					"target": "@components/DriftWall.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DriftWall/DriftWall.jsx"
+					"path": "DriftWall.jsx"
 				}
 			]
 		},
@@ -5052,12 +5169,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DriftWall/DriftWall.css"
+					"type": "registry:file",
+					"path": "DriftWall.css",
+					"target": "@components/DriftWall.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DriftWall/DriftWall.tsx"
+					"path": "DriftWall.tsx"
 				}
 			]
 		},
@@ -5086,12 +5204,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CircularGallery/CircularGallery.css"
+					"type": "registry:file",
+					"path": "CircularGallery.css",
+					"target": "@components/CircularGallery.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CircularGallery/CircularGallery.jsx"
+					"path": "CircularGallery.jsx"
 				}
 			]
 		},
@@ -5122,12 +5241,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CircularGallery/CircularGallery.css"
+					"type": "registry:file",
+					"path": "CircularGallery.css",
+					"target": "@components/CircularGallery.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CircularGallery/CircularGallery.tsx"
+					"path": "CircularGallery.tsx"
 				}
 			]
 		},
@@ -5158,12 +5278,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Counter/Counter.css"
+					"type": "registry:file",
+					"path": "Counter.css",
+					"target": "@components/Counter.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Counter/Counter.jsx"
+					"path": "Counter.jsx"
 				}
 			]
 		},
@@ -5194,12 +5315,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Counter/Counter.css"
+					"type": "registry:file",
+					"path": "Counter.css",
+					"target": "@components/Counter.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Counter/Counter.tsx"
+					"path": "Counter.tsx"
 				}
 			]
 		},
@@ -5230,12 +5352,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DecayCard/DecayCard.css"
+					"type": "registry:file",
+					"path": "DecayCard.css",
+					"target": "@components/DecayCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DecayCard/DecayCard.jsx"
+					"path": "DecayCard.jsx"
 				}
 			]
 		},
@@ -5266,12 +5389,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DecayCard/DecayCard.css"
+					"type": "registry:file",
+					"path": "DecayCard.css",
+					"target": "@components/DecayCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DecayCard/DecayCard.tsx"
+					"path": "DecayCard.tsx"
 				}
 			]
 		},
@@ -5302,12 +5426,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Dock/Dock.css"
+					"type": "registry:file",
+					"path": "Dock.css",
+					"target": "@components/Dock.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Dock/Dock.jsx"
+					"path": "Dock.jsx"
 				}
 			]
 		},
@@ -5338,12 +5463,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Dock/Dock.css"
+					"type": "registry:file",
+					"path": "Dock.css",
+					"target": "@components/Dock.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Dock/Dock.tsx"
+					"path": "Dock.tsx"
 				}
 			]
 		},
@@ -5374,12 +5500,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DomeGallery/DomeGallery.css"
+					"type": "registry:file",
+					"path": "DomeGallery.css",
+					"target": "@components/DomeGallery.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DomeGallery/DomeGallery.jsx"
+					"path": "DomeGallery.jsx"
 				}
 			]
 		},
@@ -5410,12 +5537,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DomeGallery/DomeGallery.css"
+					"type": "registry:file",
+					"path": "DomeGallery.css",
+					"target": "@components/DomeGallery.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DomeGallery/DomeGallery.tsx"
+					"path": "DomeGallery.tsx"
 				}
 			]
 		},
@@ -5448,12 +5576,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ElasticSlider/ElasticSlider.css"
+					"type": "registry:file",
+					"path": "ElasticSlider.css",
+					"target": "@components/ElasticSlider.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ElasticSlider/ElasticSlider.jsx"
+					"path": "ElasticSlider.jsx"
 				}
 			]
 		},
@@ -5486,12 +5615,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ElasticSlider/ElasticSlider.css"
+					"type": "registry:file",
+					"path": "ElasticSlider.css",
+					"target": "@components/ElasticSlider.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ElasticSlider/ElasticSlider.tsx"
+					"path": "ElasticSlider.tsx"
 				}
 			]
 		},
@@ -5522,12 +5652,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FlowingMenu/FlowingMenu.css"
+					"type": "registry:file",
+					"path": "FlowingMenu.css",
+					"target": "@components/FlowingMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FlowingMenu/FlowingMenu.jsx"
+					"path": "FlowingMenu.jsx"
 				}
 			]
 		},
@@ -5558,12 +5689,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FlowingMenu/FlowingMenu.css"
+					"type": "registry:file",
+					"path": "FlowingMenu.css",
+					"target": "@components/FlowingMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FlowingMenu/FlowingMenu.tsx"
+					"path": "FlowingMenu.tsx"
 				}
 			]
 		},
@@ -5670,12 +5802,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FlyingPosters/FlyingPosters.css"
+					"type": "registry:file",
+					"path": "FlyingPosters.css",
+					"target": "@components/FlyingPosters.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FlyingPosters/FlyingPosters.jsx"
+					"path": "FlyingPosters.jsx"
 				}
 			]
 		},
@@ -5706,12 +5839,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FlyingPosters/FlyingPosters.css"
+					"type": "registry:file",
+					"path": "FlyingPosters.css",
+					"target": "@components/FlyingPosters.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FlyingPosters/FlyingPosters.tsx"
+					"path": "FlyingPosters.tsx"
 				}
 			]
 		},
@@ -5740,12 +5874,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Folder/Folder.css"
+					"type": "registry:file",
+					"path": "Folder.css",
+					"target": "@components/Folder.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Folder/Folder.jsx"
+					"path": "Folder.jsx"
 				}
 			]
 		},
@@ -5772,12 +5907,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Folder/Folder.css"
+					"type": "registry:file",
+					"path": "Folder.css",
+					"target": "@components/Folder.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Folder/Folder.tsx"
+					"path": "Folder.tsx"
 				}
 			]
 		},
@@ -5804,12 +5940,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlassIcons/GlassIcons.css"
+					"type": "registry:file",
+					"path": "GlassIcons.css",
+					"target": "@components/GlassIcons.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlassIcons/GlassIcons.jsx"
+					"path": "GlassIcons.jsx"
 				}
 			]
 		},
@@ -5836,12 +5973,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlassIcons/GlassIcons.css"
+					"type": "registry:file",
+					"path": "GlassIcons.css",
+					"target": "@components/GlassIcons.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlassIcons/GlassIcons.tsx"
+					"path": "GlassIcons.tsx"
 				}
 			]
 		},
@@ -5868,12 +6006,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlassSurface/GlassSurface.css"
+					"type": "registry:file",
+					"path": "GlassSurface.css",
+					"target": "@components/GlassSurface.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlassSurface/GlassSurface.jsx"
+					"path": "GlassSurface.jsx"
 				}
 			]
 		},
@@ -5900,12 +6039,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GlassSurface/GlassSurface.css"
+					"type": "registry:file",
+					"path": "GlassSurface.css",
+					"target": "@components/GlassSurface.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GlassSurface/GlassSurface.tsx"
+					"path": "GlassSurface.tsx"
 				}
 			]
 		},
@@ -5932,12 +6072,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GooeyNav/GooeyNav.css"
+					"type": "registry:file",
+					"path": "GooeyNav.css",
+					"target": "@components/GooeyNav.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GooeyNav/GooeyNav.jsx"
+					"path": "GooeyNav.jsx"
 				}
 			]
 		},
@@ -5964,12 +6105,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GooeyNav/GooeyNav.css"
+					"type": "registry:file",
+					"path": "GooeyNav.css",
+					"target": "@components/GooeyNav.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GooeyNav/GooeyNav.tsx"
+					"path": "GooeyNav.tsx"
 				}
 			]
 		},
@@ -5998,12 +6140,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "InfiniteMenu/InfiniteMenu.css"
+					"type": "registry:file",
+					"path": "InfiniteMenu.css",
+					"target": "@components/InfiniteMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "InfiniteMenu/InfiniteMenu.jsx"
+					"path": "InfiniteMenu.jsx"
 				}
 			]
 		},
@@ -6034,12 +6177,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "InfiniteMenu/InfiniteMenu.css"
+					"type": "registry:file",
+					"path": "InfiniteMenu.css",
+					"target": "@components/InfiniteMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "InfiniteMenu/InfiniteMenu.tsx"
+					"path": "InfiniteMenu.tsx"
 				}
 			]
 		},
@@ -6068,8 +6212,9 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Lanyard.css"
+					"type": "registry:file",
+					"path": "Lanyard.css",
+					"target": "@components/Lanyard.css"
 				},
 				{
 					"type": "registry:component",
@@ -6100,8 +6245,9 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Lanyard.css"
+					"type": "registry:file",
+					"path": "Lanyard.css",
+					"target": "@components/Lanyard.css"
 				},
 				{
 					"type": "registry:component",
@@ -6134,12 +6280,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MagicBento/MagicBento.css"
+					"type": "registry:file",
+					"path": "MagicBento.css",
+					"target": "@components/MagicBento.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MagicBento/MagicBento.jsx"
+					"path": "MagicBento.jsx"
 				}
 			]
 		},
@@ -6170,12 +6317,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MagicBento/MagicBento.css"
+					"type": "registry:file",
+					"path": "MagicBento.css",
+					"target": "@components/MagicBento.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MagicBento/MagicBento.tsx"
+					"path": "MagicBento.tsx"
 				}
 			]
 		},
@@ -6206,12 +6354,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Masonry/Masonry.css"
+					"type": "registry:file",
+					"path": "Masonry.css",
+					"target": "@components/Masonry.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Masonry/Masonry.jsx"
+					"path": "Masonry.jsx"
 				}
 			]
 		},
@@ -6242,12 +6391,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Masonry/Masonry.css"
+					"type": "registry:file",
+					"path": "Masonry.css",
+					"target": "@components/Masonry.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Masonry/Masonry.tsx"
+					"path": "Masonry.tsx"
 				}
 			]
 		},
@@ -6351,12 +6501,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PillNav/PillNav.css"
+					"type": "registry:file",
+					"path": "PillNav.css",
+					"target": "@components/PillNav.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PillNav/PillNav.jsx"
+					"path": "PillNav.jsx"
 				}
 			]
 		},
@@ -6389,12 +6540,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PillNav/PillNav.css"
+					"type": "registry:file",
+					"path": "PillNav.css",
+					"target": "@components/PillNav.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PillNav/PillNav.tsx"
+					"path": "PillNav.tsx"
 				}
 			]
 		},
@@ -6424,12 +6576,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelCard/PixelCard.css"
+					"type": "registry:file",
+					"path": "PixelCard.css",
+					"target": "@components/PixelCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelCard/PixelCard.jsx"
+					"path": "PixelCard.jsx"
 				}
 			]
 		},
@@ -6456,12 +6609,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelCard/PixelCard.css"
+					"type": "registry:file",
+					"path": "PixelCard.css",
+					"target": "@components/PixelCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelCard/PixelCard.tsx"
+					"path": "PixelCard.tsx"
 				}
 			]
 		},
@@ -6488,12 +6642,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ProfileCard/ProfileCard.css"
+					"type": "registry:file",
+					"path": "ProfileCard.css",
+					"target": "@components/ProfileCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ProfileCard/ProfileCard.jsx"
+					"path": "ProfileCard.jsx"
 				}
 			]
 		},
@@ -6520,12 +6675,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ProfileCard/ProfileCard.css"
+					"type": "registry:file",
+					"path": "ProfileCard.css",
+					"target": "@components/ProfileCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ProfileCard/ProfileCard.tsx"
+					"path": "ProfileCard.tsx"
 				}
 			]
 		},
@@ -6554,12 +6710,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollStack/ScrollStack.css"
+					"type": "registry:file",
+					"path": "ScrollStack.css",
+					"target": "@components/ScrollStack.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollStack/ScrollStack.jsx"
+					"path": "ScrollStack.jsx"
 				}
 			]
 		},
@@ -6590,12 +6747,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollStack/ScrollStack.css"
+					"type": "registry:file",
+					"path": "ScrollStack.css",
+					"target": "@components/ScrollStack.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollStack/ScrollStack.tsx"
+					"path": "ScrollStack.tsx"
 				}
 			]
 		},
@@ -6624,12 +6782,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SpotlightCard/SpotlightCard.css"
+					"type": "registry:file",
+					"path": "SpotlightCard.css",
+					"target": "@components/SpotlightCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SpotlightCard/SpotlightCard.jsx"
+					"path": "SpotlightCard.jsx"
 				}
 			]
 		},
@@ -6656,12 +6815,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SpotlightCard/SpotlightCard.css"
+					"type": "registry:file",
+					"path": "SpotlightCard.css",
+					"target": "@components/SpotlightCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SpotlightCard/SpotlightCard.tsx"
+					"path": "SpotlightCard.tsx"
 				}
 			]
 		},
@@ -6688,12 +6848,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BorderGlow/BorderGlow.css"
+					"type": "registry:file",
+					"path": "BorderGlow.css",
+					"target": "@components/BorderGlow.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BorderGlow/BorderGlow.jsx"
+					"path": "BorderGlow.jsx"
 				}
 			]
 		},
@@ -6720,12 +6881,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "BorderGlow/BorderGlow.css"
+					"type": "registry:file",
+					"path": "BorderGlow.css",
+					"target": "@components/BorderGlow.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "BorderGlow/BorderGlow.tsx"
+					"path": "BorderGlow.tsx"
 				}
 			]
 		},
@@ -6752,12 +6914,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LineSidebar/LineSidebar.css"
+					"type": "registry:file",
+					"path": "LineSidebar.css",
+					"target": "@components/LineSidebar.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LineSidebar/LineSidebar.jsx"
+					"path": "LineSidebar.jsx"
 				}
 			]
 		},
@@ -6784,12 +6947,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LineSidebar/LineSidebar.css"
+					"type": "registry:file",
+					"path": "LineSidebar.css",
+					"target": "@components/LineSidebar.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LineSidebar/LineSidebar.tsx"
+					"path": "LineSidebar.tsx"
 				}
 			]
 		},
@@ -6816,12 +6980,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "OptionWheel/OptionWheel.css"
+					"type": "registry:file",
+					"path": "OptionWheel.css",
+					"target": "@components/OptionWheel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "OptionWheel/OptionWheel.jsx"
+					"path": "OptionWheel.jsx"
 				}
 			]
 		},
@@ -6848,12 +7013,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "OptionWheel/OptionWheel.css"
+					"type": "registry:file",
+					"path": "OptionWheel.css",
+					"target": "@components/OptionWheel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "OptionWheel/OptionWheel.tsx"
+					"path": "OptionWheel.tsx"
 				}
 			]
 		},
@@ -6882,12 +7048,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SpecularButton/SpecularButton.css"
+					"type": "registry:file",
+					"path": "SpecularButton.css",
+					"target": "@components/SpecularButton.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SpecularButton/SpecularButton.jsx"
+					"path": "SpecularButton.jsx"
 				}
 			]
 		},
@@ -6918,12 +7085,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SpecularButton/SpecularButton.css"
+					"type": "registry:file",
+					"path": "SpecularButton.css",
+					"target": "@components/SpecularButton.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SpecularButton/SpecularButton.tsx"
+					"path": "SpecularButton.tsx"
 				}
 			]
 		},
@@ -6954,12 +7122,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ElasticMesh/ElasticMesh.css"
+					"type": "registry:file",
+					"path": "ElasticMesh.css",
+					"target": "@components/ElasticMesh.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ElasticMesh/ElasticMesh.jsx"
+					"path": "ElasticMesh.jsx"
 				}
 			]
 		},
@@ -6990,12 +7159,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ElasticMesh/ElasticMesh.css"
+					"type": "registry:file",
+					"path": "ElasticMesh.css",
+					"target": "@components/ElasticMesh.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ElasticMesh/ElasticMesh.tsx"
+					"path": "ElasticMesh.tsx"
 				}
 			]
 		},
@@ -7026,12 +7196,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "RippleDistortion/RippleDistortion.css"
+					"type": "registry:file",
+					"path": "RippleDistortion.css",
+					"target": "@components/RippleDistortion.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "RippleDistortion/RippleDistortion.jsx"
+					"path": "RippleDistortion.jsx"
 				}
 			]
 		},
@@ -7062,12 +7233,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "RippleDistortion/RippleDistortion.css"
+					"type": "registry:file",
+					"path": "RippleDistortion.css",
+					"target": "@components/RippleDistortion.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "RippleDistortion/RippleDistortion.tsx"
+					"path": "RippleDistortion.tsx"
 				}
 			]
 		},
@@ -7098,12 +7270,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SwarmCursor/SwarmCursor.css"
+					"type": "registry:file",
+					"path": "SwarmCursor.css",
+					"target": "@components/SwarmCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SwarmCursor/SwarmCursor.jsx"
+					"path": "SwarmCursor.jsx"
 				}
 			]
 		},
@@ -7134,12 +7307,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SwarmCursor/SwarmCursor.css"
+					"type": "registry:file",
+					"path": "SwarmCursor.css",
+					"target": "@components/SwarmCursor.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SwarmCursor/SwarmCursor.tsx"
+					"path": "SwarmCursor.tsx"
 				}
 			]
 		},
@@ -7170,12 +7344,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "HalftoneReveal/HalftoneReveal.css"
+					"type": "registry:file",
+					"path": "HalftoneReveal.css",
+					"target": "@components/HalftoneReveal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "HalftoneReveal/HalftoneReveal.jsx"
+					"path": "HalftoneReveal.jsx"
 				}
 			]
 		},
@@ -7206,12 +7381,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "HalftoneReveal/HalftoneReveal.css"
+					"type": "registry:file",
+					"path": "HalftoneReveal.css",
+					"target": "@components/HalftoneReveal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "HalftoneReveal/HalftoneReveal.tsx"
+					"path": "HalftoneReveal.tsx"
 				}
 			]
 		},
@@ -7240,12 +7416,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollExpand/ScrollExpand.css"
+					"type": "registry:file",
+					"path": "ScrollExpand.css",
+					"target": "@components/ScrollExpand.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollExpand/ScrollExpand.jsx"
+					"path": "ScrollExpand.jsx"
 				}
 			]
 		},
@@ -7272,12 +7449,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ScrollExpand/ScrollExpand.css"
+					"type": "registry:file",
+					"path": "ScrollExpand.css",
+					"target": "@components/ScrollExpand.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ScrollExpand/ScrollExpand.tsx"
+					"path": "ScrollExpand.tsx"
 				}
 			]
 		},
@@ -7304,12 +7482,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CursorGrid/CursorGrid.css"
+					"type": "registry:file",
+					"path": "CursorGrid.css",
+					"target": "@components/CursorGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CursorGrid/CursorGrid.jsx"
+					"path": "CursorGrid.jsx"
 				}
 			]
 		},
@@ -7336,12 +7515,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CursorGrid/CursorGrid.css"
+					"type": "registry:file",
+					"path": "CursorGrid.css",
+					"target": "@components/CursorGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CursorGrid/CursorGrid.tsx"
+					"path": "CursorGrid.tsx"
 				}
 			]
 		},
@@ -7368,12 +7548,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CurvedInput/CurvedInput.css"
+					"type": "registry:file",
+					"path": "CurvedInput.css",
+					"target": "@components/CurvedInput.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CurvedInput/CurvedInput.jsx"
+					"path": "CurvedInput.jsx"
 				}
 			]
 		},
@@ -7400,12 +7581,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "CurvedInput/CurvedInput.css"
+					"type": "registry:file",
+					"path": "CurvedInput.css",
+					"target": "@components/CurvedInput.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "CurvedInput/CurvedInput.tsx"
+					"path": "CurvedInput.tsx"
 				}
 			]
 		},
@@ -7434,12 +7616,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Stack/Stack.css"
+					"type": "registry:file",
+					"path": "Stack.css",
+					"target": "@components/Stack.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Stack/Stack.jsx"
+					"path": "Stack.jsx"
 				}
 			]
 		},
@@ -7470,12 +7653,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Stack/Stack.css"
+					"type": "registry:file",
+					"path": "Stack.css",
+					"target": "@components/Stack.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Stack/Stack.tsx"
+					"path": "Stack.tsx"
 				}
 			]
 		},
@@ -7506,12 +7690,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Stepper/Stepper.css"
+					"type": "registry:file",
+					"path": "Stepper.css",
+					"target": "@components/Stepper.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Stepper/Stepper.jsx"
+					"path": "Stepper.jsx"
 				}
 			]
 		},
@@ -7542,12 +7727,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Stepper/Stepper.css"
+					"type": "registry:file",
+					"path": "Stepper.css",
+					"target": "@components/Stepper.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Stepper/Stepper.tsx"
+					"path": "Stepper.tsx"
 				}
 			]
 		},
@@ -7578,12 +7764,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TiltedCard/TiltedCard.css"
+					"type": "registry:file",
+					"path": "TiltedCard.css",
+					"target": "@components/TiltedCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TiltedCard/TiltedCard.jsx"
+					"path": "TiltedCard.jsx"
 				}
 			]
 		},
@@ -7614,12 +7801,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "TiltedCard/TiltedCard.css"
+					"type": "registry:file",
+					"path": "TiltedCard.css",
+					"target": "@components/TiltedCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "TiltedCard/TiltedCard.tsx"
+					"path": "TiltedCard.tsx"
 				}
 			]
 		},
@@ -7650,12 +7838,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StaggeredMenu/StaggeredMenu.css"
+					"type": "registry:file",
+					"path": "StaggeredMenu.css",
+					"target": "@components/StaggeredMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StaggeredMenu/StaggeredMenu.jsx"
+					"path": "StaggeredMenu.jsx"
 				}
 			]
 		},
@@ -7686,12 +7875,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "StaggeredMenu/StaggeredMenu.css"
+					"type": "registry:file",
+					"path": "StaggeredMenu.css",
+					"target": "@components/StaggeredMenu.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "StaggeredMenu/StaggeredMenu.tsx"
+					"path": "StaggeredMenu.tsx"
 				}
 			]
 		},
@@ -7722,12 +7912,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ReflectiveCard/ReflectiveCard.css"
+					"type": "registry:file",
+					"path": "ReflectiveCard.css",
+					"target": "@components/ReflectiveCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ReflectiveCard/ReflectiveCard.jsx"
+					"path": "ReflectiveCard.jsx"
 				}
 			]
 		},
@@ -7758,12 +7949,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ReflectiveCard/ReflectiveCard.css"
+					"type": "registry:file",
+					"path": "ReflectiveCard.css",
+					"target": "@components/ReflectiveCard.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ReflectiveCard/ReflectiveCard.tsx"
+					"path": "ReflectiveCard.tsx"
 				}
 			]
 		},
@@ -7794,12 +7986,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Aurora/Aurora.css"
+					"type": "registry:file",
+					"path": "Aurora.css",
+					"target": "@components/Aurora.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Aurora/Aurora.jsx"
+					"path": "Aurora.jsx"
 				}
 			]
 		},
@@ -7830,12 +8023,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Aurora/Aurora.css"
+					"type": "registry:file",
+					"path": "Aurora.css",
+					"target": "@components/Aurora.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Aurora/Aurora.tsx"
+					"path": "Aurora.tsx"
 				}
 			]
 		},
@@ -7866,12 +8060,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Balatro/Balatro.css"
+					"type": "registry:file",
+					"path": "Balatro.css",
+					"target": "@components/Balatro.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Balatro/Balatro.jsx"
+					"path": "Balatro.jsx"
 				}
 			]
 		},
@@ -7902,12 +8097,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Balatro/Balatro.css"
+					"type": "registry:file",
+					"path": "Balatro.css",
+					"target": "@components/Balatro.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Balatro/Balatro.tsx"
+					"path": "Balatro.tsx"
 				}
 			]
 		},
@@ -8006,12 +8202,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Beams/Beams.css"
+					"type": "registry:file",
+					"path": "Beams.css",
+					"target": "@components/Beams.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Beams/Beams.jsx"
+					"path": "Beams.jsx"
 				}
 			]
 		},
@@ -8046,12 +8243,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Beams/Beams.css"
+					"type": "registry:file",
+					"path": "Beams.css",
+					"target": "@components/Beams.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Beams/Beams.tsx"
+					"path": "Beams.tsx"
 				}
 			]
 		},
@@ -8084,12 +8282,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ColorBends/ColorBends.css"
+					"type": "registry:file",
+					"path": "ColorBends.css",
+					"target": "@components/ColorBends.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ColorBends/ColorBends.jsx"
+					"path": "ColorBends.jsx"
 				}
 			]
 		},
@@ -8120,12 +8319,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ColorBends/ColorBends.css"
+					"type": "registry:file",
+					"path": "ColorBends.css",
+					"target": "@components/ColorBends.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ColorBends/ColorBends.tsx"
+					"path": "ColorBends.tsx"
 				}
 			]
 		},
@@ -8156,12 +8356,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DarkVeil/DarkVeil.css"
+					"type": "registry:file",
+					"path": "DarkVeil.css",
+					"target": "@components/DarkVeil.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DarkVeil/DarkVeil.jsx"
+					"path": "DarkVeil.jsx"
 				}
 			]
 		},
@@ -8192,12 +8393,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DarkVeil/DarkVeil.css"
+					"type": "registry:file",
+					"path": "DarkVeil.css",
+					"target": "@components/DarkVeil.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DarkVeil/DarkVeil.tsx"
+					"path": "DarkVeil.tsx"
 				}
 			]
 		},
@@ -8231,12 +8433,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Dither/Dither.css"
+					"type": "registry:file",
+					"path": "Dither.css",
+					"target": "@components/Dither.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Dither/Dither.jsx"
+					"path": "Dither.jsx"
 				}
 			]
 		},
@@ -8273,12 +8476,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Dither/Dither.css"
+					"type": "registry:file",
+					"path": "Dither.css",
+					"target": "@components/Dither.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Dither/Dither.tsx"
+					"path": "Dither.tsx"
 				}
 			]
 		},
@@ -8310,12 +8514,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DotField/DotField.css"
+					"type": "registry:file",
+					"path": "DotField.css",
+					"target": "@components/DotField.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DotField/DotField.jsx"
+					"path": "DotField.jsx"
 				}
 			]
 		},
@@ -8342,12 +8547,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DotField/DotField.css"
+					"type": "registry:file",
+					"path": "DotField.css",
+					"target": "@components/DotField.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DotField/DotField.tsx"
+					"path": "DotField.tsx"
 				}
 			]
 		},
@@ -8376,12 +8582,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DotGrid/DotGrid.css"
+					"type": "registry:file",
+					"path": "DotGrid.css",
+					"target": "@components/DotGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DotGrid/DotGrid.jsx"
+					"path": "DotGrid.jsx"
 				}
 			]
 		},
@@ -8412,12 +8619,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "DotGrid/DotGrid.css"
+					"type": "registry:file",
+					"path": "DotGrid.css",
+					"target": "@components/DotGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "DotGrid/DotGrid.tsx"
+					"path": "DotGrid.tsx"
 				}
 			]
 		},
@@ -8448,12 +8656,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FaultyTerminal/FaultyTerminal.css"
+					"type": "registry:file",
+					"path": "FaultyTerminal.css",
+					"target": "@components/FaultyTerminal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FaultyTerminal/FaultyTerminal.jsx"
+					"path": "FaultyTerminal.jsx"
 				}
 			]
 		},
@@ -8484,12 +8693,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FaultyTerminal/FaultyTerminal.css"
+					"type": "registry:file",
+					"path": "FaultyTerminal.css",
+					"target": "@components/FaultyTerminal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FaultyTerminal/FaultyTerminal.tsx"
+					"path": "FaultyTerminal.tsx"
 				}
 			]
 		},
@@ -8520,12 +8730,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Galaxy/Galaxy.css"
+					"type": "registry:file",
+					"path": "Galaxy.css",
+					"target": "@components/Galaxy.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Galaxy/Galaxy.jsx"
+					"path": "Galaxy.jsx"
 				}
 			]
 		},
@@ -8556,12 +8767,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Galaxy/Galaxy.css"
+					"type": "registry:file",
+					"path": "Galaxy.css",
+					"target": "@components/Galaxy.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Galaxy/Galaxy.tsx"
+					"path": "Galaxy.tsx"
 				}
 			]
 		},
@@ -8592,12 +8804,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradientBlinds/GradientBlinds.css"
+					"type": "registry:file",
+					"path": "GradientBlinds.css",
+					"target": "@components/GradientBlinds.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradientBlinds/GradientBlinds.jsx"
+					"path": "GradientBlinds.jsx"
 				}
 			]
 		},
@@ -8628,12 +8841,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradientBlinds/GradientBlinds.css"
+					"type": "registry:file",
+					"path": "GradientBlinds.css",
+					"target": "@components/GradientBlinds.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradientBlinds/GradientBlinds.tsx"
+					"path": "GradientBlinds.tsx"
 				}
 			]
 		},
@@ -8664,12 +8878,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Lightfall/Lightfall.css"
+					"type": "registry:file",
+					"path": "Lightfall.css",
+					"target": "@components/Lightfall.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Lightfall/Lightfall.jsx"
+					"path": "Lightfall.jsx"
 				}
 			]
 		},
@@ -8700,12 +8915,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Lightfall/Lightfall.css"
+					"type": "registry:file",
+					"path": "Lightfall.css",
+					"target": "@components/Lightfall.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Lightfall/Lightfall.tsx"
+					"path": "Lightfall.tsx"
 				}
 			]
 		},
@@ -8736,12 +8952,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Ferrofluid/Ferrofluid.css"
+					"type": "registry:file",
+					"path": "Ferrofluid.css",
+					"target": "@components/Ferrofluid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Ferrofluid/Ferrofluid.jsx"
+					"path": "Ferrofluid.jsx"
 				}
 			]
 		},
@@ -8772,12 +8989,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Ferrofluid/Ferrofluid.css"
+					"type": "registry:file",
+					"path": "Ferrofluid.css",
+					"target": "@components/Ferrofluid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Ferrofluid/Ferrofluid.tsx"
+					"path": "Ferrofluid.tsx"
 				}
 			]
 		},
@@ -8808,12 +9026,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MoltenMetal/MoltenMetal.css"
+					"type": "registry:file",
+					"path": "MoltenMetal.css",
+					"target": "@components/MoltenMetal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MoltenMetal/MoltenMetal.jsx"
+					"path": "MoltenMetal.jsx"
 				}
 			]
 		},
@@ -8844,12 +9063,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "MoltenMetal/MoltenMetal.css"
+					"type": "registry:file",
+					"path": "MoltenMetal.css",
+					"target": "@components/MoltenMetal.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "MoltenMetal/MoltenMetal.tsx"
+					"path": "MoltenMetal.tsx"
 				}
 			]
 		},
@@ -8880,12 +9100,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradientWaves/GradientWaves.css"
+					"type": "registry:file",
+					"path": "GradientWaves.css",
+					"target": "@components/GradientWaves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradientWaves/GradientWaves.jsx"
+					"path": "GradientWaves.jsx"
 				}
 			]
 		},
@@ -8916,12 +9137,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GradientWaves/GradientWaves.css"
+					"type": "registry:file",
+					"path": "GradientWaves.css",
+					"target": "@components/GradientWaves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GradientWaves/GradientWaves.tsx"
+					"path": "GradientWaves.tsx"
 				}
 			]
 		},
@@ -8952,12 +9174,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "WebThreads/WebThreads.css"
+					"type": "registry:file",
+					"path": "WebThreads.css",
+					"target": "@components/WebThreads.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "WebThreads/WebThreads.jsx"
+					"path": "WebThreads.jsx"
 				}
 			]
 		},
@@ -8988,12 +9211,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "WebThreads/WebThreads.css"
+					"type": "registry:file",
+					"path": "WebThreads.css",
+					"target": "@components/WebThreads.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "WebThreads/WebThreads.tsx"
+					"path": "WebThreads.tsx"
 				}
 			]
 		},
@@ -9024,12 +9248,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Topography/Topography.css"
+					"type": "registry:file",
+					"path": "Topography.css",
+					"target": "@components/Topography.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Topography/Topography.jsx"
+					"path": "Topography.jsx"
 				}
 			]
 		},
@@ -9060,12 +9285,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Topography/Topography.css"
+					"type": "registry:file",
+					"path": "Topography.css",
+					"target": "@components/Topography.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Topography/Topography.tsx"
+					"path": "Topography.tsx"
 				}
 			]
 		},
@@ -9096,12 +9322,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LightTunnel/LightTunnel.css"
+					"type": "registry:file",
+					"path": "LightTunnel.css",
+					"target": "@components/LightTunnel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LightTunnel/LightTunnel.jsx"
+					"path": "LightTunnel.jsx"
 				}
 			]
 		},
@@ -9132,12 +9359,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LightTunnel/LightTunnel.css"
+					"type": "registry:file",
+					"path": "LightTunnel.css",
+					"target": "@components/LightTunnel.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LightTunnel/LightTunnel.tsx"
+					"path": "LightTunnel.tsx"
 				}
 			]
 		},
@@ -9168,12 +9396,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SlicedWaves/SlicedWaves.css"
+					"type": "registry:file",
+					"path": "SlicedWaves.css",
+					"target": "@components/SlicedWaves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SlicedWaves/SlicedWaves.jsx"
+					"path": "SlicedWaves.jsx"
 				}
 			]
 		},
@@ -9204,12 +9433,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SlicedWaves/SlicedWaves.css"
+					"type": "registry:file",
+					"path": "SlicedWaves.css",
+					"target": "@components/SlicedWaves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SlicedWaves/SlicedWaves.tsx"
+					"path": "SlicedWaves.tsx"
 				}
 			]
 		},
@@ -9240,12 +9470,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "AcidSquares/AcidSquares.css"
+					"type": "registry:file",
+					"path": "AcidSquares.css",
+					"target": "@components/AcidSquares.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "AcidSquares/AcidSquares.jsx"
+					"path": "AcidSquares.jsx"
 				}
 			]
 		},
@@ -9276,12 +9507,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "AcidSquares/AcidSquares.css"
+					"type": "registry:file",
+					"path": "AcidSquares.css",
+					"target": "@components/AcidSquares.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "AcidSquares/AcidSquares.tsx"
+					"path": "AcidSquares.tsx"
 				}
 			]
 		},
@@ -9312,12 +9544,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Scanner/Scanner.css"
+					"type": "registry:file",
+					"path": "Scanner.css",
+					"target": "@components/Scanner.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Scanner/Scanner.jsx"
+					"path": "Scanner.jsx"
 				}
 			]
 		},
@@ -9348,12 +9581,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Scanner/Scanner.css"
+					"type": "registry:file",
+					"path": "Scanner.css",
+					"target": "@components/Scanner.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Scanner/Scanner.tsx"
+					"path": "Scanner.tsx"
 				}
 			]
 		},
@@ -9384,12 +9618,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Grainient/Grainient.css"
+					"type": "registry:file",
+					"path": "Grainient.css",
+					"target": "@components/Grainient.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Grainient/Grainient.jsx"
+					"path": "Grainient.jsx"
 				}
 			]
 		},
@@ -9420,12 +9655,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Grainient/Grainient.css"
+					"type": "registry:file",
+					"path": "Grainient.css",
+					"target": "@components/Grainient.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Grainient/Grainient.tsx"
+					"path": "Grainient.tsx"
 				}
 			]
 		},
@@ -9458,12 +9694,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GridScan/GridScan.css"
+					"type": "registry:file",
+					"path": "GridScan.css",
+					"target": "@components/GridScan.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GridScan/GridScan.jsx"
+					"path": "GridScan.jsx"
 				}
 			]
 		},
@@ -9498,12 +9735,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GridScan/GridScan.css"
+					"type": "registry:file",
+					"path": "GridScan.css",
+					"target": "@components/GridScan.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GridScan/GridScan.tsx"
+					"path": "GridScan.tsx"
 				}
 			]
 		},
@@ -9536,12 +9774,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GridDistortion/GridDistortion.css"
+					"type": "registry:file",
+					"path": "GridDistortion.css",
+					"target": "@components/GridDistortion.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GridDistortion/GridDistortion.jsx"
+					"path": "GridDistortion.jsx"
 				}
 			]
 		},
@@ -9572,12 +9811,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GridDistortion/GridDistortion.css"
+					"type": "registry:file",
+					"path": "GridDistortion.css",
+					"target": "@components/GridDistortion.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GridDistortion/GridDistortion.tsx"
+					"path": "GridDistortion.tsx"
 				}
 			]
 		},
@@ -9608,12 +9848,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GridMotion/GridMotion.css"
+					"type": "registry:file",
+					"path": "GridMotion.css",
+					"target": "@components/GridMotion.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GridMotion/GridMotion.jsx"
+					"path": "GridMotion.jsx"
 				}
 			]
 		},
@@ -9644,12 +9885,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "GridMotion/GridMotion.css"
+					"type": "registry:file",
+					"path": "GridMotion.css",
+					"target": "@components/GridMotion.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "GridMotion/GridMotion.tsx"
+					"path": "GridMotion.tsx"
 				}
 			]
 		},
@@ -9682,15 +9924,16 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.js"
+					"path": "HyperSpeedPresets.js"
+				},
+				{
+					"type": "registry:file",
+					"path": "Hyperspeed.css",
+					"target": "@components/Hyperspeed.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.css"
-				},
-				{
-					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.jsx"
+					"path": "Hyperspeed.jsx"
 				}
 			]
 		},
@@ -9707,11 +9950,11 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.js"
+					"path": "Hyperspeed/Hyperspeed.jsx"
 				},
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.jsx"
+					"path": "Hyperspeed/HyperSpeedPresets.js"
 				}
 			]
 		},
@@ -9728,15 +9971,16 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.ts"
+					"path": "HyperSpeedPresets.ts"
+				},
+				{
+					"type": "registry:file",
+					"path": "Hyperspeed.css",
+					"target": "@components/Hyperspeed.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.css"
-				},
-				{
-					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.tsx"
+					"path": "Hyperspeed.tsx"
 				}
 			]
 		},
@@ -9753,11 +9997,11 @@
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.ts"
+					"path": "Hyperspeed/Hyperspeed.tsx"
 				},
 				{
 					"type": "registry:component",
-					"path": "Hyperspeed/Hyperspeed.tsx"
+					"path": "Hyperspeed/HyperSpeedPresets.ts"
 				}
 			]
 		},
@@ -9772,12 +10016,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Iridescence/Iridescence.css"
+					"type": "registry:file",
+					"path": "Iridescence.css",
+					"target": "@components/Iridescence.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Iridescence/Iridescence.jsx"
+					"path": "Iridescence.jsx"
 				}
 			]
 		},
@@ -9808,12 +10053,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Iridescence/Iridescence.css"
+					"type": "registry:file",
+					"path": "Iridescence.css",
+					"target": "@components/Iridescence.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Iridescence/Iridescence.tsx"
+					"path": "Iridescence.tsx"
 				}
 			]
 		},
@@ -9900,12 +10146,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LightRays/LightRays.css"
+					"type": "registry:file",
+					"path": "LightRays.css",
+					"target": "@components/LightRays.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LightRays/LightRays.jsx"
+					"path": "LightRays.jsx"
 				}
 			]
 		},
@@ -9936,12 +10183,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LightRays/LightRays.css"
+					"type": "registry:file",
+					"path": "LightRays.css",
+					"target": "@components/LightRays.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LightRays/LightRays.tsx"
+					"path": "LightRays.tsx"
 				}
 			]
 		},
@@ -9970,12 +10218,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Lightning/Lightning.css"
+					"type": "registry:file",
+					"path": "Lightning.css",
+					"target": "@components/Lightning.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Lightning/Lightning.jsx"
+					"path": "Lightning.jsx"
 				}
 			]
 		},
@@ -10002,12 +10251,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Lightning/Lightning.css"
+					"type": "registry:file",
+					"path": "Lightning.css",
+					"target": "@components/Lightning.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Lightning/Lightning.tsx"
+					"path": "Lightning.tsx"
 				}
 			]
 		},
@@ -10036,12 +10286,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LineWaves/LineWaves.css"
+					"type": "registry:file",
+					"path": "LineWaves.css",
+					"target": "@components/LineWaves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LineWaves/LineWaves.jsx"
+					"path": "LineWaves.jsx"
 				}
 			]
 		},
@@ -10072,12 +10323,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LineWaves/LineWaves.css"
+					"type": "registry:file",
+					"path": "LineWaves.css",
+					"target": "@components/LineWaves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LineWaves/LineWaves.tsx"
+					"path": "LineWaves.tsx"
 				}
 			]
 		},
@@ -10108,12 +10360,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "EvilEye/EvilEye.css"
+					"type": "registry:file",
+					"path": "EvilEye.css",
+					"target": "@components/EvilEye.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "EvilEye/EvilEye.jsx"
+					"path": "EvilEye.jsx"
 				}
 			]
 		},
@@ -10144,12 +10397,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "EvilEye/EvilEye.css"
+					"type": "registry:file",
+					"path": "EvilEye.css",
+					"target": "@components/EvilEye.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "EvilEye/EvilEye.tsx"
+					"path": "EvilEye.tsx"
 				}
 			]
 		},
@@ -10180,12 +10434,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Radar/Radar.css"
+					"type": "registry:file",
+					"path": "Radar.css",
+					"target": "@components/Radar.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Radar/Radar.jsx"
+					"path": "Radar.jsx"
 				}
 			]
 		},
@@ -10216,12 +10471,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Radar/Radar.css"
+					"type": "registry:file",
+					"path": "Radar.css",
+					"target": "@components/Radar.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Radar/Radar.tsx"
+					"path": "Radar.tsx"
 				}
 			]
 		},
@@ -10252,12 +10508,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SoftAurora/SoftAurora.css"
+					"type": "registry:file",
+					"path": "SoftAurora.css",
+					"target": "@components/SoftAurora.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SoftAurora/SoftAurora.jsx"
+					"path": "SoftAurora.jsx"
 				}
 			]
 		},
@@ -10288,12 +10545,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SoftAurora/SoftAurora.css"
+					"type": "registry:file",
+					"path": "SoftAurora.css",
+					"target": "@components/SoftAurora.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SoftAurora/SoftAurora.tsx"
+					"path": "SoftAurora.tsx"
 				}
 			]
 		},
@@ -10324,12 +10582,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LiquidChrome/LiquidChrome.css"
+					"type": "registry:file",
+					"path": "LiquidChrome.css",
+					"target": "@components/LiquidChrome.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LiquidChrome/LiquidChrome.jsx"
+					"path": "LiquidChrome.jsx"
 				}
 			]
 		},
@@ -10360,12 +10619,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LiquidChrome/LiquidChrome.css"
+					"type": "registry:file",
+					"path": "LiquidChrome.css",
+					"target": "@components/LiquidChrome.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LiquidChrome/LiquidChrome.tsx"
+					"path": "LiquidChrome.tsx"
 				}
 			]
 		},
@@ -10396,12 +10656,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Orb/Orb.css"
+					"type": "registry:file",
+					"path": "Orb.css",
+					"target": "@components/Orb.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Orb/Orb.jsx"
+					"path": "Orb.jsx"
 				}
 			]
 		},
@@ -10432,12 +10693,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Orb/Orb.css"
+					"type": "registry:file",
+					"path": "Orb.css",
+					"target": "@components/Orb.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Orb/Orb.tsx"
+					"path": "Orb.tsx"
 				}
 			]
 		},
@@ -10468,12 +10730,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Particles/Particles.css"
+					"type": "registry:file",
+					"path": "Particles.css",
+					"target": "@components/Particles.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Particles/Particles.jsx"
+					"path": "Particles.jsx"
 				}
 			]
 		},
@@ -10504,12 +10767,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Particles/Particles.css"
+					"type": "registry:file",
+					"path": "Particles.css",
+					"target": "@components/Particles.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Particles/Particles.tsx"
+					"path": "Particles.tsx"
 				}
 			]
 		},
@@ -10541,12 +10805,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelBlast/PixelBlast.css"
+					"type": "registry:file",
+					"path": "PixelBlast.css",
+					"target": "@components/PixelBlast.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelBlast/PixelBlast.jsx"
+					"path": "PixelBlast.jsx"
 				}
 			]
 		},
@@ -10579,12 +10844,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelBlast/PixelBlast.css"
+					"type": "registry:file",
+					"path": "PixelBlast.css",
+					"target": "@components/PixelBlast.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelBlast/PixelBlast.tsx"
+					"path": "PixelBlast.tsx"
 				}
 			]
 		},
@@ -10616,12 +10882,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Plasma/Plasma.css"
+					"type": "registry:file",
+					"path": "Plasma.css",
+					"target": "@components/Plasma.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Plasma/Plasma.jsx"
+					"path": "Plasma.jsx"
 				}
 			]
 		},
@@ -10652,12 +10919,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Plasma/Plasma.css"
+					"type": "registry:file",
+					"path": "Plasma.css",
+					"target": "@components/Plasma.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Plasma/Plasma.tsx"
+					"path": "Plasma.tsx"
 				}
 			]
 		},
@@ -10688,12 +10956,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PlasmaWave/PlasmaWave.css"
+					"type": "registry:file",
+					"path": "PlasmaWave.css",
+					"target": "@components/PlasmaWave.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PlasmaWave/PlasmaWave.jsx"
+					"path": "PlasmaWave.jsx"
 				}
 			]
 		},
@@ -10724,12 +10993,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PlasmaWave/PlasmaWave.css"
+					"type": "registry:file",
+					"path": "PlasmaWave.css",
+					"target": "@components/PlasmaWave.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PlasmaWave/PlasmaWave.tsx"
+					"path": "PlasmaWave.tsx"
 				}
 			]
 		},
@@ -10760,12 +11030,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Prism/Prism.css"
+					"type": "registry:file",
+					"path": "Prism.css",
+					"target": "@components/Prism.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Prism/Prism.jsx"
+					"path": "Prism.jsx"
 				}
 			]
 		},
@@ -10796,12 +11067,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Prism/Prism.css"
+					"type": "registry:file",
+					"path": "Prism.css",
+					"target": "@components/Prism.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Prism/Prism.tsx"
+					"path": "Prism.tsx"
 				}
 			]
 		},
@@ -10832,12 +11104,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PrismaticBurst/PrismaticBurst.css"
+					"type": "registry:file",
+					"path": "PrismaticBurst.css",
+					"target": "@components/PrismaticBurst.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PrismaticBurst/PrismaticBurst.jsx"
+					"path": "PrismaticBurst.jsx"
 				}
 			]
 		},
@@ -10868,12 +11141,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PrismaticBurst/PrismaticBurst.css"
+					"type": "registry:file",
+					"path": "PrismaticBurst.css",
+					"target": "@components/PrismaticBurst.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PrismaticBurst/PrismaticBurst.tsx"
+					"path": "PrismaticBurst.tsx"
 				}
 			]
 		},
@@ -10904,12 +11178,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "RippleGrid/RippleGrid.css"
+					"type": "registry:file",
+					"path": "RippleGrid.css",
+					"target": "@components/RippleGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "RippleGrid/RippleGrid.jsx"
+					"path": "RippleGrid.jsx"
 				}
 			]
 		},
@@ -10940,12 +11215,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "RippleGrid/RippleGrid.css"
+					"type": "registry:file",
+					"path": "RippleGrid.css",
+					"target": "@components/RippleGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "RippleGrid/RippleGrid.tsx"
+					"path": "RippleGrid.tsx"
 				}
 			]
 		},
@@ -11044,12 +11320,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SideRays/SideRays.css"
+					"type": "registry:file",
+					"path": "SideRays.css",
+					"target": "@components/SideRays.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SideRays/SideRays.jsx"
+					"path": "SideRays.jsx"
 				}
 			]
 		},
@@ -11080,12 +11357,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "SideRays/SideRays.css"
+					"type": "registry:file",
+					"path": "SideRays.css",
+					"target": "@components/SideRays.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "SideRays/SideRays.tsx"
+					"path": "SideRays.tsx"
 				}
 			]
 		},
@@ -11114,12 +11392,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ShapeGrid/ShapeGrid.css"
+					"type": "registry:file",
+					"path": "ShapeGrid.css",
+					"target": "@components/ShapeGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ShapeGrid/ShapeGrid.jsx"
+					"path": "ShapeGrid.jsx"
 				}
 			]
 		},
@@ -11146,12 +11425,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "ShapeGrid/ShapeGrid.css"
+					"type": "registry:file",
+					"path": "ShapeGrid.css",
+					"target": "@components/ShapeGrid.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "ShapeGrid/ShapeGrid.tsx"
+					"path": "ShapeGrid.tsx"
 				}
 			]
 		},
@@ -11180,12 +11460,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Threads/Threads.css"
+					"type": "registry:file",
+					"path": "Threads.css",
+					"target": "@components/Threads.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Threads/Threads.jsx"
+					"path": "Threads.jsx"
 				}
 			]
 		},
@@ -11216,12 +11497,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Threads/Threads.css"
+					"type": "registry:file",
+					"path": "Threads.css",
+					"target": "@components/Threads.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Threads/Threads.tsx"
+					"path": "Threads.tsx"
 				}
 			]
 		},
@@ -11250,12 +11532,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Waves/Waves.css"
+					"type": "registry:file",
+					"path": "Waves.css",
+					"target": "@components/Waves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Waves/Waves.jsx"
+					"path": "Waves.jsx"
 				}
 			]
 		},
@@ -11282,12 +11565,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "Waves/Waves.css"
+					"type": "registry:file",
+					"path": "Waves.css",
+					"target": "@components/Waves.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "Waves/Waves.tsx"
+					"path": "Waves.tsx"
 				}
 			]
 		},
@@ -11316,12 +11600,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LiquidEther/LiquidEther.css"
+					"type": "registry:file",
+					"path": "LiquidEther.css",
+					"target": "@components/LiquidEther.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LiquidEther/LiquidEther.jsx"
+					"path": "LiquidEther.jsx"
 				}
 			]
 		},
@@ -11352,12 +11637,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LiquidEther/LiquidEther.css"
+					"type": "registry:file",
+					"path": "LiquidEther.css",
+					"target": "@components/LiquidEther.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LiquidEther/LiquidEther.tsx"
+					"path": "LiquidEther.tsx"
 				}
 			]
 		},
@@ -11388,12 +11674,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FloatingLines/FloatingLines.css"
+					"type": "registry:file",
+					"path": "FloatingLines.css",
+					"target": "@components/FloatingLines.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FloatingLines/FloatingLines.jsx"
+					"path": "FloatingLines.jsx"
 				}
 			]
 		},
@@ -11424,12 +11711,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "FloatingLines/FloatingLines.css"
+					"type": "registry:file",
+					"path": "FloatingLines.css",
+					"target": "@components/FloatingLines.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "FloatingLines/FloatingLines.tsx"
+					"path": "FloatingLines.tsx"
 				}
 			]
 		},
@@ -11460,12 +11748,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LightPillar/LightPillar.css"
+					"type": "registry:file",
+					"path": "LightPillar.css",
+					"target": "@components/LightPillar.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LightPillar/LightPillar.jsx"
+					"path": "LightPillar.jsx"
 				}
 			]
 		},
@@ -11496,12 +11785,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "LightPillar/LightPillar.css"
+					"type": "registry:file",
+					"path": "LightPillar.css",
+					"target": "@components/LightPillar.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "LightPillar/LightPillar.tsx"
+					"path": "LightPillar.tsx"
 				}
 			]
 		},
@@ -11532,12 +11822,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelSnow/PixelSnow.css"
+					"type": "registry:file",
+					"path": "PixelSnow.css",
+					"target": "@components/PixelSnow.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelSnow/PixelSnow.jsx"
+					"path": "PixelSnow.jsx"
 				}
 			]
 		},
@@ -11568,12 +11859,13 @@
 			"registryDependencies": [],
 			"files": [
 				{
-					"type": "registry:component",
-					"path": "PixelSnow/PixelSnow.css"
+					"type": "registry:file",
+					"path": "PixelSnow.css",
+					"target": "@components/PixelSnow.css"
 				},
 				{
 					"type": "registry:component",
-					"path": "PixelSnow/PixelSnow.tsx"
+					"path": "PixelSnow.tsx"
 				}
 			]
 		},

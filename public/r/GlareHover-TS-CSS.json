@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "GlareHover/GlareHover.css",
+			"type": "registry:file",
+			"path": "GlareHover.css",
+			"target": "@components/GlareHover.css",
 			"content": ".glare-hover {\n  width: var(--gh-width);\n  height: var(--gh-height);\n  background: var(--gh-bg);\n  border-radius: var(--gh-br);\n  border: 1px solid var(--gh-border);\n  overflow: hidden;\n  position: relative;\n  display: grid;\n  place-items: center;\n}\n\n.glare-hover::before {\n  content: '';\n  position: absolute;\n  inset: 0;\n  background: linear-gradient(\n    var(--gh-angle),\n    hsla(0, 0%, 0%, 0) 60%,\n    var(--gh-rgba) 70%,\n    hsla(0, 0%, 0%, 0),\n    hsla(0, 0%, 0%, 0) 100%\n  );\n  transition: var(--gh-duration) ease;\n  background-size:\n    var(--gh-size) var(--gh-size),\n    100% 100%;\n  background-repeat: no-repeat;\n  background-position:\n    -100% -100%,\n    0 0;\n}\n\n.glare-hover:hover {\n  cursor: pointer;\n}\n\n.glare-hover:hover::before {\n  background-position:\n    100% 100%,\n    0 0;\n}\n\n.glare-hover--play-once::before {\n  transition: none;\n}\n\n.glare-hover--play-once:hover::before {\n  transition: var(--gh-duration) ease;\n  background-position:\n    100% 100%,\n    0 0;\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "GlareHover/GlareHover.tsx",
+			"path": "GlareHover.tsx",
 			"content": "import React from 'react';\nimport './GlareHover.css';\n\ninterface GlareHoverProps {\n  width?: string;\n  height?: string;\n  background?: string;\n  borderRadius?: string;\n  borderColor?: string;\n  children?: React.ReactNode;\n  glareColor?: string;\n  glareOpacity?: number;\n  glareAngle?: number;\n  glareSize?: number;\n  transitionDuration?: number;\n  playOnce?: boolean;\n  className?: string;\n  style?: React.CSSProperties;\n}\n\nconst GlareHover: React.FC<GlareHoverProps> = ({\n  width = '500px',\n  height = '500px',\n  background = '#000',\n  borderRadius = '10px',\n  borderColor = '#333',\n  children,\n  glareColor = '#ffffff',\n  glareOpacity = 0.5,\n  glareAngle = -45,\n  glareSize = 250,\n  transitionDuration = 650,\n  playOnce = false,\n  className = '',\n  style = {}\n}) => {\n  const hex = glareColor.replace('#', '');\n  let rgba = glareColor;\n  if (/^[0-9A-Fa-f]{6}$/.test(hex)) {\n    const r = parseInt(hex.slice(0, 2), 16);\n    const g = parseInt(hex.slice(2, 4), 16);\n    const b = parseInt(hex.slice(4, 6), 16);\n    rgba = `rgba(${r}, ${g}, ${b}, ${glareOpacity})`;\n  } else if (/^[0-9A-Fa-f]{3}$/.test(hex)) {\n    const r = parseInt(hex[0] + hex[0], 16);\n    const g = parseInt(hex[1] + hex[1], 16);\n    const b = parseInt(hex[2] + hex[2], 16);\n    rgba = `rgba(${r}, ${g}, ${b}, ${glareOpacity})`;\n  }\n\n  const vars: React.CSSProperties & { [k: string]: string } = {\n    '--gh-width': width,\n    '--gh-height': height,\n    '--gh-bg': background,\n    '--gh-br': borderRadius,\n    '--gh-angle': `${glareAngle}deg`,\n    '--gh-duration': `${transitionDuration}ms`,\n    '--gh-size': `${glareSize}%`,\n    '--gh-rgba': rgba,\n    '--gh-border': borderColor\n  };\n\n  return (\n    <div\n      className={`glare-hover ${playOnce ? 'glare-hover--play-once' : ''} ${className}`}\n      style={{ ...vars, ...style } as React.CSSProperties}\n    >\n      {children}\n    </div>\n  );\n};\n\nexport default GlareHover;\n"
 		}
 	],

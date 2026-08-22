@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "MagnetLines/MagnetLines.css",
+			"type": "registry:file",
+			"path": "MagnetLines.css",
+			"target": "@components/MagnetLines.css",
 			"content": ".magnetLines-container {\n  display: grid;\n  grid-template-columns: repeat(var(--columns), 1fr);\n  grid-template-rows: repeat(var(--rows), 1fr);\n\n  justify-items: center;\n  align-items: center;\n\n  width: 80vmin;\n  height: 80vmin;\n}\n\n.magnetLines-container span {\n  display: block;\n  transform-origin: center;\n  will-change: transform;\n  transform: rotate(var(--rotate));\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "MagnetLines/MagnetLines.jsx",
+			"path": "MagnetLines.jsx",
 			"content": "import { useRef, useEffect } from 'react';\nimport './MagnetLines.css';\n\nexport default function MagnetLines({\n  rows = 9,\n  columns = 9,\n  containerSize = '80vmin',\n  lineColor = '#efefef',\n  lineWidth = '1vmin',\n  lineHeight = '6vmin',\n  baseAngle = -10,\n  className = '',\n  style = {}\n}) {\n  const containerRef = useRef(null);\n\n  useEffect(() => {\n    const container = containerRef.current;\n    if (!container) return;\n\n    const items = container.querySelectorAll('span');\n\n    const onPointerMove = pointer => {\n      items.forEach(item => {\n        const rect = item.getBoundingClientRect();\n        const centerX = rect.x + rect.width / 2;\n        const centerY = rect.y + rect.height / 2;\n\n        const b = pointer.x - centerX;\n        const a = pointer.y - centerY;\n        const c = Math.sqrt(a * a + b * b) || 1;\n        const r = ((Math.acos(b / c) * 180) / Math.PI) * (pointer.y > centerY ? 1 : -1);\n\n        item.style.setProperty('--rotate', `${r}deg`);\n      });\n    };\n\n    window.addEventListener('pointermove', onPointerMove);\n\n    if (items.length) {\n      const middleIndex = Math.floor(items.length / 2);\n      const rect = items[middleIndex].getBoundingClientRect();\n      onPointerMove({ x: rect.x, y: rect.y });\n    }\n\n    return () => {\n      window.removeEventListener('pointermove', onPointerMove);\n    };\n  }, [rows, columns]);\n\n  const total = rows * columns;\n  const spans = Array.from({ length: total }, (_, i) => (\n    <span\n      key={i}\n      style={{\n        '--rotate': `${baseAngle}deg`,\n        backgroundColor: lineColor,\n        width: lineWidth,\n        height: lineHeight\n      }}\n    />\n  ));\n\n  return (\n    <div\n      ref={containerRef}\n      className={`magnetLines-container ${className}`}\n      style={{\n        display: 'grid',\n        gridTemplateColumns: `repeat(${columns}, 1fr)`,\n        gridTemplateRows: `repeat(${rows}, 1fr)`,\n        width: containerSize,\n        height: containerSize,\n        ...style\n      }}\n    >\n      {spans}\n    </div>\n  );\n}\n"
 		}
 	],

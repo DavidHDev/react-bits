@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "StarBorder/StarBorder.css",
+			"type": "registry:file",
+			"path": "StarBorder.css",
+			"target": "@components/StarBorder.css",
 			"content": ".star-border-container {\n  display: inline-block;\n  position: relative;\n  border-radius: 20px;\n  overflow: hidden;\n}\n\n.border-gradient-bottom {\n  position: absolute;\n  width: 300%;\n  height: 50%;\n  opacity: 0.7;\n  bottom: -12px;\n  right: -250%;\n  border-radius: 50%;\n  animation: star-movement-bottom linear infinite alternate;\n  z-index: 0;\n}\n\n.border-gradient-top {\n  position: absolute;\n  opacity: 0.7;\n  width: 300%;\n  height: 50%;\n  top: -12px;\n  left: -250%;\n  border-radius: 50%;\n  animation: star-movement-top linear infinite alternate;\n  z-index: 0;\n}\n\n.inner-content {\n  position: relative;\n  border: 1px solid #222;\n  background: #000;\n  color: white;\n  font-size: 16px;\n  text-align: center;\n  padding: 16px 26px;\n  border-radius: 20px;\n  z-index: 1;\n}\n\n@keyframes star-movement-bottom {\n  0% {\n    transform: translate(0%, 0%);\n    opacity: 1;\n  }\n  100% {\n    transform: translate(-100%, 0%);\n    opacity: 0;\n  }\n}\n\n@keyframes star-movement-top {\n  0% {\n    transform: translate(0%, 0%);\n    opacity: 1;\n  }\n  100% {\n    transform: translate(100%, 0%);\n    opacity: 0;\n  }\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "StarBorder/StarBorder.jsx",
+			"path": "StarBorder.jsx",
 			"content": "import './StarBorder.css';\n\nconst StarBorder = ({\n  as: Component = 'button',\n  className = '',\n  color = 'white',\n  speed = '6s',\n  thickness = 1,\n  children,\n  ...rest\n}) => {\n  return (\n    <Component\n      className={`star-border-container ${className}`}\n      style={{\n        padding: `${thickness}px 0`,\n        ...rest.style\n      }}\n      {...rest}\n    >\n      <div\n        className=\"border-gradient-bottom\"\n        style={{\n          background: `radial-gradient(circle, ${color}, transparent 10%)`,\n          animationDuration: speed\n        }}\n      ></div>\n      <div\n        className=\"border-gradient-top\"\n        style={{\n          background: `radial-gradient(circle, ${color}, transparent 10%)`,\n          animationDuration: speed\n        }}\n      ></div>\n      <div className=\"inner-content\">{children}</div>\n    </Component>\n  );\n};\n\nexport default StarBorder;\n"
 		}
 	],

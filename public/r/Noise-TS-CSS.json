@@ -6,13 +6,14 @@
 	"type": "registry:component",
 	"files": [
 		{
-			"type": "registry:component",
-			"path": "Noise/Noise.css",
+			"type": "registry:file",
+			"path": "Noise.css",
+			"target": "@components/Noise.css",
 			"content": ".noise-overlay {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  pointer-events: none;\n}\n"
 		},
 		{
 			"type": "registry:component",
-			"path": "Noise/Noise.tsx",
+			"path": "Noise.tsx",
 			"content": "import type React from 'react';\nimport { useRef, useEffect } from 'react';\nimport './Noise.css';\n\ninterface NoiseProps {\n  patternSize?: number;\n  patternScaleX?: number;\n  patternScaleY?: number;\n  patternRefreshInterval?: number;\n  patternAlpha?: number;\n}\n\nconst Noise: React.FC<NoiseProps> = ({\n  patternSize = 250,\n  patternScaleX = 1,\n  patternScaleY = 1,\n  patternRefreshInterval = 2,\n  patternAlpha = 15\n}) => {\n  const grainRef = useRef<HTMLCanvasElement | null>(null);\n\n  useEffect(() => {\n    const canvas = grainRef.current;\n    if (!canvas) return;\n\n    const ctx = canvas.getContext('2d', { alpha: true });\n    if (!ctx) return;\n\n    let frame = 0;\n    let animationId: number;\n    const canvasSize = 1024;\n\n    const resize = () => {\n      if (!canvas) return;\n      canvas.width = canvasSize;\n      canvas.height = canvasSize;\n\n      canvas.style.width = '100vw';\n      canvas.style.height = '100vh';\n    };\n\n    const drawGrain = () => {\n      const imageData = ctx.createImageData(canvasSize, canvasSize);\n      const data = imageData.data;\n\n      for (let i = 0; i < data.length; i += 4) {\n        const value = Math.random() * 255;\n        data[i] = value;\n        data[i + 1] = value;\n        data[i + 2] = value;\n        data[i + 3] = patternAlpha;\n      }\n\n      ctx.putImageData(imageData, 0, 0);\n    };\n\n    const loop = () => {\n      if (frame % patternRefreshInterval === 0) {\n        drawGrain();\n      }\n      frame++;\n      animationId = window.requestAnimationFrame(loop);\n    };\n\n    window.addEventListener('resize', resize);\n    resize();\n    loop();\n\n    return () => {\n      window.removeEventListener('resize', resize);\n      window.cancelAnimationFrame(animationId);\n    };\n  }, [patternSize, patternScaleX, patternScaleY, patternRefreshInterval, patternAlpha]);\n\n  return <canvas className=\"noise-overlay\" ref={grainRef} style={{ imageRendering: 'pixelated' }} />;\n};\n\nexport default Noise;\n"
 		}
 	],
