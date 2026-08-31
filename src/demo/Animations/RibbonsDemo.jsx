@@ -59,7 +59,7 @@ const RibbonsDemo = () => {
       {
         name: 'offsetFactor',
         type: 'number',
-        default: '0.02',
+        default: '0.05',
         description: 'A factor to horizontally offset the starting positions of the ribbons.'
       },
       {
@@ -77,19 +77,19 @@ const RibbonsDemo = () => {
       {
         name: 'speedMultiplier',
         type: 'number',
-        default: '0.5',
+        default: '0.6',
         description: 'Multiplier that adjusts how fast trailing points interpolate towards the head.'
       },
       {
         name: 'enableFade',
         type: 'boolean',
-        default: 'true',
+        default: 'false',
         description: 'If true, a fade effect is applied along the length of the ribbon.'
       },
       {
         name: 'enableShaderEffect',
         type: 'boolean',
-        default: 'true',
+        default: 'false',
         description: 'If true, an additional sine-wave shader effect is applied to the ribbons.'
       },
       {

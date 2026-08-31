@@ -90,7 +90,7 @@ const FerrofluidDemo = () => {
       {
         name: 'scale',
         type: 'number',
-        default: '1',
+        default: '1.6',
         description: 'Overall feature size. Higher values zoom in for larger, fewer blobs.'
       },
       {
@@ -114,13 +114,13 @@ const FerrofluidDemo = () => {
       {
         name: 'sharpness',
         type: 'number',
-        default: '3',
+        default: '2.5',
         description: 'Contrast of the rim highlights. Higher values give crisper, thinner edges.'
       },
       {
         name: 'shimmer',
         type: 'number',
-        default: '1',
+        default: '1.5',
         description: 'Amount of fine grainy break-up applied to the rim. 0 = smooth lines.'
       },
       {
@@ -156,7 +156,7 @@ const FerrofluidDemo = () => {
       {
         name: 'mouseRadius',
         type: 'number',
-        default: '0.3',
+        default: '0.35',
         description: 'Falloff radius of the magnetic cursor spike.'
       },
       {

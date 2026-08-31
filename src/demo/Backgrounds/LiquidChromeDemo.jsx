@@ -50,25 +50,25 @@ const LiquidChromeDemo = () => {
       {
         name: 'speed',
         type: 'number',
-        default: '1.0',
+        default: '0.2',
         description: 'Animation speed multiplier.'
       },
       {
         name: 'amplitude',
         type: 'number',
-        default: '0.6',
+        default: '0.3',
         description: 'Amplitude of the distortion.'
       },
       {
         name: 'frequencyX',
         type: 'number',
-        default: '2.5',
+        default: '3',
         description: 'Frequency modifier for the x distortion.'
       },
       {
         name: 'frequencyY',
         type: 'number',
-        default: '1.5',
+        default: '3',
         description: 'Frequency modifier for the y distortion.'
       },
       {

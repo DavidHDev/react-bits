@@ -50,13 +50,13 @@ const SideRaysDemo = () => {
       {
         name: 'speed',
         type: 'number',
-        default: '1.0',
+        default: '2.5',
         description: 'Animation speed of the rays'
       },
       {
         name: 'rayColor1',
         type: 'string',
-        default: '"#ffaa6e"',
+        default: '"#EAB308"',
         description: 'Color of the first ray layer in hex format'
       },
       {
@@ -68,13 +68,13 @@ const SideRaysDemo = () => {
       {
         name: 'intensity',
         type: 'number',
-        default: '1.0',
+        default: '2',
         description: 'Overall brightness of the rays'
       },
       {
         name: 'spread',
         type: 'number',
-        default: '1.0',
+        default: '2',
         description: 'Angular width of the ray fan — higher values create a wider spread between the two ray layers'
       },
       {
@@ -92,19 +92,19 @@ const SideRaysDemo = () => {
       {
         name: 'saturation',
         type: 'number',
-        default: '1.0',
+        default: '1.5',
         description: 'Color saturation of the rays — 0 renders in grayscale, values above 1 boost color'
       },
       {
         name: 'blend',
         type: 'number',
-        default: '0.78',
+        default: '0.75',
         description: 'Balance between the two ray layers — 0 is all ray 1, 1 is all ray 2'
       },
       {
         name: 'falloff',
         type: 'number',
-        default: '2.0',
+        default: '1.6',
         description: 'How steeply brightness diminishes with distance from the source — higher = tighter glow'
       },
       {

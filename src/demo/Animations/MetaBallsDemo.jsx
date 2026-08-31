@@ -107,7 +107,7 @@ const MetaBallsDemo = () => {
       {
         name: 'cursorBallColor',
         type: 'string',
-        default: '#ff0000',
+        default: '#ffffff',
         description: 'Color of the cursor ball.'
       }
     ],

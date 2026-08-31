@@ -78,7 +78,7 @@ const StaggeredMenuDemo = () => {
       {
         name: 'displaySocials',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Whether to display the social links section.'
       },
       {

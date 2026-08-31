@@ -83,13 +83,13 @@ const LightRaysDemo = () => {
       {
         name: 'lightSpread',
         type: 'number',
-        default: '0.5',
+        default: '1',
         description: 'How wide the light rays spread. Lower values = tighter rays, higher values = wider spread'
       },
       {
         name: 'rayLength',
         type: 'number',
-        default: '1.0',
+        default: '2',
         description: 'Maximum length/reach of the rays'
       },
       {
@@ -113,13 +113,13 @@ const LightRaysDemo = () => {
       {
         name: 'followMouse',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Make rays rotate towards the mouse cursor'
       },
       {
         name: 'mouseInfluence',
         type: 'number',
-        default: '0.5',
+        default: '0.1',
         description: 'How much mouse affects rays (0-1)'
       },
       {

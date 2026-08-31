@@ -80,13 +80,13 @@ const LightfallDemo = () => {
       {
         name: 'speed',
         type: 'number',
-        default: '1',
+        default: '0.5',
         description: 'Multiplier for how fast the light streaks fall.'
       },
       {
         name: 'streakCount',
         type: 'number',
-        default: '8',
+        default: '2',
         description: 'Number of streak layers rendered per cell (1–16). Higher = busier.'
       },
       {
@@ -110,7 +110,7 @@ const LightfallDemo = () => {
       {
         name: 'density',
         type: 'number',
-        default: '1',
+        default: '0.6',
         description: 'Vertical frequency of streaks. Higher values pack more streaks into view.'
       },
       {
@@ -122,13 +122,13 @@ const LightfallDemo = () => {
       {
         name: 'zoom',
         type: 'number',
-        default: '2',
+        default: '3',
         description: 'Field of view into the tunnel. Higher values zoom further in.'
       },
       {
         name: 'backgroundGlow',
         type: 'number',
-        default: '1',
+        default: '0.5',
         description: 'Intensity of the ambient background glow.'
       },
       {
@@ -146,13 +146,13 @@ const LightfallDemo = () => {
       {
         name: 'mouseStrength',
         type: 'number',
-        default: '1',
+        default: '0.5',
         description: 'Intensity of the cursor light.'
       },
       {
         name: 'mouseRadius',
         type: 'number',
-        default: '0.6',
+        default: '1',
         description: 'Falloff radius of the cursor light.'
       },
       {

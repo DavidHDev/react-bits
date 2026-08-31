@@ -100,7 +100,7 @@ const PillNavDemo = () => {
       {
         name: 'initialLoadAnimation',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Enable initial load animation for logo scale and nav items reveal'
       }
     ],

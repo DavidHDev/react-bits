@@ -71,7 +71,7 @@ const PlasmaDemo = () => {
       {
         name: 'mouseInteractive',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Whether the plasma responds to mouse movement.'
       },
       {
@@ -91,7 +91,7 @@ const PlasmaDemo = () => {
       {
         name: 'targetFps',
         type: 'number',
-        default: '30',
+        default: '60',
         description: 'Target frame rate for the animation loop. Lower values reduce CPU/GPU load.'
       },
       {
