@@ -129,6 +129,7 @@ const MetaBallsDemo = () => {
               hoverSmoothness={hoverSmoothness}
               clumpFactor={clumpFactor}
               speed={speed}
+              enableTransparency
             />
           </Box>
 

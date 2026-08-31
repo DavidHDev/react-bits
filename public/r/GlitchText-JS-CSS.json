@@ -14,7 +14,7 @@
 		{
 			"type": "registry:component",
 			"path": "GlitchText.jsx",
-			"content": "import './GlitchText.css';\n\nconst GlitchText = ({ children, speed = 1, enableShadows = true, enableOnHover = true, className = '' }) => {\n  const inlineStyles = {\n    '--after-duration': `${speed * 3}s`,\n    '--before-duration': `${speed * 2}s`,\n    '--after-shadow': enableShadows ? '-5px 0 red' : 'none',\n    '--before-shadow': enableShadows ? '5px 0 cyan' : 'none'\n  };\n\n  const hoverClass = enableOnHover ? 'enable-on-hover' : '';\n\n  return (\n    <div className={`glitch ${hoverClass} ${className}`} style={inlineStyles} data-text={children}>\n      {children}\n    </div>\n  );\n};\n\nexport default GlitchText;\n"
+			"content": "import './GlitchText.css';\n\nconst GlitchText = ({ children, speed = 0.5, enableShadows = true, enableOnHover = false, className = '' }) => {\n  const inlineStyles = {\n    '--after-duration': `${speed * 3}s`,\n    '--before-duration': `${speed * 2}s`,\n    '--after-shadow': enableShadows ? '-5px 0 red' : 'none',\n    '--before-shadow': enableShadows ? '5px 0 cyan' : 'none'\n  };\n\n  const hoverClass = enableOnHover ? 'enable-on-hover' : '';\n\n  return (\n    <div className={`glitch ${hoverClass} ${className}`} style={inlineStyles} data-text={children}>\n      {children}\n    </div>\n  );\n};\n\nexport default GlitchText;\n"
 		}
 	],
 	"registryDependencies": [],
