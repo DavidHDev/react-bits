@@ -19,7 +19,7 @@ import TextLoop from '../../content/TextAnimations/TextLoop/TextLoop';
 import { textLoop } from '../../constants/code/TextAnimations/textLoopCode';
 
 const DEFAULT_PROPS = {
-  text: 'React ✦ Bits',
+  text: 'React Bits',
   shape: 'wave',
   speed: 90,
   direction: 'forward',
@@ -72,7 +72,7 @@ const TextLoopDemo = () => {
 
   const propData = useMemo(
     () => [
-      { name: 'text', type: 'string', default: '"React ✦ Bits"', description: 'The phrase repeated along the curve.' },
+      { name: 'text', type: 'string', default: '"React Bits"', description: 'The phrase repeated along the curve.' },
       {
         name: 'shape',
         type: '"wave" | "circle" | "infinity" | "arch" | "line"',

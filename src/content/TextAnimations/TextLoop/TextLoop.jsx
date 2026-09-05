@@ -45,7 +45,7 @@ const buildPath = (shape, curviness, ribbonWidth) => {
 };
 
 const TextLoop = ({
-  text = 'React ✦ Bits',
+  text = 'React Bits',
   shape = 'wave',
   path,
   speed = 90,
@@ -78,8 +78,22 @@ const TextLoop = ({
   const d = useMemo(() => path || buildPath(shape, curviness, ribbonWidth), [path, shape, curviness, ribbonWidth]);
 
   const unit = useMemo(() => {
-    const base = uppercase ? String(text).toUpperCase() : String(text);
-    const gap = separator ? `\u00A0${separator}\u00A0` : '\u00A0\u00A0\u00A0';
+    let base = String(text ?? '');
+    let sep = separator ?? '';
+    if (uppercase) {
+      base = base.toUpperCase();
+      sep = sep.toUpperCase();
+    }
+    if (sep) {
+      // Strip any separator glyphs already present in the text so each
+      // repetition is joined by exactly one separator. A duplicated glyph
+      // breaks the textLength/lengthAdjust fit on the SVG path in stricter
+      // browsers (e.g. Firefox) and a separator can land on top of a letter.
+      base = base.split(sep).join('').replace(/[\s\u00A0]+/g, ' ').trim();
+    } else {
+      base = base.replace(/[\s\u00A0]+/g, ' ').trim();
+    }
+    const gap = sep ? `\u00A0${sep}\u00A0` : '\u00A0\u00A0\u00A0';
     return `${base}${gap}`;
   }, [text, separator, uppercase]);
 

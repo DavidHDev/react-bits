@@ -9,7 +9,7 @@ export const textLoop = {
   usage: `import TextLoop from './TextLoop';
 
 <TextLoop
-  text="React ✦ Bits"
+  text="React Bits"
   shape="wave"
   speed={90}
   direction="forward"
