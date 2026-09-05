@@ -1,6 +1,21 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { motion } from 'motion/react';
 
+const styles = {
+  srOnly: {
+    position: 'absolute',
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0,0,0,0)',
+    whiteSpace: 'nowrap',
+    border: 0,
+    visibility: 'hidden'
+  }
+};
+
 export default function DecryptedText({
   text,
   speed = 50,
@@ -351,7 +366,7 @@ export default function DecryptedText({
       {...animateProps}
       {...props}
     >
-      <span className="sr-only">{displayText}</span>
+      <span className="sr-only" style={styles.srOnly}>{displayText}</span>
 
       <span aria-hidden="true">
         {displayText.split('').map((char, index) => {

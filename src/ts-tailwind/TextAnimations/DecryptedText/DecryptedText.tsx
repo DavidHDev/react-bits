@@ -2,6 +2,21 @@ import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { motion } from 'motion/react';
 import type { HTMLMotionProps } from 'motion/react';
 
+const styles = {
+  srOnly: {
+    position: 'absolute' as const,
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px',
+    overflow: 'hidden',
+    clip: 'rect(0,0,0,0)',
+    whiteSpace: 'nowrap' as const,
+    border: 0,
+    visibility: 'hidden' as const
+  }
+};
+
 interface DecryptedTextProps extends HTMLMotionProps<'span'> {
   text: string;
   speed?: number;
@@ -368,7 +383,7 @@ export default function DecryptedText({
       {...animateProps}
       {...props}
     >
-      <span className="sr-only">{displayText}</span>
+      <span className="sr-only" style={styles.srOnly}>{displayText}</span>
 
       <span aria-hidden="true">
         {displayText.split('').map((char, index) => {
