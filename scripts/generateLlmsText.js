@@ -223,9 +223,9 @@ function buildProOverview(manifest) {
       `It currently ships ${plural(c.components ?? 0, 'animated component')}, ` +
       `${c.blocks ?? 0} landing page blocks across ${c.blockCategories ?? 0} categories, ` +
       `${c.appUi ?? 0} application UI screens across ${c.appUiCategories ?? 0} categories, ` +
-      `${plural(c.templates ?? 0, 'full Next.js template')} — ${c.total ?? 0} UI assets in total — plus ` +
-      `${c.agentKit ?? 0} Agent Kit skills, prompts and recipes. ` +
-      `One-time payment, source code delivery, no subscription.`,
+      `${plural(c.templates ?? 0, 'full Next.js template')}, and ` +
+      `${c.agentKit ?? 0} Agent Kit items: ${c.total ?? 0} assets in total. ` +
+      `Source code delivery, with lifetime and annual plans.`,
     '',
     'Entry points:',
     '',
@@ -240,7 +240,7 @@ function buildProOverview(manifest) {
     '',
     '- Pro is a **separate, license-gated registry**. It cannot be installed from the free registry. ' +
       '`npx shadcn@latest add https://reactbits.dev/r/<Component>-<LANG>-<STYLE>` only ever serves the free library.',
-    '- Pro components install as `npx shadcn@latest add @reactbits-pro/<registry-name>` after the buyer ' +
+    '- Pro components install as `npx shadcn@latest add @reactbits-starter/<slug>-tw` or `<slug>-css` after the buyer ' +
       'has added their license-keyed registry to `components.json`. Never suggest that command without a license.',
     '- Do not guess Pro item names. Every Pro item that exists is listed in this file or in the manifest JSON; ' +
       'if something is not listed, it does not exist.',

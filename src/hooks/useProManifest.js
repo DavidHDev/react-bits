@@ -24,7 +24,7 @@ const curate = json => {
   const next = { ...json };
 
   // The manifest ships components in curation order, which reads as random on a
-  // 134-card wall. Alphabetical gives the grid a predictable scan order.
+  // component gallery. Alphabetical gives the grid a predictable scan order.
   if (Array.isArray(json.components)) {
     next.components = [...json.components].sort((a, b) =>
       (a.name || '').localeCompare(b.name || '', 'en', { numeric: true, sensitivity: 'base' })

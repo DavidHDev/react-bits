@@ -27,12 +27,12 @@ import { Blocks, Box, LayoutTemplate, Bot, Component } from 'lucide-react';
  * `counts` in public/pro-manifest.json whenever the catalogue grows.
  */
 export const PRO_COUNTS = {
-  components: 134,
-  blocks: 238,
+  components: 150,
+  blocks: 280,
   appUi: 300,
-  templates: 11,
+  templates: 15,
   agentKit: 20,
-  total: 683
+  total: 765
 };
 
 /** Full breakdown, used where there is room for the whole list. */
@@ -306,40 +306,40 @@ export const HIDDEN_TEMPLATE_SLUGS = ['ai-app-template', 'minimal-landing'];
  */
 export const PRO_REEL_FEATURED = {
   components: [
+    'particle-morph',
     'aurora-beam',
+    'eclipse',
     'chroma-blinds',
-    'liquid-bars',
-    'metallic-swirl',
-    'neon-reveal',
-    'silk-waves',
-    'swirl-blend',
-    'tech-wall',
-    'halftone-vortex',
-    'glass-tiles',
-    'spectral-clouds',
-    'radial-liquid',
+    'inverted-dome',
     'reel-gallery',
-    'circle-gallery',
-    'neural-tunnel',
-    'twilight-lines'
+    'long-exposure',
+    'silk-waves',
+    'glowing-ridges',
+    'liquid-bars',
+    'glass-reveal',
+    'glass-tiles',
+    'tile-reveal',
+    'neon-reveal',
+    'ascii-ripple',
+    'neural-tunnel'
   ],
   blocks: [
+    'bento-31',
     'hero-23',
-    'hero-24',
-    'hero-3',
-    'hero-9',
-    'ecommerce-6',
-    'cta-5',
-    'stats-5',
-    'stats-6',
-    'social-proof-3',
-    'showcase-2',
-    'blog-5',
+    'bento-2',
     'pricing-6',
-    'faq-3',
-    'contact-4',
-    'waitlist-1',
-    'hero-11'
+    'bento-37',
+    'hero-24',
+    'bento-1',
+    'social-proof-3',
+    'bento-20',
+    'cta-5',
+    'bento-34',
+    'ecommerce-6',
+    'bento-12',
+    'stats-5',
+    'bento-5',
+    'showcase-2'
   ],
   'app-ui': [
     'filtering-1',

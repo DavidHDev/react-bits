@@ -22,6 +22,7 @@ const HERO_PLACEMENT = 'pro-hub-hero';
 // The hero pill rotates through what Pro actually ships, so the first thing a
 // visitor reads isn't a single headline number they might not care about.
 const TAG_ITEMS = [
+  { label: 'Bento Builder', href: '/docs/blocks/tools/bento-builder' },
   { label: 'Application UI', href: '/docs/app-ui' },
   { label: 'Landing Builder', href: '/builder' },
   { label: 'Animated Components', href: '/docs/components' },
@@ -184,7 +185,9 @@ const ProPage = () => {
             </div>
 
             <ul className="prox-proof">
-              <li>{counts?.total ? `${counts.total} UI assets + Agent Kit` : 'Complete UI library + Agent Kit'}</li>
+              <li>
+                {counts?.total ? `${counts.total} assets, including Agent Kit` : 'Complete UI library + Agent Kit'}
+              </li>
               <li aria-hidden="true" className="prox-proof-sep" />
               <li>Lifetime option</li>
               <li aria-hidden="true" className="prox-proof-sep" />

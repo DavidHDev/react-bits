@@ -12,6 +12,7 @@ import SponsorsPage from './pages/SponsorsPage';
 import ToolsPage from './pages/ToolsPage';
 import ProPage from './pages/ProPage';
 import ProSectionPage from './pages/ProSectionPage';
+import AnnouncementModal from './components/common/AnnouncementModal/AnnouncementModal';
 
 function AppContent() {
   return (
@@ -49,6 +50,7 @@ function AppContent() {
             }
           />
         </Routes>
+        <AnnouncementModal />
       </Providers>
     </>
   );

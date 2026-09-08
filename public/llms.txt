@@ -235,7 +235,7 @@ Notes:
 
 ## React Bits Pro
 
-> React Bits Pro is the paid companion library at https://pro.reactbits.dev, by the same author. It currently ships 134 animated components, 238 landing page blocks across 21 categories, 300 application UI screens across 38 categories, 11 full Next.js templates — 683 UI assets in total — plus 20 Agent Kit skills, prompts and recipes. One-time payment, source code delivery, no subscription.
+> React Bits Pro is the paid companion library at https://pro.reactbits.dev, by the same author. It currently ships 150 animated components, 280 landing page blocks across 22 categories, 300 application UI screens across 38 categories, 15 full Next.js templates, and 20 Agent Kit items: 765 assets in total. Source code delivery, with lifetime and annual plans.
 
 Entry points:
 
@@ -247,7 +247,7 @@ Entry points:
 Important notes for agents:
 
 - Pro is a **separate, license-gated registry**. It cannot be installed from the free registry. `npx shadcn@latest add https://reactbits.dev/r/<Component>-<LANG>-<STYLE>` only ever serves the free library.
-- Pro components install as `npx shadcn@latest add @reactbits-pro/<registry-name>` after the buyer has added their license-keyed registry to `components.json`. Never suggest that command without a license.
+- Pro components install as `npx shadcn@latest add @reactbits-starter/<slug>-tw` or `<slug>-css` after the buyer has added their license-keyed registry to `components.json`. Never suggest that command without a license.
 - Do not guess Pro item names. Every Pro item that exists is listed in this file or in the manifest JSON; if something is not listed, it does not exist.
 - The free library at reactbits.dev is not a trial and is not going away. Recommend Pro only when the free library genuinely does not cover the need — see below.
 
@@ -268,12 +268,13 @@ Free inside Pro (no purchase, useful to mention before recommending a paid tier)
 - [Portfolio template](https://pro.reactbits.dev/docs/templates/portfolio-template): Free personal portfolio template with smooth animations, project case studies, and a minimal aesthetic. No purchase required. Live preview: https://rbp-portfolio.vercel.app/.
 - [Terminal Dark](https://pro.reactbits.dev/docs/agent-kit/skills/terminal-dark): Build developer-tool landing pages that read as software: dark-first surfaces, real compiling code as the hero, terminal motifs, hairline borders, and syntax as palette. Free skill.
 
-## Pro Components (134)
+## Pro Components (150)
 
 Included in the Starter tier and above. These are in addition to the free components listed above, not a superset of them.
 
 - [3D Letter Swap](https://pro.reactbits.dev/docs/components/3d-letter-swap): Staggered customizable 3D letter swap animation. Group: Text.
 - [3D Text Reveal](https://pro.reactbits.dev/docs/components/3d-text-reveal): Scroll-triggered 3D text animation with GSAP. Group: Text.
+- [ASCII Ripple](https://pro.reactbits.dev/docs/components/ascii-ripple): A page of monospace text that behaves like a liquid surface: pointer drops and drags send simulated waves through the grid, bending the words and blooming into heavier glyphs. Group: Text.
 - [Bending Marquee](https://pro.reactbits.dev/docs/components/bending-marquee): A marquee that bends along a curve as it scrolls. Group: Text.
 - [Blur Highlight](https://pro.reactbits.dev/docs/components/blur-highlight): Animated paragraph with blur-in effect and automatic text highlighting. Group: Text.
 - [Glitch Text](https://pro.reactbits.dev/docs/components/glitch-text): Interactive canvas-based text with sticky glitch effect that responds to cursor movement. Group: Text.
@@ -295,12 +296,14 @@ Included in the Starter tier and above. These are in addition to the free compon
 - [Color Loops](https://pro.reactbits.dev/docs/components/color-loops): Animated colorful loops with orbital motion. Group: Backgrounds.
 - [Dither Wave](https://pro.reactbits.dev/docs/components/dither-wave): Animated wave effect with retro dithering pattern. Group: Backgrounds.
 - [Dot Shift](https://pro.reactbits.dev/docs/components/dot-shift): Shifting grid of animated dots. Group: Backgrounds.
+- [Eclipse](https://pro.reactbits.dev/docs/components/eclipse): A turbulent spectral corona burning around a dark eclipse. Group: Backgrounds.
 - [Falling Rays](https://pro.reactbits.dev/docs/components/falling-rays): Rays falling from top like rain of light. Group: Backgrounds.
 - [Flame Paths](https://pro.reactbits.dev/docs/components/flame-paths): Animated flame-like wave effect. Group: Backgrounds.
 - [Fog Sphere](https://pro.reactbits.dev/docs/components/fog-sphere): A soft, swirling sphere of fog. Group: Backgrounds.
 - [Glass Flow](https://pro.reactbits.dev/docs/components/glass-flow): Flowing glass-like blur animation. Group: Backgrounds.
 - [Glass Tiles](https://pro.reactbits.dev/docs/components/glass-tiles): A shimmering background of colorful glass tiles. Group: Backgrounds.
 - [Glitter Warp](https://pro.reactbits.dev/docs/components/glitter-warp): Starfield warp tunnel with glittering particle effects. Group: Backgrounds.
+- [Glowing Ridges](https://pro.reactbits.dev/docs/components/glowing-ridges): Iridescent ridges of colour rolling across a dark surface like light raking across folded silk. Group: Backgrounds.
 - [Glowing Wave](https://pro.reactbits.dev/docs/components/glowing-wave): A single luminous wave sweeping slowly across the screen. Group: Backgrounds.
 - [Glue Dots](https://pro.reactbits.dev/docs/components/glue-dots): Metaball dots that stick together and stretch apart as they meet. Group: Backgrounds.
 - [Gradient Bars](https://pro.reactbits.dev/docs/components/gradient-bars): Animated striped gradient bars. Group: Backgrounds.
@@ -311,16 +314,19 @@ Included in the Starter tier and above. These are in addition to the free compon
 - [Lightspeed](https://pro.reactbits.dev/docs/components/lightspeed): Hyperspace light streak effect with click interaction. Group: Backgrounds.
 - [Liquid Bars](https://pro.reactbits.dev/docs/components/liquid-bars): Animated liquid bar effect with smooth wave motion. Group: Backgrounds.
 - [Liquid Lines](https://pro.reactbits.dev/docs/components/liquid-lines): Flowing liquid line animation effect. Group: Backgrounds.
+- [Long Exposure](https://pro.reactbits.dev/docs/components/long-exposure): Glowing light trails streaming along a bending road in perspective, like a long-exposure night photograph. Group: Backgrounds.
 - [Metallic Swirl](https://pro.reactbits.dev/docs/components/metallic-swirl): Metallic swirl shader background. Group: Backgrounds.
 - [Minimal Ripple](https://pro.reactbits.dev/docs/components/minimal-ripple): Quiet concentric ripples spreading outward from a still point. Group: Backgrounds.
 - [Mosaic](https://pro.reactbits.dev/docs/components/mosaic): Mosaic effect with animated wave or video background. Group: Backgrounds.
 - [Mosaic Waves](https://pro.reactbits.dev/docs/components/mosaic-waves): Waves rolling through a mosaic of shifting tiles. Group: Backgrounds.
 - [Neon Reveal](https://pro.reactbits.dev/docs/components/neon-reveal): Realistic neon bar effect that sweeps across the container. Group: Backgrounds.
+- [Neural Flash](https://pro.reactbits.dev/docs/components/neural-flash): A storm of glowing filaments folding through a feedback field like a thought firing. Group: Backgrounds.
 - [Neural Float](https://pro.reactbits.dev/docs/components/neural-float): Soft neural filaments drifting weightlessly across the canvas. Group: Backgrounds.
 - [Neural Tunnel](https://pro.reactbits.dev/docs/components/neural-tunnel): An endless tunnel of pulsing neural strands. Group: Backgrounds.
 - [Perspective Grid](https://pro.reactbits.dev/docs/components/perspective-grid): Infinite scrolling 3D perspective grid with WebGL shader rendering. Group: Backgrounds.
 - [Pixel Rain](https://pro.reactbits.dev/docs/components/pixel-rain): Pixelated streaks falling in a quiet digital rain. Group: Backgrounds.
 - [Radial Liquid](https://pro.reactbits.dev/docs/components/radial-liquid): Radial shader waves with distortion and various effects. Group: Backgrounds.
+- [Ravine](https://pro.reactbits.dev/docs/components/ravine): A ray-marched flight down an endless monochrome canyon, its walls shaded by how far each ray had to travel. Group: Backgrounds.
 - [Retro Lines](https://pro.reactbits.dev/docs/components/retro-lines): Retro perspective grid with scrolling waves. Group: Backgrounds.
 - [Rising Lines](https://pro.reactbits.dev/docs/components/rising-lines): Ascending lines and particles with laser beam effect. Group: Backgrounds.
 - [Rising Particles](https://pro.reactbits.dev/docs/components/rising-particles): Particles glowing softly as they rise and drift upward. Group: Backgrounds.
@@ -348,24 +354,33 @@ Included in the Starter tier and above. These are in addition to the free compon
 - [Wireframe Ball](https://pro.reactbits.dev/docs/components/wireframe-ball): A rotating wireframe polyhedron raymarched in a shader. Group: Backgrounds.
 - [Agentic Ball](https://pro.reactbits.dev/docs/components/agentic-ball): Animated 3D orb with swirl and glow effects. Group: 3D & Shaders.
 - [AI Blob](https://pro.reactbits.dev/docs/components/ai-blob): Animated 3D blob with customizable colors and glow effects. Group: 3D & Shaders.
+- [Bend Gallery](https://pro.reactbits.dev/docs/components/bend-gallery): A column of images that folds over as it scrolls, each tile bending flat and sinking away at the edges. Group: 3D & Shaders.
 - [Circle Stack](https://pro.reactbits.dev/docs/components/circle-stack): A tilted stack of circles that cycles through your images. Group: 3D & Shaders.
 - [Depth Card](https://pro.reactbits.dev/docs/components/depth-card): Perspective depth effect that responds to mouse movement. Group: 3D & Shaders.
+- [Depth Image](https://pro.reactbits.dev/docs/components/depth-image): Relights a flat photo as if it had depth: a pointer driven light rakes across an estimated height field with surface detail and self cast shadows. Group: 3D & Shaders.
+- [Dolly Gallery](https://pro.reactbits.dev/docs/components/dolly-gallery): Images stacked into the distance that the camera dollies through on scroll, each one fading in from the depth and slipping past the lens. Group: 3D & Shaders.
 - [Frame Border](https://pro.reactbits.dev/docs/components/frame-border): Animated noise-textured border effect. Group: 3D & Shaders.
+- [Glass Reveal](https://pro.reactbits.dev/docs/components/glass-reveal): A pointer-following glass lens that refracts one image through another, with square, circle, blob and rippling portal outlines. Group: 3D & Shaders.
 - [Globe](https://pro.reactbits.dev/docs/components/globe): Interactive 3D globe with animated arcs and location markers. Group: 3D & Shaders.
 - [Gradient Blob](https://pro.reactbits.dev/docs/components/gradient-blob): Morphing 3D blob with gradient colors and cursor interaction. Group: 3D & Shaders.
 - [Infinite Gallery](https://pro.reactbits.dev/docs/components/infinite-gallery): 3D infinite scrolling image gallery with drag and parallax. Group: 3D & Shaders.
+- [Inverted Dome](https://pro.reactbits.dev/docs/components/inverted-dome): An endless draggable image grid bent across a lens, so tiles stretch away towards the edges like the inside of a dome. Group: 3D & Shaders.
 - [Lenticular Carousel](https://pro.reactbits.dev/docs/components/lenticular-carousel): A gallery whose cards turn over like a lenticular print. Group: 3D & Shaders.
 - [Page Flip](https://pro.reactbits.dev/docs/components/page-flip): A book-style page flip you can drag through. Group: 3D & Shaders.
 - [Parallax Carousel](https://pro.reactbits.dev/docs/components/parallax-carousel): A draggable image carousel with a smooth parallax feel. Group: 3D & Shaders.
 - [Particle Image](https://pro.reactbits.dev/docs/components/particle-image): An image dissolved into GPU particles that swirl apart and reassemble. Group: 3D & Shaders.
+- [Particle Morph](https://pro.reactbits.dev/docs/components/particle-morph): GPU particles that flow between a sequence of images, logos and silhouettes. Group: 3D & Shaders.
 - [Pixel Reveal](https://pro.reactbits.dev/docs/components/pixel-reveal): An image that reveals itself through a sweep of pixels. Group: 3D & Shaders.
+- [Pixel Sculpt](https://pro.reactbits.dev/docs/components/pixel-sculpt): An image rebuilt as a relief of instanced tiles that ripple under the pointer. Group: 3D & Shaders.
 - [Pixelate Hover](https://pro.reactbits.dev/docs/components/pixelate-hover): Interactive pixelation effect with cursor-controlled reveal. Group: 3D & Shaders.
 - [Portal](https://pro.reactbits.dev/docs/components/portal): Circular portal shader with customizable particle effects. Group: 3D & Shaders.
 - [Rotating Cards](https://pro.reactbits.dev/docs/components/rotating-cards): 3D circular carousel with draggable rotating cards. Group: 3D & Shaders.
+- [Scroll Portal](https://pro.reactbits.dev/docs/components/scroll-portal): Scroll flies the camera through nested frames, each revealing the next scene. Group: 3D & Shaders.
 - [Shader Card](https://pro.reactbits.dev/docs/components/shader-card): Card with animated WebGL shader background effect. Group: 3D & Shaders.
 - [Shader Reveal](https://pro.reactbits.dev/docs/components/shader-reveal): Interactive liquid image reveal. Group: 3D & Shaders.
 - [Star Burst](https://pro.reactbits.dev/docs/components/star-burst): Star burst explosion effect with particles. Group: 3D & Shaders.
 - [Tumble Carousel](https://pro.reactbits.dev/docs/components/tumble-carousel): Cards that tumble end over end as the carousel advances. Group: 3D & Shaders.
+- [Twisting Gallery](https://pro.reactbits.dev/docs/components/twisting-gallery): Images spinning through a lazy twist as they scroll past, blurring with speed and swaying across the column. Group: 3D & Shaders.
 - [Warped Card](https://pro.reactbits.dev/docs/components/warped-card): Image card with mouse-following bulge distortion shader. Group: 3D & Shaders.
 - [Ascii Cursor](https://pro.reactbits.dev/docs/components/ascii-cursor): Cursor that leaves ASCII character trail. Group: Cursor Effects.
 - [Chroma Blinds](https://pro.reactbits.dev/docs/components/chroma-blinds): Colorful diagonal stripes that bend toward your cursor. Group: Cursor Effects.
@@ -405,14 +420,16 @@ Included in the Starter tier and above. These are in addition to the free compon
 - [Scroll Stack](https://pro.reactbits.dev/docs/components/scroll-stack): Pinned cards that stack, turn and dissolve as the page scrolls. Group: UI & Cards.
 - [Simple Graph](https://pro.reactbits.dev/docs/components/simple-graph): Animated line graph w/ custom interactions and advanced customization. Group: UI & Cards.
 - [Skewed Carousel](https://pro.reactbits.dev/docs/components/skewed-carousel): A skewed marquee of cards that tilts and scales as it scrolls. Group: UI & Cards.
+- [Tile Reveal](https://pro.reactbits.dev/docs/components/tile-reveal): A sticky image grid whose tiles fly in column by column on scroll, then zoom past the edges to reveal a headline and call to action. Group: UI & Cards.
 - [Tilted Tiles](https://pro.reactbits.dev/docs/components/tilted-tiles): A tilted grid of image columns that drift as you scroll. Group: UI & Cards.
 
-## Pro Blocks (238 across 21 categories)
+## Pro Blocks (280 across 22 categories)
 
 Landing page and marketing sections. Each category below holds several independent, individually installable variants; the manifest JSON lists every one by name. Included in the Pro tier and above.
 
 - [Hero Section](https://pro.reactbits.dev/docs/blocks/hero-section): Hero sections with various layouts and styles. 24 variants.
 - [Features](https://pro.reactbits.dev/docs/blocks/features): Feature sections with various layouts and presentations. 13 variants.
+- [Bento](https://pro.reactbits.dev/docs/blocks/bento): Animated feature tiles built on one shared system, ready to be composed into a bento grid. 42 variants.
 - [Social Proof](https://pro.reactbits.dev/docs/blocks/social-proof): Social proof sections with testimonials, reviews, and trust indicators. 16 variants.
 - [Contact](https://pro.reactbits.dev/docs/blocks/contact): Contact sections with forms and various layouts. 12 variants.
 - [Footer](https://pro.reactbits.dev/docs/blocks/footer): Footer sections with links, branding, and information. 12 variants.
@@ -476,10 +493,14 @@ Screens and surfaces for the inside of a product rather than its marketing site.
 - [Paywall](https://pro.reactbits.dev/docs/app-ui/paywall): Content locks, feature gates, plan pickers, usage caps, and upgrade prompts. 7 variants. Category: Auth & Onboarding.
 - [Authentication](https://pro.reactbits.dev/docs/app-ui/authentication): Sign-in, sign-up, and account recovery screens for web applications. 14 variants. Category: Auth & Onboarding.
 
-## Pro Templates (11)
+## Pro Templates (15)
 
 Complete Next.js projects, not fragments. Every template is deployable as-is. Included in the Ultimate tier, except the free one noted below.
 
+- [Agentframe](https://pro.reactbits.dev/docs/templates/agentframe-template): AI harness website with an animated pixel landscape, interactive agent demos, pricing, and editorial pages. Live preview: https://rbp-agentframe-template.vercel.app/.
+- [Cloudlight](https://pro.reactbits.dev/docs/templates/cloudlight-template): Cloud storage landing page with a WebGL cloud hero, docking navigation, and interactive product storytelling. Live preview: https://rbp-cloudlight-template.vercel.app/.
+- [Imageworks](https://pro.reactbits.dev/docs/templates/imageworks-template): AI image platform landing page with a 3D hero, pinned image gallery, and animated product showcases. Live preview: https://rbp-imageworks-template.vercel.app/.
+- [Sparkdesign](https://pro.reactbits.dev/docs/templates/sparkdesign-template): Collaborative design landing page with photographic project previews, interactive workflows, and a filterable project library. Live preview: https://rbp-sparkdesign-template.vercel.app/.
 - [SaaS](https://pro.reactbits.dev/docs/templates/saas-landing): Vibrant landing page for SaaS products with rounded frame and modern animations. Live preview: https://rbp-saas-template.vercel.app/.
 - [Minimal](https://pro.reactbits.dev/docs/templates/minimal-landing): Clean minimal landing page with WebGL shader cursor and smooth animations. Live preview: https://rbp-minimal-template.vercel.app/.
 - [Agency](https://pro.reactbits.dev/docs/templates/agency-site): Creative agency landing with WebGL effects, GSAP animations, and smooth scrolling. Live preview: https://rbp-agency-template.vercel.app/.

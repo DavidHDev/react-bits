@@ -76,7 +76,7 @@ const useHover = () => {
 /**
  * Poster frame that swaps to the animated webp on hover.
  *
- * The 134 component clips total ~30MB, so the animated file is only requested
+ * Component clips are only requested
  * once a card is actually hovered, and unmounted on leave to stop it looping in
  * the background. The browser cache makes every hover after the first instant.
  */
