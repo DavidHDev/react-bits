@@ -246,7 +246,7 @@ const UsefulLinks = ({ onClose }) => (
       {[
         { to: 'https://github.com/DavidHDev/react-bits', label: 'GitHub', external: true },
         { to: '/showcase', label: 'Showcase' },
-        { to: 'https://x.com/davidhdev', label: 'Who made this?', external: true }
+        { to: 'https://x.com/davidhaz', label: 'Who made this?', external: true }
       ].map(({ to, label, external }) => (
         <Link key={to} to={to} target={external ? '_blank' : undefined} onClick={onClose} display="block" mb={2}>
           <Flex alignItems="center" gap="4px">

@@ -80,8 +80,8 @@ const Footer = () => (
       <div className="ln-footer-bottom">
         <p className="ln-footer-attribution">
           Created with <AiFillHeart className="ln-footer-heart" /> by{' '}
-          <a href="https://x.com/davidhdev" target="_blank" rel="noopener noreferrer" className="ln-footer-creator">
-            davidhdev
+          <a href="https://x.com/davidhaz" target="_blank" rel="noopener noreferrer" className="ln-footer-creator">
+            davidhaz
           </a>
         </p>
         <p className="ln-footer-copy">

@@ -379,7 +379,7 @@ const MobileDrawer = ({ isOpen, onClose }) => (
               <RouterLink to={GITHUB_URL} target="_blank" onClick={onClose} style={{ color: colors.accentMuted }}>
                 GitHub <Icon boxSize={4} as={ArrowRight} transform="rotate(-45deg)" />
               </RouterLink>
-              <RouterLink to="https://x.com/davidhdev" target="_blank" onClick={onClose} style={{ color: colors.accentMuted }}>
+              <RouterLink to="https://x.com/davidhaz" target="_blank" onClick={onClose} style={{ color: colors.accentMuted }}>
                 Who made this? <Icon boxSize={4} as={ArrowRight} transform="rotate(-45deg)" />
               </RouterLink>
             </Flex>

@@ -239,7 +239,7 @@ export const PRO_TESTIMONIALS = [
   {
     handle: '@justine_chang39',
     avatar: 'https://pbs.twimg.com/profile_images/2038292993556533248/p5lPVFXv_400x400.jpg',
-    text: '@davidhdev is cooking some of the most beautiful components I have ever seen with React Bits.',
+    text: '@davidhaz is cooking some of the most beautiful components I have ever seen with React Bits.',
     url: 'https://x.com/justine_chang39/status/1968195651457724550'
   },
   {
