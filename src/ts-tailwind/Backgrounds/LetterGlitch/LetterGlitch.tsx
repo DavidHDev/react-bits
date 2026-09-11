@@ -1,5 +1,13 @@
 import { useRef, useEffect } from 'react';
 
+interface Rgb {
+  r: number;
+  g: number;
+  b: number;
+}
+
+const FALLBACK_RGB: Rgb = { r: 255, g: 255, b: 255 };
+
 const LetterGlitch = ({
   glitchColors = ['#2b4539', '#61dca3', '#61b3dc'],
   glitchSpeed = 50,
@@ -26,8 +34,9 @@ const LetterGlitch = ({
   const letters = useRef<
     {
       char: string;
-      color: string;
-      targetColor: string;
+      rgb: Rgb;
+      fromRgb: Rgb;
+      targetRgb: Rgb;
       colorProgress: number;
     }[]
   >([]);
@@ -65,18 +74,20 @@ const LetterGlitch = ({
       : null;
   };
 
-  const interpolateColor = (
-    start: { r: number; g: number; b: number },
-    end: { r: number; g: number; b: number },
-    factor: number
-  ) => {
-    const result = {
-      r: Math.round(start.r + (end.r - start.r) * factor),
-      g: Math.round(start.g + (end.g - start.g) * factor),
-      b: Math.round(start.b + (end.b - start.b) * factor)
-    };
-    return `rgb(${result.r}, ${result.g}, ${result.b})`;
-  };
+  // Interpolation happens in numbers, and the CSS string is only built at
+  // paint time. Previously the formatted `rgb(...)` string was stored back
+  // on the letter and fed to hexToRgb on the next frame, which returned null
+  // and froze the transition after a single step.
+  const mixRgb = (start: Rgb, end: Rgb, factor: number): Rgb => ({
+    r: Math.round(start.r + (end.r - start.r) * factor),
+    g: Math.round(start.g + (end.g - start.g) * factor),
+    b: Math.round(start.b + (end.b - start.b) * factor)
+  });
+
+  const rgbToCss = ({ r, g, b }: Rgb) => `rgb(${r}, ${g}, ${b})`;
+
+  // An unparseable entry in glitchColors must not stall the animation.
+  const getRandomRgb = (): Rgb => hexToRgb(getRandomColor()) || FALLBACK_RGB;
 
   const calculateGrid = (width: number, height: number) => {
     const columns = Math.ceil(width / charWidth);
@@ -87,12 +98,16 @@ const LetterGlitch = ({
   const initializeLetters = (columns: number, rows: number) => {
     grid.current = { columns, rows };
     const totalLetters = columns * rows;
-    letters.current = Array.from({ length: totalLetters }, () => ({
-      char: getRandomChar(),
-      color: getRandomColor(),
-      targetColor: getRandomColor(),
-      colorProgress: 1
-    }));
+    letters.current = Array.from({ length: totalLetters }, () => {
+      const rgb = getRandomRgb();
+      return {
+        char: getRandomChar(),
+        rgb,
+        fromRgb: rgb,
+        targetRgb: getRandomRgb(),
+        colorProgress: 1
+      };
+    });
   };
 
   const resizeCanvas = () => {
@@ -130,7 +145,7 @@ const LetterGlitch = ({
     letters.current.forEach((letter, index) => {
       const x = (index % grid.current.columns) * charWidth;
       const y = Math.floor(index / grid.current.columns) * charHeight;
-      ctx.fillStyle = letter.color;
+      ctx.fillStyle = rgbToCss(letter.rgb);
       ctx.fillText(letter.char, x, y);
     });
   };
@@ -145,10 +160,13 @@ const LetterGlitch = ({
       if (!letters.current[index]) continue;
 
       letters.current[index].char = getRandomChar();
-      letters.current[index].targetColor = getRandomColor();
+      // A new transition starts from the colour currently on screen, so a
+      // letter picked again mid-fade continues instead of jumping.
+      letters.current[index].fromRgb = letters.current[index].rgb;
+      letters.current[index].targetRgb = getRandomRgb();
 
       if (!smooth) {
-        letters.current[index].color = letters.current[index].targetColor;
+        letters.current[index].rgb = letters.current[index].targetRgb;
         letters.current[index].colorProgress = 1;
       } else {
         letters.current[index].colorProgress = 0;
@@ -163,12 +181,8 @@ const LetterGlitch = ({
         letter.colorProgress += 0.05;
         if (letter.colorProgress > 1) letter.colorProgress = 1;
 
-        const startRgb = hexToRgb(letter.color);
-        const endRgb = hexToRgb(letter.targetColor);
-        if (startRgb && endRgb) {
-          letter.color = interpolateColor(startRgb, endRgb, letter.colorProgress);
-          needsRedraw = true;
-        }
+        letter.rgb = mixRgb(letter.fromRgb, letter.targetRgb, letter.colorProgress);
+        needsRedraw = true;
       }
     });
 
