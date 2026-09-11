@@ -191,14 +191,30 @@ const TextLoop = ({
           {unit}
         </text>
 
-        <text className="select-none" style={textStyle} fill={color} dominantBaseline="central" aria-hidden="true">
-          <textPath ref={headRef} href={`#${pathId}`} startOffset={0} textLength={fitLength} lengthAdjust="spacing">
+        <text
+          className="select-none"
+          style={textStyle}
+          fill={color}
+          dominantBaseline="central"
+          aria-hidden="true"
+          textLength={fitLength}
+          lengthAdjust="spacing"
+        >
+          <textPath ref={headRef} href={`#${pathId}`} startOffset={0}>
             {loopText}
           </textPath>
         </text>
 
-        <text className="select-none" style={textStyle} fill={color} dominantBaseline="central" aria-hidden="true">
-          <textPath ref={tailRef} href={`#${pathId}`} startOffset={0} textLength={fitLength} lengthAdjust="spacing">
+        <text
+          className="select-none"
+          style={textStyle}
+          fill={color}
+          dominantBaseline="central"
+          aria-hidden="true"
+          textLength={fitLength}
+          lengthAdjust="spacing"
+        >
+          <textPath ref={tailRef} href={`#${pathId}`} startOffset={0}>
             {loopText}
           </textPath>
         </text>
