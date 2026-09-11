@@ -64,7 +64,7 @@ const IridescenceDemo = () => {
       {
         name: 'mouseReact',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Enable or disable mouse interaction with the shader.'
       }
     ],

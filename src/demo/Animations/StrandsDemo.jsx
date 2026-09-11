@@ -135,7 +135,7 @@ const StrandsDemo = () => {
       {
         name: 'saturation',
         type: 'number',
-        default: '1',
+        default: '1.5',
         description: 'Vibrance of the colors. Above 1 makes them more intense, below 1 fades to grayscale.'
       },
       {
@@ -147,7 +147,7 @@ const StrandsDemo = () => {
       {
         name: 'scale',
         type: 'number',
-        default: '1',
+        default: '1.5',
         description: 'Zooms the whole effect in or out to make the strands bigger or smaller.'
       },
       {

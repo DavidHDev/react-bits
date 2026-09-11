@@ -39,7 +39,7 @@ const PixelTrailDemo = () => {
     () => [
       { name: 'gridSize', type: 'number', default: '40', description: 'Number of pixels in grid.' },
       { name: 'trailSize', type: 'number', default: '0.1', description: 'Size of each trail dot.' },
-      { name: 'maxAge', type: 'number', default: '500', description: 'Duration of the trail effect.' },
+      { name: 'maxAge', type: 'number', default: '250', description: 'Duration of the trail effect.' },
       { name: 'interpolate', type: 'number', default: '5', description: 'Interpolation factor for pointer movement.' },
       { name: 'color', type: 'string', default: '#ffffff', description: 'Pixel color.' },
       {

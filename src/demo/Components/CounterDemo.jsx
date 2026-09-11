@@ -77,13 +77,13 @@ const CounterDemo = () => {
       {
         name: 'textColor',
         type: 'string',
-        default: "'white'",
+        default: 'inherit',
         description: 'The text color for the counter digits.'
       },
       {
         name: 'fontWeight',
         type: 'string | number',
-        default: "'bold'",
+        default: 'inherit',
         description: 'The font weight of the counter digits.'
       },
       {

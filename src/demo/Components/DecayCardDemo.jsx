@@ -52,7 +52,7 @@ const DecayCardDemo = () => {
       {
         name: 'image',
         type: 'string',
-        default: '',
+        default: 'https://picsum.photos/300/400?grayscale',
         description: 'Allows setting the background image of the card.'
       },
       {

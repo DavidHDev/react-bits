@@ -96,7 +96,7 @@ const StaggeredMenuDemo = () => {
       {
         name: 'logoUrl',
         type: 'string',
-        default: '',
+        default: '/src/assets/logos/reactbits-gh-white.svg',
         description: 'Path to the logo image.'
       },
       {

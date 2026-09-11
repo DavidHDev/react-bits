@@ -17,7 +17,7 @@ export default function BounceCards({
     'rotate(-10deg) translate(85px)',
     'rotate(2deg) translate(170px)'
   ],
-  enableHover = true
+  enableHover = false
 }) {
   const containerRef = useRef(null);
   useEffect(() => {

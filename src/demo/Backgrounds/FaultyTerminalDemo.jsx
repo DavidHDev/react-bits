@@ -68,7 +68,7 @@ const FaultyTerminalDemo = () => {
       {
         name: 'scale',
         type: 'number',
-        default: '1.5',
+        default: '1',
         description: 'Controls the zoom/scale of the pattern.'
       },
       {
@@ -80,13 +80,13 @@ const FaultyTerminalDemo = () => {
       {
         name: 'digitSize',
         type: 'number',
-        default: '1.2',
+        default: '1.5',
         description: 'Size of individual glyphs.'
       },
       {
         name: 'timeScale',
         type: 'number',
-        default: '1',
+        default: '0.3',
         description: 'Animation speed multiplier.'
       },
       {
@@ -98,7 +98,7 @@ const FaultyTerminalDemo = () => {
       {
         name: 'scanlineIntensity',
         type: 'number',
-        default: '1',
+        default: '0.3',
         description: 'Strength of scanline effects.'
       },
       {
@@ -134,7 +134,7 @@ const FaultyTerminalDemo = () => {
       {
         name: 'curvature',
         type: 'number',
-        default: '0',
+        default: '0.2',
         description: 'Barrel distortion amount.'
       },
       {
@@ -152,13 +152,13 @@ const FaultyTerminalDemo = () => {
       {
         name: 'mouseStrength',
         type: 'number',
-        default: '0.5',
+        default: '0.2',
         description: 'Mouse interaction intensity.'
       },
       {
         name: 'pageLoadAnimation',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Enable fade-in animation on load.'
       },
       {

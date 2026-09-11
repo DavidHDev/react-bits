@@ -84,25 +84,25 @@ const MetallicPaintDemo = () => {
       {
         name: 'scale',
         type: 'number',
-        default: '2',
+        default: '4',
         description: 'Scale of the metallic pattern. Higher values create more repetitions.'
       },
       {
         name: 'refraction',
         type: 'number',
-        default: '0.015',
+        default: '0.01',
         description: 'Amount of chromatic aberration (color separation). Creates the rainbow edge effect.'
       },
       {
         name: 'blur',
         type: 'number',
-        default: '0.005',
+        default: '0.015',
         description: 'Blur amount for the pattern transitions. Higher values create softer gradients.'
       },
       {
         name: 'liquid',
         type: 'number',
-        default: '0.07',
+        default: '0.75',
         description: 'Amount of liquid/wavy animation applied to the pattern.'
       },
       {
@@ -114,13 +114,13 @@ const MetallicPaintDemo = () => {
       {
         name: 'brightness',
         type: 'number',
-        default: '1',
+        default: '2',
         description: 'Overall brightness of the metallic effect. Values above 1 increase brightness.'
       },
       {
         name: 'contrast',
         type: 'number',
-        default: '1',
+        default: '0.5',
         description: 'Color contrast of the effect. Higher values create more distinct light/dark areas.'
       },
       {
@@ -144,7 +144,7 @@ const MetallicPaintDemo = () => {
       {
         name: 'darkColor',
         type: 'string',
-        default: '#111111',
+        default: '#000000',
         description: 'Hex color for the dark/shadow areas of the metallic effect.'
       },
       {
@@ -162,13 +162,13 @@ const MetallicPaintDemo = () => {
       {
         name: 'noiseScale',
         type: 'number',
-        default: '1',
+        default: '0.5',
         description: 'Scale of the noise pattern. Higher = more detailed noise.'
       },
       {
         name: 'chromaticSpread',
         type: 'number',
-        default: '1',
+        default: '2',
         description: 'Multiplier for chromatic aberration spread between RGB channels.'
       },
       {
@@ -180,19 +180,19 @@ const MetallicPaintDemo = () => {
       {
         name: 'distortion',
         type: 'number',
-        default: '0',
+        default: '1',
         description: 'Amount of noise-based distortion applied to the pattern flow (0-1).'
       },
       {
         name: 'contour',
         type: 'number',
-        default: '0',
+        default: '0.2',
         description: 'Intensity of edge contour effect that warps the pattern along shape boundaries (0-1).'
       },
       {
         name: 'tintColor',
         type: 'string',
-        default: '#ffffff',
+        default: '#feb3ff',
         description: 'Hex color for color burn tint effect. White = no tint.'
       }
     ],

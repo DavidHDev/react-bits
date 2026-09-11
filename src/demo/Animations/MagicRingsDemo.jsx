@@ -68,8 +68,8 @@ const MagicRingsDemo = () => {
 
   const propData = useMemo(
     () => [
-      { name: 'color', type: 'string', default: '"#A855F7"', description: 'Hex color for the rings.' },
-      { name: 'colorTwo', type: 'string', default: '"#6366F1"', description: 'Second color — rings interpolate from color to colorTwo.' },
+      { name: 'color', type: 'string', default: '#fc42ff', description: 'Hex color for the rings.' },
+      { name: 'colorTwo', type: 'string', default: '#42fcff', description: 'Second color — rings interpolate from color to colorTwo.' },
       { name: 'ringCount', type: 'number', default: '6', description: 'Number of concentric rings to draw (1–10).' },
       { name: 'speed', type: 'number', default: '1', description: 'Animation speed multiplier.' },
       { name: 'attenuation', type: 'number', default: '10', description: 'Glow falloff — higher values produce tighter glow.' },

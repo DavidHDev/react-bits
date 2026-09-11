@@ -29,7 +29,7 @@ const propData = [
   {
     name: 'text',
     type: 'string',
-    default: '"Hello World!"',
+    default: 'David!',
     description: 'The text displayed on the plane in the ASCII scene.'
   },
   {
@@ -41,7 +41,7 @@ const propData = [
   {
     name: 'asciiFontSize',
     type: 'number',
-    default: '12',
+    default: '8',
     description: 'Size of the ASCII glyphs in the overlay.'
   },
   {

@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -n \"registry,docs\" -c \"blue,green\" \"npm run registry:dev\" \"vite\"",
-    "build": "npm run registry:build && npm run llms:text && npm run sitemap && vite build",
+    "build": "npm run check:prop-docs && npm run registry:build && npm run llms:text && npm run sitemap && vite build",
     "new:component": "node scripts/generateComponent.js",
     "llms:text": "node ./scripts/generateLlmsText.js",
     "sitemap": "node ./scripts/generateSitemap.js",
     "registry:build": "jsrepo build",
     "registry:dev": "jsrepo build --watch",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "check:prop-docs": "node scripts/checkPropDocs.js",
+    "test:prop-docs": "node --test scripts/checkPropDocs.test.js"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.20.0",

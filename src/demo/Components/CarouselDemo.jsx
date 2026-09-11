@@ -72,7 +72,7 @@ const CarouselDemo = () => {
       {
         name: 'round',
         type: 'boolean',
-        default: 'true',
+        default: 'false',
         description: 'When true, the carousel is rendered with a 1:1 aspect ratio and circular container/items.'
       }
     ],

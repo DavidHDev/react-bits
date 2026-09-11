@@ -27,7 +27,7 @@ const propData = [
   {
     name: 'fontFamily',
     type: 'string',
-    default: '',
+    default: 'Roboto Flex',
     description: 'Name of the variable font family.'
   },
   {

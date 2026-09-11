@@ -49,7 +49,7 @@ const TiltedCardDemo = () => {
       {
         name: 'containerHeight',
         type: 'string',
-        default: '600px',
+        default: '300px',
         description: 'Height of the overall card container.'
       },
       {

@@ -101,13 +101,13 @@ const FloatingLinesDemo = () => {
       {
         name: 'bendRadius',
         type: 'number',
-        default: '10.0',
+        default: '5',
         description: 'Radius of the area affected by mouse interaction.'
       },
       {
         name: 'bendStrength',
         type: 'number',
-        default: '-5.0',
+        default: '-0.5',
         description: 'Intensity of the bend effect when interacting with mouse.'
       },
       {

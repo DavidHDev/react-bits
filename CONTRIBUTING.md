@@ -25,7 +25,7 @@ We welcome pull requests from everyone as long as they respect the quality stand
 3. Submit a pull request to the main repository's `main` branch.
 4. Provide a clear and descriptive title for your pull request, along with a detailed description of the changes you have made, and screenshots/videos where possible.
 5. For components updates, ensure that changes are reflected in all related files. Each component change must be updated in all 4 variants of that particular component.
-6. Before you open a pull request, please make sure that your changes are tested locally, and everything looks good on desktop and mobile, also check the browser console for errors, and so on, so that we can keep this library at the highest quality possible.
+6. Before you open a pull request, please make sure that your changes are tested locally, and everything looks good on desktop and mobile, also check the browser console for errors, and so on, so that we can keep this library at the highest quality possible. Run `npm run check:prop-docs` after changing defaults or prop tables; the production build also runs this check. It compares scalar component defaults across all four variants and their documentation. Run `npm run test:prop-docs` when editing the checker, and extend its parser for new declaration patterns instead of silently skipping them.
 7. Any pull requests that fail to meet these requirements will be denied, so please make sure you respect them so that your work can go through.
 
 ## Note

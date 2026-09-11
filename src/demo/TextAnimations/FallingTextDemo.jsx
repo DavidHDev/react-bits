@@ -51,7 +51,7 @@ const FallingTextDemo = () => {
       {
         name: 'trigger',
         type: "'click' | 'hover' | 'auto' | 'scroll'",
-        default: `"click"`,
+        default: 'auto',
         description: 'Defines how the falling effect is activated.'
       },
       {
