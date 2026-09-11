@@ -106,7 +106,7 @@ const MetaBalls = ({
   clumpFactor = 1,
   cursorBallSize = 3,
   cursorBallColor = '#ffffff',
-  enableTransparency = true
+  enableTransparency = false
 }) => {
   const containerRef = useRef(null);
 

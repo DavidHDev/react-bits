@@ -1,6 +1,6 @@
 import './GlitchText.css';
 
-const GlitchText = ({ children, speed = 1, enableShadows = true, enableOnHover = true, className = '' }) => {
+const GlitchText = ({ children, speed = 0.5, enableShadows = true, enableOnHover = false, className = '' }) => {
   const inlineStyles = {
     '--after-duration': `${speed * 3}s`,
     '--before-duration': `${speed * 2}s`,

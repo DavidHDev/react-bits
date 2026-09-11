@@ -64,7 +64,7 @@ const StarBorderDemo = () => {
       {
         name: 'thickness',
         type: 'number',
-        default: '3',
+        default: '1',
         description: 'Controls the thickness of the star border effect.'
       },
       {

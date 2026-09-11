@@ -61,7 +61,7 @@ const PixelBlastDemo = () => {
       {
         name: 'pixelSize',
         type: 'number',
-        default: '4',
+        default: '3',
         description: 'Base pixel size (auto scaled for DPI).'
       },
       {
@@ -145,7 +145,7 @@ const PixelBlastDemo = () => {
       {
         name: 'edgeFade',
         type: 'number',
-        default: '0.25',
+        default: '0.5',
         description: 'Edge fade distance (0-1).'
       },
       {

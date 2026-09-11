@@ -116,13 +116,13 @@ const RippleGridDemo = () => {
       {
         name: 'mouseInteraction',
         type: 'boolean',
-        default: 'false',
+        default: 'true',
         description: 'Enable mouse/touch interaction to create ripples.'
       },
       {
         name: 'mouseInteractionRadius',
         type: 'number',
-        default: '0.8',
+        default: '1',
         description: 'Controls the radius of the mouse interaction effect.'
       }
     ],

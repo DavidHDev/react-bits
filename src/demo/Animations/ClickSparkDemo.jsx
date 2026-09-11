@@ -43,19 +43,19 @@ const ClickSparkDemo = () => {
       {
         name: 'sparkColor',
         type: 'string',
-        default: "'#f00'",
+        default: "'#fff'",
         description: 'Color of each spark line.'
       },
       {
         name: 'sparkSize',
         type: 'number',
-        default: 30,
+        default: 10,
         description: 'Initial length of each spark line.'
       },
       {
         name: 'sparkRadius',
         type: 'number',
-        default: 30,
+        default: 15,
         description: 'How far sparks travel from the click center.'
       },
       {
@@ -67,7 +67,7 @@ const ClickSparkDemo = () => {
       {
         name: 'duration',
         type: 'number',
-        default: 660,
+        default: 400,
         description: 'Animation duration in milliseconds.'
       },
       {

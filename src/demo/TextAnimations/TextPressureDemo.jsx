@@ -21,7 +21,7 @@ const propData = [
   {
     name: 'text',
     type: 'string',
-    default: '"Hello!"',
+    default: '"Compressa"',
     description: 'Text content that will be displayed and animated.'
   },
   {
@@ -81,19 +81,19 @@ const propData = [
   {
     name: 'textColor',
     type: 'string',
-    default: 'true',
+    default: '#FFFFFF',
     description: 'The fill color of the text'
   },
   {
     name: 'strokeColor',
     type: 'string',
-    default: '#FFFFFF',
+    default: '#FF0000',
     description: 'The stroke color that will be applied to the text when "stroke" is set to true'
   },
   {
     name: 'className',
     type: 'string',
-    default: '#FF0000',
+    default: '""',
     description: 'Additional class for styling the <h1> wrapper.'
   },
   {
