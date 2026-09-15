@@ -31,6 +31,8 @@ export const shapeWaves = {
     splashRadius={40}
     splashStrength={0.4}
     glow={0.35}
+    intro={true}
+    introDuration={1.6}
     paused={false}
   />
 </div>`,

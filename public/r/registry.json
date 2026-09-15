@@ -8120,6 +8120,80 @@
 			]
 		},
 		{
+			"name": "ShapeWaves-JS-CSS",
+			"title": "ShapeWaves",
+			"description": "A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.",
+			"type": "registry:component",
+			"dependencies": [
+				"vgpu@^0.3.1"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ShapeWaves.css",
+					"target": "@components/ShapeWaves.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ShapeWaves.jsx"
+				}
+			]
+		},
+		{
+			"name": "ShapeWaves-JS-TW",
+			"title": "ShapeWaves",
+			"description": "A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.",
+			"type": "registry:component",
+			"dependencies": [
+				"vgpu@^0.3.1"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ShapeWaves/ShapeWaves.jsx"
+				}
+			]
+		},
+		{
+			"name": "ShapeWaves-TS-CSS",
+			"title": "ShapeWaves",
+			"description": "A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.",
+			"type": "registry:component",
+			"dependencies": [
+				"vgpu@^0.3.1"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ShapeWaves.css",
+					"target": "@components/ShapeWaves.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ShapeWaves.tsx"
+				}
+			]
+		},
+		{
+			"name": "ShapeWaves-TS-TW",
+			"title": "ShapeWaves",
+			"description": "A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.",
+			"type": "registry:component",
+			"dependencies": [
+				"vgpu@^0.3.1"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ShapeWaves/ShapeWaves.tsx"
+				}
+			]
+		},
+		{
 			"name": "AeroShards-JS-CSS",
 			"title": "AeroShards",
 			"description": "A GPU-driven wind sculpture of folded foil shards with crisp detail, content-safe placements, and responsive pointer interactions.",

@@ -1,3 +1,4 @@
+// Inspired by https://vercel.com/labs
 import { useEffect, useRef, useState } from 'react';
 import { effect, frame, init, sampler, storage, surface, target, uniforms } from 'vgpu';
 import type { Gpu, StorageBuffer, Texture } from 'vgpu';
@@ -18,6 +19,10 @@ const WAVE_SPEED = 0.42;
 const WAVE_FRICTION = 0.94;
 const WAVE_DECAY = 0.972;
 const SETTLED_THRESHOLD = 0.01;
+const INTRO_BAND = 0.2;
+const INTRO_WARP = 0.3;
+const INTRO_JITTER = 0.16;
+const INTRO_END = 1 + INTRO_WARP + INTRO_JITTER + INTRO_BAND;
 
 const NOISE_WGSL = `
 fn mod289v3(x: vec3f) -> vec3f { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -143,6 +148,10 @@ fn shapeDistance(p: vec2f, shape: i32, c: f32) -> f32 {
   return sdIsoscelesTriangle(vec2f(p.x, p.y + c), vec2f(c, 2.0 * c));
 }
 
+fn hash21(p: vec2f) -> f32 {
+  return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453);
+}
+
 @fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
   let resolution = params.resolution.xy;
   let cellPx = params.grid.x;
@@ -189,10 +198,26 @@ fn shapeDistance(p: vec2f, shape: i32, c: f32) -> f32 {
     shape = mode - 1;
     size = dotSize * mix(0.45, 1.0, f32(stepped) / 2.0);
   }
+  let introProgress = params.placement.w;
+  var front = 0.0;
+  if (introProgress < ${INTRO_END.toFixed(2)}) {
+    let radial = length((center - resolution * 0.5) / (resolution * 0.5)) * 0.70710678;
+    let warp = cnoise(vec3f(cellUv * vec2f(3.2, 2.4) + SEED, 4.7)) * ${INTRO_WARP.toFixed(2)};
+    let jitter = hash21(cell) * ${INTRO_JITTER.toFixed(2)};
+    let spread = radial + warp + jitter + ${INTRO_WARP.toFixed(2)};
+    let band = ${INTRO_BAND.toFixed(2)} * (0.6 + 0.8 * hash21(cell + vec2f(17.0, 9.0)));
+    let t = clamp((introProgress - spread) / band, 0.0, 1.0);
+    if (t <= 0.0) {
+      return vec4f(background, select(0.0, 1.0, toSurface));
+    }
+    let back = t - 1.0;
+    size = max(size * (1.0 + 2.70158 * back * back * back + 1.70158 * back * back), 0.02);
+    front = 1.0 - smoothstep(0.0, 1.0, abs(introProgress - spread) / band);
+  }
   let aa = 2.0 / cellPx;
   let coverage = smoothstep(aa, -aa, shapeDistance(local, shape, size));
 
-  let tint = mix(params.color.rgb, params.hover.rgb, smoothstep(0.15, 0.85, charge));
+  let tint = mix(params.color.rgb, params.hover.rgb, max(smoothstep(0.15, 0.85, charge), front * 0.35));
 
   let rgb = mix(background, tint, coverage * level);
   if (toSurface) { return vec4f(rgb, 1.0); }
@@ -268,6 +293,9 @@ export interface ShapeWavesProps {
   splashRadius?: number;
   splashStrength?: number;
   glow?: number;
+  intro?: boolean;
+  introDuration?: number;
+  introKey?: string | number;
   paused?: boolean;
   onError?: (error: Error) => void;
   className?: string;
@@ -295,6 +323,9 @@ interface ShapeWavesSettings {
   splashRadius: number;
   splashStrength: number;
   glow: number;
+  intro: boolean;
+  introDuration: number;
+  introKey: string | number;
   paused: boolean;
 }
 
@@ -320,6 +351,9 @@ export default function ShapeWaves({
   splashRadius = 40,
   splashStrength = 0.4,
   glow = 0.35,
+  intro = true,
+  introDuration = 1.6,
+  introKey = 0,
   paused = false,
   onError,
   className = ''
@@ -354,6 +388,9 @@ export default function ShapeWaves({
     splashRadius,
     splashStrength,
     glow,
+    intro,
+    introDuration: Math.max(0.1, introDuration),
+    introKey,
     paused
   };
   onErrorRef.current = onError;
@@ -376,9 +413,12 @@ export default function ShapeWaves({
     splashRadius,
     splashStrength,
     glow,
+    intro,
+    introDuration,
     paused
   ].join('|');
   const maskSignature = [text, fontFamily, fontWeight, textSize].join('|');
+  const replayRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     applySettingsRef.current();
@@ -387,6 +427,10 @@ export default function ShapeWaves({
   useEffect(() => {
     applyMaskRef.current();
   }, [maskSignature]);
+
+  useEffect(() => {
+    if (introKey) replayRef.current();
+  }, [introKey]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -413,6 +457,9 @@ export default function ShapeWaves({
     let heights = new Float32Array(1);
     let previousHeights = new Float32Array(1);
     let simulationBacklog = 0;
+    let introStart = 0;
+    let introProgress = INTRO_END;
+    let introArmed = false;
     let chargesActive = false;
     let bounds: DOMRect | null = null;
     let unsubscribeGpuError: (() => void) | undefined;
@@ -578,6 +625,7 @@ export default function ShapeWaves({
         if (disposed) return;
 
         const glowEnabled = () => settingsRef.current.glow > 0;
+        let lastIntro = false;
 
         const configureGrid = () => {
           const settings = settingsRef.current;
@@ -665,6 +713,16 @@ export default function ShapeWaves({
             drift = [drift[0] + Math.cos(angle) * distance, drift[1] + Math.sin(angle) * distance];
           }
           const hovering = visible && !document.hidden && updateCharges(deltaSeconds);
+          if (introArmed) {
+            introArmed = false;
+            introStart = now;
+            introProgress = 0;
+          }
+          const introPlaying = introProgress < INTRO_END;
+          if (introPlaying) {
+            introProgress = Math.min(INTRO_END, ((now - introStart) / 1000 / settings.introDuration) * INTRO_END);
+          }
+          params.set({ placement: [gridOrigin[0], gridOrigin[1], rows, introProgress] });
           params.set({
             field: [
               NOISE_CELLS * cellPx * settings.scale,
@@ -693,7 +751,7 @@ export default function ShapeWaves({
             presented = true;
             setReady(true);
           }
-          if (animating || hovering) frameId = requestAnimationFrame(render);
+          if (animating || hovering || introPlaying) frameId = requestAnimationFrame(render);
           else lastFrameTime = 0;
         };
 
@@ -746,13 +804,17 @@ export default function ShapeWaves({
           const settings = settingsRef.current;
           configureGrid();
           params.set({
-            placement: [gridOrigin[0], gridOrigin[1], rows, 0],
+            placement: [gridOrigin[0], gridOrigin[1], rows, introProgress],
             grid: [cellPx, Math.min(1, Math.max(0.1, settings.dotSize)), SHAPE_MODES[settings.shapes] ?? 0, cols],
             color: [...parseColor(settings.color, '#929292'), 1],
             hover: [...parseColor(settings.hoverColor, '#ffffff'), glowEnabled() ? 1 : 0],
             background: [...parseColor(settings.backgroundColor, '#000000'), 1]
           });
           compositeParams.set({ strength: [2 * settings.glow, 0, 0, 0] });
+          if (settings.intro !== lastIntro) {
+            lastIntro = settings.intro;
+            if (settings.intro && !reduceMotion.matches) introArmed = true;
+          }
           if (!settings.interactive && chargesActive) {
             heights.fill(0);
             previousHeights.fill(0);
@@ -798,6 +860,11 @@ export default function ShapeWaves({
 
         applySettingsRef.current = applySettings;
         applyMaskRef.current = applyMask;
+        replayRef.current = () => {
+          if (disposed || failed || !settingsRef.current.intro || reduceMotion.matches) return;
+          introArmed = true;
+          wakeRenderer();
+        };
 
         resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(root);
@@ -826,6 +893,7 @@ export default function ShapeWaves({
       wakeRenderer = () => {};
       applySettingsRef.current = () => {};
       applyMaskRef.current = () => {};
+      replayRef.current = () => {};
       document.removeEventListener('visibilitychange', handleWake);
       reduceMotion.removeEventListener('change', handleWake);
       window.removeEventListener('pointermove', handlePointerMove);

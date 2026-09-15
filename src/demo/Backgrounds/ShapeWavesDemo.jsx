@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
@@ -9,6 +9,7 @@ import PreviewInput from '../../components/common/Preview/PreviewInput';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 import PropTable from '../../components/common/Preview/PropTable';
 import CodeExample from '../../components/code/CodeExample';
 import Dependencies from '../../components/code/Dependencies';
@@ -39,6 +40,8 @@ const DEFAULT_PROPS = {
   splashRadius: 40,
   splashStrength: 0.4,
   glow: 0.35,
+  intro: true,
+  introDuration: 1.6,
   paused: false
 };
 
@@ -58,6 +61,7 @@ const SHAPE_OPTIONS = [
 const ShapeWavesDemo = () => {
   const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const themedProps = useThemedProps(props, DEFAULT_PROPS, LIGHT_PROPS);
+  const [introKey, setIntroKey] = useState(0);
 
   const propData = useMemo(
     () => [
@@ -170,6 +174,20 @@ const ShapeWavesDemo = () => {
         description: 'Bloom on lit glyphs. 0 disables the glow pass entirely.'
       },
       {
+        name: 'intro',
+        type: 'boolean',
+        default: 'true',
+        description:
+          'Plays a spawn animation on mount: the shapes pop in along a wave that travels from the centre to the corners.'
+      },
+      { name: 'introDuration', type: 'number', default: '1.6', description: 'Length of the intro wave in seconds.' },
+      {
+        name: 'introKey',
+        type: 'string | number',
+        default: '0',
+        description: 'Change this value to replay the intro wave without remounting.'
+      },
+      {
         name: 'paused',
         type: 'boolean',
         default: 'false',
@@ -196,7 +214,8 @@ const ShapeWavesDemo = () => {
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <ShapeWaves {...themedProps} onError={error => console.error('[ShapeWaves]', error)} />
+            <RefreshButton onClick={() => setIntroKey(key => key + 1)} />
+            <ShapeWaves {...themedProps} introKey={introKey} onError={error => console.error('[ShapeWaves]', error)} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
@@ -345,6 +364,16 @@ const ShapeWavesDemo = () => {
               step={0.05}
               value={props.glow}
               onChange={value => updateProp('glow', value)}
+            />
+
+            <PreviewSwitch title="Intro" isChecked={props.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSlider
+              title="Intro Duration"
+              min={0.5}
+              max={4}
+              step={0.1}
+              value={props.introDuration}
+              onChange={value => updateProp('introDuration', value)}
             />
 
             <PreviewSwitch title="Paused" isChecked={props.paused} onChange={value => updateProp('paused', value)} />

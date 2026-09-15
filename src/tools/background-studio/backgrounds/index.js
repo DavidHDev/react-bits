@@ -38,6 +38,8 @@ export const BACKGROUNDS = [
         label: 'Splash Strength'
       },
       { name: 'glow', type: 'number', default: 0.35, min: 0, max: 3, step: 0.05, label: 'Glow' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'introDuration', type: 'number', default: 1.6, min: 0.5, max: 4, step: 0.1, label: 'Intro Duration' },
       { name: 'paused', type: 'boolean', default: false, label: 'Paused' }
     ]
   },
