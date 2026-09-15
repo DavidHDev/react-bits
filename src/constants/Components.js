@@ -129,6 +129,7 @@ const components = {
 };
 
 const backgrounds = {
+  'shape-waves': () => import('../demo/Backgrounds/ShapeWavesDemo.jsx'),
   'aero-shards': () => import('../demo/Backgrounds/AeroShardsDemo.jsx'),
   'ghost-fibers': () => import('../demo/Backgrounds/GhostFibersDemo.jsx'),
   'silk': () => import('../demo/Backgrounds/SilkDemo'),

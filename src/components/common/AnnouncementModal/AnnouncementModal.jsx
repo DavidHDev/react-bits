@@ -12,7 +12,7 @@ const STORAGE_KEY = 'rb-pro-september-2026-release-seen';
 const SHOW_DELAY = 1500;
 const PROMO_VIDEO = 'https://cdn.reactbits.dev/SEPTEMBERUPDATE.mp4';
 
-const DISABLED = false;
+const DISABLED = true;
 
 const AnnouncementModal = () => {
   const location = useLocation();

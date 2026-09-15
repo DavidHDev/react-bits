@@ -205,6 +205,7 @@ Notes:
 - [Ripple Grid](https://www.reactbits.dev/backgrounds/ripple-grid): A grid that continuously animates with a ripple effect. CLI: `RippleGrid`.
 - [Scanner](https://www.reactbits.dev/backgrounds/scanner): Calm interference bands sweeping across the screen like an oscilloscope. CLI: `Scanner`.
 - [Shape Grid](https://www.reactbits.dev/backgrounds/shape-grid): Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization. CLI: `ShapeGrid`.
+- [Shape Waves](https://www.reactbits.dev/backgrounds/shape-waves): A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around. CLI: `ShapeWaves`.
 - [Side Rays](https://www.reactbits.dev/backgrounds/side-rays): Animated light rays emanating from the side with customizable colors and speed. CLI: `SideRays`.
 - [Silk](https://www.reactbits.dev/backgrounds/silk): Smooth waves background with soft lighting. CLI: `Silk`.
 - [Sliced Waves](https://www.reactbits.dev/backgrounds/sliced-waves): A grid of soft glowing bars rippling like a slatted equalizer. CLI: `SlicedWaves`.

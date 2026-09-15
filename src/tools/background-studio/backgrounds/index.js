@@ -1,5 +1,47 @@
 export const BACKGROUNDS = [
   {
+    id: 'shape-waves',
+    label: 'Shape Waves',
+    component: () => import('../../../content/Backgrounds/ShapeWaves/ShapeWaves.jsx'),
+    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/shape-waves"',
+    props: [
+      { name: 'text', type: 'text', default: 'React Bits', label: 'Text' },
+      { name: 'color', type: 'color', default: '#929292', label: 'Color' },
+      { name: 'hoverColor', type: 'color', default: '#ffffff', label: 'Splash Color' },
+      { name: 'backgroundColor', type: 'color', default: '#000000', label: 'Background' },
+      {
+        name: 'shapes',
+        type: 'select',
+        default: 'mixed',
+        options: ['mixed', 'squares', 'circles', 'triangles'],
+        label: 'Shapes'
+      },
+      { name: 'cellSize', type: 'number', default: 10, min: 6, max: 24, step: 1, label: 'Cell Size' },
+      { name: 'dotSize', type: 'number', default: 0.75, min: 0.3, max: 1, step: 0.01, label: 'Dot Size' },
+      { name: 'textSize', type: 'number', default: 0.6, min: 0.1, max: 0.6, step: 0.01, label: 'Text Size' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 4, step: 0.1, label: 'Speed' },
+      { name: 'scale', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Wave Scale' },
+      { name: 'contrast', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Contrast' },
+      { name: 'brightness', type: 'number', default: 0.4, min: 0, max: 1, step: 0.01, label: 'Brightness' },
+      { name: 'flow', type: 'number', default: 0, min: 0, max: 4, step: 0.1, label: 'Flow' },
+      { name: 'direction', type: 'number', default: 0, min: 0, max: 360, step: 5, label: 'Direction' },
+      { name: 'fade', type: 'number', default: 0.25, min: 0, max: 0.45, step: 0.01, label: 'Edge Fade' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'splashRadius', type: 'number', default: 40, min: 10, max: 120, step: 2, label: 'Splash Radius' },
+      {
+        name: 'splashStrength',
+        type: 'number',
+        default: 0.4,
+        min: 0.2,
+        max: 2.5,
+        step: 0.05,
+        label: 'Splash Strength'
+      },
+      { name: 'glow', type: 'number', default: 0.35, min: 0, max: 3, step: 0.05, label: 'Glow' },
+      { name: 'paused', type: 'boolean', default: false, label: 'Paused' }
+    ]
+  },
+  {
     id: 'aero-shards',
     label: 'Aero Shards',
     component: () => import('../../../content/Backgrounds/AeroShards/AeroShards.jsx'),

@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Shape Waves',
   'Aero Shards',
   'Ghost Fibers',
   'Infinite Spiral',
@@ -160,6 +161,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
+      'Shape Waves',
       'Aero Shards',
       'Ghost Fibers',
       'CRT Warp',

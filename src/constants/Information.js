@@ -960,6 +960,15 @@ export const componentMetadata = {
   },
 
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
+  'Backgrounds/ShapeWaves': {
+    videoUrl: '/assets/video/shapewaves.webm',
+    description:
+      'A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.',
+    category: 'Backgrounds',
+    name: 'ShapeWaves',
+    docsUrl: 'https://reactbits.dev/backgrounds/shape-waves',
+    tags: ['webgpu', 'vgpu', 'grid', 'shapes', 'text', 'procedural']
+  },
   'Backgrounds/AeroShards': {
     videoUrl: '/assets/video/aeroshards.webm',
     description: 'A GPU-driven wind sculpture of folded foil shards with crisp detail, content-safe placements, and responsive pointer interactions.',
