@@ -121,6 +121,12 @@ const BackgroundRenderer = React.memo(({ background, props, renderKey }) => {
 
   const wrapperStyle = background.wrapperStyle || {};
 
+  // Backgrounds are standalone components that manage their own z-index, and some of them
+  // (e.g. ImageTrail's `.content`, which uses z-index 100) can use values higher than the
+  // studio's own overlays (zIndex 99 below). Since this wrapper is a positioned element with
+  // z-index auto, it does not create a stacking context, so those values used to escape and
+  // paint on top of the preview controls, making them unclickable. Isolating the wrapper keeps
+  // every z-index a background declares inside this layer, so the studio UI always stays on top.
   return (
     <Box
       ref={containerRef}
@@ -130,7 +136,7 @@ const BackgroundRenderer = React.memo(({ background, props, renderKey }) => {
       left={0}
       right={0}
       bottom={0}
-      style={wrapperStyle}
+      style={{ ...wrapperStyle, isolation: 'isolate' }}
     >
       {isReady && Component ? <Component {...componentProps} /> : <LoadingFallback />}
     </Box>
