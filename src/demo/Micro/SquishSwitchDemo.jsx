@@ -18,10 +18,10 @@ import { squishSwitch } from '../../constants/code/Micro/squishSwitchCode';
 
 const DEFAULT_PROPS = {
   disabled: false,
-  trackColor: '#3f3f46',
+  trackColor: '#27272a',
   trackOnColor: '#f5f5f5',
-  thumbColor: '#525355',
-  thumbOnColor: '#3f3f46',
+  thumbColor: '#4e4e51',
+  thumbOnColor: '#27272a',
   width: 76,
   height: 38,
   radius: 19,
@@ -74,7 +74,7 @@ const SquishSwitchDemo = () => {
       },
       { name: 'label', type: 'string', default: '""', description: 'A label beside the switch, wired to it.' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Dimmed and inert.' },
-      { name: 'trackColor', type: 'string', default: '"#3f3f46"', description: 'The track while off.' },
+      { name: 'trackColor', type: 'string', default: '"#27272a"', description: 'The track while off.' },
       { name: 'trackOnColor', type: 'string', default: '"#f5f5f5"', description: 'The track while on.' },
       {
         name: 'thumbColor',

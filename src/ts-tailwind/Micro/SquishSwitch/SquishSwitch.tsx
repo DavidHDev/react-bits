@@ -53,7 +53,7 @@ const SquishSwitch: React.FC<SquishSwitchProps> = ({
   onChange,
   label = '',
   disabled = false,
-  trackColor = '#3f3f46',
+  trackColor = '#27272a',
   trackOnColor = '#f5f5f5',
   thumbColor = '',
   thumbOnColor = '',

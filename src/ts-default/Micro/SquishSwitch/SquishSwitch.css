@@ -11,10 +11,10 @@
   --ss-thumb: 30px;
   --ss-r: 19px;
   --ss-thumb-r: 15px;
-  --ss-track: #3f3f46;
+  --ss-track: #27272a;
   --ss-track-on: #f5f5f5;
-  --ss-thumb-color: #525355;
-  --ss-thumb-on: #3f3f46;
+  --ss-thumb-color: #4e4e51;
+  --ss-thumb-on: #27272a;
   --ss-fade: 320ms;
 
   position: relative;
