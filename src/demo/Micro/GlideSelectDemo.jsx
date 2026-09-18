@@ -193,7 +193,8 @@ const GlideSelectDemo = () => {
         name: 'rememberPosition',
         type: 'boolean',
         default: 'true',
-        description: 'After leaving the list, re-entry glides from the row you left instead of fading in place.'
+        description:
+          'The highlight stays on the row the pointer left, so re-entry glides from there. Off, it clears on leave and the selected row shows again.'
       },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Dims the chip and ignores input.' },
       { name: 'ariaLabel', type: 'string', default: '"Select"', description: 'Accessible name of the chip and list.' },

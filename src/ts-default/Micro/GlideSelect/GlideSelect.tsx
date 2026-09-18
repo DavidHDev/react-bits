@@ -136,18 +136,18 @@ const GlideSelect: React.FC<GlideSelectProps> = ({
       p.style.opacity = '0';
       return;
     }
-    const jump = instant.current || (p.style.opacity !== '1' && !rememberPosition);
+    const jump = instant.current || p.style.opacity !== '1';
     p.style.transitionDuration = jump ? '0ms, 150ms' : '';
     p.style.transform = `translateY(${active * step}px)`;
     p.style.opacity = '1';
     instant.current = false;
-  }, [active, phase, rememberPosition, step]);
+  }, [active, phase, step]);
 
   const open = (viaKey: boolean) => {
     if (disabled) return;
     clearTimeout(closeTimer.current);
-    instant.current = !!viaKey;
-    setActive(viaKey ? Math.max(0, selected) : null);
+    instant.current = true;
+    setActive(selected >= 0 ? selected : viaKey ? 0 : null);
     setPhase('open');
   };
   const close = (mode: 'instant' | 'pop') => {
@@ -244,8 +244,8 @@ const GlideSelect: React.FC<GlideSelectProps> = ({
     if (!scrub.current || scrub.current.id !== e.pointerId) return;
     const i = e.type === 'pointerup' ? rowAt(e.clientY) : null;
     scrub.current = null;
-    if (i === null) setActive(null);
-    else pick(i, false);
+    if (i !== null) pick(i, false);
+    else if (!rememberPosition) setActive(null);
   };
   const onListOver = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'touch' || scrub.current) return;
@@ -320,7 +320,7 @@ const GlideSelect: React.FC<GlideSelectProps> = ({
             data-live={active !== null ? '' : undefined}
             onPointerOver={onListOver}
             onPointerLeave={() => {
-              if (!scrub.current) setActive(null);
+              if (!scrub.current && !rememberPosition) setActive(null);
             }}
             onPointerDown={onListDown}
             onPointerMove={onListMove}
