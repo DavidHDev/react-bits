@@ -24,12 +24,6 @@ export const SHOWCASE_ITEMS = [
     image: '/assets/showcase/showcase-afaq.webp'
   },
   {
-    name: 'Deepraj',
-    url: 'https://www.architech-dev.tech/',
-    using: '<CardSwap />',
-    image: '/assets/showcase/showcase-deepraj.webp'
-  },
-  {
     name: 'Devraj',
     url: 'https://devrajchatribin.com/about',
     using: '<CountUp />',
