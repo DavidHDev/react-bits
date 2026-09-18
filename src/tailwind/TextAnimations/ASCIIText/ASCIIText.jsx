@@ -525,12 +525,7 @@ export default function ASCIIText({
           mix-blend-mode: difference;
         }
 
-        /* The rendered glyphs are always a near-white color (its brightness
-           also drives which ASCII character gets picked per pixel via the
-           asciify() grayscale mapping, so it can't be swapped per theme).
-           Inverting the whole container's final pixels on a light system
-           keeps that density mapping intact while still giving a dark,
-           visible result instead of near-white-on-white. */
+        /* Invert colors after rendering the effect if in light mode */
         :root[data-theme='light'] .ascii-text-container {
           filter: invert(1);
         }
