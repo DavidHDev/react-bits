@@ -1,0 +1,262 @@
+.refine-frame {
+  --rf-w: 320px;
+  --rf-aspect: 4 / 3;
+  --rf-radius: 16px;
+  --rf-bg: #27272a;
+  --rf-ink: #f5f5f5;
+  --rf-stage: 400ms;
+  --rf-blur: 1.5px;
+  --rf-sat: 0.8;
+  --rf-scale: 1.02;
+  --rf-opacity: 0.85;
+  --rf-error: #ef4444;
+  --rf-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  position: relative;
+  isolation: isolate;
+  width: min(var(--rf-w), 100%);
+  aspect-ratio: var(--rf-aspect);
+  border-radius: var(--rf-radius);
+  overflow: hidden;
+  background: var(--rf-bg);
+  color: var(--rf-ink);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.refine-frame__media {
+  position: absolute;
+  inset: 0;
+  opacity: var(--rf-opacity);
+  filter: blur(var(--rf-blur)) saturate(var(--rf-sat));
+  transform: scale(var(--rf-scale));
+  transition:
+    opacity var(--rf-stage) var(--rf-ease-out),
+    filter var(--rf-stage) var(--rf-ease-out),
+    transform var(--rf-stage) var(--rf-ease-out);
+}
+
+.refine-frame[data-status='queued'] .refine-frame__media {
+  animation: refine-frame-wait 2.4s ease-in-out infinite;
+}
+
+@keyframes refine-frame-wait {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.refine-frame__print {
+  width: 100%;
+  height: 100%;
+  transition: opacity var(--rf-stage) ease;
+}
+
+.refine-frame__print > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.refine-frame[data-mosaic] .refine-frame__print {
+  opacity: 0;
+}
+
+.refine-frame[data-resolved] .refine-frame__print {
+  opacity: 1;
+}
+
+.refine-frame__mosaic {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rf-stage) ease;
+}
+
+.refine-frame[data-mosaic] .refine-frame__mosaic {
+  opacity: 1;
+}
+
+.refine-frame[data-resolved] .refine-frame__mosaic {
+  opacity: 0;
+}
+
+.refine-frame__sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    color-mix(in srgb, var(--rf-ink) 14%, transparent) 50%,
+    transparent 62%
+  );
+  background-size: 260% 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rf-stage) ease;
+}
+
+.refine-frame[data-sweep]:not([data-mosaic]) .refine-frame__sweep {
+  opacity: 1;
+  animation: refine-frame-sweep 2.2s linear infinite;
+}
+
+@keyframes refine-frame-sweep {
+  from {
+    background-position: 130% 0;
+  }
+
+  to {
+    background-position: -130% 0;
+  }
+}
+
+.refine-frame__chip {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px 0 8px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--rf-bg) 72%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: none;
+  transition:
+    opacity 200ms ease,
+    transform 200ms var(--rf-ease-out);
+}
+
+@starting-style {
+  .refine-frame__chip {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.refine-frame__mark {
+  display: inline-flex;
+  color: color-mix(in srgb, var(--rf-ink) 80%, transparent);
+}
+
+.refine-frame__mark[data-kind='spin'] {
+  animation: refine-frame-spin 1.1s linear infinite;
+}
+
+.refine-frame__mark[data-kind='error'] {
+  color: var(--rf-error);
+}
+
+@keyframes refine-frame-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.refine-frame__label {
+  animation: refine-frame-label 200ms ease both;
+}
+
+@keyframes refine-frame-label {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+.refine-frame__retry {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px 0 12px;
+  border: 0;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--rf-ink) 14%, var(--rf-bg));
+  color: var(--rf-ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    opacity 200ms ease,
+    transform 160ms var(--rf-ease-out),
+    background-color 150ms ease;
+}
+
+@starting-style {
+  .refine-frame__retry {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+}
+
+.refine-frame__retry:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .refine-frame__retry:hover {
+    background: color-mix(in srgb, var(--rf-ink) 20%, var(--rf-bg));
+  }
+}
+
+.refine-frame__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .refine-frame__media {
+    transition: opacity var(--rf-stage) ease;
+  }
+
+  .refine-frame[data-sweep] .refine-frame__sweep {
+    animation: none;
+    opacity: 0;
+  }
+
+  .refine-frame[data-status='queued'] .refine-frame__media {
+    animation: none;
+  }
+
+  .refine-frame__mark[data-kind='spin'] {
+    animation: none;
+  }
+
+  .refine-frame__chip,
+  .refine-frame__retry {
+    transition: opacity 200ms ease;
+  }
+
+  .refine-frame__retry:active {
+    transform: translate(-50%, -50%);
+  }
+}

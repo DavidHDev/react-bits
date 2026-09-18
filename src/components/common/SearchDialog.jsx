@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { FiSearch, FiLayers, FiImage, FiType, FiCircle, FiFile, FiArrowUpRight } from 'react-icons/fi';
+import { FiSearch, FiLayers, FiImage, FiType, FiCircle, FiFile, FiArrowUpRight, FiToggleRight } from 'react-icons/fi';
 import { AiOutlineEnter } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { CATEGORIES } from '../../constants/Categories';
@@ -73,6 +73,7 @@ const categoryIconMapping = {
   'Text Animations': FiType,
   Animations: FiCircle,
   Components: FiLayers,
+  Micro: FiToggleRight,
   Backgrounds: FiImage
 };
 

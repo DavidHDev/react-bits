@@ -12324,6 +12324,532 @@
 					"path": "PixelSnow/PixelSnow.tsx"
 				}
 			]
+		},
+		{
+			"name": "SquishSwitch-JS-CSS",
+			"title": "SquishSwitch",
+			"description": "Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SquishSwitch.css",
+					"target": "@components/SquishSwitch.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SquishSwitch.jsx"
+				}
+			]
+		},
+		{
+			"name": "SquishSwitch-JS-TW",
+			"title": "SquishSwitch",
+			"description": "Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SquishSwitch/SquishSwitch.jsx"
+				}
+			]
+		},
+		{
+			"name": "SquishSwitch-TS-CSS",
+			"title": "SquishSwitch",
+			"description": "Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SquishSwitch.css",
+					"target": "@components/SquishSwitch.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SquishSwitch.tsx"
+				}
+			]
+		},
+		{
+			"name": "SquishSwitch-TS-TW",
+			"title": "SquishSwitch",
+			"description": "Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SquishSwitch/SquishSwitch.tsx"
+				}
+			]
+		},
+		{
+			"name": "HoldButton-JS-CSS",
+			"title": "HoldButton",
+			"description": "Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "HoldButton.css",
+					"target": "@components/HoldButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "HoldButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "HoldButton-JS-TW",
+			"title": "HoldButton",
+			"description": "Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "HoldButton/HoldButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "HoldButton-TS-CSS",
+			"title": "HoldButton",
+			"description": "Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "HoldButton.css",
+					"target": "@components/HoldButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "HoldButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "HoldButton-TS-TW",
+			"title": "HoldButton",
+			"description": "Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "HoldButton/HoldButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "PeekRating-JS-CSS",
+			"title": "PeekRating",
+			"description": "Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PeekRating.css",
+					"target": "@components/PeekRating.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PeekRating.jsx"
+				}
+			]
+		},
+		{
+			"name": "PeekRating-JS-TW",
+			"title": "PeekRating",
+			"description": "Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PeekRating/PeekRating.jsx"
+				}
+			]
+		},
+		{
+			"name": "PeekRating-TS-CSS",
+			"title": "PeekRating",
+			"description": "Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PeekRating.css",
+					"target": "@components/PeekRating.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PeekRating.tsx"
+				}
+			]
+		},
+		{
+			"name": "PeekRating-TS-TW",
+			"title": "PeekRating",
+			"description": "Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PeekRating/PeekRating.tsx"
+				}
+			]
+		},
+		{
+			"name": "SpringCheck-JS-CSS",
+			"title": "SpringCheck",
+			"description": "Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SpringCheck.css",
+					"target": "@components/SpringCheck.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SpringCheck.jsx"
+				}
+			]
+		},
+		{
+			"name": "SpringCheck-JS-TW",
+			"title": "SpringCheck",
+			"description": "Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SpringCheck/SpringCheck.jsx"
+				}
+			]
+		},
+		{
+			"name": "SpringCheck-TS-CSS",
+			"title": "SpringCheck",
+			"description": "Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SpringCheck.css",
+					"target": "@components/SpringCheck.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SpringCheck.tsx"
+				}
+			]
+		},
+		{
+			"name": "SpringCheck-TS-TW",
+			"title": "SpringCheck",
+			"description": "Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SpringCheck/SpringCheck.tsx"
+				}
+			]
+		},
+		{
+			"name": "PulseHeart-JS-CSS",
+			"title": "PulseHeart",
+			"description": "Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PulseHeart.css",
+					"target": "@components/PulseHeart.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PulseHeart.jsx"
+				}
+			]
+		},
+		{
+			"name": "PulseHeart-JS-TW",
+			"title": "PulseHeart",
+			"description": "Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PulseHeart/PulseHeart.jsx"
+				}
+			]
+		},
+		{
+			"name": "PulseHeart-TS-CSS",
+			"title": "PulseHeart",
+			"description": "Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PulseHeart.css",
+					"target": "@components/PulseHeart.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PulseHeart.tsx"
+				}
+			]
+		},
+		{
+			"name": "PulseHeart-TS-TW",
+			"title": "PulseHeart",
+			"description": "Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PulseHeart/PulseHeart.tsx"
+				}
+			]
+		},
+		{
+			"name": "RubberSegment-JS-CSS",
+			"title": "RubberSegment",
+			"description": "Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "RubberSegment.css",
+					"target": "@components/RubberSegment.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "RubberSegment.jsx"
+				}
+			]
+		},
+		{
+			"name": "RubberSegment-JS-TW",
+			"title": "RubberSegment",
+			"description": "Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RubberSegment/RubberSegment.jsx"
+				}
+			]
+		},
+		{
+			"name": "RubberSegment-TS-CSS",
+			"title": "RubberSegment",
+			"description": "Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "RubberSegment.css",
+					"target": "@components/RubberSegment.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "RubberSegment.tsx"
+				}
+			]
+		},
+		{
+			"name": "RubberSegment-TS-TW",
+			"title": "RubberSegment",
+			"description": "Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RubberSegment/RubberSegment.tsx"
+				}
+			]
+		},
+		{
+			"name": "SlideCommit-JS-CSS",
+			"title": "SlideCommit",
+			"description": "Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SlideCommit.css",
+					"target": "@components/SlideCommit.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SlideCommit.jsx"
+				}
+			]
+		},
+		{
+			"name": "SlideCommit-JS-TW",
+			"title": "SlideCommit",
+			"description": "Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SlideCommit/SlideCommit.jsx"
+				}
+			]
+		},
+		{
+			"name": "SlideCommit-TS-CSS",
+			"title": "SlideCommit",
+			"description": "Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SlideCommit.css",
+					"target": "@components/SlideCommit.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SlideCommit.tsx"
+				}
+			]
+		},
+		{
+			"name": "SlideCommit-TS-TW",
+			"title": "SlideCommit",
+			"description": "Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SlideCommit/SlideCommit.tsx"
+				}
+			]
 		}
 	]
 }

@@ -22,10 +22,11 @@ const CATEGORY_SLUGS = {
   Animations: 'animations',
   Components: 'components',
   Backgrounds: 'backgrounds',
-  TextAnimations: 'text-animations'
+  TextAnimations: 'text-animations',
+  Micro: 'micro'
 };
 
-const CATEGORY_ORDER = ['TextAnimations', 'Animations', 'Components', 'Backgrounds'];
+const CATEGORY_ORDER = ['TextAnimations', 'Animations', 'Components', 'Micro', 'Backgrounds'];
 
 function pascalToTitle(name) {
   return name
@@ -74,12 +75,12 @@ function buildComponentSection(category, comps) {
 }
 
 const INTRO_LINES = [
-  'React Bits is an open source collection of memorable UI elements - Components, Animations, Backgrounds, and Text Animations - provided in four implementation variants: JavaScript + CSS, JavaScript + Tailwind, TypeScript + CSS, and TypeScript + Tailwind.',
+  'React Bits is an open source collection of memorable UI elements - Components, Animations, Backgrounds, Text Animations, and Micro interactions - provided in four implementation variants: JavaScript + CSS, JavaScript + Tailwind, TypeScript + CSS, and TypeScript + Tailwind.',
   'Components are copy-friendly and installable via CLI (jsrepo or shadcn).'
 ];
 
 const AGENT_NOTES = [
-  'Components are organized by semantics first: UI Components, Animations, Backgrounds, Text Animations.',
+  'Components are organized by semantics first: UI Components, Animations, Backgrounds, Text Animations, Micro (small, satisfying micro-interactions such as switches, buttons and loaders).',
   'Each component has 4 variants. All variants are kept in sync when updated.',
   'Dependencies vary by component (e.g., gsap, motion, three, ogl). Always check and install dependencies before usage.',
   'Everything on reactbits.dev is free and open source. There is a separate paid library, React Bits Pro, ' +

@@ -1,0 +1,179 @@
+.status-mark {
+  --sm-size: 20px;
+  --sm-stroke: 2;
+  --sm-color: currentColor;
+  --sm-done: #22c55e;
+  --sm-error: #ef4444;
+  --sm-fill: 0.06;
+  --sm-font: 14px;
+  --sm-draw: 240ms;
+  --sm-strike-delay: 180ms;
+  --sm-muted: 0.55;
+  --sm-check-delay: 120ms;
+  --sm-label-o: 0.65;
+  --sm-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --sm-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--sm-size) * 0.5);
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.status-mark__glyph {
+  flex: none;
+  overflow: visible;
+  color: var(--sm-color);
+  transition: color 200ms ease;
+}
+
+.status-mark[data-status='done'] .status-mark__glyph {
+  color: var(--sm-done);
+}
+
+.status-mark[data-status='failed'] .status-mark__glyph {
+  color: var(--sm-error);
+}
+
+.status-mark__track {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: var(--sm-stroke);
+  fill-opacity: 0;
+  stroke-opacity: 0;
+  transition:
+    fill-opacity 180ms ease,
+    stroke-opacity 200ms ease;
+}
+
+.status-mark[data-status='running'] .status-mark__track {
+  stroke-opacity: 0.2;
+}
+
+.status-mark[data-status='done'] .status-mark__track,
+.status-mark[data-status='failed'] .status-mark__track {
+  fill-opacity: var(--sm-fill);
+}
+
+.status-mark__ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--sm-stroke);
+  stroke-linecap: round;
+  opacity: var(--sm-muted);
+  transition: opacity 200ms ease;
+}
+
+.status-mark[data-status='running'] .status-mark__ring,
+.status-mark[data-status='done'] .status-mark__ring,
+.status-mark[data-status='failed'] .status-mark__ring {
+  opacity: 1;
+}
+
+.status-mark__check,
+.status-mark__cross {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--sm-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.05;
+  opacity: 0;
+  transition:
+    stroke-dashoffset 160ms var(--sm-ease-out),
+    opacity 0ms linear 160ms;
+}
+
+.status-mark[data-status='done'] .status-mark__check,
+.status-mark[data-status='failed'] .status-mark__cross,
+.status-mark[data-status='cancelled'] .status-mark__cross {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition:
+    stroke-dashoffset var(--sm-draw) var(--sm-ease-out) var(--sm-check-delay),
+    opacity 0ms linear var(--sm-check-delay);
+}
+
+.status-mark__label {
+  position: relative;
+  color: var(--sm-color);
+  font-size: var(--sm-font);
+  line-height: 1.25;
+  opacity: var(--sm-label-o);
+  transition: opacity 200ms ease;
+}
+
+.status-mark[data-status='running'] {
+  --sm-label-o: 1;
+}
+
+.status-mark[data-status='done'] {
+  --sm-label-o: 0.6;
+}
+
+.status-mark[data-status='failed'] {
+  --sm-label-o: 1;
+}
+
+.status-mark[data-status='cancelled'] {
+  --sm-label-o: 0.55;
+}
+
+.status-mark__strike {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: max(1px, calc(var(--sm-font) / 14));
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  translate: 0 -50%;
+  pointer-events: none;
+  transition: transform 160ms var(--sm-ease-out);
+}
+
+.status-mark[data-status='done'][data-strike] .status-mark__strike {
+  transform: scaleX(1);
+  transition: transform 280ms var(--sm-ease-out) var(--sm-strike-delay);
+}
+
+.status-mark__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes sm-breathe {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-mark[data-indeterminate] .status-mark__ring {
+    animation: sm-breathe 1400ms var(--sm-ease-in-out) infinite;
+  }
+
+  .status-mark__check,
+  .status-mark__cross {
+    stroke-dashoffset: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .status-mark__strike {
+    opacity: 0;
+    transform: scaleX(1) !important;
+    transition: opacity 200ms ease;
+  }
+
+  .status-mark[data-status='done'][data-strike] .status-mark__strike {
+    opacity: 1;
+  }
+}

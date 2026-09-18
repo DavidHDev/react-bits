@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  --sidebar-width: 228px;
+  --sidebar-width: 256px;
   --right-panel-width: 300px;
   --content-gap: 32px;
   --app-gutter: 32px;
@@ -426,6 +426,29 @@
 }
 
 :root[data-theme='light'] .category-components .demo-container {
+  color-scheme: light;
+  --bg-body: #fff;
+  --bg-card: #fff;
+  --bg-elevated: #fff;
+  --bg-hover: #f4f4f5;
+  --border-primary: #e4e4e7;
+  --border-secondary: #e4e4e7;
+  --border-subtle: #ededf0;
+  --text-primary: #18181b;
+  --text-secondary: #27272a;
+  --text-muted: #71717a;
+  --text-dimmed: #a1a1aa;
+  --text-link: #18181b;
+  --surface-ghost: rgba(24, 24, 27, 0.045);
+  --surface-ghost-hover: rgba(24, 24, 27, 0.075);
+  --surface-ghost-track: rgba(24, 24, 27, 0.035);
+  background: #fff;
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+:root[data-theme='light'] .category-micro .demo-container {
   color-scheme: light;
   --bg-body: #fff;
   --bg-card: #fff;

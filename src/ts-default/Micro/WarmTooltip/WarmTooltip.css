@@ -1,0 +1,169 @@
+.warm-tooltip__trigger {
+  --wt-surface: #f5f5f5;
+  --wt-fuse-ms: 400ms;
+  --wt-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.warm-tooltip__trigger[data-pressing] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.warm-tooltip__fuse {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--wt-surface);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+  transition:
+    transform 125ms var(--wt-ease-out),
+    opacity 125ms var(--wt-ease-out);
+}
+
+.warm-tooltip__fuse[data-side='top'] {
+  top: -4px;
+}
+
+.warm-tooltip__fuse[data-side='bottom'] {
+  bottom: -4px;
+}
+
+.warm-tooltip__fuse[data-side='left'],
+.warm-tooltip__fuse[data-side='right'] {
+  top: 4px;
+  bottom: 4px;
+  left: auto;
+  right: auto;
+  width: 2px;
+  height: auto;
+  transform: scaleY(0);
+  transform-origin: center top;
+}
+
+.warm-tooltip__fuse[data-side='left'] {
+  left: -4px;
+}
+
+.warm-tooltip__fuse[data-side='right'] {
+  right: -4px;
+}
+
+.warm-tooltip__fuse[data-fuse='arming'] {
+  opacity: 1;
+  transform: scaleX(1);
+  transition:
+    transform var(--wt-fuse-ms) linear,
+    opacity 80ms var(--wt-ease-out);
+}
+
+.warm-tooltip__fuse[data-side='left'][data-fuse='arming'],
+.warm-tooltip__fuse[data-side='right'][data-fuse='arming'] {
+  transform: scaleY(1);
+}
+
+.warm-tooltip {
+  --wt-surface: #f5f5f5;
+  --wt-ink: #18181b;
+  --wt-radius: 8px;
+  --wt-font: 12.5px;
+  --wt-origin: center bottom;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: block;
+  pointer-events: none;
+  font-family: inherit;
+}
+
+.warm-tooltip__box {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--wt-radius);
+  background: var(--wt-surface);
+  color: var(--wt-ink);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 8px 24px -8px rgba(0, 0, 0, 0.45);
+  transform-origin: var(--wt-origin);
+}
+
+.warm-tooltip__layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warm-tooltip__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--wt-font);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.warm-tooltip__kbd {
+  display: inline-flex;
+  align-items: center;
+  height: 1.55em;
+  padding: 0 0.45em;
+  border-radius: 0.4em;
+  background: color-mix(in srgb, var(--wt-ink) 9%, transparent);
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--wt-ink) 12%, transparent);
+  color: color-mix(in srgb, var(--wt-ink) 72%, transparent);
+  font-family: inherit;
+  font-size: 0.86em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.warm-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px;
+  border-radius: 2px;
+  background: var(--wt-surface);
+  transform: rotate(45deg);
+}
+
+.warm-tooltip__arrow[data-side='top'] {
+  bottom: 1px;
+}
+
+.warm-tooltip__arrow[data-side='bottom'] {
+  top: 1px;
+}
+
+.warm-tooltip__arrow[data-side='left'] {
+  right: 1px;
+}
+
+.warm-tooltip__arrow[data-side='right'] {
+  left: 1px;
+}
+
+@media (prefers-contrast: more) {
+  .warm-tooltip__box {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--wt-ink) 40%, transparent);
+  }
+}

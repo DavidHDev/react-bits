@@ -816,11 +816,11 @@ const Hero = () => {
 
       <div className="ln-hero-content">
         <div className="ln-hero-left">
-          <Link to="/backgrounds/aero-shards" className="ln-hero-tag">
+          <Link to="/c/micro" className="ln-hero-tag">
             <span className="ln-hero-tag-new" style={{ background: accentColor, color: accentFg }}>
-              New Background
+              New Category
             </span>
-            Aero Shards <FaArrowRight size={10} />
+            Micro-interactions <FaArrowRight size={10} />
           </Link>
 
           <h1 className="ln-hero-headline">

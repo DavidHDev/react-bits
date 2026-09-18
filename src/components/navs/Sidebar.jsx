@@ -3,8 +3,16 @@ import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Flex, VStack, Text, Stack, Icon, IconButton, Drawer, Image, Separator } from '@chakra-ui/react';
 import { ArrowRight, SearchIcon, XIcon } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
+  DashboardSquare01Icon,
+  Image01Icon,
+  Motion01Icon,
+  PuzzleIcon,
+  MousePointerClickIcon,
+  TextFontIcon
+} from '@hugeicons/core-free-icons';
 
-import { TOOLS } from '../../constants/Tools';
 import { PRO_SECTIONS } from '../../constants/Pro';
 import { colors } from '../../constants/colors';
 
@@ -68,6 +76,15 @@ const PRO_PREVIEW_ITEMS = {
 // ─── Utility Functions ───────────────────────────────────────────────────────
 const scrollToTop = () => window.scrollTo(0, 0);
 const slug = str => str.replace(/\s+/g, '-').toLowerCase();
+
+const PICKER = [
+  { key: 'all', label: 'All', icon: DashboardSquare01Icon },
+  { key: 'text-animations', label: 'Text Animations', icon: TextFontIcon },
+  { key: 'components', label: 'Components', icon: PuzzleIcon },
+  { key: 'micro', label: 'Micro', icon: MousePointerClickIcon },
+  { key: 'animations', label: 'Animations', icon: Motion01Icon },
+  { key: 'backgrounds', label: 'Backgrounds', icon: Image01Icon }
+];
 const COMPONENT_METADATA_BY_PATH = new Map(
   Object.values(componentMetadata).map(metadata => [new URL(metadata.docsUrl).pathname, metadata])
 );
@@ -204,38 +221,6 @@ const ProLinks = ({ onClose }) => (
   </>
 );
 
-// ─── Tools Configuration ─────────────────────────────────────────────────────
-const ToolsLinks = ({ onClose }) => (
-  <>
-    <Separator my={4} />
-    <Text color="#a6a6a6" mb={3}>
-      Tools
-    </Text>
-    <Flex direction="column" gap={2}>
-      {TOOLS.map(tool => (
-        <Link
-          key={tool.id}
-          to={tool.comingSoon ? '#' : tool.path}
-          onClick={tool.comingSoon ? e => e.preventDefault() : onClose}
-          style={{
-            opacity: tool.comingSoon ? 0.5 : 1,
-            cursor: tool.comingSoon ? 'not-allowed' : 'pointer'
-          }}
-        >
-          <Flex alignItems="center" gap="8px">
-            <span>{tool.label}</span>
-            {tool.comingSoon && (
-              <Text as="span" fontSize="10px" color={colors.accentMuted} fontWeight={600}>
-                SOON
-              </Text>
-            )}
-          </Flex>
-        </Link>
-      ))}
-    </Flex>
-  </>
-);
-
 const UsefulLinks = ({ onClose }) => (
   <>
     <Separator my={4} />
@@ -298,12 +283,7 @@ const MainDrawer = ({ isOpen, onClose, categories, location, pendingActivePath, 
                   isTransitioning={isTransitioning}
                   isFirstCategory={i === 0}
                 />
-                {i === 0 && (
-                  <>
-                    <ProLinks onClose={onClose} />
-                    <ToolsLinks onClose={onClose} />
-                  </>
-                )}
+                {i === 0 && <ProLinks onClose={onClose} />}
               </Box>
             ))}
           </VStack>
@@ -363,12 +343,14 @@ const Category = memo(
     showFavorites,
     onPreviewEnter,
     onPreviewMove,
-    onPreviewLeave
+    onPreviewLeave,
+    basePath = ''
   }) => {
+    const prefix = category.name === 'Get Started' ? '' : basePath;
     const items = useMemo(
       () =>
         category.subcategories.map(sub => {
-          const path = `/${slug(category.name)}/${slug(sub)}`;
+          const path = `${prefix}/${slug(category.name)}/${slug(sub)}`;
           const activePath = pendingActivePath || location.pathname;
           return {
             sub,
@@ -378,7 +360,7 @@ const Category = memo(
             isUpdated: UPDATED.includes(sub)
           };
         }),
-      [category.name, category.subcategories, location.pathname, pendingActivePath]
+      [category.name, category.subcategories, location.pathname, pendingActivePath, prefix]
     );
 
     return (
@@ -438,6 +420,7 @@ const Sidebar = () => {
   const [pendingActivePath, setPendingActivePath] = useState(null);
   const [sidebarFilter, setSidebarFilter] = useState('');
   const [sidebarPreview, setSidebarPreview] = useState(null);
+  const [pickerTip, setPickerTip] = useState(null);
 
   // Refs
   const sidebarContainerRef = useRef(null);
@@ -457,6 +440,28 @@ const Sidebar = () => {
   const { startTransition, isTransitioning } = useTransition();
   const { isAtTop: isSidebarAtTop, isAtBottom: isSidebarAtBottom } = useScrollEdges(sidebarContainerRef);
   const sidebarFilterQuery = sidebarFilter.trim().toLowerCase();
+  const focusSlug = location.pathname.match(/^\/c\/([^/]+)/)?.[1] ?? null;
+  const basePath = focusSlug ? '/c' : '';
+  const pickerIndex = Math.max(
+    0,
+    PICKER.findIndex(option => option.key === (focusSlug ?? 'all'))
+  );
+  const pickCategory = useCallback(
+    key => {
+      setPickerTip(null);
+      if (key === 'all') {
+        if (!focusSlug) return;
+        const rest = location.pathname.replace(/^\/c/, '');
+        navigate(rest.split('/').filter(Boolean).length >= 2 ? rest : '/get-started/index');
+        return;
+      }
+      if (key !== focusSlug) navigate(`/c/${key}`);
+    },
+    [focusSlug, location.pathname, navigate]
+  );
+  const filterCount = focusSlug
+    ? (CATEGORIES.find(category => slug(category.name) === focusSlug)?.subcategories.length ?? TOTAL_COMPONENTS)
+    : TOTAL_COMPONENTS;
   const sidebarCategories = useMemo(
     () =>
       CATEGORIES.map((category, index) => ({
@@ -466,8 +471,8 @@ const Sidebar = () => {
           sidebarFilterQuery && !category.name.toLowerCase().includes(sidebarFilterQuery)
             ? category.subcategories.filter(item => item.toLowerCase().includes(sidebarFilterQuery))
             : category.subcategories
-      })),
-    [sidebarFilterQuery]
+      })).filter(category => !focusSlug || category.index === 0 || slug(category.name) === focusSlug),
+    [sidebarFilterQuery, focusSlug]
   );
   const sidebarProSections = useMemo(
     () =>
@@ -478,18 +483,10 @@ const Sidebar = () => {
         : PRO_SECTIONS,
     [sidebarFilterQuery]
   );
-  const sidebarTools = useMemo(
-    () =>
-      sidebarFilterQuery && !'tools'.includes(sidebarFilterQuery)
-        ? TOOLS.filter(tool => tool.label.toLowerCase().includes(sidebarFilterQuery))
-        : TOOLS,
-    [sidebarFilterQuery]
-  );
   const showSidebarFavorites = !sidebarFilterQuery || 'favorites saved'.includes(sidebarFilterQuery);
   const sidebarHasResults =
     showSidebarFavorites ||
     sidebarProSections.length > 0 ||
-    sidebarTools.length > 0 ||
     sidebarCategories.some(category => category.subcategories.length > 0);
   const firstVisibleCategory = sidebarCategories.find(
     category => category.subcategories.length > 0 || (category.index === 0 && showSidebarFavorites)
@@ -501,11 +498,14 @@ const Sidebar = () => {
     const directMatch = itemRefs.current[activePath];
     if (directMatch) return directMatch;
     for (const category of CATEGORIES) {
-      const activeItem = category.subcategories.find(sub => activePath === `/${slug(category.name)}/${slug(sub)}`);
-      if (activeItem) return itemRefs.current[`/${slug(category.name)}/${slug(activeItem)}`];
+      const prefix = category.name === 'Get Started' ? '' : basePath;
+      const activeItem = category.subcategories.find(
+        sub => activePath === `${prefix}/${slug(category.name)}/${slug(sub)}`
+      );
+      if (activeItem) return itemRefs.current[`${prefix}/${slug(category.name)}/${slug(activeItem)}`];
     }
     return null;
-  }, [location.pathname, pendingActivePath]);
+  }, [location.pathname, pendingActivePath, basePath]);
 
   const scrollActiveItemIntoView = useCallback(() => {
     const activeEl = findActiveElement();
@@ -555,7 +555,7 @@ const Sidebar = () => {
       const pointerX = event.clientX || itemRect.left + itemRect.width / 2;
       const pointerY = event.clientY || itemRect.top + itemRect.height / 2;
       const sidebarLeft = sidebarRect?.left ?? 16;
-      const sidebarWidth = sidebarRect?.width ?? 228;
+      const sidebarWidth = sidebarRect?.width ?? 256;
       const sidebarRight = sidebarRect?.right ?? sidebarLeft + sidebarWidth;
       const pointerProgress = Math.max(0, Math.min(1, (pointerX - sidebarLeft) / sidebarWidth));
       const horizontalDrift = (pointerProgress - 0.5) * 12;
@@ -675,18 +675,61 @@ const Sidebar = () => {
         top="calc(var(--docs-header-height) + 16px)"
         left="16px"
         h="calc(100vh - var(--docs-header-height) - 32px)"
-        w={{ base: 0, md: '228px' }}
-        maxW="228px"
+        w={{ base: 0, md: '256px' }}
+        maxW="256px"
         p={0}
         overflow="hidden"
         className="sidebar"
       >
+        <div
+          className="sidebar-picker"
+          role="tablist"
+          aria-label="Category"
+          style={{ '--sp-i': pickerIndex, '--sp-n': PICKER.length }}
+          onMouseLeave={() => setPickerTip(null)}
+        >
+          <span className="sidebar-picker__pill" aria-hidden="true" />
+          {PICKER.map((option, i) => (
+            <button
+              key={option.key}
+              type="button"
+              role="tab"
+              aria-selected={i === pickerIndex}
+              aria-label={option.label}
+              className="sidebar-picker__item"
+              data-active={i === pickerIndex ? '' : undefined}
+              onClick={() => pickCategory(option.key)}
+              onMouseEnter={event => {
+                const item = event.currentTarget.getBoundingClientRect();
+                const nav = event.currentTarget.closest('nav')?.getBoundingClientRect();
+                setPickerTip({
+                  label: option.label,
+                  x: (nav?.right ?? item.right) + 10,
+                  y: item.top + item.height / 2
+                });
+              }}
+              onFocus={event => {
+                const item = event.currentTarget.getBoundingClientRect();
+                const nav = event.currentTarget.closest('nav')?.getBoundingClientRect();
+                setPickerTip({
+                  label: option.label,
+                  x: (nav?.right ?? item.right) + 10,
+                  y: item.top + item.height / 2
+                });
+              }}
+              onBlur={() => setPickerTip(null)}
+            >
+              <HugeiconsIcon icon={option.icon} size={18} strokeWidth={1.8} />
+            </button>
+          ))}
+        </div>
+
         <label className="sidebar-filter">
           <SearchIcon size={13} aria-hidden="true" />
           <input
             value={sidebarFilter}
             onChange={event => setSidebarFilter(event.target.value)}
-            placeholder={`Filter ${TOTAL_COMPONENTS} components...`}
+            placeholder={`Filter ${filterCount} components...`}
             aria-label="Filter sidebar navigation"
           />
         </label>
@@ -713,6 +756,7 @@ const Sidebar = () => {
                       onPreviewEnter={handlePreviewEnter}
                       onPreviewMove={handlePreviewMove}
                       onPreviewLeave={handlePreviewLeave}
+                      basePath={basePath}
                     />
                   )}
 
@@ -748,37 +792,12 @@ const Sidebar = () => {
                             >
                               <Icon as={section.icon} boxSize={3.5} className="sidebar-pro-icon" />
                               <span>{section.sidebarLabel || section.label}</span>
-                              {section.freeCount && <span className="sidebar-pro-free-tag">{section.freeCount} Free</span>}
+                              {section.freeCount && (
+                                <span className="sidebar-pro-free-tag">{section.freeCount} Free</span>
+                              )}
                             </Link>
                           );
                         })}
-                      </Stack>
-                    </Box>
-                  )}
-
-                  {/* Tools Section - after Pro */}
-                  {cat.index === 0 && sidebarTools.length > 0 && (
-                    <Box>
-                      <Text className="category-name" mb={2} mt={4}>
-                        Tools
-                      </Text>
-                      <Stack
-                        className="sidebar-link-stack"
-                        spacing={0.5}
-                        pl={4}
-                        borderLeft={`1px solid ${colors.borderSecondary}`}
-                        position="relative"
-                      >
-                        {sidebarTools.map(tool => (
-                          <Link
-                            key={tool.id}
-                            to={tool.path}
-                            className={`sidebar-item ${location.pathname === tool.path ? 'active-sidebar-item' : ''}`}
-                            onClick={scrollToTop}
-                          >
-                            <span>{tool.label}</span>
-                          </Link>
-                        ))}
                       </Stack>
                     </Box>
                   )}
@@ -789,6 +808,34 @@ const Sidebar = () => {
           </Box>
         </Box>
       </Box>
+
+      <AnimatePresence>
+        {pickerTip && (
+          <motion.div
+            key="picker-tip"
+            className="sidebar-picker-tip"
+            role="tooltip"
+            initial={reduceMotion ? { opacity: 0, x: 0, y: '-50%' } : { opacity: 0, x: -6, y: '-50%' }}
+            animate={{ opacity: 1, x: 0, y: '-50%' }}
+            exit={reduceMotion ? { opacity: 0, x: 0, y: '-50%' } : { opacity: 0, x: -6, y: '-50%' }}
+            transition={{ duration: reduceMotion ? 0 : 0.16, ease: [0.23, 1, 0.32, 1] }}
+            style={{ left: pickerTip.x, top: pickerTip.y }}
+          >
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.span
+                key={pickerTip.label}
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4 }}
+                transition={{ duration: reduceMotion ? 0 : 0.14, ease: [0.23, 1, 0.32, 1] }}
+                style={{ display: 'block' }}
+              >
+                {pickerTip.label}
+              </motion.span>
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {previewMediaAllowed && (
         <SidebarHoverPreview

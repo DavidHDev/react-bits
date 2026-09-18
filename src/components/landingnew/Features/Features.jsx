@@ -451,7 +451,7 @@ const CARDS = [
   },
   {
     title: 'Well Organized',
-    desc: "Four clear categories so you're not scrolling through a wall of unrelated stuff.",
+    desc: "Five clear categories so you're not scrolling through a wall of unrelated stuff.",
     span: 4,
     visual: <CategorySelector />
   },

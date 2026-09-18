@@ -14,7 +14,8 @@ const CATEGORY_KEYS = {
   components: 'Components',
   animations: 'Animations',
   backgrounds: 'Backgrounds',
-  'text-animations': 'TextAnimations'
+  'text-animations': 'TextAnimations',
+  micro: 'Micro'
 };
 
 const FALLBACK_DESCRIPTION =

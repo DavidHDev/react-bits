@@ -1,0 +1,121 @@
+.rubber-segment {
+  --rs-track: #27272a;
+  --rs-thumb: #fafafa;
+  --rs-ink: #fafafa;
+  --rs-ink-active: #18181b;
+  --rs-radius: 10px;
+  --rs-inset: 3px;
+  --rs-thumb-radius: 7px;
+  --rs-h: 36px;
+  --rs-font: 13px;
+  --rs-pad: 14px;
+  --rs-min: 44px;
+  --rs-idle: 0.7;
+  --rs-hover: 0.9;
+  --rs-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: auto;
+  vertical-align: middle;
+  padding: var(--rs-inset);
+  border-radius: var(--rs-radius);
+  background: var(--rs-track);
+  font-family: inherit;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rubber-segment[data-equal] {
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.rubber-segment[aria-disabled='true'] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.rubber-segment__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: calc(var(--rs-h) - var(--rs-inset) * 2);
+  min-width: var(--rs-min);
+  margin: 0;
+  padding: 0 var(--rs-pad);
+  border: 0;
+  border-radius: var(--rs-thumb-radius);
+  background: none;
+  color: var(--rs-ink);
+  opacity: var(--rs-idle);
+  font: inherit;
+  font-size: var(--rs-font);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  transition:
+    opacity 160ms ease,
+    transform 160ms var(--rs-ease-out);
+}
+
+.rubber-segment__item[aria-checked='true'] {
+  cursor: default;
+}
+
+.rubber-segment[data-draggable] .rubber-segment__item[aria-checked='true'] {
+  cursor: grab;
+}
+
+.rubber-segment[data-held],
+.rubber-segment[data-held] .rubber-segment__item {
+  cursor: grabbing;
+}
+
+.rubber-segment__item[data-pressed] {
+  transform: scale(0.96);
+}
+
+.rubber-segment__item:focus-visible {
+  outline: 2px solid var(--rs-thumb);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rubber-segment__item[aria-checked='false']:hover {
+    opacity: var(--rs-hover);
+  }
+}
+
+.rubber-segment__thumb {
+  position: absolute;
+  inset: var(--rs-inset);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: auto;
+  background: var(--rs-thumb);
+  color: var(--rs-ink-active);
+  pointer-events: none;
+}
+
+.rubber-segment[data-equal] .rubber-segment__thumb {
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.rubber-segment__copy {
+  color: inherit;
+  opacity: 1;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rubber-segment__item {
+    transition: opacity 160ms ease;
+  }
+}

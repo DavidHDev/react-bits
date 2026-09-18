@@ -6,6 +6,7 @@ import { ActiveRouteProvider } from './components/context/ActiveRouteContext/Act
 import SidebarLayout from './components/layout/SidebarLayout';
 import LandingPage from './pages/LandingPage';
 import CategoryPage from './pages/CategoryPage';
+import CategoryIndexPage from './pages/CategoryIndexPage';
 import ShowcasePage from './pages/ShowcasePage';
 import FavoritesPage from './pages/FavoritesPage';
 import SponsorsPage from './pages/SponsorsPage';
@@ -29,6 +30,22 @@ function AppContent() {
             element={
               <SidebarLayout>
                 <ProSectionPage />
+              </SidebarLayout>
+            }
+          />
+          <Route
+            path="/c/:category"
+            element={
+              <SidebarLayout>
+                <CategoryIndexPage />
+              </SidebarLayout>
+            }
+          />
+          <Route
+            path="/c/:category/:subcategory"
+            element={
+              <SidebarLayout>
+                <CategoryPage />
               </SidebarLayout>
             }
           />

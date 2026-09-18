@@ -1,0 +1,111 @@
+.dodge-field {
+  --df-ink: #f5f5f5;
+  --df-contrast: #18181b;
+  --df-height: 240px;
+  --df-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: var(--df-height);
+}
+
+.dodge-field__mover {
+  display: inline-grid;
+  will-change: transform;
+}
+
+.dodge-field__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  margin: 0;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--df-ink) 8%, transparent);
+  color: color-mix(in srgb, var(--df-ink) 72%, transparent);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.012em;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    transform 160ms var(--df-ease-out),
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.dodge-field__pill:active {
+  transform: scale(0.97);
+}
+
+.dodge-field__pill:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--df-ink) 60%, transparent);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dodge-field__pill:hover {
+    color: color-mix(in srgb, var(--df-ink) 90%, transparent);
+  }
+}
+
+.dodge-field__mover[data-relented='true'] .dodge-field__pill {
+  color: var(--df-ink);
+}
+
+.dodge-field__mover[data-caught='true'] .dodge-field__pill {
+  background: var(--df-ink);
+  color: var(--df-contrast);
+}
+
+.dodge-field__labels {
+  display: grid;
+}
+
+.dodge-field__label {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  transition:
+    opacity 200ms ease,
+    filter 200ms ease;
+}
+
+.dodge-field__label[data-active='false'] {
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.dodge-field__notice {
+  position: absolute;
+  inset: auto 0 12px;
+  margin: 0;
+  color: color-mix(in srgb, var(--df-ink) 55%, transparent);
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dodge-field__pill {
+    transition:
+      background-color 220ms ease,
+      color 220ms ease;
+  }
+
+  .dodge-field__pill:active {
+    transform: none;
+  }
+
+  .dodge-field .dodge-field__label {
+    filter: none;
+  }
+}

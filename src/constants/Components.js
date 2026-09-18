@@ -128,6 +128,39 @@ const components = {
   'specular-button': () => import('../demo/Components/SpecularButtonDemo')
 };
 
+const micro = {
+  'squish-switch': () => import('../demo/Micro/SquishSwitchDemo'),
+  'hold-button': () => import('../demo/Micro/HoldButtonDemo'),
+  'peek-rating': () => import('../demo/Micro/PeekRatingDemo'),
+  'spring-check': () => import('../demo/Micro/SpringCheckDemo'),
+  'pulse-heart': () => import('../demo/Micro/PulseHeartDemo'),
+  'rubber-segment': () => import('../demo/Micro/RubberSegmentDemo'),
+  'slide-commit': () => import('../demo/Micro/SlideCommitDemo'),
+  'warm-tooltip': () => import('../demo/Micro/WarmTooltipDemo'),
+  'fuse-button': () => import('../demo/Micro/FuseButtonDemo'),
+  'scrub-field': () => import('../demo/Micro/ScrubFieldDemo'),
+  'lattice-loader': () => import('../demo/Micro/LatticeLoaderDemo'),
+  'dodge-field': () => import('../demo/Micro/DodgeFieldDemo'),
+  'code-slots': () => import('../demo/Micro/CodeSlotsDemo'),
+  'wake-slider': () => import('../demo/Micro/WakeSliderDemo'),
+  'comet-dial': () => import('../demo/Micro/CometDialDemo'),
+  'jelly-radio': () => import('../demo/Micro/JellyRadioDemo'),
+  'swipe-row': () => import('../demo/Micro/SwipeRowDemo'),
+  'glide-select': () => import('../demo/Micro/GlideSelectDemo'),
+  'status-mark': () => import('../demo/Micro/StatusMarkDemo'),
+  'call-chip': () => import('../demo/Micro/CallChipDemo'),
+  'bell-toggle': () => import('../demo/Micro/BellToggleDemo'),
+  'sling-button': () => import('../demo/Micro/SlingButtonDemo'),
+  'swipe-toast': () => import('../demo/Micro/SwipeToastDemo'),
+  'prompt-bar': () => import('../demo/Micro/PromptBarDemo'),
+  'slosh-gauge': () => import('../demo/Micro/SloshGaugeDemo'),
+  'voice-pill': () => import('../demo/Micro/VoicePillDemo'),
+  'thought-line': () => import('../demo/Micro/ThoughtLineDemo'),
+  'refine-frame': () => import('../demo/Micro/RefineFrameDemo'),
+  'folder-float': () => import('../demo/Micro/FolderFloatDemo'),
+  'branched-menu': () => import('../demo/Micro/BranchedMenuDemo')
+};
+
 const backgrounds = {
   'shape-waves': () => import('../demo/Backgrounds/ShapeWavesDemo.jsx'),
   'aero-shards': () => import('../demo/Backgrounds/AeroShardsDemo.jsx'),
@@ -193,5 +226,6 @@ export const componentMap = {
   ...animations,
   ...textAnimations,
   ...components,
+  ...micro,
   ...backgrounds
 };

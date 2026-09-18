@@ -20,6 +20,8 @@
     "@chakra-ui/react": "^3.20.0",
     "@emotion/react": "^11.14.0",
     "@gsap/react": "^2.1.2",
+    "@hugeicons/core-free-icons": "^4.3.3",
+    "@hugeicons/react": "^1.1.10",
     "@react-three/drei": "^10.7.4",
     "@react-three/fiber": "^9.3.0",
     "@react-three/postprocessing": "^3.0.4",

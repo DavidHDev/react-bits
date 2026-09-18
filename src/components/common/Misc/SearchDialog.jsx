@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { Dialog, Input, InputGroup, Box, Text, Icon } from '@chakra-ui/react';
-import { FiSearch, FiLayers, FiImage, FiType, FiCircle, FiFile } from 'react-icons/fi';
+import { FiSearch, FiLayers, FiImage, FiType, FiCircle, FiFile, FiToggleRight } from 'react-icons/fi';
 import { AiOutlineEnter } from 'react-icons/ai';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
@@ -48,6 +48,7 @@ const categoryIconMapping = {
   'Text Animations': FiType,
   Animations: FiCircle,
   Components: FiLayers,
+  Micro: FiToggleRight,
   Backgrounds: FiImage
 };
 

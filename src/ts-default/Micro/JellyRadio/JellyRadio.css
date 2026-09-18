@@ -1,0 +1,108 @@
+.jelly-radio {
+  --jr-chip: #27272a;
+  --jr-active: #f5f5f5;
+  --jr-text: #f5f5f5;
+  --jr-active-text: #18181b;
+  --jr-gap: 8px;
+  --jr-radius: 18px;
+  --jr-h: 36px;
+  --jr-font: 13px;
+  --jr-px: 16px;
+  --jr-pad-x: 16px;
+  --jr-pad-y: 6px;
+  --jr-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--jr-gap);
+  padding: var(--jr-pad-y) var(--jr-pad-x);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.jelly-radio[data-disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.jelly-radio__chip {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+  transform-origin: 50% 50%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.jelly-radio__chip[data-on='true'] {
+  cursor: default;
+}
+
+.jelly-radio:not([data-disabled]) .jelly-radio__chip:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.jelly-radio__skin {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  height: var(--jr-h);
+  padding: 0 var(--jr-px);
+  border-radius: var(--jr-radius);
+  overflow: hidden;
+  background: var(--jr-chip);
+  color: var(--jr-text);
+  font-size: var(--jr-font);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    transform 160ms var(--jr-ease-out),
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.jelly-radio__skin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--jr-text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .jelly-radio__chip[data-on='false']:not(:disabled):hover .jelly-radio__skin::before {
+    opacity: 0.11;
+  }
+}
+
+.jelly-radio__chip:active .jelly-radio__skin {
+  transform: scale(0.97);
+}
+
+.jelly-radio__chip[data-on='true'] .jelly-radio__skin {
+  background: var(--jr-active);
+  color: var(--jr-active-text);
+}
+
+.jelly-radio__icon {
+  display: inline-flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jelly-radio__chip:active .jelly-radio__skin {
+    transform: none;
+  }
+}

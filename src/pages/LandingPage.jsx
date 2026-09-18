@@ -22,7 +22,7 @@ const LandingPage = () => {
   usePageSEO({
     title: 'React Bits - Animated UI Components For React',
     description:
-      'An open source collection of high quality, animated, interactive & fully customizable React components for building stunning, memorable user interfaces.',
+      'An open source collection of 200+ high quality, animated, interactive & fully customizable React components and micro interactions for building stunning, memorable user interfaces.',
     path: '/'
   });
   const [loaded, setLoaded] = useState(false);

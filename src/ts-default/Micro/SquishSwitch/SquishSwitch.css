@@ -1,0 +1,90 @@
+.squish-switch-root {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.squish-switch {
+  --ss-w: 76px;
+  --ss-h: 38px;
+  --ss-inset: 4px;
+  --ss-thumb: 30px;
+  --ss-r: 19px;
+  --ss-thumb-r: 15px;
+  --ss-track: #3f3f46;
+  --ss-track-on: #f5f5f5;
+  --ss-thumb-color: #525355;
+  --ss-thumb-on: #3f3f46;
+  --ss-fade: 320ms;
+
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.squish-switch::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+
+.squish-switch[data-held] {
+  cursor: grabbing;
+}
+
+.squish-switch[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.squish-switch__track {
+  position: relative;
+  display: block;
+  width: var(--ss-w);
+  height: var(--ss-h);
+  border-radius: var(--ss-r);
+  background: var(--ss-track);
+  transition: background-color var(--ss-fade) ease;
+}
+
+.squish-switch[data-on] .squish-switch__track {
+  background: var(--ss-track-on);
+}
+
+.squish-switch__thumb {
+  position: absolute;
+  top: var(--ss-inset);
+  left: 0;
+  width: var(--ss-thumb);
+  height: var(--ss-thumb);
+  border-radius: var(--ss-thumb-r);
+  background: var(--ss-thumb-color);
+  transition: background-color var(--ss-fade) ease;
+}
+
+.squish-switch[data-on] .squish-switch__thumb {
+  background: var(--ss-thumb-on);
+}
+
+.squish-switch__label {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .squish-switch__track,
+  .squish-switch__thumb {
+    transition-duration: 1ms;
+  }
+}

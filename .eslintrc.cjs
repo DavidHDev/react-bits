@@ -12,6 +12,7 @@ module.exports = {
   settings: { react: { version: '19.0' } },
   plugins: ['react-refresh'],
   rules: {
+    'no-empty': ['error', { allowEmptyCatch: true }],
     'react/prop-types': 'off',
     'react/jsx-no-target-blank': 'off',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }]

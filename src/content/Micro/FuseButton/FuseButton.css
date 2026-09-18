@@ -1,0 +1,232 @@
+.fuse-button {
+  --fb-ink: #f5f5f5;
+  --fb-bg: #27272a;
+  --fb-fuse: #f5a524;
+  --fb-fuse-h: 1.5px;
+  --fb-radius: 22px;
+  --fb-fade: 200ms;
+  --fb-press: 0.97;
+  --fb-h: 44px;
+  --fb-fs: 14px;
+  --fb-icon: 15px;
+  --fb-px: 20px;
+  --fb-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr);
+  height: var(--fb-h);
+  border-radius: var(--fb-radius);
+  background: var(--fb-bg);
+  color: var(--fb-ink);
+  font-family: inherit;
+  font-size: var(--fb-fs);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  isolation: isolate;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 160ms var(--fb-ease-out);
+}
+
+.fuse-button[data-pressed] {
+  transform: scale(var(--fb-press));
+}
+
+.fuse-button:has(:focus-visible) {
+  outline: 2px solid color-mix(in srgb, var(--fb-ink) 60%, transparent);
+  outline-offset: 3px;
+}
+
+.fuse-button__idle:focus-visible,
+.fuse-button__undo:focus-visible {
+  outline: none;
+}
+
+@supports not selector(:has(a)) {
+  .fuse-button__idle:focus-visible,
+  .fuse-button__undo:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--fb-ink) 60%, transparent);
+    outline-offset: -3px;
+  }
+}
+
+.fuse-button__face {
+  position: relative;
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0 var(--fb-px);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  filter: blur(2px);
+  visibility: hidden;
+  transition:
+    opacity var(--fb-fade) ease,
+    filter var(--fb-fade) ease,
+    visibility 0s linear var(--fb-fade),
+    background-color 160ms ease;
+}
+
+.fuse-button[data-phase='idle'] .fuse-button__idle,
+.fuse-button[data-phase='armed'] .fuse-button__undo,
+.fuse-button[data-phase='settled'] .fuse-button__settled {
+  opacity: 1;
+  filter: blur(0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.fuse-button[data-instant] .fuse-button__face {
+  transition-duration: 0s;
+}
+
+.fuse-button__idle:disabled,
+.fuse-button__settled {
+  cursor: default;
+}
+
+.fuse-button[data-phase='idle']:has(.fuse-button__idle:disabled) {
+  opacity: 0.55;
+}
+
+.fuse-button__icon {
+  display: inline-flex;
+  width: var(--fb-icon);
+  height: var(--fb-icon);
+}
+
+.fuse-button__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fuse-button__icon--undo {
+  transform: rotate(-70deg);
+  transition: transform var(--fb-fade) var(--fb-ease-out);
+}
+
+.fuse-button[data-phase='armed'] .fuse-button__icon--undo {
+  transform: rotate(0deg);
+}
+
+.fuse-button__fuse {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fb-fuse-h);
+  background: var(--fb-fuse);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--fb-fuse) 55%, transparent);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.fuse-button[data-fuse='top'] .fuse-button__fuse {
+  bottom: auto;
+  top: 0;
+}
+
+.fuse-button__rim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--fb-fuse) 60%, transparent));
+  transition: opacity var(--fb-fade) ease;
+}
+
+.fuse-button[data-phase='armed'] .fuse-button__rim {
+  opacity: 1;
+}
+
+.fuse-button[data-instant] .fuse-button__rim {
+  transition-duration: 0s;
+}
+
+.fuse-button__rim rect {
+  x: calc(var(--fb-fuse-h) / 2);
+  y: calc(var(--fb-fuse-h) / 2);
+  width: calc(100% - var(--fb-fuse-h));
+  height: calc(100% - var(--fb-fuse-h));
+  rx: max(0px, calc(var(--fb-radius) - var(--fb-fuse-h) / 2));
+  fill: none;
+  stroke: var(--fb-fuse);
+  stroke-width: var(--fb-fuse-h);
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+}
+
+.fuse-button__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fuse-button__idle:not(:disabled):hover,
+  .fuse-button__undo:hover {
+    background: color-mix(in srgb, var(--fb-ink) 7%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fuse-button[data-pressed] {
+    transform: none;
+  }
+
+  .fuse-button .fuse-button__face {
+    filter: none;
+    transition:
+      opacity var(--fb-fade) ease,
+      visibility 0s linear var(--fb-fade);
+  }
+
+  .fuse-button .fuse-button__icon--undo {
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .fuse-button {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fb-ink) 40%, transparent);
+  }
+}
+
+@media (forced-colors: active) {
+  .fuse-button__fuse {
+    background: Highlight;
+  }
+
+  .fuse-button__rim rect {
+    stroke: Highlight;
+  }
+}

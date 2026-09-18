@@ -1,5 +1,5 @@
 /**
- * @typedef {'Animations' | 'Backgrounds' | 'Components' | 'TextAnimations'} Category
+ * @typedef {'Animations' | 'Backgrounds' | 'Components' | 'TextAnimations' | 'Micro'} Category
  */
 /**
  * The supported code/component variants for the registry system.
@@ -1417,6 +1417,279 @@ export const componentMetadata = {
     name: 'PixelSnow',
     docsUrl: 'https://reactbits.dev/backgrounds/pixel-snow',
     tags: []
+  },
+
+  //! Micro ------------------------------------------------------------------------------------------------------------------------------------
+
+  'Micro/SquishSwitch': {
+    videoUrl: '/assets/video/squishswitch.webm',
+    description:
+      'Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.',
+    category: 'Micro',
+    name: 'SquishSwitch',
+    docsUrl: 'https://reactbits.dev/micro/squish-switch',
+    tags: ['switch', 'toggle', 'spring', 'drag', 'gesture', 'form']
+  },
+  'Micro/HoldButton': {
+    videoUrl: '/assets/video/holdbutton.webm',
+    description:
+      'Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.',
+    category: 'Micro',
+    name: 'HoldButton',
+    docsUrl: 'https://reactbits.dev/micro/hold-button',
+    tags: ['button', 'confirm', 'hold', 'press', 'destructive']
+  },
+  'Micro/PeekRating': {
+    videoUrl: '/assets/video/peekrating.webm',
+    description:
+      'Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.',
+    category: 'Micro',
+    name: 'PeekRating',
+    docsUrl: 'https://reactbits.dev/micro/peek-rating',
+    tags: ['rating', 'stars', 'hover', 'preview', 'feedback', 'form']
+  },
+  'Micro/SpringCheck': {
+    videoUrl: '/assets/video/springcheck.webm',
+    description:
+      'Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.',
+    category: 'Micro',
+    name: 'SpringCheck',
+    docsUrl: 'https://reactbits.dev/micro/spring-check',
+    tags: ['checkbox', 'toggle', 'form', 'spring', 'press', 'strikethrough']
+  },
+  'Micro/PulseHeart': {
+    videoUrl: '/assets/video/pulseheart.webm',
+    description:
+      'Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.',
+    category: 'Micro',
+    name: 'PulseHeart',
+    docsUrl: 'https://reactbits.dev/micro/pulse-heart',
+    tags: ['like', 'heart', 'button', 'reaction', 'counter', 'press']
+  },
+  'Micro/RubberSegment': {
+    videoUrl: '/assets/video/rubbersegment.webm',
+    description:
+      'Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.',
+    category: 'Micro',
+    name: 'RubberSegment',
+    docsUrl: 'https://reactbits.dev/micro/rubber-segment',
+    tags: ['segmented', 'tabs', 'drag', 'spring', 'clip-path', 'radio']
+  },
+  'Micro/SlideCommit': {
+    videoUrl: '/assets/video/slidecommit.webm',
+    description:
+      'Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.',
+    category: 'Micro',
+    name: 'SlideCommit',
+    docsUrl: 'https://reactbits.dev/micro/slide-commit',
+    tags: ['slide', 'confirm', 'async', 'gesture', 'drag', 'button']
+  },
+  'Micro/WarmTooltip': {
+    videoUrl: '/assets/video/warmtooltip.webm',
+    description:
+      'Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.',
+    category: 'Micro',
+    name: 'WarmTooltip',
+    docsUrl: 'https://reactbits.dev/micro/warm-tooltip',
+    tags: ['tooltip', 'hover', 'toolbar', 'delay', 'group', 'label']
+  },
+  'Micro/FuseButton': {
+    videoUrl: '/assets/video/fusebutton.webm',
+    description:
+      'Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.',
+    category: 'Micro',
+    name: 'FuseButton',
+    docsUrl: 'https://reactbits.dev/micro/fuse-button',
+    tags: ['button', 'undo', 'confirm', 'timer', 'press', 'fuse']
+  },
+  'Micro/ScrubField': {
+    videoUrl: '/assets/video/scrubfield.webm',
+    description:
+      'Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.',
+    category: 'Micro',
+    name: 'ScrubField',
+    docsUrl: 'https://reactbits.dev/micro/scrub-field',
+    tags: ['input', 'number', 'drag', 'scrub', 'form', 'inspector']
+  },
+  'Micro/LatticeLoader': {
+    videoUrl: '/assets/video/latticeloader.webm',
+    description:
+      'Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.',
+    category: 'Micro',
+    name: 'LatticeLoader',
+    docsUrl: 'https://reactbits.dev/micro/lattice-loader',
+    tags: ['loader', 'status', 'ai', 'agent', 'timer', 'grid']
+  },
+  'Micro/DodgeField': {
+    videoUrl: '/assets/video/dodgefield.webm',
+    description:
+      'Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.',
+    category: 'Micro',
+    name: 'DodgeField',
+    docsUrl: 'https://reactbits.dev/micro/dodge-field',
+    tags: ['hover', 'pointer', 'playful', 'wrapper', 'button', 'magnet']
+  },
+  'Micro/CodeSlots': {
+    videoUrl: '/assets/video/codeslots.webm',
+    description:
+      'One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.',
+    category: 'Micro',
+    name: 'CodeSlots',
+    docsUrl: 'https://reactbits.dev/micro/code-slots',
+    tags: ['input', 'otp', 'form', 'spring', 'code']
+  },
+  'Micro/WakeSlider': {
+    videoUrl: '/assets/video/wakeslider.webm',
+    description:
+      'Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.',
+    category: 'Micro',
+    name: 'WakeSlider',
+    docsUrl: 'https://reactbits.dev/micro/wake-slider',
+    tags: ['slider', 'range', 'input', 'drag', 'bars', 'velocity']
+  },
+  'Micro/CometDial': {
+    videoUrl: '/assets/video/cometdial.webm',
+    description:
+      'Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.',
+    category: 'Micro',
+    name: 'CometDial',
+    docsUrl: 'https://reactbits.dev/micro/comet-dial',
+    tags: ['dial', 'knob', 'gauge', 'drag', 'spring', 'input']
+  },
+  'Micro/JellyRadio': {
+    videoUrl: '/assets/video/jellyradio.webm',
+    description:
+      'Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.',
+    category: 'Micro',
+    name: 'JellyRadio',
+    docsUrl: 'https://reactbits.dev/micro/jelly-radio',
+    tags: ['radio', 'select', 'chips', 'spring', 'form', 'segmented']
+  },
+  'Micro/SwipeRow': {
+    videoUrl: '/assets/video/swiperow.webm',
+    description:
+      'List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.',
+    category: 'Micro',
+    name: 'SwipeRow',
+    docsUrl: 'https://reactbits.dev/micro/swipe-row',
+    tags: ['swipe', 'list', 'gesture', 'delete', 'drag']
+  },
+  'Micro/GlideSelect': {
+    videoUrl: '/assets/video/glideselect.webm',
+    description:
+      'Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.',
+    category: 'Micro',
+    name: 'GlideSelect',
+    docsUrl: 'https://reactbits.dev/micro/glide-select',
+    tags: ['select', 'dropdown', 'menu', 'popover', 'hover', 'form', 'keyboard']
+  },
+  'Micro/StatusMark': {
+    videoUrl: '/assets/video/statusmark.webm',
+    description:
+      'A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.',
+    category: 'Micro',
+    name: 'StatusMark',
+    docsUrl: 'https://reactbits.dev/micro/status-mark',
+    tags: ['status', 'progress', 'spinner', 'check', 'ai', 'agent', 'task', 'svg']
+  },
+  'Micro/CallChip': {
+    videoUrl: '/assets/video/callchip.webm',
+    description:
+      'Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.',
+    category: 'Micro',
+    name: 'CallChip',
+    docsUrl: 'https://reactbits.dev/micro/call-chip',
+    tags: ['chip', 'status', 'ai', 'agent', 'tool-call', 'progress', 'timer']
+  },
+  'Micro/BellToggle': {
+    videoUrl: '/assets/video/belltoggle.webm',
+    description:
+      'Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.',
+    category: 'Micro',
+    name: 'BellToggle',
+    docsUrl: 'https://reactbits.dev/micro/bell-toggle',
+    tags: ['toggle', 'button', 'bell', 'notify', 'press', 'spring']
+  },
+  'Micro/SlingButton': {
+    videoUrl: '/assets/video/slingbutton.webm',
+    description:
+      'Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick\'s velocity.',
+    category: 'Micro',
+    name: 'SlingButton',
+    docsUrl: 'https://reactbits.dev/micro/sling-button',
+    tags: ['button', 'send', 'slingshot', 'drag', 'gesture', 'spring']
+  },
+  'Micro/SwipeToast': {
+    videoUrl: '/assets/video/swipetoast.webm',
+    description:
+      'Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.',
+    category: 'Micro',
+    name: 'SwipeToast',
+    docsUrl: 'https://reactbits.dev/micro/swipe-toast',
+    tags: ['toast', 'notification', 'swipe', 'drag', 'timer', 'undo']
+  },
+  'Micro/PromptBar': {
+    videoUrl: '/assets/video/promptbar.webm',
+    description:
+      'Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.',
+    category: 'Micro',
+    name: 'PromptBar',
+    docsUrl: 'https://reactbits.dev/micro/prompt-bar',
+    tags: ['composer', 'prompt', 'chat', 'ai', 'input', 'send', 'stop', 'menu', 'mention', 'command']
+  },
+  'Micro/SloshGauge': {
+    videoUrl: '/assets/video/sloshgauge.webm',
+    description:
+      'Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.',
+    category: 'Micro',
+    name: 'SloshGauge',
+    docsUrl: 'https://reactbits.dev/micro/slosh-gauge',
+    tags: ['gauge', 'meter', 'progress', 'liquid', 'spring', 'physics', 'slider']
+  },
+  'Micro/VoicePill': {
+    videoUrl: '/assets/video/voicepill.webm',
+    description:
+      'Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.',
+    category: 'Micro',
+    name: 'VoicePill',
+    docsUrl: 'https://reactbits.dev/micro/voice-pill',
+    tags: ['mic', 'voice', 'dictation', 'equalizer', 'press', 'ai']
+  },
+  'Micro/ThoughtLine': {
+    videoUrl: '/assets/video/thoughtline.webm',
+    description:
+      'Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into "Thought for 4.2s" through a blur crossfade and the trace folds into it.',
+    category: 'Micro',
+    name: 'ThoughtLine',
+    docsUrl: 'https://reactbits.dev/micro/thought-line',
+    tags: ['ai', 'agent', 'status', 'reasoning', 'timer', 'text', 'trace']
+  },
+  'Micro/RefineFrame': {
+    videoUrl: '/assets/video/refineframe.webm',
+    description:
+      'Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.',
+    category: 'Micro',
+    name: 'RefineFrame',
+    docsUrl: 'https://reactbits.dev/micro/refine-frame',
+    tags: ['ai', 'image', 'generation', 'loading', 'progressive', 'media', 'status']
+  },
+  'Micro/FolderFloat': {
+    videoUrl: '/assets/video/folderfloat.webm',
+    description:
+      'Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.',
+    category: 'Micro',
+    name: 'FolderFloat',
+    docsUrl: 'https://reactbits.dev/micro/folder-float',
+    tags: ['folder', 'menu', 'hover', 'select', 'float', 'spring', 'files']
+  },
+  'Micro/BranchedMenu': {
+    videoUrl: '/assets/video/branchedmenu.webm',
+    description:
+      'Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.',
+    category: 'Micro',
+    name: 'BranchedMenu',
+    docsUrl: 'https://reactbits.dev/micro/branched-menu',
+    tags: ['menu', 'navigation', 'sidebar', 'tree', 'collapsible', 'line', 'active']
   }
 };
 

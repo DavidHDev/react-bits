@@ -1,0 +1,201 @@
+.slide-commit {
+  --sc-track: #262626;
+  --sc-ink: #f5f5f5;
+  --sc-ok: #22c55e;
+  --sc-no: #e5484d;
+  --sc-on-ink: #111111;
+  --sc-on-ok: #111111;
+  --sc-on-no: #ffffff;
+  --sc-radius: 28px;
+  --sc-grip-r: 24px;
+  --sc-pad: 4px;
+  --sc-font: 14px;
+
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: inherit;
+}
+
+.slide-commit[data-disabled] {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.slide-commit__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--sc-radius);
+  background: var(--sc-track);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slide-commit[data-held] .slide-commit__track {
+  cursor: grabbing;
+}
+
+.slide-commit[data-phase='pending'] .slide-commit__track,
+.slide-commit[data-phase='done'] .slide-commit__track {
+  cursor: default;
+}
+
+.slide-commit__label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-size: var(--sc-font);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.006em;
+  white-space: nowrap;
+}
+
+.slide-commit__text {
+  grid-area: 1 / 1;
+  color: color-mix(in srgb, var(--sc-ink) 45%, transparent);
+  transition:
+    opacity 200ms ease,
+    filter 200ms ease;
+}
+
+.slide-commit__text--error {
+  color: var(--sc-no);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.slide-commit[data-phase='error'] .slide-commit__text--plain {
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.slide-commit[data-phase='error'] .slide-commit__text--error {
+  opacity: 1;
+  filter: none;
+}
+
+.slide-commit__capsule {
+  position: absolute;
+  top: var(--sc-pad);
+  left: var(--sc-pad);
+  width: calc(100% - var(--sc-pad) * 2);
+  height: calc(100% - var(--sc-pad) * 2);
+  background: var(--sc-ink);
+  color: var(--sc-on-ink);
+  outline: none;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.slide-commit[data-phase='done'] .slide-commit__capsule {
+  background: var(--sc-ok);
+  color: var(--sc-on-ok);
+}
+
+.slide-commit[data-phase='error'] .slide-commit__capsule {
+  background: var(--sc-no);
+  color: var(--sc-on-no);
+}
+
+.slide-commit__capsule:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--sc-track);
+}
+
+.slide-commit__content {
+  position: absolute;
+  inset: 0;
+}
+
+.slide-commit__arrow,
+.slide-commit__spin,
+.slide-commit__done {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+  font-size: var(--sc-font);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.006em;
+  white-space: nowrap;
+}
+
+.slide-commit__arrow svg,
+.slide-commit__done svg,
+.slide-commit__spinner {
+  display: block;
+}
+
+.slide-commit__arrow,
+.slide-commit__spin {
+  transition: filter 200ms ease;
+}
+
+.slide-commit[data-phase='pending'] .slide-commit__arrow {
+  filter: blur(2px);
+}
+
+.slide-commit:not([data-phase='pending']) .slide-commit__spin {
+  filter: blur(2px);
+}
+
+.slide-commit__spinner {
+  animation: slide-commit-spin 1s linear infinite;
+  animation-play-state: paused;
+}
+
+.slide-commit[data-phase='pending'] .slide-commit__spinner {
+  animation-play-state: running;
+}
+
+@keyframes slide-commit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.slide-commit__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-commit__spinner {
+    animation: slide-commit-breathe 1.4s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+
+  .slide-commit[data-phase='pending'] .slide-commit__spinner {
+    animation-play-state: running;
+  }
+
+  @keyframes slide-commit-breathe {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.4;
+    }
+  }
+}
