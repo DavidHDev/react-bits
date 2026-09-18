@@ -30,6 +30,17 @@ html {
   background: var(--bg-body);
 }
 
+::selection {
+  background: rgba(168, 85, 247, 0.42);
+  color: #ffffff;
+  text-shadow: none;
+}
+
+:root[data-theme='light'] ::selection {
+  background: rgba(143, 54, 232, 0.22);
+  color: #18181b;
+}
+
 input[type='color'] {
   border: 2px solid #999;
   border-radius: 15px;
