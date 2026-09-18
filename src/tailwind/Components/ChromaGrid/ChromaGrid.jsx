@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 
-const ChromaGrid = ({ items, className = '', radius = 300, damping = 0.45, fadeOut = 0.6, ease = 'power3.out' }) => {
+const ChromaGrid = ({ items, className = '', radius = 300, columns = 3, rows = 2, damping = 0.45, fadeOut = 0.6, ease = 'power3.out' }) => {
   const rootRef = useRef(null);
   const fadeRef = useRef(null);
   const setX = useRef(null);
@@ -122,11 +122,19 @@ const ChromaGrid = ({ items, className = '', radius = 300, damping = 0.45, fadeO
       ref={rootRef}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
-      className={`relative w-full h-full flex flex-wrap justify-center items-start gap-3 ${className}`}
+      className={`relative w-full h-full grid justify-center gap-3 ${className}`}
       style={{
         '--r': `${radius}px`,
+        '--cols': columns,
+        '--rows': rows,
         '--x': '50%',
-        '--y': '50%'
+        '--y': '50%',
+        gridTemplateColumns: `repeat(${columns}, 320px)`,
+        gridAutoRows: 'auto',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '1rem',
+        boxSizing: 'border-box'
       }}
     >
       {data.map((c, i) => (

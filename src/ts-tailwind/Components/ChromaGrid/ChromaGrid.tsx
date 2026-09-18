@@ -16,6 +16,8 @@ export interface ChromaGridProps {
   items?: ChromaItem[];
   className?: string;
   radius?: number;
+  columns?: number;
+  rows?: number;
   damping?: number;
   fadeOut?: number;
   ease?: string;
@@ -27,6 +29,8 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
   items,
   className = '',
   radius = 300,
+  columns = 3,
+  rows = 2,
   damping = 0.45,
   fadeOut = 0.6,
   ease = 'power3.out'
@@ -151,12 +155,20 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
       ref={rootRef}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
-      className={`relative w-full h-full flex flex-wrap justify-center items-start gap-3 ${className}`}
+      className={`relative w-full h-full grid justify-center gap-3 ${className}`}
       style={
         {
           '--r': `${radius}px`,
+          '--cols': columns,
+          '--rows': rows,
           '--x': '50%',
-          '--y': '50%'
+          '--y': '50%',
+          gridTemplateColumns: `repeat(${columns}, 320px)`,
+          gridAutoRows: 'auto',
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '1rem',
+          boxSizing: 'border-box'
         } as React.CSSProperties
       }
     >
