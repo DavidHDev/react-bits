@@ -608,6 +608,11 @@ export default function ASCIIText({
           z-index: 9;
           mix-blend-mode: difference;
         }
+
+        /* Invert colors after rendering the effect if in light mode */
+        :root[data-theme='light'] .ascii-text-container {
+          filter: invert(1);
+        }
       `}</style>
     </div>
   );

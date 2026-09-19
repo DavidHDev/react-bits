@@ -14,7 +14,6 @@ import PreviewInput from '../../components/common/Preview/PreviewInput';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
-import { useColorModeValue } from '../../components/setup/color-mode';
 
 import ASCIIText from '@content/TextAnimations/ASCIIText/ASCIIText';
 import { asciiText } from '../../constants/code/TextAnimations/asciiTextCode';
@@ -75,7 +74,6 @@ const ASCIITextDemo = () => {
   const { text, enableWaves, asciiFontSize } = props;
 
   const [key, forceRerender] = useForceRerender();
-  const textColor = useColorModeValue('#18181b', '#fdf9f3');
   const dependencyList = useMemo(() => ['three'], []);
 
   useEffect(() => {
@@ -94,7 +92,6 @@ const ASCIITextDemo = () => {
               asciiFontSize={asciiFontSize}
               textFontSize={250}
               planeBaseHeight={12}
-              textColor={textColor}
             />
           </Box>
 
