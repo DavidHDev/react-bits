@@ -88,7 +88,7 @@ export default function TearTicket({
   notch = 3,
   roughness = 0,
   tearAngle = 30,
-  stretch = 6,
+  stretch = 30,
   resistance = 0.45,
   rotate = 4,
   tilt = true,

@@ -33,7 +33,7 @@ const DEFAULT_PROPS = {
   notch: 3,
   roughness: 0,
   tearAngle: 30,
-  stretch: 6,
+  stretch: 30,
   resistance: 0.45,
   rotate: 4,
   tilt: true,
@@ -258,7 +258,7 @@ const TearTicketDemo = () => {
       {
         name: 'stretch',
         type: 'number',
-        default: '6',
+        default: '30',
         description:
           'How far a paper bridge stretches before it snaps, in px. Bridges far from the hinge reach it first.'
       },
@@ -474,8 +474,8 @@ const TearTicketDemo = () => {
             <PreviewSlider
               title="Stretch"
               min={2}
-              max={30}
-              step={0.5}
+              max={60}
+              step={1}
               value={stretch}
               valueUnit="px"
               onChange={val => updateProp('stretch', val)}
