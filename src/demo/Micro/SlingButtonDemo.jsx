@@ -30,6 +30,8 @@ const DEFAULT_PROPS = {
   launchSpeed: 2600,
   recoil: 0.2,
   flight: 120,
+  particles: 14,
+  spread: 60,
   axis: 'any',
   tapSends: true,
   disabled: false
@@ -56,6 +58,8 @@ const SlingButtonDemo = () => {
     launchSpeed,
     recoil,
     flight,
+    particles,
+    spread,
     axis,
     tapSends,
     disabled
@@ -125,7 +129,25 @@ const SlingButtonDemo = () => {
           'Speed the band adds on release, in pixels per second. Sets how far the pad snaps through its seat.'
       },
       { name: 'recoil', type: 'number', default: '0.2', description: 'Bounce of the return spring. 0 stops dead.' },
-      { name: 'flight', type: 'number', default: '120', description: 'How far the dot flies, in pixels.' },
+      {
+        name: 'flight',
+        type: 'number',
+        default: '120',
+        description: 'How far the lead particle flies, in pixels. The rest scatter around that distance.'
+      },
+      {
+        name: 'particles',
+        type: 'number',
+        default: '14',
+        description:
+          'How many particles a launch throws. Each gets a random angle, reach, size, drift, speed and delay. 1 is a single dot, 0 is none.'
+      },
+      {
+        name: 'spread',
+        type: 'number',
+        default: '60',
+        description: 'The cone the burst fans across, in degrees, centred on the launch direction.'
+      },
       {
         name: 'axis',
         type: '"any" | "horizontal" | "vertical"',
@@ -172,6 +194,8 @@ const SlingButtonDemo = () => {
               launchSpeed={launchSpeed}
               recoil={recoil}
               flight={flight}
+              particles={particles}
+              spread={spread}
               axis={axis}
               tapSends={tapSends}
               disabled={disabled}
@@ -278,6 +302,23 @@ const SlingButtonDemo = () => {
               value={flight}
               valueUnit="px"
               onChange={val => updateProp('flight', val)}
+            />
+            <PreviewSlider
+              title="Particles"
+              min={0}
+              max={80}
+              step={1}
+              value={particles}
+              onChange={val => updateProp('particles', val)}
+            />
+            <PreviewSlider
+              title="Spread"
+              min={0}
+              max={180}
+              step={5}
+              value={spread}
+              valueUnit="°"
+              onChange={val => updateProp('spread', val)}
             />
             <PreviewSelect
               title="Axis"

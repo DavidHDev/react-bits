@@ -132,6 +132,7 @@ export default function PromptBar({
   color = '#f5f5f5',
   menuBackground = '#323236',
   sparkColor = '#b39dff',
+  sparkBoost = 1,
   width = 400,
   radius = 16,
   maxRows = 5,
@@ -146,6 +147,9 @@ export default function PromptBar({
   const inputRef = useRef(null);
   const glowRef = useRef(null);
   const sparkRef = useRef(null);
+  const typing = useRef({ energy: 0, strokes: 0 });
+  const boost = useRef(sparkBoost);
+  boost.current = sparkBoost;
   const rowRefs = useRef([]);
   const lastOpen = useRef(null);
   const dictation = useRef(0);
@@ -243,11 +247,14 @@ export default function PromptBar({
     if (!maxed || reduce || !canvas) return undefined;
     const ctx = canvas.getContext('2d');
     if (!ctx) return undefined;
+    typing.current.strokes = 0;
     let raf = 0;
     let last = performance.now();
     let w = 0;
     let h = 0;
     let due = 0;
+    let speed = 1;
+    let pulse = 0;
     const parts = [];
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -273,6 +280,16 @@ export default function PromptBar({
     const tick = now => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
+      const typed = typing.current;
+      const gain = boost.current;
+      typed.energy *= Math.exp(-dt / 0.8);
+      pulse *= Math.exp(-dt / 0.16);
+      if (typed.strokes > 0) {
+        typed.strokes = 0;
+        if (gain > 0) pulse = 1;
+      }
+      const energy = typed.energy * gain;
+      speed += (1 + energy * 6 - speed) * (1 - Math.exp(-dt / 0.15));
       due += dt;
       while (due > 0.14) {
         due -= 0.14;
@@ -281,7 +298,7 @@ export default function PromptBar({
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = sparkColor;
       ctx.shadowColor = sparkColor;
-      ctx.shadowBlur = 6;
+      ctx.shadowBlur = 6 + energy * 10 + pulse * 6;
       for (let i = parts.length - 1; i >= 0; i -= 1) {
         const p = parts[i];
         p.life += dt;
@@ -290,11 +307,22 @@ export default function PromptBar({
           continue;
         }
         const k = p.life / p.span;
-        const twinkle = 0.7 + 0.3 * Math.sin(now / 160 + p.phase);
-        p.y += p.vy * dt;
-        ctx.globalAlpha = Math.sin(k * Math.PI) * 0.9 * twinkle;
+        const twinkle = 0.7 + 0.3 * Math.sin((now / 160) * (1 + energy) + p.phase);
+        p.y += p.vy * dt * speed;
+        if (p.y < -4) {
+          p.y = h + 3;
+          p.x = Math.random() * w;
+        }
+        const edge = Math.min(1, Math.max(0, p.y / 14), Math.max(0, (h - p.y) / 14));
+        ctx.globalAlpha = Math.min(1, Math.sin(k * Math.PI) * (0.9 + energy * 0.25) * twinkle) * edge;
         ctx.beginPath();
-        ctx.arc(p.x + Math.sin(now / 900 + p.phase) * p.sway, p.y, p.r * twinkle, 0, Math.PI * 2);
+        ctx.arc(
+          p.x + Math.sin((now / 900) * (1 + energy * 0.8) + p.phase) * p.sway,
+          p.y,
+          p.r * twinkle * (1 + energy * 0.35),
+          0,
+          Math.PI * 2
+        );
         ctx.fill();
       }
       raf = requestAnimationFrame(tick);
@@ -572,6 +600,8 @@ export default function PromptBar({
           aria-label="Prompt"
           onChange={e => {
             setDraft(e.target.value);
+            typing.current.energy = Math.min(1.6, typing.current.energy + 0.22);
+            typing.current.strokes = Math.min(4, typing.current.strokes + 1);
             setDismissed(false);
             closeMenus();
             setActive(0);

@@ -22,6 +22,8 @@ export const slingButton = {
   launchSpeed={2600}
   recoil={0.2}
   flight={120}
+  particles={14}
+  spread={60}
   axis="any"
   tapSends
 />`,

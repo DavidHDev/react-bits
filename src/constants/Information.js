@@ -1690,6 +1690,24 @@ export const componentMetadata = {
     name: 'BranchedMenu',
     docsUrl: 'https://reactbits.dev/micro/branched-menu',
     tags: ['menu', 'navigation', 'sidebar', 'tree', 'collapsible', 'line', 'active']
+  },
+  'Micro/FlipCard': {
+    videoUrl: '/assets/video/flipcard.webm',
+    description:
+      'Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.',
+    category: 'Micro',
+    name: 'FlipCard',
+    docsUrl: 'https://reactbits.dev/micro/flip-card',
+    tags: ['card', 'flip', '3d', 'tilt', 'drag', 'spring', 'hover', 'two-sided']
+  },
+  'Micro/TearTicket': {
+    videoUrl: '/assets/video/tearticket.webm',
+    description:
+      'Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.',
+    category: 'Micro',
+    name: 'TearTicket',
+    docsUrl: 'https://reactbits.dev/micro/tear-ticket',
+    tags: ['ticket', 'tear', 'perforation', 'stub', 'coupon', 'pass', 'drag', 'parallax', 'tilt']
   }
 };
 

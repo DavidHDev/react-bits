@@ -41,6 +41,7 @@ const send = async (text, { attachments, model, effort }) => {
   color="#f5f5f5"
   menuBackground="#323236"
   sparkColor="#b39dff"
+  sparkBoost={1}
   width={400}
   radius={16}
   maxRows={5}

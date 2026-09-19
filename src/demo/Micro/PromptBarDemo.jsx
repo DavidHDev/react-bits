@@ -23,6 +23,7 @@ const DEFAULT_PROPS = {
   color: '#f5f5f5',
   menuBackground: '#323236',
   sparkColor: '#b39dff',
+  sparkBoost: 1,
   width: 400,
   radius: 16,
   maxRows: 5,
@@ -49,6 +50,7 @@ const PromptBarDemo = () => {
     color,
     menuBackground,
     sparkColor,
+    sparkBoost,
     width,
     radius,
     maxRows,
@@ -181,6 +183,13 @@ const PromptBarDemo = () => {
         default: '"#b39dff"',
         description: 'The wash, the sparks and the slider at the top effort.'
       },
+      {
+        name: 'sparkBoost',
+        type: 'number',
+        default: '1',
+        description:
+          'How strongly typing drives the sparks at the top effort: they rise faster, grow and glow brighter with typing speed, and flash on each keystroke. No sparks are added. 0 keeps them calm.'
+      },
       { name: 'width', type: 'number', default: '400', description: 'Field width in px, capped at the parent.' },
       { name: 'radius', type: 'number', default: '16', description: 'Field corner radius in px.' },
       { name: 'maxRows', type: 'number', default: '5', description: 'Rows the field grows to before it scrolls.' },
@@ -234,6 +243,7 @@ const PromptBarDemo = () => {
               color={renderedColor}
               menuBackground={renderedMenu}
               sparkColor={sparkColor}
+              sparkBoost={sparkBoost}
               width={width}
               radius={radius}
               maxRows={maxRows}
@@ -266,6 +276,14 @@ const PromptBarDemo = () => {
               title="Spark"
               color={sparkColor}
               onChange={val => updateProp('sparkColor', val)}
+            />
+            <PreviewSlider
+              title="Spark Boost"
+              min={0}
+              max={2}
+              step={0.1}
+              value={sparkBoost}
+              onChange={val => updateProp('sparkBoost', val)}
             />
             <PreviewSlider
               title="Width"

@@ -158,7 +158,9 @@ const micro = {
   'thought-line': () => import('../demo/Micro/ThoughtLineDemo'),
   'refine-frame': () => import('../demo/Micro/RefineFrameDemo'),
   'folder-float': () => import('../demo/Micro/FolderFloatDemo'),
-  'branched-menu': () => import('../demo/Micro/BranchedMenuDemo')
+  'branched-menu': () => import('../demo/Micro/BranchedMenuDemo'),
+  'flip-card': () => import('../demo/Micro/FlipCardDemo'),
+  'tear-ticket': () => import('../demo/Micro/TearTicketDemo')
 };
 
 const backgrounds = {

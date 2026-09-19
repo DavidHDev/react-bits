@@ -37,6 +37,8 @@ export default function SlingButton({
   launchSpeed = 2600,
   recoil = 0.2,
   flight = 120,
+  particles = 14,
+  spread = 60,
   axis = 'any',
   tapSends = true,
   disabled = false,
@@ -47,9 +49,11 @@ export default function SlingButton({
   const R = maxPull;
   const ARM = Math.min(armAt, 0.8 * R);
   const wellR = size / 2 + GAP + strokeWidth;
+  const padR = size / 2 - strokeWidth / 2;
   const arcR = wellR;
   const H = wellR + strokeWidth + 2;
   const DOT = Math.max(6, Math.round(size / 7));
+  const count = Math.max(0, Math.round(particles));
   const [held, setHeld] = useState(false);
   const [armed, setArmed] = useState(false);
   const [sent, setSent] = useState(false);
@@ -59,7 +63,8 @@ export default function SlingButton({
   const bandRef = useRef(null);
   const hotRef = useRef(null);
   const arcRef = useRef(null);
-  const dotRef = useRef(null);
+  const dotRefs = useRef([]);
+  const power = useRef(0);
   const iconRef = useRef(null);
   const grip = useRef(null);
   const dir = useRef({ ux: 0, uy: -1 });
@@ -79,31 +84,40 @@ export default function SlingButton({
   const launchDot = () => {
     dotPending.current = false;
     clearTimeout(dotTimer.current);
-    const dot = dotRef.current;
-    if (!dot) return;
     const { ux, uy } = dir.current;
     relaxIcon();
-    const from = wellR;
-    const to = wellR + flight;
-    dot.animate(
-      [
-        { transform: `translate(${-ux * from}px, ${-uy * from}px) scale(1)` },
-        { transform: `translate(${-ux * to}px, ${-uy * to}px) scale(0.6)` }
-      ],
-      { duration: DOT_MS, easing: EASE_OUT, fill: 'none' }
-    );
-    dot.animate(
-      [
-        { opacity: 1, offset: 0 },
-        { opacity: 1, offset: 0.6 },
-        { opacity: 0, offset: 1 }
-      ],
-      {
-        duration: DOT_MS,
-        easing: 'linear',
-        fill: 'none'
-      }
-    );
+    const base = Math.atan2(-uy, -ux);
+    const cone = (spread * Math.PI) / 180;
+    const push = 0.85 + 0.35 * power.current;
+    dotRefs.current.forEach((dot, i) => {
+      if (!dot) return;
+      const lead = i === 0;
+      const angle = base + (lead ? 0 : (Math.random() + Math.random() - 1) * (cone / 2));
+      const cx = Math.cos(angle);
+      const cy = Math.sin(angle);
+      const reach = (lead ? flight : flight * (0.3 + Math.random())) * push;
+      const drift = lead ? 0 : (Math.random() - 0.5) * flight * 0.4;
+      const scale = lead ? 1 : 0.3 + Math.random() * 0.6;
+      const shrink = lead ? 0.6 : scale * (0.2 + Math.random() * 0.4);
+      const duration = lead ? DOT_MS : DOT_MS * (0.7 + Math.random());
+      const delay = lead ? 0 : Math.random() * 70;
+      const to = wellR + reach;
+      dot.animate(
+        [
+          { transform: `translate(${cx * wellR}px, ${cy * wellR}px) scale(${scale})` },
+          { transform: `translate(${cx * to - cy * drift}px, ${cy * to + cx * drift}px) scale(${shrink})` }
+        ],
+        { duration, delay, easing: EASE_OUT, fill: 'none' }
+      );
+      dot.animate(
+        [
+          { opacity: 1, offset: 0 },
+          { opacity: 1, offset: 0.55 },
+          { opacity: 0, offset: 1 }
+        ],
+        { duration, delay, easing: 'linear', fill: 'none' }
+      );
+    });
   };
 
   const aimIcon = (ux, uy, dist) => {
@@ -136,20 +150,17 @@ export default function SlingButton({
     let d = '';
     if (dist > 0.5) {
       const a = Math.atan2(y, x);
-      const b = Math.acos(clamp((wellR - size / 2) / dist, -1, 1));
+      const b = Math.acos(clamp((wellR - padR) / dist, -1, 1));
       d = [a + b, a - b]
         .map(t => {
           const cx = Math.cos(t);
           const cy = Math.sin(t);
-          return `M${(wellR * cx).toFixed(2)},${(wellR * cy).toFixed(2)}L${(x + (size / 2) * cx).toFixed(2)},${(y + (size / 2) * cy).toFixed(2)}`;
+          return `M${(wellR * cx).toFixed(2)},${(wellR * cy).toFixed(2)}L${(x + padR * cx).toFixed(2)},${(y + padR * cy).toFixed(2)}`;
         })
         .join('');
     }
-    const w = strokeWidth * (1 - 0.3 * p);
     band.setAttribute('d', d);
     hot.setAttribute('d', d);
-    band.setAttribute('stroke-width', String(w));
-    hot.setAttribute('stroke-width', String(w));
     hot.style.opacity = String(p);
     fx.style.opacity = String(clamp(proj / 6, 0, 1));
     arc.setAttribute('stroke-dasharray', `${p} ${1 - p}`);
@@ -295,6 +306,7 @@ export default function SlingButton({
           setSent(true);
           setTimeout(() => setSent(false), 200);
         } else {
+          power.current = clamp((Math.min(p, POWER_CAP) - 1) / (POWER_CAP - 1), 0, 1);
           dotPending.current = true;
           dotTimer.current = setTimeout(launchDot, 150);
         }
@@ -338,8 +350,14 @@ export default function SlingButton({
         aria-hidden="true"
       >
         <g ref={fxRef} className="sling-button__tension" style={{ opacity: 0 }}>
-          <path ref={bandRef} className="fill-none [stroke:var(--sl-band)] [stroke-linecap:round]" />
-          <path ref={hotRef} className="fill-none [stroke:var(--sl-accent)] [stroke-linecap:round]" />
+          <path
+            ref={bandRef}
+            className="fill-none [stroke:var(--sl-band)] [stroke-linecap:round] [stroke-width:var(--sl-stroke)] [transition:stroke-width_160ms_cubic-bezier(0.23,1,0.32,1)] group-data-[armed]/root:[stroke-width:calc(var(--sl-stroke)*1.5)]"
+          />
+          <path
+            ref={hotRef}
+            className="fill-none [stroke:var(--sl-accent)] [stroke-linecap:round] [stroke-width:var(--sl-stroke)] [transition:stroke-width_160ms_cubic-bezier(0.23,1,0.32,1)] group-data-[armed]/root:[stroke-width:calc(var(--sl-stroke)*1.5)]"
+          />
         </g>
         <circle
           className="[fill:var(--sl-well)] [transition:fill_200ms_ease] group-data-[sent]/root:[fill:var(--sl-accent)]"
@@ -354,11 +372,16 @@ export default function SlingButton({
           style={{ opacity: 0 }}
         />
       </svg>
-      <span
-        ref={dotRef}
-        className="pointer-events-none absolute top-1/2 left-1/2 rounded-full opacity-0 [width:var(--sl-dot)] [height:var(--sl-dot)] [margin:calc(var(--sl-dot)/-2)_0_0_calc(var(--sl-dot)/-2)] [background:var(--sl-accent)]"
-        aria-hidden="true"
-      />
+      {Array.from({ length: count }, (_, i) => (
+        <span
+          key={i}
+          ref={el => {
+            dotRefs.current[i] = el;
+          }}
+          className="pointer-events-none absolute top-1/2 left-1/2 rounded-full opacity-0 [width:var(--sl-dot)] [height:var(--sl-dot)] [margin:calc(var(--sl-dot)/-2)_0_0_calc(var(--sl-dot)/-2)] [background:var(--sl-accent)]"
+          aria-hidden="true"
+        />
+      ))}
       <motion.span className="absolute inset-0" style={{ transform: padT }}>
         <button
           ref={padRef}

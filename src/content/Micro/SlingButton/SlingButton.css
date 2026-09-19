@@ -40,7 +40,13 @@
 .sling-button__band {
   fill: none;
   stroke: var(--sl-band);
+  stroke-width: var(--sl-stroke);
   stroke-linecap: round;
+  transition: stroke-width 160ms var(--sl-ease-out);
+}
+
+.sling-button[data-armed] .sling-button__band {
+  stroke-width: calc(var(--sl-stroke) * 1.5);
 }
 
 .sling-button__band--hot {
