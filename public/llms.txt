@@ -155,6 +155,10 @@ Notes:
 - [Stepper](https://www.reactbits.dev/components/stepper): Animated multi-step progress indicator with active state transitions. CLI: `Stepper`.
 - [Tilted Card](https://www.reactbits.dev/components/tilted-card): 3D perspective tilt card reacting to pointer. CLI: `TiltedCard`.
 
+## Micro
+
+- [Paper Crumple](https://www.reactbits.dev/micro/paper-crumple): An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows. CLI: `PaperCrumple`.
+
 ## Backgrounds
 
 - [Acid Squares](https://www.reactbits.dev/backgrounds/acid-squares): A crystalline corridor of stacked squares receding into depth. CLI: `AcidSquares`.

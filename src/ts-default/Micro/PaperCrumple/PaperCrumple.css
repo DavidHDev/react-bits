@@ -1,0 +1,86 @@
+.paper-crumple {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.paper-crumple-canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.paper-crumple-fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--pc-image-width, 60%);
+  height: var(--pc-image-height, 72%);
+  user-select: none;
+  pointer-events: none;
+}
+
+.paper-crumple-hit {
+  appearance: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 2px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: grab;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.paper-crumple-hit[data-held='true'] {
+  cursor: grabbing;
+}
+
+.paper-crumple-hit:focus,
+.paper-crumple-hit:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.paper-crumple-focus {
+  position: absolute;
+  bottom: 24px;
+  left: calc(50% - 2px);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.paper-crumple-hit:not([data-pointer='true']):focus-visible + .paper-crumple-focus {
+  opacity: 0.55;
+}
+
+.paper-crumple-hit:disabled {
+  cursor: default;
+}
+
+.paper-crumple-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

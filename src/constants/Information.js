@@ -1708,6 +1708,15 @@ export const componentMetadata = {
     name: 'TearTicket',
     docsUrl: 'https://reactbits.dev/micro/tear-ticket',
     tags: ['ticket', 'tear', 'perforation', 'stub', 'coupon', 'pass', 'drag', 'parallax', 'tilt']
+  },
+  'Micro/PaperCrumple': {
+    videoUrl: '/assets/video/papercrumple.webm',
+    description:
+      'An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.',
+    category: 'Micro',
+    name: 'PaperCrumple',
+    docsUrl: 'https://reactbits.dev/micro/paper-crumple',
+    tags: ['paper', 'crumple', '3d', 'three', 'image', 'drag', 'hold', 'fold', 'crease']
   }
 };
 

@@ -160,7 +160,8 @@ const micro = {
   'folder-float': () => import('../demo/Micro/FolderFloatDemo'),
   'branched-menu': () => import('../demo/Micro/BranchedMenuDemo'),
   'flip-card': () => import('../demo/Micro/FlipCardDemo'),
-  'tear-ticket': () => import('../demo/Micro/TearTicketDemo')
+  'tear-ticket': () => import('../demo/Micro/TearTicketDemo'),
+  'paper-crumple': () => import('../demo/Micro/PaperCrumpleDemo')
 };
 
 const backgrounds = {

@@ -12850,6 +12850,80 @@
 					"path": "SlideCommit/SlideCommit.tsx"
 				}
 			]
+		},
+		{
+			"name": "PaperCrumple-JS-CSS",
+			"title": "PaperCrumple",
+			"description": "An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.",
+			"type": "registry:component",
+			"dependencies": [
+				"three@^0.180.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PaperCrumple.css",
+					"target": "@components/PaperCrumple.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PaperCrumple.jsx"
+				}
+			]
+		},
+		{
+			"name": "PaperCrumple-JS-TW",
+			"title": "PaperCrumple",
+			"description": "An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.",
+			"type": "registry:component",
+			"dependencies": [
+				"three@^0.180.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PaperCrumple/PaperCrumple.jsx"
+				}
+			]
+		},
+		{
+			"name": "PaperCrumple-TS-CSS",
+			"title": "PaperCrumple",
+			"description": "An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.",
+			"type": "registry:component",
+			"dependencies": [
+				"three@^0.180.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PaperCrumple.css",
+					"target": "@components/PaperCrumple.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PaperCrumple.tsx"
+				}
+			]
+		},
+		{
+			"name": "PaperCrumple-TS-TW",
+			"title": "PaperCrumple",
+			"description": "An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.",
+			"type": "registry:component",
+			"dependencies": [
+				"three@^0.180.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PaperCrumple/PaperCrumple.tsx"
+				}
+			]
 		}
 	]
 }
