@@ -161,7 +161,8 @@ const micro = {
   'branched-menu': () => import('../demo/Micro/BranchedMenuDemo'),
   'flip-card': () => import('../demo/Micro/FlipCardDemo'),
   'tear-ticket': () => import('../demo/Micro/TearTicketDemo'),
-  'paper-crumple': () => import('../demo/Micro/PaperCrumpleDemo')
+  'paper-crumple': () => import('../demo/Micro/PaperCrumpleDemo'),
+  shredder: () => import('../demo/Micro/ShredderDemo')
 };
 
 const backgrounds = {

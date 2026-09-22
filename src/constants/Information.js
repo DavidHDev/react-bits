@@ -1717,6 +1717,15 @@ export const componentMetadata = {
     name: 'PaperCrumple',
     docsUrl: 'https://reactbits.dev/micro/paper-crumple',
     tags: ['paper', 'crumple', '3d', 'three', 'image', 'drag', 'hold', 'fold', 'crease']
+  },
+  'Micro/Shredder': {
+    videoUrl: '/assets/video/shredder.webm',
+    description:
+      'A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.',
+    category: 'Micro',
+    name: 'Shredder',
+    docsUrl: 'https://reactbits.dev/micro/shredder',
+    tags: ['shredder', 'delete', 'drag', 'list', 'strips', 'paper', 'physics', 'remove']
   }
 };
 

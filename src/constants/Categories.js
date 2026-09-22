@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Shredder',
   'Tear Ticket',
   'Flip Card',
   'Branched Menu',
@@ -192,7 +193,7 @@ export const CATEGORIES = [
   },
   {
     name: 'Micro',
-    subcategories: ['Paper Crumple', 'Tear Ticket', 'Flip Card', 'Branched Menu', 'Folder Float', 'Refine Frame', 'Thought Line', 'Voice Pill', 'Slosh Gauge', 'Prompt Bar', 'Swipe Toast', 'Sling Button', 'Bell Toggle', 'Call Chip', 'Status Mark', 'Glide Select', 'Swipe Row', 'Jelly Radio', 'Comet Dial', 'Wake Slider', 'Code Slots', 'Dodge Field', 'Lattice Loader', 'Scrub Field', 'Fuse Button', 'Warm Tooltip', 'Slide Commit', 'Rubber Segment', 'Pulse Heart', 'Spring Check', 'Peek Rating', 'Hold Button', 'Squish Switch']
+    subcategories: ['Shredder', 'Paper Crumple', 'Tear Ticket', 'Flip Card', 'Branched Menu', 'Folder Float', 'Refine Frame', 'Thought Line', 'Voice Pill', 'Slosh Gauge', 'Prompt Bar', 'Swipe Toast', 'Sling Button', 'Bell Toggle', 'Call Chip', 'Status Mark', 'Glide Select', 'Swipe Row', 'Jelly Radio', 'Comet Dial', 'Wake Slider', 'Code Slots', 'Dodge Field', 'Lattice Loader', 'Scrub Field', 'Fuse Button', 'Warm Tooltip', 'Slide Commit', 'Rubber Segment', 'Pulse Heart', 'Spring Check', 'Peek Rating', 'Hold Button', 'Squish Switch']
   },
   {
     name: 'Backgrounds',
