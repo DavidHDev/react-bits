@@ -59,6 +59,8 @@ const DEFAULT_PROPS = {
   stripWidth: 10,
   curl: 1,
   autoAnimate: false,
+  loop: false,
+  loopAfterDelete: false,
   dragTilt: 6,
   lift: 1.02,
   slitColor: '#3f3f46',
@@ -129,6 +131,8 @@ const ShredderDemo = () => {
     stripWidth,
     curl,
     autoAnimate,
+    loop,
+    loopAfterDelete,
     dragTilt,
     lift,
     slitColor,
@@ -169,7 +173,14 @@ const ShredderDemo = () => {
         name: 'onShred',
         type: '(item: T) => void',
         default: '-',
-        description: 'Called the moment a row has gone through the rollers. Remove the item from your list here.'
+        description:
+          'Called the moment a row has gone through the rollers. Remove the item from your list here, unless loop, loopAfterDelete or autoAnimate is on.'
+      },
+      {
+        name: 'onReorder',
+        type: '(items: T[]) => void',
+        default: '-',
+        description: 'Called with the items in their new order after a row is dropped somewhere else in the list.'
       },
       { name: 'width', type: 'number', default: '340', description: 'Width of the whole machine in pixels.' },
       {
@@ -236,6 +247,20 @@ const ShredderDemo = () => {
           'Plays through the rows on its own, bottom to top, then brings them back and starts over. Keep the rows in your list while it runs; onShred still fires.'
       },
       {
+        name: 'loop',
+        type: 'boolean',
+        default: 'false',
+        description:
+          'Once the last row has been shredded, bring them all back. Keep the rows in your list while it is on.'
+      },
+      {
+        name: 'loopAfterDelete',
+        type: 'boolean',
+        default: 'false',
+        description:
+          'After a row is shredded it comes back a moment later at a random spot, so the list never runs dry. Keep the rows in your list while it is on.'
+      },
+      {
         name: 'dragTilt',
         type: 'number',
         default: '6',
@@ -266,8 +291,9 @@ const ShredderDemo = () => {
               items={items}
               renderItem={item => <Row item={item} surface={surface} />}
               onShred={item => {
-                if (!autoAnimate) setItems(prev => prev.filter(row => row.id !== item.id));
+                if (!autoAnimate && !loop && !loopAfterDelete) setItems(prev => prev.filter(row => row.id !== item.id));
               }}
+              onReorder={next => setItems(next)}
               width={width}
               height={height}
               inset={inset}
@@ -280,6 +306,8 @@ const ShredderDemo = () => {
               stripWidth={stripWidth}
               curl={curl}
               autoAnimate={autoAnimate}
+              loop={loop}
+              loopAfterDelete={loopAfterDelete}
               dragTilt={dragTilt}
               lift={lift}
               slitColor={renderedSlit}
@@ -332,6 +360,12 @@ const ShredderDemo = () => {
                 updateProp('autoAnimate', val);
                 restart();
               }}
+            />
+            <PreviewSwitch title="Loop" isChecked={loop} onChange={val => updateProp('loop', val)} />
+            <PreviewSwitch
+              title="Loop after delete"
+              isChecked={loopAfterDelete}
+              onChange={val => updateProp('loopAfterDelete', val)}
             />
             <PreviewSlider
               title="Drag tilt"

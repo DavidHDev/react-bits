@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Dither Veil',
   'Shredder',
   'Tear Ticket',
   'Flip Card',
@@ -101,6 +102,7 @@ export const CATEGORIES = [
   {
     name: 'Animations',
     subcategories: [
+      'Dither Veil',
       'Glow Cursor',
       'Scroll Expand',
       'Ripple Distortion',

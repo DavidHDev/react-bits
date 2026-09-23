@@ -23,6 +23,7 @@ const [files, setFiles] = useState([
     </div>
   )}
   onShred={file => setFiles(prev => prev.filter(f => f.id !== file.id))}
+  onReorder={next => setFiles(next)}
   width={340}
   height={460}
   feedSpeed={180}
@@ -30,6 +31,8 @@ const [files, setFiles] = useState([
   stripWidth={10}
   curl={1}
   autoAnimate={false}
+  loop={false}
+  loopAfterDelete={false}
   fallHeight={140}
 />`,
   code,

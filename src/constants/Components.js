@@ -43,6 +43,7 @@ const animations = {
   'strands': () => import('../demo/Animations/StrandsDemo'),
   'cursor-grid': () => import('../demo/Animations/CursorGridDemo'),
   'glow-cursor': () => import('../demo/Animations/GlowCursorDemo'),
+  'dither-veil': () => import('../demo/Animations/DitherVeilDemo'),
 };
 
 const textAnimations = {

@@ -1,4 +1,14 @@
-import { useEffect, useRef, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactNode
+} from 'react';
+import { flushSync } from 'react-dom';
 
 const FOLLOW = 30;
 const SETTLE = 16;
@@ -10,6 +20,8 @@ const SLIVER = 2;
 const STACK_K = 320;
 const STACK_C = 22;
 const STAGGER = 0.035;
+const ENTER = 22;
+const HYSTERESIS = 8;
 const DEG = Math.PI / 180;
 
 export interface ShredderItem {
@@ -20,6 +32,7 @@ export interface ShredderProps<T extends ShredderItem> {
   items?: T[];
   renderItem: (item: T, index: number) => ReactNode;
   onShred?: (item: T) => void;
+  onReorder?: (items: T[]) => void;
   width?: number;
   height?: number;
   inset?: number;
@@ -32,6 +45,8 @@ export interface ShredderProps<T extends ShredderItem> {
   stripWidth?: number;
   curl?: number;
   autoAnimate?: boolean;
+  loop?: boolean;
+  loopAfterDelete?: boolean;
   dragTilt?: number;
   lift?: number;
   slitColor?: string;
@@ -44,6 +59,7 @@ interface Config<T> {
   items: T[];
   height: number;
   inset: number;
+  gap: number;
   slitHeight: number;
   fallHeight: number;
   feedSpeed: number;
@@ -51,9 +67,12 @@ interface Config<T> {
   autoFeed: boolean;
   stripWidth: number;
   curl: number;
+  loop: boolean;
+  loopAfterDelete: boolean;
   dragTilt: number;
   lift: number;
   onShred?: (item: T) => void;
+  onReorder?: (items: T[]) => void;
   disabled: boolean;
 }
 
@@ -90,6 +109,11 @@ interface Drag<T> {
   gy: number;
   px: number;
   py: number;
+  ox: number;
+  oy: number;
+  moved: boolean;
+  from: number;
+  j: number;
   phase: 'drag' | 'carry' | 'return';
   id: number | null;
   snap: Promise<Texture>;
@@ -146,8 +170,9 @@ interface Shift {
   el: HTMLLIElement;
   y: number;
   v: number;
+  target: number;
   delay: number;
-  item?: HTMLDivElement | null;
+  item: HTMLDivElement | null;
 }
 
 interface Sim<T> {
@@ -158,6 +183,8 @@ interface Sim<T> {
   feeds: Feed<T>[];
   strips: Strip<T>[];
   shifts: Map<HTMLLIElement, Shift>;
+  tops: Map<HTMLLIElement, number>;
+  timers: Set<ReturnType<typeof setTimeout>>;
   dpr: number;
   cw: number;
   ch: number;
@@ -319,6 +346,7 @@ const Shredder = <T extends ShredderItem>({
   items = [],
   renderItem,
   onShred,
+  onReorder,
   width = 340,
   height = 460,
   inset = 14,
@@ -331,6 +359,8 @@ const Shredder = <T extends ShredderItem>({
   stripWidth = 10,
   curl = 1,
   autoAnimate = false,
+  loop = false,
+  loopAfterDelete = false,
   dragTilt = 6,
   lift = 1.02,
   slitColor = '#3f3f46',
@@ -338,6 +368,10 @@ const Shredder = <T extends ShredderItem>({
   disabled = false,
   className = ''
 }: ShredderProps<T>) => {
+  const [order, setOrder] = useState(() => items.map(item => item.id));
+  const rank = new Map<string | number, number>(order.map((id, i) => [id, i]));
+  const weight = (item: T) => rank.get(item.id) ?? order.length + items.indexOf(item);
+  const sorted = [...items].sort((a, b) => weight(a) - weight(b));
   const rootRef = useRef<HTMLDivElement>(null);
   const slitRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -345,9 +379,10 @@ const Shredder = <T extends ShredderItem>({
   const itemEls = useRef(new Map<string | number, HTMLDivElement>());
   const cfg = useRef<Config<T>>({} as Config<T>);
   cfg.current = {
-    items,
+    items: sorted,
     height,
     inset,
+    gap,
     slitHeight,
     fallHeight,
     feedSpeed,
@@ -355,9 +390,12 @@ const Shredder = <T extends ShredderItem>({
     autoFeed,
     stripWidth,
     curl,
+    loop,
+    loopAfterDelete,
     dragTilt,
     lift,
     onShred,
+    onReorder,
     disabled
   };
   const sim = useRef<Sim<T>>({
@@ -368,6 +406,8 @@ const Shredder = <T extends ShredderItem>({
     feeds: [],
     strips: [],
     shifts: new Map(),
+    tops: new Map(),
+    timers: new Set(),
     dpr: 1,
     cw: 0,
     ch: 0
@@ -397,35 +437,158 @@ const Shredder = <T extends ShredderItem>({
     s.raf = requestAnimationFrame(step);
   };
 
-  const collapse = (f: Feed<T>, s: Sim<T>, k: number) => {
+  const later = (ms: number, fn: () => void) => {
+    const s = sim.current;
+    const id = setTimeout(() => {
+      s.timers.delete(id);
+      fn();
+    }, ms);
+    s.timers.add(id);
+  };
+
+  const slotOf = (key: string | number) => slotEls.current.get(key);
+  const isLive = (key: string | number) => {
+    const slot = slotOf(key);
+    return !!slot && slot.dataset.gone === undefined;
+  };
+  const liveKeys = () => cfg.current.items.map(item => item.id).filter(isLive);
+  const goneKeys = () =>
+    cfg.current.items
+      .map(item => item.id)
+      .filter(key => {
+        const slot = slotOf(key);
+        return !!slot && slot.dataset.gone !== undefined;
+      });
+
+  const shiftOf = (slot: HTMLLIElement): Shift => {
+    const s = sim.current;
+    let sh = s.shifts.get(slot);
+    if (!sh) {
+      sh = { el: slot, y: 0, v: 0, target: 0, delay: 0, item: null };
+      s.shifts.set(slot, sh);
+    }
+    return sh;
+  };
+
+  const settle = (origin: HTMLLIElement | null, entering: Set<HTMLLIElement> | null) => {
+    const s = sim.current;
+    if (!rootRef.current) return;
+    const m = metrics();
+    const next = new Map<HTMLLIElement, number>();
+    const still = reduced();
+    const active = s.drag ? s.drag.slot : null;
+    const slots = cfg.current.items.map(item => slotOf(item.id));
+    const from = origin ? slots.indexOf(origin) : -1;
+    let born = 0;
+    cfg.current.items.forEach((item, idx) => {
+      const slot = slots[idx];
+      if (!slot) return;
+      const sh = s.shifts.get(slot);
+      const top = at(slot, m).y - (sh ? sh.y : 0);
+      const prev = s.tops.get(slot);
+      next.set(slot, top);
+      if (slot === active || still) return;
+      const fresh = (entering && entering.has(slot)) || (prev === undefined && s.tops.size > 0);
+      if (fresh) {
+        const rec = shiftOf(slot);
+        const el = itemEls.current.get(item.id) || null;
+        rec.y = -ENTER;
+        rec.v = 0;
+        rec.target = 0;
+        rec.delay = born * 0.05;
+        rec.item = el;
+        born += 1;
+        if (el) el.style.opacity = '0';
+        slot.style.transform = `translateY(${rec.y}px)`;
+        return;
+      }
+      if (prev === undefined) return;
+      const delta = prev - top;
+      if (Math.abs(delta) < 0.5) return;
+      const rec = shiftOf(slot);
+      rec.y += delta;
+      if (from >= 0) rec.delay = Math.max(0, from - 1 - idx) * STAGGER;
+      slot.style.transform = `translateY(${rec.y}px)`;
+    });
+    s.tops = next;
+    run();
+  };
+
+  const reflow = (mutate: () => void, origin?: HTMLLIElement | null, entering?: Set<HTMLLIElement> | null) => {
+    mutate();
+    settle(origin || null, entering || null);
+  };
+
+  const arrange = (key: string | number, index: number) => {
+    const ids = cfg.current.items.map(item => item.id).filter(id => id !== key);
+    const live = ids.filter(isLive);
+    let anchor = 0;
+    if (index < live.length) anchor = ids.indexOf(live[index]);
+    else if (live.length) anchor = ids.indexOf(live[live.length - 1]) + 1;
+    ids.splice(anchor, 0, key);
+    return ids;
+  };
+
+  const commit = (ids: (string | number)[]) => {
+    const same = ids.every((id, i) => id === cfg.current.items[i]?.id);
+    if (same) return false;
+    flushSync(() => setOrder(ids));
+    return true;
+  };
+
+  const revive = (keys: (string | number)[], index?: number) => {
+    const s = sim.current;
+    if (s.drag) {
+      later(300, () => revive(keys, index));
+      return;
+    }
+    const entering = new Set<HTMLLIElement>();
+    reflow(
+      () => {
+        if (index !== undefined && keys.length === 1) commit(arrange(keys[0], index));
+        keys.forEach(key => {
+          const slot = slotOf(key);
+          const el = itemEls.current.get(key);
+          if (!slot || slot.dataset.gone === undefined) return;
+          delete slot.dataset.gone;
+          slot.style.height = '';
+          slot.style.marginBottom = '';
+          if (el) {
+            el.style.visibility = '';
+            el.style.transform = '';
+            delete el.dataset.state;
+          }
+          entering.add(slot);
+        });
+      },
+      null,
+      entering
+    );
+  };
+
+  const afterShred = (key: string | number) => {
+    const c = cfg.current;
+    if (c.loopAfterDelete) {
+      later(700, () => revive([key], Math.floor(Math.random() * (liveKeys().length + 1))));
+    } else if (c.loop && liveKeys().length === 0) {
+      later(900, () => revive(goneKeys()));
+    }
+  };
+
+  const collapse = (f: Feed<T>, s: Sim<T>) => {
     f.consumed = true;
     f.el.style.visibility = 'hidden';
     delete f.slot.dataset.active;
-    f.slot.dataset.gone = '';
-    const still = !reduced();
-    const before: [HTMLLIElement, number][] = [];
-    if (still) {
-      slotEls.current.forEach(el => {
-        if (el !== f.slot) before.push([el, el.getBoundingClientRect().top]);
-      });
-    }
-    f.slot.style.height = '0px';
-    f.slot.style.marginBottom = '0px';
-    if (still) {
-      const order = Array.from(f.slot.parentElement!.children);
-      const gone = order.indexOf(f.slot);
-      before.forEach(([el, top]) => {
-        const delta = (top - el.getBoundingClientRect().top) / k;
-        if (Math.abs(delta) < 0.5) return;
-        const idx = order.indexOf(el);
-        const sh = s.shifts.get(el) || { el, y: 0, v: 0, delay: 0 };
-        sh.y += delta;
-        sh.delay = Math.max(0, gone - 1 - idx) * STAGGER;
-        el.style.transform = `translateY(${sh.y}px)`;
-        s.shifts.set(el, sh);
-      });
-    }
+    s.shifts.forEach(sh => {
+      sh.target = 0;
+    });
+    reflow(() => {
+      f.slot.dataset.gone = '';
+      f.slot.style.height = '0px';
+      f.slot.style.marginBottom = '0px';
+    }, f.slot);
     cfg.current.onShred?.(f.item);
+    afterShred(f.key);
   };
 
   const consumeNow = (key: string | number, item: T, el: HTMLDivElement, slot: HTMLLIElement) => {
@@ -449,7 +612,7 @@ const Shredder = <T extends ShredderItem>({
       consumed: false,
       strips: 0
     };
-    collapse(f, s, metrics().k);
+    collapse(f, s);
     run();
   };
 
@@ -457,6 +620,9 @@ const Shredder = <T extends ShredderItem>({
     const s = sim.current;
     const c = cfg.current;
     s.drag = null;
+    s.shifts.forEach(sh => {
+      sh.target = 0;
+    });
     if (reduced()) {
       consumeNow(d.key, d.item, d.el, d.slot);
       return;
@@ -527,6 +693,60 @@ const Shredder = <T extends ShredderItem>({
     }
   };
 
+  const place = (d: Drag<T>, sp: { x: number; y: number }) => {
+    d.el.style.transform = `translate(${d.rx - sp.x}px, ${d.ry - sp.y}px) rotate(${d.tilt}deg) scale(${d.lift})`;
+  };
+
+  const aim = (d: Drag<T>, m: Metrics) => {
+    const s = sim.current;
+    const c = cfg.current;
+    const rows: { slot: HTMLLIElement; mid: number }[] = [];
+    c.items.forEach(item => {
+      if (item.id === d.key) return;
+      const slot = slotOf(item.id);
+      if (!slot || slot.dataset.gone !== undefined) return;
+      const top = s.tops.get(slot);
+      if (top === undefined) return;
+      rows.push({ slot, mid: top + slot.offsetHeight / 2 });
+    });
+    let j = -1;
+    if (d.moved && d.ry + d.H < m.lip - 8) {
+      const cy = d.ry + d.H / 2;
+      let n = 0;
+      rows.forEach(row => {
+        if (row.mid < cy) n += 1;
+      });
+      if (d.j >= 0 && n !== d.j) {
+        const edge = rows[n > d.j ? n - 1 : n];
+        if (edge && Math.abs(edge.mid - cy) < HYSTERESIS) n = d.j;
+      }
+      j = n;
+    }
+    if (j === d.j) return;
+    d.j = j;
+    rows.forEach((row, k) => {
+      shiftOf(row.slot).target = j >= 0 && k < j ? -(d.H + c.gap) : 0;
+    });
+  };
+
+  const drop = (d: Drag<T>) => {
+    const s = sim.current;
+    const c = cfg.current;
+    const live = liveKeys().filter(key => key !== d.key);
+    const index = clamp(d.j >= 0 ? d.j : d.from, 0, live.length);
+    s.shifts.forEach(sh => {
+      sh.target = 0;
+    });
+    let changed = false;
+    reflow(() => {
+      changed = commit(arrange(d.key, index));
+      d.slot.style.height = `${d.H}px`;
+      d.slot.style.marginBottom = '';
+    });
+    d.phase = 'return';
+    if (changed) c.onReorder?.(cfg.current.items);
+  };
+
   const tick = (now: number) => {
     const s = sim.current;
     const c = cfg.current;
@@ -550,6 +770,8 @@ const Shredder = <T extends ShredderItem>({
         if (d.phase === 'drag') {
           d.tx = d.px - d.gx;
           d.ty = Math.min(d.py - d.gy, ceiling);
+          if (!d.moved && Math.hypot(d.px - d.ox, d.py - d.oy) > 6) d.moved = true;
+          aim(d, m);
         } else if (d.phase === 'carry') {
           d.tx = (m.rw - d.W) / 2;
           d.ty = ceiling;
@@ -568,7 +790,7 @@ const Shredder = <T extends ShredderItem>({
         if (bites && over >= c.bite - 0.5) {
           grab(d, m);
         } else {
-          d.el.style.transform = `translate(${d.rx - sp.x}px, ${d.ry - sp.y}px) rotate(${d.tilt}deg) scale(${d.lift})`;
+          place(d, sp);
           const still =
             Math.abs(d.rx - d.tx) < 0.2 && Math.abs(d.ry - d.ty) < 0.2 && Math.abs(d.vy) < 2 && Math.abs(d.vx) < 2;
           if (d.phase === 'return' && still && Math.abs(d.lift - 1) < 0.002 && Math.abs(d.tilt) < 0.05) {
@@ -600,7 +822,7 @@ const Shredder = <T extends ShredderItem>({
         f.tilt = ease(f.tilt, 0, dt, 0.08);
         f.lift = ease(f.lift, 1, dt, 0.1);
         if (f.ry >= m.lip) {
-          collapse(f, s, m.k);
+          collapse(f, s);
         } else {
           const jitter = Math.sin(s.t * 150) * 0.5;
           f.el.style.transform = `translate(${f.rx - sp.x + jitter}px, ${f.ry - sp.y}px) rotate(${f.tilt}deg) scale(${f.lift})`;
@@ -616,9 +838,9 @@ const Shredder = <T extends ShredderItem>({
         s.shifts.delete(el);
         return;
       }
-      moving = true;
       if (sh.delay > 0) {
         sh.delay -= dt;
+        moving = true;
         return;
       }
       if (sh.item) {
@@ -633,14 +855,21 @@ const Shredder = <T extends ShredderItem>({
       const n = Math.ceil(dt * 240);
       const h = dt / n;
       for (let k = 0; k < n; k += 1) {
-        sh.v += (-STACK_K * sh.y - STACK_C * sh.v) * h;
+        sh.v += (-STACK_K * (sh.y - sh.target) - STACK_C * sh.v) * h;
         sh.y += sh.v * h;
       }
-      if (Math.abs(sh.y) < 0.15 && Math.abs(sh.v) < 4) {
-        el.style.transform = '';
-        s.shifts.delete(el);
+      if (Math.abs(sh.y - sh.target) < 0.15 && Math.abs(sh.v) < 4) {
+        sh.y = sh.target;
+        sh.v = 0;
+        if (sh.target === 0) {
+          el.style.transform = '';
+          s.shifts.delete(el);
+        } else {
+          el.style.transform = `translateY(${sh.y}px)`;
+        }
       } else {
         el.style.transform = `translateY(${sh.y}px)`;
+        moving = true;
       }
     });
     const ctx = canvas.getContext('2d')!;
@@ -725,7 +954,7 @@ const Shredder = <T extends ShredderItem>({
     const c = cfg.current;
     const key = item.id;
     const el = itemEls.current.get(key);
-    const slot = slotEls.current.get(key);
+    const slot = slotOf(key);
     if (c.disabled || s.drag || !el || !slot || slot.dataset.gone !== undefined) return;
     if (s.feeds.some(f => f.key === key)) return;
     const m = metrics();
@@ -742,7 +971,7 @@ const Shredder = <T extends ShredderItem>({
       snap = Promise.reject(new Error('snapshot'));
     }
     snap.catch(() => {});
-    s.drag = {
+    const d: Drag<T> = {
       key,
       item,
       el,
@@ -761,44 +990,26 @@ const Shredder = <T extends ShredderItem>({
       gy: p.y - sp.y,
       px: p.x,
       py: p.y,
+      ox: p.x,
+      oy: p.y,
+      moved: false,
+      from: liveKeys().indexOf(key),
+      j: -1,
       phase,
       id: e ? e.pointerId : null,
       snap,
       fill: fill === 'rgba(0, 0, 0, 0)' || fill === 'transparent' ? 'rgba(127, 127, 127, 0.35)' : fill
     };
-    slot.style.height = `${H}px`;
-    slot.dataset.active = '';
-    el.dataset.state = 'drag';
-    run();
-  };
-
-  const restore = () => {
-    const s = sim.current;
-    if (s.drag) return;
-    s.strips.length = 0;
-    s.feeds.length = 0;
-    const canvas = canvasRef.current;
-    if (canvas) canvas.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
-    const still = !reduced();
-    let i = 0;
-    slotEls.current.forEach((slot, key) => {
-      if (slot.dataset.gone === undefined) return;
-      const el = itemEls.current.get(key);
-      delete slot.dataset.gone;
-      slot.style.height = '';
-      slot.style.marginBottom = '';
-      if (el) {
-        el.style.visibility = '';
-        el.style.transform = '';
-        delete el.dataset.state;
-      }
-      if (still) {
-        if (el) el.style.opacity = '0';
-        slot.style.transform = 'translateY(-22px)';
-        s.shifts.set(slot, { el: slot, y: -22, v: 0, delay: i * 0.05, item: el || null });
-        i += 1;
-      }
-    });
+    s.drag = d;
+    s.shifts.delete(slot);
+    slot.style.transform = '';
+    reflow(() => {
+      slot.dataset.active = '';
+      el.dataset.state = 'drag';
+      slot.style.height = '0px';
+      slot.style.marginBottom = '0px';
+    }, slot);
+    place(d, at(slot, m));
     run();
   };
 
@@ -827,7 +1038,7 @@ const Shredder = <T extends ShredderItem>({
     if (d.ry + d.H > m.lip + 0.5) {
       grab(d, m);
     } else {
-      d.phase = 'return';
+      drop(d);
     }
     run();
   };
@@ -838,7 +1049,7 @@ const Shredder = <T extends ShredderItem>({
     const key = item.id;
     if (reduced()) {
       const el = itemEls.current.get(key);
-      const slot = slotEls.current.get(key);
+      const slot = slotOf(key);
       const s = sim.current;
       if (cfg.current.disabled || !el || !slot || slot.dataset.gone !== undefined || s.feeds.some(f => f.key === key))
         return;
@@ -847,6 +1058,10 @@ const Shredder = <T extends ShredderItem>({
     }
     begin(item, 'carry', null);
   };
+
+  useLayoutEffect(() => {
+    settle(null, null);
+  });
 
   useEffect(() => {
     const s = sim.current;
@@ -858,6 +1073,7 @@ const Shredder = <T extends ShredderItem>({
       const cw = root.offsetWidth + OVER * 2;
       const ch = cfg.current.fallHeight;
       if (cw === s.cw && ch === s.ch && dpr === s.dpr) return;
+      if (s.cw) s.tops = new Map();
       s.cw = cw;
       s.ch = ch;
       s.dpr = dpr;
@@ -894,8 +1110,7 @@ const Shredder = <T extends ShredderItem>({
     const pickNext = () => {
       const list = cfg.current.items;
       for (let i = list.length - 1; i >= 0; i -= 1) {
-        const slot = slotEls.current.get(list[i].id);
-        if (slot && slot.dataset.gone === undefined) return list[i];
+        if (isLive(list[i].id)) return list[i];
       }
       return null;
     };
@@ -908,7 +1123,7 @@ const Shredder = <T extends ShredderItem>({
         if (!item) {
           await wait(1100);
           if (!alive) break;
-          restore();
+          revive(goneKeys());
           await wait(1200);
           continue;
         }
@@ -929,6 +1144,8 @@ const Shredder = <T extends ShredderItem>({
     return () => {
       cancelAnimationFrame(s.raf);
       s.raf = 0;
+      s.timers.forEach(id => clearTimeout(id));
+      s.timers.clear();
     };
   }, []);
 
@@ -960,7 +1177,7 @@ const Shredder = <T extends ShredderItem>({
       }
     >
       <ul className="absolute right-0 left-0 z-[1] m-0 list-none [bottom:calc(var(--sh-fall)+var(--sh-slit-h))] [padding:0_var(--sh-inset)] [clip-path:inset(-9999px_-9999px_0_-9999px)]">
-        {items.map((item, index) => (
+        {sorted.map((item, index) => (
           <li
             key={item.id}
             ref={keep(slotEls, item.id)}

@@ -12852,6 +12852,1924 @@
 			]
 		},
 		{
+			"name": "WarmTooltip-JS-CSS",
+			"title": "WarmTooltip",
+			"description": "Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0",
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "WarmTooltip.css",
+					"target": "@components/WarmTooltip.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "WarmTooltip.jsx"
+				}
+			]
+		},
+		{
+			"name": "WarmTooltip-JS-TW",
+			"title": "WarmTooltip",
+			"description": "Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0",
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "WarmTooltip/WarmTooltip.jsx"
+				}
+			]
+		},
+		{
+			"name": "WarmTooltip-TS-CSS",
+			"title": "WarmTooltip",
+			"description": "Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0",
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "WarmTooltip.css",
+					"target": "@components/WarmTooltip.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "WarmTooltip.tsx"
+				}
+			]
+		},
+		{
+			"name": "WarmTooltip-TS-TW",
+			"title": "WarmTooltip",
+			"description": "Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0",
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "WarmTooltip/WarmTooltip.tsx"
+				}
+			]
+		},
+		{
+			"name": "FuseButton-JS-CSS",
+			"title": "FuseButton",
+			"description": "Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FuseButton.css",
+					"target": "@components/FuseButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FuseButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "FuseButton-JS-TW",
+			"title": "FuseButton",
+			"description": "Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FuseButton/FuseButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "FuseButton-TS-CSS",
+			"title": "FuseButton",
+			"description": "Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FuseButton.css",
+					"target": "@components/FuseButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FuseButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "FuseButton-TS-TW",
+			"title": "FuseButton",
+			"description": "Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FuseButton/FuseButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "ScrubField-JS-CSS",
+			"title": "ScrubField",
+			"description": "Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ScrubField.css",
+					"target": "@components/ScrubField.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ScrubField.jsx"
+				}
+			]
+		},
+		{
+			"name": "ScrubField-JS-TW",
+			"title": "ScrubField",
+			"description": "Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ScrubField/ScrubField.jsx"
+				}
+			]
+		},
+		{
+			"name": "ScrubField-TS-CSS",
+			"title": "ScrubField",
+			"description": "Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ScrubField.css",
+					"target": "@components/ScrubField.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ScrubField.tsx"
+				}
+			]
+		},
+		{
+			"name": "ScrubField-TS-TW",
+			"title": "ScrubField",
+			"description": "Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ScrubField/ScrubField.tsx"
+				}
+			]
+		},
+		{
+			"name": "LatticeLoader-JS-CSS",
+			"title": "LatticeLoader",
+			"description": "Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "LatticeLoader.css",
+					"target": "@components/LatticeLoader.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "LatticeLoader.jsx"
+				}
+			]
+		},
+		{
+			"name": "LatticeLoader-JS-TW",
+			"title": "LatticeLoader",
+			"description": "Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "LatticeLoader/LatticeLoader.jsx"
+				}
+			]
+		},
+		{
+			"name": "LatticeLoader-TS-CSS",
+			"title": "LatticeLoader",
+			"description": "Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "LatticeLoader.css",
+					"target": "@components/LatticeLoader.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "LatticeLoader.tsx"
+				}
+			]
+		},
+		{
+			"name": "LatticeLoader-TS-TW",
+			"title": "LatticeLoader",
+			"description": "Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "LatticeLoader/LatticeLoader.tsx"
+				}
+			]
+		},
+		{
+			"name": "DodgeField-JS-CSS",
+			"title": "DodgeField",
+			"description": "Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "DodgeField.css",
+					"target": "@components/DodgeField.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "DodgeField.jsx"
+				}
+			]
+		},
+		{
+			"name": "DodgeField-JS-TW",
+			"title": "DodgeField",
+			"description": "Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "DodgeField/DodgeField.jsx"
+				}
+			]
+		},
+		{
+			"name": "DodgeField-TS-CSS",
+			"title": "DodgeField",
+			"description": "Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "DodgeField.css",
+					"target": "@components/DodgeField.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "DodgeField.tsx"
+				}
+			]
+		},
+		{
+			"name": "DodgeField-TS-TW",
+			"title": "DodgeField",
+			"description": "Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "DodgeField/DodgeField.tsx"
+				}
+			]
+		},
+		{
+			"name": "CodeSlots-JS-CSS",
+			"title": "CodeSlots",
+			"description": "One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CodeSlots.css",
+					"target": "@components/CodeSlots.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CodeSlots.jsx"
+				}
+			]
+		},
+		{
+			"name": "CodeSlots-JS-TW",
+			"title": "CodeSlots",
+			"description": "One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CodeSlots/CodeSlots.jsx"
+				}
+			]
+		},
+		{
+			"name": "CodeSlots-TS-CSS",
+			"title": "CodeSlots",
+			"description": "One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CodeSlots.css",
+					"target": "@components/CodeSlots.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CodeSlots.tsx"
+				}
+			]
+		},
+		{
+			"name": "CodeSlots-TS-TW",
+			"title": "CodeSlots",
+			"description": "One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CodeSlots/CodeSlots.tsx"
+				}
+			]
+		},
+		{
+			"name": "WakeSlider-JS-CSS",
+			"title": "WakeSlider",
+			"description": "Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "WakeSlider.css",
+					"target": "@components/WakeSlider.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "WakeSlider.jsx"
+				}
+			]
+		},
+		{
+			"name": "WakeSlider-JS-TW",
+			"title": "WakeSlider",
+			"description": "Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "WakeSlider/WakeSlider.jsx"
+				}
+			]
+		},
+		{
+			"name": "WakeSlider-TS-CSS",
+			"title": "WakeSlider",
+			"description": "Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "WakeSlider.css",
+					"target": "@components/WakeSlider.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "WakeSlider.tsx"
+				}
+			]
+		},
+		{
+			"name": "WakeSlider-TS-TW",
+			"title": "WakeSlider",
+			"description": "Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "WakeSlider/WakeSlider.tsx"
+				}
+			]
+		},
+		{
+			"name": "CometDial-JS-CSS",
+			"title": "CometDial",
+			"description": "Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CometDial.css",
+					"target": "@components/CometDial.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CometDial.jsx"
+				}
+			]
+		},
+		{
+			"name": "CometDial-JS-TW",
+			"title": "CometDial",
+			"description": "Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CometDial/CometDial.jsx"
+				}
+			]
+		},
+		{
+			"name": "CometDial-TS-CSS",
+			"title": "CometDial",
+			"description": "Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CometDial.css",
+					"target": "@components/CometDial.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CometDial.tsx"
+				}
+			]
+		},
+		{
+			"name": "CometDial-TS-TW",
+			"title": "CometDial",
+			"description": "Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CometDial/CometDial.tsx"
+				}
+			]
+		},
+		{
+			"name": "JellyRadio-JS-CSS",
+			"title": "JellyRadio",
+			"description": "Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "JellyRadio.css",
+					"target": "@components/JellyRadio.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "JellyRadio.jsx"
+				}
+			]
+		},
+		{
+			"name": "JellyRadio-JS-TW",
+			"title": "JellyRadio",
+			"description": "Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "JellyRadio/JellyRadio.jsx"
+				}
+			]
+		},
+		{
+			"name": "JellyRadio-TS-CSS",
+			"title": "JellyRadio",
+			"description": "Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "JellyRadio.css",
+					"target": "@components/JellyRadio.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "JellyRadio.tsx"
+				}
+			]
+		},
+		{
+			"name": "JellyRadio-TS-TW",
+			"title": "JellyRadio",
+			"description": "Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "JellyRadio/JellyRadio.tsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeRow-JS-CSS",
+			"title": "SwipeRow",
+			"description": "List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SwipeRow.css",
+					"target": "@components/SwipeRow.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SwipeRow.jsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeRow-JS-TW",
+			"title": "SwipeRow",
+			"description": "List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SwipeRow/SwipeRow.jsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeRow-TS-CSS",
+			"title": "SwipeRow",
+			"description": "List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SwipeRow.css",
+					"target": "@components/SwipeRow.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SwipeRow.tsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeRow-TS-TW",
+			"title": "SwipeRow",
+			"description": "List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SwipeRow/SwipeRow.tsx"
+				}
+			]
+		},
+		{
+			"name": "GlideSelect-JS-CSS",
+			"title": "GlideSelect",
+			"description": "Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "GlideSelect.css",
+					"target": "@components/GlideSelect.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "GlideSelect.jsx"
+				}
+			]
+		},
+		{
+			"name": "GlideSelect-JS-TW",
+			"title": "GlideSelect",
+			"description": "Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "GlideSelect/GlideSelect.jsx"
+				}
+			]
+		},
+		{
+			"name": "GlideSelect-TS-CSS",
+			"title": "GlideSelect",
+			"description": "Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "GlideSelect.css",
+					"target": "@components/GlideSelect.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "GlideSelect.tsx"
+				}
+			]
+		},
+		{
+			"name": "GlideSelect-TS-TW",
+			"title": "GlideSelect",
+			"description": "Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "GlideSelect/GlideSelect.tsx"
+				}
+			]
+		},
+		{
+			"name": "StatusMark-JS-CSS",
+			"title": "StatusMark",
+			"description": "A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "StatusMark.css",
+					"target": "@components/StatusMark.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "StatusMark.jsx"
+				}
+			]
+		},
+		{
+			"name": "StatusMark-JS-TW",
+			"title": "StatusMark",
+			"description": "A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "StatusMark/StatusMark.jsx"
+				}
+			]
+		},
+		{
+			"name": "StatusMark-TS-CSS",
+			"title": "StatusMark",
+			"description": "A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "StatusMark.css",
+					"target": "@components/StatusMark.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "StatusMark.tsx"
+				}
+			]
+		},
+		{
+			"name": "StatusMark-TS-TW",
+			"title": "StatusMark",
+			"description": "A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "StatusMark/StatusMark.tsx"
+				}
+			]
+		},
+		{
+			"name": "CallChip-JS-CSS",
+			"title": "CallChip",
+			"description": "Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CallChip.css",
+					"target": "@components/CallChip.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CallChip.jsx"
+				}
+			]
+		},
+		{
+			"name": "CallChip-JS-TW",
+			"title": "CallChip",
+			"description": "Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CallChip/CallChip.jsx"
+				}
+			]
+		},
+		{
+			"name": "CallChip-TS-CSS",
+			"title": "CallChip",
+			"description": "Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CallChip.css",
+					"target": "@components/CallChip.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CallChip.tsx"
+				}
+			]
+		},
+		{
+			"name": "CallChip-TS-TW",
+			"title": "CallChip",
+			"description": "Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CallChip/CallChip.tsx"
+				}
+			]
+		},
+		{
+			"name": "BellToggle-JS-CSS",
+			"title": "BellToggle",
+			"description": "Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "BellToggle.css",
+					"target": "@components/BellToggle.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "BellToggle.jsx"
+				}
+			]
+		},
+		{
+			"name": "BellToggle-JS-TW",
+			"title": "BellToggle",
+			"description": "Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "BellToggle/BellToggle.jsx"
+				}
+			]
+		},
+		{
+			"name": "BellToggle-TS-CSS",
+			"title": "BellToggle",
+			"description": "Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "BellToggle.css",
+					"target": "@components/BellToggle.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "BellToggle.tsx"
+				}
+			]
+		},
+		{
+			"name": "BellToggle-TS-TW",
+			"title": "BellToggle",
+			"description": "Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "BellToggle/BellToggle.tsx"
+				}
+			]
+		},
+		{
+			"name": "SlingButton-JS-CSS",
+			"title": "SlingButton",
+			"description": "Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick's velocity.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SlingButton.css",
+					"target": "@components/SlingButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SlingButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "SlingButton-JS-TW",
+			"title": "SlingButton",
+			"description": "Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick's velocity.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SlingButton/SlingButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "SlingButton-TS-CSS",
+			"title": "SlingButton",
+			"description": "Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick's velocity.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SlingButton.css",
+					"target": "@components/SlingButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SlingButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "SlingButton-TS-TW",
+			"title": "SlingButton",
+			"description": "Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick's velocity.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SlingButton/SlingButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeToast-JS-CSS",
+			"title": "SwipeToast",
+			"description": "Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SwipeToast.css",
+					"target": "@components/SwipeToast.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SwipeToast.jsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeToast-JS-TW",
+			"title": "SwipeToast",
+			"description": "Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SwipeToast/SwipeToast.jsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeToast-TS-CSS",
+			"title": "SwipeToast",
+			"description": "Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SwipeToast.css",
+					"target": "@components/SwipeToast.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SwipeToast.tsx"
+				}
+			]
+		},
+		{
+			"name": "SwipeToast-TS-TW",
+			"title": "SwipeToast",
+			"description": "Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SwipeToast/SwipeToast.tsx"
+				}
+			]
+		},
+		{
+			"name": "PromptBar-JS-CSS",
+			"title": "PromptBar",
+			"description": "Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PromptBar.css",
+					"target": "@components/PromptBar.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PromptBar.jsx"
+				}
+			]
+		},
+		{
+			"name": "PromptBar-JS-TW",
+			"title": "PromptBar",
+			"description": "Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PromptBar/PromptBar.jsx"
+				}
+			]
+		},
+		{
+			"name": "PromptBar-TS-CSS",
+			"title": "PromptBar",
+			"description": "Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PromptBar.css",
+					"target": "@components/PromptBar.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PromptBar.tsx"
+				}
+			]
+		},
+		{
+			"name": "PromptBar-TS-TW",
+			"title": "PromptBar",
+			"description": "Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PromptBar/PromptBar.tsx"
+				}
+			]
+		},
+		{
+			"name": "SloshGauge-JS-CSS",
+			"title": "SloshGauge",
+			"description": "Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SloshGauge.css",
+					"target": "@components/SloshGauge.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SloshGauge.jsx"
+				}
+			]
+		},
+		{
+			"name": "SloshGauge-JS-TW",
+			"title": "SloshGauge",
+			"description": "Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SloshGauge/SloshGauge.jsx"
+				}
+			]
+		},
+		{
+			"name": "SloshGauge-TS-CSS",
+			"title": "SloshGauge",
+			"description": "Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "SloshGauge.css",
+					"target": "@components/SloshGauge.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "SloshGauge.tsx"
+				}
+			]
+		},
+		{
+			"name": "SloshGauge-TS-TW",
+			"title": "SloshGauge",
+			"description": "Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "SloshGauge/SloshGauge.tsx"
+				}
+			]
+		},
+		{
+			"name": "VoicePill-JS-CSS",
+			"title": "VoicePill",
+			"description": "Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "VoicePill.css",
+					"target": "@components/VoicePill.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "VoicePill.jsx"
+				}
+			]
+		},
+		{
+			"name": "VoicePill-JS-TW",
+			"title": "VoicePill",
+			"description": "Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "VoicePill/VoicePill.jsx"
+				}
+			]
+		},
+		{
+			"name": "VoicePill-TS-CSS",
+			"title": "VoicePill",
+			"description": "Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "VoicePill.css",
+					"target": "@components/VoicePill.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "VoicePill.tsx"
+				}
+			]
+		},
+		{
+			"name": "VoicePill-TS-TW",
+			"title": "VoicePill",
+			"description": "Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "VoicePill/VoicePill.tsx"
+				}
+			]
+		},
+		{
+			"name": "ThoughtLine-JS-CSS",
+			"title": "ThoughtLine",
+			"description": "Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into \"Thought for 4.2s\" through a blur crossfade and the trace folds into it.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ThoughtLine.css",
+					"target": "@components/ThoughtLine.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ThoughtLine.jsx"
+				}
+			]
+		},
+		{
+			"name": "ThoughtLine-JS-TW",
+			"title": "ThoughtLine",
+			"description": "Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into \"Thought for 4.2s\" through a blur crossfade and the trace folds into it.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ThoughtLine/ThoughtLine.jsx"
+				}
+			]
+		},
+		{
+			"name": "ThoughtLine-TS-CSS",
+			"title": "ThoughtLine",
+			"description": "Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into \"Thought for 4.2s\" through a blur crossfade and the trace folds into it.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ThoughtLine.css",
+					"target": "@components/ThoughtLine.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ThoughtLine.tsx"
+				}
+			]
+		},
+		{
+			"name": "ThoughtLine-TS-TW",
+			"title": "ThoughtLine",
+			"description": "Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into \"Thought for 4.2s\" through a blur crossfade and the trace folds into it.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ThoughtLine/ThoughtLine.tsx"
+				}
+			]
+		},
+		{
+			"name": "RefineFrame-JS-CSS",
+			"title": "RefineFrame",
+			"description": "Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "RefineFrame.css",
+					"target": "@components/RefineFrame.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "RefineFrame.jsx"
+				}
+			]
+		},
+		{
+			"name": "RefineFrame-JS-TW",
+			"title": "RefineFrame",
+			"description": "Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RefineFrame/RefineFrame.jsx"
+				}
+			]
+		},
+		{
+			"name": "RefineFrame-TS-CSS",
+			"title": "RefineFrame",
+			"description": "Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "RefineFrame.css",
+					"target": "@components/RefineFrame.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "RefineFrame.tsx"
+				}
+			]
+		},
+		{
+			"name": "RefineFrame-TS-TW",
+			"title": "RefineFrame",
+			"description": "Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "RefineFrame/RefineFrame.tsx"
+				}
+			]
+		},
+		{
+			"name": "FolderFloat-JS-CSS",
+			"title": "FolderFloat",
+			"description": "Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.",
+			"type": "registry:component",
+			"dependencies": [
+				"matter-js@^0.20.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FolderFloat.css",
+					"target": "@components/FolderFloat.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FolderFloat.jsx"
+				}
+			]
+		},
+		{
+			"name": "FolderFloat-JS-TW",
+			"title": "FolderFloat",
+			"description": "Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.",
+			"type": "registry:component",
+			"dependencies": [
+				"matter-js@^0.20.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FolderFloat/FolderFloat.jsx"
+				}
+			]
+		},
+		{
+			"name": "FolderFloat-TS-CSS",
+			"title": "FolderFloat",
+			"description": "Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.",
+			"type": "registry:component",
+			"dependencies": [
+				"matter-js@^0.20.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FolderFloat.css",
+					"target": "@components/FolderFloat.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FolderFloat.tsx"
+				}
+			]
+		},
+		{
+			"name": "FolderFloat-TS-TW",
+			"title": "FolderFloat",
+			"description": "Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.",
+			"type": "registry:component",
+			"dependencies": [
+				"matter-js@^0.20.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FolderFloat/FolderFloat.tsx"
+				}
+			]
+		},
+		{
+			"name": "BranchedMenu-JS-CSS",
+			"title": "BranchedMenu",
+			"description": "Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "BranchedMenu.css",
+					"target": "@components/BranchedMenu.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "BranchedMenu.jsx"
+				}
+			]
+		},
+		{
+			"name": "BranchedMenu-JS-TW",
+			"title": "BranchedMenu",
+			"description": "Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "BranchedMenu/BranchedMenu.jsx"
+				}
+			]
+		},
+		{
+			"name": "BranchedMenu-TS-CSS",
+			"title": "BranchedMenu",
+			"description": "Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "BranchedMenu.css",
+					"target": "@components/BranchedMenu.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "BranchedMenu.tsx"
+				}
+			]
+		},
+		{
+			"name": "BranchedMenu-TS-TW",
+			"title": "BranchedMenu",
+			"description": "Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.",
+			"type": "registry:component",
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "BranchedMenu/BranchedMenu.tsx"
+				}
+			]
+		},
+		{
+			"name": "FlipCard-JS-CSS",
+			"title": "FlipCard",
+			"description": "Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FlipCard.css",
+					"target": "@components/FlipCard.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FlipCard.jsx"
+				}
+			]
+		},
+		{
+			"name": "FlipCard-JS-TW",
+			"title": "FlipCard",
+			"description": "Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FlipCard/FlipCard.jsx"
+				}
+			]
+		},
+		{
+			"name": "FlipCard-TS-CSS",
+			"title": "FlipCard",
+			"description": "Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FlipCard.css",
+					"target": "@components/FlipCard.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FlipCard.tsx"
+				}
+			]
+		},
+		{
+			"name": "FlipCard-TS-TW",
+			"title": "FlipCard",
+			"description": "Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FlipCard/FlipCard.tsx"
+				}
+			]
+		},
+		{
+			"name": "TearTicket-JS-CSS",
+			"title": "TearTicket",
+			"description": "Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "TearTicket.css",
+					"target": "@components/TearTicket.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "TearTicket.jsx"
+				}
+			]
+		},
+		{
+			"name": "TearTicket-JS-TW",
+			"title": "TearTicket",
+			"description": "Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "TearTicket/TearTicket.jsx"
+				}
+			]
+		},
+		{
+			"name": "TearTicket-TS-CSS",
+			"title": "TearTicket",
+			"description": "Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "TearTicket.css",
+					"target": "@components/TearTicket.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "TearTicket.tsx"
+				}
+			]
+		},
+		{
+			"name": "TearTicket-TS-TW",
+			"title": "TearTicket",
+			"description": "Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.",
+			"type": "registry:component",
+			"dependencies": [
+				"motion@^12.23.12"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "TearTicket/TearTicket.tsx"
+				}
+			]
+		},
+		{
 			"name": "PaperCrumple-JS-CSS",
 			"title": "PaperCrumple",
 			"description": "An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.",
@@ -12922,6 +14840,80 @@
 				{
 					"type": "registry:component",
 					"path": "PaperCrumple/PaperCrumple.tsx"
+				}
+			]
+		},
+		{
+			"name": "Shredder-JS-CSS",
+			"title": "Shredder",
+			"description": "A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "Shredder.css",
+					"target": "@components/Shredder.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "Shredder.jsx"
+				}
+			]
+		},
+		{
+			"name": "Shredder-JS-TW",
+			"title": "Shredder",
+			"description": "A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "Shredder/Shredder.jsx"
+				}
+			]
+		},
+		{
+			"name": "Shredder-TS-CSS",
+			"title": "Shredder",
+			"description": "A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "Shredder.css",
+					"target": "@components/Shredder.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "Shredder.tsx"
+				}
+			]
+		},
+		{
+			"name": "Shredder-TS-TW",
+			"title": "Shredder",
+			"description": "A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.",
+			"type": "registry:component",
+			"dependencies": [
+				"react-dom@^19.0.0"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "Shredder/Shredder.tsx"
 				}
 			]
 		}

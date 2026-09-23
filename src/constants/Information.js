@@ -105,6 +105,15 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/animations/gradual-blur',
     tags: []
   },
+  'Animations/DitherVeil': {
+    videoUrl: '/assets/video/ditherveil.webm',
+    description:
+      'A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell.',
+    category: 'Animations',
+    name: 'DitherVeil',
+    docsUrl: 'https://reactbits.dev/animations/dither-veil',
+    tags: []
+  },
   'Animations/GlowCursor': {
     videoUrl: '/assets/video/glowcursor.webm',
     description: 'Shader-powered light trail that smoothly follows the pointer with customizable glow, color, taper and pulse.',

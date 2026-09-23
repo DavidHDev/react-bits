@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 import './Shredder.css';
 
@@ -12,6 +13,8 @@ const SLIVER = 2;
 const STACK_K = 320;
 const STACK_C = 22;
 const STAGGER = 0.035;
+const ENTER = 22;
+const HYSTERESIS = 8;
 const DEG = Math.PI / 180;
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -167,6 +170,7 @@ export default function Shredder({
   items = [],
   renderItem,
   onShred,
+  onReorder,
   width = 340,
   height = 460,
   inset = 14,
@@ -179,6 +183,8 @@ export default function Shredder({
   stripWidth = 10,
   curl = 1,
   autoAnimate = false,
+  loop = false,
+  loopAfterDelete = false,
   dragTilt = 6,
   lift = 1.02,
   slitColor = '#3f3f46',
@@ -186,6 +192,10 @@ export default function Shredder({
   disabled = false,
   className = ''
 }) {
+  const [order, setOrder] = useState(() => items.map(item => item.id));
+  const rank = new Map(order.map((id, i) => [id, i]));
+  const weight = item => rank.get(item.id) ?? order.length + items.indexOf(item);
+  const sorted = [...items].sort((a, b) => weight(a) - weight(b));
   const rootRef = useRef(null);
   const slitRef = useRef(null);
   const canvasRef = useRef(null);
@@ -193,9 +203,10 @@ export default function Shredder({
   const itemEls = useRef(new Map());
   const cfg = useRef({});
   cfg.current = {
-    items,
+    items: sorted,
     height,
     inset,
+    gap,
     slitHeight,
     fallHeight,
     feedSpeed,
@@ -203,9 +214,12 @@ export default function Shredder({
     autoFeed,
     stripWidth,
     curl,
+    loop,
+    loopAfterDelete,
     dragTilt,
     lift,
     onShred,
+    onReorder,
     disabled
   };
   const sim = useRef({
@@ -216,6 +230,8 @@ export default function Shredder({
     feeds: [],
     strips: [],
     shifts: new Map(),
+    tops: new Map(),
+    timers: new Set(),
     dpr: 1,
     cw: 0,
     ch: 0
@@ -242,35 +258,158 @@ export default function Shredder({
     s.raf = requestAnimationFrame(step);
   };
 
-  const collapse = (f, s, k) => {
+  const later = (ms, fn) => {
+    const s = sim.current;
+    const id = setTimeout(() => {
+      s.timers.delete(id);
+      fn();
+    }, ms);
+    s.timers.add(id);
+  };
+
+  const slotOf = key => slotEls.current.get(key);
+  const isLive = key => {
+    const slot = slotOf(key);
+    return !!slot && slot.dataset.gone === undefined;
+  };
+  const liveKeys = () => cfg.current.items.map(item => item.id).filter(isLive);
+  const goneKeys = () =>
+    cfg.current.items
+      .map(item => item.id)
+      .filter(key => {
+        const slot = slotOf(key);
+        return !!slot && slot.dataset.gone !== undefined;
+      });
+
+  const shiftOf = slot => {
+    const s = sim.current;
+    let sh = s.shifts.get(slot);
+    if (!sh) {
+      sh = { el: slot, y: 0, v: 0, target: 0, delay: 0, item: null };
+      s.shifts.set(slot, sh);
+    }
+    return sh;
+  };
+
+  const settle = (origin, entering) => {
+    const s = sim.current;
+    if (!rootRef.current) return;
+    const m = metrics();
+    const next = new Map();
+    const still = reduced();
+    const active = s.drag ? s.drag.slot : null;
+    const slots = cfg.current.items.map(item => slotOf(item.id));
+    const from = origin ? slots.indexOf(origin) : -1;
+    let born = 0;
+    cfg.current.items.forEach((item, idx) => {
+      const slot = slots[idx];
+      if (!slot) return;
+      const sh = s.shifts.get(slot);
+      const top = at(slot, m).y - (sh ? sh.y : 0);
+      const prev = s.tops.get(slot);
+      next.set(slot, top);
+      if (slot === active || still) return;
+      const fresh = (entering && entering.has(slot)) || (prev === undefined && s.tops.size > 0);
+      if (fresh) {
+        const rec = shiftOf(slot);
+        const el = itemEls.current.get(item.id) || null;
+        rec.y = -ENTER;
+        rec.v = 0;
+        rec.target = 0;
+        rec.delay = born * 0.05;
+        rec.item = el;
+        born += 1;
+        if (el) el.style.opacity = '0';
+        slot.style.transform = `translateY(${rec.y}px)`;
+        return;
+      }
+      if (prev === undefined) return;
+      const delta = prev - top;
+      if (Math.abs(delta) < 0.5) return;
+      const rec = shiftOf(slot);
+      rec.y += delta;
+      if (from >= 0) rec.delay = Math.max(0, from - 1 - idx) * STAGGER;
+      slot.style.transform = `translateY(${rec.y}px)`;
+    });
+    s.tops = next;
+    run();
+  };
+
+  const reflow = (mutate, origin, entering) => {
+    mutate();
+    settle(origin || null, entering || null);
+  };
+
+  const arrange = (key, index) => {
+    const ids = cfg.current.items.map(item => item.id).filter(id => id !== key);
+    const live = ids.filter(isLive);
+    let anchor = 0;
+    if (index < live.length) anchor = ids.indexOf(live[index]);
+    else if (live.length) anchor = ids.indexOf(live[live.length - 1]) + 1;
+    ids.splice(anchor, 0, key);
+    return ids;
+  };
+
+  const commit = ids => {
+    const same = ids.every((id, i) => id === cfg.current.items[i]?.id);
+    if (same) return false;
+    flushSync(() => setOrder(ids));
+    return true;
+  };
+
+  const revive = (keys, index) => {
+    const s = sim.current;
+    if (s.drag) {
+      later(300, () => revive(keys, index));
+      return;
+    }
+    const entering = new Set();
+    reflow(
+      () => {
+        if (index !== undefined && keys.length === 1) commit(arrange(keys[0], index));
+        keys.forEach(key => {
+          const slot = slotOf(key);
+          const el = itemEls.current.get(key);
+          if (!slot || slot.dataset.gone === undefined) return;
+          delete slot.dataset.gone;
+          slot.style.height = '';
+          slot.style.marginBottom = '';
+          if (el) {
+            el.style.visibility = '';
+            el.style.transform = '';
+            delete el.dataset.state;
+          }
+          entering.add(slot);
+        });
+      },
+      null,
+      entering
+    );
+  };
+
+  const afterShred = key => {
+    const c = cfg.current;
+    if (c.loopAfterDelete) {
+      later(700, () => revive([key], Math.floor(Math.random() * (liveKeys().length + 1))));
+    } else if (c.loop && liveKeys().length === 0) {
+      later(900, () => revive(goneKeys()));
+    }
+  };
+
+  const collapse = (f, s) => {
     f.consumed = true;
     f.el.style.visibility = 'hidden';
     delete f.slot.dataset.active;
-    f.slot.dataset.gone = '';
-    const still = !reduced();
-    const before = [];
-    if (still) {
-      slotEls.current.forEach(el => {
-        if (el !== f.slot) before.push([el, el.getBoundingClientRect().top]);
-      });
-    }
-    f.slot.style.height = '0px';
-    f.slot.style.marginBottom = '0px';
-    if (still) {
-      const order = Array.from(f.slot.parentElement.children);
-      const gone = order.indexOf(f.slot);
-      before.forEach(([el, top]) => {
-        const delta = (top - el.getBoundingClientRect().top) / k;
-        if (Math.abs(delta) < 0.5) return;
-        const idx = order.indexOf(el);
-        const sh = s.shifts.get(el) || { el, y: 0, v: 0, delay: 0 };
-        sh.y += delta;
-        sh.delay = Math.max(0, gone - 1 - idx) * STAGGER;
-        el.style.transform = `translateY(${sh.y}px)`;
-        s.shifts.set(el, sh);
-      });
-    }
+    s.shifts.forEach(sh => {
+      sh.target = 0;
+    });
+    reflow(() => {
+      f.slot.dataset.gone = '';
+      f.slot.style.height = '0px';
+      f.slot.style.marginBottom = '0px';
+    }, f.slot);
     cfg.current.onShred?.(f.item);
+    afterShred(f.key);
   };
 
   const consumeNow = (key, item, el, slot) => {
@@ -294,7 +433,7 @@ export default function Shredder({
       consumed: false,
       strips: 0
     };
-    collapse(f, s, metrics().k);
+    collapse(f, s);
     run();
   };
 
@@ -302,6 +441,9 @@ export default function Shredder({
     const s = sim.current;
     const c = cfg.current;
     s.drag = null;
+    s.shifts.forEach(sh => {
+      sh.target = 0;
+    });
     if (reduced()) {
       consumeNow(d.key, d.item, d.el, d.slot);
       return;
@@ -372,6 +514,60 @@ export default function Shredder({
     }
   };
 
+  const place = (d, sp) => {
+    d.el.style.transform = `translate(${d.rx - sp.x}px, ${d.ry - sp.y}px) rotate(${d.tilt}deg) scale(${d.lift})`;
+  };
+
+  const aim = (d, m) => {
+    const s = sim.current;
+    const c = cfg.current;
+    const rows = [];
+    c.items.forEach(item => {
+      if (item.id === d.key) return;
+      const slot = slotOf(item.id);
+      if (!slot || slot.dataset.gone !== undefined) return;
+      const top = s.tops.get(slot);
+      if (top === undefined) return;
+      rows.push({ slot, mid: top + slot.offsetHeight / 2 });
+    });
+    let j = -1;
+    if (d.moved && d.ry + d.H < m.lip - 8) {
+      const cy = d.ry + d.H / 2;
+      let n = 0;
+      rows.forEach(row => {
+        if (row.mid < cy) n += 1;
+      });
+      if (d.j >= 0 && n !== d.j) {
+        const edge = rows[n > d.j ? n - 1 : n];
+        if (edge && Math.abs(edge.mid - cy) < HYSTERESIS) n = d.j;
+      }
+      j = n;
+    }
+    if (j === d.j) return;
+    d.j = j;
+    rows.forEach((row, k) => {
+      shiftOf(row.slot).target = j >= 0 && k < j ? -(d.H + c.gap) : 0;
+    });
+  };
+
+  const drop = d => {
+    const s = sim.current;
+    const c = cfg.current;
+    const live = liveKeys().filter(key => key !== d.key);
+    const index = clamp(d.j >= 0 ? d.j : d.from, 0, live.length);
+    s.shifts.forEach(sh => {
+      sh.target = 0;
+    });
+    let changed = false;
+    reflow(() => {
+      changed = commit(arrange(d.key, index));
+      d.slot.style.height = `${d.H}px`;
+      d.slot.style.marginBottom = '';
+    });
+    d.phase = 'return';
+    if (changed) c.onReorder?.(cfg.current.items);
+  };
+
   const tick = now => {
     const s = sim.current;
     const c = cfg.current;
@@ -395,6 +591,8 @@ export default function Shredder({
         if (d.phase === 'drag') {
           d.tx = d.px - d.gx;
           d.ty = Math.min(d.py - d.gy, ceiling);
+          if (!d.moved && Math.hypot(d.px - d.ox, d.py - d.oy) > 6) d.moved = true;
+          aim(d, m);
         } else if (d.phase === 'carry') {
           d.tx = (m.rw - d.W) / 2;
           d.ty = ceiling;
@@ -413,7 +611,7 @@ export default function Shredder({
         if (bites && over >= c.bite - 0.5) {
           grab(d, m);
         } else {
-          d.el.style.transform = `translate(${d.rx - sp.x}px, ${d.ry - sp.y}px) rotate(${d.tilt}deg) scale(${d.lift})`;
+          place(d, sp);
           const still =
             Math.abs(d.rx - d.tx) < 0.2 && Math.abs(d.ry - d.ty) < 0.2 && Math.abs(d.vy) < 2 && Math.abs(d.vx) < 2;
           if (d.phase === 'return' && still && Math.abs(d.lift - 1) < 0.002 && Math.abs(d.tilt) < 0.05) {
@@ -445,7 +643,7 @@ export default function Shredder({
         f.tilt = ease(f.tilt, 0, dt, 0.08);
         f.lift = ease(f.lift, 1, dt, 0.1);
         if (f.ry >= m.lip) {
-          collapse(f, s, m.k);
+          collapse(f, s);
         } else {
           const jitter = Math.sin(s.t * 150) * 0.5;
           f.el.style.transform = `translate(${f.rx - sp.x + jitter}px, ${f.ry - sp.y}px) rotate(${f.tilt}deg) scale(${f.lift})`;
@@ -461,9 +659,9 @@ export default function Shredder({
         s.shifts.delete(el);
         return;
       }
-      moving = true;
       if (sh.delay > 0) {
         sh.delay -= dt;
+        moving = true;
         return;
       }
       if (sh.item) {
@@ -478,14 +676,21 @@ export default function Shredder({
       const n = Math.ceil(dt * 240);
       const h = dt / n;
       for (let k = 0; k < n; k += 1) {
-        sh.v += (-STACK_K * sh.y - STACK_C * sh.v) * h;
+        sh.v += (-STACK_K * (sh.y - sh.target) - STACK_C * sh.v) * h;
         sh.y += sh.v * h;
       }
-      if (Math.abs(sh.y) < 0.15 && Math.abs(sh.v) < 4) {
-        el.style.transform = '';
-        s.shifts.delete(el);
+      if (Math.abs(sh.y - sh.target) < 0.15 && Math.abs(sh.v) < 4) {
+        sh.y = sh.target;
+        sh.v = 0;
+        if (sh.target === 0) {
+          el.style.transform = '';
+          s.shifts.delete(el);
+        } else {
+          el.style.transform = `translateY(${sh.y}px)`;
+        }
       } else {
         el.style.transform = `translateY(${sh.y}px)`;
+        moving = true;
       }
     });
     const ctx = canvas.getContext('2d');
@@ -570,7 +775,7 @@ export default function Shredder({
     const c = cfg.current;
     const key = item.id;
     const el = itemEls.current.get(key);
-    const slot = slotEls.current.get(key);
+    const slot = slotOf(key);
     if (c.disabled || s.drag || !el || !slot || slot.dataset.gone !== undefined) return;
     if (s.feeds.some(f => f.key === key)) return;
     const m = metrics();
@@ -587,7 +792,7 @@ export default function Shredder({
       snap = Promise.reject(new Error('snapshot'));
     }
     snap.catch(() => {});
-    s.drag = {
+    const d = {
       key,
       item,
       el,
@@ -606,44 +811,26 @@ export default function Shredder({
       gy: p.y - sp.y,
       px: p.x,
       py: p.y,
+      ox: p.x,
+      oy: p.y,
+      moved: false,
+      from: liveKeys().indexOf(key),
+      j: -1,
       phase,
       id: e ? e.pointerId : null,
       snap,
       fill: fill === 'rgba(0, 0, 0, 0)' || fill === 'transparent' ? 'rgba(127, 127, 127, 0.35)' : fill
     };
-    slot.style.height = `${H}px`;
-    slot.dataset.active = '';
-    el.dataset.state = 'drag';
-    run();
-  };
-
-  const restore = () => {
-    const s = sim.current;
-    if (s.drag) return;
-    s.strips.length = 0;
-    s.feeds.length = 0;
-    const canvas = canvasRef.current;
-    if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-    const still = !reduced();
-    let i = 0;
-    slotEls.current.forEach((slot, key) => {
-      if (slot.dataset.gone === undefined) return;
-      const el = itemEls.current.get(key);
-      delete slot.dataset.gone;
-      slot.style.height = '';
-      slot.style.marginBottom = '';
-      if (el) {
-        el.style.visibility = '';
-        el.style.transform = '';
-        delete el.dataset.state;
-      }
-      if (still) {
-        if (el) el.style.opacity = '0';
-        slot.style.transform = 'translateY(-22px)';
-        s.shifts.set(slot, { el: slot, y: -22, v: 0, delay: i * 0.05, item: el || null });
-        i += 1;
-      }
-    });
+    s.drag = d;
+    s.shifts.delete(slot);
+    slot.style.transform = '';
+    reflow(() => {
+      slot.dataset.active = '';
+      el.dataset.state = 'drag';
+      slot.style.height = '0px';
+      slot.style.marginBottom = '0px';
+    }, slot);
+    place(d, at(slot, m));
     run();
   };
 
@@ -672,7 +859,7 @@ export default function Shredder({
     if (d.ry + d.H > m.lip + 0.5) {
       grab(d, m);
     } else {
-      d.phase = 'return';
+      drop(d);
     }
     run();
   };
@@ -683,7 +870,7 @@ export default function Shredder({
     const key = item.id;
     if (reduced()) {
       const el = itemEls.current.get(key);
-      const slot = slotEls.current.get(key);
+      const slot = slotOf(key);
       const s = sim.current;
       if (cfg.current.disabled || !el || !slot || slot.dataset.gone !== undefined || s.feeds.some(f => f.key === key))
         return;
@@ -692,6 +879,10 @@ export default function Shredder({
     }
     begin(item, 'carry', null);
   };
+
+  useLayoutEffect(() => {
+    settle(null, null);
+  });
 
   useEffect(() => {
     const s = sim.current;
@@ -703,6 +894,7 @@ export default function Shredder({
       const cw = root.offsetWidth + OVER * 2;
       const ch = cfg.current.fallHeight;
       if (cw === s.cw && ch === s.ch && dpr === s.dpr) return;
+      if (s.cw) s.tops = new Map();
       s.cw = cw;
       s.ch = ch;
       s.dpr = dpr;
@@ -739,8 +931,7 @@ export default function Shredder({
     const pickNext = () => {
       const list = cfg.current.items;
       for (let i = list.length - 1; i >= 0; i -= 1) {
-        const slot = slotEls.current.get(list[i].id);
-        if (slot && slot.dataset.gone === undefined) return list[i];
+        if (isLive(list[i].id)) return list[i];
       }
       return null;
     };
@@ -753,7 +944,7 @@ export default function Shredder({
         if (!item) {
           await wait(1100);
           if (!alive) break;
-          restore();
+          revive(goneKeys());
           await wait(1200);
           continue;
         }
@@ -774,6 +965,8 @@ export default function Shredder({
     return () => {
       cancelAnimationFrame(s.raf);
       s.raf = 0;
+      s.timers.forEach(id => clearTimeout(id));
+      s.timers.clear();
     };
   }, []);
 
@@ -801,7 +994,7 @@ export default function Shredder({
       }}
     >
       <ul className="shredder__list">
-        {items.map((item, index) => (
+        {sorted.map((item, index) => (
           <li key={item.id} ref={keep(slotEls, item.id)} className="shredder__slot">
             <div
               ref={keep(itemEls, item.id)}
