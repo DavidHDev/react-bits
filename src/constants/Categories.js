@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Tech Text',
   'Dither Veil',
   'Shredder',
   'Tear Ticket',
@@ -65,6 +66,7 @@ export const CATEGORIES = [
   {
     name: 'Text Animations',
     subcategories: [
+      'Tech Text',
       'Text Loop',
       'Masked Heading',
       'Particle Text',

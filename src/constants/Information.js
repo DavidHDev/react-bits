@@ -509,6 +509,15 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/text-animations/warp-text',
     tags: []
   },
+  'TextAnimations/TechText': {
+    videoUrl: '/assets/video/techtext.webm',
+    description:
+      'A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.',
+    category: 'TextAnimations',
+    name: 'TechText',
+    docsUrl: 'https://reactbits.dev/text-animations/tech-text',
+    tags: []
+  },
   'TextAnimations/StrokeText': {
     videoUrl: '/assets/video/stroketext.webm',
     description: 'Outlined letterforms draw themselves on, then flood with fill.',

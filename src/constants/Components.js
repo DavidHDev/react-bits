@@ -78,7 +78,8 @@ const textAnimations = {
   'depth-text': () => import('../demo/TextAnimations/DepthTextDemo'),
   'fold-text': () => import('../demo/TextAnimations/FoldTextDemo'),
   'echo-text': () => import('../demo/TextAnimations/EchoTextDemo'),
-  'text-loop': () => import('../demo/TextAnimations/TextLoopDemo')
+  'text-loop': () => import('../demo/TextAnimations/TextLoopDemo'),
+  'tech-text': () => import('../demo/TextAnimations/TechTextDemo')
 };
 
 const components = {
