@@ -4102,7 +4102,7 @@
 		{
 			"name": "TechText-JS-CSS",
 			"title": "TechText",
-			"description": "A wordmark that opens into its real vector anatomy under the cursor: outlines, anchors, bezier handles and font metrics.",
+			"description": "A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -4121,7 +4121,7 @@
 		{
 			"name": "TechText-JS-TW",
 			"title": "TechText",
-			"description": "A wordmark that opens into its real vector anatomy under the cursor: outlines, anchors, bezier handles and font metrics.",
+			"description": "A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -4135,7 +4135,7 @@
 		{
 			"name": "TechText-TS-CSS",
 			"title": "TechText",
-			"description": "A wordmark that opens into its real vector anatomy under the cursor: outlines, anchors, bezier handles and font metrics.",
+			"description": "A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -4154,7 +4154,7 @@
 		{
 			"name": "TechText-TS-TW",
 			"title": "TechText",
-			"description": "A wordmark that opens into its real vector anatomy under the cursor: outlines, anchors, bezier handles and font metrics.",
+			"description": "A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
