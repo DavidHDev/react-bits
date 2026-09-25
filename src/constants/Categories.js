@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Electric Logo',
   'Tech Text',
   'Dither Veil',
   'Shredder',
@@ -104,6 +105,7 @@ export const CATEGORIES = [
   {
     name: 'Animations',
     subcategories: [
+      'Electric Logo',
       'Dither Veil',
       'Glow Cursor',
       'Scroll Expand',

@@ -44,6 +44,7 @@ const animations = {
   'cursor-grid': () => import('../demo/Animations/CursorGridDemo'),
   'glow-cursor': () => import('../demo/Animations/GlowCursorDemo'),
   'dither-veil': () => import('../demo/Animations/DitherVeilDemo'),
+  'electric-logo': () => import('../demo/Animations/ElectricLogoDemo'),
 };
 
 const textAnimations = {

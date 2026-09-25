@@ -105,6 +105,15 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/animations/gradual-blur',
     tags: []
   },
+  'Animations/ElectricLogo': {
+    videoUrl: '/assets/video/electriclogo.webm',
+    description:
+      'Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.',
+    category: 'Animations',
+    name: 'ElectricLogo',
+    docsUrl: 'https://reactbits.dev/animations/electric-logo',
+    tags: []
+  },
   'Animations/DitherVeil': {
     videoUrl: '/assets/video/ditherveil.webm',
     description:

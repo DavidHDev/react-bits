@@ -598,6 +598,80 @@
 			]
 		},
 		{
+			"name": "ElectricLogo-JS-CSS",
+			"title": "ElectricLogo",
+			"description": "Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ElectricLogo.css",
+					"target": "@components/ElectricLogo.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ElectricLogo.jsx"
+				}
+			]
+		},
+		{
+			"name": "ElectricLogo-JS-TW",
+			"title": "ElectricLogo",
+			"description": "Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ElectricLogo/ElectricLogo.jsx"
+				}
+			]
+		},
+		{
+			"name": "ElectricLogo-TS-CSS",
+			"title": "ElectricLogo",
+			"description": "Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "ElectricLogo.css",
+					"target": "@components/ElectricLogo.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "ElectricLogo.tsx"
+				}
+			]
+		},
+		{
+			"name": "ElectricLogo-TS-TW",
+			"title": "ElectricLogo",
+			"description": "Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ElectricLogo/ElectricLogo.tsx"
+				}
+			]
+		},
+		{
 			"name": "DitherVeil-JS-CSS",
 			"title": "DitherVeil",
 			"description": "A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell.",
