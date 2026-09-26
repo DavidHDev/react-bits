@@ -184,8 +184,6 @@ const ShapeBlur = ({
 
     document.addEventListener('mousemove', onPointerMove);
     document.addEventListener('pointermove', onPointerMove);
-    document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
     const resize = () => {
       const container = mountRef.current;
       w = container.clientWidth;

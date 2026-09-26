@@ -6710,7 +6710,6 @@ export default function Waves({
     }
     function onMouseMove(e) { updateMouse(e.pageX, e.pageY); }
     function onTouchMove(e) {
-      e.preventDefault();
       const touch = e.touches[0];
       updateMouse(touch.clientX, touch.clientY);
     }
@@ -6730,7 +6729,7 @@ export default function Waves({
     requestAnimationFrame(tick);
     window.addEventListener("resize", onResize);
     window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     return () => {
       window.removeEventListener("resize", onResize);
@@ -6996,7 +6995,6 @@ export default function Waves({
       updateMouse(e.pageX, e.pageY);
     }
     function onTouchMove(e) {
-      e.preventDefault();
       const touch = e.touches[0];
       updateMouse(touch.clientX, touch.clientY);
     }
@@ -7017,7 +7015,7 @@ export default function Waves({
     requestAnimationFrame(tick);
     window.addEventListener("resize", onResize);
     window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     return () => {
       window.removeEventListener("resize", onResize);
@@ -11084,8 +11082,6 @@ const ShapeBlur = ({
 
     document.addEventListener('mousemove', onPointerMove);
     document.addEventListener('pointermove', onPointerMove);
-    document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
     const resize = () => {
       const container = mountRef.current;
       w = container.clientWidth;
@@ -11335,7 +11331,6 @@ const ShapeBlur = ({
 
     document.addEventListener('mousemove', onPointerMove);
     document.addEventListener('pointermove', onPointerMove);
-    document.body.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
     const resize = () => {
       const container = mountRef.current;
