@@ -5194,6 +5194,80 @@
 			]
 		},
 		{
+			"name": "FlexCarousel-JS-CSS",
+			"title": "FlexCarousel",
+			"description": "An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FlexCarousel.css",
+					"target": "@components/FlexCarousel.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FlexCarousel.jsx"
+				}
+			]
+		},
+		{
+			"name": "FlexCarousel-JS-TW",
+			"title": "FlexCarousel",
+			"description": "An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FlexCarousel/FlexCarousel.jsx"
+				}
+			]
+		},
+		{
+			"name": "FlexCarousel-TS-CSS",
+			"title": "FlexCarousel",
+			"description": "An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FlexCarousel.css",
+					"target": "@components/FlexCarousel.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FlexCarousel.tsx"
+				}
+			]
+		},
+		{
+			"name": "FlexCarousel-TS-TW",
+			"title": "FlexCarousel",
+			"description": "An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FlexCarousel/FlexCarousel.tsx"
+				}
+			]
+		},
+		{
 			"name": "DepthCarousel-JS-CSS",
 			"title": "DepthCarousel",
 			"description": "Cards recede into depth on a 3D rail, with drag, keyboard and auto-advance.",

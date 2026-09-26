@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Flex Carousel',
   'Electric Logo',
   'Tech Text',
   'Dither Veil',
@@ -150,6 +151,7 @@ export const CATEGORIES = [
   {
     name: 'Components',
     subcategories: [
+      'Flex Carousel',
       'Infinite Spiral',
       'Depth Carousel',
       'Morph Slider',

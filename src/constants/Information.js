@@ -633,6 +633,15 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/components/chroma-grid',
     tags: []
   },
+  'Components/FlexCarousel': {
+    videoUrl: '/assets/video/flexcarousel.webm',
+    description:
+      'An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.',
+    category: 'Components',
+    name: 'FlexCarousel',
+    docsUrl: 'https://reactbits.dev/components/flex-carousel',
+    tags: []
+  },
   'Components/DepthCarousel': {
     videoUrl: '/assets/video/depthcarousel.webm',
     description: 'Cards recede into depth on a 3D rail, with drag, keyboard and auto-advance.',
