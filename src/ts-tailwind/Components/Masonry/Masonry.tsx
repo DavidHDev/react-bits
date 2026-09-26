@@ -10,9 +10,10 @@ const useMedia = (queries: string[], values: number[], defaultValue: number): nu
   const [value, setValue] = useState<number>(get);
 
   useEffect(() => {
+    const mediaQueries = queries.map(q => matchMedia(q));
     const handler = () => setValue(get);
-    queries.forEach(q => matchMedia(q).addEventListener('change', handler));
-    return () => queries.forEach(q => matchMedia(q).removeEventListener('change', handler));
+    mediaQueries.forEach(query => query.addEventListener('change', handler));
+    return () => mediaQueries.forEach(query => query.removeEventListener('change', handler));
   }, [queries]);
 
   return value;
