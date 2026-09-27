@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { animate, useMotionValue, useReducedMotion } from 'motion/react';
 

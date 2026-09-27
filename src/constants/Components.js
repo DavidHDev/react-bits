@@ -1,7 +1,8 @@
 const getStarted = {
   introduction: () => import('../docs/Introduction.jsx'),
   installation: () => import('../docs/Installation.jsx'),
-  mcp: () => import('../docs/McpServer.jsx')
+  mcp: () => import('../docs/McpServer.jsx'),
+  changelog: () => import('../docs/Changelog.jsx')
 };
 
 const animations = {

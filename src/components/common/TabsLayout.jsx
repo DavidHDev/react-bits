@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import TabsFooter from './TabsFooter';
 import CategoryProFooter from './Pro/CategoryProFooter';
 
@@ -6,7 +6,7 @@ import { Tabs, Icon, Flex, Tooltip, Box, Menu, Portal } from '@chakra-ui/react';
 import { FiCode, FiEye } from 'react-icons/fi';
 import { FaRegShareFromSquare } from 'react-icons/fa6';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
-import { MoreHorizontal, Palette } from 'lucide-react';
+import { Maximize2, Monitor, MoreHorizontal, Palette, Smartphone, Tablet } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { toggleSavedComponent, isComponentSaved } from '../../utils/favorites';
@@ -21,6 +21,8 @@ import CopyForAIMenu, { AIMenuItem } from './CopyForAIMenu';
 import { useAIExportActions } from '../../hooks/useAIExportActions';
 import ComponentPager from './ComponentPager';
 import CustomizeActionsContext from './Preview/CustomizeContext';
+import PreviewResizer, { PreviewStage } from './Preview/PreviewResizer';
+import { usePreviewFrame } from '../../hooks/usePreviewFrame';
 
 const TAB_STYLE_PROPS = {
   flex: '0 0 auto',
@@ -63,6 +65,87 @@ function findChildProps(children, targetType) {
   });
   return result;
 }
+
+const TOOLTIP_CONTENT_PROPS = {
+  bg: colors.bgBody,
+  border: `1px solid ${colors.borderPrimary}`,
+  color: colors.accent,
+  fontSize: '12px',
+  fontWeight: '500',
+  lineHeight: '0',
+  px: 4,
+  whiteSpace: 'nowrap',
+  h: 10,
+  borderRadius: '10px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+  pointerEvents: 'none'
+};
+
+const PreviewAction = ({ label, icon, onClick }) => (
+  <Tooltip.Root openDelay={250} closeDelay={100} positioning={{ placement: 'left', gutter: 8 }}>
+    <Tooltip.Trigger asChild>
+      <Box
+        as="button"
+        aria-label={label}
+        onClick={onClick}
+        display="flex"
+        cursor="pointer"
+        alignItems="center"
+        justifyContent="center"
+        {...TAB_STYLE_PROPS}
+        w={10}
+      >
+        <Icon as={icon} boxSize={4} flexShrink={0} color="var(--text-primary)" />
+      </Box>
+    </Tooltip.Trigger>
+    <Tooltip.Positioner>
+      <Tooltip.Content {...TOOLTIP_CONTENT_PROPS}>{label}</Tooltip.Content>
+    </Tooltip.Positioner>
+  </Tooltip.Root>
+);
+
+const TABLET_WIDTH = 768;
+const MOBILE_WIDTH = 375;
+
+const WIDTH_PRESETS = [
+  { label: 'Desktop', icon: Monitor, width: null },
+  { label: `Tablet · ${TABLET_WIDTH}px`, icon: Tablet, width: TABLET_WIDTH },
+  { label: `Mobile · ${MOBILE_WIDTH}px`, icon: Smartphone, width: MOBILE_WIDTH }
+];
+
+const PreviewWidthPresets = ({ fullWidth, width, onChange }) => {
+  const presets = WIDTH_PRESETS.filter(preset => preset.width === null || preset.width < fullWidth);
+  if (presets.length < 2) return null;
+
+  return (
+    <div className="preview-width-presets" role="group" aria-label="Preview width">
+      {presets.map(preset => (
+        <Tooltip.Root key={preset.label} openDelay={250} closeDelay={100} positioning={{ placement: 'top', gutter: 8 }}>
+          <Tooltip.Trigger asChild>
+            <button
+              type="button"
+              className="preview-width-preset"
+              aria-label={preset.label}
+              aria-pressed={width === preset.width}
+              onClick={() => onChange(preset.width)}
+            >
+              <preset.icon aria-hidden="true" />
+            </button>
+          </Tooltip.Trigger>
+          <Tooltip.Positioner>
+            <Tooltip.Content {...TOOLTIP_CONTENT_PROPS}>{preset.label}</Tooltip.Content>
+          </Tooltip.Positioner>
+        </Tooltip.Root>
+      ))}
+    </div>
+  );
+};
+
+const canFullscreen = () =>
+  typeof document !== 'undefined' && Boolean(document.fullscreenEnabled || document.webkitFullscreenEnabled);
 
 function getActiveCode(codeObject, lang, style) {
   if (!codeObject) return { source: '', label: '', css: '' };
@@ -257,11 +340,38 @@ const TabsLayout = ({ children, className }) => {
     }
   }, []);
 
+  const [activeTab, setActiveTab] = useState('preview');
+  const [previewWidth, setPreviewWidth] = useState(null);
+  const [resizing, setResizing] = useState(false);
+  const previewRef = useRef(null);
+  const isPreview = activeTab === 'preview';
+  const canResize = category !== 'get-started' && isPreview;
+  const frame = usePreviewFrame(previewRef, canResize);
+
+  useEffect(() => {
+    if (frame && previewWidth !== null && previewWidth >= frame.fullWidth) setPreviewWidth(null);
+  }, [frame, previewWidth]);
+
+  const openFullscreen = useCallback(() => {
+    const demo = previewRef.current?.querySelector('.demo-container');
+    const request = demo?.requestFullscreen || demo?.webkitRequestFullscreen;
+    if (!request) return;
+    Promise.resolve(request.call(demo)).catch(() => toast.error('Fullscreen is not available here'));
+  }, []);
+
   const showFavorite = favoriteKey && category !== 'get-started';
-  const hasOverflowActions = showFavorite || Boolean(codeExampleProps) || Boolean(studioButtonProps);
+  const showFullscreen = category === 'backgrounds' && isPreview && canFullscreen();
+  const hasOverflowActions = showFavorite || Boolean(codeExampleProps) || Boolean(studioButtonProps) || showFullscreen;
 
   return (
-    <Tabs.Root w="100%" variant="plain" lazyMount defaultValue="preview" className={className}>
+    <Tabs.Root
+      w="100%"
+      variant="plain"
+      lazyMount
+      value={activeTab}
+      onValueChange={({ value }) => setActiveTab(value)}
+      className={className}
+    >
       <Tabs.List w="100%">
         <Flex gap={2} justifyContent="space-between" alignItems="center" w="100%" wrap="nowrap">
           {/* Primary tabs */}
@@ -277,6 +387,12 @@ const TabsLayout = ({ children, className }) => {
 
           {/* Desktop: full action buttons */}
           <Flex alignItems="center" gap={2} flexShrink={0} display={{ base: 'none', md: 'flex' }}>
+            {canResize && frame && (
+              <PreviewWidthPresets fullWidth={frame.fullWidth} width={previewWidth} onChange={setPreviewWidth} />
+            )}
+
+            {showFullscreen && <PreviewAction label="Fullscreen" icon={Maximize2} onClick={openFullscreen} />}
+
             {showFavorite && (
               <Tooltip.Root openDelay={250} closeDelay={100} positioning={{ placement: 'left', gutter: 8 }}>
                 <Tooltip.Trigger asChild>
@@ -483,6 +599,24 @@ const TabsLayout = ({ children, className }) => {
                           ))}
                         </>
                       )}
+                      {showFullscreen && (
+                        <Menu.Item
+                          value="fullscreen"
+                          onSelect={openFullscreen}
+                          display="flex"
+                          alignItems="center"
+                          gap={3}
+                          px={3}
+                          py={2}
+                          fontSize="14px"
+                          color="var(--text-primary)"
+                          borderRadius="8px"
+                          cursor="pointer"
+                          _hover={{ bg: colors.bgHover }}
+                        >
+                          <Maximize2 size={16} /> Fullscreen
+                        </Menu.Item>
+                      )}
                       {studioButtonProps && (
                         <Menu.Item
                           value="open-studio"
@@ -510,7 +644,15 @@ const TabsLayout = ({ children, className }) => {
         </Flex>
       </Tabs.List>
 
-      <Tabs.Content pt={0} value="preview">
+      <Tabs.Content
+        pt={0}
+        value="preview"
+        ref={previewRef}
+        className="preview-panel"
+        data-resizing={resizing ? '' : undefined}
+        style={previewWidth === null ? undefined : { '--preview-width': `${previewWidth}px` }}
+      >
+        {canResize && <PreviewStage frame={frame} visible={previewWidth !== null || resizing} />}
         <CustomizeActionsContext.Provider
           value={{
             openStudio: studioButtonProps ? handleOpenStudio : null,
@@ -520,6 +662,14 @@ const TabsLayout = ({ children, className }) => {
         >
           {contentMap.PreviewTab}
         </CustomizeActionsContext.Provider>
+        {canResize && (
+          <PreviewResizer
+            frame={frame}
+            width={previewWidth}
+            onWidthChange={setPreviewWidth}
+            onResizingChange={setResizing}
+          />
+        )}
       </Tabs.Content>
       <Tabs.Content pt={0} value="code">
         {contentMap.CodeTab}

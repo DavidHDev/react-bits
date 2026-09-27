@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, type PanInfo, useMotionValue, useTransform } from 'motion/react';
 import React, { type JSX } from 'react';

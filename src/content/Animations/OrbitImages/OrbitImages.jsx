@@ -1,3 +1,5 @@
+'use client';
+
 // Component created by Dominik Koch
 // https://x.com/dominikkoch
 

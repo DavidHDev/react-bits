@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, type HTMLAttributes, type ReactNode } from 'react';
 import { Mesh, Program, Renderer, Triangle } from 'ogl';
 import './GlowCursor.css';

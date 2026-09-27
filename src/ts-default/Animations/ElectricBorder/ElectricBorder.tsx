@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useCallback, type CSSProperties, type ReactNode } from 'react';
 import './ElectricBorder.css';
 

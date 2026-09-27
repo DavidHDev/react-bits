@@ -1,3 +1,5 @@
+'use client';
+
 import { AnimatePresence, motion, type Variants } from 'motion/react';
 import React, { Children, type HTMLAttributes, type JSX, type ReactNode, useLayoutEffect, useRef, useState } from 'react';
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, type CSSProperties } from 'react';
 import { Renderer, Program, Mesh, Triangle, Texture, type OGLRenderingContext } from 'ogl';
 import './WarpText.css';

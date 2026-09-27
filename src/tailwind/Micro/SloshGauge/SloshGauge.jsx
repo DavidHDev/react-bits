@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const H = 1 / 120;

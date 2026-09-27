@@ -1,3 +1,5 @@
+'use client';
+
 import { isValidElement, useLayoutEffect, useRef, useState } from 'react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {

@@ -42,9 +42,11 @@ const files = [
   path.join(paths.constants, `${componentNameLower}Code.js`)
 ];
 
+const componentFiles = new Set(files.filter(file => /\.(jsx|tsx)$/.test(file) && !file.includes(paths.demo)));
+
 files.forEach(file => {
   if (!fs.existsSync(file)) {
-    fs.writeFileSync(file, '');
+    fs.writeFileSync(file, componentFiles.has(file) ? "'use client';\n" : '');
   }
 });
 

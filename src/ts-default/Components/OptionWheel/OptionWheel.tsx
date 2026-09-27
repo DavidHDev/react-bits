@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState, useCallback, useEffect, type CSSProperties } from 'react';
 import './OptionWheel.css';
 

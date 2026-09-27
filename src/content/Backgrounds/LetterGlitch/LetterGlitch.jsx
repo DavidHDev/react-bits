@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useEffect } from 'react';
 
 const FALLBACK_RGB = { r: 255, g: 255, b: 255 };

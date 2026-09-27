@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo, useRef } from 'react';
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);

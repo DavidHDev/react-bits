@@ -11,7 +11,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    hmr: true
+    hmr: true,
+    watch: {
+      ignored: ['**/public/r/**', '**/public/og/**']
+    }
   },
   resolve: {
     dedupe: ['react', 'react-dom'],
@@ -30,5 +33,13 @@ export default defineConfig({
       parser: safeParser
     }
   },
-  assetsInclude: ['**/*.glb']
+  assetsInclude: ['**/*.glb'],
+  build: {
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client')) return;
+        warn(warning);
+      }
+    }
+  }
 });

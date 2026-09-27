@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 const spring = (value = 0) => ({ value, target: value, velocity: 0 });

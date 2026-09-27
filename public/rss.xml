@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>React Bits changelog</title>
+    <link>https://reactbits.dev/get-started/changelog</link>
+    <description>Everything new in React Bits: new components, categories and updates.</description>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 27 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <atom:link href="https://reactbits.dev/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>New: Micro Slats</title>
+      <link>https://reactbits.dev/backgrounds/micro-slats</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/MicroSlats@added</guid>
+      <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.</description>
+    </item>
+    <item>
+      <title>New: Flex Carousel</title>
+      <link>https://reactbits.dev/components/flex-carousel</link>
+      <guid isPermaLink="false">reactbits:Components/FlexCarousel@added</guid>
+      <pubDate>Sat, 26 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.</description>
+    </item>
+    <item>
+      <title>New: Electric Logo</title>
+      <link>https://reactbits.dev/animations/electric-logo</link>
+      <guid isPermaLink="false">reactbits:Animations/ElectricLogo@added</guid>
+      <pubDate>Fri, 25 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.</description>
+    </item>
+    <item>
+      <title>New: Tech Text</title>
+      <link>https://reactbits.dev/text-animations/tech-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/TechText@added</guid>
+      <pubDate>Thu, 24 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>A wordmark whose letters turn into dashed vector paths under the cursor.</description>
+    </item>
+    <item>
+      <title>New: Dither Veil</title>
+      <link>https://reactbits.dev/animations/dither-veil</link>
+      <guid isPermaLink="false">reactbits:Animations/DitherVeil@added</guid>
+      <pubDate>Wed, 23 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell.</description>
+    </item>
+    <item>
+      <title>New: Shredder</title>
+      <link>https://reactbits.dev/micro/shredder</link>
+      <guid isPermaLink="false">reactbits:Micro/Shredder@added</guid>
+      <pubDate>Tue, 22 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Micro</category>
+      <description>A list with a paper shredder at the bottom.</description>
+    </item>
+    <item>
+      <title>New: Paper Crumple</title>
+      <link>https://reactbits.dev/micro/paper-crumple</link>
+      <guid isPermaLink="false">reactbits:Micro/PaperCrumple@added</guid>
+      <pubDate>Sun, 20 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Micro</category>
+      <description>An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag.</description>
+    </item>
+    <item>
+      <title>New: Flip Card</title>
+      <link>https://reactbits.dev/micro/flip-card</link>
+      <guid isPermaLink="false">reactbits:Micro/FlipCard@added</guid>
+      <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Micro</category>
+      <description>Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.</description>
+    </item>
+    <item>
+      <title>New: Tear Ticket</title>
+      <link>https://reactbits.dev/micro/tear-ticket</link>
+      <guid isPermaLink="false">reactbits:Micro/TearTicket@added</guid>
+      <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Micro</category>
+      <description>Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used.</description>
+    </item>
+    <item>
+      <title>New category: Micro</title>
+      <link>https://reactbits.dev/c/micro</link>
+      <guid isPermaLink="false">reactbits:Micro@launch</guid>
+      <pubDate>Fri, 18 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Micro</category>
+      <description>A new category of small, satisfying interactions: switches, buttons, sliders, toasts, menus, loaders and more. Launched with 30 components: Bell Toggle, Branched Menu, Call Chip, Code Slots, Comet Dial, Dodge Field, Folder Float, Fuse Button, Glide Select, Hold Button, Jelly Radio, Lattice Loader, Peek Rating, Prompt Bar, Pulse Heart, Refine Frame, Rubber Segment, Scrub Field, Slide Commit, Sling Button, Slosh Gauge, Spring Check, Squish Switch, Status Mark, Swipe Row, Swipe Toast, Thought Line, Voice Pill, Wake Slider, Warm Tooltip.</description>
+    </item>
+    <item>
+      <title>New: Shape Waves</title>
+      <link>https://reactbits.dev/backgrounds/shape-waves</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/ShapeWaves@added</guid>
+      <pubDate>Tue, 15 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.</description>
+    </item>
+  </channel>
+</rss>

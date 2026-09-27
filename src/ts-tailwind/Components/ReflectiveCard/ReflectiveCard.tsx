@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Fingerprint, User, Activity, Lock } from 'lucide-react';
 

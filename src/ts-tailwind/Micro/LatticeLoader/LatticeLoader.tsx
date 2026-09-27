@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 
 export type LatticeStatus = 'working' | 'done' | 'error';

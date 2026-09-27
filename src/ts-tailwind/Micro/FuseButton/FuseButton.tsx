@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Archive02Icon, Tick02Icon, Undo02Icon } from '@hugeicons/core-free-icons';

@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useRef } from 'react';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

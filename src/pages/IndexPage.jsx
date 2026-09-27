@@ -15,6 +15,7 @@ const IndexPage = () => {
         list={componentMetadata}
         hasFavoriteButton
         sorting="alphabetical"
+        showSortControl
         newSinceLastVisit={newSinceLastVisit}
       />
       <BackToTopButton />

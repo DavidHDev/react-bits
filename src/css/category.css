@@ -806,6 +806,24 @@
   font-weight: 500;
 }
 
+.component-pager-key {
+  display: none;
+  margin-left: 6px;
+  padding: 0 4px;
+  border: 1px solid var(--shell-border-strong);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.625rem;
+  line-height: 1.5;
+  color: var(--text-dimmed);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .component-pager-key {
+    display: inline-block;
+  }
+}
+
 .component-pager-name {
   overflow: hidden;
   color: inherit;
@@ -2025,4 +2043,245 @@
 
 :root[data-theme='light'] .sc-sponsor img {
   filter: grayscale(1) invert(1);
+}
+
+.preview-panel {
+  position: relative;
+  --stage-border: #2f293a;
+  --stage-line: #342d40;
+  --stage-fill: #15121b;
+  --resize-bar: #3a3346;
+  --resize-bar-hover: #6f667d;
+  --resize-bar-active: #f4f4f5;
+  --resize-ease: 0.3s var(--ease-out);
+}
+
+:root[data-theme='light'] .preview-panel {
+  --stage-border: #ededf0;
+  --stage-line: #e4e4e7;
+  --stage-fill: #fafafa;
+  --resize-bar: #d4d4d8;
+  --resize-bar-hover: #a1a1aa;
+  --resize-bar-active: #18181b;
+}
+
+.preview-panel .demo-container {
+  position: relative;
+  max-width: min(100%, var(--preview-width, 100%));
+  transition: max-width var(--resize-ease);
+}
+
+.preview-stage {
+  position: absolute;
+  border: 1px solid var(--stage-border);
+  border-radius: var(--radius-lg);
+  background: var(--stage-fill);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--resize-ease);
+}
+
+.preview-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, var(--stage-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--stage-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image:
+    repeating-linear-gradient(to right, #000 0 3px, transparent 3px 8px),
+    repeating-linear-gradient(to bottom, #000 0 3px, transparent 3px 8px);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    repeating-linear-gradient(to right, #000 0 3px, transparent 3px 8px),
+    repeating-linear-gradient(to bottom, #000 0 3px, transparent 3px 8px);
+  mask-composite: intersect;
+}
+
+.preview-stage[data-visible] {
+  opacity: 1;
+}
+
+.preview-resize-handle {
+  position: absolute;
+  z-index: 3;
+  display: none;
+  width: 24px;
+  align-items: center;
+  justify-content: center;
+  cursor: ew-resize;
+  touch-action: none;
+  outline: none;
+  transition: left var(--resize-ease);
+}
+
+.preview-resize-bar {
+  width: 4px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--resize-bar);
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.preview-resize-grip {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  color: var(--text-dimmed);
+  opacity: 0.5;
+  pointer-events: none;
+  transition:
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.preview-resize-handle:hover .preview-resize-bar,
+.preview-resize-handle:focus-visible .preview-resize-bar {
+  background: var(--resize-bar-hover);
+}
+
+.preview-resize-handle:hover .preview-resize-grip,
+.preview-resize-handle:focus-visible .preview-resize-grip {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.preview-resize-handle[data-dragging] .preview-resize-bar {
+  background: var(--resize-bar-active);
+}
+
+.preview-resize-handle[data-dragging] .preview-resize-grip {
+  color: var(--bg-body);
+  opacity: 1;
+}
+
+.preview-resize-handle:focus-visible .preview-resize-bar {
+  box-shadow:
+    0 0 0 2px var(--bg-body),
+    0 0 0 4px var(--resize-bar-hover);
+}
+
+.preview-width-indicator {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, calc(-100% - 10px));
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--resize-ease);
+}
+
+.preview-width-indicator[data-visible] {
+  opacity: 1;
+}
+
+.preview-panel[data-resizing] .demo-container,
+.preview-panel[data-resizing] .preview-resize-handle {
+  transition: none;
+}
+
+:root[data-preview-resizing],
+:root[data-preview-resizing] * {
+  cursor: ew-resize !important;
+  user-select: none !important;
+}
+
+@media (min-width: 1024px) {
+  .preview-resize-handle {
+    display: flex;
+  }
+}
+
+.preview-width-presets {
+  display: inline-flex;
+  height: 40px;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--action-control-border);
+  border-radius: 10px;
+  background: var(--action-control-bg);
+}
+
+.preview-width-preset {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.preview-width-preset svg {
+  width: 15px;
+  height: 15px;
+}
+
+.preview-width-preset:hover {
+  color: var(--text-primary);
+  background: var(--surface-ghost-hover);
+}
+
+.preview-width-preset:active {
+  transform: scale(0.94);
+}
+
+.preview-width-preset[aria-pressed='true'] {
+  color: var(--color-accent);
+  background: var(--surface-ghost-hover);
+}
+
+:root[data-theme='light'] .preview-width-preset[aria-pressed='true'] {
+  border-color: var(--border-subtle);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.06);
+}
+
+.preview-width-preset:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.preview-panel .demo-container:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.preview-panel .demo-container:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preview-panel .demo-container,
+  .preview-stage,
+  .preview-resize-handle,
+  .preview-width-indicator {
+    transition: none;
+  }
 }

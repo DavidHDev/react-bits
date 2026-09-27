@@ -22,6 +22,8 @@ export const VARIANTS = ['JS-CSS', 'JS-TW', 'TS-CSS', 'TS-TW'];
  * @property {string} name
  * @property {string} docsUrl
  * @property {string[]} tags
+ * @property {string} added
+ * @property {{ date: string, note: string }[]} [updates]
  * @property {Variant[]} [variants]
  * @property {Record<string, any>} [meta]
  */
@@ -39,7 +41,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'AnimatedContent',
     docsUrl: 'https://reactbits.dev/animations/animated-content',
-    tags: []
+    tags: [],
+    added: '2025-01-05'
   },
   'Animations/BlobCursor': {
     videoUrl: '/assets/video/blobcursor.webm',
@@ -47,7 +50,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'BlobCursor',
     docsUrl: 'https://reactbits.dev/animations/blob-cursor',
-    tags: []
+    tags: [],
+    added: '2024-08-06'
   },
   'Animations/ClickSpark': {
     videoUrl: '/assets/video/clickspark.webm',
@@ -55,7 +59,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ClickSpark',
     docsUrl: 'https://reactbits.dev/animations/click-spark',
-    tags: []
+    tags: [],
+    added: '2025-01-16'
   },
   'Animations/Crosshair': {
     videoUrl: '/assets/video/crosshair.webm',
@@ -63,7 +68,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Crosshair',
     docsUrl: 'https://reactbits.dev/animations/crosshair',
-    tags: []
+    tags: [],
+    added: '2024-08-12'
   },
   'Animations/Cubes': {
     videoUrl: '/assets/video/cubes.webm',
@@ -71,7 +77,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Cubes',
     docsUrl: 'https://reactbits.dev/animations/cubes',
-    tags: []
+    tags: [],
+    added: '2025-06-17'
   },
   'Animations/ElectricBorder': {
     videoUrl: '/assets/video/electricborder.webm',
@@ -79,7 +86,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ElectricBorder',
     docsUrl: 'https://reactbits.dev/animations/electric-border',
-    tags: []
+    tags: [],
+    added: '2025-08-21'
   },
   'Animations/FadeContent': {
     videoUrl: '/assets/video/fadecontent.webm',
@@ -87,7 +95,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'FadeContent',
     docsUrl: 'https://reactbits.dev/animations/fade-content',
-    tags: []
+    tags: [],
+    added: '2024-08-07'
   },
   'Animations/GlareHover': {
     videoUrl: '/assets/video/glarehover.webm',
@@ -95,7 +104,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'GlareHover',
     docsUrl: 'https://reactbits.dev/animations/glare-hover',
-    tags: []
+    tags: [],
+    added: '2025-05-30'
   },
   'Animations/GradualBlur': {
     videoUrl: '/assets/video/gradualblur.webm',
@@ -103,7 +113,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'GradualBlur',
     docsUrl: 'https://reactbits.dev/animations/gradual-blur',
-    tags: []
+    tags: [],
+    added: '2025-08-26'
   },
   'Animations/ElectricLogo': {
     videoUrl: '/assets/video/electriclogo.webm',
@@ -112,7 +123,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ElectricLogo',
     docsUrl: 'https://reactbits.dev/animations/electric-logo',
-    tags: []
+    tags: [],
+    added: '2026-09-25'
   },
   'Animations/DitherVeil': {
     videoUrl: '/assets/video/ditherveil.webm',
@@ -121,7 +133,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'DitherVeil',
     docsUrl: 'https://reactbits.dev/animations/dither-veil',
-    tags: []
+    tags: [],
+    added: '2026-09-23'
   },
   'Animations/GlowCursor': {
     videoUrl: '/assets/video/glowcursor.webm',
@@ -129,7 +142,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'GlowCursor',
     docsUrl: 'https://reactbits.dev/animations/glow-cursor',
-    tags: []
+    tags: [],
+    added: '2026-08-26'
   },
   'Animations/GhostCursor': {
     videoUrl: '/assets/video/ghostcursor.webm',
@@ -137,7 +151,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'GhostCursor',
     docsUrl: 'https://reactbits.dev/animations/ghost-cursor',
-    tags: []
+    tags: [],
+    added: '2025-10-27'
   },
   'Animations/ImageTrail': {
     videoUrl: '/assets/video/imagetrail.webm',
@@ -145,7 +160,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ImageTrail',
     docsUrl: 'https://reactbits.dev/animations/image-trail',
-    tags: []
+    tags: [],
+    added: '2025-01-30'
   },
   'Animations/LogoLoop': {
     videoUrl: '/assets/video/logoloop.webm',
@@ -153,7 +169,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'LogoLoop',
     docsUrl: 'https://reactbits.dev/animations/logo-loop',
-    tags: []
+    tags: [],
+    added: '2025-08-18'
   },
   'Animations/Magnet': {
     videoUrl: '/assets/video/magnet.webm',
@@ -161,7 +178,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Magnet',
     docsUrl: 'https://reactbits.dev/animations/magnet',
-    tags: []
+    tags: [],
+    added: '2024-08-08'
   },
   'Animations/MagnetLines': {
     videoUrl: '/assets/video/magnetlines.webm',
@@ -169,7 +187,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'MagnetLines',
     docsUrl: 'https://reactbits.dev/animations/magnet-lines',
-    tags: []
+    tags: [],
+    added: '2025-01-03'
   },
   'Animations/MetaBalls': {
     videoUrl: '/assets/video/metaballs.webm',
@@ -177,7 +196,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'MetaBalls',
     docsUrl: 'https://reactbits.dev/animations/meta-balls',
-    tags: []
+    tags: [],
+    added: '2025-02-12'
   },
   'Animations/Strands': {
     videoUrl: '/assets/video/strands.webm',
@@ -185,7 +205,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Strands',
     docsUrl: 'https://reactbits.dev/animations/strands',
-    tags: []
+    tags: [],
+    added: '2026-06-10'
   },
   'Animations/MetallicPaint': {
     videoUrl: '/assets/video/metallicpaint.webm',
@@ -193,7 +214,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'MetallicPaint',
     docsUrl: 'https://reactbits.dev/animations/metallic-paint',
-    tags: []
+    tags: [],
+    added: '2025-02-22'
   },
   'Animations/Noise': {
     videoUrl: '/assets/video/noise.webm',
@@ -201,7 +223,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Noise',
     docsUrl: 'https://reactbits.dev/animations/noise',
-    tags: []
+    tags: [],
+    added: '2025-01-06'
   },
   'Animations/PixelTrail': {
     videoUrl: '/assets/video/pixeltrail.webm',
@@ -209,7 +232,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'PixelTrail',
     docsUrl: 'https://reactbits.dev/animations/pixel-trail',
-    tags: []
+    tags: [],
+    added: '2025-02-01'
   },
   'Animations/PixelTransition': {
     videoUrl: '/assets/video/pixeltransition.webm',
@@ -217,7 +241,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'PixelTransition',
     docsUrl: 'https://reactbits.dev/animations/pixel-transition',
-    tags: []
+    tags: [],
+    added: '2025-01-21'
   },
   'Animations/PixelSwap': {
     videoUrl: '/assets/video/pixelswap.webm',
@@ -225,7 +250,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'PixelSwap',
     docsUrl: 'https://reactbits.dev/animations/pixel-swap',
-    tags: []
+    tags: [],
+    added: '2026-08-12'
   },
   'Animations/Ribbons': {
     videoUrl: '/assets/video/ribbons.webm',
@@ -233,7 +259,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Ribbons',
     docsUrl: 'https://reactbits.dev/animations/ribbons',
-    tags: []
+    tags: [],
+    added: '2025-02-09'
   },
   'Animations/ShapeBlur': {
     videoUrl: '/assets/video/shapeblur.webm',
@@ -241,7 +268,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ShapeBlur',
     docsUrl: 'https://reactbits.dev/animations/shape-blur',
-    tags: []
+    tags: [],
+    added: '2025-01-26'
   },
   'Animations/SplashCursor': {
     videoUrl: '/assets/video/splashcursor.webm',
@@ -249,7 +277,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'SplashCursor',
     docsUrl: 'https://reactbits.dev/animations/splash-cursor',
-    tags: []
+    tags: [],
+    added: '2025-01-03'
   },
   'Animations/StarBorder': {
     videoUrl: '/assets/video/starborder.webm',
@@ -257,7 +286,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'StarBorder',
     docsUrl: 'https://reactbits.dev/animations/star-border',
-    tags: []
+    tags: [],
+    added: '2024-08-18'
   },
   'Animations/StickerPeel': {
     videoUrl: '/assets/video/stickerpeel.webm',
@@ -265,7 +295,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'StickerPeel',
     docsUrl: 'https://reactbits.dev/animations/sticker-peel',
-    tags: []
+    tags: [],
+    added: '2025-07-21'
   },
   'Animations/TargetCursor': {
     videoUrl: '/assets/video/targetcursor.webm',
@@ -273,7 +304,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'TargetCursor',
     docsUrl: 'https://reactbits.dev/animations/target-cursor',
-    tags: []
+    tags: [],
+    added: '2025-07-18'
   },
   'Animations/LaserFlow': {
     videoUrl: '/assets/video/laserflow.webm',
@@ -281,7 +313,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'LaserFlow',
     docsUrl: 'https://reactbits.dev/animations/laser-flow',
-    tags: []
+    tags: [],
+    added: '2025-09-09'
   },
   'Animations/Antigravity': {
     videoUrl: '/assets/video/antigravity.webm',
@@ -289,7 +322,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'Antigravity',
     docsUrl: 'https://reactbits.dev/animations/antigravity',
-    tags: []
+    tags: [],
+    added: '2025-12-08'
   },
   'Animations/OrbitImages': {
     videoUrl: '/assets/video/orbitimages.webm',
@@ -297,7 +331,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'OrbitImages',
     docsUrl: 'https://reactbits.dev/animations/orbit-images',
-    tags: []
+    tags: [],
+    added: '2026-02-12'
   },
   'Animations/MagicRings': {
     videoUrl: '/assets/video/magicrings.webm',
@@ -305,7 +340,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'MagicRings',
     docsUrl: 'https://reactbits.dev/animations/magic-rings',
-    tags: []
+    tags: [],
+    added: '2026-03-11'
   },
 
   //! Text Animations -------------------------------------------------------------------------------------------------------------------------------
@@ -316,7 +352,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ASCIIText',
     docsUrl: 'https://reactbits.dev/text-animations/ascii-text',
-    tags: []
+    tags: [],
+    added: '2025-01-20'
   },
   'TextAnimations/BlurText': {
     videoUrl: '/assets/video/blurtext.webm',
@@ -324,7 +361,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'BlurText',
     docsUrl: 'https://reactbits.dev/text-animations/blur-text',
-    tags: []
+    tags: [],
+    added: '2024-08-06'
   },
   'TextAnimations/CircularText': {
     videoUrl: '/assets/video/circulartext.webm',
@@ -332,7 +370,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'CircularText',
     docsUrl: 'https://reactbits.dev/text-animations/circular-text',
-    tags: []
+    tags: [],
+    added: '2025-02-14'
   },
   'TextAnimations/CountUp': {
     videoUrl: '/assets/video/countup.webm',
@@ -340,7 +379,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'CountUp',
     docsUrl: 'https://reactbits.dev/text-animations/count-up',
-    tags: []
+    tags: [],
+    added: '2024-08-13'
   },
   'TextAnimations/CurvedLoop': {
     videoUrl: '/assets/video/curvedloop.webm',
@@ -348,7 +388,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'CurvedLoop',
     docsUrl: 'https://reactbits.dev/text-animations/curved-loop',
-    tags: []
+    tags: [],
+    added: '2025-07-06'
   },
   'TextAnimations/DecryptedText': {
     videoUrl: '/assets/video/decryptedtext.webm',
@@ -356,7 +397,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'DecryptedText',
     docsUrl: 'https://reactbits.dev/text-animations/decrypted-text',
-    tags: []
+    tags: [],
+    added: '2025-01-06'
   },
   'TextAnimations/FallingText': {
     videoUrl: '/assets/video/fallingtext.webm',
@@ -364,7 +406,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'FallingText',
     docsUrl: 'https://reactbits.dev/text-animations/falling-text',
-    tags: []
+    tags: [],
+    added: '2025-01-22'
   },
   'TextAnimations/FuzzyText': {
     videoUrl: '/assets/video/fuzzytext.webm',
@@ -372,7 +415,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'FuzzyText',
     docsUrl: 'https://reactbits.dev/text-animations/fuzzy-text',
-    tags: []
+    tags: [],
+    added: '2025-02-18'
   },
   'TextAnimations/GlitchText': {
     videoUrl: '/assets/video/glitchtext.webm',
@@ -380,7 +424,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'GlitchText',
     docsUrl: 'https://reactbits.dev/text-animations/glitch-text',
-    tags: []
+    tags: [],
+    added: '2025-02-18'
   },
   'TextAnimations/GradientText': {
     videoUrl: '/assets/video/gradienttext.webm',
@@ -388,7 +433,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'GradientText',
     docsUrl: 'https://reactbits.dev/text-animations/gradient-text',
-    tags: []
+    tags: [],
+    added: '2024-08-12'
   },
   'TextAnimations/RotatingText': {
     videoUrl: '/assets/video/rotatingtext.webm',
@@ -396,7 +442,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'RotatingText',
     docsUrl: 'https://reactbits.dev/text-animations/rotating-text',
-    tags: []
+    tags: [],
+    added: '2025-02-02'
   },
   'TextAnimations/ScrambledText': {
     videoUrl: '/assets/video/scrambledtext.webm',
@@ -404,7 +451,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ScrambledText',
     docsUrl: 'https://reactbits.dev/text-animations/scrambled-text',
-    tags: []
+    tags: [],
+    added: '2025-05-23'
   },
   'TextAnimations/ScrollFloat': {
     videoUrl: '/assets/video/scrollfloat.webm',
@@ -412,7 +460,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ScrollFloat',
     docsUrl: 'https://reactbits.dev/text-animations/scroll-float',
-    tags: []
+    tags: [],
+    added: '2025-02-17'
   },
   'TextAnimations/ScrollReveal': {
     videoUrl: '/assets/video/scrollreveal.webm',
@@ -420,7 +469,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ScrollReveal',
     docsUrl: 'https://reactbits.dev/text-animations/scroll-reveal',
-    tags: []
+    tags: [],
+    added: '2025-02-17'
   },
   'TextAnimations/ScrollVelocity': {
     videoUrl: '/assets/video/scrollvelocity.webm',
@@ -428,7 +478,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ScrollVelocity',
     docsUrl: 'https://reactbits.dev/text-animations/scroll-velocity',
-    tags: []
+    tags: [],
+    added: '2025-02-14'
   },
   'TextAnimations/ShinyText': {
     videoUrl: '/assets/video/shinytext.webm',
@@ -436,7 +487,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ShinyText',
     docsUrl: 'https://reactbits.dev/text-animations/shiny-text',
-    tags: []
+    tags: [],
+    added: '2024-08-12'
   },
   'TextAnimations/SplitText': {
     videoUrl: '/assets/video/splittext.webm',
@@ -444,7 +496,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'SplitText',
     docsUrl: 'https://reactbits.dev/text-animations/split-text',
-    tags: []
+    tags: [],
+    added: '2024-08-06'
   },
   'TextAnimations/TextCursor': {
     videoUrl: '/assets/video/textcursor.webm',
@@ -452,7 +505,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'TextCursor',
     docsUrl: 'https://reactbits.dev/text-animations/text-cursor',
-    tags: []
+    tags: [],
+    added: '2025-03-18'
   },
   'TextAnimations/TextPressure': {
     videoUrl: '/assets/video/textpressure.webm',
@@ -460,7 +514,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'TextPressure',
     docsUrl: 'https://reactbits.dev/text-animations/text-pressure',
-    tags: []
+    tags: [],
+    added: '2025-01-17'
   },
   'TextAnimations/TextType': {
     videoUrl: '/assets/video/texttype.webm',
@@ -468,7 +523,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'TextType',
     docsUrl: 'https://reactbits.dev/text-animations/text-type',
-    tags: []
+    tags: [],
+    added: '2025-07-20'
   },
   'TextAnimations/TrueFocus': {
     videoUrl: '/assets/video/truefocus.webm',
@@ -476,7 +532,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'TrueFocus',
     docsUrl: 'https://reactbits.dev/text-animations/true-focus',
-    tags: []
+    tags: [],
+    added: '2025-01-07'
   },
   'TextAnimations/VariableProximity': {
     videoUrl: '/assets/video/variableproximity.webm',
@@ -484,7 +541,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'VariableProximity',
     docsUrl: 'https://reactbits.dev/text-animations/variable-proximity',
-    tags: []
+    tags: [],
+    added: '2025-01-07'
   },
   'TextAnimations/Shuffle': {
     videoUrl: '/assets/video/shuffle.webm',
@@ -492,7 +550,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'Shuffle',
     docsUrl: 'https://reactbits.dev/text-animations/shuffle',
-    tags: []
+    tags: [],
+    added: '2025-09-06'
   },
   'TextAnimations/ParticleText': {
     videoUrl: '/assets/video/particletext.webm',
@@ -500,7 +559,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'ParticleText',
     docsUrl: 'https://reactbits.dev/text-animations/particle-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/SplitFlapText': {
     videoUrl: '/assets/video/splitflaptext.webm',
@@ -508,7 +568,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'SplitFlapText',
     docsUrl: 'https://reactbits.dev/text-animations/split-flap-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/WarpText': {
     videoUrl: '/assets/video/warptext.webm',
@@ -516,7 +577,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'WarpText',
     docsUrl: 'https://reactbits.dev/text-animations/warp-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/TechText': {
     videoUrl: '/assets/video/techtext.webm',
@@ -525,7 +587,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'TechText',
     docsUrl: 'https://reactbits.dev/text-animations/tech-text',
-    tags: []
+    tags: [],
+    added: '2026-09-24'
   },
   'TextAnimations/StrokeText': {
     videoUrl: '/assets/video/stroketext.webm',
@@ -533,7 +596,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'StrokeText',
     docsUrl: 'https://reactbits.dev/text-animations/stroke-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/DepthText': {
     videoUrl: '/assets/video/depthtext.webm',
@@ -541,7 +605,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'DepthText',
     docsUrl: 'https://reactbits.dev/text-animations/depth-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/FoldText': {
     videoUrl: '/assets/video/foldtext.webm',
@@ -549,7 +614,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'FoldText',
     docsUrl: 'https://reactbits.dev/text-animations/fold-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/EchoText': {
     videoUrl: '/assets/video/echotext.webm',
@@ -557,7 +623,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'EchoText',
     docsUrl: 'https://reactbits.dev/text-animations/echo-text',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/MaskedHeading': {
     videoUrl: '/assets/video/maskedheading.webm',
@@ -565,7 +632,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'MaskedHeading',
     docsUrl: 'https://reactbits.dev/text-animations/masked-heading',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'TextAnimations/TextLoop': {
     videoUrl: '/assets/video/textloop.webm',
@@ -573,7 +641,8 @@ export const componentMetadata = {
     category: 'TextAnimations',
     name: 'TextLoop',
     docsUrl: 'https://reactbits.dev/text-animations/text-loop',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
 
   //! Components -------------------------------------------------------------------------------------------------------------------------------
@@ -583,7 +652,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'AnimatedList',
     docsUrl: 'https://reactbits.dev/components/animated-list',
-    tags: []
+    tags: [],
+    added: '2025-02-23'
   },
   'Components/BounceCards': {
     videoUrl: '/assets/video/bouncecards.webm',
@@ -591,7 +661,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'BounceCards',
     docsUrl: 'https://reactbits.dev/components/bounce-cards',
-    tags: []
+    tags: [],
+    added: '2025-01-02'
   },
   'Components/BubbleMenu': {
     videoUrl: '/assets/video/bubblemenu.webm',
@@ -599,7 +670,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'BubbleMenu',
     docsUrl: 'https://reactbits.dev/components/bubble-menu',
-    tags: []
+    tags: [],
+    added: '2025-08-22'
   },
   'Components/CardNav': {
     videoUrl: '/assets/video/cardnav.webm',
@@ -607,7 +679,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'CardNav',
     docsUrl: 'https://reactbits.dev/components/card-nav',
-    tags: []
+    tags: [],
+    added: '2025-08-16'
   },
   'Components/CardSwap': {
     videoUrl: '/assets/video/cardswap.webm',
@@ -615,7 +688,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'CardSwap',
     docsUrl: 'https://reactbits.dev/components/card-swap',
-    tags: []
+    tags: [],
+    added: '2025-06-02'
   },
   'Components/Carousel': {
     videoUrl: '/assets/video/carousel.webm',
@@ -623,7 +697,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Carousel',
     docsUrl: 'https://reactbits.dev/components/carousel',
-    tags: []
+    tags: [],
+    added: '2025-02-13'
   },
   'Components/ChromaGrid': {
     videoUrl: '/assets/video/chromagrid.webm',
@@ -631,7 +706,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'ChromaGrid',
     docsUrl: 'https://reactbits.dev/components/chroma-grid',
-    tags: []
+    tags: [],
+    added: '2025-05-30'
   },
   'Components/FlexCarousel': {
     videoUrl: '/assets/video/flexcarousel.webm',
@@ -640,7 +716,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'FlexCarousel',
     docsUrl: 'https://reactbits.dev/components/flex-carousel',
-    tags: []
+    tags: [],
+    added: '2026-09-26'
   },
   'Components/DepthCarousel': {
     videoUrl: '/assets/video/depthcarousel.webm',
@@ -648,7 +725,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'DepthCarousel',
     docsUrl: 'https://reactbits.dev/components/depth-carousel',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Components/AccordionGallery': {
     videoUrl: '/assets/video/accordiongallery.webm',
@@ -656,7 +734,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'AccordionGallery',
     docsUrl: 'https://reactbits.dev/components/accordion-gallery',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Components/MorphSlider': {
     videoUrl: '/assets/video/morphslider.webm',
@@ -664,7 +743,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'MorphSlider',
     docsUrl: 'https://reactbits.dev/components/morph-slider',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Components/DriftWall': {
     videoUrl: '/assets/video/driftwall.webm',
@@ -672,7 +752,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'DriftWall',
     docsUrl: 'https://reactbits.dev/components/drift-wall',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Components/CircularGallery': {
     videoUrl: '/assets/video/circulargallery.webm',
@@ -680,7 +761,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'CircularGallery',
     docsUrl: 'https://reactbits.dev/components/circular-gallery',
-    tags: []
+    tags: [],
+    added: '2025-02-03'
   },
   'Components/Counter': {
     videoUrl: '/assets/video/counter.webm',
@@ -688,7 +770,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Counter',
     docsUrl: 'https://reactbits.dev/components/counter',
-    tags: []
+    tags: [],
+    added: '2025-02-15'
   },
   'Components/DecayCard': {
     videoUrl: '/assets/video/decaycard.webm',
@@ -696,7 +779,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'DecayCard',
     docsUrl: 'https://reactbits.dev/components/decay-card',
-    tags: []
+    tags: [],
+    added: '2024-08-20'
   },
   'Components/Dock': {
     videoUrl: '/assets/video/dock.webm',
@@ -704,7 +788,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Dock',
     docsUrl: 'https://reactbits.dev/components/dock',
-    tags: []
+    tags: [],
+    added: '2024-08-08'
   },
   'Components/DomeGallery': {
     videoUrl: '/assets/video/domegallery.webm',
@@ -712,7 +797,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'DomeGallery',
     docsUrl: 'https://reactbits.dev/components/dome-gallery',
-    tags: []
+    tags: [],
+    added: '2025-08-29'
   },
   'Components/ElasticSlider': {
     videoUrl: '/assets/video/elasticslider.webm',
@@ -720,7 +806,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'ElasticSlider',
     docsUrl: 'https://reactbits.dev/components/elastic-slider',
-    tags: []
+    tags: [],
+    added: '2024-08-18'
   },
   'Components/FlowingMenu': {
     videoUrl: '/assets/video/flowingmenu.webm',
@@ -728,7 +815,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'FlowingMenu',
     docsUrl: 'https://reactbits.dev/components/flowing-menu',
-    tags: []
+    tags: [],
+    added: '2025-01-31'
   },
   'Components/FluidGlass': {
     videoUrl: '/assets/video/fluidglass.webm',
@@ -736,7 +824,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'FluidGlass',
     docsUrl: 'https://reactbits.dev/components/fluid-glass',
-    tags: []
+    tags: [],
+    added: '2025-06-15'
   },
   'Components/FlyingPosters': {
     videoUrl: '/assets/video/flyingposters.webm',
@@ -744,7 +833,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'FlyingPosters',
     docsUrl: 'https://reactbits.dev/components/flying-posters',
-    tags: []
+    tags: [],
+    added: '2025-01-29'
   },
   'Components/Folder': {
     videoUrl: '/assets/video/folder.webm',
@@ -752,7 +842,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Folder',
     docsUrl: 'https://reactbits.dev/components/folder',
-    tags: []
+    tags: [],
+    added: '2025-02-28'
   },
   'Components/GlassIcons': {
     videoUrl: '/assets/video/glassicons.webm',
@@ -760,7 +851,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'GlassIcons',
     docsUrl: 'https://reactbits.dev/components/glass-icons',
-    tags: []
+    tags: [],
+    added: '2025-02-18'
   },
   'Components/GlassSurface': {
     videoUrl: '/assets/video/glasssurface.webm',
@@ -768,7 +860,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'GlassSurface',
     docsUrl: 'https://reactbits.dev/components/glass-surface',
-    tags: []
+    tags: [],
+    added: '2025-07-19'
   },
   'Components/GooeyNav': {
     videoUrl: '/assets/video/gooeynav.webm',
@@ -776,7 +869,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'GooeyNav',
     docsUrl: 'https://reactbits.dev/components/gooey-nav',
-    tags: []
+    tags: [],
+    added: '2025-03-14'
   },
   'Components/InfiniteSpiral': {
     videoUrl: '/assets/video/infinitespiral.webm',
@@ -784,7 +878,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'InfiniteSpiral',
     docsUrl: 'https://reactbits.dev/components/infinite-spiral',
-    tags: []
+    tags: [],
+    added: '2026-08-29'
   },
   'Components/InfiniteMenu': {
     videoUrl: '/assets/video/infinitemenu.webm',
@@ -792,7 +887,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'InfiniteMenu',
     docsUrl: 'https://reactbits.dev/components/infinite-menu',
-    tags: []
+    tags: [],
+    added: '2025-01-28'
   },
   'Components/Lanyard': {
     videoUrl: '/assets/video/lanyard.webm',
@@ -800,7 +896,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Lanyard',
     docsUrl: 'https://reactbits.dev/components/lanyard',
-    tags: []
+    tags: [],
+    added: '2025-02-15'
   },
   'Components/MagicBento': {
     videoUrl: '/assets/video/magicbento.webm',
@@ -808,7 +905,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'MagicBento',
     docsUrl: 'https://reactbits.dev/components/magic-bento',
-    tags: []
+    tags: [],
+    added: '2025-07-13'
   },
   'Components/Masonry': {
     videoUrl: '/assets/video/masonry.webm',
@@ -816,7 +914,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Masonry',
     docsUrl: 'https://reactbits.dev/components/masonry',
-    tags: []
+    tags: [],
+    added: '2024-08-08'
   },
   'Components/ModelViewer': {
     videoUrl: '/assets/video/modelviewer.webm',
@@ -824,7 +923,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'ModelViewer',
     docsUrl: 'https://reactbits.dev/components/model-viewer',
-    tags: []
+    tags: [],
+    added: '2025-06-13'
   },
   'Components/PillNav': {
     videoUrl: '/assets/video/pillnav.webm',
@@ -832,7 +932,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'PillNav',
     docsUrl: 'https://reactbits.dev/components/pill-nav',
-    tags: []
+    tags: [],
+    added: '2025-08-13'
   },
   'Components/PixelCard': {
     videoUrl: '/assets/video/pixelcard.webm',
@@ -840,7 +941,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'PixelCard',
     docsUrl: 'https://reactbits.dev/components/pixel-card',
-    tags: []
+    tags: [],
+    added: '2025-01-20'
   },
   'Components/ProfileCard': {
     videoUrl: '/assets/video/profilecard.webm',
@@ -848,7 +950,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'ProfileCard',
     docsUrl: 'https://reactbits.dev/components/profile-card',
-    tags: []
+    tags: [],
+    added: '2025-06-01'
   },
   'Components/ScrollStack': {
     videoUrl: '/assets/video/scrollstack.webm',
@@ -856,7 +959,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'ScrollStack',
     docsUrl: 'https://reactbits.dev/components/scroll-stack',
-    tags: []
+    tags: [],
+    added: '2025-07-15'
   },
   'Components/SpotlightCard': {
     videoUrl: '/assets/video/spotlightcard.webm',
@@ -864,7 +968,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'SpotlightCard',
     docsUrl: 'https://reactbits.dev/components/spotlight-card',
-    tags: []
+    tags: [],
+    added: '2024-08-14'
   },
   'Components/BorderGlow': {
     videoUrl: '/assets/video/borderglow.webm',
@@ -872,7 +977,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'BorderGlow',
     docsUrl: 'https://reactbits.dev/components/border-glow',
-    tags: []
+    tags: [],
+    added: '2026-03-17'
   },
   'Components/LineSidebar': {
     videoUrl: '/assets/video/linesidebar.webm',
@@ -880,7 +986,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'LineSidebar',
     docsUrl: 'https://reactbits.dev/components/line-sidebar',
-    tags: []
+    tags: [],
+    added: '2026-07-07'
   },
   'Components/OptionWheel': {
     videoUrl: '/assets/video/optionwheel.webm',
@@ -888,7 +995,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'OptionWheel',
     docsUrl: 'https://reactbits.dev/components/option-wheel',
-    tags: []
+    tags: [],
+    added: '2026-07-14'
   },
   'Components/SpecularButton': {
     videoUrl: '/assets/video/specularbutton.webm',
@@ -896,7 +1004,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'SpecularButton',
     docsUrl: 'https://reactbits.dev/components/specular-button',
-    tags: []
+    tags: [],
+    added: '2026-07-14'
   },
   'Animations/ElasticMesh': {
     videoUrl: '/assets/video/elasticmesh.webm',
@@ -904,7 +1013,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ElasticMesh',
     docsUrl: 'https://reactbits.dev/animations/elastic-mesh',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Animations/RippleDistortion': {
     videoUrl: '/assets/video/rippledistortion.webm',
@@ -912,7 +1022,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'RippleDistortion',
     docsUrl: 'https://reactbits.dev/animations/ripple-distortion',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Animations/SwarmCursor': {
     videoUrl: '/assets/video/swarmcursor.webm',
@@ -920,7 +1031,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'SwarmCursor',
     docsUrl: 'https://reactbits.dev/animations/swarm-cursor',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Animations/HalftoneReveal': {
     videoUrl: '/assets/video/halftonereveal.webm',
@@ -928,7 +1040,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'HalftoneReveal',
     docsUrl: 'https://reactbits.dev/animations/halftone-reveal',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Animations/ScrollExpand': {
     videoUrl: '/assets/video/scrollexpand.webm',
@@ -936,7 +1049,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'ScrollExpand',
     docsUrl: 'https://reactbits.dev/animations/scroll-expand',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Animations/CursorGrid': {
     videoUrl: '/assets/video/cursorgrid.webm',
@@ -944,7 +1058,8 @@ export const componentMetadata = {
     category: 'Animations',
     name: 'CursorGrid',
     docsUrl: 'https://reactbits.dev/animations/cursor-grid',
-    tags: []
+    tags: [],
+    added: '2026-07-14'
   },
   'Components/CurvedInput': {
     videoUrl: '/assets/video/curvedinput.webm',
@@ -952,7 +1067,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'CurvedInput',
     docsUrl: 'https://reactbits.dev/components/curved-input',
-    tags: []
+    tags: [],
+    added: '2026-07-12'
   },
   'Components/Stack': {
     videoUrl: '/assets/video/stack.webm',
@@ -960,7 +1076,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Stack',
     docsUrl: 'https://reactbits.dev/components/stack',
-    tags: []
+    tags: [],
+    added: '2024-08-07'
   },
   'Components/Stepper': {
     videoUrl: '/assets/video/stepper.webm',
@@ -968,7 +1085,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'Stepper',
     docsUrl: 'https://reactbits.dev/components/stepper',
-    tags: []
+    tags: [],
+    added: '2025-02-04'
   },
   'Components/TiltedCard': {
     videoUrl: '/assets/video/tiltedcard.webm',
@@ -976,7 +1094,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'TiltedCard',
     docsUrl: 'https://reactbits.dev/components/tilted-card',
-    tags: []
+    tags: [],
+    added: '2025-01-22'
   },
   'Components/StaggeredMenu': {
     videoUrl: '/assets/video/staggeredmenu.webm',
@@ -984,7 +1103,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'StaggeredMenu',
     docsUrl: 'https://reactbits.dev/components/staggered-menu',
-    tags: []
+    tags: [],
+    added: '2025-09-04'
   },
   'Components/ReflectiveCard': {
     videoUrl: '/assets/video/reflectivecard.webm',
@@ -992,7 +1112,8 @@ export const componentMetadata = {
     category: 'Components',
     name: 'ReflectiveCard',
     docsUrl: 'https://reactbits.dev/components/reflective-card',
-    tags: []
+    tags: [],
+    added: '2025-12-11'
   },
 
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
@@ -1003,7 +1124,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'MicroSlats',
     docsUrl: 'https://reactbits.dev/backgrounds/micro-slats',
-    tags: ['webgl', 'ogl', 'grid', 'waves', 'interactive', 'procedural']
+    tags: ['webgl', 'ogl', 'grid', 'waves', 'interactive', 'procedural'],
+    added: '2026-09-27'
   },
   'Backgrounds/ShapeWaves': {
     videoUrl: '/assets/video/shapewaves.webm',
@@ -1012,7 +1134,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'ShapeWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/shape-waves',
-    tags: ['webgpu', 'vgpu', 'grid', 'shapes', 'text', 'procedural']
+    tags: ['webgpu', 'vgpu', 'grid', 'shapes', 'text', 'procedural'],
+    added: '2026-09-15'
   },
   'Backgrounds/AeroShards': {
     videoUrl: '/assets/video/aeroshards.webm',
@@ -1020,7 +1143,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'AeroShards',
     docsUrl: 'https://reactbits.dev/backgrounds/aero-shards',
-    tags: ['webgpu', 'vgpu', 'particles', 'procedural', 'post-processing', 'interactive']
+    tags: ['webgpu', 'vgpu', 'particles', 'procedural', 'post-processing', 'interactive'],
+    added: '2026-08-31'
   },
   'Backgrounds/GhostFibers': {
     videoUrl: '/assets/video/ghostfibers.webm',
@@ -1028,7 +1152,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'GhostFibers',
     docsUrl: 'https://reactbits.dev/backgrounds/ghost-fibers',
-    tags: []
+    tags: [],
+    added: '2026-08-29'
   },
   'Backgrounds/Aurora': {
     videoUrl: '/assets/video/aurora.webm',
@@ -1036,7 +1161,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Aurora',
     docsUrl: 'https://reactbits.dev/backgrounds/aurora',
-    tags: []
+    tags: [],
+    added: '2025-02-05'
   },
   'Backgrounds/Balatro': {
     videoUrl: '/assets/video/balatro.webm',
@@ -1044,7 +1170,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Balatro',
     docsUrl: 'https://reactbits.dev/backgrounds/balatro',
-    tags: []
+    tags: [],
+    added: '2025-02-16'
   },
   'Backgrounds/Ballpit': {
     videoUrl: '/assets/video/ballpit.webm',
@@ -1052,7 +1179,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Ballpit',
     docsUrl: 'https://reactbits.dev/backgrounds/ballpit',
-    tags: []
+    tags: [],
+    added: '2025-01-07'
   },
   'Backgrounds/Beams': {
     videoUrl: '/assets/video/beams.webm',
@@ -1060,7 +1188,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Beams',
     docsUrl: 'https://reactbits.dev/backgrounds/beams',
-    tags: []
+    tags: [],
+    added: '2025-05-27'
   },
   'Backgrounds/ColorBends': {
     videoUrl: '/assets/video/colorbends.webm',
@@ -1068,7 +1197,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'ColorBends',
     docsUrl: 'https://reactbits.dev/backgrounds/color-bends',
-    tags: []
+    tags: [],
+    added: '2025-10-27'
   },
   'Backgrounds/CRTWarp': {
     videoUrl: '/assets/video/crtwarp.webm',
@@ -1076,7 +1206,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'CRTWarp',
     docsUrl: 'https://reactbits.dev/backgrounds/crt-warp',
-    tags: []
+    tags: [],
+    added: '2026-08-26'
   },
   'Backgrounds/DarkVeil': {
     videoUrl: '/assets/video/darkveil.webm',
@@ -1084,7 +1215,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'DarkVeil',
     docsUrl: 'https://reactbits.dev/backgrounds/dark-veil',
-    tags: []
+    tags: [],
+    added: '2025-07-16'
   },
   'Backgrounds/Dither': {
     videoUrl: '/assets/video/dither.webm',
@@ -1092,7 +1224,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Dither',
     docsUrl: 'https://reactbits.dev/backgrounds/dither',
-    tags: []
+    tags: [],
+    added: '2025-02-19'
   },
   'Backgrounds/DotField': {
     videoUrl: '/assets/video/dotfield.webm',
@@ -1100,7 +1233,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'DotField',
     docsUrl: 'https://reactbits.dev/backgrounds/dot-field',
-    tags: []
+    tags: [],
+    added: '2026-04-14'
   },
   'Backgrounds/DotGrid': {
     videoUrl: '/assets/video/dotgrid.webm',
@@ -1108,7 +1242,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'DotGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/dot-grid',
-    tags: []
+    tags: [],
+    added: '2025-05-23'
   },
   'Backgrounds/FaultyTerminal': {
     videoUrl: '/assets/video/faultyterminal.webm',
@@ -1116,7 +1251,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'FaultyTerminal',
     docsUrl: 'https://reactbits.dev/backgrounds/faulty-terminal',
-    tags: []
+    tags: [],
+    added: '2025-07-23'
   },
   'Backgrounds/Galaxy': {
     videoUrl: '/assets/video/galaxy.webm',
@@ -1124,7 +1260,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Galaxy',
     docsUrl: 'https://reactbits.dev/backgrounds/galaxy',
-    tags: []
+    tags: [],
+    added: '2025-07-20'
   },
   'Backgrounds/GradientBlinds': {
     videoUrl: '/assets/video/gradientblinds.webm',
@@ -1132,7 +1269,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'GradientBlinds',
     docsUrl: 'https://reactbits.dev/backgrounds/gradient-blinds',
-    tags: []
+    tags: [],
+    added: '2025-08-23'
   },
   'Backgrounds/Lightfall': {
     videoUrl: '/assets/video/lightfall.webm',
@@ -1140,7 +1278,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Lightfall',
     docsUrl: 'https://reactbits.dev/backgrounds/lightfall',
-    tags: []
+    tags: [],
+    added: '2026-06-02'
   },
   'Backgrounds/Ferrofluid': {
     videoUrl: '/assets/video/ferrofluid.webm',
@@ -1148,7 +1287,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Ferrofluid',
     docsUrl: 'https://reactbits.dev/backgrounds/ferrofluid',
-    tags: []
+    tags: [],
+    added: '2026-06-02'
   },
   'Backgrounds/MoltenMetal': {
     videoUrl: '/assets/video/moltenmetal.webm',
@@ -1156,7 +1296,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'MoltenMetal',
     docsUrl: 'https://reactbits.dev/backgrounds/molten-metal',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/GradientWaves': {
     videoUrl: '/assets/video/gradientwaves.webm',
@@ -1164,7 +1305,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'GradientWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/gradient-waves',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/WebThreads': {
     videoUrl: '/assets/video/webthreads.webm',
@@ -1172,7 +1314,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'WebThreads',
     docsUrl: 'https://reactbits.dev/backgrounds/web-threads',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/Topography': {
     videoUrl: '/assets/video/topography.webm',
@@ -1180,7 +1323,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Topography',
     docsUrl: 'https://reactbits.dev/backgrounds/topography',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/LightTunnel': {
     videoUrl: '/assets/video/lighttunnel.webm',
@@ -1188,7 +1332,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LightTunnel',
     docsUrl: 'https://reactbits.dev/backgrounds/light-tunnel',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/SlicedWaves': {
     videoUrl: '/assets/video/slicedwaves.webm',
@@ -1196,7 +1341,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'SlicedWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/sliced-waves',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/AcidSquares': {
     videoUrl: '/assets/video/acidsquares.webm',
@@ -1204,7 +1350,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'AcidSquares',
     docsUrl: 'https://reactbits.dev/backgrounds/acid-squares',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/Scanner': {
     videoUrl: '/assets/video/scanner.webm',
@@ -1212,7 +1359,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Scanner',
     docsUrl: 'https://reactbits.dev/backgrounds/scanner',
-    tags: []
+    tags: [],
+    added: '2026-08-04'
   },
   'Backgrounds/Grainient': {
     videoUrl: '/assets/video/grainient.webm',
@@ -1220,7 +1368,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Grainient',
     docsUrl: 'https://reactbits.dev/backgrounds/grainient',
-    tags: []
+    tags: [],
+    added: '2026-02-03'
   },
   'Backgrounds/GridScan': {
     videoUrl: '/assets/video/gridscan.webm',
@@ -1228,7 +1377,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'GridScan',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-scan',
-    tags: []
+    tags: [],
+    added: '2025-11-03'
   },
   'Backgrounds/GridDistortion': {
     videoUrl: '/assets/video/griddistortion.webm',
@@ -1236,7 +1386,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'GridDistortion',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-distortion',
-    tags: []
+    tags: [],
+    added: '2025-01-25'
   },
   'Backgrounds/GridMotion': {
     videoUrl: '/assets/video/gridmotion.webm',
@@ -1244,7 +1395,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'GridMotion',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-motion',
-    tags: []
+    tags: [],
+    added: '2024-08-18'
   },
   'Backgrounds/Hyperspeed': {
     videoUrl: '/assets/video/hyperspeed.webm',
@@ -1252,7 +1404,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Hyperspeed',
     docsUrl: 'https://reactbits.dev/backgrounds/hyperspeed',
-    tags: []
+    tags: [],
+    added: '2024-08-14'
   },
   'Backgrounds/Iridescence': {
     videoUrl: '/assets/video/iridescence.webm',
@@ -1260,7 +1413,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Iridescence',
     docsUrl: 'https://reactbits.dev/backgrounds/iridescence',
-    tags: []
+    tags: [],
+    added: '2025-02-05'
   },
   'Backgrounds/LetterGlitch': {
     videoUrl: '/assets/video/letterglitch.webm',
@@ -1268,7 +1422,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LetterGlitch',
     docsUrl: 'https://reactbits.dev/backgrounds/letter-glitch',
-    tags: []
+    tags: [],
+    added: '2025-01-24'
   },
   'Backgrounds/LightRays': {
     videoUrl: '/assets/video/lightrays.webm',
@@ -1276,7 +1431,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LightRays',
     docsUrl: 'https://reactbits.dev/backgrounds/light-rays',
-    tags: []
+    tags: [],
+    added: '2025-07-21'
   },
   'Backgrounds/Lightning': {
     videoUrl: '/assets/video/lightning.webm',
@@ -1284,7 +1440,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Lightning',
     docsUrl: 'https://reactbits.dev/backgrounds/lightning',
-    tags: []
+    tags: [],
+    added: '2025-02-25'
   },
   'Backgrounds/LineWaves': {
     videoUrl: '/assets/video/linewaves.webm',
@@ -1292,7 +1449,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LineWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/line-waves',
-    tags: []
+    tags: [],
+    added: '2026-03-17'
   },
   'Backgrounds/EvilEye': {
     videoUrl: '/assets/video/evileye.webm',
@@ -1300,7 +1458,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'EvilEye',
     docsUrl: 'https://reactbits.dev/backgrounds/evil-eye',
-    tags: []
+    tags: [],
+    added: '2026-03-17'
   },
   'Backgrounds/Radar': {
     videoUrl: '/assets/video/radar.webm',
@@ -1308,7 +1467,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Radar',
     docsUrl: 'https://reactbits.dev/backgrounds/radar',
-    tags: []
+    tags: [],
+    added: '2026-03-17'
   },
   'Backgrounds/SoftAurora': {
     videoUrl: '/assets/video/softaurora.webm',
@@ -1316,7 +1476,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'SoftAurora',
     docsUrl: 'https://reactbits.dev/backgrounds/soft-aurora',
-    tags: []
+    tags: [],
+    added: '2026-03-17'
   },
   'Backgrounds/LiquidChrome': {
     videoUrl: '/assets/video/liquidchrome.webm',
@@ -1324,7 +1485,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LiquidChrome',
     docsUrl: 'https://reactbits.dev/backgrounds/liquid-chrome',
-    tags: []
+    tags: [],
+    added: '2025-02-07'
   },
   'Backgrounds/Orb': {
     videoUrl: '/assets/video/orb.webm',
@@ -1332,7 +1494,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Orb',
     docsUrl: 'https://reactbits.dev/backgrounds/orb',
-    tags: []
+    tags: [],
+    added: '2025-02-07'
   },
   'Backgrounds/Particles': {
     videoUrl: '/assets/video/particles.webm',
@@ -1340,7 +1503,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Particles',
     docsUrl: 'https://reactbits.dev/backgrounds/particles',
-    tags: []
+    tags: [],
+    added: '2025-02-10'
   },
   'Backgrounds/PixelBlast': {
     videoUrl: '/assets/video/pixelblast.webm',
@@ -1348,7 +1512,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'PixelBlast',
     docsUrl: 'https://reactbits.dev/backgrounds/pixel-blast',
-    tags: []
+    tags: [],
+    added: '2025-08-31'
   },
   'Backgrounds/Plasma': {
     videoUrl: '/assets/video/plasma.webm',
@@ -1356,7 +1521,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Plasma',
     docsUrl: 'https://reactbits.dev/backgrounds/plasma',
-    tags: []
+    tags: [],
+    added: '2025-08-18'
   },
   'Backgrounds/PlasmaWave': {
     videoUrl: '/assets/video/plasmawave.webm',
@@ -1364,7 +1530,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'PlasmaWave',
     docsUrl: 'https://reactbits.dev/backgrounds/plasma-wave',
-    tags: []
+    tags: [],
+    added: '2026-04-14'
   },
   'Backgrounds/Prism': {
     videoUrl: '/assets/video/prism.webm',
@@ -1372,7 +1539,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Prism',
     docsUrl: 'https://reactbits.dev/backgrounds/prism',
-    tags: []
+    tags: [],
+    added: '2025-08-20'
   },
   'Backgrounds/PrismaticBurst': {
     videoUrl: '/assets/video/prismaticburst.webm',
@@ -1380,7 +1548,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'PrismaticBurst',
     docsUrl: 'https://reactbits.dev/backgrounds/prismatic-burst',
-    tags: []
+    tags: [],
+    added: '2025-08-26'
   },
   'Backgrounds/RippleGrid': {
     videoUrl: '/assets/video/ripplegrid.webm',
@@ -1388,7 +1557,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'RippleGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/ripple-grid',
-    tags: []
+    tags: [],
+    added: '2025-07-14'
   },
   'Backgrounds/Silk': {
     videoUrl: '/assets/video/silk.webm',
@@ -1396,7 +1566,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Silk',
     docsUrl: 'https://reactbits.dev/backgrounds/silk',
-    tags: []
+    tags: [],
+    added: '2025-05-22'
   },
   'Backgrounds/SideRays': {
     videoUrl: '/assets/video/siderays.webm',
@@ -1404,7 +1575,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'SideRays',
     docsUrl: 'https://reactbits.dev/backgrounds/side-rays',
-    tags: []
+    tags: [],
+    added: '2026-06-02'
   },
   'Backgrounds/ShapeGrid': {
     videoUrl: '/assets/video/squares.webm',
@@ -1412,7 +1584,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'ShapeGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/shape-grid',
-    tags: []
+    tags: [],
+    added: '2026-03-15'
   },
   'Backgrounds/Threads': {
     videoUrl: '/assets/video/threads.webm',
@@ -1420,7 +1593,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Threads',
     docsUrl: 'https://reactbits.dev/backgrounds/threads',
-    tags: []
+    tags: [],
+    added: '2025-02-18'
   },
   'Backgrounds/Waves': {
     videoUrl: '/assets/video/waves.webm',
@@ -1428,7 +1602,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'Waves',
     docsUrl: 'https://reactbits.dev/backgrounds/waves',
-    tags: []
+    tags: [],
+    added: '2025-01-03'
   },
   'Backgrounds/LiquidEther': {
     videoUrl: '/assets/video/liquidether.webm',
@@ -1437,7 +1612,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LiquidEther',
     docsUrl: 'https://reactbits.dev/backgrounds/liquid-ether',
-    tags: []
+    tags: [],
+    added: '2025-09-05'
   },
   'Backgrounds/FloatingLines': {
     videoUrl: '/assets/video/floatinglines.webm',
@@ -1445,7 +1621,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'FloatingLines',
     docsUrl: 'https://reactbits.dev/backgrounds/floating-lines',
-    tags: []
+    tags: [],
+    added: '2025-11-14'
   },
   'Backgrounds/LightPillar': {
     videoUrl: '/assets/video/lightpillar.webm',
@@ -1453,7 +1630,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'LightPillar',
     docsUrl: 'https://reactbits.dev/backgrounds/light-pillar',
-    tags: []
+    tags: [],
+    added: '2025-12-03'
   },
   'Backgrounds/PixelSnow': {
     videoUrl: '/assets/video/pixelsnow.webm',
@@ -1461,7 +1639,8 @@ export const componentMetadata = {
     category: 'Backgrounds',
     name: 'PixelSnow',
     docsUrl: 'https://reactbits.dev/backgrounds/pixel-snow',
-    tags: []
+    tags: [],
+    added: '2025-12-20'
   },
 
   //! Micro ------------------------------------------------------------------------------------------------------------------------------------
@@ -1473,7 +1652,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SquishSwitch',
     docsUrl: 'https://reactbits.dev/micro/squish-switch',
-    tags: ['switch', 'toggle', 'spring', 'drag', 'gesture', 'form']
+    tags: ['switch', 'toggle', 'spring', 'drag', 'gesture', 'form'],
+    added: '2026-09-18'
   },
   'Micro/HoldButton': {
     videoUrl: '/assets/video/holdbutton.webm',
@@ -1482,7 +1662,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'HoldButton',
     docsUrl: 'https://reactbits.dev/micro/hold-button',
-    tags: ['button', 'confirm', 'hold', 'press', 'destructive']
+    tags: ['button', 'confirm', 'hold', 'press', 'destructive'],
+    added: '2026-09-18'
   },
   'Micro/PeekRating': {
     videoUrl: '/assets/video/peekrating.webm',
@@ -1491,7 +1672,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'PeekRating',
     docsUrl: 'https://reactbits.dev/micro/peek-rating',
-    tags: ['rating', 'stars', 'hover', 'preview', 'feedback', 'form']
+    tags: ['rating', 'stars', 'hover', 'preview', 'feedback', 'form'],
+    added: '2026-09-18'
   },
   'Micro/SpringCheck': {
     videoUrl: '/assets/video/springcheck.webm',
@@ -1500,7 +1682,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SpringCheck',
     docsUrl: 'https://reactbits.dev/micro/spring-check',
-    tags: ['checkbox', 'toggle', 'form', 'spring', 'press', 'strikethrough']
+    tags: ['checkbox', 'toggle', 'form', 'spring', 'press', 'strikethrough'],
+    added: '2026-09-18'
   },
   'Micro/PulseHeart': {
     videoUrl: '/assets/video/pulseheart.webm',
@@ -1509,7 +1692,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'PulseHeart',
     docsUrl: 'https://reactbits.dev/micro/pulse-heart',
-    tags: ['like', 'heart', 'button', 'reaction', 'counter', 'press']
+    tags: ['like', 'heart', 'button', 'reaction', 'counter', 'press'],
+    added: '2026-09-18'
   },
   'Micro/RubberSegment': {
     videoUrl: '/assets/video/rubbersegment.webm',
@@ -1518,7 +1702,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'RubberSegment',
     docsUrl: 'https://reactbits.dev/micro/rubber-segment',
-    tags: ['segmented', 'tabs', 'drag', 'spring', 'clip-path', 'radio']
+    tags: ['segmented', 'tabs', 'drag', 'spring', 'clip-path', 'radio'],
+    added: '2026-09-18'
   },
   'Micro/SlideCommit': {
     videoUrl: '/assets/video/slidecommit.webm',
@@ -1527,7 +1712,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SlideCommit',
     docsUrl: 'https://reactbits.dev/micro/slide-commit',
-    tags: ['slide', 'confirm', 'async', 'gesture', 'drag', 'button']
+    tags: ['slide', 'confirm', 'async', 'gesture', 'drag', 'button'],
+    added: '2026-09-18'
   },
   'Micro/WarmTooltip': {
     videoUrl: '/assets/video/warmtooltip.webm',
@@ -1536,7 +1722,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'WarmTooltip',
     docsUrl: 'https://reactbits.dev/micro/warm-tooltip',
-    tags: ['tooltip', 'hover', 'toolbar', 'delay', 'group', 'label']
+    tags: ['tooltip', 'hover', 'toolbar', 'delay', 'group', 'label'],
+    added: '2026-09-18'
   },
   'Micro/FuseButton': {
     videoUrl: '/assets/video/fusebutton.webm',
@@ -1545,7 +1732,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'FuseButton',
     docsUrl: 'https://reactbits.dev/micro/fuse-button',
-    tags: ['button', 'undo', 'confirm', 'timer', 'press', 'fuse']
+    tags: ['button', 'undo', 'confirm', 'timer', 'press', 'fuse'],
+    added: '2026-09-18'
   },
   'Micro/ScrubField': {
     videoUrl: '/assets/video/scrubfield.webm',
@@ -1554,7 +1742,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'ScrubField',
     docsUrl: 'https://reactbits.dev/micro/scrub-field',
-    tags: ['input', 'number', 'drag', 'scrub', 'form', 'inspector']
+    tags: ['input', 'number', 'drag', 'scrub', 'form', 'inspector'],
+    added: '2026-09-18'
   },
   'Micro/LatticeLoader': {
     videoUrl: '/assets/video/latticeloader.webm',
@@ -1563,7 +1752,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'LatticeLoader',
     docsUrl: 'https://reactbits.dev/micro/lattice-loader',
-    tags: ['loader', 'status', 'ai', 'agent', 'timer', 'grid']
+    tags: ['loader', 'status', 'ai', 'agent', 'timer', 'grid'],
+    added: '2026-09-18'
   },
   'Micro/DodgeField': {
     videoUrl: '/assets/video/dodgefield.webm',
@@ -1572,7 +1762,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'DodgeField',
     docsUrl: 'https://reactbits.dev/micro/dodge-field',
-    tags: ['hover', 'pointer', 'playful', 'wrapper', 'button', 'magnet']
+    tags: ['hover', 'pointer', 'playful', 'wrapper', 'button', 'magnet'],
+    added: '2026-09-18'
   },
   'Micro/CodeSlots': {
     videoUrl: '/assets/video/codeslots.webm',
@@ -1581,7 +1772,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'CodeSlots',
     docsUrl: 'https://reactbits.dev/micro/code-slots',
-    tags: ['input', 'otp', 'form', 'spring', 'code']
+    tags: ['input', 'otp', 'form', 'spring', 'code'],
+    added: '2026-09-18'
   },
   'Micro/WakeSlider': {
     videoUrl: '/assets/video/wakeslider.webm',
@@ -1590,7 +1782,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'WakeSlider',
     docsUrl: 'https://reactbits.dev/micro/wake-slider',
-    tags: ['slider', 'range', 'input', 'drag', 'bars', 'velocity']
+    tags: ['slider', 'range', 'input', 'drag', 'bars', 'velocity'],
+    added: '2026-09-18'
   },
   'Micro/CometDial': {
     videoUrl: '/assets/video/cometdial.webm',
@@ -1599,7 +1792,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'CometDial',
     docsUrl: 'https://reactbits.dev/micro/comet-dial',
-    tags: ['dial', 'knob', 'gauge', 'drag', 'spring', 'input']
+    tags: ['dial', 'knob', 'gauge', 'drag', 'spring', 'input'],
+    added: '2026-09-18'
   },
   'Micro/JellyRadio': {
     videoUrl: '/assets/video/jellyradio.webm',
@@ -1608,7 +1802,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'JellyRadio',
     docsUrl: 'https://reactbits.dev/micro/jelly-radio',
-    tags: ['radio', 'select', 'chips', 'spring', 'form', 'segmented']
+    tags: ['radio', 'select', 'chips', 'spring', 'form', 'segmented'],
+    added: '2026-09-18'
   },
   'Micro/SwipeRow': {
     videoUrl: '/assets/video/swiperow.webm',
@@ -1617,7 +1812,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SwipeRow',
     docsUrl: 'https://reactbits.dev/micro/swipe-row',
-    tags: ['swipe', 'list', 'gesture', 'delete', 'drag']
+    tags: ['swipe', 'list', 'gesture', 'delete', 'drag'],
+    added: '2026-09-18'
   },
   'Micro/GlideSelect': {
     videoUrl: '/assets/video/glideselect.webm',
@@ -1626,7 +1822,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'GlideSelect',
     docsUrl: 'https://reactbits.dev/micro/glide-select',
-    tags: ['select', 'dropdown', 'menu', 'popover', 'hover', 'form', 'keyboard']
+    tags: ['select', 'dropdown', 'menu', 'popover', 'hover', 'form', 'keyboard'],
+    added: '2026-09-18'
   },
   'Micro/StatusMark': {
     videoUrl: '/assets/video/statusmark.webm',
@@ -1635,7 +1832,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'StatusMark',
     docsUrl: 'https://reactbits.dev/micro/status-mark',
-    tags: ['status', 'progress', 'spinner', 'check', 'ai', 'agent', 'task', 'svg']
+    tags: ['status', 'progress', 'spinner', 'check', 'ai', 'agent', 'task', 'svg'],
+    added: '2026-09-18'
   },
   'Micro/CallChip': {
     videoUrl: '/assets/video/callchip.webm',
@@ -1644,7 +1842,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'CallChip',
     docsUrl: 'https://reactbits.dev/micro/call-chip',
-    tags: ['chip', 'status', 'ai', 'agent', 'tool-call', 'progress', 'timer']
+    tags: ['chip', 'status', 'ai', 'agent', 'tool-call', 'progress', 'timer'],
+    added: '2026-09-18'
   },
   'Micro/BellToggle': {
     videoUrl: '/assets/video/belltoggle.webm',
@@ -1653,7 +1852,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'BellToggle',
     docsUrl: 'https://reactbits.dev/micro/bell-toggle',
-    tags: ['toggle', 'button', 'bell', 'notify', 'press', 'spring']
+    tags: ['toggle', 'button', 'bell', 'notify', 'press', 'spring'],
+    added: '2026-09-18'
   },
   'Micro/SlingButton': {
     videoUrl: '/assets/video/slingbutton.webm',
@@ -1662,7 +1862,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SlingButton',
     docsUrl: 'https://reactbits.dev/micro/sling-button',
-    tags: ['button', 'send', 'slingshot', 'drag', 'gesture', 'spring']
+    tags: ['button', 'send', 'slingshot', 'drag', 'gesture', 'spring'],
+    added: '2026-09-18'
   },
   'Micro/SwipeToast': {
     videoUrl: '/assets/video/swipetoast.webm',
@@ -1671,7 +1872,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SwipeToast',
     docsUrl: 'https://reactbits.dev/micro/swipe-toast',
-    tags: ['toast', 'notification', 'swipe', 'drag', 'timer', 'undo']
+    tags: ['toast', 'notification', 'swipe', 'drag', 'timer', 'undo'],
+    added: '2026-09-18'
   },
   'Micro/PromptBar': {
     videoUrl: '/assets/video/promptbar.webm',
@@ -1680,7 +1882,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'PromptBar',
     docsUrl: 'https://reactbits.dev/micro/prompt-bar',
-    tags: ['composer', 'prompt', 'chat', 'ai', 'input', 'send', 'stop', 'menu', 'mention', 'command']
+    tags: ['composer', 'prompt', 'chat', 'ai', 'input', 'send', 'stop', 'menu', 'mention', 'command'],
+    added: '2026-09-18'
   },
   'Micro/SloshGauge': {
     videoUrl: '/assets/video/sloshgauge.webm',
@@ -1689,7 +1892,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'SloshGauge',
     docsUrl: 'https://reactbits.dev/micro/slosh-gauge',
-    tags: ['gauge', 'meter', 'progress', 'liquid', 'spring', 'physics', 'slider']
+    tags: ['gauge', 'meter', 'progress', 'liquid', 'spring', 'physics', 'slider'],
+    added: '2026-09-18'
   },
   'Micro/VoicePill': {
     videoUrl: '/assets/video/voicepill.webm',
@@ -1698,7 +1902,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'VoicePill',
     docsUrl: 'https://reactbits.dev/micro/voice-pill',
-    tags: ['mic', 'voice', 'dictation', 'equalizer', 'press', 'ai']
+    tags: ['mic', 'voice', 'dictation', 'equalizer', 'press', 'ai'],
+    added: '2026-09-18'
   },
   'Micro/ThoughtLine': {
     videoUrl: '/assets/video/thoughtline.webm',
@@ -1707,7 +1912,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'ThoughtLine',
     docsUrl: 'https://reactbits.dev/micro/thought-line',
-    tags: ['ai', 'agent', 'status', 'reasoning', 'timer', 'text', 'trace']
+    tags: ['ai', 'agent', 'status', 'reasoning', 'timer', 'text', 'trace'],
+    added: '2026-09-18'
   },
   'Micro/RefineFrame': {
     videoUrl: '/assets/video/refineframe.webm',
@@ -1716,7 +1922,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'RefineFrame',
     docsUrl: 'https://reactbits.dev/micro/refine-frame',
-    tags: ['ai', 'image', 'generation', 'loading', 'progressive', 'media', 'status']
+    tags: ['ai', 'image', 'generation', 'loading', 'progressive', 'media', 'status'],
+    added: '2026-09-18'
   },
   'Micro/FolderFloat': {
     videoUrl: '/assets/video/folderfloat.webm',
@@ -1725,7 +1932,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'FolderFloat',
     docsUrl: 'https://reactbits.dev/micro/folder-float',
-    tags: ['folder', 'menu', 'hover', 'select', 'float', 'spring', 'files']
+    tags: ['folder', 'menu', 'hover', 'select', 'float', 'spring', 'files'],
+    added: '2026-09-18'
   },
   'Micro/BranchedMenu': {
     videoUrl: '/assets/video/branchedmenu.webm',
@@ -1734,7 +1942,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'BranchedMenu',
     docsUrl: 'https://reactbits.dev/micro/branched-menu',
-    tags: ['menu', 'navigation', 'sidebar', 'tree', 'collapsible', 'line', 'active']
+    tags: ['menu', 'navigation', 'sidebar', 'tree', 'collapsible', 'line', 'active'],
+    added: '2026-09-18'
   },
   'Micro/FlipCard': {
     videoUrl: '/assets/video/flipcard.webm',
@@ -1743,7 +1952,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'FlipCard',
     docsUrl: 'https://reactbits.dev/micro/flip-card',
-    tags: ['card', 'flip', '3d', 'tilt', 'drag', 'spring', 'hover', 'two-sided']
+    tags: ['card', 'flip', '3d', 'tilt', 'drag', 'spring', 'hover', 'two-sided'],
+    added: '2026-09-19'
   },
   'Micro/TearTicket': {
     videoUrl: '/assets/video/tearticket.webm',
@@ -1752,7 +1962,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'TearTicket',
     docsUrl: 'https://reactbits.dev/micro/tear-ticket',
-    tags: ['ticket', 'tear', 'perforation', 'stub', 'coupon', 'pass', 'drag', 'parallax', 'tilt']
+    tags: ['ticket', 'tear', 'perforation', 'stub', 'coupon', 'pass', 'drag', 'parallax', 'tilt'],
+    added: '2026-09-19'
   },
   'Micro/PaperCrumple': {
     videoUrl: '/assets/video/papercrumple.webm',
@@ -1761,7 +1972,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'PaperCrumple',
     docsUrl: 'https://reactbits.dev/micro/paper-crumple',
-    tags: ['paper', 'crumple', '3d', 'three', 'image', 'drag', 'hold', 'fold', 'crease']
+    tags: ['paper', 'crumple', '3d', 'three', 'image', 'drag', 'hold', 'fold', 'crease'],
+    added: '2026-09-20'
   },
   'Micro/Shredder': {
     videoUrl: '/assets/video/shredder.webm',
@@ -1770,7 +1982,8 @@ export const componentMetadata = {
     category: 'Micro',
     name: 'Shredder',
     docsUrl: 'https://reactbits.dev/micro/shredder',
-    tags: ['shredder', 'delete', 'drag', 'list', 'strips', 'paper', 'physics', 'remove']
+    tags: ['shredder', 'delete', 'drag', 'list', 'strips', 'paper', 'physics', 'remove'],
+    added: '2026-09-22'
   }
 };
 

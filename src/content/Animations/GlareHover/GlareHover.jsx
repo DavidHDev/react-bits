@@ -1,3 +1,5 @@
+'use client';
+
 import './GlareHover.css';
 
 const GlareHover = ({

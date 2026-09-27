@@ -1,3 +1,5 @@
+'use client';
+
 // Inspired by https://vercel.com/labs
 import { useEffect, useRef, useState } from 'react';
 import { effect, frame, init, sampler, storage, surface, target, uniforms } from 'vgpu';

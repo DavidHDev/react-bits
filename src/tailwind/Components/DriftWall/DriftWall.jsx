@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 const DEFAULT_ITEMS = Array.from({ length: 15 }, (_, i) => {

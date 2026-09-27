@@ -1,3 +1,5 @@
+'use client';
+
 import { CSSProperties, HTMLAttributes, useEffect, useMemo, useRef, useState } from 'react';
 import './SplitFlapText.css';
 

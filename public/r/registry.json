@@ -8410,7 +8410,7 @@
 		{
 			"name": "MicroSlats-JS-CSS",
 			"title": "MicroSlats",
-			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.",
 			"type": "registry:component",
 			"dependencies": [
 				"ogl@^1.0.11"
@@ -8431,7 +8431,7 @@
 		{
 			"name": "MicroSlats-JS-TW",
 			"title": "MicroSlats",
-			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.",
 			"type": "registry:component",
 			"dependencies": [
 				"ogl@^1.0.11"
@@ -8447,7 +8447,7 @@
 		{
 			"name": "MicroSlats-TS-CSS",
 			"title": "MicroSlats",
-			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.",
 			"type": "registry:component",
 			"dependencies": [
 				"ogl@^1.0.11"
@@ -8468,7 +8468,7 @@
 		{
 			"name": "MicroSlats-TS-TW",
 			"title": "MicroSlats",
-			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.",
 			"type": "registry:component",
 			"dependencies": [
 				"ogl@^1.0.11"

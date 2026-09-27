@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v6';
 import Providers from './components/layout/Providers';
 import { ActiveRouteProvider } from './components/context/ActiveRouteContext/ActiveRouteContext';
@@ -23,6 +23,7 @@ function AppContent() {
           <Route exact path="/" element={<LandingPage />} />
           <Route exact path="/showcase" element={<ShowcasePage />} />
           <Route exact path="/sponsors" element={<SponsorsPage />} />
+          <Route exact path="/changelog" element={<Navigate to="/get-started/changelog" replace />} />
           <Route path="/tools/:toolId?" element={<ToolsPage />} />
           <Route exact path="/pro" element={<ProPage />} />
           <Route
