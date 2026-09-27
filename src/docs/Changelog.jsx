@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Rss } from 'lucide-react';
 import CopyPageButton from './CopyPageButton';
 import useScrollToTop from '../hooks/useScrollToTop';
-import { getChangelogEntries } from '../utils/changelog';
+import { CHANGELOG_DESCRIPTION, getChangelogEntries } from '../utils/changelog';
 
 const INITIAL_MONTHS = 6;
 const KIND_LABELS = { launch: 'New category', added: 'New', updated: 'Update' };
@@ -72,7 +72,7 @@ const Changelog = () => {
         <CopyPageButton />
       </div>
 
-      <p className="docs-lead">Everything new in React Bits, newest first.</p>
+      <p className="docs-lead">{CHANGELOG_DESCRIPTION}</p>
 
       <a className="changelog-rss" href="/rss.xml" target="_blank" rel="noreferrer">
         <Rss size={14} aria-hidden="true" />

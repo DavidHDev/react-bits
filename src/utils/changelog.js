@@ -1,6 +1,6 @@
 import { getComponentCatalog, toSlug } from './catalog.js';
 
-export const CHANGELOG_DESCRIPTION = 'Everything new in React Bits, newest first.';
+export const CHANGELOG_DESCRIPTION = 'Keep up with the newest additions to React Bits.';
 
 const CHANGELOG_START = '2026-09-01';
 

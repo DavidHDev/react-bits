@@ -3,7 +3,7 @@ import path from 'path';
 import process from 'process';
 import { fileURLToPath } from 'url';
 import { componentMetadata } from '../src/constants/Information.js';
-import { getChangelogEntries } from '../src/utils/changelog.js';
+import { CHANGELOG_DESCRIPTION, getChangelogEntries } from '../src/utils/changelog.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SITE = 'https://reactbits.dev';
@@ -50,7 +50,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   <channel>
     <title>React Bits changelog</title>
     <link>${SITE}/get-started/changelog</link>
-    <description>Everything new in React Bits: new components, categories and updates.</description>
+    <description>${escapeXml(CHANGELOG_DESCRIPTION)}</description>
     <language>en-us</language>
     <lastBuildDate>${toRfc822(entries[0]?.date ?? new Date().toISOString().slice(0, 10))}</lastBuildDate>
     <atom:link href="${SITE}/rss.xml" rel="self" type="application/rss+xml" />
