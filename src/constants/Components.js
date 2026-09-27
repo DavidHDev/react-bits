@@ -170,6 +170,7 @@ const micro = {
 };
 
 const backgrounds = {
+  'micro-slats': () => import('../demo/Backgrounds/MicroSlatsDemo.jsx'),
   'shape-waves': () => import('../demo/Backgrounds/ShapeWavesDemo.jsx'),
   'aero-shards': () => import('../demo/Backgrounds/AeroShardsDemo.jsx'),
   'ghost-fibers': () => import('../demo/Backgrounds/GhostFibersDemo.jsx'),

@@ -1,5 +1,6 @@
 // Highlighted sidebar items
 export const NEW = [
+  'Micro Slats',
   'Flex Carousel',
   'Electric Logo',
   'Tech Text',
@@ -206,6 +207,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
+      'Micro Slats',
       'Shape Waves',
       'Aero Shards',
       'Ghost Fibers',

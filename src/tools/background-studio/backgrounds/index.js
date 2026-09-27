@@ -1,5 +1,38 @@
 export const BACKGROUNDS = [
   {
+    id: 'micro-slats',
+    label: 'Micro Slats',
+    component: () => import('../../../content/Backgrounds/MicroSlats/MicroSlats.jsx'),
+    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/micro-slats"',
+    props: [
+      { name: 'color', type: 'color', default: '#A855F7', label: 'Color' },
+      { name: 'glintColor', type: 'color', default: '#ffffff', label: 'Glint Color' },
+      { name: 'backgroundColor', type: 'color', default: '#000000', label: 'Background' },
+      { name: 'slatWidth', type: 'number', default: 10, min: 2, max: 16, step: 1, label: 'Slat Width' },
+      { name: 'slatHeight', type: 'number', default: 25, min: 6, max: 64, step: 1, label: 'Slat Height' },
+      { name: 'gap', type: 'number', default: 3, min: 1, max: 12, step: 1, label: 'Gap' },
+      { name: 'roundness', type: 'number', default: 0.75, min: 0, max: 1, step: 0.05, label: 'Roundness' },
+      { name: 'speed', type: 'number', default: 0.6, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'scale', type: 'number', default: 1.5, min: 0.3, max: 2.5, step: 0.05, label: 'Scale' },
+      { name: 'direction', type: 'number', default: 250, min: 0, max: 360, step: 1, label: 'Direction' },
+      { name: 'chop', type: 'number', default: 0.55, min: 0, max: 1.5, step: 0.05, label: 'Chop' },
+      { name: 'stretch', type: 'number', default: 0, min: 0, max: 0.95, step: 0.05, label: 'Stretch' },
+      { name: 'glint', type: 'number', default: 0.7, min: 0, max: 2, step: 0.05, label: 'Glint' },
+      { name: 'contrast', type: 'number', default: 1.25, min: 0.5, max: 3, step: 0.05, label: 'Contrast' },
+      { name: 'perspective', type: 'number', default: 0.55, min: 0, max: 1, step: 0.05, label: 'Perspective' },
+      { name: 'fog', type: 'number', default: 0.55, min: 0, max: 1, step: 0.05, label: 'Fog' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'cursorStrength', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Cursor Strength' },
+      { name: 'cursorSize', type: 'number', default: 40, min: 20, max: 240, step: 5, label: 'Cursor Size' },
+      { name: 'swirl', type: 'number', default: 0, min: 0, max: 1.5, step: 0.05, label: 'Swirl' },
+      { name: 'trail', type: 'number', default: 1.4, min: 0.3, max: 4, step: 0.1, label: 'Trail' },
+      { name: 'lean', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Lean' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'introDuration', type: 'number', default: 1.5, min: 0.6, max: 5, step: 0.1, label: 'Intro Duration' },
+      { name: 'paused', type: 'boolean', default: false, label: 'Paused' }
+    ]
+  },
+  {
     id: 'shape-waves',
     label: 'Shape Waves',
     component: () => import('../../../content/Backgrounds/ShapeWaves/ShapeWaves.jsx'),

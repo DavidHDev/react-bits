@@ -996,6 +996,15 @@ export const componentMetadata = {
   },
 
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
+  'Backgrounds/MicroSlats': {
+    videoUrl: '/assets/video/microslats.webm',
+    description:
+      'A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.',
+    category: 'Backgrounds',
+    name: 'MicroSlats',
+    docsUrl: 'https://reactbits.dev/backgrounds/micro-slats',
+    tags: ['webgl', 'ogl', 'grid', 'waves', 'interactive', 'procedural']
+  },
   'Backgrounds/ShapeWaves': {
     videoUrl: '/assets/video/shapewaves.webm',
     description:

@@ -8408,6 +8408,80 @@
 			]
 		},
 		{
+			"name": "MicroSlats-JS-CSS",
+			"title": "MicroSlats",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "MicroSlats.css",
+					"target": "@components/MicroSlats.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "MicroSlats.jsx"
+				}
+			]
+		},
+		{
+			"name": "MicroSlats-JS-TW",
+			"title": "MicroSlats",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "MicroSlats/MicroSlats.jsx"
+				}
+			]
+		},
+		{
+			"name": "MicroSlats-TS-CSS",
+			"title": "MicroSlats",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "MicroSlats.css",
+					"target": "@components/MicroSlats.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "MicroSlats.tsx"
+				}
+			]
+		},
+		{
+			"name": "MicroSlats-TS-TW",
+			"title": "MicroSlats",
+			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, cursor ripples and an intro that rolls in from the horizon.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "MicroSlats/MicroSlats.tsx"
+				}
+			]
+		},
+		{
 			"name": "ShapeWaves-JS-CSS",
 			"title": "ShapeWaves",
 			"description": "A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.",
