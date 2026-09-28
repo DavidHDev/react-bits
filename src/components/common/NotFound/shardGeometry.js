@@ -104,7 +104,7 @@ const createShards = () => {
     const cx = vertices.reduce((total, point) => total + point.x, 0) / 3 - PANE_WIDTH / 2;
     const cy = vertices.reduce((total, point) => total + point.y, 0) / 3 - PANE_HEIGHT / 2;
     const radius = Math.hypot(cx, cy) || 1;
-    const separation = between(4, 12);
+    const separation = radius * 0.12 + between(4, 9);
 
     return {
       x,

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/landingnew/Navbar/Navbar';
-import PowerCable from '../components/common/NotFound/PowerCable';
 import FloatingShards from '../components/common/NotFound/FloatingShards';
 import ElectricLogo from '../content/Animations/ElectricLogo/ElectricLogo';
 import { useColorModeValue } from '../components/setup/color-mode';
@@ -12,7 +11,6 @@ import markup from '../assets/svg/404.svg?raw';
 const MARK_SRC = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
 const MARK_VIEWBOX = markup.match(/viewBox="([^"]+)"/)[1];
 const MARK_PATH = markup.match(/ d="([^"]+)"/)[1];
-const CABLE_ANCHOR = { x: 1738, y: 726 };
 const STAGE_SCALE = 0.56;
 
 const PALETTES = {
@@ -35,20 +33,6 @@ const BOOT = [
   [820, 0],
   [1080, 1]
 ];
-const SPUTTER = [
-  [0, 0.3],
-  [60, 0.85],
-  [120, 0.12],
-  [190, 0.5],
-  [240, 0]
-];
-const RECONNECT = [
-  [0, 0.7],
-  [70, 0.05],
-  [240, 0.45],
-  [300, 0],
-  [470, 1]
-];
 const BROWNOUT = [
   [0, 0.3],
   [70, 1],
@@ -64,10 +48,8 @@ const NotFoundPage = () => {
   const theme = useColorModeValue('light', 'dark');
   const palette = PALETTES[theme];
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
-  const [plugged, setPlugged] = useState(true);
   const [power, setPower] = useState(0);
   const stageRef = useRef(null);
-  const anchorRef = useRef(null);
   const titleRef = useRef(null);
   const timers = useRef([]);
 
@@ -88,11 +70,11 @@ const NotFoundPage = () => {
       setReducedMotion(query.matches);
       timers.current.forEach(clearTimeout);
       timers.current = [];
-      setPower(plugged ? 1 : 0);
+      setPower(1);
     };
     query.addEventListener('change', sync);
     return () => query.removeEventListener('change', sync);
-  }, [plugged]);
+  }, []);
 
   useEffect(() => {
     const robots = document.head.querySelector('meta[name="robots"]');
@@ -131,15 +113,7 @@ const NotFoundPage = () => {
     return () => pending.current.forEach(clearTimeout);
   }, [play]);
 
-  const handlePlugChange = useCallback(
-    next => {
-      setPlugged(next);
-      play(next ? RECONNECT : SPUTTER);
-    },
-    [play]
-  );
-
-  const lit = plugged && power === 1;
+  const lit = power === 1;
 
   useEffect(() => {
     if (!lit || reducedMotion) return undefined;
@@ -168,7 +142,6 @@ const NotFoundPage = () => {
         <div ref={stageRef} className="nf-stage" style={{ '--nf-scale': STAGE_SCALE }} aria-hidden="true">
           <svg className="nf-tubes" viewBox={MARK_VIEWBOX} preserveAspectRatio="xMidYMid meet">
             <path d={MARK_PATH} />
-            <circle ref={anchorRef} cx={CABLE_ANCHOR.x} cy={CABLE_ANCHOR.y} r="1" />
           </svg>
           <ElectricLogo
             src={MARK_SRC}
@@ -177,7 +150,7 @@ const NotFoundPage = () => {
             glowColor={palette.glowColor}
             bend={palette.bend}
             glow={palette.glow}
-            intensity={plugged ? power : 0}
+            intensity={power}
             interactive={!reducedMotion}
             speed={reducedMotion ? 0 : 2.5}
             arcs={reducedMotion ? 0 : 1}
@@ -217,16 +190,6 @@ const NotFoundPage = () => {
           </Link>
         ))}
       </nav>
-
-      <PowerCable
-        layoutKey={pathname}
-        stageRef={stageRef}
-        anchorRef={anchorRef}
-        plugged={plugged}
-        powered={lit}
-        onPlugChange={handlePlugChange}
-        reducedMotion={reducedMotion}
-      />
     </div>
   );
 };

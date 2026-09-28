@@ -5,16 +5,6 @@
   --nf-title-size: clamp(22px, 2.6vw, 28px);
   --nf-tube: rgb(232 220 255 / 0.12);
   --nf-spill: rgb(173 109 255 / 0.1);
-  --nf-cable: #2d2836;
-  --nf-cable-shine: rgb(255 255 255 / 0.09);
-  --nf-plug: #373141;
-  --nf-prong: #a4a0ad;
-  --nf-outlet: #1d1924;
-  --nf-outlet-edge: #37313f;
-  --nf-slot: #0c0a0f;
-  --nf-led-off: #3b3545;
-  --nf-led-on: #d2b0ff;
-  --nf-floor: rgb(255 255 255 / 0.07);
   position: relative;
   display: flex;
   min-height: 100svh;
@@ -31,38 +21,32 @@
   --nf-shard-shadow: rgb(24 24 27 / 0.055);
   --nf-tube: rgb(24 24 27 / 0.12);
   --nf-spill: rgb(169 83 255 / 0.05);
-  --nf-cable: #3f3f46;
-  --nf-cable-shine: rgb(255 255 255 / 0.3);
-  --nf-plug: #52525b;
-  --nf-prong: #a1a1aa;
-  --nf-outlet: #f4f4f5;
-  --nf-outlet-edge: #d4d4d8;
-  --nf-slot: #52525b;
-  --nf-led-off: #d4d4d8;
-  --nf-led-on: #a953ff;
-  --nf-floor: rgb(24 24 27 / 0.09);
 }
 
 .nf-shards {
   position: absolute;
   z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  --nf-shard-mask: radial-gradient(
+    ellipse 220px 155px at 50% calc(50% + 16px),
+    transparent 0%,
+    rgb(0 0 0 / 0.15) 35%,
+    rgb(0 0 0 / 0.72) 75%,
+    #000 100%
+  );
+  -webkit-mask-image: var(--nf-shard-mask);
+  mask-image: var(--nf-shard-mask);
+}
+
+.nf-shard-plane {
+  position: absolute;
   top: calc(50% + 16px);
   left: 50%;
   width: clamp(540px, 72vw, 800px);
   aspect-ratio: 760 / 440;
   transform: translate(-50%, -50%);
   perspective: 1000px;
-  pointer-events: none;
-  --nf-shard-mask: radial-gradient(
-    ellipse closest-side,
-    rgb(0 0 0 / 0.12) 0%,
-    rgb(0 0 0 / 0.28) 25%,
-    rgb(0 0 0 / 0.9) 55%,
-    rgb(0 0 0 / 0.64) 72%,
-    transparent 100%
-  );
-  -webkit-mask-image: var(--nf-shard-mask);
-  mask-image: var(--nf-shard-mask);
 }
 
 .nf-shard {
@@ -164,10 +148,6 @@
   vector-effect: non-scaling-stroke;
 }
 
-.nf-tubes circle {
-  stroke: none;
-}
-
 .nf-title {
   position: relative;
   z-index: 4;
@@ -250,8 +230,7 @@
 
 .nf-btn:focus-visible,
 .nf-suggest-link:focus-visible,
-.nf-categories a:focus-visible,
-.nf-plug-handle:focus-visible {
+.nf-categories a:focus-visible {
   outline: 2px solid var(--text-primary);
   outline-offset: 3px;
 }
@@ -277,89 +256,6 @@
   color: var(--text-primary);
 }
 
-.nf-cable {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.nf-cable-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.nf-floor {
-  color: var(--nf-floor);
-  stroke-width: 1;
-}
-
-.nf-cable-line {
-  fill: none;
-  stroke: var(--nf-cable);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.nf-cable-shine {
-  fill: none;
-  stroke: var(--nf-cable-shine);
-  stroke-width: 0.7;
-  stroke-linecap: round;
-  transform: translateY(-0.7px);
-}
-
-.nf-plug-body,
-.nf-plug-neck {
-  fill: var(--nf-plug);
-}
-
-.nf-plug-prong {
-  fill: var(--nf-prong);
-}
-
-.nf-outlet-body {
-  fill: var(--nf-outlet);
-  stroke: var(--nf-outlet-edge);
-  stroke-width: 1;
-}
-
-.nf-outlet-slot {
-  fill: var(--nf-slot);
-}
-
-.nf-outlet-led {
-  fill: var(--nf-led-off);
-  transition: fill 0.12s linear;
-}
-
-.nf-outlet-led[data-on='true'] {
-  fill: var(--nf-led-on);
-}
-
-.nf-plug-handle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: 12px;
-  background: transparent;
-  cursor: grab;
-  pointer-events: auto;
-  touch-action: none;
-}
-
-.nf-plug-handle:active {
-  cursor: grabbing;
-}
-
 .nf-sr-only {
   position: absolute;
   width: 1px;
@@ -371,6 +267,16 @@
 
 @media (max-width: 640px) {
   .nf-shards {
+    --nf-shard-mask: radial-gradient(
+      ellipse 155px 115px at 50% calc(50% + 12px),
+      transparent 0%,
+      rgb(0 0 0 / 0.15) 35%,
+      rgb(0 0 0 / 0.72) 75%,
+      #000 100%
+    );
+  }
+
+  .nf-shard-plane {
     width: 540px;
     top: calc(50% + 12px);
   }
@@ -401,8 +307,7 @@
 
   .nf-btn,
   .nf-suggest-name,
-  .nf-categories a,
-  .nf-outlet-led {
+  .nf-categories a {
     transition: none;
   }
 }

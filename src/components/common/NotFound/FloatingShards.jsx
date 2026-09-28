@@ -110,29 +110,31 @@ const FloatingShards = ({ reducedMotion }) => {
 
   return (
     <div ref={rootRef} className="nf-shards" aria-hidden="true" data-paused={reducedMotion}>
-      {SHARDS.map((shard, index) => (
-        <div
-          key={index}
-          className="nf-shard"
-          style={{
-            '--shard-x': `${((shard.x + shard.offsetX) / PANE_WIDTH) * 100}%`,
-            '--shard-y': `${((shard.y + shard.offsetY) / PANE_HEIGHT) * 100}%`,
-            '--shard-width': `${(shard.width / PANE_WIDTH) * 100}%`,
-            '--shard-height': `${(shard.height / PANE_HEIGHT) * 100}%`,
-            '--shard-rotation': `${shard.rotation}deg`,
-            '--shard-drift-x': `${shard.driftX}px`,
-            '--shard-drift-y': `${shard.driftY}px`,
-            '--shard-turn': `${shard.turn}deg`,
-            '--shard-duration': `${shard.duration}s`,
-            '--shard-delay': `${shard.delay}s`,
-            '--shard-opacity': 0.65 + shard.depth * 0.3
-          }}
-        >
-          <svg viewBox={`0 0 ${shard.width} ${shard.height}`} focusable="false" className="nf-shard-face">
-            <polygon points={shard.points} vectorEffect="non-scaling-stroke" />
-          </svg>
-        </div>
-      ))}
+      <div className="nf-shard-plane">
+        {SHARDS.map((shard, index) => (
+          <div
+            key={index}
+            className="nf-shard"
+            style={{
+              '--shard-x': `${((shard.x + shard.offsetX) / PANE_WIDTH) * 100}%`,
+              '--shard-y': `${((shard.y + shard.offsetY) / PANE_HEIGHT) * 100}%`,
+              '--shard-width': `${(shard.width / PANE_WIDTH) * 100}%`,
+              '--shard-height': `${(shard.height / PANE_HEIGHT) * 100}%`,
+              '--shard-rotation': `${shard.rotation}deg`,
+              '--shard-drift-x': `${shard.driftX}px`,
+              '--shard-drift-y': `${shard.driftY}px`,
+              '--shard-turn': `${shard.turn}deg`,
+              '--shard-duration': `${shard.duration}s`,
+              '--shard-delay': `${shard.delay}s`,
+              '--shard-opacity': 0.65 + shard.depth * 0.3
+            }}
+          >
+            <svg viewBox={`0 0 ${shard.width} ${shard.height}`} focusable="false" className="nf-shard-face">
+              <polygon points={shard.points} vectorEffect="non-scaling-stroke" />
+            </svg>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
