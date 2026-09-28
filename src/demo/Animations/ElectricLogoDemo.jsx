@@ -238,6 +238,13 @@ const ElectricLogoDemo = () => {
         description:
           'The background the logo sits on. Dark renders the lightning as emitted light. Light renders crisp electric ink with a white-hot core and a lighter fill.'
       },
+      {
+        name: 'onRender',
+        type: '(canvas: HTMLCanvasElement) => void',
+        default: 'undefined',
+        description:
+          'Called immediately after each rendered frame. Copy the canvas synchronously to capture the current frame for effects such as live reflections.'
+      },
       { name: 'className', type: 'string', default: "''", description: 'Extra classes on the container.' },
       { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles on the container.' }
     ],

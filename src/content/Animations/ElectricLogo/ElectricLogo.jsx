@@ -596,6 +596,7 @@ const ElectricLogo = ({
   cursorIntensity = 0.75,
   cursorRadius = 100,
   theme = 'dark',
+  onRender,
   className = '',
   style
 }) => {
@@ -621,7 +622,8 @@ const ElectricLogo = ({
       interactive,
       cursorIntensity,
       cursorRadius,
-      theme
+      theme,
+      onRender
     };
   });
 
@@ -942,6 +944,7 @@ const ElectricLogo = ({
         uniforms.uFill.value = s.fill;
         uniforms.uInk.value = ink;
         renderer.render({ scene: mesh });
+        s.onRender?.(canvas);
       }
 
       if (visible) raf = requestAnimationFrame(frame);

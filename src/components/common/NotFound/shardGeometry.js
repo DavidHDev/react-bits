@@ -96,6 +96,7 @@ const createShards = () => {
       y,
       width,
       height,
+      vertices,
       points: vertices.map(point => `${point.x - x},${point.y - y}`).join(' '),
       sourcePolygon,
       offsetX: 0,

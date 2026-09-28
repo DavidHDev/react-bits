@@ -1,7 +1,5 @@
 .nf {
   --nf-background: #120f17;
-  --nf-shard-edge: rgb(240 231 255 / 0.12);
-  --nf-shard-shadow: rgb(0 0 0 / 0.32);
   --nf-title-size: clamp(22px, 2.6vw, 28px);
   --nf-tube: rgb(232 220 255 / 0.12);
   --nf-spill: rgb(173 109 255 / 0.1);
@@ -17,8 +15,6 @@
 
 :root[data-theme='light'] .nf {
   --nf-background: #ffffff;
-  --nf-shard-edge: rgb(24 24 27 / 0.095);
-  --nf-shard-shadow: rgb(24 24 27 / 0.055);
   --nf-tube: rgb(24 24 27 / 0.12);
   --nf-spill: rgb(169 83 255 / 0.05);
 }
@@ -48,42 +44,12 @@
   transform: translate(-50%, -50%);
 }
 
-.nf-shard {
+.nf-glass-canvas {
   position: absolute;
-  top: var(--shard-y);
-  left: var(--shard-x);
-  width: var(--shard-width);
-  height: var(--shard-height);
-  opacity: var(--shard-opacity);
-  will-change: transform;
-}
-
-.nf-shard-face {
+  top: 50%;
+  left: 50%;
   display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  transform-origin: 50% 50%;
-  fill: var(--nf-background);
-  stroke: var(--nf-shard-edge);
-  stroke-width: 0.8;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 9px 16px var(--nf-shard-shadow));
-  animation: nf-shard-float var(--shard-duration) ease-in-out var(--shard-delay) infinite alternate;
-}
-
-.nf-shards[data-paused='true'] .nf-shard-face {
-  animation-play-state: paused;
-}
-
-@keyframes nf-shard-float {
-  from {
-    transform: rotate(var(--shard-rotation));
-  }
-  to {
-    transform: translate3d(var(--shard-drift-x), var(--shard-drift-y), 0)
-      rotate(calc(var(--shard-rotation) + var(--shard-turn)));
-  }
+  transform: translate(-50%, -50%);
 }
 
 .nf::before {
@@ -296,15 +262,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nf-shard {
-    will-change: auto;
-  }
-
-  .nf-shard-face {
-    animation: none;
-    transform: rotate(var(--shard-rotation));
-  }
-
   .nf-btn,
   .nf-suggest-name,
   .nf-categories a {

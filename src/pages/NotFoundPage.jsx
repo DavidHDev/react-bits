@@ -50,6 +50,8 @@ const NotFoundPage = () => {
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
   const [power, setPower] = useState(0);
   const stageRef = useRef(null);
+  const reflectionRef = useRef(null);
+  const reflectElectricity = useCallback(canvas => reflectionRef.current?.(canvas), []);
   const titleRef = useRef(null);
   const timers = useRef([]);
 
@@ -138,12 +140,19 @@ const NotFoundPage = () => {
       <Navbar showDocs />
 
       <main className="nf-main">
-        <FloatingShards reducedMotion={reducedMotion} />
+        <FloatingShards
+          reducedMotion={reducedMotion}
+          theme={theme}
+          stageRef={stageRef}
+          reflectionRef={reflectionRef}
+          layoutKey={`${pathname}:${suggestions.length}`}
+        />
         <div ref={stageRef} className="nf-stage" style={{ '--nf-scale': STAGE_SCALE }} aria-hidden="true">
           <svg className="nf-tubes" viewBox={MARK_VIEWBOX} preserveAspectRatio="xMidYMid meet">
             <path d={MARK_PATH} />
           </svg>
           <ElectricLogo
+            onRender={reflectElectricity}
             src={MARK_SRC}
             theme={theme}
             color={palette.color}

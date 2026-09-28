@@ -124,7 +124,8 @@ export const componentMetadata = {
     name: 'ElectricLogo',
     docsUrl: 'https://reactbits.dev/animations/electric-logo',
     tags: [],
-    added: '2026-09-25'
+    added: '2026-09-25',
+    updates: [{ date: '2026-09-28', note: 'Added an onRender callback for capturing live frames and reflection effects.' }]
   },
   'Animations/DitherVeil': {
     videoUrl: '/assets/video/ditherveil.webm',
