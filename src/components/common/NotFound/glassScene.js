@@ -12,6 +12,7 @@ import {
   PMREMGenerator,
   Scene,
   SRGBColorSpace,
+  Vector3,
   Vector4,
   WebGLRenderer
 } from 'three';
@@ -65,13 +66,40 @@ const reflectedElectricity = /* glsl */ `
   float inside = step(0.0, reflectedUV.x) * step(reflectedUV.x, 1.0)
     * step(0.0, reflectedUV.y) * step(reflectedUV.y, 1.0) * step(0.0, ray.z);
   vec4 center = texture2D(electricFrame, reflectedUV);
-  vec4 left = texture2D(electricFrame, reflectedUV + vec2(0.0015, 0.0));
-  vec4 right = texture2D(electricFrame, reflectedUV - vec2(0.0015, 0.0));
-  vec3 electric = center.rgb * center.a + (left.rgb * left.a + right.rgb * right.a) * 0.3;
+  float bevel = pow(1.0 - abs(normalize(vGlassNormal).z), 0.7);
+  float edgeDistance = 10000.0;
+  for (int edge = 0; edge < 12; edge++) {
+    edgeDistance = min(edgeDistance, prismEdges[edge].z - dot(vGlassPosition.xy, prismEdges[edge].xy));
+  }
+  float prismRim = exp(-max(edgeDistance, 0.0) / 2.6);
+  vec2 chromaticOffset = (glassNormal.xy + vec2(0.35, 0.18)) * (0.004 + bevel * 0.008);
+  vec4 red = texture2D(electricFrame, reflectedUV + chromaticOffset);
+  vec4 blue = texture2D(electricFrame, reflectedUV - chromaticOffset);
+  vec3 electric = vec3(red.r * red.a, center.g * center.a, blue.b * blue.a);
   float fresnel = 0.04 + 0.96 * pow(1.0 - max(dot(eye, glassNormal), 0.0), 5.0);
-  float energy = center.a + (left.a + right.a) * 0.3;
-  outgoingLight += electric * fresnel * inside * 0.65 * (1.0 - electricInk);
-  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * inside * energy * 0.08);
+  float energy = max(center.a, max(red.a, blue.a));
+  outgoingLight += electric * fresnel * inside * 1.0 * (1.0 - electricInk);
+  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * inside * energy * 0.16);
+
+  // Split the softbox highlights at the bevel, where a prism's color is most
+  // visible. RGB offsets follow its normal, so the fringe moves with the glass.
+  if (bevel > 0.001) {
+    vec3 spectralAxis = normalize(vec3(normal.y + 0.35, -normal.x + 0.2, 0.0));
+    vec3 spread = spectralAxis * bevel * 0.22;
+    vec3 neutralLight = getIBLRadiance(geometryViewDir, normal, material.roughness);
+    vec3 redLight = getIBLRadiance(geometryViewDir, normalize(normal + spread), material.roughness);
+    vec3 blueLight = getIBLRadiance(geometryViewDir, normalize(normal - spread), material.roughness);
+    vec3 spectralLight = vec3(redLight.r, neutralLight.g, blueLight.b);
+    outgoingLight = max(vec3(0.0), outgoingLight + (spectralLight - neutralLight) * fresnel * 0.85);
+  }
+
+  // A restrained spectral edge tint keeps the split readable even when the
+  // transmitted backdrop is plain white. Faces remain clear and neutral.
+  float spectralPhase = dot(glassNormal, vec3(0.45, 0.7, 0.2)) + dot(vWorldPosition.xy, vec2(0.0007, 0.0004));
+  vec3 prism = 0.64 + 0.36 * cos(6.2831853 * (spectralPhase + vec3(0.0, 0.333, 0.667)));
+  float edgeLight = max(bevel * (0.12 + fresnel * 0.28), prismRim * 0.28);
+  outgoingLight = mix(outgoingLight, outgoingLight * prism, electricInk * edgeLight * 1.5);
+  outgoingLight += prism * edgeLight * 0.12 * (1.0 - electricInk);
 `;
 
 // Small preblurred silhouettes provide the broad, faint contact shadows of
@@ -97,7 +125,7 @@ const createShadow = (shard, light) => {
   const material = new MeshBasicMaterial({
     map: texture,
     transparent: true,
-    opacity: light ? 0.045 : 0.16,
+    opacity: light ? 0.09 : 0.16,
     depthWrite: false
   });
   return new Mesh(new PlaneGeometry(width, height), material);
@@ -137,37 +165,60 @@ export const createGlassScene = (container, theme) => {
   const electricBounds = new Vector4(0, 70, 520, 205);
   const material = new MeshPhysicalMaterial({
     envMap: environment.texture,
-    color: light ? '#ffffff' : '#e2ddea',
+    color: light ? '#edeff5' : '#e2ddea',
     metalness: 0,
     roughness: 0.065,
     transmission: 1,
     thickness: 3.2,
     ior: 1.5,
-    dispersion: 0.12,
-    attenuationColor: '#ccc3de',
-    attenuationDistance: 120,
+    dispersion: 0.9,
+    attenuationColor: light ? '#b9c7e4' : '#ccc3de',
+    attenuationDistance: light ? 65 : 120,
     envMapIntensity: light ? 0.85 : 0.28,
     specularIntensity: 1
   });
-  material.onBeforeCompile = shader => {
+  const shadeGlass = (shader, edges) => {
     shader.uniforms.electricFrame = { value: electricFrame };
     shader.uniforms.electricBounds = { value: electricBounds };
     shader.uniforms.electricInk = { value: light ? 1 : 0 };
+    shader.uniforms.prismEdges = { value: edges };
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassNormal;\nvarying vec3 vGlassPosition;')
+      .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvGlassNormal = normal;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition = position;');
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
-        '#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;'
+        '#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\nuniform vec3 prismEdges[12];\nvarying vec3 vGlassNormal;\nvarying vec3 vGlassPosition;'
       )
       .replace('#include <opaque_fragment>', `${reflectedElectricity}\n#include <opaque_fragment>`);
   };
   const edgeMaterial = material.clone();
   edgeMaterial.roughness = 0.085;
   edgeMaterial.envMapIntensity = light ? 1.05 : 1.65;
-  edgeMaterial.onBeforeCompile = material.onBeforeCompile;
+  if (light) {
+    edgeMaterial.color.set('#bac8df');
+    edgeMaterial.attenuationDistance = 20;
+  }
 
   const shards = SHARDS.map((shard, index) => {
     const geometry = createShardGeometry(shard);
-    const mesh = new Mesh(geometry, [material, edgeMaterial]);
+    const cx = shard.x + shard.width / 2;
+    const cy = shard.y + shard.height / 2;
+    const edges = Array.from({ length: 12 }, (_, edge) => {
+      if (edge >= shard.vertices.length) return new Vector3(0, 0, 10000);
+      const a = shard.vertices[edge];
+      const b = shard.vertices[(edge + 1) % shard.vertices.length];
+      const length = Math.hypot(b.x - a.x, b.y - a.y);
+      const nx = (b.y - a.y) / length;
+      const ny = (b.x - a.x) / length;
+      return new Vector3(nx, ny, (a.x - cx) * nx + (cy - a.y) * ny);
+    });
+    const materials = [material.clone(), edgeMaterial.clone()];
+    materials.forEach(surface => {
+      surface.onBeforeCompile = shader => shadeGlass(shader, edges);
+    });
+    const mesh = new Mesh(geometry, materials);
     scene.add(mesh);
     const shadow = createShadow(shard, light);
     scene.add(shadow);
@@ -225,6 +276,7 @@ export const createGlassScene = (container, theme) => {
     dispose() {
       shards.forEach(({ mesh, shadow }) => {
         mesh.geometry.dispose();
+        mesh.material.forEach(surface => surface.dispose());
         shadow.geometry.dispose();
         shadow.material.map.dispose();
         shadow.material.dispose();
