@@ -82,9 +82,84 @@
   -webkit-box-reflect: below var(--nf-reflect, 0px) linear-gradient(transparent 64%, rgb(0 0 0 / 0.34));
 }
 
+.nf-sign,
 .nf-stage .electric-logo {
   position: absolute;
   inset: 0;
+}
+
+.nf[data-entering] > .ln-navbar {
+  animation: nf-nav-enter 550ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+
+.nf[data-entering] .nf-sign {
+  animation: nf-sign-enter 1100ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
+}
+
+.nf[data-entering] .nf-title,
+.nf[data-entering] .nf-suggest,
+.nf[data-entering] .nf-btn,
+.nf[data-entering] .nf-categories a {
+  animation: nf-content-enter 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.nf[data-entering] .nf-title {
+  animation-delay: 480ms;
+}
+.nf[data-entering] .nf-suggest {
+  animation-delay: 560ms;
+}
+.nf[data-entering] .nf-btn {
+  animation-delay: 640ms;
+}
+.nf[data-entering] .nf-categories a {
+  animation-delay: calc(780ms + var(--nf-order) * 35ms);
+}
+
+.nf[data-entering] .ln-navbar:focus-within,
+.nf[data-entering] .nf-btn:focus-visible,
+.nf[data-entering] .nf-suggest:focus-within,
+.nf[data-entering] .nf-categories a:focus-visible {
+  animation: none;
+}
+
+@keyframes nf-nav-enter {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes nf-sign-enter {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.97;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes nf-content-enter {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
 }
 
 .nf-tubes {
@@ -243,6 +318,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .nf[data-entering] > .ln-navbar,
+  .nf[data-entering] .nf-sign,
+  .nf[data-entering] .nf-title,
+  .nf[data-entering] .nf-suggest,
+  .nf[data-entering] .nf-btn,
+  .nf[data-entering] .nf-categories a {
+    animation: none;
+  }
+
   .nf-btn,
   .nf-suggest-name,
   .nf-categories a {

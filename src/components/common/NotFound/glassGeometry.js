@@ -2,18 +2,17 @@ import { BufferGeometry, ExtrudeGeometry, Float32BufferAttribute, Shape, Vector2
 import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const DEPTH = 2.6;
-const BEVEL_THICKNESS = 0.4;
-
 export const createShardGeometry = shard => {
   const cx = shard.x + shard.width / 2;
   const cy = shard.y + shard.height / 2;
+  const bevelThickness = shard.bevelThickness ?? 0.4;
   const shape = new Shape(shard.vertices.map(point => new Vector2(point.x - cx, cy - point.y)));
   const geometry = new ExtrudeGeometry(shape, {
     depth: DEPTH,
     steps: 1,
     bevelEnabled: true,
-    bevelThickness: BEVEL_THICKNESS,
-    bevelSize: 0.75,
+    bevelThickness,
+    bevelSize: shard.bevelSize ?? 0.75,
     bevelSegments: 8,
     curveSegments: 1
   });
@@ -36,7 +35,7 @@ export const createShardGeometry = shard => {
     strip.dispose();
   }
 
-  const faceZ = DEPTH / 2 + BEVEL_THICKNESS;
+  const faceZ = DEPTH / 2 + bevelThickness;
   for (let index = 0; index < position.count; index++) {
     const z = position.getZ(index);
     if (Math.abs(Math.abs(z) - faceZ) < 1e-5) normal.setXYZ(index, 0, 0, Math.sign(z));

@@ -48,6 +48,7 @@ const NotFoundPage = () => {
   const theme = useColorModeValue('light', 'dark');
   const palette = PALETTES[theme];
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
+  const [entering, setEntering] = useState(() => !prefersReducedMotion());
   const [power, setPower] = useState(0);
   const stageRef = useRef(null);
   const reflectionRef = useRef(null);
@@ -70,12 +71,18 @@ const NotFoundPage = () => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
     const sync = () => {
       setReducedMotion(query.matches);
+      if (query.matches) setEntering(false);
       timers.current.forEach(clearTimeout);
       timers.current = [];
       setPower(1);
     };
     query.addEventListener('change', sync);
     return () => query.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setEntering(false), 1900);
+    return () => clearTimeout(timeout);
   }, []);
 
   useEffect(() => {
@@ -136,7 +143,7 @@ const NotFoundPage = () => {
   if (direct) return <Navigate to={{ pathname: direct.path, search, hash }} replace />;
 
   return (
-    <div className="nf" style={{ '--nf-power': power }}>
+    <div className="nf" data-entering={entering ? '' : undefined} style={{ '--nf-power': power }}>
       <Navbar showDocs />
 
       <main className="nf-main">
@@ -148,26 +155,28 @@ const NotFoundPage = () => {
           layoutKey={`${pathname}:${suggestions.length}`}
         />
         <div ref={stageRef} className="nf-stage" style={{ '--nf-scale': STAGE_SCALE }} aria-hidden="true">
-          <svg className="nf-tubes" viewBox={MARK_VIEWBOX} preserveAspectRatio="xMidYMid meet">
-            <path d={MARK_PATH} />
-          </svg>
-          <ElectricLogo
-            onRender={reflectElectricity}
-            src={MARK_SRC}
-            theme={theme}
-            color={palette.color}
-            glowColor={palette.glowColor}
-            bend={palette.bend}
-            glow={palette.glow}
-            intensity={power}
-            interactive={!reducedMotion}
-            speed={reducedMotion ? 0 : 2.5}
-            arcs={reducedMotion ? 0 : 1}
-            flicker={reducedMotion ? 0 : 0.6}
-            scale={STAGE_SCALE}
-            thickness={1.6}
-            cursorRadius={90}
-          />
+          <div className="nf-sign">
+            <svg className="nf-tubes" viewBox={MARK_VIEWBOX} preserveAspectRatio="xMidYMid meet">
+              <path d={MARK_PATH} />
+            </svg>
+            <ElectricLogo
+              onRender={reflectElectricity}
+              src={MARK_SRC}
+              theme={theme}
+              color={palette.color}
+              glowColor={palette.glowColor}
+              bend={palette.bend}
+              glow={palette.glow}
+              intensity={power}
+              interactive={!reducedMotion}
+              speed={reducedMotion ? 0 : 2.5}
+              arcs={reducedMotion ? 0 : 1}
+              flicker={reducedMotion ? 0 : 0.6}
+              scale={STAGE_SCALE}
+              thickness={1.6}
+              cursorRadius={90}
+            />
+          </div>
         </div>
 
         <h1 ref={titleRef} className="nf-title">
@@ -193,8 +202,8 @@ const NotFoundPage = () => {
       </main>
 
       <nav className="nf-categories" aria-label="Categories">
-        {CATEGORY_LINKS.map(link => (
-          <Link key={link.to} to={link.to}>
+        {CATEGORY_LINKS.map((link, index) => (
+          <Link key={link.to} to={link.to} style={{ '--nf-order': index }}>
             {link.label}
           </Link>
         ))}

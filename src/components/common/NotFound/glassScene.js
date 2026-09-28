@@ -19,6 +19,7 @@ import {
 import { PANE_HEIGHT, PANE_WIDTH, SHARDS } from './shardGeometry';
 import { createShardGeometry } from './glassGeometry';
 import { createShardMotion, stepShardMotion } from './shardMotion';
+import { createShardIntro, applyShardIntro } from './shardIntro';
 
 const ELECTRIC_DEPTH = 180;
 // Sample the actual 404 outline so selected faces catch a live stroke at rest.
@@ -185,6 +186,7 @@ export const createGlassScene = (container, theme) => {
   electricFrame.magFilter = LinearFilter;
   electricFrame.generateMipmaps = false;
   const electricBounds = new Vector4(0, 70, 520, 205);
+  const glassIntroTime = { value: 0 };
   const material = new MeshPhysicalMaterial({
     envMap: environment.texture,
     color: '#ffffff',
@@ -204,12 +206,18 @@ export const createGlassScene = (container, theme) => {
     shader.uniforms.electricBounds = { value: electricBounds };
     shader.uniforms.electricInk = { value: light ? 1 : 0 };
     shader.uniforms.glassBackdrop = { value: scene.background };
+    shader.uniforms.glassIntroTime = glassIntroTime;
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
-        '#include <common>\nattribute float glassVisibility;\nvarying float vGlassVisibility;'
+        '#include <common>\nattribute float glassVisibility;\nattribute vec2 glassEntrance;\nuniform float glassIntroTime;\nvarying float vGlassVisibility;'
       )
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassVisibility = glassVisibility;');
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+        float arrival = clamp((glassIntroTime - glassEntrance.x) / glassEntrance.y, 0.0, 1.0);
+        vGlassVisibility = glassVisibility * smoothstep(0.0, 0.6, arrival);`
+      );
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
@@ -228,6 +236,13 @@ export const createGlassScene = (container, theme) => {
   cutMaterial.onBeforeCompile = shadeGlass;
   const shards = SHARDS.map((shard, index) => {
     const geometry = createShardGeometry(shard);
+    const intro = createShardIntro(shard, index);
+    const entrance = new Float32Array(geometry.attributes.position.count * 2);
+    for (let i = 0; i < entrance.length; i += 2) {
+      entrance[i] = intro.delay;
+      entrance[i + 1] = intro.duration;
+    }
+    geometry.setAttribute('glassEntrance', new Float32BufferAttribute(entrance, 2));
     // Fade whole outer fragments at different rates; no shared circular crop.
     const radial = Math.hypot(shard.px / 390, shard.py / 235);
     const variation = Math.sin(index * 2.37) * 0.065 + Math.cos(index * 1.71) * 0.035;
@@ -239,7 +254,7 @@ export const createGlassScene = (container, theme) => {
     const mesh = new Mesh(geometry, [material, cutMaterial]);
     scene.add(mesh);
     const target = index < 12 && index % 7 !== 0 ? SIGN_TARGETS[index % SIGN_TARGETS.length] : null;
-    return { mesh, motion: createShardMotion(shard, index), target };
+    return { mesh, motion: createShardMotion(shard, index), target, intro };
   });
 
   let previousWidth = 0;
@@ -255,7 +270,7 @@ export const createGlassScene = (container, theme) => {
     },
     resize(rect, stage) {
       const scale = rect.width / PANE_WIDTH;
-      // Leave room for drifting geometry; CSS softly masks the pane perimeter.
+      // Leave room for drifting geometry; each outer fragment fades separately.
       const width = rect.width + 120 * scale;
       const height = rect.height + 120 * scale;
       // Supersample thin glass highlights even on a standard-density display.
@@ -293,9 +308,11 @@ export const createGlassScene = (container, theme) => {
         });
       }
     },
-    render(time, pointer, dt) {
+    render(time, pointer, dt, introTime = 3) {
+      glassIntroTime.value = introTime;
       shards.forEach(shard => {
         const pose = stepShardMotion(shard.motion, time, pointer, dt);
+        applyShardIntro(pose, shard.intro, introTime);
         shard.mesh.position.set(pose[0], pose[1], pose[2]);
         shard.mesh.rotation.set(pose[3], pose[4], pose[5]);
       });

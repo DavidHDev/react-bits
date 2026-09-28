@@ -5,10 +5,14 @@ import { PANE_WIDTH } from './shardGeometry';
 const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutKey }) => {
   const rootRef = useRef(null);
   const measureRef = useRef(null);
+  const entranceRef = useRef({ started: null, complete: false });
 
   useEffect(() => {
     const root = rootRef.current;
     const plane = root.querySelector('.nf-shard-plane');
+    const entrance = entranceRef.current;
+    entrance.started ??= performance.now();
+    if (reducedMotion) entrance.complete = true;
     const glass = createGlassScene(plane, theme);
     if (!glass) return undefined;
 
@@ -32,7 +36,9 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
       const dt = Math.min((now - (last || now)) / 1000, 0.032);
       last = now;
       if (!reducedMotion) time += dt;
-      glass.render(time, pointer, reducedMotion ? 0 : dt);
+      const introTime = entrance.complete ? 3 : (now - entrance.started) / 1000;
+      if (introTime >= 2) entrance.complete = true;
+      glass.render(time, pointer, reducedMotion ? 0 : dt, introTime);
       if (!reducedMotion) frame = requestAnimationFrame(tick);
     };
     const wake = () => {
