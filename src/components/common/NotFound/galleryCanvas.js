@@ -1,7 +1,8 @@
 import { categoryPreviews } from './categoryPreviews';
 
 const SPEED = 24;
-const CROSSFADE = 280;
+const MORPH_SPRING = 12;
+const MEDIA_WAIT = 180;
 const EXIT_DURATION = 700;
 const mod = (value, period) => ((value % period) + period) % period;
 
@@ -27,14 +28,11 @@ const drawCover = (context, source, sourceBox, x, y, width, height) => {
   );
 };
 
-const createMedia = (item, wake) => {
-  const image = new Image();
+const createMedia = (item, poster, wake) => {
+  const image = poster.image;
   let video = null;
   let playing = false;
   let disposed = false;
-
-  image.onload = wake;
-  image.src = item.poster;
 
   const pause = () => {
     playing = false;
@@ -78,12 +76,16 @@ const createMedia = (item, wake) => {
     get video() {
       return video;
     },
+    get ready() {
+      return (
+        (video?.readyState >= 2 && video.videoWidth > 0) || (image.complete && image.naturalWidth > 0) || poster.failed
+      );
+    },
     sync,
     pause,
     dispose() {
       disposed = true;
       pause();
-      image.onload = null;
       if (video) {
         video.onloadeddata = null;
         video.removeAttribute('src');
@@ -98,10 +100,14 @@ export const createGalleryCanvas = (canvas, onFrame) => {
   const context = canvas.getContext('2d');
   const scene = document.createElement('canvas');
   const sceneContext = scene.getContext('2d');
+  const layerCanvas = document.createElement('canvas');
+  const layerContext = layerCanvas.getContext('2d');
+  const posters = new Map();
   let options = { active: false, category: null, theme: 'dark', reducedMotion: false };
-  let deck = [];
-  let previous = null;
-  let transitionStart = 0;
+  let layers = [];
+  let requested = null;
+  let target = null;
+  let requestedAt = 0;
   let exitUntil = 0;
   let width = 0;
   let height = 0;
@@ -112,37 +118,45 @@ export const createGalleryCanvas = (canvas, onFrame) => {
   let disposed = false;
 
   const visible = () => !disposed && !document.hidden && (options.active || performance.now() < exitUntil);
-  const pause = () => deck.forEach(item => item.pause());
-  const discardPrevious = () => {
-    if (!previous) return;
-    previous.width = 0;
-    previous.height = 0;
-    previous = null;
+  const pause = () => layers.forEach(layer => layer.deck.forEach(item => item.pause()));
+  const getPoster = item => {
+    if (!posters.has(item.poster)) {
+      const image = new Image();
+      const poster = { image, failed: false };
+      image.onload = wake;
+      image.onerror = () => {
+        poster.failed = true;
+        wake();
+      };
+      image.src = item.poster;
+      posters.set(item.poster, poster);
+    }
+    return posters.get(item.poster);
   };
 
   const drawCard = (item, x, y, cardWidth, cardHeight) => {
     const dark = options.theme !== 'light';
     const mediaHeight = cardHeight - 38;
     const inset = 5;
-    sceneContext.save();
-    roundedRect(sceneContext, x, y, cardWidth, cardHeight, 15);
-    sceneContext.shadowColor = dark ? 'rgba(0,0,0,.22)' : 'rgba(26,23,42,.10)';
-    sceneContext.shadowBlur = 16;
-    sceneContext.shadowOffsetY = 6;
-    sceneContext.fillStyle = dark ? '#17151c' : '#ffffff';
-    sceneContext.fill();
-    sceneContext.shadowColor = 'transparent';
-    sceneContext.clip();
-    sceneContext.fillStyle = '#08070b';
-    roundedRect(sceneContext, x + inset, y + inset, cardWidth - inset * 2, mediaHeight - inset, 11);
-    sceneContext.fill();
-    sceneContext.save();
-    sceneContext.clip();
+    layerContext.save();
+    roundedRect(layerContext, x, y, cardWidth, cardHeight, 15);
+    layerContext.shadowColor = dark ? 'rgba(0,0,0,.22)' : 'rgba(26,23,42,.10)';
+    layerContext.shadowBlur = 16;
+    layerContext.shadowOffsetY = 6;
+    layerContext.fillStyle = dark ? '#17151c' : '#ffffff';
+    layerContext.fill();
+    layerContext.shadowColor = 'transparent';
+    layerContext.clip();
+    layerContext.fillStyle = '#08070b';
+    roundedRect(layerContext, x + inset, y + inset, cardWidth - inset * 2, mediaHeight - inset, 11);
+    layerContext.fill();
+    layerContext.save();
+    layerContext.clip();
 
     const video = item.video;
     if (!options.reducedMotion && video?.readyState >= 2 && video.videoWidth) {
       drawCover(
-        sceneContext,
+        layerContext,
         video,
         { x: 0, y: 0, width: video.videoWidth, height: video.videoHeight },
         x + inset,
@@ -155,7 +169,7 @@ export const createGalleryCanvas = (canvas, onFrame) => {
       // interior so their logo and page title never appear in this small gallery.
       const imageScale = item.image.naturalWidth / 1200;
       drawCover(
-        sceneContext,
+        layerContext,
         item.image,
         { x: 524 * imageScale, y: 86 * imageScale, width: 672 * imageScale, height: 458 * imageScale },
         x + inset,
@@ -164,55 +178,105 @@ export const createGalleryCanvas = (canvas, onFrame) => {
         mediaHeight - inset
       );
     } else {
-      sceneContext.fillStyle = 'rgba(236,231,248,.46)';
-      sceneContext.font = '500 12px "Geist Mono", monospace';
-      sceneContext.textAlign = 'center';
-      sceneContext.fillText(`<${item.name.replaceAll(' ', '')} />`, x + cardWidth / 2, y + mediaHeight / 2 + 4);
+      layerContext.fillStyle = 'rgba(236,231,248,.46)';
+      layerContext.font = '500 12px "Geist Mono", monospace';
+      layerContext.textAlign = 'center';
+      layerContext.fillText(`<${item.name.replaceAll(' ', '')} />`, x + cardWidth / 2, y + mediaHeight / 2 + 4);
     }
-    sceneContext.restore();
+    layerContext.restore();
 
-    sceneContext.fillStyle = dark ? '#e8e5ed' : '#2b2733';
-    sceneContext.font = '500 12px "Geist", sans-serif';
-    sceneContext.textAlign = 'left';
-    sceneContext.textBaseline = 'middle';
-    sceneContext.fillText(item.name, x + 14, y + mediaHeight + 18);
-    roundedRect(sceneContext, x + 0.5, y + 0.5, cardWidth - 1, cardHeight - 1, 14.5);
-    sceneContext.strokeStyle = dark ? 'rgba(224,215,244,.13)' : 'rgba(43,29,67,.12)';
-    sceneContext.lineWidth = 1;
-    sceneContext.stroke();
-    sceneContext.restore();
+    layerContext.fillStyle = dark ? '#e8e5ed' : '#2b2733';
+    layerContext.font = '500 12px "Geist", sans-serif';
+    layerContext.textAlign = 'left';
+    layerContext.textBaseline = 'middle';
+    layerContext.fillText(item.name, x + 14, y + mediaHeight + 18);
+    roundedRect(layerContext, x + 0.5, y + 0.5, cardWidth - 1, cardHeight - 1, 14.5);
+    layerContext.strokeStyle = dark ? 'rgba(224,215,244,.13)' : 'rgba(43,29,67,.12)';
+    layerContext.lineWidth = 1;
+    layerContext.stroke();
+    layerContext.restore();
   };
 
-  const draw = now => {
+  const draw = (now, dt) => {
     const cardWidth = Math.min(222, Math.max(180, width * 0.55));
     const cardHeight = cardWidth * 0.63 + 38;
     const step = cardWidth + 16;
     const start = (width - cardWidth) / 2;
     const y = (height - cardHeight) / 2;
-    const travel = mod(offset, deck.length * step);
-    const progress = previous ? Math.min(1, (now - transitionStart) / CROSSFADE) : 1;
-    const mix = options.reducedMotion ? 1 : 1 - (1 - progress) ** 3;
-
-    sceneContext.setTransform(ratio, 0, 0, ratio, 0, 0);
-    sceneContext.clearRect(0, 0, width, height);
-    if (previous && mix < 1) {
-      sceneContext.globalAlpha = 1 - mix;
-      sceneContext.drawImage(previous, 0, 0, width, height);
-    }
-    sceneContext.globalAlpha = mix;
+    const travel = mod(offset, requested.deck.length * step);
     const first = Math.floor((travel - start - cardWidth - 20) / step);
     const last = Math.ceil((width + travel - start + 20) / step);
     const shown = new Set();
     for (let index = first; index <= last; index++) {
       const x = start + index * step - travel;
-      if (x + cardWidth < -20 || x > width + 20) continue;
-      const mediaIndex = mod(index, deck.length);
-      shown.add(mediaIndex);
-      drawCard(deck[mediaIndex], x, y, cardWidth, cardHeight);
+      if (x + cardWidth >= -20 && x <= width + 20) shown.add(mod(index, requested.deck.length));
     }
-    sceneContext.globalAlpha = 1;
-    deck.forEach((item, index) => item.sync(!options.reducedMotion && shown.has(index)));
-    if (mix === 1) discardPrevious();
+    const outgoing = layers
+      .filter(layer => layer !== requested && layer.weight > 0.04)
+      .sort((a, b) => b.weight - a.weight)[0];
+
+    // Prepare the incoming imagery while the outgoing category keeps playing.
+    // Posters are shared across visits; videos only play on visible cards.
+    layers.forEach(layer => {
+      layer.deck.forEach((item, index) =>
+        item.sync(!options.reducedMotion && shown.has(index) && (layer === requested || layer === outgoing))
+      );
+    });
+    if (
+      options.reducedMotion ||
+      now - requestedAt >= MEDIA_WAIT ||
+      [...shown].every(index => requested.deck[index].ready)
+    ) {
+      target = requested;
+    }
+
+    const decay = Math.exp(-MORPH_SPRING * dt);
+    layers.forEach(layer => {
+      const destination = layer === target ? 1 : 0;
+      if (options.reducedMotion) {
+        layer.weight = destination;
+        layer.velocity = 0;
+        return;
+      }
+      // An exact critically damped spring keeps its velocity when retargeted.
+      const displacement = layer.weight - destination;
+      const impulse = (layer.velocity + MORPH_SPRING * displacement) * dt;
+      layer.weight = destination + (displacement + impulse) * decay;
+      layer.velocity = (layer.velocity - MORPH_SPRING * impulse) * decay;
+    });
+    layers = layers.filter(layer => {
+      if (layer === requested || layer === target || layer.weight > 0.002 || Math.abs(layer.velocity) > 0.02)
+        return true;
+      layer.deck.forEach(item => item.dispose());
+      return false;
+    });
+    const totalWeight = layers.reduce((total, layer) => total + Math.max(0, layer.weight), 0) || 1;
+
+    sceneContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+    sceneContext.clearRect(0, 0, width, height);
+    layers.forEach(layer => {
+      const weight = Math.max(0, layer.weight) / totalWeight;
+      if (weight < 0.001) return;
+      layerContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+      layerContext.clearRect(0, 0, width, height);
+      for (let index = first; index <= last; index++) {
+        const x = start + index * step - travel;
+        if (x + cardWidth < -20 || x > width + 20) continue;
+        drawCard(layer.deck[mod(index, layer.deck.length)], x, y, cardWidth, cardHeight);
+      }
+
+      const scale = options.reducedMotion ? 1 : 0.94 + 0.06 * weight;
+      sceneContext.save();
+      sceneContext.translate(width / 2, height / 2);
+      sceneContext.scale(scale, scale);
+      sceneContext.translate(-width / 2, -height / 2);
+      sceneContext.globalAlpha = weight;
+      // Blend premultiplied layers without dimming the card shells mid-morph.
+      sceneContext.globalCompositeOperation = 'lighter';
+      sceneContext.filter = options.reducedMotion ? 'none' : `blur(${(1 - weight) * 3 * ratio}px)`;
+      sceneContext.drawImage(layerCanvas, 0, 0, width, height);
+      sceneContext.restore();
+    });
 
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
     context.clearRect(0, 0, width, height);
@@ -237,7 +301,7 @@ export const createGalleryCanvas = (canvas, onFrame) => {
 
   const tick = now => {
     frame = 0;
-    if (!visible() || !deck.length || !width || !height) {
+    if (!visible() || !requested || !width || !height) {
       last = 0;
       pause();
       return;
@@ -245,7 +309,7 @@ export const createGalleryCanvas = (canvas, onFrame) => {
     const dt = Math.min((now - (last || now)) / 1000, 0.05);
     last = now;
     if (!options.reducedMotion) offset += dt * SPEED;
-    draw(now);
+    draw(now, dt);
     if (!options.reducedMotion) frame = requestAnimationFrame(tick);
   };
 
@@ -261,8 +325,8 @@ export const createGalleryCanvas = (canvas, onFrame) => {
     width = nextWidth;
     height = nextHeight;
     ratio = nextRatio;
-    canvas.width = scene.width = Math.round(width * ratio);
-    canvas.height = scene.height = Math.round(height * ratio);
+    canvas.width = scene.width = layerCanvas.width = Math.round(width * ratio);
+    canvas.height = scene.height = layerCanvas.height = Math.round(height * ratio);
     wake();
   };
 
@@ -283,17 +347,20 @@ export const createGalleryCanvas = (canvas, onFrame) => {
     update(next) {
       const changedCategory = next.category && categoryPreviews[next.category] && options.category !== next.category;
       if (changedCategory) {
-        discardPrevious();
-        if (deck.length && scene.width && scene.height) {
-          previous = document.createElement('canvas');
-          previous.width = scene.width;
-          previous.height = scene.height;
-          previous.getContext('2d').drawImage(scene, 0, 0);
-          transitionStart = performance.now();
+        requested = layers.find(layer => layer.category === next.category);
+        if (!requested) {
+          requested = {
+            category: next.category,
+            deck: categoryPreviews[next.category].map(item => createMedia(item, getPoster(item), wake)),
+            weight: layers.length ? 0 : 1,
+            velocity: 0
+          };
+          layers.push(requested);
         }
-        deck.forEach(item => item.dispose());
-        deck = categoryPreviews[next.category].map(item => createMedia(item, wake));
+        requestedAt = performance.now();
+        if (!target) target = requested;
       }
+      if (next.active && !options.active) Object.values(categoryPreviews).flat().forEach(getPoster);
       if (!next.active && options.active) exitUntil = performance.now() + EXIT_DURATION;
       if (next.active && !options.active) last = 0;
       options = { ...next, category: next.category || options.category };
@@ -306,10 +373,14 @@ export const createGalleryCanvas = (canvas, onFrame) => {
       cancelAnimationFrame(frame);
       observer.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      deck.forEach(item => item.dispose());
-      discardPrevious();
-      scene.width = 0;
-      scene.height = 0;
+      layers.forEach(layer => layer.deck.forEach(item => item.dispose()));
+      posters.forEach(({ image }) => {
+        image.onload = null;
+        image.onerror = null;
+      });
+      posters.clear();
+      scene.width = layerCanvas.width = 0;
+      scene.height = layerCanvas.height = 0;
     }
   };
 };
