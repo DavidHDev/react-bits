@@ -46,7 +46,6 @@
   width: clamp(540px, 72vw, 800px);
   aspect-ratio: 760 / 440;
   transform: translate(-50%, -50%);
-  perspective: 1000px;
 }
 
 .nf-shard {
@@ -64,6 +63,7 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+  transform-origin: 50% 50%;
   fill: var(--nf-background);
   stroke: var(--nf-shard-edge);
   stroke-width: 0.8;
@@ -78,11 +78,11 @@
 
 @keyframes nf-shard-float {
   from {
-    transform: rotate(var(--shard-rotation)) scale(0.965);
+    transform: rotate(var(--shard-rotation));
   }
   to {
     transform: translate3d(var(--shard-drift-x), var(--shard-drift-y), 0)
-      rotate(calc(var(--shard-rotation) + var(--shard-turn))) scale(0.965);
+      rotate(calc(var(--shard-rotation) + var(--shard-turn)));
   }
 }
 
@@ -302,7 +302,7 @@
 
   .nf-shard-face {
     animation: none;
-    transform: rotate(var(--shard-rotation)) scale(0.965);
+    transform: rotate(var(--shard-rotation));
   }
 
   .nf-btn,

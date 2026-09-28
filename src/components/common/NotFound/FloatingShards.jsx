@@ -8,19 +8,22 @@ const FloatingShards = ({ reducedMotion }) => {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return undefined;
+    const plane = root.querySelector('.nf-shard-plane');
     const elements = [...root.querySelectorAll('.nf-shard')];
     const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
     const target = { x: 0, y: 0 };
     const position = { x: 0, y: 0 };
     let rect = root.getBoundingClientRect();
+    let scale = plane.getBoundingClientRect().width / PANE_WIDTH;
     let frame = 0;
     let last = 0;
     let inView = true;
 
     const render = () => {
+      plane.style.transform = `translate(calc(-50% + ${position.x * 5 * scale}px), calc(-50% + ${position.y * 4 * scale}px))`;
       elements.forEach((element, index) => {
         const depth = SHARDS[index].depth;
-        element.style.transform = `translate3d(${position.x * depth * 8}px, ${position.y * depth * 6}px, 0) rotateX(${-position.y * depth * 2}deg) rotateY(${position.x * depth * 2}deg)`;
+        element.style.transform = `translate3d(${position.x * depth * 3 * scale}px, ${position.y * depth * 2 * scale}px, 0)`;
       });
     };
 
@@ -78,9 +81,12 @@ const FloatingShards = ({ reducedMotion }) => {
 
     const measure = () => {
       rect = root.getBoundingClientRect();
+      scale = plane.getBoundingClientRect().width / PANE_WIDTH;
+      render();
     };
     const resize = new ResizeObserver(measure);
     resize.observe(root);
+    resize.observe(plane);
     const visibility = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       syncPlayback();
@@ -121,8 +127,8 @@ const FloatingShards = ({ reducedMotion }) => {
               '--shard-width': `${(shard.width / PANE_WIDTH) * 100}%`,
               '--shard-height': `${(shard.height / PANE_HEIGHT) * 100}%`,
               '--shard-rotation': `${shard.rotation}deg`,
-              '--shard-drift-x': `${shard.driftX}px`,
-              '--shard-drift-y': `${shard.driftY}px`,
+              '--shard-drift-x': `${(shard.driftX / shard.width) * 100}%`,
+              '--shard-drift-y': `${(shard.driftY / shard.height) * 100}%`,
               '--shard-turn': `${shard.turn}deg`,
               '--shard-duration': `${shard.duration}s`,
               '--shard-delay': `${shard.delay}s`,

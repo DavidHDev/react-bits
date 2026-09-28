@@ -1,57 +1,47 @@
 export const PANE_WIDTH = 760;
 export const PANE_HEIGHT = 440;
 
-const triangulate = points => {
-  const span = Math.max(PANE_WIDTH, PANE_HEIGHT);
-  const vertices = [
-    ...points,
-    { x: PANE_WIDTH / 2 - span * 20, y: PANE_HEIGHT / 2 - span },
-    { x: PANE_WIDTH / 2 + span * 20, y: PANE_HEIGHT / 2 - span },
-    { x: PANE_WIDTH / 2, y: PANE_HEIGHT / 2 + span * 20 }
-  ];
+const INSET = 12;
+const TILE = 100;
+const VISIBLE_CELLS = [
+  [1, 0],
+  [2, 0],
+  [4, 0],
+  [0, 1],
+  [1, 1],
+  [2, 1],
+  [3, 1],
+  [4, 1],
+  [5, 1],
+  [0, 2],
+  [1, 2],
+  [2, 2],
+  [3, 2],
+  [4, 2],
+  [5, 2],
+  [6, 2],
+  [1, 3],
+  [2, 3],
+  [3, 3],
+  [5, 3],
+  [2, 4],
+  [4, 4]
+];
 
-  const triangle = (a, b, c) => {
-    const p = vertices[a];
-    let q = vertices[b];
-    let r = vertices[c];
-    const cross = (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x);
-    if (Math.abs(cross) < 1e-7) return null;
-    if (cross < 0) {
-      [b, c] = [c, b];
-      [q, r] = [r, q];
+const clip = (polygon, nx, ny, limit) => {
+  const result = [];
+  for (let index = 0; index < polygon.length; index++) {
+    const a = polygon[index];
+    const b = polygon[(index + 1) % polygon.length];
+    const da = a.x * nx + a.y * ny - limit;
+    const db = b.x * nx + b.y * ny - limit;
+    if (da <= 0) result.push(a);
+    if ((da < 0 && db > 0) || (da > 0 && db < 0)) {
+      const t = da / (da - db);
+      result.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
     }
-    const determinant = 2 * (p.x * (q.y - r.y) + q.x * (r.y - p.y) + r.x * (p.y - q.y));
-    const p2 = p.x * p.x + p.y * p.y;
-    const q2 = q.x * q.x + q.y * q.y;
-    const r2 = r.x * r.x + r.y * r.y;
-    const x = (p2 * (q.y - r.y) + q2 * (r.y - p.y) + r2 * (p.y - q.y)) / determinant;
-    const y = (p2 * (r.x - q.x) + q2 * (p.x - r.x) + r2 * (q.x - p.x)) / determinant;
-    return { indices: [a, b, c], x, y, radiusSquared: (x - p.x) ** 2 + (y - p.y) ** 2 };
-  };
-
-  let triangles = [triangle(points.length, points.length + 1, points.length + 2)];
-  points.forEach((point, index) => {
-    const edges = new Map();
-    triangles = triangles.filter(cell => {
-      if ((point.x - cell.x) ** 2 + (point.y - cell.y) ** 2 > cell.radiusSquared + 1e-7) return true;
-      for (let side = 0; side < 3; side++) {
-        const a = cell.indices[side];
-        const b = cell.indices[(side + 1) % 3];
-        const key = a < b ? `${a}:${b}` : `${b}:${a}`;
-        if (edges.has(key)) edges.delete(key);
-        else edges.set(key, [a, b]);
-      }
-      return false;
-    });
-    edges.forEach(([a, b]) => {
-      const cell = triangle(a, b, index);
-      if (cell) triangles.push(cell);
-    });
-  });
-
-  return triangles
-    .filter(cell => cell.indices.every(index => index < points.length))
-    .map(cell => cell.indices.map(index => points[index]));
+  }
+  return result;
 };
 
 const createShards = () => {
@@ -61,51 +51,45 @@ const createShards = () => {
     return seed / 4294967296;
   };
   const between = (min, max) => min + random() * (max - min);
-  const points = [
-    { x: 40, y: 132 },
-    { x: 190, y: 34 },
-    { x: 343, y: 73 },
-    { x: 457, y: 15 },
-    { x: 593, y: 100 },
-    { x: 727, y: 65 },
-    { x: 701, y: 229 },
-    { x: 746, y: 336 },
-    { x: 560, y: 417 },
-    { x: 425, y: 367 },
-    { x: 261, y: 432 },
-    { x: 85, y: 342 },
-    { x: 26, y: 257 },
-    { x: 373, y: 207 }
-  ];
-
-  for (let index = 0; index < 7; index++) {
-    let best = null;
-    let clearance = -1;
-    for (let candidate = 0; candidate < 80; candidate++) {
-      const point = {
-        x: Math.round(between(120, PANE_WIDTH - 120)),
-        y: Math.round(between(95, PANE_HEIGHT - 95))
-      };
-      const distance = Math.min(...points.map(vertex => (point.x - vertex.x) ** 2 + (point.y - vertex.y) ** 2));
-      if (distance > clearance) {
-        best = point;
-        clearance = distance;
-      }
+  const sites = [];
+  for (let row = -2; row <= 6; row++) {
+    for (let column = -2; column <= 8; column++) {
+      sites.push({
+        column,
+        row,
+        x: 80 + column * TILE + between(-38, 38),
+        y: 20 + row * TILE + between(-38, 38)
+      });
     }
-    points.push(best);
   }
 
-  return triangulate(points).map(vertices => {
+  return VISIBLE_CELLS.map(([column, row]) => {
+    const site = sites.find(candidate => candidate.column === column && candidate.row === row);
+    const boundary = [
+      { x: -PANE_WIDTH, y: -PANE_HEIGHT },
+      { x: PANE_WIDTH * 2, y: -PANE_HEIGHT },
+      { x: PANE_WIDTH * 2, y: PANE_HEIGHT * 2 },
+      { x: -PANE_WIDTH, y: PANE_HEIGHT * 2 }
+    ];
+    let sourcePolygon = boundary;
+    let vertices = boundary;
+
+    sites.forEach(neighbor => {
+      if (neighbor === site) return;
+      const dx = neighbor.x - site.x;
+      const dy = neighbor.y - site.y;
+      const length = Math.hypot(dx, dy);
+      const nx = dx / length;
+      const ny = dy / length;
+      const limit = ((site.x + neighbor.x) * nx + (site.y + neighbor.y) * ny) / 2;
+      sourcePolygon = clip(sourcePolygon, nx, ny, limit);
+      vertices = clip(vertices, nx, ny, limit - INSET);
+    });
+
     const x = Math.min(...vertices.map(point => point.x));
     const y = Math.min(...vertices.map(point => point.y));
     const width = Math.max(...vertices.map(point => point.x)) - x;
     const height = Math.max(...vertices.map(point => point.y)) - y;
-    const cx = vertices.reduce((total, point) => total + point.x, 0) / 3 - PANE_WIDTH / 2;
-    const cy = vertices.reduce((total, point) => total + point.y, 0) / 3 - PANE_HEIGHT / 2;
-    const radius = Math.hypot(cx, cy) || 1;
-    const separation = between(14, 64);
-    const sideways = between(-28, 28);
-    const rotation = between(-16, 16);
 
     return {
       x,
@@ -113,13 +97,14 @@ const createShards = () => {
       width,
       height,
       points: vertices.map(point => `${point.x - x},${point.y - y}`).join(' '),
-      offsetX: (cx * separation - cy * sideways) / radius,
-      offsetY: (cy * separation + cx * sideways) / radius,
-      rotation,
+      sourcePolygon,
+      offsetX: 0,
+      offsetY: 0,
+      rotation: between(-1, 1),
       depth: between(0.4, 1),
-      driftX: between(3, 6) * (random() < 0.5 ? -1 : 1),
-      driftY: between(3, 6) * (random() < 0.5 ? -1 : 1),
-      turn: between(0.5, 1.2) * (random() < 0.5 ? -1 : 1),
+      driftX: between(-2, 2),
+      driftY: between(-2, 2),
+      turn: between(-0.4, 0.4),
       duration: between(20, 32),
       delay: between(-32, 0)
     };
