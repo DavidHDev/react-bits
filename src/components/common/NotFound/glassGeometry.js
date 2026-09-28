@@ -1,8 +1,8 @@
 import { BufferGeometry, ExtrudeGeometry, Float32BufferAttribute, Shape, Vector2 } from 'three';
 import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 
-const DEPTH = 3.2;
-const BEVEL_THICKNESS = 0.8;
+const DEPTH = 2.6;
+const BEVEL_THICKNESS = 0.4;
 
 export const createShardGeometry = shard => {
   const cx = shard.x + shard.width / 2;
@@ -13,7 +13,7 @@ export const createShardGeometry = shard => {
     steps: 1,
     bevelEnabled: true,
     bevelThickness: BEVEL_THICKNESS,
-    bevelSize: 0.7,
+    bevelSize: 0.45,
     bevelSegments: 8,
     curveSegments: 1
   });

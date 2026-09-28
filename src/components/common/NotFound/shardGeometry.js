@@ -2,8 +2,7 @@ export const PANE_WIDTH = 760;
 export const PANE_HEIGHT = 440;
 
 const INSET = 8;
-const COUNT = 30;
-const TAU = Math.PI * 2;
+const COUNT = 24;
 
 const clip = (polygon, nx, ny, limit) => {
   const result = [];
@@ -21,6 +20,26 @@ const clip = (polygon, nx, ny, limit) => {
   return result;
 };
 
+const area = polygon =>
+  Math.abs(
+    polygon.reduce((sum, point, index) => {
+      const next = polygon[(index + 1) % polygon.length];
+      return sum + point.x * next.y - next.x * point.y;
+    }, 0) / 2
+  );
+
+const inset = (polygon, margin) => {
+  let result = polygon;
+  polygon.forEach((a, index) => {
+    const b = polygon[(index + 1) % polygon.length];
+    const length = Math.hypot(b.x - a.x, b.y - a.y);
+    const nx = (b.y - a.y) / length;
+    const ny = (a.x - b.x) / length;
+    result = clip(result, nx, ny, a.x * nx + a.y * ny - margin);
+  });
+  return result;
+};
+
 const createShards = () => {
   let seed = 404;
   const random = () => {
@@ -28,71 +47,72 @@ const createShards = () => {
     return seed / 4294967296;
   };
   const between = (min, max) => min + random() * (max - min);
-  const sites = [{ x: 373, y: 214 }];
-  for (let index = 1; index < COUNT; index++) {
+  const point = (x, y) => ({ x, y });
+  const left = point(0, 242);
+  const first = point(280, 196);
+  const second = point(478, 226);
+  const right = point(760, 171);
+  const upperLeft = point(190, 28);
+  const upperRight = point(590, 40);
+  const lowerLeft = point(164, 418);
+  const lowerRight = point(553, 394);
+  // The primary crack branches between two displaced junctions. Its boundary
+  // has inward breaks, so the assembled fragments never form an oval slab.
+  const cells = [
+    [left, point(37, 95), upperLeft, first],
+    [upperLeft, point(338, 0), upperRight, second, first],
+    [upperRight, point(680, 20), right, second],
+    [left, first, lowerLeft, point(85, 382), point(12, 315)],
+    [first, second, lowerRight, point(374, 440), lowerLeft],
+    [second, right, point(736, 320), point(685, 409), lowerRight]
+  ].map(polygon => ({ polygon, direction: null }));
+
+  while (cells.length < COUNT) {
+    const weights = cells.map(cell => Math.max(0, area(cell.polygon) - 6500) ** 1.2);
+    let pick = random() * weights.reduce((sum, weight) => sum + weight, 0);
+    let selected = weights.findIndex(weight => (pick -= weight) < 0);
+    if (selected < 0) selected = 0;
+    const cell = cells[selected];
     let best = null;
-    let clearance = -1;
-    for (let candidate = 0; candidate < 100; candidate++) {
-      const angle = between(0, TAU);
-      const radius = Math.sqrt(random());
-      const edge = 1 + 0.075 * Math.sin(angle * 3 + 0.6) + 0.045 * Math.cos(angle * 5 - 0.8);
-      const point = {
-        x: PANE_WIDTH / 2 + Math.cos(angle) * radius * edge * 322,
-        y: PANE_HEIGHT / 2 + Math.sin(angle) * radius * edge * 171
-      };
-      const distance = Math.min(...sites.map(site => (point.x - site.x) ** 2 + (point.y - site.y) ** 2));
-      if (distance > clearance) {
-        best = point;
-        clearance = distance;
+    let bestScore = -Infinity;
+    const desiredRatio = between(0.23, 0.62);
+    const desiredAspect = random() < 0.45 ? between(2.2, 3.7) : between(1.2, 2.1);
+
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const direction = between(0, Math.PI);
+      if (cell.direction !== null && Math.abs(Math.sin(direction - cell.direction)) < 0.3) continue;
+      const nx = Math.cos(direction);
+      const ny = Math.sin(direction);
+      const projections = cell.polygon.map(p => p.x * nx + p.y * ny);
+      const min = Math.min(...projections);
+      const max = Math.max(...projections);
+      const limit = min + (max - min) * between(0.24, 0.76);
+      const children = [clip(cell.polygon, nx, ny, limit), clip(cell.polygon, -nx, -ny, -limit)];
+      if (children.some(polygon => polygon.length < 3 || area(polygon) < 2500)) continue;
+      const inner = children.map(polygon => inset(polygon, INSET));
+      if (inner.some((polygon, index) => polygon.length < 3 || area(polygon) < area(children[index]) * 0.43)) continue;
+      const smaller = area(children[0]) < area(children[1]) ? 0 : 1;
+      const polygon = children[smaller];
+      let length = 0;
+      for (const a of polygon) for (const b of polygon) length = Math.max(length, Math.hypot(a.x - b.x, a.y - b.y));
+      const aspect = (length * length) / (2 * area(polygon));
+      const trianglePenalty = children.filter(child => child.length === 3).length * 0.65;
+      const score =
+        -Math.abs(area(polygon) / area(cell.polygon) - desiredRatio) * 2 -
+        Math.abs(aspect - desiredAspect) * 0.3 -
+        trianglePenalty;
+      if (score > bestScore) {
+        bestScore = score;
+        best = children.map(child => ({ polygon: child, direction }));
       }
     }
-    sites.push(best);
+    if (!best) break;
+    cells.splice(selected, 1, ...best);
   }
 
-  const guards = Array.from({ length: 20 }, (_, index) => {
-    const angle = (index / 20) * TAU + between(-0.045, 0.045);
-    const radius = between(0.95, 1.05);
-    return {
-      x: PANE_WIDTH / 2 + Math.cos(angle) * radius * 415,
-      y: PANE_HEIGHT / 2 + Math.sin(angle) * radius * 258
-    };
-  });
-  const cells = sites.map(site => {
-    let polygon = [
-      { x: -PANE_WIDTH, y: -PANE_HEIGHT },
-      { x: PANE_WIDTH * 2, y: -PANE_HEIGHT },
-      { x: PANE_WIDTH * 2, y: PANE_HEIGHT * 2 },
-      { x: -PANE_WIDTH, y: PANE_HEIGHT * 2 }
-    ];
-    [...sites, ...guards].forEach(neighbor => {
-      if (neighbor === site) return;
-      const dx = neighbor.x - site.x;
-      const dy = neighbor.y - site.y;
-      const length = Math.hypot(dx, dy);
-      const nx = dx / length;
-      const ny = dy / length;
-      const limit = ((site.x + neighbor.x) * nx + (site.y + neighbor.y) * ny) / 2;
-      polygon = clip(polygon, nx, ny, limit);
-    });
-    return polygon;
-  });
-  const allPoints = cells.flat();
-  const left = Math.min(...allPoints.map(point => point.x));
-  const top = Math.min(...allPoints.map(point => point.y));
-  const scaleX = PANE_WIDTH / (Math.max(...allPoints.map(point => point.x)) - left);
-  const scaleY = PANE_HEIGHT / (Math.max(...allPoints.map(point => point.y)) - top);
-
-  return cells.map(cell => {
-    const sourcePolygon = cell.map(point => ({ x: (point.x - left) * scaleX, y: (point.y - top) * scaleY }));
-    let vertices = sourcePolygon;
-    sourcePolygon.forEach((a, index) => {
-      const b = sourcePolygon[(index + 1) % sourcePolygon.length];
-      const length = Math.hypot(b.x - a.x, b.y - a.y);
-      const nx = (b.y - a.y) / length;
-      const ny = (a.x - b.x) / length;
-      vertices = clip(vertices, nx, ny, a.x * nx + a.y * ny - INSET);
-    });
-
+  return cells.map(({ polygon: sourcePolygon }) => {
+    const span = Math.max(...sourcePolygon.flatMap(a => sourcePolygon.map(b => Math.hypot(a.x - b.x, a.y - b.y))));
+    const vertices = inset(sourcePolygon, Math.max(INSET, span * 0.04));
     const x = Math.min(...vertices.map(point => point.x));
     const y = Math.min(...vertices.map(point => point.y));
     const width = Math.max(...vertices.map(point => point.x)) - x;
