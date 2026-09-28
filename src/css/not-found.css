@@ -45,10 +45,10 @@
   --nf-shard-outer-mask: radial-gradient(
     ellipse 50% 50% at 50% 50%,
     #000 0%,
-    #000 54%,
-    rgb(0 0 0 / 0.85) 68%,
-    rgb(0 0 0 / 0.48) 82%,
-    rgb(0 0 0 / 0.16) 93%,
+    #000 58%,
+    rgb(0 0 0 / 0.94) 72%,
+    rgb(0 0 0 / 0.64) 84%,
+    rgb(0 0 0 / 0.25) 94%,
     transparent 100%
   );
   -webkit-mask-image: var(--nf-shard-outer-mask);

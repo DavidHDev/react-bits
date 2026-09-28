@@ -8,15 +8,18 @@ export const createShardMotion = (shard, index) => {
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
     return min + (seed / 4294967296) * (max - min);
   };
-  const x = shard.x + shard.width / 2 - PANE_WIDTH / 2;
-  const y = PANE_HEIGHT / 2 - shard.y - shard.height / 2;
+  // Compensate the resting position for perspective so depth doesn't collapse
+  // the independently scattered screen-space clearances.
+  const perspective = 1 - shard.z / 1400;
+  const x = (shard.x + shard.width / 2 - PANE_WIDTH / 2) * perspective;
+  const y = (PANE_HEIGHT / 2 - shard.y - shard.height / 2) * perspective;
   return {
     x,
     y,
-    z: random(-4, 4),
-    rx: (y - 65) * 0.00045 + random(-0.2, 0.2),
-    ry: -x * 0.00045 + random(-0.24, 0.24),
-    rz: random(-0.045, 0.045),
+    z: shard.z,
+    rx: shard.tiltX,
+    ry: shard.tiltY,
+    rz: shard.turn,
     mobility: Math.min(1, Math.sqrt(shard.width * shard.height) / 100),
     phase: random(0, TAU),
     frequency: TAU / random(22, 36),

@@ -13,7 +13,7 @@ export const createShardGeometry = shard => {
     steps: 1,
     bevelEnabled: true,
     bevelThickness: BEVEL_THICKNESS,
-    bevelSize: 0.45,
+    bevelSize: 0.75,
     bevelSegments: 8,
     curveSegments: 1
   });
