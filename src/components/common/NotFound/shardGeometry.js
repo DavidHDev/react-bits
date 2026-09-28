@@ -61,31 +61,30 @@ const createShards = () => {
     return seed / 4294967296;
   };
   const between = (min, max) => min + random() * (max - min);
-  const third = size => Math.round(size * between(0.26, 0.39));
-  const twoThirds = size => Math.round(size * between(0.61, 0.74));
   const points = [
-    { x: 0, y: 0 },
-    { x: third(PANE_WIDTH), y: 0 },
-    { x: twoThirds(PANE_WIDTH), y: 0 },
-    { x: PANE_WIDTH, y: 0 },
-    { x: PANE_WIDTH, y: third(PANE_HEIGHT) },
-    { x: PANE_WIDTH, y: twoThirds(PANE_HEIGHT) },
-    { x: PANE_WIDTH, y: PANE_HEIGHT },
-    { x: twoThirds(PANE_WIDTH), y: PANE_HEIGHT },
-    { x: third(PANE_WIDTH), y: PANE_HEIGHT },
-    { x: 0, y: PANE_HEIGHT },
-    { x: 0, y: twoThirds(PANE_HEIGHT) },
-    { x: 0, y: third(PANE_HEIGHT) },
+    { x: 40, y: 132 },
+    { x: 190, y: 34 },
+    { x: 343, y: 73 },
+    { x: 457, y: 15 },
+    { x: 593, y: 100 },
+    { x: 727, y: 65 },
+    { x: 701, y: 229 },
+    { x: 746, y: 336 },
+    { x: 560, y: 417 },
+    { x: 425, y: 367 },
+    { x: 261, y: 432 },
+    { x: 85, y: 342 },
+    { x: 26, y: 257 },
     { x: 373, y: 207 }
   ];
 
-  for (let index = 0; index < 9; index++) {
+  for (let index = 0; index < 7; index++) {
     let best = null;
     let clearance = -1;
     for (let candidate = 0; candidate < 80; candidate++) {
       const point = {
-        x: Math.round(between(58, PANE_WIDTH - 58)),
-        y: Math.round(between(48, PANE_HEIGHT - 48))
+        x: Math.round(between(120, PANE_WIDTH - 120)),
+        y: Math.round(between(95, PANE_HEIGHT - 95))
       };
       const distance = Math.min(...points.map(vertex => (point.x - vertex.x) ** 2 + (point.y - vertex.y) ** 2));
       if (distance > clearance) {
@@ -104,7 +103,9 @@ const createShards = () => {
     const cx = vertices.reduce((total, point) => total + point.x, 0) / 3 - PANE_WIDTH / 2;
     const cy = vertices.reduce((total, point) => total + point.y, 0) / 3 - PANE_HEIGHT / 2;
     const radius = Math.hypot(cx, cy) || 1;
-    const separation = radius * 0.12 + between(4, 9);
+    const separation = between(14, 64);
+    const sideways = between(-28, 28);
+    const rotation = between(-16, 16);
 
     return {
       x,
@@ -112,13 +113,13 @@ const createShards = () => {
       width,
       height,
       points: vertices.map(point => `${point.x - x},${point.y - y}`).join(' '),
-      offsetX: (cx / radius) * separation,
-      offsetY: (cy / radius) * separation,
-      rotation: between(-1.5, 1.5),
+      offsetX: (cx * separation - cy * sideways) / radius,
+      offsetY: (cy * separation + cx * sideways) / radius,
+      rotation,
       depth: between(0.4, 1),
       driftX: between(3, 6) * (random() < 0.5 ? -1 : 1),
       driftY: between(3, 6) * (random() < 0.5 ? -1 : 1),
-      turn: between(0.5, 1.2),
+      turn: between(0.5, 1.2) * (random() < 0.5 ? -1 : 1),
       duration: between(20, 32),
       delay: between(-32, 0)
     };
