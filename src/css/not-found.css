@@ -88,9 +88,8 @@
   left: 50%;
   width: min(840px, calc(100% - 32px));
   opacity: var(--nf-preview);
-  transform: translate(-50%, -50%);
-  translate: 0 calc((1 - var(--nf-preview)) * 22px);
-  scale: calc(0.88 + var(--nf-preview) * 0.12);
+  transform: translate(-50%, -50%) scale(calc(0.92 + var(--nf-preview) * 0.08));
+  transform-origin: center;
   filter: blur(calc((1 - var(--nf-preview)) * 8px));
   pointer-events: none;
 }
@@ -315,12 +314,13 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px 24px;
-  padding: 0 24px 32px;
+  gap: 0;
+  padding: 0 12px 28px;
   font-size: 13px;
 }
 
 .nf-categories a {
+  padding: 4px 12px;
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--transition-fast);
@@ -365,6 +365,10 @@
     translate: none;
     scale: none;
     filter: none;
+  }
+
+  .nf-gallery {
+    transform: translate(-50%, -50%);
   }
 
   .nf[data-entering] > .ln-navbar,
