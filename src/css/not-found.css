@@ -42,6 +42,17 @@
   width: clamp(540px, 72vw, 800px);
   aspect-ratio: 760 / 440;
   transform: translate(-50%, -50%);
+  --nf-shard-outer-mask: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #000 0%,
+    #000 54%,
+    rgb(0 0 0 / 0.85) 68%,
+    rgb(0 0 0 / 0.48) 82%,
+    rgb(0 0 0 / 0.16) 93%,
+    transparent 100%
+  );
+  -webkit-mask-image: var(--nf-shard-outer-mask);
+  mask-image: var(--nf-shard-outer-mask);
 }
 
 .nf-glass-canvas {
@@ -234,7 +245,7 @@
 @media (max-width: 640px) {
   .nf-shards {
     --nf-shard-mask: radial-gradient(
-      ellipse 155px 115px at 50% calc(50% + 12px),
+      ellipse clamp(115px, 24vw, 155px) clamp(80px, 18vw, 115px) at 50% calc(50% + 12px),
       transparent 0%,
       rgb(0 0 0 / 0.15) 35%,
       rgb(0 0 0 / 0.72) 75%,
@@ -243,7 +254,7 @@
   }
 
   .nf-shard-plane {
-    width: 540px;
+    width: min(540px, calc(100vw + 32px));
     top: calc(50% + 12px);
   }
 

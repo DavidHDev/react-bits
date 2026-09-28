@@ -187,7 +187,7 @@ export const createGlassScene = (container, theme) => {
     },
     resize(rect, stage) {
       const scale = rect.width / PANE_WIDTH;
-      // Canvas padding, not an outer fade or a rectangular shard boundary.
+      // Leave room for drifting geometry; CSS softly masks the pane perimeter.
       const width = rect.width + 120 * scale;
       const height = rect.height + 120 * scale;
       // Supersample thin glass highlights even on a standard-density display.

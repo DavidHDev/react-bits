@@ -16,7 +16,8 @@ export const createShardMotion = (shard, index) => {
     z: random(-4, 4),
     rx: (y - 65) * 0.00045 + random(-0.2, 0.2),
     ry: -x * 0.00045 + random(-0.24, 0.24),
-    rz: random(-0.085, 0.085),
+    rz: random(-0.045, 0.045),
+    mobility: Math.min(1, Math.sqrt(shard.width * shard.height) / 100),
     phase: random(0, TAU),
     frequency: TAU / random(22, 36),
     axis: random(0, TAU),
@@ -44,8 +45,8 @@ export const stepShardMotion = (shard, time, pointer, dt) => {
   const u = Math.tanh(dx * c + dy * s) * proximity;
   const v = Math.tanh(dy * c - dx * s) * proximity;
   const target = shard.target;
-  target[0] = u * 2.2 * shard.responseX;
-  target[1] = v * 2.2 * shard.responseY;
+  target[0] = u * 2.2 * shard.responseX * shard.mobility;
+  target[1] = v * 2.2 * shard.responseY * shard.mobility;
   target[2] = (u + v) * shard.twist * 2.2;
   target[3] = v * 0.12 * shard.responseX;
   target[4] = u * 0.14 * shard.responseY;
@@ -58,8 +59,8 @@ export const stepShardMotion = (shard, time, pointer, dt) => {
   }
   const wave = time * shard.frequency + shard.phase;
   const pose = shard.pose;
-  pose[0] = shard.x + Math.sin(wave) * 1.4 + shard.offset[0];
-  pose[1] = shard.y + Math.cos(wave * 0.83 + shard.axis) * 1.7 + shard.offset[1];
+  pose[0] = shard.x + Math.sin(wave) * 1.4 * shard.mobility + shard.offset[0];
+  pose[1] = shard.y + Math.cos(wave * 0.83 + shard.axis) * 1.7 * shard.mobility + shard.offset[1];
   pose[2] = shard.z + Math.sin(wave * 0.67) * 2.5 + shard.offset[2];
   pose[3] = shard.rx + Math.sin(wave * 0.9 + shard.axis) * 0.035 + shard.offset[3];
   pose[4] = shard.ry + Math.cos(wave * 0.8) * 0.04 + shard.offset[4];
