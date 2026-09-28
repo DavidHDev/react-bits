@@ -30,7 +30,9 @@
   position: absolute;
   top: calc(50% + 16px);
   left: 50%;
-  width: clamp(390px, 72vw, 640px);
+  /* Grow with the available height while leaving breathing room below the
+     navbar. The visible shards occupy about 90% of this square. */
+  width: min(108vw, max(320px, calc(120svh - 440px)));
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
 }
@@ -299,7 +301,6 @@
 
 @media (max-width: 640px) {
   .nf-shard-plane {
-    width: min(540px, 100vw);
     top: calc(50% + 12px);
   }
 
