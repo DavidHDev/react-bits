@@ -2,7 +2,16 @@ import { useEffect, useRef } from 'react';
 import { createGlassScene } from './glassScene';
 import { PANE_WIDTH } from './shardGeometry';
 
-const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutKey }) => {
+const FloatingShards = ({
+  reducedMotion,
+  theme,
+  stageRef,
+  galleryRef,
+  reflectionRef,
+  galleryReflectionRef,
+  previewProgress,
+  layoutKey
+}) => {
   const rootRef = useRef(null);
   const measureRef = useRef(null);
   const entranceRef = useRef({ started: null, complete: false });
@@ -28,16 +37,22 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
     let sourceHeight = 0;
     let inView = true;
     let disposed = false;
+    let layoutDirty = false;
     const active = () => !disposed && inView && !document.hidden;
 
     const tick = now => {
       frame = 0;
       if (!active()) return;
+      if (layoutDirty) {
+        updateLayout();
+        layoutDirty = false;
+      }
       const dt = Math.min((now - (last || now)) / 1000, 0.032);
       last = now;
       if (!reducedMotion) time += dt;
       const introTime = entrance.complete ? 3 : (now - entrance.started) / 1000;
       if (introTime >= 2) entrance.complete = true;
+      glass.setPreview(Math.max(0, Math.min(1, previewProgress.get())));
       glass.render(time, pointer, reducedMotion ? 0 : dt, introTime);
       if (!reducedMotion) frame = requestAnimationFrame(tick);
     };
@@ -45,7 +60,7 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
       if (!frame && active()) frame = requestAnimationFrame(tick);
     };
     const capture = canvas => {
-      if (!active()) return;
+      if (!active() || previewProgress.get() >= 0.999) return;
       if (reducedMotion) {
         if (canvas.width !== sourceWidth || canvas.height !== sourceHeight) {
           sourceElapsed = 0;
@@ -62,13 +77,27 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
       wake();
     };
     reflectionRef.current = capture;
+    const captureGallery = canvas => {
+      if (!active()) return;
+      glass.captureGallery(canvas);
+      wake();
+    };
+    galleryReflectionRef.current = captureGallery;
 
-    const measure = () => {
+    const updateLayout = () => {
       rect = plane.getBoundingClientRect();
-      glass.resize(rect, stageRef.current?.getBoundingClientRect());
+      glass.resize(rect, stageRef.current?.getBoundingClientRect(), galleryRef.current?.getBoundingClientRect());
+    };
+    const measure = () => {
+      updateLayout();
       wake();
     };
     measureRef.current = measure;
+    const stopPreview = previewProgress.on('change', () => {
+      layoutDirty = true;
+      sourceElapsed = 0;
+      wake();
+    });
     const reset = () => {
       pointer.active = 0;
     };
@@ -93,6 +122,7 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
     resize.observe(root);
     resize.observe(plane);
     if (stageRef.current) resize.observe(stageRef.current);
+    if (galleryRef.current) resize.observe(galleryRef.current);
     const visibility = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
       playback();
@@ -110,6 +140,8 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
       disposed = true;
       if (measureRef.current === measure) measureRef.current = null;
       if (reflectionRef.current === capture) reflectionRef.current = null;
+      if (galleryReflectionRef.current === captureGallery) galleryReflectionRef.current = null;
+      stopPreview();
       cancelAnimationFrame(frame);
       resize.disconnect();
       visibility.disconnect();
@@ -121,7 +153,7 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
       pointerQuery.removeEventListener('change', reset);
       glass.dispose();
     };
-  }, [reducedMotion, theme, stageRef, reflectionRef]);
+  }, [reducedMotion, theme, stageRef, galleryRef, reflectionRef, galleryReflectionRef, previewProgress]);
 
   useEffect(() => {
     measureRef.current?.();

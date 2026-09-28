@@ -33,6 +33,16 @@ const SIGN_TARGETS = [
   [1471, 243],
   [1662, 660]
 ];
+const GALLERY_TARGETS = [
+  [0.14, 0.38],
+  [0.34, 0.66],
+  [0.55, 0.3],
+  [0.78, 0.58],
+  [0.88, 0.34],
+  [0.42, 0.4],
+  [0.67, 0.7],
+  [0.23, 0.72]
+];
 
 // The front hemisphere stays dim so the faces remain clear. Grazing cut walls
 // reflect the rear hemisphere; broad rear cards reveal their thickness while
@@ -134,6 +144,10 @@ const reflectedElectricity = /* glsl */ `
     * step(0.0, reflectedUV.y) * step(reflectedUV.y, 1.0) * step(0.0, ray.z);
   vec4 center = texture2D(electricFrame, reflectedUV);
   vec3 electric = center.rgb * center.a;
+  vec2 galleryUV = (hit - galleryBounds.xy) / galleryBounds.zw + 0.5;
+  float galleryInside = step(0.0, galleryUV.x) * step(galleryUV.x, 1.0)
+    * step(0.0, galleryUV.y) * step(galleryUV.y, 1.0) * step(0.0, ray.z);
+  vec4 gallery = texture2D(galleryFrame, clamp(galleryUV, vec2(0.0), vec2(1.0)));
   float fresnel = 0.04 + 0.96 * pow(1.0 - max(dot(eye, glassNormal), 0.0), 5.0);
   float studio =
     0.7 * glassStudioCard(vWorldPosition, ray, 240.0, vec2(-260.0, 20.0), vec2(85.0, 560.0), -0.18) +
@@ -146,8 +160,12 @@ const reflectedElectricity = /* glsl */ `
   outgoingLight *= 1.0 - electricInk * fresnel * min(studio, 1.0) * 0.65;
   outgoingLight += vec3(studio * fresnel * (1.0 - electricInk));
   float energy = center.a;
-  outgoingLight += electric * fresnel * inside * 2.6 * (1.0 - electricInk);
-  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * inside * energy * 0.32);
+  float electricAmount = inside * (1.0 - glassPreview);
+  float galleryAmount = galleryInside * gallery.a * glassPreview;
+  outgoingLight += electric * fresnel * electricAmount * 2.6 * (1.0 - electricInk);
+  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * electricAmount * energy * 0.32);
+  outgoingLight += gallery.rgb * fresnel * galleryAmount * 5.0 * (1.0 - electricInk);
+  outgoingLight = mix(outgoingLight, gallery.rgb, electricInk * galleryAmount * 0.3);
   // A long Gaussian shoulder protects the text without a visible mask edge.
   vec2 centerDistance = (vWorldPosition.xy - vec2(0.0, -12.0)) / 155.0;
   float centerVisibility = 1.0 - exp(-dot(centerDistance, centerDistance) * 1.4);
@@ -186,6 +204,18 @@ export const createGlassScene = (container, theme) => {
   electricFrame.magFilter = LinearFilter;
   electricFrame.generateMipmaps = false;
   const electricBounds = new Vector4(0, 70, 520, 205);
+  const gallerySource = document.createElement('canvas');
+  gallerySource.width = 960;
+  gallerySource.height = 360;
+  const galleryContext = gallerySource.getContext('2d');
+  const galleryFrame = new CanvasTexture(gallerySource);
+  galleryFrame.colorSpace = SRGBColorSpace;
+  galleryFrame.minFilter = LinearFilter;
+  galleryFrame.magFilter = LinearFilter;
+  galleryFrame.generateMipmaps = false;
+  const galleryBounds = electricBounds.clone();
+  const glassPreview = { value: 0 };
+  let hasGalleryBounds = false;
   const glassIntroTime = { value: 0 };
   const material = new MeshPhysicalMaterial({
     envMap: environment.texture,
@@ -205,6 +235,9 @@ export const createGlassScene = (container, theme) => {
     shader.uniforms.electricFrame = { value: electricFrame };
     shader.uniforms.electricBounds = { value: electricBounds };
     shader.uniforms.electricInk = { value: light ? 1 : 0 };
+    shader.uniforms.galleryFrame = { value: galleryFrame };
+    shader.uniforms.galleryBounds = { value: galleryBounds };
+    shader.uniforms.glassPreview = glassPreview;
     shader.uniforms.glassBackdrop = { value: scene.background };
     shader.uniforms.glassIntroTime = glassIntroTime;
     shader.vertexShader = shader.vertexShader
@@ -221,7 +254,7 @@ export const createGlassScene = (container, theme) => {
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
-        `#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\nuniform vec3 glassBackdrop;\nvarying float vGlassVisibility;\n${studioReflection}`
+        `#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\nuniform sampler2D galleryFrame;\nuniform vec4 galleryBounds;\nuniform float glassPreview;\nuniform vec3 glassBackdrop;\nvarying float vGlassVisibility;\n${studioReflection}`
       )
       .replace('#include <opaque_fragment>', `${reflectedElectricity}\n#include <opaque_fragment>`);
   };
@@ -252,10 +285,35 @@ export const createGlassScene = (container, theme) => {
     );
     const mesh = new Mesh(geometry, [material, cutMaterial]);
     scene.add(mesh);
-    const target = index < 12 && index % 7 !== 0 ? SIGN_TARGETS[index % SIGN_TARGETS.length] : null;
-    return { mesh, motion: createShardMotion(shard, index), target, intro };
+    const target =
+      index < 12 && index % 7 !== 0
+        ? SIGN_TARGETS[index % SIGN_TARGETS.length].map(
+            (coordinate, axis) => 0.5 + (coordinate / (axis === 0 ? 1897 : 742) - 0.5) * 0.56
+          )
+        : null;
+    const galleryTarget = index < 30 && index % 7 !== 0 ? GALLERY_TARGETS[index % GALLERY_TARGETS.length] : null;
+    const motion = createShardMotion(shard, index);
+    const signNormal = new Vector3(
+      Math.sin(motion.ry),
+      -Math.sin(motion.rx) * Math.cos(motion.ry),
+      Math.cos(motion.rx) * Math.cos(motion.ry)
+    );
+    return { mesh, motion, target, galleryTarget, signNormal, intro };
   });
 
+  const origin = new Vector3();
+  const towardSurface = new Vector3();
+  const galleryNormal = new Vector3();
+  const blendedNormal = new Vector3();
+  const previewPointer = { x: 0, y: 0, active: 0 };
+  const surfaceNormal = (motion, bounds, target, clump, normal) => {
+    origin.set(motion.x * clump, motion.y * clump, motion.z);
+    towardSurface
+      .set(bounds.x + (target[0] - 0.5) * bounds.z, bounds.y + (0.5 - target[1]) * bounds.w, ELECTRIC_DEPTH)
+      .sub(origin)
+      .normalize();
+    normal.copy(camera.position).sub(origin).normalize().add(towardSurface).normalize();
+  };
   let previousWidth = 0;
   let previousHeight = 0;
   let previousDpr = 0;
@@ -267,7 +325,24 @@ export const createGlassScene = (container, theme) => {
       context.drawImage(canvas, 0, 0, source.width, source.height);
       electricFrame.needsUpdate = true;
     },
-    resize(rect, stage) {
+    captureGallery(canvas) {
+      if (!canvas.width || !canvas.height) return;
+      const scale = Math.min(1, 960 / Math.max(canvas.width, canvas.height));
+      const width = Math.max(1, Math.round(canvas.width * scale));
+      const height = Math.max(1, Math.round(canvas.height * scale));
+      if (gallerySource.width !== width || gallerySource.height !== height) {
+        galleryFrame.dispose();
+        gallerySource.width = width;
+        gallerySource.height = height;
+      }
+      galleryContext.clearRect(0, 0, width, height);
+      galleryContext.drawImage(canvas, 0, 0, width, height);
+      galleryFrame.needsUpdate = true;
+    },
+    setPreview(progress) {
+      glassPreview.value = Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
+    },
+    resize(rect, stage, gallery) {
       const scale = rect.width / PANE_WIDTH;
       // Leave room for drifting geometry; each outer fragment fades separately.
       const width = rect.width + 120 * scale;
@@ -291,29 +366,45 @@ export const createGlassScene = (container, theme) => {
           stage.width / scale,
           stage.height / scale
         );
-        shards.forEach(({ motion, target }) => {
+        shards.forEach(({ motion, target, signNormal }) => {
           if (!target) return;
-          const origin = new Vector3(motion.x, motion.y, motion.z);
-          const towardSign = new Vector3(
-            electricBounds.x + (target[0] / 1897 - 0.5) * 0.56 * electricBounds.z,
-            electricBounds.y + (0.5 - target[1] / 742) * 0.56 * electricBounds.w,
-            ELECTRIC_DEPTH
-          )
-            .sub(origin)
-            .normalize();
-          const normal = camera.position.clone().sub(origin).normalize().add(towardSign).normalize();
-          motion.rx = Math.atan2(-normal.y, normal.z);
-          motion.ry = Math.asin(normal.x);
+          surfaceNormal(motion, electricBounds, target, 1, signNormal);
         });
+      }
+      if (gallery?.width > 0 && gallery?.height > 0) {
+        galleryBounds.set(
+          (gallery.left + gallery.width / 2 - rect.left - rect.width / 2) / scale,
+          -(gallery.top + gallery.height / 2 - rect.top - rect.height / 2) / scale,
+          gallery.width / scale,
+          gallery.height / scale
+        );
+        hasGalleryBounds = true;
+      } else if (!hasGalleryBounds) {
+        galleryBounds.copy(electricBounds);
       }
     },
     render(time, pointer, dt, introTime = 3) {
       glassIntroTime.value = introTime;
+      const preview = glassPreview.value;
+      const clump = 1 - preview * 0.1;
+      previewPointer.x = pointer.x / clump;
+      previewPointer.y = pointer.y / clump;
+      previewPointer.active = pointer.active;
       shards.forEach(shard => {
-        const pose = stepShardMotion(shard.motion, time, pointer, dt);
+        blendedNormal.copy(shard.signNormal);
+        if (shard.galleryTarget && hasGalleryBounds && preview > 0) {
+          surfaceNormal(shard.motion, galleryBounds, shard.galleryTarget, clump, galleryNormal);
+          blendedNormal.lerp(galleryNormal, preview).normalize();
+        }
+        shard.motion.rx = Math.atan2(-blendedNormal.y, blendedNormal.z);
+        shard.motion.ry = Math.asin(Math.max(-1, Math.min(1, blendedNormal.x)));
+        const pose = stepShardMotion(shard.motion, time, previewPointer, dt);
+        pose[0] *= clump;
+        pose[1] *= clump;
         applyShardIntro(pose, shard.intro, introTime);
         shard.mesh.position.set(pose[0], pose[1], pose[2]);
         shard.mesh.rotation.set(pose[3], pose[4], pose[5]);
+        shard.mesh.scale.setScalar(1 - preview * 0.05);
       });
       renderer.render(scene, camera);
     },
@@ -324,6 +415,7 @@ export const createGlassScene = (container, theme) => {
       material.dispose();
       cutMaterial.dispose();
       electricFrame.dispose();
+      galleryFrame.dispose();
       environment.dispose();
       renderer.dispose();
       renderer.forceContextLoss();
