@@ -149,7 +149,7 @@ const reflectedElectricity = /* glsl */ `
   outgoingLight += electric * fresnel * inside * 2.6 * (1.0 - electricInk);
   outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * inside * energy * 0.32);
   // A long Gaussian shoulder protects the text without a visible mask edge.
-  vec2 centerDistance = (vWorldPosition.xy - vec2(0.0, -12.0)) / vec2(185.0, 115.0);
+  vec2 centerDistance = (vWorldPosition.xy - vec2(0.0, -12.0)) / 155.0;
   float centerVisibility = 1.0 - exp(-dot(centerDistance, centerDistance) * 1.4);
   outgoingLight = mix(glassBackdrop, outgoingLight, vGlassVisibility * centerVisibility);
 `;
@@ -244,9 +244,8 @@ export const createGlassScene = (container, theme) => {
     }
     geometry.setAttribute('glassEntrance', new Float32BufferAttribute(entrance, 2));
     // Fade whole outer fragments at different rates; no shared circular crop.
-    const radial = Math.hypot(shard.px / 390, shard.py / 235);
     const variation = Math.sin(index * 2.37) * 0.065 + Math.cos(index * 1.71) * 0.035;
-    const visibility = Math.exp(-Math.pow(Math.max(0, radial + variation) / 0.85, 4));
+    const visibility = Math.exp(-Math.pow(Math.max(0, shard.fadeDistance + variation) / 0.96, 4));
     geometry.setAttribute(
       'glassVisibility',
       new Float32BufferAttribute(new Float32Array(geometry.attributes.position.count).fill(visibility), 1)

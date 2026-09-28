@@ -1,5 +1,6 @@
-export const PANE_WIDTH = 760;
-export const PANE_HEIGHT = 440;
+export const PANE_WIDTH = 640;
+export const PANE_HEIGHT = 640;
+export const FIELD_RADIUS = 245;
 
 const TAU = Math.PI * 2;
 const cross = (a, b, c) => (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
@@ -100,30 +101,38 @@ const createShards = () => {
   for (let index = 0; index < 56; index++) {
     const large = index < 12;
     const chip = index >= 30;
+    const protruding = [3, 9, 18, 27].includes(index);
     let placement;
     for (let attempt = 0; attempt < 1800; attempt++) {
-      const px = random(-350, 350);
-      const py = random(-203, 203);
-      const radial = Math.hypot(px / 380, py / 220);
-      if (radial > 0.96 || radial < (large ? 0.4 : chip ? 0.48 : 0.25)) continue;
+      const angle = random(0, TAU);
+      // Equal axes give the field a round center of gravity. Uneven pockets
+      // and a few independent outliers keep its outline from becoming a ring.
+      const boundary = FIELD_RADIUS * (1 + 0.075 * Math.sin(angle * 3 + 0.6) + 0.055 * Math.cos(angle * 5 - 0.4));
+      const distance = protruding ? random(265, 286) : Math.sqrt(random()) * boundary;
+      const radial = distance / FIELD_RADIUS;
+      if (radial < (large ? 0.45 : chip ? 0.48 : 0.25)) continue;
+      const px = Math.cos(angle) * distance;
+      const py = Math.sin(angle) * distance;
       const radius = chip ? random(5, 10) : (large ? 64 - radial * 28 : 32 - radial * 16) * random(0.78, 1.18);
       if (shards.some(shard => Math.hypot(px - shard.px, py - shard.py) < (radius + shard.radius) * 1.08 + 14))
         continue;
-      placement = { px, py, radius };
+      const fadeDistance = distance / (boundary + (protruding ? 55 : 0));
+      placement = { px, py, radius, fadeDistance };
       break;
     }
     if (!placement) continue;
     const { px, py, radius } = placement;
-    // Reserve the established layout samples, then use a separate seed for
-    // silhouettes. Shape changes cannot move the accepted composition.
-    const layoutSamples = (4 + Math.floor(random(0, 4))) * 2 + 2;
-    for (let sample = 0; sample < layoutSamples; sample++) random();
+    // Silhouettes have a separate seed so refining a shape cannot move its
+    // neighbors or change the clearances in the composition.
     const shape = createProfile(index, radius);
     let polygon = shape.polygon;
     const cx = (Math.min(...polygon.map(p => p.x)) + Math.max(...polygon.map(p => p.x))) / 2;
     const cy = (Math.min(...polygon.map(p => p.y)) + Math.max(...polygon.map(p => p.y))) / 2;
     const scale = radius / Math.max(...polygon.map(p => Math.hypot(p.x - cx, p.y - cy)));
-    polygon = polygon.map(p => ({ x: (p.x - cx) * scale + px + 380, y: (p.y - cy) * scale + 220 - py }));
+    polygon = polygon.map(p => ({
+      x: (p.x - cx) * scale + px + PANE_WIDTH / 2,
+      y: (p.y - cy) * scale + PANE_HEIGHT / 2 - py
+    }));
     const x = Math.min(...polygon.map(p => p.x));
     const y = Math.min(...polygon.map(p => p.y));
     const width = Math.max(...polygon.map(p => p.x)) - x;

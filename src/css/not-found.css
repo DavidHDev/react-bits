@@ -30,8 +30,8 @@
   position: absolute;
   top: calc(50% + 16px);
   left: 50%;
-  width: clamp(540px, 72vw, 800px);
-  aspect-ratio: 760 / 440;
+  width: clamp(390px, 72vw, 640px);
+  aspect-ratio: 1;
   transform: translate(-50%, -50%);
 }
 

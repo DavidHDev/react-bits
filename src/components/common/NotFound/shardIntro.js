@@ -4,7 +4,7 @@ const random = seed => {
 };
 
 export const createShardIntro = (shard, index) => ({
-  delay: 0.1 + Math.hypot(shard.px / 380, shard.py / 220) * 0.12 + random(index + 1) * 0.18,
+  delay: 0.1 + (Math.hypot(shard.px, shard.py) / FIELD_RADIUS) * 0.12 + random(index + 1) * 0.18,
   duration: 1.05 + random(index + 17) * 0.32,
   depth: 210 + random(index + 29) * 130,
   rx: (random(index + 43) - 0.5) * 1.1,
@@ -26,3 +26,4 @@ export const applyShardIntro = (pose, intro, time) => {
   pose[4] += intro.ry * remaining;
   pose[5] += intro.rz * remaining;
 };
+import { FIELD_RADIUS } from './shardGeometry.js';
