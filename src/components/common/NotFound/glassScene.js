@@ -2,7 +2,6 @@ import {
   CanvasTexture,
   Color,
   EquirectangularReflectionMapping,
-  ExtrudeGeometry,
   LinearFilter,
   Mesh,
   MeshBasicMaterial,
@@ -12,13 +11,13 @@ import {
   PlaneGeometry,
   PMREMGenerator,
   Scene,
-  Shape,
   SRGBColorSpace,
-  Vector2,
   Vector4,
   WebGLRenderer
 } from 'three';
 import { PANE_HEIGHT, PANE_WIDTH, SHARDS } from './shardGeometry';
+import { createShardGeometry } from './glassGeometry';
+import { createShardMotion, stepShardMotion } from './shardMotion';
 
 // Broad studio softboxes give clear glass something to reflect. A narrow strip
 // catches the fractured bevels as they turn, without drawing artificial outlines.
@@ -42,7 +41,7 @@ const createEnvironment = renderer => {
     context.restore();
   };
   softbox(240, 160, 150, 100, '#a4a0ae');
-  softbox(740, 260, 35, 200, '#e9e6f2');
+  softbox(740, 260, 70, 200, '#e9e6f2');
   softbox(520, 420, 250, 80, '#50435d');
   const texture = new CanvasTexture(canvas);
   texture.mapping = EquirectangularReflectionMapping;
@@ -107,7 +106,7 @@ const createShadow = (shard, light) => {
 export const createGlassScene = (container, theme) => {
   let renderer;
   try {
-    renderer = new WebGLRenderer({ alpha: false, antialias: true, powerPreference: 'low-power' });
+    renderer = new WebGLRenderer({ alpha: false, antialias: true, powerPreference: 'high-performance' });
   } catch {
     // The decoration is optional; navigation and the page message stay intact.
     return null;
@@ -115,6 +114,7 @@ export const createGlassScene = (container, theme) => {
   const light = theme === 'light';
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = NoToneMapping;
+  renderer.transmissionResolutionScale = 0.75;
   renderer.setClearColor(light ? '#ffffff' : '#120f17', 1);
   renderer.domElement.className = 'nf-glass-canvas';
   container.appendChild(renderer.domElement);
@@ -139,7 +139,7 @@ export const createGlassScene = (container, theme) => {
     envMap: environment.texture,
     color: light ? '#ffffff' : '#e2ddea',
     metalness: 0,
-    roughness: 0.075,
+    roughness: 0.065,
     transmission: 1,
     thickness: 3.2,
     ior: 1.5,
@@ -161,43 +161,17 @@ export const createGlassScene = (container, theme) => {
       .replace('#include <opaque_fragment>', `${reflectedElectricity}\n#include <opaque_fragment>`);
   };
   const edgeMaterial = material.clone();
-  edgeMaterial.roughness = 0.16;
-  edgeMaterial.envMapIntensity = light ? 1.1 : 2.1;
+  edgeMaterial.roughness = 0.085;
+  edgeMaterial.envMapIntensity = light ? 1.05 : 1.65;
   edgeMaterial.onBeforeCompile = material.onBeforeCompile;
 
   const shards = SHARDS.map((shard, index) => {
-    const cx = shard.x + shard.width / 2;
-    const cy = shard.y + shard.height / 2;
-    const shape = new Shape(shard.vertices.map(point => new Vector2(point.x - cx, cy - point.y)));
-    const geometry = new ExtrudeGeometry(shape, {
-      depth: 3.2,
-      steps: 1,
-      bevelEnabled: true,
-      bevelThickness: 0.8,
-      bevelSize: 0.7,
-      bevelSegments: 2,
-      curveSegments: 1
-    });
-    geometry.translate(0, 0, -1.6);
+    const geometry = createShardGeometry(shard);
     const mesh = new Mesh(geometry, [material, edgeMaterial]);
-    const x = cx - PANE_WIDTH / 2;
-    const y = PANE_HEIGHT / 2 - cy;
-    mesh.position.set(x, y, 0);
     scene.add(mesh);
     const shadow = createShadow(shard, light);
     scene.add(shadow);
-    return {
-      mesh,
-      shadow,
-      x,
-      y,
-      rx: (y - 65) * 0.00065 + Math.sin(index * 4.7) * 0.12,
-      ry: -x * 0.00065 + Math.cos(index * 2.8) * 0.14,
-      phase: index * 2.399,
-      frequency: (Math.PI * 2) / shard.duration,
-      depth: shard.depth,
-      rotation: (shard.rotation * Math.PI) / 180
-    };
+    return { mesh, shadow, motion: createShardMotion(shard, index) };
   });
 
   let previousWidth = 0;
@@ -216,7 +190,8 @@ export const createGlassScene = (container, theme) => {
       // Canvas padding, not an outer fade or a rectangular shard boundary.
       const width = rect.width + 120 * scale;
       const height = rect.height + 120 * scale;
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.75, Math.sqrt(1100000 / (width * height)));
+      // Supersample thin glass highlights even on a standard-density display.
+      const dpr = Math.min(2, Math.sqrt(2200000 / (width * height)));
       if (width !== previousWidth || height !== previousHeight || dpr !== previousDpr) {
         renderer.setPixelRatio(dpr);
         renderer.setSize(width, height);
@@ -236,19 +211,11 @@ export const createGlassScene = (container, theme) => {
         );
       }
     },
-    render(time, pointer) {
+    render(time, pointer, dt) {
       shards.forEach(shard => {
-        const wave = time * shard.frequency + shard.phase;
-        shard.mesh.position.set(
-          shard.x + Math.sin(wave) * 1.7 + pointer.x * (3 + shard.depth * 2),
-          shard.y + Math.cos(wave * 0.83) * 2 - pointer.y * (2 + shard.depth * 1.4),
-          Math.sin(wave * 0.67) * 2.5
-        );
-        shard.mesh.rotation.set(
-          shard.rx + Math.sin(wave * 0.9) * 0.035 + pointer.y * 0.035,
-          shard.ry + Math.cos(wave * 0.8) * 0.04 + pointer.x * 0.04,
-          shard.rotation + Math.sin(wave * 0.7) * 0.007
-        );
+        const pose = stepShardMotion(shard.motion, time, pointer, dt);
+        shard.mesh.position.set(pose[0], pose[1], pose[2]);
+        shard.mesh.rotation.set(pose[3], pose[4], pose[5]);
         shard.shadow.position.set(shard.mesh.position.x + 3, shard.mesh.position.y - 7, -24);
         shard.shadow.rotation.z = shard.mesh.rotation.z;
         shard.shadow.scale.set(Math.cos(shard.mesh.rotation.y), Math.cos(shard.mesh.rotation.x), 1);

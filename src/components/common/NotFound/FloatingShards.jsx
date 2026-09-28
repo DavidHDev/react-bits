@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createGlassScene } from './glassScene';
+import { PANE_WIDTH } from './shardGeometry';
 
 const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutKey }) => {
   const rootRef = useRef(null);
@@ -12,8 +13,7 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
     if (!glass) return undefined;
 
     const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const target = { x: 0, y: 0 };
-    const pointer = { x: 0, y: 0, vx: 0, vy: 0 };
+    const pointer = { x: 0, y: 0, active: 0 };
     let rect;
     let frame = 0;
     let last = 0;
@@ -31,16 +31,8 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
       if (!active()) return;
       const dt = Math.min((now - (last || now)) / 1000, 0.032);
       last = now;
-      if (!reducedMotion) {
-        time += dt;
-        // A critically damped spring keeps changes in direction continuous.
-        for (const axis of ['x', 'y']) {
-          const velocity = `v${axis}`;
-          pointer[velocity] += ((target[axis] - pointer[axis]) * 36 - pointer[velocity] * 12) * dt;
-          pointer[axis] += pointer[velocity] * dt;
-        }
-      }
-      glass.render(time, pointer);
+      if (!reducedMotion) time += dt;
+      glass.render(time, pointer, reducedMotion ? 0 : dt);
       if (!reducedMotion) frame = requestAnimationFrame(tick);
     };
     const wake = () => {
@@ -66,19 +58,20 @@ const FloatingShards = ({ reducedMotion, theme, stageRef, reflectionRef, layoutK
     reflectionRef.current = capture;
 
     const measure = () => {
-      rect = root.getBoundingClientRect();
-      glass.resize(plane.getBoundingClientRect(), stageRef.current?.getBoundingClientRect());
+      rect = plane.getBoundingClientRect();
+      glass.resize(rect, stageRef.current?.getBoundingClientRect());
       wake();
     };
     measureRef.current = measure;
     const reset = () => {
-      target.x = 0;
-      target.y = 0;
+      pointer.active = 0;
     };
     const onMove = event => {
       if (reducedMotion || !pointerQuery.matches || event.pointerType !== 'mouse') return;
-      target.x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width) * 2 - 1));
-      target.y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1));
+      const scale = rect.width / PANE_WIDTH;
+      pointer.x = (event.clientX - rect.left - rect.width / 2) / scale;
+      pointer.y = -(event.clientY - rect.top - rect.height / 2) / scale;
+      pointer.active = 1;
     };
     const onOut = event => {
       if (!event.relatedTarget) reset();
