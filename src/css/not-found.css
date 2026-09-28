@@ -24,15 +24,6 @@
   z-index: 0;
   inset: 0;
   pointer-events: none;
-  --nf-shard-mask: radial-gradient(
-    ellipse 220px 155px at 50% calc(50% + 16px),
-    transparent 0%,
-    rgb(0 0 0 / 0.15) 35%,
-    rgb(0 0 0 / 0.72) 75%,
-    #000 100%
-  );
-  -webkit-mask-image: var(--nf-shard-mask);
-  mask-image: var(--nf-shard-mask);
 }
 
 .nf-shard-plane {
@@ -42,17 +33,6 @@
   width: clamp(540px, 72vw, 800px);
   aspect-ratio: 760 / 440;
   transform: translate(-50%, -50%);
-  --nf-shard-outer-mask: radial-gradient(
-    ellipse 50% 50% at 50% 50%,
-    #000 0%,
-    #000 58%,
-    rgb(0 0 0 / 0.94) 72%,
-    rgb(0 0 0 / 0.64) 84%,
-    rgb(0 0 0 / 0.25) 94%,
-    transparent 100%
-  );
-  -webkit-mask-image: var(--nf-shard-outer-mask);
-  mask-image: var(--nf-shard-outer-mask);
 }
 
 .nf-glass-canvas {
@@ -243,18 +223,8 @@
 }
 
 @media (max-width: 640px) {
-  .nf-shards {
-    --nf-shard-mask: radial-gradient(
-      ellipse clamp(115px, 24vw, 155px) clamp(80px, 18vw, 115px) at 50% calc(50% + 12px),
-      transparent 0%,
-      rgb(0 0 0 / 0.15) 35%,
-      rgb(0 0 0 / 0.72) 75%,
-      #000 100%
-    );
-  }
-
   .nf-shard-plane {
-    width: min(540px, calc(100vw + 32px));
+    width: min(540px, 100vw);
     top: calc(50% + 12px);
   }
 

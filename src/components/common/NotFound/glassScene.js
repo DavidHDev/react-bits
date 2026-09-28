@@ -1,6 +1,7 @@
 import {
   CanvasTexture,
   Color,
+  Float32BufferAttribute,
   LinearFilter,
   Mesh,
   MeshLambertMaterial,
@@ -11,12 +12,26 @@ import {
   PMREMGenerator,
   Scene,
   SRGBColorSpace,
+  Vector3,
   Vector4,
   WebGLRenderer
 } from 'three';
 import { PANE_HEIGHT, PANE_WIDTH, SHARDS } from './shardGeometry';
 import { createShardGeometry } from './glassGeometry';
 import { createShardMotion, stepShardMotion } from './shardMotion';
+
+const ELECTRIC_DEPTH = 180;
+// Sample the actual 404 outline so selected faces catch a live stroke at rest.
+const SIGN_TARGETS = [
+  [162, 243],
+  [353, 660],
+  [588, 530],
+  [656, 372],
+  [959, 0],
+  [1261, 372],
+  [1471, 243],
+  [1662, 660]
+];
 
 // The front hemisphere stays dim so the faces remain clear. Grazing cut walls
 // reflect the rear hemisphere; broad rear cards reveal their thickness while
@@ -111,7 +126,7 @@ const reflectedElectricity = /* glsl */ `
   vec3 glassNormal = inverseTransformDirection(normal, viewMatrix);
   vec3 eye = normalize(cameraPosition - vWorldPosition);
   vec3 ray = reflect(-eye, glassNormal);
-  float distanceToLight = (310.0 - vWorldPosition.z) / max(ray.z, 0.001);
+  float distanceToLight = (${ELECTRIC_DEPTH.toFixed(1)} - vWorldPosition.z) / max(ray.z, 0.001);
   vec2 hit = vWorldPosition.xy + ray.xy * distanceToLight;
   vec2 reflectedUV = (hit - electricBounds.xy) / electricBounds.zw + 0.5;
   float inside = step(0.0, reflectedUV.x) * step(reflectedUV.x, 1.0)
@@ -130,8 +145,12 @@ const reflectedElectricity = /* glsl */ `
   outgoingLight *= 1.0 - electricInk * fresnel * min(studio, 1.0) * 0.65;
   outgoingLight += vec3(studio * fresnel * (1.0 - electricInk));
   float energy = center.a;
-  outgoingLight += electric * fresnel * inside * 0.65 * (1.0 - electricInk);
-  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * inside * energy * 0.065);
+  outgoingLight += electric * fresnel * inside * 2.6 * (1.0 - electricInk);
+  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * inside * energy * 0.32);
+  // A long Gaussian shoulder protects the text without a visible mask edge.
+  vec2 centerDistance = (vWorldPosition.xy - vec2(0.0, -12.0)) / vec2(185.0, 115.0);
+  float centerVisibility = 1.0 - exp(-dot(centerDistance, centerDistance) * 1.4);
+  outgoingLight = mix(glassBackdrop, outgoingLight, vGlassVisibility * centerVisibility);
 `;
 
 export const createGlassScene = (container, theme) => {
@@ -184,10 +203,17 @@ export const createGlassScene = (container, theme) => {
     shader.uniforms.electricFrame = { value: electricFrame };
     shader.uniforms.electricBounds = { value: electricBounds };
     shader.uniforms.electricInk = { value: light ? 1 : 0 };
+    shader.uniforms.glassBackdrop = { value: scene.background };
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        '#include <common>\nattribute float glassVisibility;\nvarying float vGlassVisibility;'
+      )
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassVisibility = glassVisibility;');
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
-        `#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\n${studioReflection}`
+        `#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\nuniform vec3 glassBackdrop;\nvarying float vGlassVisibility;\n${studioReflection}`
       )
       .replace('#include <opaque_fragment>', `${reflectedElectricity}\n#include <opaque_fragment>`);
   };
@@ -202,9 +228,18 @@ export const createGlassScene = (container, theme) => {
   cutMaterial.onBeforeCompile = shadeGlass;
   const shards = SHARDS.map((shard, index) => {
     const geometry = createShardGeometry(shard);
+    // Fade whole outer fragments at different rates; no shared circular crop.
+    const radial = Math.hypot(shard.px / 390, shard.py / 235);
+    const variation = Math.sin(index * 2.37) * 0.065 + Math.cos(index * 1.71) * 0.035;
+    const visibility = Math.exp(-Math.pow(Math.max(0, radial + variation) / 0.85, 4));
+    geometry.setAttribute(
+      'glassVisibility',
+      new Float32BufferAttribute(new Float32Array(geometry.attributes.position.count).fill(visibility), 1)
+    );
     const mesh = new Mesh(geometry, [material, cutMaterial]);
     scene.add(mesh);
-    return { mesh, motion: createShardMotion(shard, index) };
+    const target = index < 12 && index % 7 !== 0 ? SIGN_TARGETS[index % SIGN_TARGETS.length] : null;
+    return { mesh, motion: createShardMotion(shard, index), target };
   });
 
   let previousWidth = 0;
@@ -242,6 +277,20 @@ export const createGlassScene = (container, theme) => {
           stage.width / scale,
           stage.height / scale
         );
+        shards.forEach(({ motion, target }) => {
+          if (!target) return;
+          const origin = new Vector3(motion.x, motion.y, motion.z);
+          const towardSign = new Vector3(
+            electricBounds.x + (target[0] / 1897 - 0.5) * 0.56 * electricBounds.z,
+            electricBounds.y + (0.5 - target[1] / 742) * 0.56 * electricBounds.w,
+            ELECTRIC_DEPTH
+          )
+            .sub(origin)
+            .normalize();
+          const normal = camera.position.clone().sub(origin).normalize().add(towardSign).normalize();
+          motion.rx = Math.atan2(-normal.y, normal.z);
+          motion.ry = Math.asin(normal.x);
+        });
       }
     },
     render(time, pointer, dt) {
