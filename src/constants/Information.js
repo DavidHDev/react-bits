@@ -710,6 +710,16 @@ export const componentMetadata = {
     tags: [],
     added: '2025-05-30'
   },
+  'Components/CircularCarousel': {
+    videoUrl: '/assets/video/circularcarousel.webm',
+    description:
+      'A 3D ring of images with four layouts, bendable cards, depth fade, momentum drag, snapping and click to focus.',
+    category: 'Components',
+    name: 'CircularCarousel',
+    docsUrl: 'https://reactbits.dev/components/circular-carousel',
+    tags: [],
+    added: '2026-09-29'
+  },
   'Components/FlexCarousel': {
     videoUrl: '/assets/video/flexcarousel.webm',
     description:

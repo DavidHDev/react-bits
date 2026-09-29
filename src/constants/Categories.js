@@ -91,6 +91,7 @@ export const CATEGORIES = [
   {
     name: 'Components',
     subcategories: [
+      'Circular Carousel',
       'Flex Carousel',
       'Infinite Spiral',
       'Depth Carousel',

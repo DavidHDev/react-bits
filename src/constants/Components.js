@@ -99,6 +99,7 @@ const components = {
   'flying-posters': () => import('../demo/Components/FlyingPostersDemo'),
   'flowing-menu': () => import('../demo/Components/FlowingMenuDemo'),
   'depth-carousel': () => import('../demo/Components/DepthCarouselDemo'),
+  'circular-carousel': () => import('../demo/Components/CircularCarouselDemo'),
   'flex-carousel': () => import('../demo/Components/FlexCarouselDemo'),
   'accordion-gallery': () => import('../demo/Components/AccordionGalleryDemo'),
   'morph-slider': () => import('../demo/Components/MorphSliderDemo'),
