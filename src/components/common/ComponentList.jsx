@@ -177,7 +177,9 @@ const ComponentList = ({
   const scrollRef = useRef(null);
   const GAP_PX = 16;
   const [hoveredKey, setHoveredKey] = useState(null);
-  const [sortMode, setSortMode] = useState(sorting === 'alphabetical' ? SORT_NAME : null);
+  const [sortMode, setSortMode] = useState(
+    sorting === 'newest' ? SORT_NEWEST : sorting === 'alphabetical' ? SORT_NAME : null
+  );
   const previewMediaAllowed = usePreviewMediaAllowed();
   const clearSlotRef = useRef(null);
   const clearBtnRef = useRef(null);

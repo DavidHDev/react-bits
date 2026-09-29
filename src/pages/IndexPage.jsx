@@ -14,7 +14,7 @@ const IndexPage = () => {
         title="Browse All"
         list={componentMetadata}
         hasFavoriteButton
-        sorting="alphabetical"
+        sorting="newest"
         showSortControl
         newSinceLastVisit={newSinceLastVisit}
       />
