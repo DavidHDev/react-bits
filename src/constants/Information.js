@@ -1128,6 +1128,16 @@ export const componentMetadata = {
   },
 
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
+  'Backgrounds/PatternWaves': {
+    videoUrl: '/assets/video/patternwaves.webm',
+    description:
+      'A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.',
+    category: 'Backgrounds',
+    name: 'PatternWaves',
+    docsUrl: 'https://reactbits.dev/backgrounds/pattern-waves',
+    tags: ['webgl', 'ogl', 'halftone', 'pattern', 'waves', 'ascii', 'interactive', 'procedural'],
+    added: '2026-09-30'
+  },
   'Backgrounds/MicroSlats': {
     videoUrl: '/assets/video/microslats.webm',
     description:

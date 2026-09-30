@@ -147,6 +147,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
+      'Pattern Waves',
       'Micro Slats',
       'Shape Waves',
       'Aero Shards',

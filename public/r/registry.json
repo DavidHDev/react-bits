@@ -8474,6 +8474,80 @@
 			]
 		},
 		{
+			"name": "PatternWaves-JS-CSS",
+			"title": "PatternWaves",
+			"description": "A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PatternWaves.css",
+					"target": "@components/PatternWaves.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PatternWaves.jsx"
+				}
+			]
+		},
+		{
+			"name": "PatternWaves-JS-TW",
+			"title": "PatternWaves",
+			"description": "A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PatternWaves/PatternWaves.jsx"
+				}
+			]
+		},
+		{
+			"name": "PatternWaves-TS-CSS",
+			"title": "PatternWaves",
+			"description": "A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "PatternWaves.css",
+					"target": "@components/PatternWaves.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "PatternWaves.tsx"
+				}
+			]
+		},
+		{
+			"name": "PatternWaves-TS-TW",
+			"title": "PatternWaves",
+			"description": "A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "PatternWaves/PatternWaves.tsx"
+				}
+			]
+		},
+		{
 			"name": "MicroSlats-JS-CSS",
 			"title": "MicroSlats",
 			"description": "A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.",

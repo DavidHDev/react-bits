@@ -1,5 +1,55 @@
 export const BACKGROUNDS = [
   {
+    id: 'pattern-waves',
+    label: 'Pattern Waves',
+    component: () => import('../../../content/Backgrounds/PatternWaves/PatternWaves.jsx'),
+    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/pattern-waves"',
+    props: [
+      { name: 'color', type: 'color', default: '#ffffff', label: 'Color' },
+      { name: 'backgroundColor', type: 'color', default: '#000000', label: 'Background' },
+      {
+        name: 'pattern',
+        type: 'select',
+        default: 'dot',
+        options: ['dot', 'square', 'plus', 'line', 'glyph'],
+        label: 'Pattern'
+      },
+      { name: 'wave', type: 'select', default: 'silk', options: ['silk', 'swell', 'ripple'], label: 'Wave' },
+      { name: 'characters', type: 'text', default: '.:-=+*#%@', label: 'Characters' },
+      { name: 'spacing', type: 'number', default: 9, min: 5, max: 30, step: 1, label: 'Spacing' },
+      { name: 'markSize', type: 'number', default: 0.95, min: 0.3, max: 1, step: 0.05, label: 'Mark Size' },
+      { name: 'depth', type: 'number', default: 0.95, min: 0, max: 1.5, step: 0.05, label: 'Depth' },
+      { name: 'light', type: 'number', default: 0, min: -90, max: 90, step: 1, label: 'Light' },
+      { name: 'shine', type: 'number', default: 0.8, min: 0, max: 2, step: 0.05, label: 'Shine' },
+      { name: 'contrast', type: 'number', default: 1.2, min: 0.5, max: 2.5, step: 0.05, label: 'Contrast' },
+      { name: 'speed', type: 'number', default: 0.35, min: 0, max: 2, step: 0.05, label: 'Speed' },
+      { name: 'scale', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'direction', type: 'number', default: 20, min: 0, max: 360, step: 1, label: 'Direction' },
+      {
+        name: 'fade',
+        type: 'select',
+        default: 'edges',
+        options: ['edges', 'center', 'bottom', 'top', 'none'],
+        label: 'Fade'
+      },
+      { name: 'fadeSize', type: 'number', default: 0.5, min: 0.1, max: 1, step: 0.05, label: 'Fade Size' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'cursorSize', type: 'number', default: 50, min: 10, max: 200, step: 5, label: 'Cursor Size' },
+      {
+        name: 'cursorStrength',
+        type: 'number',
+        default: 0.6,
+        min: 0,
+        max: 1,
+        step: 0.05,
+        label: 'Cursor Strength'
+      },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'paused', type: 'boolean', default: false, label: 'Paused' }
+    ]
+  },
+  {
     id: 'micro-slats',
     label: 'Micro Slats',
     component: () => import('../../../content/Backgrounds/MicroSlats/MicroSlats.jsx'),
