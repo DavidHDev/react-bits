@@ -1,0 +1,227 @@
+.circular-carousel {
+  --cc-fade: #000000;
+  --cc-radius: 12px;
+  --cc-inner: 0.4;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.circular-carousel[data-axis='x'] {
+  touch-action: pan-x;
+}
+
+.circular-carousel[data-draggable] {
+  cursor: grab;
+}
+
+.circular-carousel[data-dragging] {
+  cursor: grabbing;
+}
+
+.circular-carousel:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(128, 128, 140, 0.55);
+}
+
+.circular-carousel__view {
+  position: absolute;
+  inset: 0;
+}
+
+.circular-carousel[data-shape='wheel'] .circular-carousel__view {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000000 18%, #000000 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000000 18%, #000000 82%, transparent);
+}
+
+.circular-carousel[data-shape='panorama'] .circular-carousel__view {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000000 12%, #000000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000000 12%, #000000 88%, transparent);
+}
+
+.circular-carousel__stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.circular-carousel[data-ready] .circular-carousel__stage {
+  opacity: 1;
+}
+
+.circular-carousel__camera,
+.circular-carousel__ring,
+.circular-carousel__card {
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.circular-carousel__camera {
+  position: relative;
+}
+
+.circular-carousel__ring,
+.circular-carousel__card {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.circular-carousel__tile {
+  position: absolute;
+  outline: 1px solid transparent;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.circular-carousel__frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.circular-carousel__photo {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.circular-carousel__shade,
+.circular-carousel__inner {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.circular-carousel__shade {
+  background: var(--cc-fade);
+  opacity: var(--cc-depth, 0);
+}
+
+.circular-carousel__inner {
+  background: #000000;
+  opacity: var(--cc-inner);
+}
+
+.circular-carousel__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  color: inherit;
+  text-align: center;
+  pointer-events: none;
+  animation: circular-carousel-reveal 900ms ease both;
+}
+
+.circular-carousel__title {
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+  animation: circular-carousel-title 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.circular-carousel__subtitle {
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.circular-carousel__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  opacity: 0.5;
+}
+
+.circular-carousel__slash {
+  opacity: 0.6;
+}
+
+.circular-carousel__digits {
+  display: inline-flex;
+}
+
+.circular-carousel__digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.circular-carousel__reel {
+  display: flex;
+  flex-direction: column;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.circular-carousel__reel > span {
+  height: 1em;
+}
+
+.circular-carousel__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes circular-carousel-title {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes circular-carousel-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circular-carousel__stage,
+  .circular-carousel__reel {
+    transition: none;
+  }
+
+  .circular-carousel__caption,
+  .circular-carousel__title {
+    animation: none;
+  }
+}

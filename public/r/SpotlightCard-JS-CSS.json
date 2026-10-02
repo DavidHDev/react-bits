@@ -14,7 +14,7 @@
 		{
 			"type": "registry:component",
 			"path": "SpotlightCard.jsx",
-			"content": "import { useRef } from 'react';\nimport './SpotlightCard.css';\n\nconst SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)' }) => {\n  const divRef = useRef(null);\n\n  const handleMouseMove = e => {\n    const rect = divRef.current.getBoundingClientRect();\n    const x = e.clientX - rect.left;\n    const y = e.clientY - rect.top;\n\n    divRef.current.style.setProperty('--mouse-x', `${x}px`);\n    divRef.current.style.setProperty('--mouse-y', `${y}px`);\n    divRef.current.style.setProperty('--spotlight-color', spotlightColor);\n  };\n\n  return (\n    <div ref={divRef} onMouseMove={handleMouseMove} className={`card-spotlight ${className}`}>\n      {children}\n    </div>\n  );\n};\n\nexport default SpotlightCard;\n"
+			"content": "'use client';\n\nimport { useRef } from 'react';\nimport './SpotlightCard.css';\n\nconst SpotlightCard = ({ children, className = '', spotlightColor = 'rgba(255, 255, 255, 0.25)' }) => {\n  const divRef = useRef(null);\n\n  const handleMouseMove = e => {\n    const rect = divRef.current.getBoundingClientRect();\n    const x = e.clientX - rect.left;\n    const y = e.clientY - rect.top;\n\n    divRef.current.style.setProperty('--mouse-x', `${x}px`);\n    divRef.current.style.setProperty('--mouse-y', `${y}px`);\n    divRef.current.style.setProperty('--spotlight-color', spotlightColor);\n  };\n\n  return (\n    <div ref={divRef} onMouseMove={handleMouseMove} className={`card-spotlight ${className}`}>\n      {children}\n    </div>\n  );\n};\n\nexport default SpotlightCard;\n"
 		}
 	],
 	"registryDependencies": [],

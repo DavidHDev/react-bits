@@ -1,0 +1,108 @@
+.shredder {
+  position: relative;
+  width: min(var(--sh-w), 100%);
+  height: var(--sh-h);
+  color: var(--sh-ink);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.shredder[data-disabled] {
+  opacity: 0.6;
+}
+
+.shredder__list {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--sh-fall) + var(--sh-slit-h));
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0 var(--sh-inset);
+  list-style: none;
+  clip-path: inset(-9999px -9999px 0 -9999px);
+}
+
+.shredder__slot {
+  position: relative;
+  margin-bottom: var(--sh-gap);
+}
+
+.shredder__slot[data-active] {
+  z-index: 2;
+}
+
+.shredder__slot[data-gone] {
+  pointer-events: none;
+}
+
+.shredder__item {
+  position: relative;
+  outline: none;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transform-origin: 50% 50%;
+}
+
+.shredder__slot[data-active] .shredder__item {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  will-change: transform, filter;
+  filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+  transition: filter 240ms ease;
+}
+
+.shredder__item[data-state='drag'] {
+  cursor: grabbing;
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.22));
+}
+
+.shredder__item[data-state='feed'] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.shredder[data-disabled] .shredder__item {
+  cursor: default;
+}
+
+.shredder__slit {
+  position: absolute;
+  right: var(--sh-slit-inset);
+  bottom: var(--sh-fall);
+  left: var(--sh-slit-inset);
+  z-index: 3;
+  height: var(--sh-slit-h);
+  border-radius: 999px;
+  background: var(--sh-slit);
+  will-change: transform;
+}
+
+.shredder__fall {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  height: var(--sh-fall);
+  pointer-events: none;
+}
+
+.shredder__canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: calc(-1 * var(--sh-over));
+  width: calc(100% + var(--sh-over) * 2);
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shredder__slot[data-active] .shredder__item {
+    transition: none;
+  }
+}

@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState, useCallback, useEffect } from 'react';
 
 const FALLOFF_CURVES = {

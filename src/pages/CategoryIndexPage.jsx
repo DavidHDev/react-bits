@@ -57,6 +57,7 @@ const CategoryIndexPage = () => {
         list={list}
         hasFavoriteButton
         sorting="alphabetical"
+        showSortControl
         newSinceLastVisit={newSinceLastVisit}
         basePath="/c"
         showCategoryFilter={false}

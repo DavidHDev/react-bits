@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import * as THREE from 'three';
 import './PaperCrumple.css';

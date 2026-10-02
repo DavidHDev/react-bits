@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 type StarBorderProps<T extends React.ElementType> = React.ComponentPropsWithoutRef<T> & {

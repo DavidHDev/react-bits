@@ -1045,3 +1045,151 @@
     margin-top: 0;
   }
 }
+
+.changelog-rss {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.changelog-rss:hover {
+  color: var(--text-primary);
+}
+
+.changelog-month {
+  margin-top: 2.75rem;
+}
+
+.changelog-month-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.changelog-days {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.changelog-day {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 16px;
+  padding: 1rem 0;
+  border-top: 1px solid var(--shell-border);
+}
+
+.changelog-day:first-child {
+  border-top: 0;
+}
+
+.changelog-date {
+  padding-top: 1px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-dimmed);
+  font-variant-numeric: tabular-nums;
+}
+
+.changelog-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.changelog-entry-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 2px;
+}
+
+.changelog-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.changelog-name:hover {
+  color: var(--color-accent);
+}
+
+.changelog-meta {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-dimmed);
+}
+
+.changelog-kind.is-added,
+.changelog-kind.is-launch {
+  color: var(--color-accent);
+}
+
+.changelog-note {
+  max-width: 64ch;
+  margin: 2px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.changelog-includes {
+  max-width: 64ch;
+  margin: 8px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--text-dimmed);
+}
+
+.changelog-includes a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.changelog-includes a:hover {
+  color: var(--text-primary);
+}
+
+.changelog-older {
+  display: block;
+  margin: 2.5rem auto 0;
+  padding: 10px 16px;
+  border: 1px solid var(--action-control-border);
+  border-radius: 10px;
+  background: var(--action-control-bg);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+
+.changelog-older:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .changelog-day {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}

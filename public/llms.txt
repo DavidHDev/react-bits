@@ -1,10 +1,10 @@
 # React Bits
 
-> React Bits is an open source collection of memorable UI elements - Components, Animations, Backgrounds, and Text Animations - provided in four implementation variants: JavaScript + CSS, JavaScript + Tailwind, TypeScript + CSS, and TypeScript + Tailwind. Components are copy-friendly and installable via CLI (jsrepo or shadcn).
+> React Bits is an open source collection of memorable UI elements - Components, Animations, Backgrounds, Text Animations, and Micro interactions - provided in four implementation variants: JavaScript + CSS, JavaScript + Tailwind, TypeScript + CSS, and TypeScript + Tailwind. Components are copy-friendly and installable via CLI (jsrepo or shadcn).
 
 Important notes for agents:
 
-- Components are organized by semantics first: UI Components, Animations, Backgrounds, Text Animations.
+- Components are organized by semantics first: UI Components, Animations, Backgrounds, Text Animations, Micro (small, satisfying micro-interactions such as switches, buttons and loaders).
 - Each component has 4 variants. All variants are kept in sync when updated.
 - Dependencies vary by component (e.g., gsap, motion, three, ogl). Always check and install dependencies before usage.
 - Everything on reactbits.dev is free and open source. There is a separate paid library, React Bits Pro, covering page blocks, application UI, templates and agent skills - see the React Bits Pro sections below.
@@ -58,6 +58,7 @@ Notes:
 - [Split Flap Text](https://www.reactbits.dev/text-animations/split-flap-text): Mechanical split-flap departure board that clacks through to each new phrase. CLI: `SplitFlapText`.
 - [Split Text](https://www.reactbits.dev/text-animations/split-text): Splits text into characters / words for staggered entrance animation. CLI: `SplitText`.
 - [Stroke Text](https://www.reactbits.dev/text-animations/stroke-text): Outlined letterforms draw themselves on, then flood with fill. CLI: `StrokeText`.
+- [Tech Text](https://www.reactbits.dev/text-animations/tech-text): A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home. CLI: `TechText`.
 - [Text Cursor](https://www.reactbits.dev/text-animations/text-cursor): Make any text element follow your cursor, leaving a trail of copies behind it. CLI: `TextCursor`.
 - [Text Loop](https://www.reactbits.dev/text-animations/text-loop): A seamless text marquee that flows along curved SVG paths. CLI: `TextLoop`.
 - [Text Pressure](https://www.reactbits.dev/text-animations/text-pressure): Characters scale / warp interactively based on pointer pressure zone. CLI: `TextPressure`.
@@ -75,8 +76,10 @@ Notes:
 - [Crosshair](https://www.reactbits.dev/animations/crosshair): Custom crosshair cursor with tracking, and link hover effects. CLI: `Crosshair`.
 - [Cubes](https://www.reactbits.dev/animations/cubes): 3D rotating cube cluster. Supports auto-rotation or hover interaction. CLI: `Cubes`.
 - [Cursor Grid](https://www.reactbits.dev/animations/cursor-grid): Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses. CLI: `CursorGrid`.
+- [Dither Veil](https://www.reactbits.dev/animations/dither-veil): A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell. CLI: `DitherVeil`.
 - [Elastic Mesh](https://www.reactbits.dev/animations/elastic-mesh): Spring-mesh surface that stretches under the pointer and settles back with damped physics. CLI: `ElasticMesh`.
 - [Electric Border](https://www.reactbits.dev/animations/electric-border): Jittery electric energy border with animated arcs, glow and adjustable intensity. CLI: `ElectricBorder`.
+- [Electric Logo](https://www.reactbits.dev/animations/electric-logo): Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor. CLI: `ElectricLogo`.
 - [Fade Content](https://www.reactbits.dev/animations/fade-content): Simple directional fade / slide entrance / exit wrapper with threshold-based activation. CLI: `FadeContent`.
 - [Ghost Cursor](https://www.reactbits.dev/animations/ghost-cursor): Semi-transparent ghost cursor that smoothly follows the real cursor with a trailing effect. CLI: `GhostCursor`.
 - [Glare Hover](https://www.reactbits.dev/animations/glare-hover): Adds a realistic moving glare highlight on hover over any element. CLI: `GlareHover`.
@@ -127,6 +130,7 @@ Notes:
 - [Dome Gallery](https://www.reactbits.dev/components/dome-gallery): Immersive 3D dome gallery projecting images on a hemispheric surface. CLI: `DomeGallery`.
 - [Drift Wall](https://www.reactbits.dev/components/drift-wall): An endless perspective wall of tiles drifting past, lifting on hover. CLI: `DriftWall`.
 - [Elastic Slider](https://www.reactbits.dev/components/elastic-slider): Slider handle stretches elastically then snaps with spring physics. CLI: `ElasticSlider`.
+- [Flex Carousel](https://www.reactbits.dev/components/flex-carousel): An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus. CLI: `FlexCarousel`.
 - [Flowing Menu](https://www.reactbits.dev/components/flowing-menu): Liquid flowing active indicator glides between menu items. CLI: `FlowingMenu`.
 - [Fluid Glass](https://www.reactbits.dev/components/fluid-glass): Glassmorphism container with animated liquid distortion refraction. CLI: `FluidGlass`.
 - [Flying Posters](https://www.reactbits.dev/components/flying-posters): 3D posters rotate on scroll infinitely. CLI: `FlyingPosters`.
@@ -157,7 +161,40 @@ Notes:
 
 ## Micro
 
+- [Bell Toggle](https://www.reactbits.dev/micro/bell-toggle): Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt. CLI: `BellToggle`.
+- [Branched Menu](https://www.reactbits.dev/micro/branched-menu): Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section. CLI: `BranchedMenu`.
+- [Call Chip](https://www.reactbits.dev/micro/call-chip): Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error. CLI: `CallChip`.
+- [Code Slots](https://www.reactbits.dev/micro/code-slots): One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash. CLI: `CodeSlots`.
+- [Comet Dial](https://www.reactbits.dev/micro/comet-dial): Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest. CLI: `CometDial`.
+- [Dodge Field](https://www.reactbits.dev/micro/dodge-field): Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home. CLI: `DodgeField`.
+- [Flip Card](https://www.reactbits.dev/micro/flip-card): Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on. CLI: `FlipCard`.
+- [Folder Float](https://www.reactbits.dev/micro/folder-float): Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes. CLI: `FolderFloat`.
+- [Fuse Button](https://www.reactbits.dev/micro/fuse-button): Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back. CLI: `FuseButton`.
+- [Glide Select](https://www.reactbits.dev/micro/glide-select): Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in. CLI: `GlideSelect`.
+- [Hold Button](https://www.reactbits.dev/micro/hold-button): Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes. CLI: `HoldButton`.
+- [Jelly Radio](https://www.reactbits.dev/micro/jelly-radio): Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row. CLI: `JellyRadio`.
+- [Lattice Loader](https://www.reactbits.dev/micro/lattice-loader): Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends. CLI: `LatticeLoader`.
 - [Paper Crumple](https://www.reactbits.dev/micro/paper-crumple): An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows. CLI: `PaperCrumple`.
+- [Peek Rating](https://www.reactbits.dev/micro/peek-rating): Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop. CLI: `PeekRating`.
+- [Prompt Bar](https://www.reactbits.dev/micro/prompt-bar): Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy. CLI: `PromptBar`.
+- [Pulse Heart](https://www.reactbits.dev/micro/pulse-heart): Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph. CLI: `PulseHeart`.
+- [Refine Frame](https://www.reactbits.dev/micro/refine-frame): Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill. CLI: `RefineFrame`.
+- [Rubber Segment](https://www.reactbits.dev/micro/rubber-segment): Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots. CLI: `RubberSegment`.
+- [Scrub Field](https://www.reactbits.dev/micro/scrub-field): Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing. CLI: `ScrubField`.
+- [Shredder](https://www.reactbits.dev/micro/shredder): A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete. CLI: `Shredder`.
+- [Slide Commit](https://www.reactbits.dev/micro/slide-commit): Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure. CLI: `SlideCommit`.
+- [Sling Button](https://www.reactbits.dev/micro/sling-button): Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick's velocity. CLI: `SlingButton`.
+- [Slosh Gauge](https://www.reactbits.dev/micro/slosh-gauge): Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider. CLI: `SloshGauge`.
+- [Spring Check](https://www.reactbits.dev/micro/spring-check): Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press. CLI: `SpringCheck`.
+- [Squish Switch](https://www.reactbits.dev/micro/squish-switch): Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick. CLI: `SquishSwitch`.
+- [Status Mark](https://www.reactbits.dev/micro/status-mark): A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike. CLI: `StatusMark`.
+- [Swipe Row](https://www.reactbits.dev/micro/swipe-row): List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row. CLI: `SwipeRow`.
+- [Swipe Toast](https://www.reactbits.dev/micro/swipe-toast): Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container. CLI: `SwipeToast`.
+- [Tear Ticket](https://www.reactbits.dev/micro/tear-ticket): Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover. CLI: `TearTicket`.
+- [Thought Line](https://www.reactbits.dev/micro/thought-line): Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into "Thought for 4.2s" through a blur crossfade and the trace folds into it. CLI: `ThoughtLine`.
+- [Voice Pill](https://www.reactbits.dev/micro/voice-pill): Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in. CLI: `VoicePill`.
+- [Wake Slider](https://www.reactbits.dev/micro/wake-slider): Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest. CLI: `WakeSlider`.
+- [Warm Tooltip](https://www.reactbits.dev/micro/warm-tooltip): Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean. CLI: `WarmTooltip`.
 
 ## Backgrounds
 
@@ -196,6 +233,7 @@ Notes:
 - [Line Waves](https://www.reactbits.dev/backgrounds/line-waves): Animated line wave pattern with colorful warped distortion. CLI: `LineWaves`.
 - [Liquid Chrome](https://www.reactbits.dev/backgrounds/liquid-chrome): Liquid metallic chrome shader with flowing reflective surface. CLI: `LiquidChrome`.
 - [Liquid Ether](https://www.reactbits.dev/backgrounds/liquid-ether): Interactive liquid shader with flowing distortion and customizable colors. CLI: `LiquidEther`.
+- [Micro Slats](https://www.reactbits.dev/backgrounds/micro-slats): A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon. CLI: `MicroSlats`.
 - [Molten Metal](https://www.reactbits.dev/backgrounds/molten-metal): Swirling caustic plasma filaments with molten, white-hot cores. CLI: `MoltenMetal`.
 - [Orb](https://www.reactbits.dev/backgrounds/orb): Floating energy orb with customizable hover effect. CLI: `Orb`.
 - [Particles](https://www.reactbits.dev/backgrounds/particles): Configurable particle system. CLI: `Particles`.

@@ -1,3 +1,5 @@
+'use client';
+
 const GlitchText = ({ children, speed = 0.5, enableShadows = true, enableOnHover = false, className = '' }) => {
   const inlineStyles = {
     '--after-duration': `${speed * 3}s`,

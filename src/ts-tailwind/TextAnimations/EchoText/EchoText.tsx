@@ -1,3 +1,5 @@
+'use client';
+
 import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 
 type Direction = 'right' | 'left' | 'up' | 'down' | 'diagonal';

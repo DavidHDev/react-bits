@@ -1,3 +1,5 @@
+'use client';
+
 const gradientMapping = {
   blue: 'linear-gradient(hsl(223, 90%, 50%), hsl(208, 90%, 50%))',
   purple: 'linear-gradient(hsl(283, 90%, 50%), hsl(268, 90%, 50%))',

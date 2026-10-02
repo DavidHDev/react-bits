@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 
 const BASE_URL = 'https://reactbits.dev';
+const DEFAULT_IMAGE = '/og.jpg';
+const DEFAULT_IMAGE_ALT = 'React Bits: React components that stand out. 200+ free creative components.';
 
 const setMeta = (attr, key, content) => {
   let el = document.head.querySelector(`meta[${attr}="${key}"]`);
@@ -17,7 +19,7 @@ const setMeta = (attr, key, content) => {
  * with the current route. Updates the existing tags in <head> in place, so
  * crawlers never see duplicates.
  */
-const usePageSEO = ({ title, description, path }) => {
+const usePageSEO = ({ title, description, path, image, imageAlt }) => {
   useEffect(() => {
     if (title) {
       document.title = title;
@@ -34,6 +36,13 @@ const usePageSEO = ({ title, description, path }) => {
     const url = `${BASE_URL}${path ?? window.location.pathname}`;
     setMeta('property', 'og:url', url);
 
+    const imageUrl = `${BASE_URL}${image || DEFAULT_IMAGE}`;
+    const alt = imageAlt || DEFAULT_IMAGE_ALT;
+    setMeta('property', 'og:image', imageUrl);
+    setMeta('name', 'twitter:image', imageUrl);
+    setMeta('property', 'og:image:alt', alt);
+    setMeta('name', 'twitter:image:alt', alt);
+
     let canonical = document.head.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
@@ -41,7 +50,7 @@ const usePageSEO = ({ title, description, path }) => {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute('href', url);
-  }, [title, description, path]);
+  }, [title, description, path, image, imageAlt]);
 };
 
 export default usePageSEO;

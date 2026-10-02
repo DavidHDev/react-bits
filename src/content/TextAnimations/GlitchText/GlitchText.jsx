@@ -1,3 +1,5 @@
+'use client';
+
 import './GlitchText.css';
 
 const GlitchText = ({ children, speed = 0.5, enableShadows = true, enableOnHover = false, className = '' }) => {

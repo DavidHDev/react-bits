@@ -1,3 +1,5 @@
+'use client';
+
 import { type FC, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 

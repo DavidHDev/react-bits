@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, useMotionValue, useMotionValueEvent, useReducedMotion } from 'motion/react';
 import { Tick02Icon } from '@hugeicons/core-free-icons';

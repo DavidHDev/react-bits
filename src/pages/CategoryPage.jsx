@@ -6,6 +6,7 @@ import { decodeLabel } from '../utils/utils';
 import { Box, Text } from '@chakra-ui/react';
 import { useTransition } from '../hooks/useTransition';
 import usePageSEO from '../hooks/usePageSEO';
+import { CHANGELOG_DESCRIPTION } from '../utils/changelog';
 import BackToTopButton from '../components/common/BackToTopButton';
 import { SkeletonLoader, GetStartedLoader } from '../components/common/SkeletonLoader';
 import IndexPage from './IndexPage';
@@ -16,6 +17,10 @@ const CATEGORY_KEYS = {
   backgrounds: 'Backgrounds',
   'text-animations': 'TextAnimations',
   micro: 'Micro'
+};
+
+const DOCS_DESCRIPTIONS = {
+  changelog: CHANGELOG_DESCRIPTION
 };
 
 const FALLBACK_DESCRIPTION =
@@ -57,10 +62,13 @@ const CategoryPage = () => {
   }, [subcategory, transitionPhase]);
 
   const metadataKey = `${CATEGORY_KEYS[category]}/${decodedLabel?.replace(/\s+/g, '')}`;
+  const isComponent = Boolean(componentMetadata[metadataKey]);
   usePageSEO({
     title: decodedLabel ? `React Bits - ${decodedLabel}` : undefined,
-    description: componentMetadata[metadataKey]?.description || FALLBACK_DESCRIPTION,
-    path: `/${category}/${subcategory}`
+    description: componentMetadata[metadataKey]?.description || DOCS_DESCRIPTIONS[subcategory] || FALLBACK_DESCRIPTION,
+    path: `/${category}/${subcategory}`,
+    image: isComponent ? `/og/${category}/${subcategory}.jpg` : undefined,
+    imageAlt: isComponent ? `${decodedLabel}, a React Bits component` : undefined
   });
 
   return (

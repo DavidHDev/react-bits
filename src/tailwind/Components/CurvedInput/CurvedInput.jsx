@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 const DEG = 180 / Math.PI;

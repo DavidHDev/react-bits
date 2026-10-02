@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState, useId } from 'react';
 import './GlassSurface.css';
 

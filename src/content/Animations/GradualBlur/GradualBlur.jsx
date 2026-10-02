@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 
 import './GradualBlur.css';

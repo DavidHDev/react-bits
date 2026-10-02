@@ -21,7 +21,7 @@ const BackgroundContent = ({
   const headlineShadow = useColorModeValue('0 2px 20px rgba(255,255,255,0.75)', '0 4px 24px rgba(0,0,0,0.5)');
 
   return (
-    <Box userSelect="none">
+    <Box userSelect="none" className="background-demo-content">
       {/* Toggle */}
       <Box
         position="absolute"

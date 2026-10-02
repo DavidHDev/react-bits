@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useCallback } from 'react';
 
 function hexToRgba(hex, alpha = 1) {

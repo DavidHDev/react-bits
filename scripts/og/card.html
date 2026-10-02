@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Geist Pixel';
+        src: url('/fonts/geist-pixel/GeistPixel-Line.woff2') format('woff2');
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+        background: #000;
+      }
+
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: url('/base.png') 0 0 / 1200px 630px no-repeat;
+      }
+
+      .copy {
+        position: absolute;
+        left: 84px;
+        bottom: 82px;
+        width: 396px;
+      }
+
+      .title {
+        margin: 0;
+        font-family: 'Geist Pixel', monospace;
+        font-weight: 400;
+        font-size: 80px;
+        line-height: 1.02;
+        color: #fff;
+        overflow-wrap: normal;
+        text-shadow: 0 0 22px rgba(255, 255, 255, 0.28);
+      }
+
+      .preview {
+        position: absolute;
+        top: 82px;
+        left: 520px;
+        width: 800px;
+        height: 466px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 26px;
+        background: rgba(7, 7, 8, 0.92);
+      }
+
+      .preview canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        mix-blend-mode: screen;
+      }
+
+      .no-preview .preview {
+        display: none;
+      }
+
+      .no-preview .copy {
+        width: 1032px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="copy">
+        <h1 class="title"></h1>
+      </div>
+      <div class="preview"><canvas></canvas></div>
+    </div>
+    <script>
+      const CANVAS_WIDTH = 1200;
+      const LIVE_MIN_SHARE = 0.12;
+      const params = new URLSearchParams(location.search);
+      const title = document.querySelector('.title');
+      const preview = document.querySelector('.preview');
+      const canvas = preview.querySelector('canvas');
+
+      const whenLoaded = video =>
+        new Promise((resolve, reject) => {
+          video.addEventListener('loadeddata', resolve, { once: true });
+          video.addEventListener('error', () => reject(new Error(`Could not load ${video.src}`)), { once: true });
+        });
+
+      const nextFrame = () => new Promise(resolve => requestAnimationFrame(() => resolve()));
+
+      const seek = (video, time) =>
+        new Promise(resolve => {
+          video.addEventListener('seeked', () => nextFrame().then(resolve), { once: true });
+          video.currentTime = time;
+        });
+
+      const lightness = (data, index) => 0.2126 * data[index] + 0.7152 * data[index + 1] + 0.0722 * data[index + 2];
+
+      const readLightness = (context, width, height) => {
+        const { data } = context.getImageData(0, 0, width, height);
+        const values = new Float32Array(width * height);
+        for (let i = 0; i < values.length; i += 1) values[i] = lightness(data, i * 4);
+        return values;
+      };
+
+      const ringOf = (values, width, height) => {
+        const ring = [];
+        for (let x = 0; x < width; x += 1) ring.push(values[x], values[(height - 1) * width + x]);
+        for (let y = 0; y < height; y += 1) ring.push(values[y * width], values[y * width + width - 1]);
+        return ring.sort((a, b) => a - b);
+      };
+
+      const backgroundOf = (values, width, height) => {
+        const ring = ringOf(values, width, height);
+        return ring[ring.length >> 1];
+      };
+
+      const edgeCoverage = (values, width, height) => {
+        const ring = ringOf(values, width, height);
+        const median = ring[ring.length >> 1];
+        return ring.filter(value => Math.abs(value - median) > 10).length / ring.length;
+      };
+
+      const hasFlatBackground = (values, width, height) => edgeCoverage(values, width, height) < 0.15;
+
+      const touchesEdge = (values, width, height) => {
+        const background = backgroundOf(values, width, height);
+        const differs = index => Math.abs(values[index] - background) > 24;
+        for (let x = 0; x < width; x += 1) {
+          if (
+            differs(x) ||
+            differs(width + x) ||
+            differs((height - 1) * width + x) ||
+            differs((height - 2) * width + x)
+          ) {
+            return true;
+          }
+        }
+        for (let y = 0; y < height; y += 1) {
+          if (
+            differs(y * width) ||
+            differs(y * width + 1) ||
+            differs(y * width + width - 1) ||
+            differs(y * width + width - 2)
+          ) {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      const contentScore = (values, width, height) => {
+        const background = backgroundOf(values, width, height);
+        let content = 0;
+        let edges = 0;
+        for (let y = 0; y < height; y += 1) {
+          let previous = values[y * width];
+          for (let x = 0; x < width; x += 1) {
+            const value = values[y * width + x];
+            content += Math.max(0, Math.abs(value - background) - 8);
+            edges += Math.abs(value - previous);
+            previous = value;
+          }
+        }
+        return (content + edges * 0.5) / (width * height);
+      };
+
+      const motionBetween = (a, b) => {
+        let total = 0;
+        for (let i = 0; i < a.length; i += 1) total += Math.abs(a[i] - b[i]);
+        return total / a.length;
+      };
+
+      const brightest = values => {
+        const sample = [];
+        for (let i = 0; i < values.length; i += 7) sample.push(values[i]);
+        sample.sort((a, b) => a - b);
+        return sample[Math.floor(sample.length * 0.9995)];
+      };
+
+      const contentBox = (values, width, height, threshold) => {
+        const background = backgroundOf(values, width, height);
+        const columns = new Float64Array(width);
+        const rows = new Float64Array(height);
+        let total = 0;
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            if (Math.abs(values[y * width + x] - background) > threshold) {
+              columns[x] += 1;
+              rows[y] += 1;
+              total += 1;
+            }
+          }
+        }
+        if (total < 40) return { x: 0, y: 0, width, height };
+        const span = counts => {
+          let sum = 0;
+          let start = 0;
+          let end = counts.length - 1;
+          for (let i = 0; i < counts.length; i += 1) {
+            sum += counts[i];
+            if (sum >= total * 0.02) {
+              start = i;
+              break;
+            }
+          }
+          sum = 0;
+          for (let i = counts.length - 1; i >= 0; i -= 1) {
+            sum += counts[i];
+            if (sum >= total * 0.02) {
+              end = i;
+              break;
+            }
+          }
+          return [start, Math.max(start + 1, end)];
+        };
+        const [x0, x1] = span(columns);
+        const [y0, y1] = span(rows);
+        return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
+      };
+
+      const chooseFrame = async video => {
+        const probe = document.createElement('canvas');
+        probe.width = 160;
+        probe.height = Math.round((160 * video.videoHeight) / video.videoWidth);
+        const context = probe.getContext('2d', { willReadFrequently: true });
+        const sample = async time => {
+          await seek(video, time);
+          context.drawImage(video, 0, 0, probe.width, probe.height);
+          return readLightness(context, probe.width, probe.height);
+        };
+
+        const duration = video.duration;
+        const step = Math.min(0.12, duration / 40);
+        let best = { score: -Infinity, time: 0 };
+        const samples = 16;
+        for (let i = 0; i < samples; i += 1) {
+          const time = duration * (0.15 + (0.75 * i) / (samples - 1));
+          const current = await sample(time);
+          const after = await sample(Math.min(duration - 0.01, time + step));
+          const flat = hasFlatBackground(current, probe.width, probe.height);
+          const clipped = flat && touchesEdge(current, probe.width, probe.height);
+          const score =
+            (contentScore(current, probe.width, probe.height) * (clipped ? 0.45 : 1)) /
+            (1 + motionBetween(current, after) / 6);
+          if (score > best.score) best = { score, time };
+        }
+        return best;
+      };
+
+      const coverage = (values, width, height) => {
+        const background = backgroundOf(values, width, height);
+        let count = 0;
+        for (let i = 0; i < values.length; i += 1) if (Math.abs(values[i] - background) > 24) count += 1;
+        return count / values.length;
+      };
+
+      const probeOf = (source, sourceWidth, sourceHeight) => {
+        const probe = document.createElement('canvas');
+        probe.width = 160;
+        probe.height = Math.round((160 * sourceHeight) / sourceWidth);
+        const context = probe.getContext('2d', { willReadFrequently: true });
+        context.drawImage(source, 0, 0, probe.width, probe.height);
+        return coverage(readLightness(context, probe.width, probe.height), probe.width, probe.height);
+      };
+
+      const toneMap = (context, values, width, height, peak) => {
+        const image = context.getImageData(0, 0, width, height);
+        const black = Math.min(backgroundOf(values, width, height), 26) + 2;
+        const range = Math.max(85, (peak < 140 ? peak : 255) - black);
+        for (let i = 0; i < values.length; i += 1) {
+          const level = Math.min(255, 255 * Math.pow(Math.max(0, values[i] - black) / range, 0.85));
+          image.data[i * 4] = level;
+          image.data[i * 4 + 1] = level;
+          image.data[i * 4 + 2] = level;
+        }
+        context.putImageData(image, 0, 0);
+      };
+
+      const drawSource = (source, sourceWidth, sourceHeight) => {
+        const full = document.createElement('canvas');
+        full.width = sourceWidth;
+        full.height = sourceHeight;
+        const fullContext = full.getContext('2d', { willReadFrequently: true });
+        fullContext.drawImage(source, 0, 0);
+        const values = readLightness(fullContext, sourceWidth, sourceHeight);
+        const peak = brightest(values);
+        const background = backgroundOf(values, sourceWidth, sourceHeight);
+        const box = contentBox(values, sourceWidth, sourceHeight, Math.max(6, 0.12 * (peak - background)));
+        const edge = Math.max(3, Math.round(Math.min(sourceWidth, sourceHeight) * 0.015));
+        const touches =
+          box.x <= edge ||
+          box.y <= edge ||
+          box.x + box.width >= sourceWidth - edge ||
+          box.y + box.height >= sourceHeight - edge;
+        const flat = hasFlatBackground(values, sourceWidth, sourceHeight) && !touches;
+        toneMap(fullContext, values, sourceWidth, sourceHeight, peak);
+
+        const rect = preview.getBoundingClientRect();
+        const width = Math.round(rect.width - 2);
+        const height = Math.round(rect.height - 2);
+        const visibleWidth = Math.min(width, CANVAS_WIDTH - rect.left - 1);
+        canvas.width = width;
+        canvas.height = height;
+
+        const cover = Math.max(visibleWidth / sourceWidth, height / sourceHeight);
+        const fit = Math.min((visibleWidth * 0.64) / box.width, (height * 0.64) / box.height);
+        const scale = flat ? Math.min(fit, cover * 2.5) : Math.min(Math.max(fit, cover), cover * 2);
+        const centerX = box.x + box.width / 2;
+        const centerY = box.y + box.height / 2;
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        const idealX = visibleWidth / 2 - centerX * scale;
+        const idealY = height / 2 - centerY * scale;
+        const offsetX = flat ? idealX : clamp(idealX, Math.min(0, visibleWidth - sourceWidth * scale), 0);
+        const offsetY = flat ? idealY : clamp(idealY, Math.min(0, height - sourceHeight * scale), 0);
+
+        const context = canvas.getContext('2d');
+        context.imageSmoothingQuality = 'high';
+        context.drawImage(full, offsetX, offsetY, sourceWidth * scale, sourceHeight * scale);
+        return { zoom: Number((scale / cover).toFixed(2)), box, flat };
+      };
+
+      const loadVideo = async src => {
+        const video = document.createElement('video');
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = 'auto';
+        video.src = src;
+        await whenLoaded(video);
+        if (!Number.isFinite(video.duration)) await seek(video, 1e6);
+        return video;
+      };
+
+      const loadStill = src =>
+        new Promise((resolve, reject) => {
+          const still = new Image();
+          still.onload = () => resolve(still);
+          still.onerror = () => reject(new Error(`Could not load ${src}`));
+          still.src = src;
+        });
+
+      const renderPreview = async ({ image, video }) => {
+        const still = image ? await loadStill(image) : null;
+        const clip = video ? await loadVideo(video) : null;
+        const frame = clip ? await chooseFrame(clip) : null;
+        if (frame) await seek(clip, frame.time);
+        const liveCoverage = still ? probeOf(still, still.naturalWidth, still.naturalHeight) : 0;
+        const videoCoverage = frame ? probeOf(clip, clip.videoWidth, clip.videoHeight) : 0;
+        const coverages = { live: Number(liveCoverage.toFixed(4)), video: Number(videoCoverage.toFixed(4)) };
+        if (still && liveCoverage > 0.002 && (!frame || liveCoverage >= LIVE_MIN_SHARE * videoCoverage)) {
+          return { source: 'live', coverages, ...drawSource(still, still.naturalWidth, still.naturalHeight) };
+        }
+        return { source: 'video', coverages, time: frame.time, ...drawSource(clip, clip.videoWidth, clip.videoHeight) };
+      };
+
+      const fitTitle = maxSize => {
+        const lines = () => title.offsetHeight / parseFloat(getComputedStyle(title).lineHeight);
+        let size = maxSize;
+        title.style.fontSize = `${size}px`;
+        while (size > 40 && (title.scrollWidth > title.clientWidth + 1 || lines() > 3.05)) {
+          size -= 2;
+          title.style.fontSize = `${size}px`;
+        }
+        return size;
+      };
+
+      const render = async () => {
+        const image = params.get('image');
+        const video = params.get('video');
+        const hasPreview = Boolean(image || video);
+        title.textContent = params.get('title') || '';
+        document.body.classList.toggle('no-preview', !hasPreview);
+        await document.fonts.load('80px "Geist Pixel"');
+        await document.fonts.ready;
+        const fontSize = fitTitle(hasPreview ? 80 : 104);
+        const frame = hasPreview ? await renderPreview({ image, video }) : null;
+        await nextFrame();
+        await nextFrame();
+        window.__og = { status: 'ready', token: params.get('token'), fontSize, source: frame?.source ?? 'none', frame };
+      };
+
+      render().catch(error => {
+        window.__og = { status: 'error', token: params.get('token'), message: error.message };
+      });
+    </script>
+  </body>
+</html>

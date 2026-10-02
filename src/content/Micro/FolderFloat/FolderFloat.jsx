@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import './FolderFloat.css';

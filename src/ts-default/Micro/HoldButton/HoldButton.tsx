@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 import './HoldButton.css';

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 const TAP_MS = 250;

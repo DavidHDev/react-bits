@@ -1,3 +1,5 @@
+'use client';
+
 import { Effect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';

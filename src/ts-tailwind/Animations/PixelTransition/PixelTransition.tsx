@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect, useState, type CSSProperties } from 'react';
 import { gsap } from 'gsap';
 

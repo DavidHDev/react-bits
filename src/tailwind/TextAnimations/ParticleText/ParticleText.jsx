@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
 const hexToRgb = hex => {
   const clean = hex.replace('#', '').trim();

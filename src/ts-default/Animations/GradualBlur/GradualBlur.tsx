@@ -1,3 +1,5 @@
+'use client';
+
 import React, { type CSSProperties, useEffect, useRef, useState, useMemo, type PropsWithChildren } from 'react';
 
 import './GradualBlur.css';

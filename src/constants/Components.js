@@ -1,7 +1,8 @@
 const getStarted = {
   introduction: () => import('../docs/Introduction.jsx'),
   installation: () => import('../docs/Installation.jsx'),
-  mcp: () => import('../docs/McpServer.jsx')
+  mcp: () => import('../docs/McpServer.jsx'),
+  changelog: () => import('../docs/Changelog.jsx')
 };
 
 const animations = {
@@ -43,6 +44,8 @@ const animations = {
   'strands': () => import('../demo/Animations/StrandsDemo'),
   'cursor-grid': () => import('../demo/Animations/CursorGridDemo'),
   'glow-cursor': () => import('../demo/Animations/GlowCursorDemo'),
+  'dither-veil': () => import('../demo/Animations/DitherVeilDemo'),
+  'electric-logo': () => import('../demo/Animations/ElectricLogoDemo'),
 };
 
 const textAnimations = {
@@ -77,7 +80,8 @@ const textAnimations = {
   'depth-text': () => import('../demo/TextAnimations/DepthTextDemo'),
   'fold-text': () => import('../demo/TextAnimations/FoldTextDemo'),
   'echo-text': () => import('../demo/TextAnimations/EchoTextDemo'),
-  'text-loop': () => import('../demo/TextAnimations/TextLoopDemo')
+  'text-loop': () => import('../demo/TextAnimations/TextLoopDemo'),
+  'tech-text': () => import('../demo/TextAnimations/TechTextDemo')
 };
 
 const components = {
@@ -95,6 +99,8 @@ const components = {
   'flying-posters': () => import('../demo/Components/FlyingPostersDemo'),
   'flowing-menu': () => import('../demo/Components/FlowingMenuDemo'),
   'depth-carousel': () => import('../demo/Components/DepthCarouselDemo'),
+  'circular-carousel': () => import('../demo/Components/CircularCarouselDemo'),
+  'flex-carousel': () => import('../demo/Components/FlexCarouselDemo'),
   'accordion-gallery': () => import('../demo/Components/AccordionGalleryDemo'),
   'morph-slider': () => import('../demo/Components/MorphSliderDemo'),
   'drift-wall': () => import('../demo/Components/DriftWallDemo'),
@@ -161,10 +167,13 @@ const micro = {
   'branched-menu': () => import('../demo/Micro/BranchedMenuDemo'),
   'flip-card': () => import('../demo/Micro/FlipCardDemo'),
   'tear-ticket': () => import('../demo/Micro/TearTicketDemo'),
-  'paper-crumple': () => import('../demo/Micro/PaperCrumpleDemo')
+  'paper-crumple': () => import('../demo/Micro/PaperCrumpleDemo'),
+  shredder: () => import('../demo/Micro/ShredderDemo')
 };
 
 const backgrounds = {
+  'pattern-waves': () => import('../demo/Backgrounds/PatternWavesDemo.jsx'),
+  'micro-slats': () => import('../demo/Backgrounds/MicroSlatsDemo.jsx'),
   'shape-waves': () => import('../demo/Backgrounds/ShapeWavesDemo.jsx'),
   'aero-shards': () => import('../demo/Backgrounds/AeroShardsDemo.jsx'),
   'ghost-fibers': () => import('../demo/Backgrounds/GhostFibersDemo.jsx'),

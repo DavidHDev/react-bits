@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, memo } from 'react';
 
 import './DotField.css';

@@ -1,0 +1,388 @@
+.nf {
+  --nf-preview: 0;
+  --nf-background: #120f17;
+  --nf-title-size: clamp(22px, 2.6vw, 28px);
+  --nf-tube: rgb(232 220 255 / 0.12);
+  --nf-spill: rgb(173 109 255 / 0.1);
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--nf-background);
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .nf {
+  --nf-background: #ffffff;
+  --nf-tube: rgb(24 24 27 / 0.12);
+  --nf-spill: rgb(169 83 255 / 0.05);
+}
+
+.nf-shards {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+
+.nf-shard-plane {
+  position: absolute;
+  top: calc(50% + 16px);
+  left: 50%;
+  /* Grow with the available height while leaving breathing room below the
+     navbar. The visible shards occupy about 90% of this square. */
+  width: min(108vw, max(320px, calc(120svh - 440px)));
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.nf-glass-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+
+.nf::before {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(17% 15% at 50% 42%, var(--nf-spill), transparent);
+  content: '';
+  opacity: var(--nf-power, 0);
+  pointer-events: none;
+}
+
+.nf-main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 88px 16px 28px;
+  text-align: center;
+}
+
+.nf-default {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  opacity: calc(1 - var(--nf-preview));
+  translate: 0 calc(var(--nf-preview) * -18px);
+  scale: calc(1 - var(--nf-preview) * 0.12);
+  filter: blur(calc(var(--nf-preview) * 8px));
+}
+
+.nf-gallery {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% + 30px);
+  left: 50%;
+  width: min(840px, calc(100% - 32px));
+  opacity: var(--nf-preview);
+  transform: translate(-50%, -50%) scale(calc(0.92 + var(--nf-preview) * 0.08));
+  transform-origin: center;
+  filter: blur(calc((1 - var(--nf-preview)) * 8px));
+  pointer-events: none;
+}
+
+.nf-gallery-surface {
+  width: 100%;
+  height: clamp(220px, 30vw, 272px);
+}
+
+.nf-gallery-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.nf-stage {
+  --nf-glyph-w: calc(var(--nf-title-size) * 10.5);
+  --nf-fade-x: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  --nf-fade-y: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  position: relative;
+  z-index: 0;
+  flex: none;
+  width: calc(var(--nf-glyph-w) / var(--nf-scale));
+  min-height: 0;
+  aspect-ratio: 2.556 / 1;
+  margin: calc(var(--nf-glyph-w) * -0.154) 0 calc(var(--nf-glyph-w) * -0.154 + 52px);
+  -webkit-mask-image: var(--nf-fade-x), var(--nf-fade-y);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--nf-fade-x), var(--nf-fade-y);
+  mask-composite: intersect;
+  -webkit-box-reflect: below var(--nf-reflect, 0px) linear-gradient(transparent 64%, rgb(0 0 0 / 0.34));
+}
+
+.nf-sign,
+.nf-stage .electric-logo {
+  position: absolute;
+  inset: 0;
+}
+
+.nf[data-entering] > .ln-navbar {
+  animation: nf-nav-enter 550ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+
+.nf[data-entering] .nf-sign {
+  animation: nf-sign-enter 1100ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
+}
+
+.nf[data-entering] .nf-title,
+.nf[data-entering] .nf-suggest,
+.nf[data-entering] .nf-btn,
+.nf[data-entering] .nf-categories a {
+  animation: nf-content-enter 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.nf[data-entering] .nf-title {
+  animation-delay: 480ms;
+}
+.nf[data-entering] .nf-suggest {
+  animation-delay: 560ms;
+}
+.nf[data-entering] .nf-btn {
+  animation-delay: 640ms;
+}
+.nf[data-entering] .nf-categories a {
+  animation-delay: calc(780ms + var(--nf-order) * 35ms);
+}
+
+.nf[data-entering] .ln-navbar:focus-within,
+.nf[data-entering] .nf-btn:focus-visible,
+.nf[data-entering] .nf-suggest:focus-within,
+.nf[data-entering] .nf-categories a:focus-visible {
+  animation: none;
+}
+
+@keyframes nf-nav-enter {
+  from {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes nf-sign-enter {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.97;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes nf-content-enter {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
+}
+
+.nf-tubes {
+  position: absolute;
+  top: calc((1 - var(--nf-scale)) * 50%);
+  left: calc((1 - var(--nf-scale)) * 50%);
+  width: calc(var(--nf-scale) * 100%);
+  height: calc(var(--nf-scale) * 100%);
+  overflow: visible;
+  fill: none;
+  stroke: var(--nf-tube);
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.nf-tubes path {
+  vector-effect: non-scaling-stroke;
+}
+
+.nf-title {
+  position: relative;
+  z-index: 4;
+  margin: 0;
+  font-size: var(--nf-title-size);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.nf-suggest {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px 18px;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.nf-suggest-label {
+  color: var(--text-muted);
+}
+
+.nf-suggest-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nf-suggest-name {
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--border-primary);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color var(--transition-fast);
+}
+
+.nf-suggest-link:hover .nf-suggest-name {
+  text-decoration-color: currentColor;
+}
+
+.nf-suggest-category {
+  color: var(--text-dimmed);
+  font-size: 12px;
+}
+
+.nf-btn {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  height: 42px;
+  align-items: center;
+  margin-top: 28px;
+  padding: 0 20px;
+  border-radius: 11px;
+  background: #f4f4f5;
+  color: #120f17;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-base),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.nf-btn:hover {
+  background: #ffffff;
+}
+
+.nf-btn:active {
+  transform: scale(0.97);
+}
+
+.nf-btn:focus-visible,
+.nf-suggest-link:focus-visible,
+.nf-categories a:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}
+
+.nf-categories {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  padding: 0 12px 28px;
+  font-size: 13px;
+}
+
+.nf-categories a {
+  padding: 4px 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.nf-categories a:hover,
+.nf-categories a[data-previewing] {
+  color: var(--text-primary);
+}
+
+.nf-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .nf-shard-plane {
+    top: calc(50% + 12px);
+  }
+
+  .nf-main {
+    padding-top: 84px;
+  }
+}
+
+:root[data-theme='light'] .nf-btn {
+  background: #18181b;
+  color: #ffffff;
+}
+
+:root[data-theme='light'] .nf-btn:hover {
+  background: #2b2b2f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-default,
+  .nf-gallery {
+    translate: none;
+    scale: none;
+    filter: none;
+  }
+
+  .nf-gallery {
+    transform: translate(-50%, -50%);
+  }
+
+  .nf[data-entering] > .ln-navbar,
+  .nf[data-entering] .nf-sign,
+  .nf[data-entering] .nf-title,
+  .nf[data-entering] .nf-suggest,
+  .nf[data-entering] .nf-btn,
+  .nf[data-entering] .nf-categories a {
+    animation: none;
+  }
+
+  .nf-btn,
+  .nf-suggest-name,
+  .nf-categories a {
+    transition: none;
+  }
+}

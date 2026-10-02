@@ -1,3 +1,5 @@
+'use client';
+
 import { CSSProperties, KeyboardEvent, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type PixelSwapPattern =

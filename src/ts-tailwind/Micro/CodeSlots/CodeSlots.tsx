@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
 import {
   animate,

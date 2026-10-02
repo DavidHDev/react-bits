@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { animate, motion, motionValue, useMotionValue, useReducedMotion, useTransform } from 'motion/react';
 import { HugeiconsIcon } from '@hugeicons/react';

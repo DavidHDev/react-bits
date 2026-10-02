@@ -1,3 +1,5 @@
+'use client';
+
 import './GlassIcons.css';
 
 const gradientMapping = {
