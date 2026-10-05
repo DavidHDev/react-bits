@@ -85,16 +85,23 @@ const BackgroundRenderer = React.memo(({ background, props, renderKey }) => {
   useEffect(() => {
     if (!loadComponent) return;
 
+    let cancelled = false;
     setError(null);
     loadComponent()
       .then(module => {
+        if (cancelled) return;
         setComponent(() => module.default);
         setKey(k => k + 1);
       })
       .catch(err => {
+        if (cancelled) return;
         console.error('Failed to load background:', err);
         setError(err);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [backgroundId, loadComponent]);
 
   if (error) {
@@ -535,7 +542,7 @@ export default function BackgroundStudio({ toolSelector }) {
         minH={{ base: '300px', lg: 'auto' }}
       >
         <Suspense fallback={<LoadingFallback />}>
-          <BackgroundRenderer background={background} props={props} renderKey={renderKey} />
+          <BackgroundRenderer key={background.id} background={background} props={props} renderKey={renderKey} />
         </Suspense>
 
         <Box
