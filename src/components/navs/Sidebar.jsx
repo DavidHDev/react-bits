@@ -2,7 +2,7 @@ import { useRef, useState, useCallback, useMemo, memo, useEffect, Fragment } fro
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Flex, VStack, Text, Stack, Icon, IconButton, Drawer, Image, Separator } from '@chakra-ui/react';
-import { ArrowRight, SearchIcon, XIcon } from 'lucide-react';
+import { ArrowRight, LayoutGrid, SearchIcon, XIcon } from 'lucide-react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
   DashboardSquare01Icon,
@@ -14,6 +14,7 @@ import {
 } from '@hugeicons/core-free-icons';
 
 import { PRO_SECTIONS } from '../../constants/Pro';
+import { proLinkProps } from '../../utils/pro';
 import { colors } from '../../constants/colors';
 
 import { useTransition } from '../../hooks/useTransition';
@@ -207,15 +208,28 @@ const ProLinks = ({ onClose }) => (
           <span>Overview</span>
         </Flex>
       </Link>
-      {PRO_SECTIONS.map(section => (
-        <Link key={section.slug} to={`/pro/${section.slug}`} onClick={onClose} className="sidebar-pro-link">
-          <Flex alignItems="center" gap="7px">
-            <Icon as={section.icon} boxSize={4} className="sidebar-pro-icon" />
-            <span>{section.sidebarLabel || section.label}</span>
-            {section.freeCount && <span className="sidebar-pro-free-tag">{section.freeCount} Free</span>}
-          </Flex>
-        </Link>
-      ))}
+      {PRO_SECTIONS.map(section => {
+        const linkProps = proLinkProps(section.proPath, 'sidebar-mobile', {
+          params: { section: section.slug }
+        });
+        return (
+          <a
+            key={section.slug}
+            {...linkProps}
+            onClick={() => {
+              linkProps.onClick();
+              onClose?.();
+            }}
+            className="sidebar-pro-link"
+          >
+            <Flex alignItems="center" gap="7px">
+              <Icon as={section.icon} boxSize={4} className="sidebar-pro-icon" />
+              <span>{section.sidebarLabel || section.label}</span>
+              {section.freeCount && <span className="sidebar-pro-free-tag">{section.freeCount} Free</span>}
+            </Flex>
+          </a>
+        );
+      })}
     </Flex>
     <Separator my={4} />
   </>
@@ -442,6 +456,7 @@ const Sidebar = () => {
   const sidebarFilterQuery = sidebarFilter.trim().toLowerCase();
   const focusSlug = location.pathname.match(/^\/c\/([^/]+)/)?.[1] ?? null;
   const basePath = focusSlug ? '/c' : '';
+  const onIndexPage = location.pathname === '/get-started/index';
   const pickerIndex = Math.max(
     0,
     PICKER.findIndex(option => option.key === (focusSlug ?? 'all'))
@@ -681,6 +696,28 @@ const Sidebar = () => {
         overflow="hidden"
         className="sidebar"
       >
+        <Link
+          to="/get-started/index"
+          className="sidebar-browse"
+          aria-current={onIndexPage ? 'page' : undefined}
+          tabIndex={onIndexPage ? -1 : undefined}
+          onClick={scrollToTop}
+        >
+          <LayoutGrid size={13} strokeWidth={2} aria-hidden="true" className="sidebar-browse__icon" />
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={onIndexPage ? 'current' : 'browse'}
+              className="sidebar-browse__label"
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 6, filter: 'blur(2px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6, filter: 'blur(2px)' }}
+              transition={{ duration: reduceMotion ? 0 : 0.22, ease: [0.23, 1, 0.32, 1] }}
+            >
+              {onIndexPage ? 'Viewing all components' : 'Browse all components'}
+            </motion.span>
+          </AnimatePresence>
+        </Link>
+
         <div
           className="sidebar-picker"
           role="tablist"
@@ -774,16 +811,13 @@ const Sidebar = () => {
                         position="relative"
                       >
                         {sidebarProSections.map(section => {
-                          const path = `/pro/${section.slug}`;
                           return (
-                            <Link
+                            <a
                               key={section.slug}
-                              ref={el => {
-                                if (itemRefs.current) itemRefs.current[path] = el;
-                              }}
-                              to={path}
-                              className={`sidebar-item sidebar-pro-link ${location.pathname === path ? 'active-sidebar-item' : ''}`}
-                              onClick={scrollToTop}
+                              {...proLinkProps(section.proPath, 'sidebar', {
+                                params: { section: section.slug }
+                              })}
+                              className="sidebar-item sidebar-pro-link"
                               onMouseEnter={event => handleProPreviewEnter(section, event)}
                               onMouseMove={handlePreviewMove}
                               onMouseLeave={handlePreviewLeave}
@@ -795,7 +829,7 @@ const Sidebar = () => {
                               {section.freeCount && (
                                 <span className="sidebar-pro-free-tag">{section.freeCount} Free</span>
                               )}
-                            </Link>
+                            </a>
                           );
                         })}
                       </Stack>

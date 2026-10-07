@@ -1,0 +1,714 @@
+{
+  "counts": {
+    "components": 230,
+    "blocks": 300,
+    "blockCategories": 22,
+    "appUi": 300,
+    "appUiCategories": 38,
+    "templates": 15,
+    "agentKit": 20,
+    "total": 865
+  },
+  "assets": {
+    "baseUrl": "https://reactbits.dev/rbp"
+  },
+  "startingPrice": 129,
+  "tiers": [
+    {
+      "id": "starter",
+      "name": "Starter",
+      "lifetime": 129,
+      "annual": 79,
+      "popular": false,
+      "ctaText": "Get Starter"
+    },
+    {
+      "id": "pro",
+      "name": "Pro",
+      "lifetime": 249,
+      "annual": 149,
+      "popular": false,
+      "ctaText": "Get Pro"
+    },
+    {
+      "id": "ultimate",
+      "name": "Ultimate",
+      "lifetime": 349,
+      "annual": 199,
+      "popular": true,
+      "ctaText": "Get Everything"
+    }
+  ],
+  "plans": {
+    "free": {
+      "components": 0,
+      "blocks": 0,
+      "appUi": 0,
+      "templates": 1,
+      "agentKit": 1
+    },
+    "starter": {
+      "components": 230,
+      "blocks": 0,
+      "appUi": 0,
+      "templates": 1,
+      "agentKit": 2
+    },
+    "pro": {
+      "components": 230,
+      "blocks": 300,
+      "appUi": 300,
+      "templates": 1,
+      "agentKit": 20
+    },
+    "ultimate": {
+      "components": 230,
+      "blocks": 300,
+      "appUi": 300,
+      "templates": 15,
+      "agentKit": 20
+    }
+  },
+  "showcase": {
+    "components": [
+      {
+        "name": "Glowing Ridges",
+        "slug": "glowing-ridges",
+        "href": "https://pro.reactbits.dev/docs/components/glowing-ridges",
+        "image": "/assets/pro/showcase/components/glowing-ridges-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/glowing-ridges-light.webp"
+      },
+      {
+        "name": "Long Exposure",
+        "slug": "long-exposure",
+        "href": "https://pro.reactbits.dev/docs/components/long-exposure",
+        "image": "/assets/pro/showcase/components/long-exposure-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/long-exposure-light.webp"
+      },
+      {
+        "name": "Prismatic Slats",
+        "slug": "prismatic-slats",
+        "href": "https://pro.reactbits.dev/docs/components/prismatic-slats",
+        "image": "/assets/pro/showcase/components/prismatic-slats-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/prismatic-slats-light.webp"
+      },
+      {
+        "name": "Astral Shell",
+        "slug": "astral-shell",
+        "href": "https://pro.reactbits.dev/docs/components/astral-shell",
+        "image": "/assets/pro/showcase/components/astral-shell-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/astral-shell-light.webp"
+      },
+      {
+        "name": "Glyph Tide",
+        "slug": "glyph-tide",
+        "href": "https://pro.reactbits.dev/docs/components/glyph-tide",
+        "image": "/assets/pro/showcase/components/glyph-tide-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/glyph-tide-light.webp"
+      },
+      {
+        "name": "Vapor Type",
+        "slug": "vapor-type",
+        "href": "https://pro.reactbits.dev/docs/components/vapor-type",
+        "image": "/assets/pro/showcase/components/vapor-type-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/vapor-type-light.webp"
+      },
+      {
+        "name": "Radial Liquid",
+        "slug": "radial-liquid",
+        "href": "https://pro.reactbits.dev/docs/components/radial-liquid",
+        "image": "/assets/pro/showcase/components/radial-liquid-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/radial-liquid-light.webp"
+      },
+      {
+        "name": "Synaptic Shift",
+        "slug": "synaptic-shift",
+        "href": "https://pro.reactbits.dev/docs/components/synaptic-shift",
+        "image": "/assets/pro/showcase/components/synaptic-shift-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/synaptic-shift-light.webp"
+      },
+      {
+        "name": "Glass Tiles",
+        "slug": "glass-tiles",
+        "href": "https://pro.reactbits.dev/docs/components/glass-tiles",
+        "image": "/assets/pro/showcase/components/glass-tiles-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/glass-tiles-light.webp"
+      },
+      {
+        "name": "Dither Wave",
+        "slug": "dither-wave",
+        "href": "https://pro.reactbits.dev/docs/components/dither-wave",
+        "image": "/assets/pro/showcase/components/dither-wave-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/dither-wave-light.webp"
+      },
+      {
+        "name": "Passage Gallery",
+        "slug": "passage-gallery",
+        "href": "https://pro.reactbits.dev/docs/components/passage-gallery",
+        "image": "/assets/pro/showcase/components/passage-gallery-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/passage-gallery-light.webp"
+      },
+      {
+        "name": "Orbit Reel",
+        "slug": "orbit-reel",
+        "href": "https://pro.reactbits.dev/docs/components/orbit-reel",
+        "image": "/assets/pro/showcase/components/orbit-reel-dark.webp",
+        "imageLight": "/assets/pro/showcase/components/orbit-reel-light.webp"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Page block 1",
+        "slug": "blocks-01",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/01-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/01-light.webp"
+      },
+      {
+        "name": "Page block 2",
+        "slug": "blocks-02",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/02-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/02-light.webp"
+      },
+      {
+        "name": "Page block 3",
+        "slug": "blocks-03",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/03-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/03-light.webp"
+      },
+      {
+        "name": "Page block 4",
+        "slug": "blocks-04",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/04-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/04-light.webp"
+      },
+      {
+        "name": "Page block 5",
+        "slug": "blocks-05",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/05-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/05-light.webp"
+      },
+      {
+        "name": "Page block 6",
+        "slug": "blocks-06",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/06-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/06-light.webp"
+      },
+      {
+        "name": "Page block 7",
+        "slug": "blocks-07",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/07-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/07-light.webp"
+      },
+      {
+        "name": "Page block 8",
+        "slug": "blocks-08",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/08-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/08-light.webp"
+      },
+      {
+        "name": "Page block 9",
+        "slug": "blocks-09",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/09-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/09-light.webp"
+      },
+      {
+        "name": "Page block 10",
+        "slug": "blocks-10",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/10-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/10-light.webp"
+      },
+      {
+        "name": "Page block 11",
+        "slug": "blocks-11",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/11-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/11-light.webp"
+      },
+      {
+        "name": "Page block 12",
+        "slug": "blocks-12",
+        "href": "https://pro.reactbits.dev/docs/blocks",
+        "image": "/assets/pro/showcase/blocks/12-dark.webp",
+        "imageLight": "/assets/pro/showcase/blocks/12-light.webp"
+      }
+    ],
+    "app-ui": [
+      {
+        "name": "App UI block 1",
+        "slug": "app-ui-01",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/01-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/01-light.webp"
+      },
+      {
+        "name": "App UI block 2",
+        "slug": "app-ui-02",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/02-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/02-light.webp"
+      },
+      {
+        "name": "App UI block 3",
+        "slug": "app-ui-03",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/03-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/03-light.webp"
+      },
+      {
+        "name": "App UI block 4",
+        "slug": "app-ui-04",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/04-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/04-light.webp"
+      },
+      {
+        "name": "App UI block 5",
+        "slug": "app-ui-05",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/05-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/05-light.webp"
+      },
+      {
+        "name": "App UI block 6",
+        "slug": "app-ui-06",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/06-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/06-light.webp"
+      },
+      {
+        "name": "App UI block 7",
+        "slug": "app-ui-07",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/07-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/07-light.webp"
+      },
+      {
+        "name": "App UI block 8",
+        "slug": "app-ui-08",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/08-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/08-light.webp"
+      },
+      {
+        "name": "App UI block 9",
+        "slug": "app-ui-09",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/09-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/09-light.webp"
+      },
+      {
+        "name": "App UI block 10",
+        "slug": "app-ui-10",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/10-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/10-light.webp"
+      },
+      {
+        "name": "App UI block 11",
+        "slug": "app-ui-11",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/11-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/11-light.webp"
+      },
+      {
+        "name": "App UI block 12",
+        "slug": "app-ui-12",
+        "href": "https://pro.reactbits.dev/docs/app-ui",
+        "image": "/assets/pro/showcase/app-ui/12-dark.webp",
+        "imageLight": "/assets/pro/showcase/app-ui/12-light.webp"
+      }
+    ],
+    "templates": [
+      {
+        "name": "Template 1",
+        "slug": "templates-01",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/01-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/01-light.webp"
+      },
+      {
+        "name": "Template 2",
+        "slug": "templates-02",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/02-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/02-light.webp"
+      },
+      {
+        "name": "Template 3",
+        "slug": "templates-03",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/03-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/03-light.webp"
+      },
+      {
+        "name": "Template 4",
+        "slug": "templates-04",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/04-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/04-light.webp"
+      },
+      {
+        "name": "Template 5",
+        "slug": "templates-05",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/05-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/05-light.webp"
+      },
+      {
+        "name": "Template 6",
+        "slug": "templates-06",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/06-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/06-light.webp"
+      },
+      {
+        "name": "Template 7",
+        "slug": "templates-07",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/07-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/07-light.webp"
+      },
+      {
+        "name": "Template 8",
+        "slug": "templates-08",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/08-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/08-light.webp"
+      },
+      {
+        "name": "Template 9",
+        "slug": "templates-09",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/09-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/09-light.webp"
+      },
+      {
+        "name": "Template 10",
+        "slug": "templates-10",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/10-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/10-light.webp"
+      },
+      {
+        "name": "Template 11",
+        "slug": "templates-11",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/11-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/11-light.webp"
+      },
+      {
+        "name": "Template 12",
+        "slug": "templates-12",
+        "href": "https://pro.reactbits.dev/docs/templates",
+        "image": "/assets/pro/showcase/templates/12-dark.webp",
+        "imageLight": "/assets/pro/showcase/templates/12-light.webp"
+      }
+    ],
+    "agent-kit": [
+      {
+        "name": "Neobrutalism",
+        "slug": "neobrutalism",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/neobrutalism",
+        "image": "/assets/pro/agent-kit/skill-neobrutalism.webp"
+      },
+      {
+        "name": "Playful Motion",
+        "slug": "playful-motion",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/playful-motion",
+        "image": "/assets/pro/agent-kit/skill-playful-motion.webp"
+      },
+      {
+        "name": "Swiss Grid",
+        "slug": "swiss-grid",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/swiss-grid",
+        "image": "/assets/pro/agent-kit/skill-swiss-grid.webp"
+      },
+      {
+        "name": "Terminal Dark",
+        "slug": "terminal-dark",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/terminal-dark",
+        "image": "/assets/pro/agent-kit/skill-terminal-dark.webp"
+      },
+      {
+        "name": "Editorial",
+        "slug": "editorial",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/editorial",
+        "image": "/assets/pro/agent-kit/skill-editorial.webp"
+      },
+      {
+        "name": "Luxury Serif",
+        "slug": "luxury-serif",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/luxury-serif",
+        "image": "/assets/pro/agent-kit/skill-luxury-serif.webp"
+      },
+      {
+        "name": "Apple Minimal",
+        "slug": "apple-minimal",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/apple-minimal",
+        "image": "/assets/pro/agent-kit/skill-apple-minimal.webp"
+      },
+      {
+        "name": "Corporate Trust",
+        "slug": "corporate-trust",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/skills/corporate-trust",
+        "image": "/assets/pro/agent-kit/skill-corporate-trust.webp"
+      },
+      {
+        "name": "Fintech",
+        "slug": "fintech",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/prompts/fintech",
+        "image": "/assets/pro/agent-kit/prompt-fintech.webp"
+      },
+      {
+        "name": "Consumer Hardware",
+        "slug": "consumer-hardware",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/prompts/consumer-hardware",
+        "image": "/assets/pro/agent-kit/prompt-consumer-hardware.webp"
+      },
+      {
+        "name": "Ecommerce Brand",
+        "slug": "ecommerce-brand",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/prompts/ecommerce-brand",
+        "image": "/assets/pro/agent-kit/prompt-ecommerce-brand.webp"
+      },
+      {
+        "name": "SaaS Homepage",
+        "slug": "saas-homepage",
+        "href": "https://pro.reactbits.dev/docs/agent-kit/recipes/saas-homepage",
+        "image": "/assets/pro/agent-kit/recipe-saas-homepage.webp"
+      }
+    ]
+  },
+  "categories": {
+    "backgrounds": {
+      "count": 98,
+      "noun": "backgrounds",
+      "pitch": "Shader scenes and animated surfaces made to sit behind real content.",
+      "path": "/docs/components?category=Backgrounds",
+      "items": [
+        {
+          "name": "Glass Tiles",
+          "slug": "glass-tiles",
+          "href": "https://pro.reactbits.dev/docs/components/glass-tiles",
+          "media": {
+            "animated": "/rbp/showcase/components/glass-tiles.webp",
+            "poster": "/rbp/showcase/components/glass-tiles-poster.webp"
+          }
+        },
+        {
+          "name": "Radial Liquid",
+          "slug": "radial-liquid",
+          "href": "https://pro.reactbits.dev/docs/components/radial-liquid",
+          "media": {
+            "animated": "/rbp/showcase/components/radial-liquid.webp",
+            "poster": "/rbp/showcase/components/radial-liquid-poster.webp"
+          }
+        },
+        {
+          "name": "Vortex",
+          "slug": "vortex",
+          "href": "https://pro.reactbits.dev/docs/components/vortex",
+          "media": {
+            "animated": "/rbp/showcase/components/vortex.webp",
+            "poster": "/rbp/showcase/components/vortex-poster.webp"
+          }
+        },
+        {
+          "name": "Chroma Blinds",
+          "slug": "chroma-blinds",
+          "href": "https://pro.reactbits.dev/docs/components/chroma-blinds",
+          "media": {
+            "animated": "/rbp/showcase/components/chroma-blinds.webp",
+            "poster": "/rbp/showcase/components/chroma-blinds-poster.webp"
+          }
+        }
+      ]
+    },
+    "text-animations": {
+      "count": 34,
+      "noun": "text animations",
+      "pitch": "Scroll reveals, 3D type and glitch effects for headlines that need to land.",
+      "path": "/docs/components?category=Text",
+      "items": [
+        {
+          "name": "Glitch Text",
+          "slug": "glitch-text",
+          "href": "https://pro.reactbits.dev/docs/components/glitch-text",
+          "media": {
+            "animated": "/rbp/showcase/components/glitch-text.webp",
+            "poster": "/rbp/showcase/components/glitch-text-poster.webp"
+          }
+        },
+        {
+          "name": "ASCII Ripple",
+          "slug": "ascii-ripple",
+          "href": "https://pro.reactbits.dev/docs/components/ascii-ripple",
+          "media": {
+            "animated": "/rbp/showcase/components/ascii-ripple.webp",
+            "poster": "/rbp/showcase/components/ascii-ripple-poster.webp"
+          }
+        },
+        {
+          "name": "Speeding Text",
+          "slug": "speeding-text",
+          "href": "https://pro.reactbits.dev/docs/components/speeding-text",
+          "media": {
+            "animated": "/rbp/showcase/components/speeding-text.webp",
+            "poster": "/rbp/showcase/components/speeding-text-poster.webp"
+          }
+        },
+        {
+          "name": "Staggered Text",
+          "slug": "staggered-text",
+          "href": "https://pro.reactbits.dev/docs/components/staggered-text",
+          "media": {
+            "animated": "/rbp/showcase/components/staggered-text.webp",
+            "poster": "/rbp/showcase/components/staggered-text-poster.webp"
+          }
+        }
+      ]
+    },
+    "animations": {
+      "count": 21,
+      "noun": "cursor effects",
+      "pitch": "Cursor trails and pointer effects that give a site its own feel.",
+      "path": "/docs/components?category=Cursor%20Effects",
+      "items": [
+        {
+          "name": "Glass Cursor",
+          "slug": "glass-cursor",
+          "href": "https://pro.reactbits.dev/docs/components/glass-cursor",
+          "media": {
+            "animated": "/rbp/showcase/components/glass-cursor.webp",
+            "poster": "/rbp/showcase/components/glass-cursor-poster.webp"
+          }
+        },
+        {
+          "name": "Dither Cursor",
+          "slug": "dither-cursor",
+          "href": "https://pro.reactbits.dev/docs/components/dither-cursor",
+          "media": {
+            "animated": "/rbp/showcase/components/dither-cursor.webp",
+            "poster": "/rbp/showcase/components/dither-cursor-poster.webp"
+          }
+        },
+        {
+          "name": "Smooth Cursor",
+          "slug": "smooth-cursor",
+          "href": "https://pro.reactbits.dev/docs/components/smooth-cursor",
+          "media": {
+            "animated": "/rbp/showcase/components/smooth-cursor.webp",
+            "poster": "/rbp/showcase/components/smooth-cursor-poster.webp"
+          }
+        },
+        {
+          "name": "Custom Cursor",
+          "slug": "custom-cursor",
+          "href": "https://pro.reactbits.dev/docs/components/custom-cursor",
+          "media": {
+            "animated": "/rbp/showcase/components/custom-cursor.webp",
+            "poster": "/rbp/showcase/components/custom-cursor-poster.webp"
+          }
+        }
+      ]
+    },
+    "components": {
+      "count": 230,
+      "noun": "components",
+      "pitch": "Galleries, cards and interactive pieces for pages that need more than the basics.",
+      "path": "/docs/components",
+      "items": [
+        {
+          "name": "Reel Gallery",
+          "slug": "reel-gallery",
+          "href": "https://pro.reactbits.dev/docs/components/reel-gallery",
+          "media": {
+            "animated": "/rbp/showcase/components/reel-gallery.webp",
+            "poster": "/rbp/showcase/components/reel-gallery-poster.webp"
+          }
+        },
+        {
+          "name": "Shader Card",
+          "slug": "shader-card",
+          "href": "https://pro.reactbits.dev/docs/components/shader-card",
+          "media": {
+            "animated": "/rbp/showcase/components/shader-card.webp",
+            "poster": "/rbp/showcase/components/shader-card-poster.webp"
+          }
+        },
+        {
+          "name": "Comparison Slider",
+          "slug": "comparison-slider",
+          "href": "https://pro.reactbits.dev/docs/components/comparison-slider",
+          "media": {
+            "animated": "/rbp/showcase/components/comparison-slider.webp",
+            "poster": "/rbp/showcase/components/comparison-slider-poster.webp"
+          }
+        },
+        {
+          "name": "Staggered Text",
+          "slug": "staggered-text",
+          "href": "https://pro.reactbits.dev/docs/components/staggered-text",
+          "media": {
+            "animated": "/rbp/showcase/components/staggered-text.webp",
+            "poster": "/rbp/showcase/components/staggered-text-poster.webp"
+          }
+        }
+      ]
+    },
+    "default": {
+      "count": 230,
+      "noun": "components",
+      "pitch": "Components, page blocks, app UI and templates, built to work together.",
+      "path": "/",
+      "items": [
+        {
+          "name": "Aurora Beam",
+          "slug": "aurora-beam",
+          "href": "https://pro.reactbits.dev/docs/components/aurora-beam",
+          "media": {
+            "animated": "/rbp/showcase/components/aurora-beam.webp",
+            "poster": "/rbp/showcase/components/aurora-beam-poster.webp"
+          }
+        },
+        {
+          "name": "Smooth Cursor",
+          "slug": "smooth-cursor",
+          "href": "https://pro.reactbits.dev/docs/components/smooth-cursor",
+          "media": {
+            "animated": "/rbp/showcase/components/smooth-cursor.webp",
+            "poster": "/rbp/showcase/components/smooth-cursor-poster.webp"
+          }
+        },
+        {
+          "name": "Circle Gallery",
+          "slug": "circle-gallery",
+          "href": "https://pro.reactbits.dev/docs/components/circle-gallery",
+          "media": {
+            "animated": "/rbp/showcase/components/circle-gallery.webp",
+            "poster": "/rbp/showcase/components/circle-gallery-poster.webp"
+          }
+        },
+        {
+          "name": "Staggered Text",
+          "slug": "staggered-text",
+          "href": "https://pro.reactbits.dev/docs/components/staggered-text",
+          "media": {
+            "animated": "/rbp/showcase/components/staggered-text.webp",
+            "poster": "/rbp/showcase/components/staggered-text-poster.webp"
+          }
+        }
+      ]
+    }
+  }
+}

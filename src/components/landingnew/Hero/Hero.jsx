@@ -2,10 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import DotField from './DotField';
 import HeroBand from './HeroBand';
-import { FaArrowRight } from 'react-icons/fa6';
-import { LuRotateCcw, LuMoveHorizontal } from 'react-icons/lu';
-import { useStars } from '@/hooks/useStars';
-import { COMPONENT_COUNT } from '@/constants/Categories';
+import { LuArrowRight, LuRotateCcw, LuMoveHorizontal } from 'react-icons/lu';
 import { useColorMode } from '../../setup/color-mode';
 import './Hero.css';
 
@@ -270,16 +267,6 @@ function tweenScene({ from, target, onFrame, onDone }) {
   return () => {
     if (raf !== null) cancelAnimationFrame(raf);
   };
-}
-
-const CHIP_IDLE_RGB = [255, 255, 255];
-const CHIP_IDLE_ALPHA = 0.45;
-
-function chipTint(accentHex, weight) {
-  const [r, g, b] = parseHexRgb(accentHex);
-  const mix = (from, to) => Math.round(lerp(from, to, weight));
-  const alpha = lerp(CHIP_IDLE_ALPHA, 1, weight);
-  return `rgba(${mix(CHIP_IDLE_RGB[0], r)}, ${mix(CHIP_IDLE_RGB[1], g)}, ${mix(CHIP_IDLE_RGB[2], b)}, ${alpha.toFixed(3)})`;
 }
 
 /* ── Helpers ── */
@@ -630,19 +617,17 @@ const Hero = () => {
   const { resolvedTheme } = useColorMode();
   const isLightTheme = resolvedTheme === 'light';
   const [activeSnippet, setActiveSnippet] = useState(0);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const snippetTabsRef = useRef(null);
   const activeRef = useRef(activeSnippet);
   activeRef.current = activeSnippet;
-
-  const stars = useStars();
 
   const [propValues, setPropValues] = useState(() =>
     SNIPPET_DEFS.map(def => Object.fromEntries(def.props.map(p => [p.name, p.default])))
   );
 
   const [activePreset, setActivePreset] = useState(0);
-  const [presetFade, setPresetFade] = useState({ from: null, to: 0, e: 1 });
+  const [presetThumb, setPresetThumb] = useState(0);
+  const presetTabsRef = useRef(null);
   const propValuesRef = useRef(propValues);
   propValuesRef.current = propValues;
   const activePresetRef = useRef(activePreset);
@@ -653,7 +638,6 @@ const Hero = () => {
     stopTweenRef.current?.();
     stopTweenRef.current = null;
     setActivePreset(null);
-    setPresetFade({ from: null, to: null, e: 1 });
     setPropValues(prev => {
       const idx = activeRef.current;
       const next = [...prev];
@@ -664,30 +648,53 @@ const Hero = () => {
 
   const applyPreset = useCallback(presetIndex => {
     const preset = SCENE_PRESETS[presetIndex];
-    if (!preset) return;
+    if (!preset || presetIndex === activePresetRef.current) return;
 
-    playSound('color');
+    playSound('toggle', 0.2);
     stopTweenRef.current?.();
 
-    const previous = activePresetRef.current;
     setActivePreset(presetIndex);
-    setPresetFade({ from: previous, to: presetIndex, e: 0 });
+    setPresetThumb(presetIndex);
 
     stopTweenRef.current = tweenScene({
       from: propValuesRef.current,
       target: preset.values,
-      onFrame: (values, e) => {
-        setPropValues(values);
-        setPresetFade({ from: previous, to: presetIndex, e });
-      },
+      onFrame: values => setPropValues(values),
       onDone: () => {
         stopTweenRef.current = null;
-        setPresetFade({ from: null, to: presetIndex, e: 1 });
       }
     });
   }, []);
 
-  const toggleDropdown = useCallback(() => setDropdownOpen(prev => !prev), []);
+  const handlePresetKeys = useCallback(
+    event => {
+      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+      if (!step) return;
+      event.preventDefault();
+      const current = activePresetRef.current ?? -1;
+      const next = (current + step + SCENE_PRESETS.length) % SCENE_PRESETS.length;
+      applyPreset(next);
+      presetTabsRef.current?.querySelectorAll('[role="radio"]')[next]?.focus();
+    },
+    [applyPreset]
+  );
+
+  const selectSnippet = useCallback((index, focus = false) => {
+    if (index === activeRef.current) return;
+    playSound('toggle', 0.2);
+    setActiveSnippet(index);
+    if (focus) snippetTabsRef.current?.querySelectorAll('[role="tab"]')[index]?.focus();
+  }, []);
+
+  const handleSnippetKeys = useCallback(
+    event => {
+      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+      if (!step) return;
+      event.preventDefault();
+      selectSnippet((activeRef.current + step + SNIPPET_DEFS.length) % SNIPPET_DEFS.length, true);
+    },
+    [selectSnippet]
+  );
 
   const hasChanges = useMemo(() => {
     const def = SNIPPET_DEFS[activeSnippet];
@@ -699,68 +706,22 @@ const Hero = () => {
     stopTweenRef.current?.();
     stopTweenRef.current = null;
     setActivePreset(0);
-    setPresetFade({ from: null, to: 0, e: 1 });
+    setPresetThumb(0);
     setPropValues(SNIPPET_DEFS.map(def => Object.fromEntries(def.props.map(p => [p.name, p.default]))));
   }, []);
 
   useEffect(() => () => stopTweenRef.current?.(), []);
 
-  useEffect(() => {
-    const onClickOutside = e => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener('pointerdown', onClickOutside);
-    return () => document.removeEventListener('pointerdown', onClickOutside);
-  }, []);
-
   const accentColor = propValues[0].color;
-  const { accentFg, accentText, accentGlow, dotGradientFrom, dotGradientTo } = useMemo(() => {
+  const { accentText, dotGradientFrom, dotGradientTo } = useMemo(() => {
     const [ar, ag, ab] = parseHexRgb(accentColor);
-    const lum = (0.2126 * ar + 0.7152 * ag + 0.0722 * ab) / 255;
     const hsv = hexToHsv(accentColor);
     return {
-      accentFg: lum > 0.5 ? '#000' : '#fff',
       accentText: hsvToHex(hsv.h, Math.min(hsv.s, 0.7), Math.max(hsv.v, 0.92)),
-      accentGlow: `0 0 24px rgba(${ar}, ${ag}, ${ab}, 0.3), 0 0 64px rgba(${ar}, ${ag}, ${ab}, 0.14)`,
       dotGradientFrom: `rgba(${ar}, ${ag}, ${ab}, 0.35)`,
       dotGradientTo: `rgba(${Math.min(ar + 12, 255)}, ${Math.min(ag + 66, 255)}, ${Math.min(ab + 16, 255)}, 0.25)`
     };
   }, [accentColor]);
-
-  const presetStyle = useCallback(
-    index => {
-      const fading = presetFade.from !== null;
-      let weight;
-      if (!fading) weight = activePreset === index ? 1 : 0;
-      else if (index === presetFade.to) weight = presetFade.e;
-      else if (index === presetFade.from) weight = 1 - presetFade.e;
-      else weight = 0;
-
-      if (weight <= 0) return undefined;
-      if (isLightTheme) {
-        return {
-          color: '#52525b',
-          background: `rgba(39, 39, 42, ${(0.055 * weight).toFixed(4)})`,
-          transition: fading ? 'none' : undefined
-        };
-      }
-      return {
-        color: chipTint(accentText, weight),
-        background: `rgba(255, 255, 255, ${(0.07 * weight).toFixed(4)})`,
-        transition: fading ? 'none' : undefined
-      };
-    },
-    [presetFade, activePreset, accentText, isLightTheme]
-  );
-
-  const componentCount = COMPONENT_COUNT;
-
-  const formattedStars = useMemo(
-    () => (stars >= 1000 ? `${(stars / 1000).toFixed(1).replace(/\.0$/, '')}k` : stars),
-    [stars]
-  );
 
   useEffect(() => {
     const hsv = hexToHsv(accentColor);
@@ -817,32 +778,26 @@ const Hero = () => {
       <div className="ln-hero-content">
         <div className="ln-hero-left">
           <Link to="/c/micro" className="ln-hero-tag">
-            <span className="ln-hero-tag-new" style={{ background: accentColor, color: accentFg }}>
-              New Category
-            </span>
-            Micro-interactions <FaArrowRight size={10} />
+            <span className="ln-hero-tag-new">New</span>
+            Micro-interactions <LuArrowRight size={13} strokeWidth={2} />
           </Link>
 
           <h1 className="ln-hero-headline">
             <span className="ln-hero-headline-line">React components for</span>
             <br />
-            <span className="ln-hero-headline-line" style={{ color: accentText, textShadow: accentGlow }}>
+            <span className="ln-hero-headline-line ln-hero-headline-accent" style={{ color: accentText }}>
               creative developers
             </span>
           </h1>
 
           <p className="ln-hero-description">
-            Highly customizable animated components &amp; backgrounds that drop into your project and instantly make it
-            stand out
+            Animated components and backgrounds that install as source you own. Tune every value, starting with this
+            page&apos;s background.
           </p>
 
           <div className="ln-hero-buttons">
-            <Link
-              to="/get-started/index"
-              className="ln-hero-btn ln-hero-btn-primary"
-              style={{ background: accentColor, borderColor: accentColor, color: accentFg }}
-            >
-              Browse Components <FaArrowRight size={12} />
+            <Link to="/get-started/index" className="ln-hero-btn ln-hero-btn-primary">
+              Browse components <LuArrowRight size={16} strokeWidth={2} />
             </Link>
             <a
               href="https://github.com/DavidHDev/react-bits"
@@ -851,66 +806,41 @@ const Hero = () => {
               className="ln-hero-btn ln-hero-btn-secondary"
             >
               Star on GitHub
-              <span className="ln-hero-btn-count">{formattedStars}</span>
             </a>
           </div>
-
-          <ul className="ln-hero-proof">
-            <li>{componentCount}+ components</li>
-            <li aria-hidden="true" className="ln-hero-proof-sep" />
-            <li>Free forever</li>
-          </ul>
         </div>
 
         <div className="ln-hero-right">
           <div className="ln-hero-code-window" onPointerEnter={preloadSounds}>
             <div className="ln-hero-code-titlebar">
-              <div className="ln-hero-code-dots">
-                <span />
-                <span />
-                <span />
-              </div>
-              <div className="ln-hero-code-titlebar-actions">
-                {hasChanges && (
-                  <button className="ln-hero-code-reset" onClick={resetProps} aria-label="Reset to defaults">
-                    <LuRotateCcw size={14} strokeWidth={1.5} />
+              <div
+                className="ln-hero-code-switch"
+                role="tablist"
+                aria-label="Component"
+                ref={snippetTabsRef}
+                onKeyDown={handleSnippetKeys}
+                style={{ '--count': SNIPPET_DEFS.length, '--index': activeSnippet }}
+              >
+                <span className="ln-hero-code-switch-thumb" aria-hidden="true" />
+                {SNIPPET_DEFS.map((def, i) => (
+                  <button
+                    key={def.label}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === activeSnippet}
+                    tabIndex={i === activeSnippet ? 0 : -1}
+                    className={`ln-hero-code-switch-option${i === activeSnippet ? ' active' : ''}`}
+                    onClick={() => selectSnippet(i)}
+                  >
+                    {def.label}
                   </button>
-                )}
-                <div className="ln-hero-code-dropdown" ref={dropdownRef}>
-                  <button className="ln-hero-code-dropdown-trigger" onClick={toggleDropdown}>
-                    {SNIPPET_DEFS[activeSnippet].label}
-                    <svg
-                      className={`ln-hero-code-caret${dropdownOpen ? ' open' : ''}`}
-                      width="8"
-                      height="5"
-                      viewBox="0 0 8 5"
-                      fill="none"
-                    >
-                      <path
-                        d="M1 1L4 4L7 1"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                  <div className={`ln-hero-code-dropdown-menu${dropdownOpen ? ' open' : ''}`}>
-                    {SNIPPET_DEFS.map((def, i) => (
-                      <button
-                        key={def.label}
-                        className={`ln-hero-code-dropdown-item${i === activeSnippet ? ' active' : ''}`}
-                        onClick={() => {
-                          setActiveSnippet(i);
-                          setDropdownOpen(false);
-                        }}
-                      >
-                        {def.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
+              {hasChanges && (
+                <button className="ln-hero-code-reset" onClick={resetProps} aria-label="Reset to defaults">
+                  <LuRotateCcw size={14} strokeWidth={1.5} />
+                </button>
+              )}
             </div>
             <div className="ln-hero-code-body">
               <InteractiveCode
@@ -920,13 +850,24 @@ const Hero = () => {
               />
             </div>
             <div className="ln-hero-code-footer">
-              <div className="ln-hero-code-presets" role="group" aria-label="Presets">
+              <div
+                className="ln-hero-code-switch"
+                role="radiogroup"
+                aria-label="Presets"
+                ref={presetTabsRef}
+                onKeyDown={handlePresetKeys}
+                data-empty={activePreset === null ? '' : undefined}
+                style={{ '--count': SCENE_PRESETS.length, '--index': presetThumb }}
+              >
+                <span className="ln-hero-code-switch-thumb" aria-hidden="true" />
                 {SCENE_PRESETS.map((preset, i) => (
                   <button
                     key={preset.label}
-                    className={`ln-hero-code-preset${activePreset === i ? ' active' : ''}`}
-                    style={presetStyle(i)}
-                    aria-pressed={activePreset === i}
+                    type="button"
+                    role="radio"
+                    aria-checked={activePreset === i}
+                    tabIndex={(activePreset ?? 0) === i ? 0 : -1}
+                    className={`ln-hero-code-switch-option${activePreset === i ? ' active' : ''}`}
                     onClick={() => applyPreset(i)}
                   >
                     {preset.label}

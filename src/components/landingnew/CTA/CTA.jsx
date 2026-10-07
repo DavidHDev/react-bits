@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
 import { FiArrowRight } from 'react-icons/fi';
-import MoltenMetal from '@/content/Backgrounds/MoltenMetal/MoltenMetal';
+import HeroBand from '../Hero/HeroBand';
+import { useColorModeValue } from '../../setup/color-mode';
 import useProImpression from '../../../hooks/useProImpression';
 import { proLinkProps } from '../../../utils/pro';
 import './CTA.css';
@@ -9,6 +10,7 @@ import './CTA.css';
 const CTA = () => {
   const prefersReducedMotion = useReducedMotion();
   const impressionRef = useProImpression('landing-final-cta');
+  const light = useColorModeValue(true, false);
 
   return (
     <section className="ln-cta-section" ref={impressionRef}>
@@ -22,11 +24,26 @@ const CTA = () => {
         transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
       >
         <div className="ln-cta-card-wrapper">
-          <div className="ln-cta-card-border" />
           <div className="ln-cta-card">
             {!prefersReducedMotion && (
               <div className="ln-cta-bg" aria-hidden="true">
-                <MoltenMetal opacity={0.4} mouseInteraction={false} />
+                <HeroBand
+                  className="ln-cta-band"
+                  color="#A855F7"
+                  speed={0.2}
+                  frequency={1}
+                  noise={0.15}
+                  bandWidth={0.14}
+                  rotation={90}
+                  fadeTop={0.75}
+                  iterations={1}
+                  intensity={1.25}
+                  scale={1}
+                  warpStrength={1}
+                  yOffset={0.3}
+                  mouseInfluence={0}
+                  lightMode={light}
+                />
               </div>
             )}
             <h2 className="ln-cta-headline">Build something people remember.</h2>

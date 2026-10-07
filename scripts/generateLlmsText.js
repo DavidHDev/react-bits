@@ -352,7 +352,7 @@ function buildProAgentKit(manifest) {
   const extra = skill
     ? [
         '',
-        `[${skill.name}](${skill.href}) is the twentieth Agent Kit item and teaches an agent to install and use Pro correctly; ` +
+        `[${skill.name}](${skill.href}) is the setup skill for installing and using Pro correctly; ` +
           `it ships with the ${TIER_NAMES[skill.tier] || 'Starter'} tier.`
       ]
     : [];

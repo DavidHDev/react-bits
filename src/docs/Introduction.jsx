@@ -2,28 +2,63 @@ import useScrollToTop from '../hooks/useScrollToTop';
 import DocsButtonBar from './DocsButtonBar';
 import CopyPageButton from './CopyPageButton';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Search, SlidersHorizontal, TerminalSquare } from 'lucide-react';
+import { ArrowRight, CornerDownLeft, Search } from 'lucide-react';
+import HeroBand from '../components/landingnew/Hero/HeroBand';
+import { useColorModeValue } from '../components/setup/color-mode';
+
+const SLIDERS = [
+  { label: 'Delay', value: 0.32 },
+  { label: 'Duration', value: 0.64 },
+  { label: 'Threshold', value: 0.48 }
+];
 
 const QUICK_START_STEPS = [
   {
-    icon: Search,
     title: 'Choose a component',
-    description: 'Browse by category or search for the interaction you need.'
+    description: 'Browse by category or search for the interaction you need.',
+    visual: (
+      <>
+        <span className="docs-qs-field">
+          <Search size={12} />
+          split te
+          <span className="docs-qs-caret" />
+        </span>
+        <span className="docs-qs-result is-active">
+          Split Text
+          <CornerDownLeft size={11} />
+        </span>
+        <span className="docs-qs-result">Split Flap Text</span>
+      </>
+    )
   },
   {
-    icon: SlidersHorizontal,
     title: 'Make it yours',
-    description: 'Tune the preview and send settings to your usage code.'
+    description: 'Tune the preview and send settings to your usage code.',
+    visual: SLIDERS.map(({ label, value }) => (
+      <span className="docs-qs-slider" key={label}>
+        {label}
+        <span className="docs-qs-track">
+          <span className="docs-qs-fill" style={{ width: `${value * 100}%` }} />
+        </span>
+      </span>
+    ))
   },
   {
-    icon: TerminalSquare,
     title: 'Add it to your project',
-    description: 'Copy the source or install your chosen variant with the CLI.'
+    description: 'Copy the source or install your chosen variant with the CLI.',
+    visual: (
+      <span className="docs-qs-cli">
+        <span className="docs-qs-prompt">$</span> npx shadcn@latest add
+        <br />
+        @react-bits/SplitText-TS-TW
+      </span>
+    )
   }
 ];
 
 const Introduction = () => {
   useScrollToTop();
+  const light = useColorModeValue(true, false);
 
   return (
     <section className="docs-section">
@@ -33,34 +68,61 @@ const Introduction = () => {
       </div>
 
       <p className="docs-lead">
-        React Bits is an open-source collection of expressive UI components for adding motion and personality without adopting an entire design system.
+        React Bits is an open-source collection of expressive UI components for adding motion and personality without
+        adopting an entire design system.
       </p>
 
       <p className="docs-lead">
-        Pick a component, tune it in the preview, then copy or install the exact variant for your stack. React Bits makes it easy to be creative, and works great with AI.
+        Pick a component, tune it in the preview, then copy or install the exact variant for your stack. React Bits
+        makes it easy to be creative, and works great with AI.
       </p>
 
       <div className="docs-quickstart">
         <div className="docs-quickstart-steps">
-          {QUICK_START_STEPS.map(({ icon: StepIcon, title, description }, index) => (
+          {QUICK_START_STEPS.map(({ title, description, visual }, index) => (
             <div className="docs-quickstart-step" key={title}>
-              <div className="docs-quickstart-step-heading">
-                <span className="docs-quickstart-index">0{index + 1}</span>
-                <StepIcon size={17} aria-hidden="true" />
+              <div className="docs-quickstart-well" aria-hidden="true">
+                {visual}
               </div>
-              <h2>{title}</h2>
-              <p>{description}</p>
+              <div className="docs-quickstart-text">
+                <span className="docs-quickstart-index">Step {index + 1}</span>
+                <h2>{title}</h2>
+                <p>{description}</p>
+              </div>
             </div>
           ))}
         </div>
-        <div className="docs-quickstart-actions">
-          <Link to="/get-started/index" className="docs-quickstart-primary">
-            Browse components
-            <ArrowRight size={14} aria-hidden="true" />
-          </Link>
-          <Link to="/get-started/installation" className="docs-quickstart-secondary">
-            Installation guide
-          </Link>
+        <div className="docs-quickstart-cta">
+          <div className="docs-quickstart-cta-card">
+            <div className="docs-quickstart-band" aria-hidden="true">
+              <HeroBand
+                className="docs-quickstart-band-canvas"
+                color="#A855F7"
+                speed={0.2}
+                frequency={1}
+                noise={0.15}
+                bandWidth={0.14}
+                rotation={90}
+                fadeTop={0.75}
+                iterations={1}
+                intensity={1.25}
+                scale={1}
+                warpStrength={1}
+                yOffset={0.3}
+                mouseInfluence={0}
+                lightMode={light}
+              />
+            </div>
+            <div className="docs-quickstart-actions">
+              <Link to="/get-started/index" className="docs-quickstart-primary">
+                Browse components
+                <ArrowRight size={14} aria-hidden="true" />
+              </Link>
+              <Link to="/get-started/installation" className="docs-quickstart-secondary">
+                Installation guide
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 

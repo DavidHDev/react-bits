@@ -13,7 +13,6 @@ import FavoritesPage from './pages/FavoritesPage';
 import SponsorsPage from './pages/SponsorsPage';
 import ToolsPage from './pages/ToolsPage';
 import ProPage from './pages/ProPage';
-import ProSectionPage from './pages/ProSectionPage';
 import AnnouncementModal from './components/common/AnnouncementModal/AnnouncementModal';
 import { CATEGORIES } from './constants/Categories';
 import { componentMap } from './constants/Components';
@@ -73,14 +72,6 @@ function AppContent() {
           <Route exact path="/changelog" element={<Navigate to="/get-started/changelog" replace />} />
           <Route path="/tools/:toolId?" element={<ToolsPage />} />
           <Route exact path="/pro" element={<ProPage />} />
-          <Route
-            path="/pro/:section"
-            element={
-              <SidebarLayout>
-                <ProSectionPage />
-              </SidebarLayout>
-            }
-          />
           <Route path="/c/:category" element={<CategoryIndexRoute />} />
           <Route path="/c/:category/:subcategory" element={<DocsRoute prefix="/c" />} />
           <Route path="/:category/:subcategory" element={<DocsRoute />} />

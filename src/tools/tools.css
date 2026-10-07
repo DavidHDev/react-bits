@@ -16,63 +16,22 @@
   cursor: pointer;
 }
 
-.tool-selector-wrapper::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  padding: 2px;
-  background: conic-gradient(from var(--border-angle, 0deg), #5227ff, #B497CF, #5227ff, #B497CF, #5227ff);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: rotateBorder 4s linear infinite;
-}
-
-.tool-selector-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 16px;
-  background: conic-gradient(from var(--border-angle, 0deg), #5227ff, #B497CF, #5227ff, #B497CF, #5227ff);
-  filter: blur(6px);
-  opacity: 0.3;
-  z-index: -1;
-  animation: rotateBorder 4s linear infinite;
-}
-
-@property --border-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes rotateBorder {
-  to {
-    --border-angle: 360deg;
-  }
-}
-
 .tool-selector-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 14px 14px;
-  background: linear-gradient(135deg, var(--bg-elevated) 0%, #1a0f2e 100%);
-  border: none;
+  padding: 12px 12px 12px 10px;
+  border: 1px solid transparent;
   border-radius: 12px;
+  background: var(--surface-ghost);
+  box-shadow: var(--surface-ghost-highlight);
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .tool-selector-button:hover {
-  background: linear-gradient(135deg, #1f1235 0%, #251840 100%);
+  background: var(--surface-ghost-hover);
 }
 
 /* Info Tooltip */
@@ -93,20 +52,10 @@
   background: var(--border-secondary);
 }
 
-:root[data-theme='light'] .tool-selector-wrapper::before {
-  padding: 1px;
-  background: var(--shell-border-strong);
-  opacity: 1;
-  animation: none;
-}
-
-:root[data-theme='light'] .tool-selector-wrapper::after {
-  display: none;
-}
-
 :root[data-theme='light'] .tool-selector-button {
-  border: 0;
+  border-color: var(--shell-border);
   background: #fff;
+  box-shadow: none;
 }
 
 :root[data-theme='light'] .tool-selector-button:hover {

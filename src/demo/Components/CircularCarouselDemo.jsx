@@ -136,7 +136,7 @@ const CircularCarouselDemo = () => {
         type: 'Array<{ src: string; alt?: string; title?: string; subtitle?: string }>',
         default: '10 sample photos',
         description:
-          'Images placed around the ring. The alt text is announced to screen readers, the title and optional subtitle are shown by captions.'
+          'Images placed around the ring. The alt text is announced to screen readers, the title and optional subtitle are shown by captions. Passing a new list of the same length crossfades each card to its new image.'
       },
       {
         name: 'preset',

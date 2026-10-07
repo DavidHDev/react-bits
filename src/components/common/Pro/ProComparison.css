@@ -1,0 +1,363 @@
+.prox-cmp {
+  --cmp-band: #0e0b13;
+  --cmp-line: rgba(255, 255, 255, 0.07);
+  --cmp-text: #fff;
+  --cmp-soft: rgba(255, 255, 255, 0.72);
+  --cmp-muted: rgba(255, 255, 255, 0.45);
+  --cmp-faint: rgba(255, 255, 255, 0.3);
+  --cmp-panel: rgba(255, 255, 255, 0.03);
+  --cmp-panel-line: rgba(255, 255, 255, 0.09);
+  --cmp-panel-shadow: none;
+  --cmp-feature: 31%;
+  --cmp-plan: calc((100% - var(--cmp-feature)) / 4);
+  font-family: 'Geist', sans-serif;
+}
+
+.prox-cmp-table {
+  position: relative;
+  isolation: isolate;
+}
+
+.prox-cmp-panel {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--cmp-feature) + var(--cmp-plan) * 3);
+  width: var(--cmp-plan);
+  border: 1px solid var(--cmp-panel-line);
+  border-radius: 18px;
+  background: var(--cmp-panel);
+  box-shadow: var(--cmp-panel-shadow);
+  pointer-events: none;
+}
+
+.prox-cmp-row {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: var(--cmp-feature) repeat(4, var(--cmp-plan));
+}
+
+.prox-cmp-body .prox-cmp-row {
+  border-top: 1px solid var(--cmp-line);
+}
+
+.prox-cmp-corner {
+  display: flex;
+  align-items: flex-end;
+  padding: 30px 40px 28px 0;
+}
+
+.prox-cmp-terms {
+  margin: 0;
+  color: var(--cmp-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.prox-cmp-terms strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--cmp-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.prox-cmp-plan {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 30px 22px 28px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.prox-cmp-plan-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.prox-cmp-plan-name {
+  color: var(--cmp-text);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.prox-cmp-plan-flag {
+  color: var(--cmp-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.prox-cmp-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 7px;
+  margin-top: 22px;
+}
+
+.prox-cmp-price strong {
+  color: var(--cmp-text);
+  font-size: 34px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.prox-cmp-price span {
+  color: var(--cmp-muted);
+  font-size: 13px;
+}
+
+.prox-cmp-plan-detail {
+  flex: 1;
+  margin-top: 12px;
+  color: var(--cmp-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.prox-cmp-plan.is-free .prox-cmp-plan-name,
+.prox-cmp-plan.is-free .prox-cmp-price strong {
+  color: var(--cmp-soft);
+}
+
+.prox-cmp .prox-cmp-buy,
+.prox-cmp-owned {
+  margin-top: 24px;
+}
+
+.prox-cmp .prox-cmp-buy {
+  justify-content: center;
+  width: 100%;
+}
+
+.prox-cmp-owned {
+  display: flex;
+  align-items: center;
+  min-height: 38px;
+  color: var(--cmp-faint);
+  font-size: 13px;
+}
+
+.prox-cmp-feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 20px 32px 20px 0;
+  text-align: left;
+}
+
+.prox-cmp-feature-name {
+  color: var(--cmp-text);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.prox-cmp-feature-detail {
+  max-width: 40ch;
+  color: var(--cmp-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.prox-cmp-cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 20px 22px;
+  color: var(--cmp-soft);
+  font-size: 15px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.prox-cmp-cell.is-free {
+  color: var(--cmp-faint);
+}
+
+.prox-cmp-cell.is-featured {
+  color: var(--cmp-text);
+}
+
+.prox-cmp-cell svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.prox-cmp-dash {
+  width: 12px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--cmp-faint);
+  opacity: 0.6;
+}
+
+.prox-cmp-word {
+  color: var(--cmp-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.prox-cmp-count {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prox-cmp-count-note {
+  color: var(--cmp-muted);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.prox-cmp .prox-cmp-choose {
+  display: none;
+}
+
+.prox-cmp-terms.prox-cmp-note {
+  display: none;
+}
+
+:root[data-theme='light'] .prox-cmp {
+  --cmp-band: #fafafa;
+  --cmp-line: rgba(24, 24, 27, 0.08);
+  --cmp-text: #18181b;
+  --cmp-soft: rgba(24, 24, 27, 0.74);
+  --cmp-muted: rgba(24, 24, 27, 0.52);
+  --cmp-faint: rgba(24, 24, 27, 0.36);
+  --cmp-panel: #fff;
+  --cmp-panel-line: rgba(24, 24, 27, 0.09);
+  --cmp-panel-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
+}
+
+@media (max-width: 1000px) {
+  .prox-cmp {
+    --cmp-feature: 28%;
+  }
+
+  .prox-cmp-plan {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .prox-cmp-cell {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .prox-cmp .prox-cmp-buy {
+    padding-right: 10px;
+    padding-left: 10px;
+    white-space: nowrap;
+  }
+
+  .prox-cmp-price strong {
+    font-size: 28px;
+  }
+
+  .prox-cmp-plan-flag {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .prox-cmp-panel,
+  .prox-cmp-corner,
+  .prox-cmp-plan-detail,
+  .prox-cmp-price span,
+  .prox-cmp .prox-cmp-buy,
+  .prox-cmp-owned {
+    display: none;
+  }
+
+  .prox-cmp-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .prox-cmp-head {
+    position: sticky;
+    z-index: 2;
+    top: 84px;
+    border-bottom: 1px solid var(--cmp-line);
+    background: var(--cmp-band);
+  }
+
+  .prox-cmp-plan {
+    padding: 14px 8px 12px 0;
+  }
+
+  .prox-cmp-plan-name {
+    color: var(--cmp-soft);
+    font-size: 13px;
+  }
+
+  .prox-cmp-plan.is-featured .prox-cmp-plan-name {
+    color: var(--cmp-text);
+  }
+
+  .prox-cmp-plan.is-free .prox-cmp-plan-name,
+  .prox-cmp-plan.is-free .prox-cmp-price strong {
+    color: var(--cmp-faint);
+  }
+
+  .prox-cmp-price {
+    margin-top: 4px;
+  }
+
+  .prox-cmp-price strong {
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .prox-cmp-body .prox-cmp-row:first-child {
+    border-top: 0;
+  }
+
+  .prox-cmp-feature {
+    grid-column: 1 / -1;
+    padding: 18px 0 10px;
+  }
+
+  .prox-cmp-cell {
+    padding: 0 8px 18px 0;
+    font-size: 14px;
+  }
+
+  .prox-cmp-count-note {
+    display: none;
+  }
+
+  .prox-cmp .prox-cmp-choose {
+    display: flex;
+    justify-content: center;
+    max-width: 420px;
+    margin-top: 24px;
+  }
+
+  .prox-cmp-terms.prox-cmp-note {
+    display: block;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .prox-cmp-head {
+    top: 60px;
+  }
+}

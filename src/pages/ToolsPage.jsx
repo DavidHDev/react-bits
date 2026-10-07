@@ -2,14 +2,17 @@ import { Box, Flex, Text, Icon, Portal } from '@chakra-ui/react';
 import { ChevronDown, Info } from 'lucide-react';
 import { useRef, useEffect, useState, Suspense, lazy } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { LuArrowUpRight } from 'react-icons/lu';
 import Navbar from '../components/landingnew/Navbar/Navbar';
-import DotField from '../components/landingnew/Hero/DotField';
+import Footer from '../components/landingnew/Footer/Footer';
+import ProCard from '../components/common/ProCard';
+import SponsorsCard from '../components/common/SponsorsCard';
 import { TOOLS as BASE_TOOLS } from '../constants/Tools';
 import { colors } from '../constants/colors';
+import { useColorModeValue } from '../components/setup/color-mode';
 import '../tools/tools.css';
+import '../css/site-page.css';
 import '../css/tools-landing.css';
-import Footer from '../components/landingnew/Footer/Footer';
-import { FaArrowRight } from 'react-icons/fa6';
 
 const BackgroundStudio = lazy(() => import('../tools/background-studio/BackgroundStudio'));
 const ShapeMagic = lazy(() => import('../tools/shape-magic/ShapeMagic'));
@@ -25,6 +28,23 @@ const TOOLS = BASE_TOOLS.map(tool => ({
   ...tool,
   component: TOOL_COMPONENTS[tool.id]
 }));
+
+const previewFrom = name => lazy(() => import('../tools/ToolPreviews').then(module => ({ default: module[name] })));
+
+const TOOL_CARDS = {
+  'background-studio': {
+    blurb: 'Pick an animated background, tune every setting live, then export a video, an image or the code.',
+    Preview: previewFrom('BackgroundStudioPreview')
+  },
+  'shape-magic': {
+    blurb: 'Merge rectangles into one liquid shape. Export SVG, PNG, React or a clip-path.',
+    Preview: previewFrom('ShapeMagicPreview')
+  },
+  'texture-lab': {
+    blurb: 'Run an image through halftone, dither, ASCII, grain and more, then download it.',
+    Preview: previewFrom('TextureLabPreview')
+  }
+};
 
 const ToolDropdown = ({ selectedTool, onSelect, isOpen, setIsOpen }) => {
   const dropdownRef = useRef(null);
@@ -53,7 +73,6 @@ const ToolDropdown = ({ selectedTool, onSelect, isOpen, setIsOpen }) => {
 
   return (
     <Box position="relative" ref={dropdownRef}>
-      {/* Animated rotating border */}
       <div className="tool-selector-wrapper" onClick={() => setIsOpen(!isOpen)}>
         <Flex
           as="button"
@@ -64,16 +83,8 @@ const ToolDropdown = ({ selectedTool, onSelect, isOpen, setIsOpen }) => {
           w="100%"
         >
           <Flex align="center" gap={2.5}>
-            <Flex
-              align="center"
-              justify="center"
-              w={7}
-              h={7}
-              borderRadius="8px"
-              bg={`linear-gradient(135deg, ${colors.primary} 0%, #7B4FFF 100%)`}
-              boxShadow="0 2px 8px rgba(82, 39, 255, 0.4)"
-            >
-              <Icon as={selected.icon} boxSize={4} color="#fff" />
+            <Flex align="center" justify="center" w={7} h={7} borderRadius="8px" bg="var(--surface-ghost-hover)">
+              <Icon as={selected.icon} boxSize={4} color="var(--text-primary)" />
             </Flex>
             <Text fontSize="14px" fontWeight={600} color="var(--text-primary)" letterSpacing="-0.01em">
               {selected.label}
@@ -88,13 +99,13 @@ const ToolDropdown = ({ selectedTool, onSelect, isOpen, setIsOpen }) => {
               onMouseEnter={() => setTooltipVisible(true)}
               onMouseLeave={() => setTooltipVisible(false)}
             >
-              <Info size={14} color={colors.accent} />
+              <Info size={14} color="var(--text-dimmed)" />
             </div>
-            <Flex align="center" justify="center" w={6} h={6} borderRadius="6px" bg={colors.bgHover}>
+            <Flex align="center" justify="center" w={6} h={6} borderRadius="6px" bg="var(--surface-ghost)">
               <Icon
                 as={ChevronDown}
                 boxSize={3.5}
-                color={colors.accent}
+                color="var(--text-dimmed)"
                 transition="transform 0.2s"
                 transform={isOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
               />
@@ -143,17 +154,21 @@ const ToolDropdown = ({ selectedTool, onSelect, isOpen, setIsOpen }) => {
               w={6}
               h={6}
               borderRadius="8px"
-              bg={selectedTool === tool.id ? `linear-gradient(135deg, ${colors.primary} 0%, #7B4FFF 100%)` : colors.bgHover}
+              bg={selectedTool === tool.id ? 'var(--surface-ghost-hover)' : 'var(--surface-ghost)'}
               transition="all 0.15s"
             >
-              <Icon as={tool.icon} boxSize={3.5} color={selectedTool === tool.id ? '#fff' : colors.accent} />
+              <Icon
+                as={tool.icon}
+                boxSize={3.5}
+                color={selectedTool === tool.id ? 'var(--text-primary)' : 'var(--text-dimmed)'}
+              />
             </Flex>
             <Text fontSize="14px" fontWeight={selectedTool === tool.id ? 600 : 500} color="var(--text-primary)">
               {tool.label}
             </Text>
             {!tool.component && (
               <Text fontSize="10px" color={colors.accentMuted} fontWeight={600} ml="auto">
-                SOON
+                Soon
               </Text>
             )}
           </Flex>
@@ -246,6 +261,7 @@ export default function ToolsPage() {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const light = useColorModeValue(true, false);
 
   useEffect(() => {
     if (!toolId) {
@@ -262,51 +278,56 @@ export default function ToolsPage() {
     return (
       <>
         <Navbar showDocs />
-        <div className="tools-dotfield">
-          <DotField sparkle waveAmplitude={5} dotRadius={2} />
-        </div>
-        <section className="tools-landing">
+        <main className="pg tl">
           <title>React Bits - Tools</title>
 
-          <div className="tools-landing-header">
-            <div className="tools-landing-header-left">
-              <h1 className="tools-landing-title">Creative Tools</h1>
-              <p className="tools-landing-subtitle">
-                Free utilities to boost your creative workflow and help you get the most out of React Bits in your projects.
-              </p>
-            </div>
-          </div>
+          <div className="tl-layout">
+            <div className="tl-main">
+              <header className="pg-head tl-head">
+                <div>
+                  <h1 className="pg-title">Creative tools</h1>
+                  <p className="pg-sub">
+                    Free tools that run in your browser. Make a background, a shape or a texture, tune it live, then
+                    take it into your project.
+                  </p>
+                </div>
+              </header>
 
-          <div className="tools-landing-grid">
-            {TOOLS.map(tool => {
-              const IconComp = tool.icon;
-              return (
-                <Link to={`/tools/${tool.id}`} className="tools-landing-card" key={tool.id}>
-                  <div className="tools-landing-card-banner">
-                    <div className="tools-landing-card-banner-icon">
-                      <IconComp size={32} />
-                    </div>
-                  </div>
-                  <div className="tools-landing-card-body">
-                    <div className="tools-landing-card-top">
-                      <div className="tools-landing-card-title-row">
-                        <h3 className="tools-landing-card-title">{tool.label}</h3>
-                        {!tool.component && (
-                          <span className="tools-landing-card-tag soon">Coming Soon</span>
+              <div className="tl-grid">
+                {TOOLS.map(tool => {
+                  const card = TOOL_CARDS[tool.id];
+                  const Preview = card?.Preview;
+                  return (
+                    <Link to={`/tools/${tool.id}`} className={`pg-tile tl-card tl-card--${tool.id}`} key={tool.id}>
+                      <div className="pg-well tl-well">
+                        {Preview && (
+                          <Suspense fallback={null}>
+                            <Preview light={light} />
+                          </Suspense>
                         )}
                       </div>
-                      <p className="tools-landing-card-desc">{tool.description}</p>
-                    </div>
-                    <div className="tools-landing-card-cta">
-                      <span>Open</span>
-                      <FaArrowRight size={11} />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+                      <div className="tl-caption">
+                        <div className="tl-text">
+                          <h2 className="tl-name">{tool.label}</h2>
+                          <p className="tl-desc">{card?.blurb || tool.description}</p>
+                        </div>
+                        <span className="tl-open">
+                          Open
+                          <LuArrowUpRight size={14} aria-hidden="true" />
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <aside className="tl-rail">
+              <ProCard />
+              <SponsorsCard />
+            </aside>
           </div>
-        </section>
+        </main>
 
         <Footer />
       </>

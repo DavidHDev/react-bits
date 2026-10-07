@@ -705,9 +705,12 @@ export default function ShapeWaves({
               maskContext.font = `${settings.fontWeight} ${fontPx}px ${settings.fontFamily}`;
             }
             maskContext.textAlign = 'center';
-            maskContext.textBaseline = 'middle';
+            maskContext.textBaseline = 'alphabetic';
+            const metrics = maskContext.measureText(content);
+            const x = (maskWidth + metrics.actualBoundingBoxLeft - metrics.actualBoundingBoxRight) / 2;
+            const y = (maskHeight + metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
             maskContext.fillStyle = '#fff';
-            maskContext.fillText(content, maskWidth / 2, maskHeight / 2);
+            maskContext.fillText(content, x, y);
           }
 
           const nextTexture = createMaskTexture(maskWidth, maskHeight);

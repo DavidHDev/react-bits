@@ -1,66 +1,54 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { LuArrowRight } from 'react-icons/lu';
 
+import { PRO_SHOWCASE_ITEMS } from '../../../constants/Pro';
 import useProImpression from '../../../hooks/useProImpression';
-import { trackProClick } from '../../../utils/pro';
+import { proLinkProps } from '../../../utils/pro';
+import { useColorModeValue } from '../../setup/color-mode';
 import './ProSpotlight.css';
 
 const LIBRARY_PREVIEWS = [
   {
     label: 'Animated components',
     title: 'Motion and interaction',
-    image: '/assets/pro/components/aurora-beam-poster.webp',
-    to: '/pro/components'
+    section: 'components',
+    to: '/docs/components'
   },
   {
     label: 'Page blocks',
     title: 'Complete marketing sections',
-    image: '/assets/pro/blocks/hero-7.webp',
-    crop: 'standard',
-    to: '/pro/blocks'
+    section: 'blocks',
+    to: '/docs/blocks'
   },
   {
     label: 'App UI',
     title: 'Interfaces for real products',
-    image: '/assets/pro/app-ui/ai-chat-8.webp',
-    crop: 'deep',
-    to: '/pro/app-ui'
+    section: 'app-ui',
+    to: '/docs/app-ui'
   },
   {
     label: 'Agent Kit',
     title: 'Prompts, skills & recipes',
     image: '/assets/pro/agent-kit/skill-terminal-dark.webp',
-    to: '/pro/agent-kit'
+    to: '/docs/agent-kit'
   },
   {
     label: 'Templates',
     title: 'Complete Next.js websites',
-    video: 'https://cdn.reactbits.dev/security-preview.mp4',
-    to: '/pro/templates'
+    section: 'templates',
+    to: '/docs/templates'
   }
 ];
 
+const previewImage = (item, light) => {
+  const shot = item.section ? PRO_SHOWCASE_ITEMS[item.section]?.[0] : null;
+  if (!shot) return item.image;
+  return light ? shot.imageLight || shot.image : shot.image;
+};
+
 const ProSpotlight = () => {
   const impressionRef = useProImpression('landing-pro-spotlight');
-  const templateVideoRef = useRef(null);
-
-  const playTemplate = () => {
-    const video = templateVideoRef.current;
-    if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const playback = video.play();
-    playback?.catch(() => {});
-  };
-
-  const stopTemplate = () => {
-    const video = templateVideoRef.current;
-    if (!video) return;
-
-    video.pause();
-    if (video.readyState >= 1) video.currentTime = 0.4;
-  };
+  const light = useColorModeValue(true, false);
 
   return (
     <section className="ln-prospot-section" ref={impressionRef}>
@@ -74,16 +62,14 @@ const ProSpotlight = () => {
         <header className="ln-prospot-header">
           <div className="ln-prospot-copy">
             <h2>Build the complete product.</h2>
-            <p>React Bits Pro adds more components, page blocks, application UI, full Next.js templates and agent skills to the package you already use.</p>
+            <p>
+              React Bits Pro adds more components, page blocks, application UI, full Next.js templates and agent skills
+              to the package you already use.
+            </p>
           </div>
           <a
             className="ln-prospot-primary"
-            href="https://pro.reactbits.dev/docs/introduction"
-            onClick={() =>
-              trackProClick('landing-pro-spotlight', {
-                destination: 'https://pro.reactbits.dev/docs/introduction'
-              })
-            }
+            {...proLinkProps('/docs/introduction', 'landing-pro-spotlight', { sameTab: true })}
           >
             Explore the library <LuArrowRight size={15} />
           </a>
@@ -91,41 +77,19 @@ const ProSpotlight = () => {
 
         <div className="ln-prospot-gallery" aria-label="Inside React Bits Pro">
           {LIBRARY_PREVIEWS.map(item => (
-            <Link
+            <a
               className="browse-card ln-prospot-item"
-              to={item.to}
+              {...proLinkProps(item.to, 'landing-pro-preview', { params: { section: item.label }, sameTab: true })}
               key={item.label}
-              onMouseEnter={item.video ? playTemplate : undefined}
-              onMouseLeave={item.video ? stopTemplate : undefined}
-              onFocus={item.video ? playTemplate : undefined}
-              onBlur={item.video ? stopTemplate : undefined}
-              onClick={() => trackProClick('landing-pro-preview', { section: item.label, destination: item.to })}
             >
-              <span
-                className={`browse-card-well ln-prospot-media${item.crop ? ` is-zoomed is-zoomed-${item.crop}` : ''}`}
-              >
-                {item.video ? (
-                  <video
-                    ref={templateVideoRef}
-                    src={item.video}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-hidden="true"
-                    onLoadedMetadata={event => {
-                      event.currentTarget.currentTime = 0.4;
-                    }}
-                  />
-                ) : (
-                  <img src={item.image} alt="" loading="lazy" decoding="async" />
-                )}
+              <span className="browse-card-well ln-prospot-media">
+                <img src={previewImage(item, light)} alt="" loading="lazy" decoding="async" />
               </span>
               <span className="ln-prospot-item-copy">
                 <strong className="browse-card-title">{item.title}</strong>
                 <small>{item.label}</small>
               </span>
-            </Link>
+            </a>
           ))}
         </div>
       </motion.div>

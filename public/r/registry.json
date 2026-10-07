@@ -598,6 +598,80 @@
 			]
 		},
 		{
+			"name": "CrystalizedBall-JS-CSS",
+			"title": "CrystalizedBall",
+			"description": "A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CrystalizedBall.css",
+					"target": "@components/CrystalizedBall.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CrystalizedBall.jsx"
+				}
+			]
+		},
+		{
+			"name": "CrystalizedBall-JS-TW",
+			"title": "CrystalizedBall",
+			"description": "A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CrystalizedBall/CrystalizedBall.jsx"
+				}
+			]
+		},
+		{
+			"name": "CrystalizedBall-TS-CSS",
+			"title": "CrystalizedBall",
+			"description": "A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "CrystalizedBall.css",
+					"target": "@components/CrystalizedBall.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "CrystalizedBall.tsx"
+				}
+			]
+		},
+		{
+			"name": "CrystalizedBall-TS-TW",
+			"title": "CrystalizedBall",
+			"description": "A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.",
+			"type": "registry:component",
+			"dependencies": [
+				"ogl@^1.0.11"
+			],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "CrystalizedBall/CrystalizedBall.tsx"
+				}
+			]
+		},
+		{
 			"name": "ElectricLogo-JS-CSS",
 			"title": "ElectricLogo",
 			"description": "Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.",

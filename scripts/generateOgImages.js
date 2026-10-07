@@ -12,6 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = path.join(ROOT, 'public/og');
 const BASE_IMAGE = path.join(ROOT, 'scripts/og/base.png');
 const TEMPLATE = path.join(ROOT, 'scripts/og/card.html');
+const LOGO = path.join(ROOT, 'src/assets/logos/react-bits-logo.svg');
 const FONT_DIR = path.join(ROOT, 'node_modules/geist/dist/fonts');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const WIDTH = 1200;
@@ -32,6 +33,7 @@ const LIVE_STYLE = [
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.png': 'image/png',
+  '.svg': 'image/svg+xml',
   '.webm': 'video/webm',
   '.mp4': 'video/mp4',
   '.woff2': 'font/woff2',
@@ -81,6 +83,7 @@ const resolveAsset = (pathname, liveDir) => {
   if (pathname === '/card.html') return TEMPLATE;
   if (pathname.startsWith('/live/')) return path.join(liveDir, path.basename(pathname));
   if (pathname === '/base.png') return BASE_IMAGE;
+  if (pathname === '/logo.svg') return LOGO;
   if (pathname.startsWith('/fonts/')) return path.join(FONT_DIR, pathname.slice('/fonts/'.length));
   if (pathname.startsWith('/assets/video/')) return path.join(PUBLIC_DIR, pathname);
   return null;
@@ -353,6 +356,7 @@ const main = async () => {
       const inputs = [
         BASE_IMAGE,
         TEMPLATE,
+        LOGO,
         ...(hasVideo ? [videoFile] : []),
         ...filesIn(path.join(ROOT, 'src/content', category, name)),
         path.join(ROOT, 'src/demo', category, `${name}Demo.jsx`)

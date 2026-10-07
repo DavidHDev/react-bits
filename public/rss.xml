@@ -5,8 +5,40 @@
     <link>https://reactbits.dev/get-started/changelog</link>
     <description>Keep up with the newest additions to React Bits.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 27 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2026 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://reactbits.dev/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>New: Crystalized Ball</title>
+      <link>https://reactbits.dev/animations/crystalized-ball</link>
+      <guid isPermaLink="false">reactbits:Animations/CrystalizedBall@added</guid>
+      <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.</description>
+    </item>
+    <item>
+      <title>New: Pattern Waves</title>
+      <link>https://reactbits.dev/backgrounds/pattern-waves</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/PatternWaves@added</guid>
+      <pubDate>Wed, 30 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.</description>
+    </item>
+    <item>
+      <title>New: Circular Carousel</title>
+      <link>https://reactbits.dev/components/circular-carousel</link>
+      <guid isPermaLink="false">reactbits:Components/CircularCarousel@added</guid>
+      <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>A 3D ring of images with four layouts, bendable cards, depth fade, momentum drag, snapping and click to focus.</description>
+    </item>
+    <item>
+      <title>Updated: Electric Logo</title>
+      <link>https://reactbits.dev/animations/electric-logo</link>
+      <guid isPermaLink="false">reactbits:Animations/ElectricLogo@2026-09-28</guid>
+      <pubDate>Mon, 28 Sep 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Added an onRender callback for capturing live frames and reflection effects.</description>
+    </item>
     <item>
       <title>New: Micro Slats</title>
       <link>https://reactbits.dev/backgrounds/micro-slats</link>

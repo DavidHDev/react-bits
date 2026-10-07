@@ -710,22 +710,8 @@
   align-items: center;
   justify-content: center;
   gap: 1em;
-  margin-top: 0em;
-  padding: 3em 0;
-}
-
-.preview-footer::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(39, 30, 55, 0.6), transparent);
-}
-
-:root[data-theme='light'] .preview-footer::before {
-  content: none;
+  margin-top: 0;
+  padding: 2.5rem 0 3rem;
 }
 
 .component-pager {
@@ -733,8 +719,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px;
-  margin-top: 6rem;
-  margin-bottom: 12px;
+  margin-top: 3rem;
   padding: 4px;
   border: 1px solid transparent;
   border-radius: var(--radius-lg);
@@ -851,7 +836,7 @@
 @media (max-width: 480px) {
   .component-pager {
     gap: 4px;
-    margin-top: 4.5rem;
+    margin-top: 2.5rem;
   }
 
   .component-pager-link,

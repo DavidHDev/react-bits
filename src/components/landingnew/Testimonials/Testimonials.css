@@ -11,6 +11,10 @@
   overflow: hidden;
 }
 
+.landing-wrapper > .ln-test-section {
+  padding-bottom: clamp(24px, 3vw, 40px);
+}
+
 .ln-test-inner {
   max-width: 1324px;
   margin: 0 auto;
@@ -29,12 +33,10 @@
   margin: 0 0 40px;
 }
 
-/* ─── Column Grid ─── */
-
 .ln-test-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
   height: 540px;
   mask-image: linear-gradient(
     to bottom,
@@ -80,8 +82,8 @@
 .ln-test-col-set {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-bottom: 16px;
+  gap: 12px;
+  padding-bottom: 12px;
   flex-shrink: 0;
 }
 
@@ -114,25 +116,23 @@
 /* ─── Card ─── */
 
 .ln-test-card {
-  display: block;
-  padding: 20px 22px;
-  border-radius: 14px;
-  background: rgba(18, 15, 23, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.2),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-radius: 16px;
+  background: rgba(24, 20, 31, 0.55);
+  border: 1px solid transparent;
+  box-shadow: var(--surface-ghost-highlight);
   text-decoration: none;
   transition:
-    border-color 0.3s ease,
+    background-color 0.3s ease,
     transform var(--dur-press) var(--ease-out);
   flex-shrink: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .ln-test-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
+    background-color: rgba(34, 29, 43, 0.6);
   }
 }
 
@@ -140,11 +140,19 @@
   transform: scale(0.98);
 }
 
+.ln-test-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 14px 17px;
+  border-radius: 11px;
+  background: rgba(9, 8, 11, 0.55);
+}
+
 .ln-test-card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
 }
 
 .ln-test-card-head-left {
@@ -154,33 +162,52 @@
 }
 
 .ln-test-avatar {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ln-test-avatar-fallback {
+  display: grid;
+  place-items: center;
+  background: var(--hub-border, var(--surface-ghost-track, #262626));
+  color: var(--hub-text, var(--text-primary, #ededed));
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .ln-test-handle {
-  font-family: 'Geist Mono', monospace;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.45);
+  font-family: 'Geist', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .ln-test-x-icon {
   width: 13px;
   height: 13px;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.22);
   flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ln-test-card:hover .ln-test-x-icon {
+    color: rgba(255, 255, 255, 0.6);
+  }
 }
 
 .ln-test-text {
   font-family: 'Geist', sans-serif;
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: -0.005em;
+  color: rgba(255, 255, 255, 0.78);
   margin: 0;
+  text-wrap: pretty;
 }
 
 /* ─── Responsive ─── */
@@ -238,13 +265,9 @@
 }
 
 :root[data-theme='light'] .ln-test-card {
-  border-color: var(--border-subtle);
+  border-color: rgba(24, 24, 27, 0.08);
   background: #fff;
   box-shadow: none;
-}
-
-:root[data-theme='light'] .ln-test-avatar {
-  border-color: var(--border-subtle);
 }
 
 :root[data-theme='light'] .ln-test-handle {
@@ -256,11 +279,20 @@
 }
 
 :root[data-theme='light'] .ln-test-text {
-  color: #52525b;
+  color: #3f3f46;
+}
+
+:root[data-theme='light'] .ln-test-card-inner {
+  background: #f7f7f8;
 }
 
 @media (hover: hover) and (pointer: fine) {
   :root[data-theme='light'] .ln-test-card:hover {
-    border-color: #d4d4d8;
+    border-color: rgba(24, 24, 27, 0.12);
+    background: #fff;
+  }
+
+  :root[data-theme='light'] .ln-test-card:hover .ln-test-x-icon {
+    color: #52525b;
   }
 }

@@ -178,7 +178,7 @@
   font-size: 9px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: monospace;
+  font-family: 'Geist', sans-serif;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.5);
   background: rgba(255, 255, 255, 0.08);
@@ -194,42 +194,19 @@
   white-space: nowrap;
   color: var(--pro-fg, #fff);
   height: 36px;
-  padding: 0 20px;
+  padding: 0 18px;
   display: flex;
   align-items: center;
   border-radius: 10px;
-  border: 5px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(
-    125deg,
-    var(--pro-dark, #7c3aed),
-    var(--pro-base, #a855f7),
-    var(--pro-light, #d946ef),
-    var(--pro-base, #a855f7),
-    var(--pro-dark, #7c3aed)
-  );
-  background-size: 400% 100%;
-  animation: ln-pro-flow 3s ease infinite;
+  border: 1px solid transparent;
+  background: var(--pro-base, #a855f7);
   box-shadow:
-    0 0 16px rgba(var(--pro-glow, 168, 85, 247), 0.5),
-    0 0 40px rgba(var(--pro-glow, 168, 85, 247), 0.2);
-  overflow: hidden;
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.2);
   isolation: isolate;
   transition:
     transform var(--dur-press) var(--ease-out),
-    box-shadow 0.3s ease;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-}
-
-.ln-navbar-pro::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: 6px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
-  background-size: 200% 100%;
-  animation: ln-pro-shine 10s ease-in-out infinite;
-  pointer-events: none;
+    filter var(--transition-fast);
 }
 
 .ln-navbar-pro-label {
@@ -242,34 +219,11 @@
 }
 
 .ln-navbar-pro:hover {
-  box-shadow:
-    0 0 24px rgba(var(--pro-glow, 168, 85, 247), 0.7),
-    0 0 56px rgba(var(--pro-glow, 168, 85, 247), 0.35);
+  filter: brightness(1.08);
 }
 
 .ln-navbar-pro:active {
   transform: scale(0.97);
-}
-
-@keyframes ln-pro-flow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes ln-pro-shine {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }
 
 .ln-navbar-github {
@@ -329,7 +283,6 @@
     height: 32px;
     padding: 0 12px;
     font-size: 12px;
-    border-width: 3px;
     border-radius: 8px;
   }
 
@@ -1039,11 +992,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ln-navbar-pro,
-  .ln-navbar-pro::before {
-    animation: none;
-  }
-
   .ln-navbar-browse:active,
   .ln-navbar-github:active,
   .ln-navbar-icon-btn:active,

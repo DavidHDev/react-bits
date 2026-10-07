@@ -1,19 +1,60 @@
-import { useState } from 'react';
+import { LuArrowUpRight } from 'react-icons/lu';
+import { TbBrandOpenai } from 'react-icons/tb';
 import DocsButtonBar from './DocsButtonBar';
 import CodeBlock from './CodeBlock';
-import MethodSelector from './MethodSelector';
+import CommandList, { CopyButton } from './CommandList';
 import CopyPageButton from './CopyPageButton';
+import DocsStep from './DocsStep';
 import useScrollToTop from '../hooks/useScrollToTop';
 import claude from '../assets/icons/claude.svg';
 import vscode from '../assets/icons/vscode.svg';
 import cursor from '../assets/icons/cursor.svg';
 
-const IMG_STYLE = { width: '18px', height: '18px' };
+const LOGO = { width: '15px', height: '15px' };
 
 const CLIENTS = [
-  { key: 'claude', icon: <img src={claude} alt="Claude Code Logo" style={IMG_STYLE} />, label: 'Claude Code' },
-  { key: 'cursor', icon: <img src={cursor} alt="Cursor Logo" style={IMG_STYLE} />, label: 'Cursor' },
-  { key: 'vscode', icon: <img src={vscode} alt="VS Code Logo" style={IMG_STYLE} />, label: 'VS Code' }
+  {
+    key: 'claude',
+    icon: <img src={claude} alt="" style={LOGO} />,
+    label: 'Claude Code',
+    command: 'npx shadcn@latest mcp init --client claude',
+    note: (
+      <>
+        Then restart Claude Code. If the server doesn&apos;t show up, run <code>/mcp</code> to debug it.
+      </>
+    )
+  },
+  {
+    key: 'codex',
+    icon: <TbBrandOpenai size={15} aria-hidden="true" />,
+    label: 'Codex',
+    command: `[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]`,
+    note: (
+      <>
+        The CLI can&apos;t set up Codex for you. Add this to <code>~/.codex/config.toml</code>, then restart Codex.
+      </>
+    )
+  },
+  {
+    key: 'cursor',
+    icon: <img src={cursor} alt="" style={LOGO} />,
+    label: 'Cursor',
+    command: 'npx shadcn@latest mcp init --client cursor',
+    note: 'Then open Cursor Settings and enable the shadcn MCP server.'
+  },
+  {
+    key: 'vscode',
+    icon: <img src={vscode} alt="" style={LOGO} />,
+    label: 'VS Code',
+    command: 'npx shadcn@latest mcp init --client vscode',
+    note: (
+      <>
+        Then open <code>.vscode/mcp.json</code> and click Start next to the shadcn server.
+      </>
+    )
+  }
 ];
 
 const EXAMPLE_PROMPTS = [
@@ -22,59 +63,13 @@ const EXAMPLE_PROMPTS = [
   'Add a new section which fades in on scroll using FadeContent from React Bits'
 ];
 
-const PromptList = () => (
-  <ul className="docs-list">
-    {EXAMPLE_PROMPTS.map(prompt => (
-      <li key={prompt} className="docs-list-item dim">
-        {prompt}
-      </li>
-    ))}
-  </ul>
-);
-
-const ClientInstructions = ({ client }) => {
-  const initCommand = `npx shadcn@latest mcp init --client ${client}`;
-
-  return (
-    <>
-      <p className="docs-paragraph short">Run this in your project:</p>
-      <CodeBlock language="bash" showLineNumbers>
-        {initCommand}
-      </CodeBlock>
-
-      {client === 'claude' && (
-        <>
-          <p className="docs-paragraph">Restart Claude Code and try prompts like:</p>
-          <PromptList />
-          <p className="docs-paragraph dim">Tip: Use /mcp in Claude Code to debug the MCP server.</p>
-        </>
-      )}
-
-      {client === 'cursor' && (
-        <>
-          <p className="docs-paragraph">
-            Then open Cursor Settings and enable the shadcn MCP server. Try prompts like:
-          </p>
-          <PromptList />
-        </>
-      )}
-
-      {client === 'vscode' && (
-        <>
-          <p className="docs-paragraph">
-            Then open <span className="docs-highlight">.vscode/mcp.json</span> and click{' '}
-            <span className="docs-highlight">Start</span> next to the shadcn server. Try prompts like:
-          </p>
-          <PromptList />
-        </>
-      )}
-    </>
-  );
-};
+const REGISTRY_CONFIG = `{
+  "registries": {
+    "@react-bits": "https://reactbits.dev/r/{name}.json"
+  }
+}`;
 
 const McpServer = () => {
-  const [selectedClient, setSelectedClient] = useState('claude');
-
   useScrollToTop();
 
   return (
@@ -85,57 +80,55 @@ const McpServer = () => {
       </div>
 
       <p className="docs-lead">
-        <a
-          style={{ textDecoration: 'underline' }}
-          href="https://modelcontextprotocol.io/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Model Context Protocol (MCP)
+        Let your AI assistant browse, search and install React Bits components for you, straight from a prompt.
+      </p>
+
+      <p className="docs-paragraph dim">
+        It works through the shadcn MCP server.{' '}
+        <a className="docs-inline-link" href="https://modelcontextprotocol.io/" target="_blank" rel="noreferrer">
+          Model Context Protocol
         </a>{' '}
-        is an open standard that enables AI assistants to securely connect to external data sources and tools.
+        is an open standard that lets AI assistants connect to tools and data.
       </p>
 
-      <p className="docs-paragraph dim">
-        React Bits encourages the use of the shadcn MCP server to browse, search, and install components using natural
-        language.
-      </p>
+      <h2 className="docs-section-title">Setup</h2>
 
-      <h2 className="docs-section-title">Quick Start</h2>
+      <ol className="docs-steps">
+        <DocsStep index={1} title="Add the React Bits registry">
+          <p className="docs-step-text">
+            In your project&apos;s <code>components.json</code>, add <code>@react-bits</code> to the registries:
+          </p>
+          <CodeBlock language="json" showLineNumbers>
+            {REGISTRY_CONFIG}
+          </CodeBlock>
+        </DocsStep>
 
-      <p className="docs-paragraph">
-        Registries are configured in your project&apos;s <span className="docs-highlight">components.json</span> file,
-        where you should first add the <span className="docs-highlight">@react-bits</span> registry:
-      </p>
-      <CodeBlock language="json" showLineNumbers>{`{
-  "registries": {
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
-  }
-}`}</CodeBlock>
+        <DocsStep index={2} title="Connect your AI client">
+          <p className="docs-step-text">Set up the shadcn MCP server for your client:</p>
+          <CommandList items={CLIENTS} />
+        </DocsStep>
 
-      <p className="docs-paragraph dim">
-        Then, from the options below, select your client & set up the shadcn MCP server.
-      </p>
-
-      <MethodSelector methods={CLIENTS} selected={selectedClient} onSelect={setSelectedClient} ariaLabel="MCP client" />
-
-      <ClientInstructions client={selectedClient} />
+        <DocsStep index={3} title="Ask for components">
+          <p className="docs-step-text">Describe what you want in plain language. Try one of these:</p>
+          <ul className="docs-cmds">
+            {EXAMPLE_PROMPTS.map(prompt => (
+              <li className="docs-prompt" key={prompt}>
+                <span className="docs-prompt-text">{prompt}</span>
+                <CopyButton text={prompt} label="Copy prompt" />
+              </li>
+            ))}
+          </ul>
+        </DocsStep>
+      </ol>
 
       <h2 className="docs-section-title">Learn more</h2>
 
-      <p className="docs-paragraph dim" style={{ marginBottom: '16px' }}>
-        To learn more about using the shadcn MCP server, including manual setup for different clients, please visit the
-        official documentation:
-      </p>
-
-      <a
-        className="docs-paragraph"
-        style={{ textDecoration: 'underline' }}
-        href="https://ui.shadcn.com/docs/mcp"
-        target="_blank"
-        rel="noreferrer"
-      >
-        ui.shadcn.com/docs/mcp
+      <a className="docs-link-tile" href="https://ui.shadcn.com/docs/mcp" target="_blank" rel="noreferrer">
+        <span className="docs-link-tile-text">
+          <span className="docs-link-tile-title">shadcn MCP documentation</span>
+          <span className="docs-link-tile-desc">Manual setup for other clients, and more ways to use the server.</span>
+        </span>
+        <LuArrowUpRight aria-hidden="true" />
       </a>
 
       <DocsButtonBar

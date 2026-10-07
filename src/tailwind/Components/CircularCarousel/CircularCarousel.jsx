@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 
 const STYLE = `
 @keyframes circular-carousel-title { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes circular-carousel-leave { from { opacity: 1; } to { opacity: 0; } }
 @keyframes circular-carousel-reveal { from { opacity: 0; } to { opacity: 1; } }
 `;
 
@@ -131,6 +132,8 @@ const DRAG_THRESHOLD = 5;
 const SPRING = 118;
 const SETTLE_SPEED = 9;
 const CAPTION_SPACE = 76;
+const SWAP_LENGTH = 700;
+const SWAP_SPREAD = 420;
 const TO_RAD = Math.PI / 180;
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -218,7 +221,9 @@ const CircularCarousel = ({
   className = '',
   style
 }) => {
-  const list = items && items.length ? items : DEFAULT_ITEMS;
+  const incoming = items && items.length ? items : DEFAULT_ITEMS;
+  const [list, setList] = useState(incoming);
+  const [leaving, setLeaving] = useState(null);
   const count = list.length;
   const shape = PRESETS[preset] ? preset : 'cylinder';
   const layout = PRESETS[shape];
@@ -336,12 +341,22 @@ const CircularCarousel = ({
     wakeRef.current();
   }, [directionSign]);
 
-  const sourcesKey = list.map(item => item.src).join('|');
+  const incomingRef = useRef(incoming);
+  incomingRef.current = incoming;
+  const listRef = useRef(list);
+  listRef.current = list;
+  const sourcesKey = incoming.map(item => item.src).join('|');
 
   useEffect(() => {
     let cancelled = false;
-    setReady(false);
-    const sources = sourcesKey.split('|').slice(0, 12);
+    const next = incomingRef.current;
+    const smooth = readyRef.current && next.length === listRef.current.length;
+    if (!smooth) {
+      setReady(false);
+      setLeaving(null);
+      setList(next);
+    }
+    const sources = next.slice(0, 16).map(item => item.src);
     const load = src =>
       new Promise(resolve => {
         const image = new Image();
@@ -354,6 +369,20 @@ const CircularCarousel = ({
     Promise.race([Promise.all(sources.map(load)), timeout]).then(() => {
       if (cancelled) return;
       const state = stateRef.current;
+      if (smooth) {
+        const previous = listRef.current;
+        const s = settingsRef.current;
+        if (!s.reduced && previous !== next) {
+          setLeaving(current => ({
+            id: (current?.id || 0) + 1,
+            items: previous,
+            delays: previous.map((_, index) => (Math.abs(wrap(index * s.step + state.angle)) / 180) * SWAP_SPREAD)
+          }));
+        }
+        setList(next);
+        wakeRef.current();
+        return;
+      }
       state.introDone = false;
       state.intro = null;
       setReady(true);
@@ -363,6 +392,12 @@ const CircularCarousel = ({
       cancelled = true;
     };
   }, [sourcesKey]);
+
+  useEffect(() => {
+    if (!leaving) return undefined;
+    const timer = setTimeout(() => setLeaving(null), SWAP_LENGTH + SWAP_SPREAD + 80);
+    return () => clearTimeout(timer);
+  }, [leaving]);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -405,18 +440,14 @@ const CircularCarousel = ({
           for (const [cx, cy] of corners) {
             let p;
             if (s.axis === 'x') {
-              p = rotateX([cx, cy, s.radius], -a);
-              p = [p[0], p[1], p[2] - s.radius];
-              p = rotateY(p, s.tilt);
+              p = rotateY(rotateX([cx, cy, s.radius], -a), s.tilt);
             } else if (s.layout.billboard) {
               const c = rotateY([0, 0, s.radius], a);
-              p = [c[0] + cx, cy, c[2] - s.radius];
-              p = rotateX(p, s.tilt);
+              p = rotateX([c[0] + cx, cy, c[2]], s.tilt);
             } else {
-              p = rotateY([cx, cy, s.radius], a);
-              p = [p[0], p[1], p[2] - s.radius];
-              p = rotateX(p, s.tilt);
+              p = rotateX(rotateY([cx, cy, s.radius], a), s.tilt);
             }
+            p = [p[0], p[1], p[2] - s.radius];
             if (p[2] >= P * 0.95) continue;
             const k = P / (P - p[2]);
             minX = Math.min(minX, p[0] * k);
@@ -814,7 +845,7 @@ const CircularCarousel = ({
   const current = list[active] || list[0];
   const label = current ? current.title || current.alt || `Image ${active + 1}` : '';
 
-  const renderTile = (item, tile, back) => {
+  const renderTile = (item, tile, back, index) => {
     const strip = back ? tile.total - 1 - tile.index : tile.index;
     const first = strip === 0;
     const last = strip === tile.total - 1;
@@ -834,6 +865,7 @@ const CircularCarousel = ({
         ? { left: 0, top: -offset, width: cardW, height: cardH }
         : { left: -offset, top: 0, width: cardW, height: cardH };
     const flip = axis === 'x' ? ' rotateX(180deg)' : ' rotateY(180deg)';
+    const gone = leaving?.items[index];
     return (
       <div
         key={`${back ? 'b' : 'f'}${tile.index}`}
@@ -853,6 +885,17 @@ const CircularCarousel = ({
             decoding="async"
             style={photoStyle}
           />
+          {gone && (
+            <img
+              key={`leaving-${leaving.id}`}
+              className="pointer-events-none absolute block max-w-none select-none object-cover [-webkit-user-drag:none] animate-[circular-carousel-leave_700ms_cubic-bezier(0.33,1,0.68,1)_both]"
+              src={gone.src}
+              alt=""
+              draggable={false}
+              decoding="async"
+              style={{ ...photoStyle, animationDelay: `${Math.round(leaving.delays[index])}ms` }}
+            />
+          )}
           {back && <div className="pointer-events-none absolute inset-0 bg-black opacity-[var(--cc-inner)]" />}
           <div className="pointer-events-none absolute inset-0 bg-[var(--cc-fade)] opacity-[var(--cc-depth,0)]" />
         </div>
@@ -910,8 +953,8 @@ const CircularCarousel = ({
                   aria-roledescription="slide"
                   aria-label={`${item.title || item.alt || `Image ${index + 1}`}, ${index + 1} of ${count}`}
                 >
-                  {tiles.map(tile => renderTile(item, tile, false))}
-                  {layout.backfaces && tiles.map(tile => renderTile(item, tile, true))}
+                  {tiles.map(tile => renderTile(item, tile, false, index))}
+                  {layout.backfaces && tiles.map(tile => renderTile(item, tile, true, index))}
                 </div>
               ))}
             </div>

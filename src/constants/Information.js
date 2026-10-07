@@ -116,6 +116,16 @@ export const componentMetadata = {
     tags: [],
     added: '2025-08-26'
   },
+  'Animations/CrystalizedBall': {
+    videoUrl: '/assets/video/crystalizedball.webm',
+    description:
+      'A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.',
+    category: 'Animations',
+    name: 'CrystalizedBall',
+    docsUrl: 'https://reactbits.dev/animations/crystalized-ball',
+    tags: ['webgl', 'ogl', 'orb', 'electric', 'particles', 'glow', 'interactive'],
+    added: '2026-10-06'
+  },
   'Animations/ElectricLogo': {
     videoUrl: '/assets/video/electriclogo.webm',
     description:
@@ -1156,7 +1166,8 @@ export const componentMetadata = {
     name: 'ShapeWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/shape-waves',
     tags: ['webgpu', 'vgpu', 'grid', 'shapes', 'text', 'procedural'],
-    added: '2026-09-15'
+    added: '2026-09-15',
+    updates: [{ date: '2026-10-06', note: 'Centered text cutouts using actual glyph bounds.' }]
   },
   'Backgrounds/AeroShards': {
     videoUrl: '/assets/video/aeroshards.webm',

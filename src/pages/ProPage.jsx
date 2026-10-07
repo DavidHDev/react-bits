@@ -1,126 +1,44 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { LuArrowRight, LuArrowUpRight, LuCheck, LuPlus } from 'react-icons/lu';
+import { useState } from 'react';
+import { LuArrowUpRight, LuPlus } from 'react-icons/lu';
 
 import Navbar from '../components/landingnew/Navbar/Navbar';
 import Footer from '../components/landingnew/Footer/Footer';
 import Testimonials from '../components/landingnew/Testimonials/Testimonials';
 import ProCta from '../components/common/Pro/ProCta';
-import ProReel from '../components/common/Pro/ProReel';
+import ProShowcase from '../components/common/Pro/ProShowcase';
+import ProComparison from '../components/common/Pro/ProComparison';
 import ColorBends from '../content/Backgrounds/ColorBends/ColorBends';
-import { PRO_SECTIONS, PRO_FAQ, PRO_TESTIMONIALS, PRO_FREE_COPY } from '../constants/Pro';
+import {
+  PRO_COUNTS,
+  PRO_SECTIONS,
+  PRO_FAQ,
+  PRO_TESTIMONIALS,
+  PRO_FREE_COPY,
+  PRO_SHOWCASE_ITEMS
+} from '../constants/Pro';
 import { proUrl, proLinkProps, trackProClick, proAgentKitPreview } from '../utils/pro';
 import useProManifest from '../hooks/useProManifest';
 import useProImpression from '../hooks/useProImpression';
 import usePageSEO from '../hooks/usePageSEO';
 import useScrollToTop from '../hooks/useScrollToTop';
-import ReactBitsLogo from '../assets/logos/react-bits-logo.svg';
+import { useColorModeValue } from '../components/setup/color-mode';
 import ReactBitsProLogo from '../assets/logos/react-bits-pro-logo.svg';
 
 const HERO_PLACEMENT = 'pro-hub-hero';
 
-// The hero pill rotates through what Pro actually ships, so the first thing a
-// visitor reads isn't a single headline number they might not care about.
-const TAG_ITEMS = [
-  { label: 'Bento Builder', href: '/docs/blocks/tools/bento-builder' },
-  { label: 'Application UI', href: '/docs/app-ui' },
-  { label: 'Landing Builder', href: '/builder' },
-  { label: 'Animated Components', href: '/docs/components' },
-  { label: 'Agent Kit', href: '/docs/agent-kit' }
-];
-
-const COMPARISON = [
-  {
-    label: 'React Bits',
-    logo: ReactBitsLogo,
-    title: 'Add a standout moment.',
-    description: 'The open-source library for adding individual animated components and effects to any project.',
-    points: ['Free forever', 'Four code variants', 'Source you own'],
-    action: { label: 'Browse free components', to: '/get-started/index' }
-  },
-  {
-    label: 'React Bits Pro',
-    logo: ReactBitsProLogo,
-    title: 'Build the complete experience.',
-    description:
-      'The full toolkit for shipping the marketing site, the product behind it and the agent workflow around both.',
-    points: ['Complete page and app UI', 'Templates and Agent Kit', 'Lifetime access available'],
-    featured: true
-  }
-];
-
-const TAG_INTERVAL = 3200;
-
-const ProTag = () => {
-  const [index, setIndex] = useState(0);
-  const [widths, setWidths] = useState(null);
-  const slotRef = useRef(null);
-
-  useEffect(() => {
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const id = setInterval(() => setIndex(i => (i + 1) % TAG_ITEMS.length), TAG_INTERVAL);
-    return () => clearInterval(id);
-  }, []);
-
-  // A fixed slot would leave dead space after the short labels, so each label is
-  // measured once and the pill animates to that exact width.
-  useEffect(() => {
-    let cancelled = false;
-
-    const measure = () => {
-      const slot = slotRef.current;
-      if (!slot || cancelled) return;
-
-      const probe = document.createElement('span');
-      probe.className = 'prox-tag-label';
-      // `inset: 0` would stretch the probe to the slot, so it is measured free.
-      probe.style.cssText = 'position:absolute;inset:auto;width:auto;white-space:nowrap;visibility:hidden';
-      slot.appendChild(probe);
-
-      const next = TAG_ITEMS.map(item => {
-        probe.textContent = item.label;
-        return Math.ceil(probe.getBoundingClientRect().width);
-      });
-
-      probe.remove();
-      setWidths(next);
-    };
-
-    if (document.fonts?.ready) document.fonts.ready.then(measure);
-    else measure();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const item = TAG_ITEMS[index];
-
-  const inner = (
-    <>
-      <span className="prox-tag-badge">New</span>
-      <span className="prox-tag-slot" ref={slotRef} style={widths ? { width: `${widths[index]}px` } : undefined}>
-        <span className="prox-tag-label" key={index}>
-          {item.label}
-        </span>
-      </span>
-      <LuArrowRight size={11} />
-    </>
-  );
-
-  return (
-    <a
-      className="prox-tag"
-      {...proLinkProps(item.href, `${HERO_PLACEMENT}-tag`, {
-        params: { item: item.label },
-        sameTab: true
-      })}
-    >
-      {inner}
-    </a>
-  );
-};
 const CTA_PLACEMENT = 'pro-hub-cta';
+
+const PILLAR_PICKS = {
+  components: ['radial-liquid', 'orbit-reel', 'astral-shell'],
+  'app-ui': ['app-ui-12', 'app-ui-10', 'app-ui-07']
+};
+
+const pillarShots = slug => {
+  const items = PRO_SHOWCASE_ITEMS[slug] || [];
+  const picks = PILLAR_PICKS[slug];
+  if (!picks) return items.slice(0, 3);
+  return picks.map(pick => items.find(item => item.slug === pick)).filter(Boolean);
+};
 
 /** Template recordings often open on a black or half-painted frame. */
 const VIDEO_START_TIME = 0.4;
@@ -135,11 +53,11 @@ const ProPage = () => {
   });
 
   const [openFaq, setOpenFaq] = useState(null);
+  const light = useColorModeValue(true, false);
   const heroImpressionRef = useProImpression(HERO_PLACEMENT);
   const comparisonImpressionRef = useProImpression('pro-hub-comparison');
 
   const { manifest } = useProManifest();
-  const counts = manifest?.counts;
 
   const templates = manifest?.templates || [];
 
@@ -155,21 +73,27 @@ const ProPage = () => {
       <main className="prox">
         <section className="prox-hero" ref={heroImpressionRef}>
           <div className="prox-hero-bg" aria-hidden="true">
-            <ColorBends rotation={90} speed={0.2} frequency={1} noise={0.15} intensity={1.5} colors={['#A855F7']} />
+            <div className="prox-hero-bands">
+              <ColorBends rotation={90} speed={0.16} frequency={1} noise={0.12} intensity={1.2} colors={['#A855F7']} />
+            </div>
           </div>
 
           <div className="prox-inner prox-hero-inner">
-            <ProTag />
+            <span
+              className="prox-hero-mark"
+              style={{ '--prox-mark': `url(${ReactBitsProLogo})` }}
+              role="img"
+              aria-label="React Bits Pro"
+            />
 
             <h1 className="prox-hero-title">
-              The complete React toolkit
-              <br />
+              The complete React toolkit <br />
               for crafting memorable UI
             </h1>
 
             <p className="prox-hero-desc">
               React Bits stays free forever. Pro takes you from individual effects to complete pages, product UI,
-              templates and an Agent Kit—all delivered as source you own.
+              templates and an Agent Kit, all delivered as source you own.
             </p>
 
             <div className="prox-actions">
@@ -179,51 +103,54 @@ const ProPage = () => {
               >
                 Get React Bits Pro
               </a>
-              <Link className="prox-btn prox-btn-ghost" to="/pro/components">
+              <a
+                className="prox-btn prox-btn-ghost"
+                {...proLinkProps('/docs/components', 'pro-hub-hero-catalogue', { sameTab: true })}
+              >
                 Browse the catalogue
-              </Link>
+              </a>
             </div>
-
-            <ul className="prox-proof">
-              <li>
-                {counts?.total ? `${counts.total} assets, including Agent Kit` : 'Complete UI library + Agent Kit'}
-              </li>
-              <li aria-hidden="true" className="prox-proof-sep" />
-              <li>Lifetime option</li>
-              <li aria-hidden="true" className="prox-proof-sep" />
-              <li>Full source</li>
-            </ul>
           </div>
 
-          <ProReel manifest={manifest} />
+          <ProShowcase />
         </section>
 
         <section className="prox-section">
           <div className="prox-inner">
             <header className="prox-head">
-              <h2 className="prox-title">What you get</h2>
-              <p className="prox-sub">
-                One library, five kinds of building blocks. Everything installs as source you own and can edit.
-              </p>
+              <h2 className="prox-title">Five libraries in one</h2>
+              <p className="prox-sub">Every piece installs as source you own, ready to edit and ship.</p>
             </header>
 
             <div className="prox-pillars">
-              {PRO_SECTIONS.map(section => {
-                const count = counts?.[section.countKey];
-                return (
-                  <Link key={section.slug} to={`/pro/${section.slug}`} className="prox-pillar">
-                    <span className="prox-pillar-arrow" aria-hidden="true">
-                      <LuArrowUpRight size={15} />
-                    </span>
+              {PRO_SECTIONS.map(section => (
+                <a
+                  key={section.slug}
+                  className="prox-pillar"
+                  {...proLinkProps(section.proPath, `pro-hub-${section.slug}`, { sameTab: true })}
+                >
+                  <span className="prox-pillar-media" aria-hidden="true">
+                    {pillarShots(section.slug).map((item, index) => (
+                      <img
+                        key={item.slug}
+                        className={`prox-pillar-shot is-${['front', 'left', 'right'][index]}`}
+                        src={light ? item.imageLight || item.image : item.image}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ))}
+                  </span>
 
-                    <span className="prox-pillar-body">
-                      <span className="prox-pillar-count">{count ?? '—'}</span>
-                      <span className="prox-pillar-name">{section.countLabel || section.label}</span>
-                      <span className="prox-pillar-desc">{section.tagline}</span>
+                  <span className="prox-pillar-body">
+                    <span className="prox-pillar-title">
+                      {PRO_COUNTS[section.countKey]} {section.countLabel}
+                      <LuArrowUpRight size={16} aria-hidden="true" />
                     </span>
-                  </Link>
-                );
-              })}
+                    <span className="prox-pillar-desc">{section.tagline}</span>
+                  </span>
+                </a>
+              ))}
             </div>
           </div>
         </section>
@@ -231,60 +158,27 @@ const ProPage = () => {
         <section className="prox-section prox-section-alt" ref={comparisonImpressionRef}>
           <div className="prox-inner">
             <header className="prox-head prox-head-centered">
-              <h2 className="prox-title">Start free. Go Pro when the project grows.</h2>
+              <h2 className="prox-title">Build the whole product, not just the hero.</h2>
               <p className="prox-sub">
-                The free library and Pro are designed to work together. The difference is how much of the product you
-                want ready before you start.
+                Free components make one section stand out. Pro covers everything else: page sections, app UI, full
+                templates and an Agent Kit, plus {PRO_COUNTS.components} more components.
               </p>
             </header>
 
-            <div className="prox-compare">
-              {COMPARISON.map(item => (
-                <article className={`prox-compare-card${item.featured ? ' is-featured' : ''}`} key={item.label}>
-                  <span
-                    className={`prox-compare-logo${item.featured ? ' is-pro' : ''}`}
-                    style={{ '--prox-compare-logo': `url(${item.logo})` }}
-                    role="img"
-                    aria-label={item.label}
-                  />
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <ul>
-                    {item.points.map(point => (
-                      <li key={point}>
-                        <LuCheck size={14} />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {item.action ? (
-                    <Link className="prox-compare-action" to={item.action.to}>
-                      {item.action.label}
-                      <LuArrowRight size={14} />
-                    </Link>
-                  ) : (
-                    <a
-                      className="prox-compare-action is-primary"
-                      {...proLinkProps('/#pricing', 'pro-hub-comparison', { sameTab: true })}
-                    >
-                      See plans and pricing
-                      <LuArrowRight size={14} />
-                    </a>
-                  )}
-                </article>
-              ))}
-            </div>
+            <ProComparison />
           </div>
         </section>
 
         {(freeTemplate || freeSkill) && (
           <section className="prox-section">
             <div className="prox-inner">
-              <header className="prox-head">
-                <h2 className="prox-title">Try the quality before you buy</h2>
+              <header className="prox-head prox-free-head">
+                <h2 className="prox-title">Try the workflow before you buy</h2>
                 <p className="prox-sub">
-                  Download a complete template and install an Agent Kit skill for free. No checkout required.
+                  Download a template and install an agent skill, no checkout needed. They show how Pro fits into your
+                  project. To judge the full library, browse its{' '}
+                  <a {...proLinkProps('/docs/components', 'pro-hub-free-previews', { sameTab: true })}>live previews</a>
+                  .
                 </p>
               </header>
 
@@ -307,32 +201,35 @@ const ProPage = () => {
                         />
                       </span>
                     )}
-                    <span className="prox-free-tag">Free template</span>
-                    <h3 className="prox-free-title">{freeTemplate.name}</h3>
-                    <p className="prox-free-desc">{PRO_FREE_COPY[freeTemplate.slug] || freeTemplate.description}</p>
-                    <div className="prox-free-actions">
-                      <a
-                        className="prox-btn prox-btn-sm prox-btn-primary"
-                        href={proUrl(freeTemplate.href, 'pro-hub-free-template', { rb_item: freeTemplate.slug })}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => trackProClick('pro-hub-free-template', { item: freeTemplate.slug })}
-                      >
-                        Download it
-                      </a>
-                      {freeTemplate.livePreviewUrl && (
+                    <div className="prox-free-body">
+                      <span className="prox-free-kind">Free template</span>
+                      <h3 className="prox-free-title">{freeTemplate.name}</h3>
+                      <p className="prox-free-desc">{PRO_FREE_COPY[freeTemplate.slug] || freeTemplate.description}</p>
+                      <div className="prox-free-actions">
                         <a
-                          className="prox-btn prox-btn-sm prox-btn-ghost"
-                          href={proUrl(freeTemplate.livePreviewUrl, 'pro-hub-free-template-live', {
-                            rb_item: freeTemplate.slug
-                          })}
+                          className="prox-btn prox-btn-sm prox-btn-primary"
+                          href={proUrl(freeTemplate.href, 'pro-hub-free-template', { rb_item: freeTemplate.slug })}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => trackProClick('pro-hub-free-template-live', { item: freeTemplate.slug })}
+                          onClick={() => trackProClick('pro-hub-free-template', { item: freeTemplate.slug })}
                         >
-                          Live site
+                          Download template
                         </a>
-                      )}
+                        {freeTemplate.livePreviewUrl && (
+                          <a
+                            className="prox-free-link"
+                            href={proUrl(freeTemplate.livePreviewUrl, 'pro-hub-free-template-live', {
+                              rb_item: freeTemplate.slug
+                            })}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => trackProClick('pro-hub-free-template-live', { item: freeTemplate.slug })}
+                          >
+                            Live site
+                            <LuArrowUpRight size={14} aria-hidden="true" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </article>
                 )}
@@ -342,22 +239,28 @@ const ProPage = () => {
                     <span className="prox-free-media">
                       <img src={proAgentKitPreview(freeSkill)} alt="" loading="lazy" decoding="async" />
                     </span>
-                    <span className="prox-free-tag">Free agent skill</span>
-                    <h3 className="prox-free-title">{freeSkill.name}</h3>
-                    <p className="prox-free-desc">{PRO_FREE_COPY[freeSkill.slug] || freeSkill.summary}</p>
-                    <div className="prox-free-actions">
-                      <a
-                        className="prox-btn prox-btn-sm prox-btn-primary"
-                        href={proUrl(freeSkill.href, 'pro-hub-free-skill', { rb_item: freeSkill.slug })}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => trackProClick('pro-hub-free-skill', { item: freeSkill.slug })}
-                      >
-                        Install it
-                      </a>
-                      <Link className="prox-btn prox-btn-sm prox-btn-ghost" to="/pro/agent-kit">
-                        See all skills
-                      </Link>
+                    <div className="prox-free-body">
+                      <span className="prox-free-kind">Free agent skill</span>
+                      <h3 className="prox-free-title">{freeSkill.name}</h3>
+                      <p className="prox-free-desc">{PRO_FREE_COPY[freeSkill.slug] || freeSkill.summary}</p>
+                      <div className="prox-free-actions">
+                        <a
+                          className="prox-btn prox-btn-sm prox-btn-primary"
+                          href={proUrl(freeSkill.href, 'pro-hub-free-skill', { rb_item: freeSkill.slug })}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => trackProClick('pro-hub-free-skill', { item: freeSkill.slug })}
+                        >
+                          Install skill
+                        </a>
+                        <a
+                          className="prox-free-link"
+                          {...proLinkProps('/docs/agent-kit', 'pro-hub-free-skill-catalogue', { sameTab: true })}
+                        >
+                          All skills
+                          <LuArrowUpRight size={14} aria-hidden="true" />
+                        </a>
+                      </div>
                     </div>
                   </article>
                 )}
@@ -368,7 +271,7 @@ const ProPage = () => {
 
         <Testimonials tweets={PRO_TESTIMONIALS} />
 
-        <section className="prox-section prox-section-alt">
+        <section className="prox-section">
           <div className="prox-inner prox-faq-layout">
             <div className="prox-faq-aside">
               <h2 className="prox-title">Questions, answered</h2>

@@ -17,7 +17,12 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "check:prop-docs": "node scripts/checkPropDocs.js",
-    "test:prop-docs": "node --test scripts/checkPropDocs.test.js"
+    "test:prop-docs": "node --test scripts/checkPropDocs.test.js",
+    "pro:summary": "node scripts/generateProSummary.js",
+    "predev": "npm run pro:summary",
+    "prebuild": "npm run pro:summary",
+    "pro:sync": "node scripts/syncProCatalog.js",
+    "pro:sync:check": "node scripts/syncProCatalog.js --check"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.20.0",

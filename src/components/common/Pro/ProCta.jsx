@@ -1,48 +1,60 @@
 import { Link } from 'react-router-dom';
 import { LuArrowRight, LuArrowUpRight } from 'react-icons/lu';
 
-import MoltenMetal from '@/content/Backgrounds/MoltenMetal/MoltenMetal';
+import HeroBand from '../../landingnew/Hero/HeroBand';
+import { useColorModeValue } from '../../setup/color-mode';
 import { proLinkProps } from '../../../utils/pro';
 
-/**
- * Closing CTA for the on-domain Pro pages.
- *
- * Deliberately mirrors the landing page's final CTA (rotating conic border,
- * dark card, shader wash, mono buttons) so the Pro pages close on the same
- * note as the rest of the site rather than a plain outlined panel.
- */
-const ProCta = ({ title, description, placement, secondary, trackParams, showShader = true, showArrows = true }) => (
-  <section className="pro-cta">
-    <div className="pro-cta-border" aria-hidden="true" />
+const ProCta = ({ title, description, placement, secondary, trackParams, showShader = true, showArrows = true }) => {
+  const light = useColorModeValue(true, false);
 
-    <div className="pro-cta-card">
-      {showShader && (
-        <div className="pro-cta-bg" aria-hidden="true">
-          <MoltenMetal opacity={0.4} mouseInteraction={false} />
-        </div>
-      )}
-
-      <h2 className="pro-cta-title">{title}</h2>
-      <p className="pro-cta-desc">{description}</p>
-
-      <div className="pro-cta-actions">
-        <a
-          className="pro-cta-btn pro-cta-btn-primary"
-          {...proLinkProps('/#pricing', placement, { params: trackParams, sameTab: true })}
-        >
-          Get React Bits Pro
-          {showArrows && <LuArrowUpRight size={15} />}
-        </a>
-
-        {secondary && (
-          <Link className="pro-cta-btn pro-cta-btn-secondary" to={secondary.to}>
-            {secondary.label}
-            {showArrows && <LuArrowRight size={15} />}
-          </Link>
+  return (
+    <section className="pro-cta">
+      <div className="pro-cta-card">
+        {showShader && (
+          <div className="pro-cta-bg" aria-hidden="true">
+            <HeroBand
+              className="pro-cta-band"
+              color="#A855F7"
+              speed={0.2}
+              frequency={1}
+              noise={0.15}
+              bandWidth={0.14}
+              rotation={90}
+              fadeTop={0.75}
+              iterations={1}
+              intensity={1.25}
+              scale={1}
+              warpStrength={1}
+              yOffset={0.3}
+              mouseInfluence={0}
+              lightMode={light}
+            />
+          </div>
         )}
+
+        <h2 className="pro-cta-title">{title}</h2>
+        <p className="pro-cta-desc">{description}</p>
+
+        <div className="pro-cta-actions">
+          <a
+            className="pro-cta-btn pro-cta-btn-primary"
+            {...proLinkProps('/#pricing', placement, { params: trackParams, sameTab: true })}
+          >
+            Get React Bits Pro
+            {showArrows && <LuArrowUpRight size={15} />}
+          </a>
+
+          {secondary && (
+            <Link className="pro-cta-btn pro-cta-btn-secondary" to={secondary.to}>
+              {secondary.label}
+              {showArrows && <LuArrowRight size={15} />}
+            </Link>
+          )}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default ProCta;

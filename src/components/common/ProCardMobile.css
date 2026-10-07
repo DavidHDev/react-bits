@@ -13,10 +13,9 @@
     align-items: stretch;
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid rgba(255, 255, 255, 0.09);
-    background: rgba(14, 11, 19, 0.96);
+    background: rgba(17, 17, 17, 0.96);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.28);
     opacity: 0;
     transform: translateY(100%);
     pointer-events: none;
@@ -43,6 +42,11 @@
     text-decoration: none;
   }
 
+  .pro-mobile-bar:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -4px;
+  }
+
   .pro-mobile-bar-image {
     width: 52px;
     height: 46px;
@@ -50,7 +54,16 @@
     display: block;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 7px;
-    background: #09080b;
+    background: #0a0a0a;
+    overflow: hidden;
+  }
+
+  .pro-mobile-bar-media,
+  .pro-mobile-bar-media img,
+  .pro-mobile-bar-media video {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -63,7 +76,7 @@
   }
 
   .pro-mobile-bar-label {
-    color: #b78cff;
+    color: #a3a3a3;
     font-size: 10px;
     font-weight: 600;
     line-height: 1.1;
@@ -88,14 +101,12 @@
     flex: 0 0 auto;
     color: rgba(255, 255, 255, 0.58);
   }
-
 }
 
 @media only screen and (max-width: 1000px) {
   :root[data-theme='light'] .pro-mobile-shell {
     border-top-color: rgba(24, 24, 27, 0.1);
     background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 -10px 28px rgba(24, 24, 27, 0.08);
   }
 
   :root[data-theme='light'] .pro-mobile-bar {

@@ -1,667 +1,201 @@
-/* ─── Sponsors page ────────────────────────────────────────────────────────── */
-.sponsors-dotfield {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
+.spx .pg-inner {
+  max-width: 1100px;
 }
 
-.sponsors-page {
-  position: relative;
-  z-index: 1;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 180px 2em 4em;
-  min-height: 100vh;
-}
-
-/* ─── Header ───────────────────────────────────────────────────────────────── */
-.sponsors-page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 3em;
-}
-
-.sponsors-page-header-left {
-  display: flex;
-  flex-direction: column;
+.spx-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
-.sponsors-page-title {
-  font-family: 'Geist', sans-serif;
-  font-size: clamp(36px, 5vw, 100px);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: #fff;
-  margin: 0;
-  line-height: 1.1;
+.spx-stat-well {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
 }
 
-.sponsors-page-subtitle {
+.spx-stat-value {
+  color: #fff;
+  font-family: 'Geist', sans-serif;
+  font-size: clamp(40px, 4.4vw, 56px);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -2.4px;
+}
+
+.spx-stat-label {
+  padding: 13px 10px 8px 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Geist', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.spx-plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.spx-plan-well {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px 20px 20px;
+}
+
+.spx-plan-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.spx-plan-name {
+  margin: 0;
+  color: #fff;
   font-family: 'Geist', sans-serif;
   font-size: 16px;
-  max-width: 36ch;
-  font-weight: 400;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
-.sponsors-page-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Geist Mono', monospace;
-  font-size: 13px;
-  font-weight: 500;
-  color: #fff;
-  height: 42px;
-  padding: 0 24px;
-  width: fit-content;
-  flex-shrink: 0;
-  margin-top: 16px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
-  box-shadow:
-    0 2px 16px rgba(139, 92, 246, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
-  text-decoration: none;
-}
-
-.sponsors-page-cta:hover {
-  box-shadow:
-    0 4px 24px rgba(139, 92, 246, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-/* ─── Stats row ────────────────────────────────────────────────────────────── */
-.sponsors-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-}
-
-/* ─── Divider ──────────────────────────────────────────────────────────────── */
-.sponsors-divider {
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  margin: 4.5em 0 3.5em;
-}
-
-.sponsors-section-title {
-  font-family: 'Geist', sans-serif;
-  font-size: clamp(22px, 3vw, 46px);
-  font-weight: 500;
-  color: #fff;
-  letter-spacing: -0.02em;
-  text-align: left;
-  line-height: 1.1;
-  margin: 0 0 28px;
-}
-
-.sponsors-section-heading {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 36px;
-  margin-top: 128px;
-  scroll-margin-top: 120px;
-}
-
-.sponsors-section-heading .sponsors-section-title {
-  margin: 0;
-}
-
-.sponsors-section-subtitle {
-  font-family: 'Geist', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.4;
+.spx-plan-note {
   color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-}
-
-.sponsors-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 28px 16px;
-  background: var(--bg-elevated, #1a1625);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  transition: border-color 0.2s ease;
-}
-
-.sponsors-stat:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.sponsors-stat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a855f7;
-  margin-bottom: 4px;
-}
-
-.sponsors-stat-value {
   font-family: 'Geist', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -1px;
-  line-height: 1;
-}
-
-.sponsors-stat-label {
-  font-family: 'Geist', sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-/* ─── Tier section ─────────────────────────────────────────────────────────── */
-.sponsors-tier-section {
-  margin-bottom: 3em;
-}
-
-.sponsors-tier-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.sponsors-tier-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-family: 'Geist Mono', monospace;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
-  letter-spacing: 0.02em;
 }
 
-.sponsors-tier-badge--diamond {
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  color: #c084fc;
+.spx-plan-price {
+  margin: 0;
+  color: #fff;
+  font-family: 'Geist', sans-serif;
+  font-size: 44px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -2px;
 }
 
-.sponsors-tier-badge--platinum {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
+.spx-plan-price span {
+  margin-left: 6px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
-.sponsors-tier-badge--silver {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
+.spx-plan-btn {
+  width: 100%;
 }
 
-/* ─── Sponsor card ─────────────────────────────────────────────────────────── */
-.sponsors-tier-grid {
-  display: grid;
-  gap: 16px;
-}
-
-.sponsors-tier-grid--diamond {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.sponsors-tier-grid--platinum {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.sponsors-tier-grid--silver {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.sponsors-page-card {
+.spx-plan-benefits {
   display: flex;
   flex-direction: column;
-  background: var(--bg-elevated, #1a1625);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  padding: 6px;
-  text-decoration: none;
-  overflow: hidden;
-  transition: border-color 0.2s ease;
+  gap: 11px;
+  margin: 0;
+  padding: 18px 14px 14px;
+  list-style: none;
 }
 
-.sponsors-page-card:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-  text-decoration: none;
-}
-
-/* Banner area inside card */
-.sponsors-card-banner {
+.spx-plan-benefits li {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: 'Geist', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.45;
 }
 
-.sponsors-card-banner--diamond {
-  height: 140px;
-  background: linear-gradient(145deg, rgba(168, 85, 247, 0.08) 0%, rgba(124, 58, 237, 0.04) 100%);
+.spx-plan-benefits svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.sponsors-card-banner--platinum {
-  height: 110px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+.spx-contact {
+  margin-top: 12px;
 }
 
-.sponsors-card-banner--silver {
-  height: 90px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
-}
-
-.sponsors-card-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.sponsors-card-banner--diamond::before {
-  background: radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 60%);
-}
-
-.sponsors-card-banner--platinum::before {
-  background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
-}
-
-.sponsors-card-banner--silver::before {
-  background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
-}
-
-.sponsors-card-logo {
-  height: 40%;
-  max-height: 48px;
-  width: auto;
-  max-width: 70%;
-  object-fit: contain;
-  opacity: 0.85;
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.sponsors-card-banner--diamond .sponsors-card-logo {
-  max-height: 56px;
-}
-
-.sponsors-page-card:hover .sponsors-card-logo {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-/* Card body */
-.sponsors-card-body {
+.spx-contact-well {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 14px 10px;
+  gap: 24px;
+  padding: 26px 26px 26px 28px;
 }
 
-.sponsors-card-name {
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  letter-spacing: -0.2px;
-}
-
-.sponsors-card-arrow {
-  display: flex;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.3);
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.sponsors-page-card:hover .sponsors-card-arrow {
-  color: #a855f7;
-  transform: translateX(2px);
-}
-
-/* ─── Empty tier placeholder ───────────────────────────────────────────────── */
-.sponsors-tier-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  border: 1px dashed rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-/* ─── Pricing ──────────────────────────────────────────────────── */
-.sponsors-pricing {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.sponsors-pricing-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 28px;
-  background: var(--bg-elevated, #1a1625);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  transition: border-color 0.2s ease;
-}
-
-.sponsors-pricing-card:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.sponsors-pricing-card--featured {
-  border-color: rgba(168, 85, 247, 0.3);
-}
-
-.sponsors-pricing-card--featured:hover {
-  border-color: rgba(168, 85, 247, 0.45);
-}
-
-.sponsors-pricing-price {
-  font-family: 'Geist', sans-serif;
-  font-size: 36px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: #fff;
-  line-height: 1;
-}
-
-.sponsors-pricing-period {
-  font-family: 'Geist Mono', monospace;
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.4);
-  margin-left: 4px;
-}
-
-.sponsors-pricing-benefits {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  list-style: none;
+.spx-contact-title {
   margin: 0;
-  padding: 0;
-  flex: 1;
-}
-
-.sponsors-pricing-benefits li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-family: 'Geist', sans-serif;
-  font-size: 13.5px;
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.sponsors-pricing-benefits li svg {
-  flex-shrink: 0;
-  margin-top: 2px;
-  color: #c084fc;
-}
-
-.sponsors-pricing-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  height: 38px;
-  font-family: 'Geist Mono', monospace;
-  font-size: 13px;
-  font-weight: 500;
   color: #fff;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: var(--surface-ghost-track);
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
-  text-decoration: none;
-}
-
-.sponsors-pricing-btn:hover {
-  background: var(--surface-ghost);
-  box-shadow: var(--surface-ghost-highlight);
-  transform: translateY(-1px);
-}
-
-.sponsors-pricing-btn--featured {
-  border: none;
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
-  box-shadow:
-    0 2px 12px rgba(139, 92, 246, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.sponsors-pricing-btn--featured:hover {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
-  border: none;
-  box-shadow:
-    0 4px 20px rgba(139, 92, 246, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.sponsors-pricing-note {
   font-family: 'Geist', sans-serif;
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.4);
-  margin: 24px 0 0;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
 }
 
-.sponsors-pricing-note a {
-  color: #c084fc;
-  text-decoration: none;
+.spx-contact-sub {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
 }
 
-.sponsors-pricing-note a:hover {
-  text-decoration: underline;
-}
-
-/* ─── Responsive ───────────────────────────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .sponsors-tier-grid--diamond {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sponsors-tier-grid--platinum {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sponsors-tier-grid--silver {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .sponsors-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .sponsors-page-header {
-    flex-direction: column;
-  }
-
-  .sponsors-stats {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .sponsors-stat {
-    flex-direction: row;
-    gap: 14px;
-    padding: 18px 22px;
-  }
-
-  .sponsors-stat-icon {
-    margin-bottom: 0;
-  }
-
-  .sponsors-tier-grid--diamond,
-  .sponsors-tier-grid--platinum {
-    grid-template-columns: 1fr;
-  }
-
-  .sponsors-tier-grid--silver {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sponsors-pricing {
-    grid-template-columns: 1fr;
+@media (max-width: 900px) {
+  .spx-plans {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 520px;
   }
 }
 
 @media (max-width: 640px) {
-  .sponsors-page {
-    padding: 100px 1em 3em;
+  .spx-stats {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 
-  .sponsors-tier-grid--silver {
-    grid-template-columns: 1fr;
+  .spx-stat-well {
+    height: 120px;
+  }
+
+  .spx-plans {
+    gap: 8px;
+  }
+
+  .spx-contact {
+    margin-top: 8px;
+  }
+
+  .spx-contact-well {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 22px 20px;
   }
 }
 
-/* ─── Light theme ─────────────────────────────────────────────────────────── */
-:root[data-theme='light'] .sponsors-dotfield {
-  opacity: 0.3;
+:root[data-theme='light'] .spx-stat-value,
+:root[data-theme='light'] .spx-plan-name,
+:root[data-theme='light'] .spx-plan-price,
+:root[data-theme='light'] .spx-contact-title {
+  color: #18181b;
 }
 
-:root[data-theme='light'] .sponsors-page-title,
-:root[data-theme='light'] .sponsors-section-title,
-:root[data-theme='light'] .sponsors-stat-value,
-:root[data-theme='light'] .sponsors-card-name,
-:root[data-theme='light'] .sponsors-pricing-price {
-  color: var(--text-primary);
+:root[data-theme='light'] .spx-stat-label,
+:root[data-theme='light'] .spx-plan-note,
+:root[data-theme='light'] .spx-plan-price span,
+:root[data-theme='light'] .spx-contact-sub {
+  color: #71717a;
 }
 
-:root[data-theme='light'] .sponsors-page-subtitle,
-:root[data-theme='light'] .sponsors-section-subtitle,
-:root[data-theme='light'] .sponsors-stat-label,
-:root[data-theme='light'] .sponsors-pricing-period,
-:root[data-theme='light'] .sponsors-pricing-note,
-:root[data-theme='light'] .sponsors-pricing-benefits li {
-  color: var(--text-dimmed);
+:root[data-theme='light'] .spx-plan-benefits li {
+  color: #3f3f46;
 }
 
-:root[data-theme='light'] .sponsors-page-cta,
-:root[data-theme='light'] .sponsors-pricing-btn {
-  font-family: 'Geist', sans-serif;
-}
-
-:root[data-theme='light'] .sponsors-divider {
-  border-top-color: var(--border-subtle);
-}
-
-:root[data-theme='light'] .sponsors-stat,
-:root[data-theme='light'] .sponsors-page-card,
-:root[data-theme='light'] .sponsors-pricing-card {
-  border-color: var(--border-subtle);
-  background: #fff;
-}
-
-:root[data-theme='light'] .sponsors-stat:hover,
-:root[data-theme='light'] .sponsors-page-card:hover,
-:root[data-theme='light'] .sponsors-pricing-card:hover {
-  border-color: var(--border-primary);
-}
-
-:root[data-theme='light'] .sponsors-pricing-card--featured,
-:root[data-theme='light'] .sponsors-pricing-card--featured:hover {
-  border-color: rgba(143, 54, 232, 0.32);
-}
-
-:root[data-theme='light'] .sponsors-card-banner {
-  border: 1px solid var(--preview-border);
-}
-
-:root[data-theme='light'] .sponsors-card-banner--diamond {
-  background: linear-gradient(145deg, #fafafa 0%, #f7f4fb 100%);
-}
-
-:root[data-theme='light'] .sponsors-card-banner--platinum,
-:root[data-theme='light'] .sponsors-card-banner--silver {
-  background: #fafafa;
-}
-
-:root[data-theme='light'] .sponsors-card-banner--diamond::before {
-  background: radial-gradient(circle at 50% 80%, rgba(143, 54, 232, 0.1) 0%, transparent 60%);
-}
-
-:root[data-theme='light'] .sponsors-card-banner--platinum::before,
-:root[data-theme='light'] .sponsors-card-banner--silver::before {
-  background: radial-gradient(circle at 50% 80%, rgba(24, 24, 27, 0.035) 0%, transparent 60%);
-}
-
-:root[data-theme='light'] .sponsors-card-logo {
-  filter: grayscale(1) invert(1);
-}
-
-:root[data-theme='light'] .sponsors-card-arrow {
+:root[data-theme='light'] .spx-plan-benefits svg {
   color: #a1a1aa;
-}
-
-:root[data-theme='light'] .sponsors-tier-badge--diamond {
-  border-color: rgba(143, 54, 232, 0.18);
-  background: rgba(143, 54, 232, 0.07);
-  color: #7e3db8;
-}
-
-:root[data-theme='light'] .sponsors-tier-badge--platinum,
-:root[data-theme='light'] .sponsors-tier-badge--silver {
-  border-color: var(--border-subtle);
-  background: #fafafa;
-  color: var(--text-muted);
-}
-
-:root[data-theme='light'] .sponsors-tier-empty {
-  border-color: var(--border-primary);
-  color: var(--text-dimmed);
-}
-
-:root[data-theme='light'] .sponsors-pricing-btn:not(.sponsors-pricing-btn--featured) {
-  border-color: var(--border-subtle);
-  background: #fff;
-  box-shadow: none;
-  color: var(--text-primary);
-}
-
-:root[data-theme='light'] .sponsors-pricing-btn:not(.sponsors-pricing-btn--featured):hover {
-  border-color: var(--border-primary);
-  background: #fafafa;
-  box-shadow: none;
-}
-
-:root[data-theme='light'] .sponsors-pricing-note a {
-  color: #7e3db8;
 }

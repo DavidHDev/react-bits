@@ -67,8 +67,8 @@ const LandingPage = () => {
         <ProSpotlight />
         <QuickStart />
         <Ownership />
-        <Testimonials />
         <Sponsors />
+        <Testimonials />
         <CTA />
         <Footer />
       </section>

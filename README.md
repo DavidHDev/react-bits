@@ -28,6 +28,12 @@
 
 <br />
 
+## React Bits Pro
+
+React Bits Pro adds premium components, page blocks, app UI, and complete templates for your next project.
+
+[![React Bits Pro previews: ASCII Ripple, Radial Liquid, Hero 12, and Dashboard 12](public/assets/readme/react-bits-pro.webp)](https://pro.reactbits.dev/?utm_source=github&utm_medium=readme&utm_campaign=pro-conversion&utm_content=readme-pro)
+
 ## ✨ Why React Bits?
 
 React Bits helps you **ship stunning interfaces faster**. Instead of spending hours crafting animations from scratch, grab a polished component and customize it to fit your vision.

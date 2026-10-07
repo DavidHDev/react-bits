@@ -3,7 +3,7 @@ import { componentMetadata } from './Information.js';
 export const CATEGORIES = [
   {
     name: 'Get Started',
-    subcategories: ['Introduction', 'Installation', 'MCP', 'Index', 'Changelog']
+    subcategories: ['Introduction', 'Installation', 'MCP', 'Changelog']
   },
   {
     name: 'Text Animations',
@@ -46,6 +46,7 @@ export const CATEGORIES = [
   {
     name: 'Animations',
     subcategories: [
+      'Crystalized Ball',
       'Electric Logo',
       'Dither Veil',
       'Glow Cursor',

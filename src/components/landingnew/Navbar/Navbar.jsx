@@ -7,7 +7,7 @@ import { GITHUB_URL } from '../../../constants/Site';
 import { proLinkProps } from '../../../utils/pro';
 import useProImpression from '../../../hooks/useProImpression';
 import { FaGithub } from 'react-icons/fa6';
-import { LuSearch, LuSettings2, LuSun, LuMoon } from 'react-icons/lu';
+import { LuLayoutGrid, LuSearch, LuSettings2, LuSun, LuMoon } from 'react-icons/lu';
 import { useColorMode } from '../../setup/color-mode';
 import { useSearch } from '../../context/SearchContext/useSearch';
 import { useOptions } from '../../context/OptionsContext/useOptions';
@@ -50,6 +50,7 @@ const Navbar = ({ showDocs }) => {
   const docsProRef = useProImpression('docs-navbar', { category: docsCategory }, showDocsProCta);
   const landingProRef = useProImpression('navbar', { surface: 'marketing' }, !showDocs);
   const mobileFilterQuery = mobileFilter.trim().toLowerCase();
+  const onIndexPage = location.pathname === '/get-started/index';
   const mobileCategories = useMemo(
     () =>
       CATEGORIES.map((category, index) => ({
@@ -248,7 +249,6 @@ const Navbar = ({ showDocs }) => {
                   </div>
                 )}
               </div>
-
             </>
           )}
 
@@ -336,6 +336,19 @@ const Navbar = ({ showDocs }) => {
               <div className="ln-navbar-mobile-backdrop" onClick={() => setMenuOpen(false)} />
               <div className="ln-navbar-mobile-menu ln-navbar-mobile-menu-docs">
                 <div className="ln-navbar-mobile-scroll">
+                  <Link
+                    className="sidebar-browse sidebar-browse--menu"
+                    to="/get-started/index"
+                    aria-current={onIndexPage ? 'page' : undefined}
+                    tabIndex={onIndexPage ? -1 : undefined}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <LuLayoutGrid size={14} aria-hidden="true" className="sidebar-browse__icon" />
+                    <span className="sidebar-browse__label">
+                      {onIndexPage ? 'Viewing all components' : 'Browse all components'}
+                    </span>
+                  </Link>
+
                   <label className="ln-navbar-mobile-filter">
                     <LuSearch size={14} aria-hidden="true" />
                     <input
@@ -388,21 +401,26 @@ const Navbar = ({ showDocs }) => {
                                 <span className="ln-navbar-mobile-label ln-navbar-mobile-label-pro">Explore Pro</span>
                                 <div className="ln-navbar-mobile-group">
                                   {mobileProSections.map(section => {
-                                    const path = `/pro/${section.slug}`;
+                                    const linkProps = proLinkProps(section.proPath, 'mobile-menu', {
+                                      params: { section: section.slug }
+                                    });
                                     const SectionIcon = section.icon;
                                     return (
-                                      <Link
+                                      <a
                                         key={section.slug}
-                                        className={`ln-navbar-mobile-link ln-navbar-mobile-pro-link${location.pathname === path ? ' ln-navbar-mobile-link-active' : ''}`}
-                                        to={path}
-                                        onClick={() => setMenuOpen(false)}
+                                        className="ln-navbar-mobile-link ln-navbar-mobile-pro-link"
+                                        {...linkProps}
+                                        onClick={() => {
+                                          linkProps.onClick();
+                                          setMenuOpen(false);
+                                        }}
                                       >
                                         <SectionIcon size={14} aria-hidden="true" />
                                         <span>{section.sidebarLabel || section.label}</span>
                                         {section.freeCount && (
                                           <span className="ln-navbar-mobile-free-tag">{section.freeCount} Free</span>
                                         )}
-                                      </Link>
+                                      </a>
                                     );
                                   })}
                                 </div>

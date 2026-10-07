@@ -46,6 +46,7 @@ const animations = {
   'glow-cursor': () => import('../demo/Animations/GlowCursorDemo'),
   'dither-veil': () => import('../demo/Animations/DitherVeilDemo'),
   'electric-logo': () => import('../demo/Animations/ElectricLogoDemo'),
+  'crystalized-ball': () => import('../demo/Animations/CrystalizedBallDemo'),
 };
 
 const textAnimations = {

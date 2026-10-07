@@ -1,47 +1,21 @@
-import { Eye, Star, Component, Gem, Crown, Medal, ArrowRight, Check } from 'lucide-react';
+import { LuArrowRight, LuCheck } from 'react-icons/lu';
 import useScrollToTop from '../hooks/useScrollToTop';
 import usePageSEO from '../hooks/usePageSEO';
+import { useStars } from '../hooks/useStars';
 import Navbar from '../components/landingnew/Navbar/Navbar';
 import Footer from '../components/landingnew/Footer/Footer';
-import DotField from '../components/landingnew/Hero/DotField';
-import { diamondSponsors, platinumSponsors, silverSponsors } from '../constants/Sponsors';
-import { FaArrowRight } from 'react-icons/fa6';
+import { SponsorGrid } from '../components/landingnew/Sponsors/Sponsors';
+import { TOTAL_COMPONENTS } from '../constants/Categories';
 
+import '../css/site-page.css';
 import '../css/sponsors-page.css';
 
-const buildSponsorUrl = (url, tier) => {
-  if (!url) return null;
-  try {
-    const sponsorUrl = new URL(url);
-    sponsorUrl.searchParams.set('utm_source', 'reactbits');
-    sponsorUrl.searchParams.set('utm_medium', 'sponsor');
-    sponsorUrl.searchParams.set('utm_campaign', tier);
-    sponsorUrl.searchParams.set('ref', 'reactbits');
-    return sponsorUrl.toString();
-  } catch {
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}utm_source=reactbits&utm_medium=sponsor&utm_campaign=${tier}&ref=reactbits`;
-  }
-};
+const CONTACT_URL = 'mailto:contact@davidhaz.com?subject=React%20Bits%20Sponsorship%20Inquiry';
 
-const STATS = [
-  { icon: Eye, value: '500K+', label: 'Monthly Visitors' },
-  { icon: Star, value: '43K+', label: 'GitHub Stars' },
-  { icon: Component, value: '140+', label: 'Components' },
-];
-
-const TIERS = [
-  { key: 'diamond', label: 'Diamond', icon: Gem, sponsors: diamondSponsors },
-  { key: 'platinum', label: 'Platinum', icon: Crown, sponsors: platinumSponsors },
-  { key: 'silver', label: 'Silver', icon: Medal, sponsors: silverSponsors },
-].filter(tier => tier.sponsors.length > 0);
-
-// Polar checkout links per sponsorship tier
-const PRICING = [
+const PLANS = [
   {
     key: 'diamond',
     label: 'Diamond',
-    icon: Gem,
     price: 500,
     checkoutUrl: 'https://buy.polar.sh/polar_cl_CAKYEZJI4v1T5QdfNfAVAmDhyNVfPVBj6lNaF0H6bII',
     featured: true,
@@ -50,28 +24,26 @@ const PRICING = [
       'Largest logo in the README',
       'Shoutout on X',
       'Featured on the sponsors page',
-      'Direct line for feedback & requests'
+      'Direct line for feedback and requests'
     ]
   },
   {
     key: 'platinum',
     label: 'Platinum',
-    icon: Crown,
     price: 250,
     checkoutUrl: 'https://buy.polar.sh/polar_cl_d9UlbstPFQlba5YiLjFHjfhQ8LwVfhQTZKGxf1HiJZ7',
-    featured: false,
     benefits: ['Larger logo in the README', 'Larger logo on the docs sidebar', 'Shoutout on X']
   },
   {
     key: 'silver',
     label: 'Silver',
-    icon: Medal,
     price: 100,
     checkoutUrl: 'https://buy.polar.sh/polar_cl_XQulCE8GgwOmHo7wLjdDYkMZFm6nYogF3Igfl4cqAfM',
-    featured: false,
     benefits: ['Logo in the README', 'Logo on the docs sidebar', 'Listed on the sponsors page']
   }
 ];
+
+const formatStars = stars => (stars >= 1000 ? `${(stars / 1000).toFixed(1).replace(/\.0$/, '')}K` : String(stars));
 
 const SponsorsPage = () => {
   useScrollToTop();
@@ -82,128 +54,123 @@ const SponsorsPage = () => {
     path: '/sponsors'
   });
 
+  const stars = useStars();
+
+  const stats = [
+    { value: '500K+', label: 'Monthly visitors' },
+    { value: formatStars(stars), label: 'GitHub stars' },
+    { value: `${TOTAL_COMPONENTS}+`, label: 'Docs pages that show your logo' }
+  ];
+
   return (
     <>
       <Navbar showDocs />
-      <div className="sponsors-dotfield">
-        <DotField sparkle waveAmplitude={5} dotRadius={2} />
-      </div>
-      <section className="sponsors-page">
 
-        {/* ── Header ──────────────────────────────────────────────── */}
-        <div className="sponsors-page-header">
-          <div className="sponsors-page-header-left">
-            <h1 className="sponsors-page-title">Sponsors</h1>
-            <p className="sponsors-page-subtitle">
-              Your support keeps React Bits free and open-source for developers everywhere.
-            </p>
-          </div>
-          <a href="#sponsor-plans" className="sponsors-page-cta">
-            Become a Sponsor <FaArrowRight size={12} />
-          </a>
-        </div>
-
-        {/* ── Tiers ───────────────────────────────────────────────── */}
-        {TIERS.map(tier => (
-          <div className="sponsors-tier-section" key={tier.key}>
-            <div className="sponsors-tier-header">
-              <span className={`sponsors-tier-badge sponsors-tier-badge--${tier.key}`}>
-                <tier.icon size={13} />
-                {tier.label}
-              </span>
+      <main className="pg spx">
+        <div className="pg-inner">
+          <header className="pg-head">
+            <div>
+              <h1 className="pg-title">Sponsors</h1>
+              <p className="pg-sub">
+                React Bits is free and open source. These teams help keep it that way, and their logos sit beside every
+                page of the docs.
+              </p>
             </div>
 
-            {tier.sponsors.length > 0 ? (
-              <div className={`sponsors-tier-grid sponsors-tier-grid--${tier.key}`}>
-                {tier.sponsors.map(sponsor => {
-                  const href = buildSponsorUrl(sponsor.url, tier.key);
-                  return (
-                    <a
-                      key={sponsor.id}
-                      href={href}
-                      target="_blank"
-                      rel="noopener"
-                      className="sponsors-page-card"
-                    >
-                      <div className={`sponsors-card-banner sponsors-card-banner--${tier.key}`}>
-                        <img
-                          className="sponsors-card-logo"
-                          src={sponsor.imageUrl}
-                          alt={sponsor.name}
-                        />
-                      </div>
-                      <div className="sponsors-card-body">
-                        <span className="sponsors-card-name">{sponsor.name}</span>
-                        <span className="sponsors-card-arrow">
-                          <ArrowRight size={14} />
-                        </span>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="sponsors-tier-empty">Available — reach out to claim this spot</div>
-            )}
-          </div>
-        ))}
-
-        {/* ── Pricing ─────────────────────────────────────────────── */}
-
-        <div className="sponsors-section-heading" id="sponsor-plans">
-          <h2 className="sponsors-section-title">Become a sponsor</h2>
-          <p className="sponsors-section-subtitle">Power the fastest growing open-source creative UI library, cancel anytime.</p>
-        </div>
-        <div className="sponsors-pricing">
-          {PRICING.map(tier => (
-            <div
-              key={tier.key}
-              className={`sponsors-pricing-card${tier.featured ? ' sponsors-pricing-card--featured' : ''}`}
-            >
-              <span className={`sponsors-tier-badge sponsors-tier-badge--${tier.key}`}>
-                <tier.icon size={13} />
-                {tier.label}
-              </span>
-              <div className="sponsors-pricing-price">
-                ${tier.price}
-                <span className="sponsors-pricing-period">/month</span>
-              </div>
-              <ul className="sponsors-pricing-benefits">
-                {tier.benefits.map(benefit => (
-                  <li key={benefit}>
-                    <Check size={14} />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={tier.checkoutUrl}
-                target="_blank"
-                rel="noopener"
-                className={`sponsors-pricing-btn${tier.featured ? ' sponsors-pricing-btn--featured' : ''}`}
-              >
-                Sponsor as {tier.label} <ArrowRight size={14} />
+            <div className="pg-actions">
+              <a href="#sponsor-plans" className="pg-btn pg-btn-primary">
+                Become a sponsor
+                <LuArrowRight size={16} aria-hidden="true" />
+              </a>
+              <a href={CONTACT_URL} className="pg-btn pg-btn-secondary">
+                Email us
               </a>
             </div>
-          ))}
-        </div>
+          </header>
 
-        {/* ── Stats ───────────────────────────────────────── */}
-        <div className="sponsors-stats">
-          {STATS.map(s => (
-            <div className="sponsors-stat" key={s.label}>
-              <span className="sponsors-stat-icon"><s.icon size={22} /></span>
-              <span className="sponsors-stat-value">{s.value}</span>
-              <span className="sponsors-stat-label">{s.label}</span>
+          <SponsorGrid detailed />
+
+          <section className="pg-section">
+            <header className="pg-section-head">
+              <h2 className="pg-section-title">Reach developers while they build</h2>
+              <p className="pg-section-sub">
+                Your logo appears in the README and on every docs page, right where React developers come looking for
+                UI.
+              </p>
+            </header>
+
+            <div className="spx-stats">
+              {stats.map(stat => (
+                <div className="pg-tile spx-stat" key={stat.label}>
+                  <div className="pg-well spx-stat-well">
+                    <span className="spx-stat-value">{stat.value}</span>
+                  </div>
+                  <span className="spx-stat-label">{stat.label}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </section>
 
-        <p className="sponsors-pricing-note">
-          Questions or custom packages?{' '}
-          <a href="mailto:contact@davidhaz.com?subject=React%20Bits%20Sponsorship%20Inquiry">Get in touch</a>
-        </p>
-      </section>
+          <section className="pg-section" id="sponsor-plans">
+            <header className="pg-section-head">
+              <h2 className="pg-section-title">Become a sponsor</h2>
+              <p className="pg-section-sub">Monthly plans, billed through Polar. Cancel anytime.</p>
+            </header>
+
+            <div className="spx-plans">
+              {PLANS.map(plan => (
+                <article className={`pg-tile spx-plan${plan.featured ? ' is-featured' : ''}`} key={plan.key}>
+                  <div className="pg-well spx-plan-well">
+                    <div className="spx-plan-top">
+                      <h3 className="spx-plan-name">{plan.label}</h3>
+                      {plan.featured && <span className="spx-plan-note">Most visible</span>}
+                    </div>
+
+                    <p className="spx-plan-price">
+                      ${plan.price}
+                      <span>/month</span>
+                    </p>
+
+                    <a
+                      href={plan.checkoutUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`pg-btn ${plan.featured ? 'pg-btn-primary' : 'pg-btn-secondary'} spx-plan-btn`}
+                    >
+                      Sponsor as {plan.label}
+                    </a>
+                  </div>
+
+                  <ul className="spx-plan-benefits">
+                    {plan.benefits.map(benefit => (
+                      <li key={benefit}>
+                        <LuCheck size={15} aria-hidden="true" />
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+
+            <div className="pg-tile spx-contact">
+              <div className="pg-well spx-contact-well">
+                <div>
+                  <h3 className="spx-contact-title">Need a different package?</h3>
+                  <p className="spx-contact-sub">
+                    Questions, or a plan that doesn&apos;t fit the tiers above. Email us and we&apos;ll work it out.
+                  </p>
+                </div>
+                <a href={CONTACT_URL} className="pg-btn pg-btn-secondary">
+                  Email us
+                  <LuArrowRight size={16} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
       <Footer />
     </>
   );

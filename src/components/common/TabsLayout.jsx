@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import TabsFooter from './TabsFooter';
 import CategoryProFooter from './Pro/CategoryProFooter';
+import Customize from './Preview/Customize';
 
 import { Tabs, Icon, Flex, Tooltip, Box, Menu, Portal } from '@chakra-ui/react';
 import { FiCode, FiEye } from 'react-icons/fi';
@@ -64,6 +65,33 @@ function findChildProps(children, targetType) {
     }
   });
   return result;
+}
+
+function insertCategoryPro(children, category) {
+  const target = findChildProps(children, Customize) ? Customize : PropTable;
+  let inserted = false;
+  const visit = node => {
+    if (inserted) return node;
+    if (Array.isArray(node)) return node.map(visit);
+    if (!React.isValidElement(node)) return node;
+    if (node.type === target) {
+      inserted = true;
+      const strip = <CategoryProFooter key="related-pro" category={category} />;
+      return (
+        <React.Fragment key={node.key ?? 'related-pro-slot'}>
+          {target === Customize ? node : strip}
+          {target === Customize ? strip : node}
+        </React.Fragment>
+      );
+    }
+    if (node.props.children == null) return node;
+    const next = visit(node.props.children);
+    if (!inserted) return node;
+    return Array.isArray(next)
+      ? React.cloneElement(node, undefined, ...next)
+      : React.cloneElement(node, undefined, next);
+  };
+  return visit(children);
 }
 
 const TOOLTIP_CONTENT_PROPS = {
@@ -584,7 +612,8 @@ const TabsLayout = ({ children, className }) => {
                           cursor="pointer"
                           _hover={{ bg: colors.bgHover }}
                         >
-                          <Icon as={FaRegShareFromSquare} boxSize={4} flexShrink={0} color="var(--text-primary)" /> Copy share link
+                          <Icon as={FaRegShareFromSquare} boxSize={4} flexShrink={0} color="var(--text-primary)" /> Copy
+                          share link
                         </Menu.Item>
                       )}
                       {aiExport && (
@@ -660,7 +689,7 @@ const TabsLayout = ({ children, className }) => {
             canReset: hasChanges
           }}
         >
-          {contentMap.PreviewTab}
+          {insertCategoryPro(contentMap.PreviewTab, category)}
         </CustomizeActionsContext.Provider>
         {canResize && (
           <PreviewResizer
@@ -676,8 +705,6 @@ const TabsLayout = ({ children, className }) => {
       </Tabs.Content>
 
       {category !== 'get-started' && <ComponentPager category={category} subcategory={subcategory} />}
-
-      <CategoryProFooter category={category} />
 
       <TabsFooter />
     </Tabs.Root>

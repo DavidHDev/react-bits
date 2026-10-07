@@ -17,6 +17,7 @@ export const proUrl = (path = '/', placement = 'unknown', extra = {}) => {
   url.searchParams.set('utm_source', UTM_SOURCE);
   url.searchParams.set('utm_medium', placement);
   url.searchParams.set('utm_campaign', UTM_CAMPAIGN);
+  url.searchParams.set('utm_content', placement);
 
   for (const [key, value] of Object.entries(extra)) {
     if (value != null) url.searchParams.set(key, String(value));

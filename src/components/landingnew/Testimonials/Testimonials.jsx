@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FaXTwitter } from 'react-icons/fa6';
 import './Testimonials.css';
 
@@ -16,7 +17,7 @@ const TWEETS = [
   },
   {
     handle: '@GibsonSMurray',
-    avatar: 'https://pbs.twimg.com/profile_images/1724192049002340352/-tood-4D_400x400.jpg',
+    avatar: null,
     text: 'React Bits has got to be the most artistic ui component lib I have seen in a while 🤌',
     url: 'https://x.com/GibsonSMurray/status/1889909058838339626'
   },
@@ -46,7 +47,7 @@ const TWEETS = [
   },
   {
     handle: '@irohandev',
-    avatar: 'https://pbs.twimg.com/profile_images/1920165535351742464/CJU2uWMU_400x400.jpg',
+    avatar: null,
     text: 'Got to know about React Bits and its just wow, the components are incredibly well designed! Really loved the overall feel and quality.',
     url: 'https://x.com/irohandev/status/1934877463064268822'
   },
@@ -61,16 +62,30 @@ const TWEETS = [
 /** Deals the list into three columns round-robin so each one stays evenly filled. */
 const toColumns = tweets => [0, 1, 2].map(offset => tweets.filter((_, i) => i % 3 === offset));
 
+const TweetAvatar = ({ tweet }) => {
+  const [failed, setFailed] = useState(false);
+  if (tweet.avatar && !failed) {
+    return <img src={tweet.avatar} alt="" className="ln-test-avatar" loading="lazy" onError={() => setFailed(true)} />;
+  }
+  return (
+    <span className="ln-test-avatar ln-test-avatar-fallback" aria-hidden="true">
+      {tweet.handle.replace(/^@/, '').slice(0, 2).toUpperCase()}
+    </span>
+  );
+};
+
 const TweetCard = ({ tweet }) => (
   <a href={tweet.url} target="_blank" rel="noopener noreferrer" className="ln-test-card">
-    <div className="ln-test-card-head">
-      <div className="ln-test-card-head-left">
-        <img src={tweet.avatar} alt="" className="ln-test-avatar" loading="lazy" />
-        <span className="ln-test-handle">{tweet.handle}</span>
+    <div className="ln-test-card-inner">
+      <p className="ln-test-text">{tweet.text}</p>
+      <div className="ln-test-card-head">
+        <div className="ln-test-card-head-left">
+          <TweetAvatar key={tweet.avatar || tweet.handle} tweet={tweet} />
+          <span className="ln-test-handle">{tweet.handle}</span>
+        </div>
+        <FaXTwitter className="ln-test-x-icon" />
       </div>
-      <FaXTwitter className="ln-test-x-icon" />
     </div>
-    <p className="ln-test-text">{tweet.text}</p>
   </a>
 );
 

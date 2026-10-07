@@ -29,11 +29,25 @@
         background: url('/base.png') 0 0 / 1200px 630px no-repeat;
       }
 
+      .logo {
+        position: absolute;
+        top: 83px;
+        left: 44px;
+        width: 211px;
+        height: 42.2px;
+        background: #fff;
+        -webkit-mask: url('/logo.svg') left top / contain no-repeat;
+        mask: url('/logo.svg') left top / contain no-repeat;
+      }
+
       .copy {
         position: absolute;
-        left: 84px;
-        bottom: 82px;
-        width: 396px;
+        top: 82px;
+        left: 40px;
+        display: flex;
+        align-items: center;
+        width: 440px;
+        height: 466px;
       }
 
       .title {
@@ -71,12 +85,13 @@
       }
 
       .no-preview .copy {
-        width: 1032px;
+        width: 1116px;
       }
     </style>
   </head>
   <body>
     <div class="card">
+      <div class="logo"></div>
       <div class="copy">
         <h1 class="title"></h1>
       </div>
