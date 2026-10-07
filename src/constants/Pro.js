@@ -2,6 +2,7 @@ import proSummary from './pro-summary.generated.json';
 import { Blocks, Box, LayoutTemplate, Bot, Component } from 'lucide-react';
 
 export const PRO_COUNTS = proSummary.counts;
+export const PRO_NEW_COUNTS = proSummary.newCounts;
 export const PRO_TIERS = proSummary.tiers;
 export const PRO_PLAN_ACCESS = proSummary.plans;
 export const PRO_SHOWCASE_ITEMS = proSummary.showcase;

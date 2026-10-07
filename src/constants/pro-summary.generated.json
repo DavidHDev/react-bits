@@ -9,6 +9,10 @@
     "agentKit": 20,
     "total": 865
   },
+  "newCounts": {
+    "components": 80,
+    "blocks": 20
+  },
   "assets": {
     "baseUrl": "https://reactbits.dev/rbp"
   },

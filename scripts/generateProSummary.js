@@ -198,6 +198,10 @@ const tiers = manifest.tiers.map(({ id, name, lifetime, annual, popular, ctaText
 
 const summary = {
   counts: manifest.counts,
+  newCounts: {
+    components: manifest.components.filter(item => item.isNew).length,
+    blocks: variantsOf(manifest.blocks).filter(item => item.isNew).length
+  },
   assets: { baseUrl: manifest.assets.baseUrl },
   startingPrice: Math.min(...manifest.tiers.map(tier => tier.lifetime)),
   tiers,

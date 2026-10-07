@@ -3,16 +3,15 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useLocation } from 'react-router-dom';
 import { LuX, LuVolume2, LuVolumeX } from 'react-icons/lu';
 import { FiArrowRight } from 'react-icons/fi';
+import { PRO_NEW_COUNTS } from '../../../constants/Pro';
 import { proUrl, trackProClick } from '../../../utils/pro';
 import './AnnouncementModal.css';
 
-// Bumped for each release so people who dismissed the previous announcement
-// still see the new one.
-const STORAGE_KEY = 'rb-pro-september-2026-release-seen';
+const STORAGE_KEY = 'rb-pro-october-2026-release-seen';
 const SHOW_DELAY = 1500;
-const PROMO_VIDEO = 'https://cdn.reactbits.dev/SEPTEMBERUPDATE.mp4';
+const PROMO_VIDEO = 'https://cdn.reactbits.dev/OCTOBER_UPDATE.mp4';
 
-const DISABLED = true;
+const DISABLED = false;
 
 const AnnouncementModal = () => {
   const location = useLocation();
@@ -24,7 +23,10 @@ const AnnouncementModal = () => {
   const previouslyFocusedElement = useRef(null);
 
   useEffect(() => {
-    const hasSeenModal = localStorage.getItem(STORAGE_KEY);
+    let hasSeenModal = false;
+    try {
+      hasSeenModal = Boolean(localStorage.getItem(STORAGE_KEY));
+    } catch {}
 
     if (hasSeenModal || DISABLED || isLandingPage) return;
 
@@ -38,7 +40,7 @@ const AnnouncementModal = () => {
 
   useEffect(() => {
     if (isVisible && modalRef.current) {
-      modalRef.current.focus();
+      modalRef.current.querySelector('button')?.focus();
     }
   }, [isVisible]);
 
@@ -68,7 +70,9 @@ const AnnouncementModal = () => {
 
   const handleDismiss = useCallback(() => {
     setIsClosing(true);
-    localStorage.setItem(STORAGE_KEY, 'true');
+    try {
+      localStorage.setItem(STORAGE_KEY, 'true');
+    } catch {}
 
     setTimeout(() => {
       setIsVisible(false);
@@ -153,14 +157,16 @@ const AnnouncementModal = () => {
                   loop
                   muted={isMuted}
                   playsInline
+                  preload="metadata"
                   width={1920}
                   height={1080}
-                  aria-label="React Bits Pro September update: new components, templates, bento blocks and Bento Builder"
+                  aria-label="React Bits Pro October update: new components and marketing blocks"
                 />
                 <button
                   className="announcement-modal-sound"
                   onClick={() => setIsMuted(m => !m)}
                   aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+                  aria-pressed={!isMuted}
                 >
                   {isMuted ? <LuVolumeX size={15} /> : <LuVolume2 size={15} />}
                 </button>
@@ -168,16 +174,17 @@ const AnnouncementModal = () => {
 
               <div className="announcement-modal-content">
                 <h2 id="announcement-modal-title" className="announcement-modal-title">
-                  React Bits Pro September Update
+                  React Bits Pro October Update
                 </h2>
 
                 <div id="announcement-modal-description" className="announcement-modal-description">
                   <p>
-                    <strong>16 new components</strong>, <strong>4 new templates</strong> and{' '}
-                    <strong>42 new bento blocks</strong> just landed, along with the new <strong>Bento Builder</strong>.
+                    <strong>{PRO_NEW_COUNTS.components} new components</strong> and{' '}
+                    <strong>{PRO_NEW_COUNTS.blocks} new marketing blocks</strong>.
                   </p>
                   <p>
-                    Drag, resize and arrange your next bento layout. More ways to build, all included in the update.
+                    New backgrounds, text animations, galleries, cursor effects and image effects. Watch the showcase,
+                    then try the demos.
                   </p>
                 </div>
 
@@ -192,6 +199,18 @@ const AnnouncementModal = () => {
                   }}
                 >
                   Explore React Bits Pro <FiArrowRight size={14} />
+                </a>
+                <a
+                  href={proUrl('/changelog', 'announcement-modal-changelog')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="announcement-modal-changelog"
+                  onClick={() => {
+                    trackProClick('announcement-modal-changelog');
+                    handleDismiss();
+                  }}
+                >
+                  View changelog
                 </a>
               </div>
             </div>
