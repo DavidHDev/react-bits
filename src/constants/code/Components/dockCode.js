@@ -5,22 +5,42 @@ import tsCode from '@ts-default/Components/Dock/Dock.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/Dock/Dock.tsx?raw';
 
 export const dock = {
-  dependencies: `motion`,
+  dependencies: ``,
   usage: `import Dock from './Dock';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Delete02Icon, Home01Icon, Mail01Icon, MusicNote03Icon, Settings01Icon } from '@hugeicons/core-free-icons';
 
-  const items = [
-    { icon: <VscHome size={18} />, label: 'Home', onClick: () => alert('Home!') },
-    { icon: <VscArchive size={18} />, label: 'Archive', onClick: () => alert('Archive!') },
-    { icon: <VscAccount size={18} />, label: 'Profile', onClick: () => alert('Profile!') },
-    { icon: <VscSettingsGear size={18} />, label: 'Settings', onClick: () => alert('Settings!') },
-  ];
+const glyph = icon => <HugeiconsIcon icon={icon} size="1em" strokeWidth={1.8} />;
 
-  <Dock 
+const items = [
+  {
+    icon: glyph(Home01Icon),
+    label: 'Home',
+    active: true,
+    onClick: () => console.log('Home'),
+    menu: [
+      { label: 'New Window', onClick: () => console.log('New Window') },
+      { separator: true },
+      { label: 'Options', items: [{ label: 'Open at Login', checked: true }, { label: 'Show in Finder' }] },
+      { separator: true },
+      { label: 'Quit', onClick: () => console.log('Quit') }
+    ]
+  },
+  { icon: glyph(Mail01Icon), label: 'Mail', badge: 3, onClick: () => console.log('Mail') },
+  { icon: glyph(MusicNote03Icon), label: 'Music', active: true, onClick: () => console.log('Music') },
+  { icon: glyph(Settings01Icon), label: 'Settings', onClick: () => console.log('Settings') },
+  { separator: true },
+  { icon: glyph(Delete02Icon), label: 'Trash', onClick: () => console.log('Trash') }
+];
+
+<div style={{ position: 'relative', height: 400 }}>
+  <Dock
     items={items}
-    panelHeight={68}
     baseItemSize={50}
     magnification={70}
-  />`,
+    panelHeight={68}
+  />
+</div>`,
   code,
   css,
   tailwind,

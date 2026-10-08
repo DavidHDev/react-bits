@@ -76,7 +76,7 @@ const SWATCH_PRESETS = [
   '#000000'
 ];
 
-export default function PreviewColorPickerCustom({ title, color, onChange }) {
+export default function PreviewColorPickerCustom({ title, color, onChange, variant = 'row' }) {
   const [hsv, setHsv] = useState(() => {
     if (color && color.length >= 7) return hexToHsv(color);
     return { h: 270, s: 0.65, v: 0.97 };
@@ -203,28 +203,44 @@ export default function PreviewColorPickerCustom({ title, color, onChange }) {
 
   const currentHex = hsvToHex(hsv.h, hsv.s, hsv.v);
   const hueColor = hsvToHex(hsv.h, 1, 1);
+  const chip = variant === 'swatch';
+  const popoverWidth = chip ? 232 : popoverRect?.width;
+  const popoverLeft = chip
+    ? Math.min(Math.max(8, (popoverRect?.left ?? 0) + (popoverRect?.width ?? 0) / 2 - 116), window.innerWidth - 240)
+    : popoverRect?.left;
 
   return (
-    <div className="scrubber" ref={wrapRef} style={{ position: 'relative' }}>
-      <div
-        className="scrubber-track scrubber-track--color"
-        onClick={() => setOpen(o => !o)}
-        style={{ cursor: 'pointer' }}
-      >
-        <span className="scrubber-label">{title}</span>
-        <div className="scrubber-color-controls">
-          <span className="scrubber-color-swatch-preview" style={{ background: currentHex }} />
-          <input
-            className="scrubber-color-text"
-            type="text"
-            value={textVal}
-            onChange={handleTextChange}
-            onClick={e => e.stopPropagation()}
-            maxLength={7}
-            aria-label={`${title} hex value`}
-          />
+    <div className={chip ? 'scrubber-chip-wrap' : 'scrubber'} ref={wrapRef} style={{ position: 'relative' }}>
+      {chip ? (
+        <button
+          type="button"
+          className="scrubber-color-chip"
+          style={{ background: currentHex }}
+          onClick={() => setOpen(o => !o)}
+          aria-label={`${title}: ${currentHex}`}
+          aria-expanded={open}
+        />
+      ) : (
+        <div
+          className="scrubber-track scrubber-track--color"
+          onClick={() => setOpen(o => !o)}
+          style={{ cursor: 'pointer' }}
+        >
+          <span className="scrubber-label">{title}</span>
+          <div className="scrubber-color-controls">
+            <span className="scrubber-color-swatch-preview" style={{ background: currentHex }} />
+            <input
+              className="scrubber-color-text"
+              type="text"
+              value={textVal}
+              onChange={handleTextChange}
+              onClick={e => e.stopPropagation()}
+              maxLength={7}
+              aria-label={`${title} hex value`}
+            />
+          </div>
         </div>
-      </div>
+      )}
       {open &&
         popoverRect &&
         createPortal(
@@ -234,8 +250,8 @@ export default function PreviewColorPickerCustom({ title, color, onChange }) {
             style={{
               position: 'fixed',
               top: popoverRect.bottom + 4,
-              left: popoverRect.left,
-              width: popoverRect.width,
+              left: popoverLeft,
+              width: popoverWidth,
               zIndex: 9999,
               background: 'var(--bg-elevated)',
               border: '1px solid var(--border-primary)',
@@ -331,6 +347,17 @@ export default function PreviewColorPickerCustom({ title, color, onChange }) {
                 />
               ))}
             </div>
+            {chip ? (
+              <input
+                className="scrubber-color-text"
+                type="text"
+                value={textVal}
+                onChange={handleTextChange}
+                maxLength={7}
+                aria-label={`${title} hex value`}
+                style={{ width: '100%', marginTop: 10 }}
+              />
+            ) : null}
           </div>,
           document.body
         )}

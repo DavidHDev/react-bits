@@ -5,19 +5,17 @@ import tsCode from '@ts-default/TextAnimations/ShinyText/ShinyText.tsx?raw';
 import tsTailwind from '@ts-tailwind/TextAnimations/ShinyText/ShinyText.tsx?raw';
 
 export const shinyText = {
-  dependencies: `motion`,
+  dependencies: ``,
   usage: `import ShinyText from './ShinyText';
 
 <ShinyText
-  text="✨ Shiny Text Effect"
-  speed={2}
-  delay={0}
+  text="Shiny Text Effect"
   color="#b5b5b5"
   shineColor="#ffffff"
-  spread={120}
-  direction="left"
-  yoyo={false}
-  pauseOnHover={false}
+  speed={2}
+  shineWidth={40}
+  softness={0.8}
+  trigger="loop"
 />`,
   code,
   css,

@@ -1,57 +1,513 @@
-.dock-outer {
-  margin: 0 0.5rem;
+.dock {
+  position: absolute;
+  z-index: 10;
   display: flex;
-  max-width: 100%;
-  align-items: center;
+  gap: var(--dock-gap);
+  box-sizing: border-box;
+  padding: var(--dock-pad);
+  border-radius: calc(var(--dock-base) * var(--dock-round) * 0.5 + var(--dock-pad));
+  background: var(--dock-panel);
+  box-shadow:
+    inset 0 0 0 1px var(--dock-panel-edge),
+    inset 0 1px 0 var(--dock-panel-highlight),
+    var(--dock-panel-shadow);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  touch-action: none;
+  transition:
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
 }
 
-.dock-panel {
+.dock[data-hidden] {
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    translate 0.36s cubic-bezier(0.55, 0, 0.75, 0.15),
+    opacity 0.24s ease 0.1s;
+}
+
+.dock::before {
+  content: '';
   position: absolute;
-  bottom: 0.5rem;
+  z-index: -1;
+  display: none;
+}
+
+.dock:hover::before {
+  display: block;
+}
+
+.dock--bottom,
+.dock--top {
   left: 50%;
+  height: var(--dock-thickness);
   transform: translateX(-50%);
-  display: flex;
+}
+
+.dock--left,
+.dock--right {
+  top: 50%;
+  flex-direction: column;
+  width: var(--dock-thickness);
+  transform: translateY(-50%);
+}
+
+.dock--bottom {
+  bottom: 12px;
   align-items: flex-end;
-  width: fit-content;
-  gap: 1rem;
-  border-radius: 1rem;
-  background-color: #120F17;
-  border: 1px solid #222;
-  padding: 0 0.5rem 0.5rem;
+}
+
+.dock--top {
+  top: 12px;
+  align-items: flex-start;
+}
+
+.dock--left {
+  left: 12px;
+  align-items: flex-start;
+}
+
+.dock--right {
+  right: 12px;
+  align-items: flex-end;
+}
+
+.dock--bottom[data-hidden] {
+  translate: 0 calc(100% + 12px);
+}
+
+.dock--top[data-hidden] {
+  translate: 0 calc(-100% - 12px);
+}
+
+.dock--left[data-hidden] {
+  translate: calc(-100% - 12px) 0;
+}
+
+.dock--right[data-hidden] {
+  translate: calc(100% + 12px) 0;
+}
+
+.dock--bottom::before,
+.dock--top::before {
+  left: 0;
+  right: 0;
+  height: calc(var(--dock-reach) + 8px);
+}
+
+.dock--left::before,
+.dock--right::before {
+  top: 0;
+  bottom: 0;
+  width: calc(var(--dock-reach) + 8px);
+}
+
+.dock--bottom::before {
+  bottom: 100%;
+}
+
+.dock--top::before {
+  top: 100%;
+}
+
+.dock--left::before {
+  left: 100%;
+}
+
+.dock--right::before {
+  right: 100%;
 }
 
 .dock-item {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background-color: #120F17;
-  border: 1px solid #222;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  flex: none;
+  width: var(--dock-base);
+  height: var(--dock-base);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--dock-ink);
+  font: inherit;
   cursor: pointer;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.dock-icon {
+.dock-item:hover,
+.dock-item:focus-visible {
+  z-index: 1;
+}
+
+.dock-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--dock-base);
+  height: var(--dock-base);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.dock-face {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  border-radius: calc(var(--dock-base) * var(--dock-round) * 0.5);
+  background: var(--dock-tile);
+  box-shadow:
+    inset 0 0 0 1px var(--dock-tile-edge),
+    inset 0 1px 0 var(--dock-tile-highlight),
+    var(--dock-tile-shadow);
+  font-size: calc(var(--dock-base) * 0.44);
+  line-height: 1;
+  transition: filter 0.2s ease;
+}
+
+.dock--bare .dock-face {
+  overflow: visible;
+  background: none;
+  box-shadow: none;
+  font-size: calc(var(--dock-base) * 0.62);
+}
+
+.dock-item:active .dock-face,
+.dock-item[data-open] .dock-face {
+  filter: var(--dock-press);
+  transition-duration: 0s;
+}
+
+.dock-item:focus-visible .dock-face {
+  outline: 2px solid var(--dock-accent);
+  outline-offset: 3px;
+}
+
+.dock-badge {
+  position: absolute;
+  top: calc(var(--dock-base) * (0.1465 * var(--dock-round) - 0.19));
+  right: calc(var(--dock-base) * (0.1465 * var(--dock-round) - 0.19));
+  box-sizing: border-box;
+  min-width: calc(var(--dock-base) * 0.38);
+  height: calc(var(--dock-base) * 0.38);
+  padding: 0 calc(var(--dock-base) * 0.1);
+  border-radius: calc(var(--dock-base) * 0.19);
+  background: var(--dock-badge);
+  color: #ffffff;
+  font-size: calc(var(--dock-base) * 0.22);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: calc(var(--dock-base) * 0.38);
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.dock-badge:empty {
+  top: calc(var(--dock-base) * (0.1465 * var(--dock-round) - 0.11));
+  right: calc(var(--dock-base) * (0.1465 * var(--dock-round) - 0.11));
+  min-width: 0;
+  width: calc(var(--dock-base) * 0.22);
+  height: calc(var(--dock-base) * 0.22);
+  padding: 0;
+}
+
+.dock-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--dock-dot);
+  pointer-events: none;
+}
+
+.dock--bottom .dock-dot,
+.dock--top .dock-dot {
+  left: 50%;
+  margin-left: -2px;
+}
+
+.dock--left .dock-dot,
+.dock--right .dock-dot {
+  top: 50%;
+  margin-top: -2px;
+}
+
+.dock--bottom .dock-dot {
+  top: calc(100% + max(var(--dock-pad) / 2, 5px) - 2px);
+}
+
+.dock--top .dock-dot {
+  bottom: calc(100% + max(var(--dock-pad) / 2, 5px) - 2px);
+}
+
+.dock--left .dock-dot {
+  right: calc(100% + max(var(--dock-pad) / 2, 5px) - 2px);
+}
+
+.dock--right .dock-dot {
+  left: calc(100% + max(var(--dock-pad) / 2, 5px) - 2px);
+}
+
+.dock-separator {
+  flex: none;
+  align-self: center;
+  border-radius: 1px;
+  background: var(--dock-separator);
+}
+
+.dock--bottom .dock-separator,
+.dock--top .dock-separator {
+  width: 1px;
+  height: calc(var(--dock-base) * 0.72);
+}
+
+.dock--left .dock-separator,
+.dock--right .dock-separator {
+  width: calc(var(--dock-base) * 0.72);
+  height: 1px;
 }
 
 .dock-label {
   position: absolute;
-  top: -1.5rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--dock-label);
+  color: var(--dock-label-ink);
+  box-shadow:
+    inset 0 0 0 1px var(--dock-panel-edge),
+    0 8px 20px -8px rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.dock--bottom .dock-label {
+  bottom: calc(100% + 12px);
   left: 50%;
-  width: fit-content;
-  white-space: pre;
-  border-radius: 0.375rem;
-  border: 1px solid #222;
-  background-color: #120F17;
-  padding: 0.125rem 0.5rem;
-  font-size: 0.75rem;
-  color: #fff;
-  transform: translateX(-50%);
+  transform: translate(-50%, 4px);
+}
+
+.dock--top .dock-label {
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translate(-50%, -4px);
+}
+
+.dock--left .dock-label {
+  top: 50%;
+  left: calc(100% + 12px);
+  transform: translate(-4px, -50%);
+}
+
+.dock--right .dock-label {
+  top: 50%;
+  right: calc(100% + 12px);
+  transform: translate(4px, -50%);
+}
+
+.dock-item:focus-visible .dock-label {
+  opacity: 1;
+}
+
+.dock--bottom .dock-item:focus-visible .dock-label,
+.dock--top .dock-item:focus-visible .dock-label {
+  transform: translate(-50%, 0);
+}
+
+.dock--left .dock-item:focus-visible .dock-label,
+.dock--right .dock-item:focus-visible .dock-label {
+  transform: translate(0, -50%);
+}
+
+@media (hover: hover) {
+  .dock-item:hover .dock-label {
+    opacity: 1;
+  }
+
+  .dock--bottom .dock-item:hover .dock-label,
+  .dock--top .dock-item:hover .dock-label {
+    transform: translate(-50%, 0);
+  }
+
+  .dock--left .dock-item:hover .dock-label,
+  .dock--right .dock-item:hover .dock-label {
+    transform: translate(0, -50%);
+  }
+}
+
+.dock .dock-item[data-hop] .dock-label {
+  opacity: 0;
+}
+
+.dock-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  visibility: hidden;
+  color: var(--dock-menu-ink);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.dock-menu-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  box-shadow: var(--dock-menu-shadow);
+  pointer-events: none;
+}
+
+.dock-menu-glass {
+  position: absolute;
+  inset: -9px;
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  pointer-events: none;
+}
+
+.dock-menu-shape {
+  position: absolute;
+  top: -9px;
+  left: -9px;
+  width: calc(100% + 18px);
+  height: calc(100% + 18px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.dock-menu-shape path {
+  fill: var(--dock-menu);
+  stroke: var(--dock-menu-edge);
+  stroke-width: 1px;
+}
+
+.dock-menu-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 172px;
+  max-width: 280px;
+  padding: 5px;
+  outline: none;
+}
+
+.dock-menu-highlight {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  right: 5px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--dock-accent);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.16s cubic-bezier(0.3, 0.8, 0.3, 1),
+    height 0.16s cubic-bezier(0.3, 0.8, 0.3, 1),
+    opacity 0.12s ease;
+}
+
+.dock-menu-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 24px;
+  margin: 0;
+  padding: 0 10px 0 7px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: default;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dock-menu-row[data-active] {
+  color: #ffffff;
+}
+
+.dock-menu-row[aria-disabled='true'] {
+  color: var(--dock-menu-muted);
+}
+
+.dock-menu-check {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+}
+
+.dock-menu-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1px;
+  font-size: 15px;
+}
+
+.dock-menu-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dock-menu-shortcut {
+  flex: none;
+  margin-left: 18px;
+  color: var(--dock-menu-muted);
+}
+
+.dock-menu-row[data-active] .dock-menu-shortcut {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.dock-menu-chevron {
+  display: flex;
+  flex: none;
+  margin-left: 14px;
+  color: var(--dock-menu-muted);
+}
+
+.dock-menu-row[data-active] .dock-menu-chevron {
+  color: inherit;
+}
+
+.dock-menu-separator {
+  flex: none;
+  height: 1px;
+  margin: 5px 10px;
+  background: var(--dock-menu-separator);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock,
+  .dock[data-hidden],
+  .dock-menu-highlight {
+    transition: none;
+  }
 }

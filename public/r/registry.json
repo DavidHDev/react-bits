@@ -3028,11 +3028,9 @@
 		{
 			"name": "GradientText-JS-CSS",
 			"title": "GradientText",
-			"description": "Animated gradient sweep across live text with speed and color control.",
+			"description": "Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3049,11 +3047,9 @@
 		{
 			"name": "GradientText-JS-TW",
 			"title": "GradientText",
-			"description": "Animated gradient sweep across live text with speed and color control.",
+			"description": "Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3065,11 +3061,9 @@
 		{
 			"name": "GradientText-TS-CSS",
 			"title": "GradientText",
-			"description": "Animated gradient sweep across live text with speed and color control.",
+			"description": "Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3086,11 +3080,9 @@
 		{
 			"name": "GradientText-TS-TW",
 			"title": "GradientText",
-			"description": "Animated gradient sweep across live text with speed and color control.",
+			"description": "Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3472,11 +3464,9 @@
 		{
 			"name": "ShinyText-JS-CSS",
 			"title": "ShinyText",
-			"description": "Metallic sheen sweeps across text producing a reflective highlight.",
+			"description": "A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3493,11 +3483,9 @@
 		{
 			"name": "ShinyText-JS-TW",
 			"title": "ShinyText",
-			"description": "Metallic sheen sweeps across text producing a reflective highlight.",
+			"description": "A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3509,11 +3497,9 @@
 		{
 			"name": "ShinyText-TS-CSS",
 			"title": "ShinyText",
-			"description": "Metallic sheen sweeps across text producing a reflective highlight.",
+			"description": "A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3530,11 +3516,9 @@
 		{
 			"name": "ShinyText-TS-TW",
 			"title": "ShinyText",
-			"description": "Metallic sheen sweeps across text producing a reflective highlight.",
+			"description": "A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5990,10 +5974,10 @@
 		{
 			"name": "Dock-JS-CSS",
 			"title": "Dock",
-			"description": "macOS style magnifying dock with proximity scaling of icons.",
+			"description": "macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6011,10 +5995,10 @@
 		{
 			"name": "Dock-JS-TW",
 			"title": "Dock",
-			"description": "macOS style magnifying dock with proximity scaling of icons.",
+			"description": "macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6027,10 +6011,10 @@
 		{
 			"name": "Dock-TS-CSS",
 			"title": "Dock",
-			"description": "macOS style magnifying dock with proximity scaling of icons.",
+			"description": "macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6048,10 +6032,10 @@
 		{
 			"name": "Dock-TS-TW",
 			"title": "Dock",
-			"description": "macOS style magnifying dock with proximity scaling of icons.",
+			"description": "macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [

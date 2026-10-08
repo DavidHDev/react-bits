@@ -518,15 +518,6 @@
   border-color: #e4e4e7;
 }
 
-:root[data-theme='light'] .category-components .demo-container .dock-panel,
-:root[data-theme='light'] .category-components .demo-container .dock-item,
-:root[data-theme='light'] .category-components .demo-container .dock-label {
-  background: rgba(255, 255, 255, 0.92);
-  border-color: #e4e4e7;
-  color: #18181b;
-  box-shadow: 0 10px 30px rgba(24, 24, 27, 0.08);
-}
-
 :root[data-theme='light'] .category-components .demo-container .carousel-container,
 :root[data-theme='light'] .category-components .demo-container .carousel-item,
 :root[data-theme='light'] .category-components .demo-container .carousel-container.round,

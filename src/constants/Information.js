@@ -446,12 +446,19 @@ export const componentMetadata = {
   },
   'TextAnimations/GradientText': {
     videoUrl: '/assets/video/gradienttext.webm',
-    description: 'Animated gradient sweep across live text with speed and color control.',
+    description:
+      'Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.',
     category: 'TextAnimations',
     name: 'GradientText',
     docsUrl: 'https://reactbits.dev/text-animations/gradient-text',
     tags: [],
-    added: '2024-08-12'
+    added: '2024-08-12',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt with no dependencies. Adds flow and conic variants, any angle, a scale for broader or tighter bands, a soft glow and colors that drift toward the pointer. The outline is now a true gradient ring that works on light and dark backgrounds, and the component renders inline so it fits inside headings.'
+      }
+    ]
   },
   'TextAnimations/RotatingText': {
     videoUrl: '/assets/video/rotatingtext.webm',
@@ -500,12 +507,19 @@ export const componentMetadata = {
   },
   'TextAnimations/ShinyText': {
     videoUrl: '/assets/video/shinytext.webm',
-    description: 'Metallic sheen sweeps across text producing a reflective highlight.',
+    description:
+      'A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.',
     category: 'TextAnimations',
     name: 'ShinyText',
     docsUrl: 'https://reactbits.dev/text-animations/shiny-text',
     tags: [],
-    added: '2024-08-12'
+    added: '2024-08-12',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt with no dependencies. Shape the shine with width, softness, angle and up to three bands, add a travelling glow, pick smooth, linear or snappy easing, play it on a loop, on hover or when scrolled into view, and let it follow the pointer. The old spread prop is now angle.'
+      }
+    ]
   },
   'TextAnimations/SplitText': {
     videoUrl: '/assets/video/splittext.webm',
@@ -821,12 +835,18 @@ export const componentMetadata = {
   },
   'Components/Dock': {
     videoUrl: '/assets/video/dock.webm',
-    description: 'macOS style magnifying dock with proximity scaling of icons.',
+    description: 'macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.',
     category: 'Components',
     name: 'Dock',
     docsUrl: 'https://reactbits.dev/components/dock',
     tags: [],
-    added: '2024-08-08'
+    added: '2024-08-08',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt without dependencies. Icons now grow on a smooth curve and hop when clicked, and each item can show an open dot and a badge. Right click, long press or the menu key opens an Apple style context menu with checkmarks and submenus. Also new: four edge positions, auto hide, light and dark themes, roundness, accent and badge colors, separators, keyboard support, and a dock that shrinks to fit small screens.'
+      }
+    ]
   },
   'Components/DomeGallery': {
     videoUrl: '/assets/video/domegallery.webm',

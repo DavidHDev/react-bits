@@ -9,7 +9,7 @@ import Customize from '../../components/common/Preview/Customize';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
-import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+import PreviewColorList from '../../components/common/Preview/PreviewColorList';
 
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
@@ -20,72 +20,92 @@ import { gradientText } from '../../constants/code/TextAnimations/gradientTextCo
 const DEFAULT_PROPS = {
   colors: ['#5227FF', '#FF9FFC', '#B497CF'],
   animationSpeed: 8,
-  direction: 'horizontal',
-  pauseOnHover: false,
+  variant: 'linear',
+  angle: 90,
+  scale: 3,
   yoyo: true,
-  showBorder: false
+  glow: 0,
+  showBorder: false,
+  borderWidth: 1.5,
+  pauseOnHover: false,
+  followPointer: false
 };
+
+const VARIANT_OPTIONS = [
+  { value: 'linear', label: 'Linear' },
+  { value: 'flow', label: 'Flow' },
+  { value: 'conic', label: 'Conic' }
+];
 
 const GradientTextDemo = () => {
   const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const { colors, animationSpeed, direction, pauseOnHover, yoyo, showBorder } = props;
-
-  const updateColor = (index, newColor) => {
-    const newColors = [...colors];
-    newColors[index] = newColor;
-    updateProp('colors', newColors);
-  };
-
   const propData = useMemo(
     () => [
-      {
-        name: 'children',
-        type: 'ReactNode',
-        default: '-',
-        description: 'The content to be displayed inside the gradient text.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Adds custom classes to the root element for additional styling.'
-      },
+      { name: 'children', type: 'ReactNode', default: '-', description: 'The text to fill with the gradient.' },
       {
         name: 'colors',
         type: 'string[]',
         default: `["#5227FF", "#FF9FFC", "#B497CF"]`,
-        description: 'Array of colors for the gradient effect.'
+        description: 'Colors of the gradient, in order. The first color is repeated at the end so loops stay seamless.'
       },
       {
         name: 'animationSpeed',
         type: 'number',
         default: '8',
-        description: 'Duration of one animation cycle in seconds.'
+        description: 'Seconds for one full cycle of the animation.'
       },
       {
-        name: 'direction',
-        type: `'horizontal' | 'vertical' | 'diagonal'`,
-        default: `'horizontal'`,
-        description: 'Direction of the gradient animation.'
+        name: 'variant',
+        type: "'linear' | 'flow' | 'conic'",
+        default: "'linear'",
+        description:
+          'How the colors move. Linear slides a gradient through the text, flow drifts soft blobs of color around like a living mesh gradient and conic swings colors around the center.'
       },
       {
-        name: 'pauseOnHover',
-        type: 'boolean',
-        default: 'false',
-        description: 'Pauses the animation when hovering over the text.'
+        name: 'angle',
+        type: 'number',
+        default: '90',
+        description: 'Direction of the gradient in degrees. 90 runs left to right, 180 top to bottom.'
+      },
+      {
+        name: 'scale',
+        type: 'number',
+        default: '3',
+        description: 'How broad the colors are. Higher values show fewer colors at once in longer, calmer bands.'
       },
       {
         name: 'yoyo',
         type: 'boolean',
         default: 'true',
-        description: 'Reverses animation direction at the end instead of looping.'
+        description: 'Eases back and forth instead of scrolling the gradient in one direction forever.'
+      },
+      {
+        name: 'glow',
+        type: 'number',
+        default: '0',
+        description: 'A soft bloom of the gradient colors around the letters, from 0 to 1.'
       },
       {
         name: 'showBorder',
         type: 'boolean',
         default: 'false',
-        description: 'Displays a gradient border around the text.'
-      }
+        description: 'Wraps the text in a pill with an animated gradient outline that works on any background.'
+      },
+      { name: 'borderWidth', type: 'number', default: '1.5', description: 'Thickness of the outline in px.' },
+      {
+        name: 'pauseOnHover',
+        type: 'boolean',
+        default: 'false',
+        description: 'Holds the colors still while the pointer is over the text.'
+      },
+      {
+        name: 'followPointer',
+        type: 'boolean',
+        default: 'false',
+        description: 'While hovered, the colors are drawn toward the pointer.'
+      },
+      { name: 'className', type: 'string', default: "''", description: 'Extra class names for the root element.' },
+      { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the root element.' }
     ],
     []
   );
@@ -95,45 +115,19 @@ const GradientTextDemo = () => {
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" minH={400}>
-            <Text fontSize={'3rem'} as="div">
-              <GradientText
-                colors={colors}
-                animationSpeed={animationSpeed}
-                direction={direction}
-                pauseOnHover={pauseOnHover}
-                yoyo={yoyo}
-                showBorder={showBorder}
-              >
-                Gradient Magic
-              </GradientText>
+            <Text fontSize="3rem" fontWeight={600} as="div" textAlign="center" px={4}>
+              <GradientText {...props}>Gradient Magic</GradientText>
             </Text>
           </Box>
 
           <Customize>
-            {colors.map((color, index) => (
-              <PreviewColorPickerCustom
-                key={index}
-                title={`Color ${index + 1}`}
-                color={color}
-                onChange={val => updateColor(index, val)}
-              />
-            ))}
+            <PreviewColorList title="Colors" colors={props.colors} onChange={value => updateProp('colors', value)} />
 
-            <PreviewSlider
-              title="Color Count"
-              min={2}
-              max={8}
-              step={1}
-              value={colors.length}
-              onChange={val => {
-                if (val > colors.length) {
-                  const newColors = [...colors];
-                  while (newColors.length < val) newColors.push('#ffffff');
-                  updateProp('colors', newColors);
-                } else if (val < colors.length) {
-                  updateProp('colors', colors.slice(0, val));
-                }
-              }}
+            <PreviewSelect
+              title="Variant"
+              options={VARIANT_OPTIONS}
+              value={props.variant}
+              onChange={value => updateProp('variant', value)}
             />
 
             <PreviewSlider
@@ -141,34 +135,67 @@ const GradientTextDemo = () => {
               min={1}
               max={20}
               step={0.5}
-              value={animationSpeed}
-              onChange={val => updateProp('animationSpeed', val)}
+              value={props.animationSpeed}
+              onChange={value => updateProp('animationSpeed', value)}
               valueUnit="s"
             />
 
-            <PreviewSelect
-              title="Direction"
-              options={[
-                { value: 'horizontal', label: 'Horizontal' },
-                { value: 'vertical', label: 'Vertical' },
-                { value: 'diagonal', label: 'Diagonal' }
-              ]}
-              value={direction}
-              onChange={val => updateProp('direction', val)}
+            <PreviewSlider
+              title="Angle"
+              min={0}
+              max={360}
+              step={5}
+              value={props.angle}
+              onChange={value => updateProp('angle', value)}
+              valueUnit="°"
             />
 
-            <PreviewSwitch title="Yoyo" isChecked={yoyo} onChange={checked => updateProp('yoyo', checked)} />
-
-            <PreviewSwitch
-              title="Pause on Hover"
-              isChecked={pauseOnHover}
-              onChange={checked => updateProp('pauseOnHover', checked)}
+            <PreviewSlider
+              title="Scale"
+              min={1}
+              max={6}
+              step={0.25}
+              value={props.scale}
+              onChange={value => updateProp('scale', value)}
             />
+
+            <PreviewSlider
+              title="Glow"
+              min={0}
+              max={1}
+              step={0.05}
+              value={props.glow}
+              onChange={value => updateProp('glow', value)}
+            />
+
+            <PreviewSlider
+              title="Border Width"
+              min={0.5}
+              max={4}
+              step={0.5}
+              value={props.borderWidth}
+              onChange={value => updateProp('borderWidth', value)}
+              valueUnit="px"
+            />
+
+            <PreviewSwitch title="Yoyo" isChecked={props.yoyo} onChange={value => updateProp('yoyo', value)} />
 
             <PreviewSwitch
               title="Show Border"
-              isChecked={showBorder}
-              onChange={checked => updateProp('showBorder', checked)}
+              isChecked={props.showBorder}
+              onChange={value => updateProp('showBorder', value)}
+            />
+
+            <PreviewSwitch
+              title="Pause on Hover"
+              isChecked={props.pauseOnHover}
+              onChange={value => updateProp('pauseOnHover', value)}
+            />
+
+            <PreviewSwitch
+              title="Follow Pointer"
+              isChecked={props.followPointer}
+              onChange={value => updateProp('followPointer', value)}
             />
           </Customize>
 
