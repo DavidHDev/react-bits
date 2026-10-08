@@ -92,6 +92,7 @@ export const CATEGORIES = [
   {
     name: 'Components',
     subcategories: [
+      'Holo Card',
       'Circular Carousel',
       'Flex Carousel',
       'Infinite Spiral',

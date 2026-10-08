@@ -1,0 +1,81 @@
+.holo-card {
+  --hc-w: 320px;
+  --hc-ratio: 0.716;
+  --hc-radius: 14px;
+
+  position: relative;
+  display: inline-block;
+  width: var(--hc-w);
+  max-width: 100%;
+  aspect-ratio: var(--hc-ratio);
+  border-radius: var(--hc-radius);
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+.holo-card[data-flippable] {
+  cursor: pointer;
+}
+
+.holo-card[data-flippable]:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
+}
+
+.holo-card__shadow {
+  position: absolute;
+  inset: 10% 7% -4%;
+  border-radius: var(--hc-radius);
+  background: rgba(0, 0, 0, 0.42);
+  filter: blur(26px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.holo-card__rotor {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.holo-card__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--hc-radius);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.holo-card__face--back {
+  transform: rotateY(180deg);
+}
+
+.holo-card__face img,
+.holo-card__face canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.holo-card__face img {
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.holo-card__face canvas {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.holo-card[data-ready] .holo-card__face canvas {
+  opacity: 1;
+}

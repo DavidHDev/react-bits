@@ -110,6 +110,7 @@ const components = {
   'carousel': () => import('../demo/Components/CarouselDemo'),
   'counter': () => import('../demo/Components/CounterDemo'),
   'lanyard': () => import('../demo/Components/LanyardDemo'),
+  'holo-card': () => import('../demo/Components/HoloCardDemo'),
   'glass-icons': () => import('../demo/Components/GlassIconsDemo'),
   'animated-list': () => import('../demo/Components/AnimatedListDemo'),
   'folder': () => import('../demo/Components/FolderDemo'),

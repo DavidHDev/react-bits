@@ -13,6 +13,7 @@ const OUT_DIR = path.join(ROOT, 'public/og');
 const BASE_IMAGE = path.join(ROOT, 'scripts/og/base.png');
 const TEMPLATE = path.join(ROOT, 'scripts/og/card.html');
 const LOGO = path.join(ROOT, 'src/assets/logos/react-bits-logo.svg');
+const ANNOUNCEMENT = path.join(ROOT, 'src/components/common/AnnouncementModal/AnnouncementModal.jsx');
 const FONT_DIR = path.join(ROOT, 'node_modules/geist/dist/fonts');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const WIDTH = 1200;
@@ -184,11 +185,25 @@ const connect = url =>
     );
   });
 
+const announcementKey = () => {
+  try {
+    return fs.readFileSync(ANNOUNCEMENT, 'utf8').match(/STORAGE_KEY = '([^']+)'/)?.[1] ?? null;
+  } catch {
+    return null;
+  }
+};
+
 const openPage = async (browser, endpoint, { width, height, scale }) => {
   const { targetId } = await browser.send('Target.createTarget', { url: 'about:blank', newWindow: true });
   const page = await connect(`ws://${endpoint.host}/devtools/page/${targetId}`);
   await page.send('Page.enable');
   await page.send('Runtime.enable');
+  const seen = announcementKey();
+  if (seen) {
+    await page.send('Page.addScriptToEvaluateOnNewDocument', {
+      source: `try { localStorage.setItem(${JSON.stringify(seen)}, 'true'); } catch {}`
+    });
+  }
   await page.send('Emulation.setDeviceMetricsOverride', {
     width,
     height,

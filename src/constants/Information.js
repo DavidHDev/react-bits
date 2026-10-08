@@ -726,6 +726,16 @@ export const componentMetadata = {
     tags: [],
     added: '2025-05-30'
   },
+  'Components/HoloCard': {
+    videoUrl: '/assets/video/holocard.webm',
+    description:
+      'Collectible trading card with a real holographic foil. Pick bursts, stars, shards, cosmos and more, with glitter sparkling on the silver border as it tilts.',
+    category: 'Components',
+    name: 'HoloCard',
+    docsUrl: 'https://reactbits.dev/components/holo-card',
+    tags: [],
+    added: '2026-10-08'
+  },
   'Components/CircularCarousel': {
     videoUrl: '/assets/video/circularcarousel.webm',
     description:
