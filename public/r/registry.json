@@ -7406,7 +7406,7 @@
 		{
 			"name": "SpotlightCard-JS-CSS",
 			"title": "SpotlightCard",
-			"description": "Dynamic spotlight follows cursor casting gradient illumination.",
+			"description": "Card lit by a soft spotlight that follows the pointer, catches its edge and reaches nearby cards.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7425,7 +7425,7 @@
 		{
 			"name": "SpotlightCard-JS-TW",
 			"title": "SpotlightCard",
-			"description": "Dynamic spotlight follows cursor casting gradient illumination.",
+			"description": "Card lit by a soft spotlight that follows the pointer, catches its edge and reaches nearby cards.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7439,7 +7439,7 @@
 		{
 			"name": "SpotlightCard-TS-CSS",
 			"title": "SpotlightCard",
-			"description": "Dynamic spotlight follows cursor casting gradient illumination.",
+			"description": "Card lit by a soft spotlight that follows the pointer, catches its edge and reaches nearby cards.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7458,7 +7458,7 @@
 		{
 			"name": "SpotlightCard-TS-TW",
 			"title": "SpotlightCard",
-			"description": "Dynamic spotlight follows cursor casting gradient illumination.",
+			"description": "Card lit by a soft spotlight that follows the pointer, catches its edge and reaches nearby cards.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],

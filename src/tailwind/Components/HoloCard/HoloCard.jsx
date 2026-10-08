@@ -633,7 +633,7 @@ export default function HoloCard({
   return (
     <div
       ref={rootRef}
-      className={`relative inline-block w-[var(--hc-w)] max-w-full aspect-[var(--hc-ratio)] rounded-[var(--hc-radius)] outline-none select-none touch-pan-y [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none]${flippable ? ' cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-current' : ''}${className ? ` ${className}` : ''}`}
+      className={`relative inline-block w-[var(--hc-w)] max-w-full aspect-[var(--hc-ratio)] rounded-[var(--hc-radius)] outline-none select-none touch-pan-y [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] ${flippable ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[6px] focus-visible:outline-current' : ''}${className ? ` ${className}` : ''}`}
       role={flippable ? 'button' : 'img'}
       tabIndex={flippable ? 0 : undefined}
       aria-label={alt || undefined}

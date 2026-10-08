@@ -1502,14 +1502,6 @@
   font-weight: bold;
 }
 
-.custom-spotlight-card {
-  user-select: none;
-  background-color: var(--bg-elevated) !important;
-  border: 1px solid var(--border-secondary) !important;
-  width: 350px;
-  height: 300px;
-}
-
 .scroll-stack-card-demo {
   font-size: clamp(1.5rem, 4vw, 3rem);
   font-weight: 900;

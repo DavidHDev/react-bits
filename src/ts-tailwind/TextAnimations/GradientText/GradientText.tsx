@@ -209,7 +209,7 @@ export default function GradientText({
   return (
     <span
       ref={rootRef}
-      className={`relative inline-flex items-center justify-center max-w-full isolate${showBorder ? ' px-[0.75em] py-[0.35em] rounded-full before:content-[] before:absolute before:inset-0 before:p-[var(--gt-border)] before:rounded-[inherit] before:[background-image:var(--gt-gradient)] before:[-webkit-mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)] before:[-webkit-mask-composite:xor] before:[mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] before:pointer-events-none' : ''}${className ? ` ${className}` : ''}`}
+      className={`relative inline-flex items-center justify-center max-w-full isolate ${showBorder ? 'px-[0.75em] py-[0.35em] rounded-full before:content-[] before:absolute before:inset-0 before:p-[var(--gt-border)] before:rounded-[inherit] before:[background-image:var(--gt-gradient)] before:[-webkit-mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)] before:[-webkit-mask-composite:xor] before:[mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] before:pointer-events-none' : ''}${className ? ` ${className}` : ''}`}
       style={
         {
           '--gt-gradient': `linear-gradient(${direction ? (ANGLES[direction] ?? angle) : angle}deg, ${loop.join(', ')})`,

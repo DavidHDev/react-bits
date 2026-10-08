@@ -346,7 +346,7 @@ const ShinyText = ({
   return (
     <span
       ref={rootRef}
-      className={`relative inline-block bg-no-repeat [background-size:100%_100%] bg-clip-text [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]${className ? ` ${className}` : ''}`}
+      className={`relative inline-block bg-no-repeat [background-size:100%_100%] bg-clip-text [-webkit-background-clip:text] [-webkit-text-fill-color:transparent] ${className}`}
       style={{ backgroundImage: `linear-gradient(${color}, ${color})`, ...style }}
     >
       {content}

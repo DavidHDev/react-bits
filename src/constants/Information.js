@@ -1028,12 +1028,18 @@ export const componentMetadata = {
   },
   'Components/SpotlightCard': {
     videoUrl: '/assets/video/spotlightcard.webm',
-    description: 'Dynamic spotlight follows cursor casting gradient illumination.',
+    description: 'Card lit by a soft spotlight that follows the pointer, catches its edge and reaches nearby cards.',
     category: 'Components',
     name: 'SpotlightCard',
     docsUrl: 'https://reactbits.dev/components/spotlight-card',
     tags: [],
-    added: '2024-08-14'
+    added: '2024-08-14',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt. The light glides after the pointer with a natural falloff, lights up the card edge, reaches cards as the pointer gets close so a grid shares one light, follows keyboard focus and swells on press. New options for size, intensity, softness, a beam shape, border glow, proximity, smoothing, ambient drift, grain and a light theme, and any div props now pass through.'
+      }
+    ]
   },
   'Components/BorderGlow': {
     videoUrl: '/assets/video/borderglow.webm',
