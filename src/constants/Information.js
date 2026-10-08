@@ -46,12 +46,18 @@ export const componentMetadata = {
   },
   'Animations/BlobCursor': {
     videoUrl: '/assets/video/blobcursor.webm',
-    description: 'Organic blob cursor that smoothly follows the pointer with inertia and elastic morphing.',
+    description: 'Liquid metal blob cursor that stretches, sloshes and bursts into droplets, in chrome, jelly, pearl or ink.',
     category: 'Animations',
     name: 'BlobCursor',
     docsUrl: 'https://reactbits.dev/animations/blob-cursor',
     tags: [],
-    added: '2024-08-06'
+    added: '2024-08-06',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt in three so it works in every browser, Safari included. The blob is now a smooth 3D liquid that pulls into a teardrop as it moves, with chrome, jelly, pearl and ink looks, an optional shapeshifting morph, puddle depth, drips you can soak back up, blend modes and a click burst whose droplets fly off the page while the blob grows back.'
+      }
+    ]
   },
   'Animations/ClickSpark': {
     videoUrl: '/assets/video/clickspark.webm',
@@ -1100,12 +1106,18 @@ export const componentMetadata = {
   },
   'Components/Stack': {
     videoUrl: '/assets/video/stack.webm',
-    description: 'Layered stack with swipe animations, autoplay and smooth transitions.',
+    description: 'Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.',
     category: 'Components',
     name: 'Stack',
     docsUrl: 'https://reactbits.dev/components/stack',
     tags: [],
-    added: '2024-08-07'
+    added: '2024-08-07',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt so cards never jump or reset mid-drag. Throws carry their momentum and tuck the card under the stack, and there are four layouts plus spread, depth, frame, tilt, speed and keyboard controls.'
+      }
+    ]
   },
   'Components/Stepper': {
     videoUrl: '/assets/video/stepper.webm',

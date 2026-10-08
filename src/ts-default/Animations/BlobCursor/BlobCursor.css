@@ -1,28 +1,12 @@
-.blob-container {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.blob-main {
-  pointer-events: none;
+.blob-cursor {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   overflow: hidden;
-  background: transparent;
-  user-select: none;
-  cursor: default;
+  pointer-events: none;
 }
 
-.blob {
-  position: absolute;
-  will-change: transform;
-  transform: translate(-50%, -50%);
-}
-
-.inner-dot {
-  position: absolute;
+.blob-cursor-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

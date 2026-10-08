@@ -70,10 +70,10 @@
 		{
 			"name": "BlobCursor-JS-CSS",
 			"title": "BlobCursor",
-			"description": "Organic blob cursor that smoothly follows the pointer with inertia and elastic morphing.",
+			"description": "Liquid metal blob cursor that stretches, sloshes and bursts into droplets, in chrome, jelly, pearl or ink.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -91,10 +91,10 @@
 		{
 			"name": "BlobCursor-JS-TW",
 			"title": "BlobCursor",
-			"description": "Organic blob cursor that smoothly follows the pointer with inertia and elastic morphing.",
+			"description": "Liquid metal blob cursor that stretches, sloshes and bursts into droplets, in chrome, jelly, pearl or ink.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -107,10 +107,10 @@
 		{
 			"name": "BlobCursor-TS-CSS",
 			"title": "BlobCursor",
-			"description": "Organic blob cursor that smoothly follows the pointer with inertia and elastic morphing.",
+			"description": "Liquid metal blob cursor that stretches, sloshes and bursts into droplets, in chrome, jelly, pearl or ink.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -128,10 +128,10 @@
 		{
 			"name": "BlobCursor-TS-TW",
 			"title": "BlobCursor",
-			"description": "Organic blob cursor that smoothly follows the pointer with inertia and elastic morphing.",
+			"description": "Liquid metal blob cursor that stretches, sloshes and bursts into droplets, in chrome, jelly, pearl or ink.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -8188,7 +8188,7 @@
 		{
 			"name": "Stack-JS-CSS",
 			"title": "Stack",
-			"description": "Layered stack with swipe animations, autoplay and smooth transitions.",
+			"description": "Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.",
 			"type": "registry:component",
 			"dependencies": [
 				"motion@^12.23.12"
@@ -8209,7 +8209,7 @@
 		{
 			"name": "Stack-JS-TW",
 			"title": "Stack",
-			"description": "Layered stack with swipe animations, autoplay and smooth transitions.",
+			"description": "Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.",
 			"type": "registry:component",
 			"dependencies": [
 				"motion@^12.23.12"
@@ -8225,7 +8225,7 @@
 		{
 			"name": "Stack-TS-CSS",
 			"title": "Stack",
-			"description": "Layered stack with swipe animations, autoplay and smooth transitions.",
+			"description": "Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.",
 			"type": "registry:component",
 			"dependencies": [
 				"motion@^12.23.12"
@@ -8246,7 +8246,7 @@
 		{
 			"name": "Stack-TS-TW",
 			"title": "Stack",
-			"description": "Layered stack with swipe animations, autoplay and smooth transitions.",
+			"description": "Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.",
 			"type": "registry:component",
 			"dependencies": [
 				"motion@^12.23.12"

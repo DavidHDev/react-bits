@@ -1,43 +1,50 @@
-.stack-container {
+.stack {
   position: relative;
   width: 100%;
   height: 100%;
-  perspective: 600px;
+  outline: none;
 }
 
-.card-rotate {
+.stack:focus-visible .stack-card[data-top] .stack-card-face {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.stack-card {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  cursor: grab;
-}
-
-.card-rotate-disabled {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-.card {
-  border-radius: 1rem;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card img {
-  pointer-events: none;
+  inset: 0;
+  will-change: transform;
   user-select: none;
-  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.card-image {
+.stack-card-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.stack-card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.stack-card-content img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.stack-card-shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
   pointer-events: none;
 }
