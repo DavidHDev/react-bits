@@ -76,17 +76,10 @@ function defineComponent({
     description,
     type: 'registry:component',
     categories: [category, ...(categories ?? [])],
-    meta,
-    ...(title === 'Lanyard' ? { dependencyResolution: 'manual' as const } : {})
+    meta
   };
 
-  const filesForVariant = (basePath: string, sourceFile: string, styleFile?: string): RegistryItemFile[] => {
-    // Lanyard also ships binary assets (card.glb, lanyard.png) which can't go through the registry,
-    // so only its source files are listed instead of the whole folder.
-    if (title === 'Lanyard') {
-      return [...(styleFile ? [defineStylesheet(basePath, styleFile)] : []), { path: `${basePath}/${sourceFile}` }];
-    }
-
+  const filesForVariant = (basePath: string, styleFile?: string): RegistryItemFile[] => {
     // Variants without a stylesheet can ship the whole folder as-is.
     if (!styleFile || !fs.existsSync(`${basePath}/${styleFile}`)) return [{ path: basePath }];
 
@@ -109,7 +102,7 @@ function defineComponent({
           {
             ...baseItem,
             name: `${baseItem.title}-JS-CSS`,
-            files: filesForVariant(`src/content/${category}/${title}`, `${title}.jsx`, `${title}.css`)
+            files: filesForVariant(`src/content/${category}/${title}`, `${title}.css`)
           }
         ]
       : []),
@@ -120,7 +113,7 @@ function defineComponent({
           {
             ...baseItem,
             name: `${baseItem.title}-JS-TW`,
-            files: filesForVariant(`src/tailwind/${category}/${title}`, `${title}.jsx`)
+            files: filesForVariant(`src/tailwind/${category}/${title}`)
           }
         ]
       : []),
@@ -131,7 +124,7 @@ function defineComponent({
           {
             ...baseItem,
             name: `${baseItem.title}-TS-CSS`,
-            files: filesForVariant(`src/ts-default/${category}/${title}`, `${title}.tsx`, `${title}.css`)
+            files: filesForVariant(`src/ts-default/${category}/${title}`, `${title}.css`)
           }
         ]
       : []),
@@ -142,7 +135,7 @@ function defineComponent({
           {
             ...baseItem,
             name: `${baseItem.title}-TS-TW`,
-            files: filesForVariant(`src/ts-tailwind/${category}/${title}`, `${title}.tsx`)
+            files: filesForVariant(`src/ts-tailwind/${category}/${title}`)
           }
         ]
       : [])

@@ -913,12 +913,19 @@ export const componentMetadata = {
   },
   'Components/Lanyard': {
     videoUrl: '/assets/video/lanyard.webm',
-    description: 'Swinging 3D lanyard / badge card with realistic inertial motion.',
+    description:
+      'Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.',
     category: 'Components',
     name: 'Lanyard',
     docsUrl: 'https://reactbits.dev/components/lanyard',
     tags: [],
-    added: '2025-02-15'
+    added: '2025-02-15',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt with three as the only dependency and no model, texture or config setup. Pass any image for the front, back and band. The card swings with real momentum, the woven band stretches and slingshots it back, a click flips it over, and a new holographic finish adds a sparkling foil.'
+      }
+    ]
   },
   'Components/MagicBento': {
     videoUrl: '/assets/video/magicbento.webm',

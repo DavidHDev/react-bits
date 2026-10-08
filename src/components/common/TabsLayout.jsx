@@ -18,7 +18,8 @@ import PropTable from './Preview/PropTable';
 import CodeExample, { injectPropsIntoCode } from '../code/CodeExample';
 import OpenInStudioButton from './Preview/OpenInStudioButton';
 import { buildStudioUrl } from './Preview/studio-url';
-import CopyForAIMenu, { AIMenuItem } from './CopyForAIMenu';
+import CopyForAIMenu, { AIMenuItem, AIMenuSeparator } from './CopyForAIMenu';
+import FluidMenuContent from './FluidMenuContent';
 import { useAIExportActions } from '../../hooks/useAIExportActions';
 import ComponentPager from './ComponentPager';
 import CustomizeActionsContext from './Preview/CustomizeContext';
@@ -564,7 +565,7 @@ const TabsLayout = ({ children, className }) => {
                 </Menu.Trigger>
                 <Portal>
                   <Menu.Positioner>
-                    <Menu.Content
+                    <FluidMenuContent
                       bg={colors.bgBody}
                       border={`1px solid ${colors.borderPrimary}`}
                       borderRadius="10px"
@@ -618,11 +619,11 @@ const TabsLayout = ({ children, className }) => {
                       )}
                       {aiExport && (
                         <>
-                          <Menu.Separator borderColor={colors.borderPrimary} my={1} />
+                          <AIMenuSeparator />
                           {aiActions.copyItems.map(item => (
                             <AIMenuItem key={item.key} item={item} done={aiActions.done} />
                           ))}
-                          <Menu.Separator borderColor={colors.borderPrimary} my={1} />
+                          <AIMenuSeparator />
                           {aiActions.openItems.map(item => (
                             <AIMenuItem key={item.key} item={item} done={aiActions.done} />
                           ))}
@@ -664,7 +665,7 @@ const TabsLayout = ({ children, className }) => {
                           <Palette size={16} /> Open in BG Studio
                         </Menu.Item>
                       )}
-                    </Menu.Content>
+                    </FluidMenuContent>
                   </Menu.Positioner>
                 </Portal>
               </Menu.Root>

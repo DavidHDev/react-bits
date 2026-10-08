@@ -1,6 +1,7 @@
 import { Menu, Portal, Box } from '@chakra-ui/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { colors } from '../../constants/colors';
+import FluidMenuContent from './FluidMenuContent';
 
 const AI_MENU_ITEM_PROPS = {
   display: 'flex',
@@ -11,8 +12,7 @@ const AI_MENU_ITEM_PROPS = {
   fontSize: '14px',
   color: 'var(--text-primary)',
   borderRadius: '8px',
-  cursor: 'pointer',
-  _hover: { bg: colors.bgHover }
+  cursor: 'pointer'
 };
 
 export const AIMenuItem = ({ item, done }) => {
@@ -24,6 +24,16 @@ export const AIMenuItem = ({ item, done }) => {
     </Menu.Item>
   );
 };
+
+export const AIMenuSeparator = () => (
+  <Menu.Separator
+    height="1px"
+    border="0"
+    my={1}
+    mx="6px"
+    bg="linear-gradient(90deg, transparent, var(--inset-divider) 14%, var(--inset-divider) 86%, transparent)"
+  />
+);
 
 const CopyForAIMenu = ({ triggerProps, copyItems, openItems, done }) => {
   return (
@@ -47,7 +57,7 @@ const CopyForAIMenu = ({ triggerProps, copyItems, openItems, done }) => {
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content
+          <FluidMenuContent
             bg={colors.bgBody}
             border={`1px solid ${colors.borderPrimary}`}
             borderRadius="10px"
@@ -60,11 +70,11 @@ const CopyForAIMenu = ({ triggerProps, copyItems, openItems, done }) => {
             {copyItems.map(item => (
               <AIMenuItem key={item.key} item={item} done={done} />
             ))}
-            <Menu.Separator borderColor={colors.borderPrimary} my={1} />
+            <AIMenuSeparator />
             {openItems.map(item => (
               <AIMenuItem key={item.key} item={item} done={done} />
             ))}
-          </Menu.Content>
+          </FluidMenuContent>
         </Menu.Positioner>
       </Portal>
     </Menu.Root>

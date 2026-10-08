@@ -6778,9 +6778,11 @@
 		{
 			"name": "Lanyard-JS-CSS",
 			"title": "Lanyard",
-			"description": "Swinging 3D lanyard / badge card with realistic inertial motion.",
+			"description": "Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"three@^0.180.0"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6797,23 +6799,27 @@
 		{
 			"name": "Lanyard-JS-TW",
 			"title": "Lanyard",
-			"description": "Swinging 3D lanyard / badge card with realistic inertial motion.",
+			"description": "Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"three@^0.180.0"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Lanyard.jsx"
+					"path": "Lanyard/Lanyard.jsx"
 				}
 			]
 		},
 		{
 			"name": "Lanyard-TS-CSS",
 			"title": "Lanyard",
-			"description": "Swinging 3D lanyard / badge card with realistic inertial motion.",
+			"description": "Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"three@^0.180.0"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6830,14 +6836,16 @@
 		{
 			"name": "Lanyard-TS-TW",
 			"title": "Lanyard",
-			"description": "Swinging 3D lanyard / badge card with realistic inertial motion.",
+			"description": "Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"three@^0.180.0"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
 					"type": "registry:component",
-					"path": "Lanyard.tsx"
+					"path": "Lanyard/Lanyard.tsx"
 				}
 			]
 		},
