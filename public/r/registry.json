@@ -5075,8 +5075,8 @@
 			"description": "Responsive carousel with touch gestures, looping and transitions.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -10992,11 +10992,9 @@
 		{
 			"name": "Iridescence-JS-CSS",
 			"title": "Iridescence",
-			"description": "Slick iridescent shader with shifting waves.",
+			"description": "Liquid iridescent surface with shifting folds that you can stir with the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11013,11 +11011,9 @@
 		{
 			"name": "Iridescence-JS-TW",
 			"title": "Iridescence",
-			"description": "Slick iridescent shader with shifting waves.",
+			"description": "Liquid iridescent surface with shifting folds that you can stir with the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11029,11 +11025,9 @@
 		{
 			"name": "Iridescence-TS-CSS",
 			"title": "Iridescence",
-			"description": "Slick iridescent shader with shifting waves.",
+			"description": "Liquid iridescent surface with shifting folds that you can stir with the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11050,11 +11044,9 @@
 		{
 			"name": "Iridescence-TS-TW",
 			"title": "Iridescence",
-			"description": "Slick iridescent shader with shifting waves.",
+			"description": "Liquid iridescent surface with shifting folds that you can stir with the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

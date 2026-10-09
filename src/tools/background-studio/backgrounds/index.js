@@ -888,9 +888,23 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Iridescence/Iridescence.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/iridescence"',
     props: [
-      { name: 'speed', type: 'number', default: 1.0, min: 0, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'amplitude', type: 'number', default: 0.1, min: 0, max: 1, step: 0.05, label: 'Amplitude' },
-      { name: 'mouseReact', type: 'boolean', default: true, label: 'Mouse React' }
+      { name: 'color', type: 'color', default: '#8099cc', label: 'Color' },
+      { name: 'hueShift', type: 'number', default: 0, min: -180, max: 180, step: 1, label: 'Hue Shift' },
+      { name: 'saturation', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Saturation' },
+      { name: 'brightness', type: 'number', default: 1.5, min: 0.2, max: 2.5, step: 0.05, label: 'Brightness' },
+      { name: 'contrast', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Contrast' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'scale', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'detail', type: 'number', default: 8, min: 1, max: 16, step: 1, label: 'Detail' },
+      { name: 'warp', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Warp' },
+      { name: 'rotation', type: 'number', default: 0, min: -180, max: 180, step: 1, label: 'Rotation' },
+      { name: 'mouseReact', type: 'boolean', default: true, label: 'Mouse React' },
+      { name: 'amplitude', type: 'number', default: 0.1, min: 0, max: 0.5, step: 0.01, label: 'Amplitude' },
+      { name: 'stir', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Stir' },
+      { name: 'sheen', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Sheen' },
+      { name: 'clickSwirl', type: 'boolean', default: true, label: 'Click Swirl' },
+      { name: 'grain', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Grain' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' }
     ]
   },
   {

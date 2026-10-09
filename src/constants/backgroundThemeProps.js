@@ -81,7 +81,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     scanGlow: 0.18
   },
   hyperspeed: { theme: 'light', roadColor: '#efeff2', lineColor: '#d0d0d7' },
-  iridescence: { lightMode: true, color: [1, 1, 1] },
+  iridescence: { color: '#ffffff' },
   'letter-glitch': {
     lightMode: true,
     colors: ['#3f6212', '#047857', '#0369a1'],

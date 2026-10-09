@@ -1578,12 +1578,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Iridescence': {
     videoUrl: '/assets/video/iridescence.webm',
-    description: 'Slick iridescent shader with shifting waves.',
+    description: 'Liquid iridescent surface with shifting folds that you can stir with the cursor.',
     category: 'Backgrounds',
     name: 'Iridescence',
     docsUrl: 'https://reactbits.dev/backgrounds/iridescence',
     tags: [],
-    added: '2025-02-05'
+    added: '2025-02-05',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt with full control over color, folds and motion, a liquid stir under the cursor, a swirl on click and presets.'
+      }
+    ]
   },
   'Backgrounds/LetterGlitch': {
     videoUrl: '/assets/video/letterglitch.webm',
