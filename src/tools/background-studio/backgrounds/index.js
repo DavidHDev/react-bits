@@ -1056,10 +1056,24 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Threads/Threads.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/threads"',
     props: [
-      { name: 'color', type: 'rgbArray', default: [0.32, 0.15, 1.0], label: 'Color' },
-      { name: 'amplitude', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Amplitude' },
-      { name: 'distance', type: 'number', default: 0, min: 0, max: 2, step: 0.1, label: 'Distance' },
-      { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' }
+      { name: 'color', type: 'color', default: '#ffffff', label: 'Color' },
+      { name: 'lineCount', type: 'number', default: 90, min: 4, max: 120, step: 1, label: 'Line Count' },
+      { name: 'thickness', type: 'number', default: 0.6, min: 0.2, max: 4, step: 0.1, label: 'Thickness' },
+      { name: 'softness', type: 'number', default: 1.3, min: 0, max: 3, step: 0.1, label: 'Softness' },
+      { name: 'amplitude', type: 'number', default: 1.7, min: 0, max: 4, step: 0.1, label: 'Amplitude' },
+      { name: 'distance', type: 'number', default: 0.4, min: 0, max: 2, step: 0.05, label: 'Distance' },
+      { name: 'waves', type: 'number', default: 1.05, min: 0.2, max: 3, step: 0.05, label: 'Waves' },
+      { name: 'speed', type: 'number', default: 0.6, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'split', type: 'number', default: 0.04, min: 0, max: 0.6, step: 0.01, label: 'Split' },
+      { name: 'fray', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Fray' },
+      { name: 'angle', type: 'number', default: 25, min: -90, max: 90, step: 1, label: 'Angle' },
+      { name: 'taper', type: 'number', default: 0.85, min: 0, max: 1, step: 0.05, label: 'Taper' },
+      { name: 'brightness', type: 'number', default: 1.4, min: 0.25, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'parting', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Parting' },
+      { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'seed', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Seed' }
     ]
   },
   {

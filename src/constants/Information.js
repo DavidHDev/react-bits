@@ -1776,12 +1776,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Threads': {
     videoUrl: '/assets/video/threads.webm',
-    description: 'Animated pattern of lines forming a fabric-like motion.',
+    description: 'Flowing threads that fray apart and part around the cursor, from fine silk to contour lines.',
     category: 'Backgrounds',
     name: 'Threads',
     docsUrl: 'https://reactbits.dev/backgrounds/threads',
     tags: [],
-    added: '2025-02-18'
+    added: '2025-02-18',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt to run several times faster, with presets, much more control over the threads and a cursor that parts them.'
+      }
+    ]
   },
   'Backgrounds/Waves': {
     videoUrl: '/assets/video/waves.webm',

@@ -12428,11 +12428,9 @@
 		{
 			"name": "Threads-JS-CSS",
 			"title": "Threads",
-			"description": "Animated pattern of lines forming a fabric-like motion.",
+			"description": "Flowing threads that fray apart and part around the cursor, from fine silk to contour lines.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12449,11 +12447,9 @@
 		{
 			"name": "Threads-JS-TW",
 			"title": "Threads",
-			"description": "Animated pattern of lines forming a fabric-like motion.",
+			"description": "Flowing threads that fray apart and part around the cursor, from fine silk to contour lines.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12465,11 +12461,9 @@
 		{
 			"name": "Threads-TS-CSS",
 			"title": "Threads",
-			"description": "Animated pattern of lines forming a fabric-like motion.",
+			"description": "Flowing threads that fray apart and part around the cursor, from fine silk to contour lines.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12486,11 +12480,9 @@
 		{
 			"name": "Threads-TS-TW",
 			"title": "Threads",
-			"description": "Animated pattern of lines forming a fabric-like motion.",
+			"description": "Flowing threads that fray apart and part around the cursor, from fine silk to contour lines.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
