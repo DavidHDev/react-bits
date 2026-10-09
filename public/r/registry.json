@@ -5072,7 +5072,7 @@
 		{
 			"name": "Carousel-JS-CSS",
 			"title": "Carousel",
-			"description": "Responsive carousel with touch gestures, looping and transitions.",
+			"description": "Swipeable cards for feature tours, stories and galleries, with five transitions and an autoplay timer.",
 			"type": "registry:component",
 			"dependencies": [
 				"@hugeicons/react@^1.1.10",
@@ -5094,11 +5094,11 @@
 		{
 			"name": "Carousel-JS-TW",
 			"title": "Carousel",
-			"description": "Responsive carousel with touch gestures, looping and transitions.",
+			"description": "Swipeable cards for feature tours, stories and galleries, with five transitions and an autoplay timer.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5111,11 +5111,11 @@
 		{
 			"name": "Carousel-TS-CSS",
 			"title": "Carousel",
-			"description": "Responsive carousel with touch gestures, looping and transitions.",
+			"description": "Swipeable cards for feature tours, stories and galleries, with five transitions and an autoplay timer.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5133,11 +5133,11 @@
 		{
 			"name": "Carousel-TS-TW",
 			"title": "Carousel",
-			"description": "Responsive carousel with touch gestures, looping and transitions.",
+			"description": "Swipeable cards for feature tours, stories and galleries, with five transitions and an autoplay timer.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [

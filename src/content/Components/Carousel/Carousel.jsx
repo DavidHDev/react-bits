@@ -726,7 +726,8 @@ export default function Carousel({
         ...(THEMES[theme] ?? THEMES.dark),
         '--carousel-radius': `${round ? 9999 : Math.max(0, radius)}px`,
         '--carousel-scale': clamp(cardWidth / 300, 0.86, 1),
-        ...(typeof maxWidth === 'number' ? { width: '100%', maxWidth } : { width: maxWidth }),
+        width: typeof maxWidth === 'number' ? '100%' : maxWidth,
+        maxWidth: typeof maxWidth === 'number' ? maxWidth : undefined,
         ...style
       }}
       role="region"

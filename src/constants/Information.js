@@ -768,12 +768,18 @@ export const componentMetadata = {
   },
   'Components/Carousel': {
     videoUrl: '/assets/video/carousel.webm',
-    description: 'Responsive carousel with touch gestures, looping and transitions.',
+    description: 'Swipeable cards for feature tours, stories and galleries, with five transitions and an autoplay timer.',
     category: 'Components',
     name: 'Carousel',
     docsUrl: 'https://reactbits.dev/components/carousel',
     tags: [],
-    added: '2025-02-13'
+    added: '2025-02-13',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt with momentum swiping, five transitions, photo cards, an autoplay timer and a cleaner frame in both themes.'
+      }
+    ]
   },
   'Components/ChromaGrid': {
     videoUrl: '/assets/video/chromagrid.webm',
