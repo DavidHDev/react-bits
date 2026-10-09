@@ -1,64 +1,54 @@
-.star-border-container {
-  display: inline-block;
+.star-border {
   position: relative;
-  border-radius: 20px;
-  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.875rem 1.5rem;
+  border: 0;
+  border-radius: var(--star-border-radius);
+  background: var(--star-border-surface);
+  color: var(--star-border-text);
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.25;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.border-gradient-bottom {
+.star-border::before {
+  content: '';
   position: absolute;
-  width: 300%;
-  height: 50%;
-  opacity: 0.7;
-  bottom: -12px;
-  right: -250%;
-  border-radius: 50%;
-  animation: star-movement-bottom linear infinite alternate;
-  z-index: 0;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 var(--star-border-thickness) var(--star-border-track);
+  pointer-events: none;
 }
 
-.border-gradient-top {
+.star-border__light {
   position: absolute;
-  opacity: 0.7;
-  width: 300%;
-  height: 50%;
-  top: -12px;
-  left: -250%;
-  border-radius: 50%;
-  animation: star-movement-top linear infinite alternate;
-  z-index: 0;
+  top: -48px;
+  left: -48px;
+  z-index: -1;
+  width: calc(100% + 96px);
+  height: calc(100% + 96px);
+  pointer-events: none;
 }
 
-.inner-content {
-  position: relative;
-  border: 1px solid #222;
-  background: #000;
-  color: white;
-  font-size: 16px;
-  text-align: center;
-  padding: 16px 26px;
-  border-radius: 20px;
-  z-index: 1;
+button.star-border,
+a.star-border {
+  cursor: pointer;
 }
 
-@keyframes star-movement-bottom {
-  0% {
-    transform: translate(0%, 0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-100%, 0%);
-    opacity: 0;
-  }
+.star-border:focus-visible {
+  outline: 2px solid var(--star-border-track);
+  outline-offset: 3px;
 }
 
-@keyframes star-movement-top {
-  0% {
-    transform: translate(0%, 0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(100%, 0%);
-    opacity: 0;
-  }
+.star-border:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

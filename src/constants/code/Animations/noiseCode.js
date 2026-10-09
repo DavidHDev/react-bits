@@ -5,18 +5,23 @@ import tsCode from '@ts-default/Animations/Noise/Noise.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/Noise/Noise.tsx?raw';
 
 export const noise = {
-  usage: `import Noise from './Noise;'
+  usage: `import Noise from './Noise';
 
-<div style={{width: '600px', height: '400px', position: 'relative', overflow: 'hidden'}}>
+<div style={{ position: 'relative', width: '100%', height: 500 }}>
+  <img src="/photo.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
   <Noise
-    patternSize={250}
-    patternScaleX={1}
-    patternScaleY={1}
-    patternRefreshInterval={2}
-    patternAlpha={15}
+    opacity={0.2}
+    size={1}
+    fps={24}
+    blendMode="overlay"
+    contrast={0.6}
+    colored={false}
+    dust={0}
+    scratches={0}
+    scanlines={0}
+    flicker={0}
   />
 </div>`,
-
   code,
   css,
   tailwind,

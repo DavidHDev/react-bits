@@ -71,7 +71,8 @@ export const BACKGROUND_LIGHT_PROPS = {
     grainAmount: 0.055,
     contrast: 1.25
   },
-  'grid-motion': { gradientColor: '#ffffff' },
+  'grid-distortion': { imageSrc: '/assets/demo/day-landscape.webp' },
+  'grid-motion': { theme: 'light' },
   'grid-scan': {
     lightMode: true,
     linesColor: '#8b5cf6',
@@ -79,7 +80,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     backgroundColor: '#ffffff',
     scanGlow: 0.18
   },
-  hyperspeed: { lightMode: true },
+  hyperspeed: { theme: 'light', roadColor: '#efeff2', lineColor: '#d0d0d7' },
   iridescence: { lightMode: true, color: [1, 1, 1] },
   'letter-glitch': {
     lightMode: true,

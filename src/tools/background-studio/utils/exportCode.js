@@ -1,14 +1,5 @@
 import { generateCliCommands } from '../../../utils/cli';
 
-const HYPERSPEED_PRESET_LABELS = {
-  one: 'Cyberpunk',
-  two: 'Akira',
-  three: 'Golden',
-  four: 'Split',
-  five: 'Highway',
-  six: 'Neon Waves'
-};
-
 export function generateExportCode(background, props, options = {}) {
   if (!background) return { commands: null, jsxCode: '' };
 
@@ -17,22 +8,6 @@ export function generateExportCode(background, props, options = {}) {
   const componentName = label.replace(/\s+/g, '');
 
   const commands = generateCliCommands(language, style, 'backgrounds', id);
-
-  if (id === 'hyperspeed' && props.preset) {
-    const presetKey = props.preset || 'one';
-    const presetLabel = HYPERSPEED_PRESET_LABELS[presetKey] || 'Cyberpunk';
-
-    const jsxCode = `import { hyperspeedPresets } from './HyperSpeedPresets';
-
-// Using "${presetLabel}" preset
-<div style={{ width: '1080px', height: '1080px', position: 'relative' }}>
-  <Hyperspeed
-    effectOptions={hyperspeedPresets.${presetKey}}
-  />
-</div>`;
-
-    return { commands, jsxCode };
-  }
 
   const allProps = background.props || [];
   const definedPropNames = new Set(allProps.map(propDef => propDef.name));

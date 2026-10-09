@@ -1,24 +1,43 @@
-.bounceCardsContainer {
+.bounce-cards {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 400px;
-  height: 400px;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.card {
+.bounce-cards__card {
   position: absolute;
-  width: 200px;
+  top: 50%;
+  left: 50%;
+  width: var(--bounce-cards-size);
   aspect-ratio: 1;
-  border: 5px solid #fff;
-  border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: var(--bounce-cards-border) solid var(--bounce-cards-border-color);
+  border-radius: var(--bounce-cards-radius);
+  background: var(--bounce-cards-border-color);
+  box-shadow: var(--bounce-cards-shadow);
+  transform: translate(-50%, -50%) scale(0);
+  transition: box-shadow 0.3s ease;
+  will-change: transform;
 }
 
-.card .image {
+.bounce-cards__card[data-active] {
+  box-shadow: var(--bounce-cards-shadow-active);
+}
+
+.bounce-cards__card--clickable {
+  cursor: pointer;
+}
+
+.bounce-cards__card--clickable:focus-visible {
+  outline: 2px solid var(--bounce-cards-border-color);
+  outline-offset: 3px;
+}
+
+.bounce-cards__card img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
+  user-select: none;
 }

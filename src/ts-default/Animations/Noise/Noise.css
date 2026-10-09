@@ -1,8 +1,36 @@
-.noise-overlay {
+.noise {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
+}
+
+.noise--fixed {
+  position: fixed;
+}
+
+.noise__grain {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  image-rendering: pixelated;
+}
+
+.noise__dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.noise__lines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55) 0,
+    rgba(0, 0, 0, 0.55) 1px,
+    transparent 1px,
+    transparent 3px
+  );
 }

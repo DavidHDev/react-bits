@@ -1,90 +1,202 @@
 import { useMemo } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowRight02Icon } from '@hugeicons/core-free-icons';
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 
 import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
-
-import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import Customize from '../../components/common/Preview/Customize';
+import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 
 import StarBorder from '../../content/Animations/StarBorder/StarBorder';
 import { starBorder } from '../../constants/code/Animations/starBorderCode';
-import Customize from '../../components/common/Preview/Customize';
 
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 import { useColorModeValue } from '../../components/setup/color-mode';
 
 const DEFAULT_PROPS = {
+  preset: 'comet',
+  color: '#ffffff',
+  trailColor: '#ffffff',
+  duration: 4,
+  direction: 'clockwise',
+  stars: 1,
+  trailLength: 0.3,
   thickness: 1,
-  speed: 5,
-  color: 'magenta'
+  radius: 12,
+  glow: 0.6,
+  sparkle: false,
+  hover: 'lap',
+  clickPulse: true
 };
 
-const colorOptions = [
-  { value: 'magenta', label: 'Magenta' },
-  { value: 'cyan', label: 'Cyan' },
-  { value: 'white', label: 'White' }
+const PRESETS = {
+  comet: {},
+  twin: { stars: 2, duration: 5, trailLength: 0.25 },
+  ember: { color: '#ffcf8a', trailColor: '#ff4d2e', trailLength: 0.45, glow: 0.8 },
+  frost: { color: '#e0f7ff', trailColor: '#38bdf8', thickness: 1.5, radius: 24 },
+  stardust: { sparkle: true, duration: 6, glow: 0.7 },
+  quiet: { hover: 'brighten', duration: 7, trailLength: 0.2, glow: 0.35 },
+  reveal: { hover: 'reveal', duration: 3, trailLength: 0.4 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'comet', label: 'Comet' },
+  { value: 'twin', label: 'Twin' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'frost', label: 'Frost' },
+  { value: 'stardust', label: 'Stardust' },
+  { value: 'quiet', label: 'Quiet' },
+  { value: 'reveal', label: 'Reveal' }
+];
+
+const LIGHT_SWAP = {
+  '#ffffff': '#18181b',
+  '#ffcf8a': '#c2410c',
+  '#ff4d2e': '#fb923c',
+  '#e0f7ff': '#0369a1'
+};
+
+const DIRECTION_OPTIONS = [
+  { value: 'clockwise', label: 'Clockwise' },
+  { value: 'counterclockwise', label: 'Counterclockwise' }
+];
+
+const HOVER_OPTIONS = [
+  { value: 'lap', label: 'Lap' },
+  { value: 'brighten', label: 'Brighten' },
+  { value: 'reveal', label: 'Reveal' },
+  { value: 'none', label: 'None' }
 ];
 
 const StarBorderDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const { thickness, speed, color } = props;
-  const backgroundColor = useColorModeValue('#ffffff', '#000000');
-  const textColor = useColorModeValue('#18181b', '#ffffff');
-  const borderColor = useColorModeValue('#e4e4e7', '#222222');
+  const { props, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, color, trailColor, ...settings } = props;
+  const theme = useColorModeValue('light', 'dark');
+  const light = theme === 'light';
+  const swap = value => (light ? (LIGHT_SWAP[value] ?? value) : value);
+  const shownColor = swap(color);
+  const shownTrail = trailColor === DEFAULT_PROPS.trailColor ? shownColor : swap(trailColor);
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(key => [key, DEFAULT_PROPS[key]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
+
+  const computedProps = useMemo(
+    () => ({ color: shownColor, trailColor: shownTrail, ...(light ? { theme: 'light' } : {}) }),
+    [shownColor, shownTrail, light]
+  );
+
+  const shared = { ...settings, color: shownColor, trailColor: shownTrail, theme };
 
   const propData = useMemo(
     () => [
       {
         name: 'as',
-        type: 'string',
-        default: 'button',
-        description: 'Allows specifying the type of the parent component to be rendered.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: '-',
-        description: 'Allows adding custom classes to the component.'
+        type: 'ElementType',
+        default: "'button'",
+        description: 'Element or component to render, for example a, div or a router Link.'
       },
       {
         name: 'color',
         type: 'string',
-        default: 'white',
-        description: 'Changes the main color of the border (fades to transparent)'
+        default: '-',
+        description: 'Color of the star and its glow. Defaults to white on dark and ink on light.'
       },
       {
-        name: 'speed',
+        name: 'trailColor',
         type: 'string',
-        default: '6s',
-        description: 'Changes the speed of the animation.'
+        default: '-',
+        description: 'Color the trail fades into behind the star. Defaults to color.'
       },
       {
-        name: 'thickness',
+        name: 'duration',
+        type: 'number',
+        default: '4',
+        description: 'Seconds for one lap around the border. The star keeps the same pace on any shape.'
+      },
+      {
+        name: 'direction',
+        type: "'clockwise' | 'counterclockwise'",
+        default: "'clockwise'",
+        description: 'Which way the star travels.'
+      },
+      {
+        name: 'stars',
         type: 'number',
         default: '1',
-        description: 'Controls the thickness of the star border effect.'
+        description: 'Stars spaced evenly around the border, up to 6.'
+      },
+      {
+        name: 'trailLength',
+        type: 'number',
+        default: '0.3',
+        description: 'Length of the trail as a share of the border. Trails stretch when the star speeds up.'
+      },
+      { name: 'thickness', type: 'number', default: '1', description: 'Border width in pixels.' },
+      {
+        name: 'radius',
+        type: 'number',
+        default: '12',
+        description: 'Corner radius in pixels. Values past half the height give a pill.'
+      },
+      {
+        name: 'glow',
+        type: 'number',
+        default: '0.6',
+        description: 'Bloom around the star and its trail, from 0 to 1. Light spills onto the surface and the page.'
+      },
+      {
+        name: 'sparkle',
+        type: 'boolean',
+        default: 'false',
+        description: 'Puts a small twinkling glint at the front of each trail and lets it shed fine stardust.'
+      },
+      {
+        name: 'hover',
+        type: "'lap' | 'brighten' | 'reveal' | 'none'",
+        default: "'lap'",
+        description:
+          'What happens on hover and keyboard focus. Lap sends the star once around the border, brighten makes the light shine stronger, and reveal keeps it hidden until then.'
+      },
+      {
+        name: 'clickPulse',
+        type: 'boolean',
+        default: 'true',
+        description: 'Sends light racing around the border from the point you press.'
+      },
+      {
+        name: 'theme',
+        type: "'dark' | 'light'",
+        default: "'dark'",
+        description: 'Picks the default surface, text, border and star colors.'
       },
       {
         name: 'backgroundColor',
         type: 'string',
-        default: "'#000000'",
-        description: 'Background color of the button surface.'
+        default: '-',
+        description: 'Surface color. Follows the theme when not set.'
       },
-      {
-        name: 'textColor',
-        type: 'string',
-        default: "'#ffffff'",
-        description: 'Text color of the button content.'
-      },
+      { name: 'textColor', type: 'string', default: '-', description: 'Text color. Follows the theme when not set.' },
       {
         name: 'borderColor',
         type: 'string',
-        default: "'#222222'",
-        description: 'Static border color around the button surface.'
-      }
+        default: '-',
+        description: 'Color of the resting border the star travels on. Follows the theme when not set.'
+      },
+      {
+        name: 'className',
+        type: 'string',
+        default: "''",
+        description: 'Extra classes for the root, for example to change padding or font.'
+      },
+      { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the root.' }
     ],
     []
   );
@@ -95,56 +207,113 @@ const StarBorderDemo = () => {
       defaultProps={DEFAULT_PROPS}
       resetProps={resetProps}
       hasChanges={hasChanges}
-      demoOnlyProps={['speed']}
-      computedProps={{ speed: `${speed}s` }}
+      demoOnlyProps={['preset']}
+      computedProps={computedProps}
     >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={400}>
-            <StarBorder
-              className="star-border-demo"
-              color={color}
-              thickness={thickness}
-              speed={`${speed}s`}
-              backgroundColor={backgroundColor}
-              textColor={textColor}
-              borderColor={borderColor}
-            >
-              <Text mx={0} fontSize={'1em'}>
-                Star Border
-              </Text>
-            </StarBorder>
+            <Flex align="center" justify="center" w="100%" h="100%">
+              <StarBorder
+                {...shared}
+                backgroundColor="var(--bg-elevated)"
+                borderColor="var(--border-primary)"
+                style={{ height: 48, padding: '0 22px', fontSize: 15 }}
+              >
+                Get started
+                <HugeiconsIcon icon={ArrowRight02Icon} size={17} strokeWidth={1.8} />
+              </StarBorder>
+            </Flex>
           </Box>
 
           <Customize>
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+
+            <PreviewColorPickerCustom title="Color" color={shownColor} onChange={value => updateProp('color', value)} />
+
+            <PreviewColorPickerCustom
+              title="Trail Color"
+              color={shownTrail}
+              onChange={value => updateProp('trailColor', value)}
+            />
+
+            <PreviewSlider
+              title="Duration"
+              min={1}
+              max={12}
+              step={0.5}
+              value={props.duration}
+              valueUnit="s"
+              onChange={value => updateProp('duration', value)}
+            />
+
             <PreviewSelect
-              title="Color"
-              options={colorOptions}
-              value={color}
-              width={120}
-              onChange={v => updateProp('color', v)}
+              title="Direction"
+              options={DIRECTION_OPTIONS}
+              value={props.direction}
+              onChange={value => updateProp('direction', value)}
+            />
+
+            <PreviewSlider
+              title="Stars"
+              min={1}
+              max={6}
+              step={1}
+              value={props.stars}
+              onChange={value => updateProp('stars', value)}
+            />
+
+            <PreviewSlider
+              title="Trail Length"
+              min={0.05}
+              max={0.8}
+              step={0.05}
+              value={props.trailLength}
+              onChange={value => updateProp('trailLength', value)}
             />
 
             <PreviewSlider
               title="Thickness"
               min={0.5}
-              max={8}
+              max={4}
               step={0.5}
-              value={thickness}
+              value={props.thickness}
               valueUnit="px"
-              width={200}
-              onChange={v => updateProp('thickness', v)}
+              onChange={value => updateProp('thickness', value)}
             />
 
             <PreviewSlider
-              title="Speed"
-              min={1}
-              max={10}
-              step={0.5}
-              value={speed}
-              valueUnit="s"
-              width={200}
-              onChange={v => updateProp('speed', v)}
+              title="Radius"
+              min={0}
+              max={30}
+              step={1}
+              value={props.radius}
+              valueUnit="px"
+              onChange={value => updateProp('radius', value)}
+            />
+
+            <PreviewSlider
+              title="Glow"
+              min={0}
+              max={1}
+              step={0.05}
+              value={props.glow}
+              onChange={value => updateProp('glow', value)}
+            />
+
+            <PreviewSelect
+              title="Hover"
+              options={HOVER_OPTIONS}
+              value={props.hover}
+              onChange={value => updateProp('hover', value)}
+            />
+
+            <PreviewSwitch title="Sparkle" isChecked={props.sparkle} onChange={value => updateProp('sparkle', value)} />
+
+            <PreviewSwitch
+              title="Click Pulse"
+              isChecked={props.clickPulse}
+              onChange={value => updateProp('clickPulse', value)}
             />
           </Customize>
 

@@ -70,12 +70,18 @@ export const componentMetadata = {
   },
   'Animations/Crosshair': {
     videoUrl: '/assets/video/crosshair.webm',
-    description: 'Custom crosshair cursor with tracking, and link hover effects.',
+    description: 'Crosshair cursor with live coordinates that locks onto links and buttons and measures them.',
     category: 'Animations',
     name: 'Crosshair',
     docsUrl: 'https://reactbits.dev/animations/crosshair',
     tags: [],
-    added: '2024-08-12'
+    added: '2024-08-12',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt on a single canvas with no dependencies. Hovering a link, button or any element you mark frames it with corner brackets and shows its size, and the lines read out the pointer position at the edges. The old glitch is still there as an effect. New options for thickness, opacity, solid, dashed or dotted lines, a gap around the pointer, edge fade, smoothing, a click pulse, hiding the system cursor and a difference blend that stays visible on any background.'
+      }
+    ]
   },
   'Animations/Cubes': {
     videoUrl: '/assets/video/cubes.webm',
@@ -236,12 +242,18 @@ export const componentMetadata = {
   },
   'Animations/Noise': {
     videoUrl: '/assets/video/noise.webm',
-    description: 'Animated film grain / noise overlay adding subtle texture and motion.',
+    description: 'Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.',
     category: 'Animations',
     name: 'Noise',
     docsUrl: 'https://reactbits.dev/animations/noise',
     tags: [],
-    added: '2025-01-06'
+    added: '2025-01-06',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt around a tiny pre-rendered grain tile that jitters each frame, so it no longer regenerates a million pixels on the CPU. It now fills its container instead of the viewport, or the whole page with fixed. New props cover opacity, grain size, frame rate (0 for a still paper texture), blend mode, contrast, colored grain, film dust with specks and hairs, running scratches, scanlines and flicker. The old pattern props are replaced: patternAlpha by opacity and patternRefreshInterval by fps.'
+      }
+    ]
   },
   'Animations/PixelTrail': {
     videoUrl: '/assets/video/pixeltrail.webm',
@@ -254,12 +266,18 @@ export const componentMetadata = {
   },
   'Animations/PixelTransition': {
     videoUrl: '/assets/video/pixeltransition.webm',
-    description: 'Pixel dissolve transition for content reveal on hover.',
+    description: 'Retro pixel dissolve that covers a card in solid pixels, swaps the content underneath and clears again.',
     category: 'Animations',
     name: 'PixelTransition',
     docsUrl: 'https://reactbits.dev/animations/pixel-transition',
     tags: [],
-    added: '2025-01-21'
+    added: '2025-01-21',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: "Rebuilt on a single canvas without GSAP, so hovering in and out quickly reverses the transition smoothly instead of glitching, and it is safe to render on the server. Pixels stay square on any card shape. New props cover the order pixels appear in (random, ordered dither, a ripple from the pointer or a wipe from the edge it crossed), randomness, how each pixel animates (pop, grow or fade), square, rounded or circle pixels, gap, a mosaic of tones and a capped frame rate for a choppy retro feel. It can run on hover or click, be controlled with active and onActiveChange, and responds to keyboard focus and taps. aspectRatio also takes CSS ratios like '4 / 5'. The card no longer has a white border or dark background, and pixelColor defaults to white."
+      }
+    ]
   },
   'Animations/PixelSwap': {
     videoUrl: '/assets/video/pixelswap.webm',
@@ -281,12 +299,19 @@ export const componentMetadata = {
   },
   'Animations/ShapeBlur': {
     videoUrl: '/assets/video/shapeblur.webm',
-    description: 'Morphing blurred geometric shape. The effect occurs on hover.',
+    description:
+      'A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode.',
     category: 'Animations',
     name: 'ShapeBlur',
     docsUrl: 'https://reactbits.dev/animations/shape-blur',
     tags: [],
-    added: '2025-01-26'
+    added: '2025-01-26',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt on plain WebGL2, so the three dependency is gone. The blur is now a real lens defocus that follows the pointer smoothly, with color fringing, plus a focus mode that keeps the shape blurred until you point at it. Draw a rectangle frame, circle, polygon or star, or trace any SVG or transparent PNG through src, as an outline or filled, with nested echoes, rotation and spin. The lens drifts on its own while the pointer is away, the canvas is transparent and children render on top. The variation, pixelRatioProp, shapeSize, borderSize, circleSize and circleEdge props are replaced by shape, size, thickness, lensSize and lensSoftness.'
+      }
+    ]
   },
   'Animations/SplashCursor': {
     videoUrl: '/assets/video/splashcursor.webm',
@@ -299,12 +324,19 @@ export const componentMetadata = {
   },
   'Animations/StarBorder': {
     videoUrl: '/assets/video/starborder.webm',
-    description: 'Animated star / sparkle border orbiting content with twinkle pulses.',
+    description:
+      'A twinkling star that travels the exact outline of any button, pill or card, trailing light and stardust.',
     category: 'Animations',
     name: 'StarBorder',
     docsUrl: 'https://reactbits.dev/animations/star-border',
     tags: [],
-    added: '2024-08-18'
+    added: '2024-08-18',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt from scratch. The star now travels the real rounded outline at an even pace on any shape, with a fading trail and bloom that spills onto the surface, plus an optional twinkling glint and stardust. On hover the star can run a quick extra lap, shine brighter or only appear when needed, and a click sends light around the whole border. New props cover the trail color and length, stars, direction, radius, glow and a light theme. Content now sits directly in the root, so padding and classes apply as usual, and `speed` is now `duration` in seconds.'
+      }
+    ]
   },
   'Animations/StickerPeel': {
     videoUrl: '/assets/video/stickerpeel.webm',
@@ -365,12 +397,18 @@ export const componentMetadata = {
 
   'TextAnimations/AsciiText': {
     videoUrl: '/assets/video/asciitext.webm',
-    description: 'Renders text with an animated ASCII background for a retro feel.',
+    description: 'Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.',
     category: 'TextAnimations',
     name: 'ASCIIText',
     docsUrl: 'https://reactbits.dev/text-animations/ascii-text',
     tags: [],
-    added: '2025-01-20'
+    added: '2025-01-20',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt as a single WebGL pass without three.js. The characters and the colored blocks are drawn on one grid, so the layers can no longer slip apart on load, and late-loading fonts only change the glyph shapes. New interactions: characters scramble under the pointer, clicks send a ripple of characters across the canvas, the text decodes in on load and sways when idle. New props cover the character set, gradient colors, block opacity, wave strength and speed, color fringing, tilt, hue shift, scramble, text scale, font and a light theme. planeBaseHeight and textFontSize are replaced by textScale, and enableWaves by waves.'
+      }
+    ]
   },
   'TextAnimations/BlurText': {
     videoUrl: '/assets/video/blurtext.webm',
@@ -688,12 +726,18 @@ export const componentMetadata = {
   },
   'Components/BounceCards': {
     videoUrl: '/assets/video/bouncecards.webm',
-    description: 'Cards bounce that bounce in on mount.',
+    description: 'A fan of photo cards that bounce in, then spread apart and straighten the one you hover.',
     category: 'Components',
     name: 'BounceCards',
     docsUrl: 'https://reactbits.dev/components/bounce-cards',
     tags: [],
-    added: '2025-01-02'
+    added: '2025-01-02',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt on springs without GSAP. Hover no longer flickers when the cards slide under the pointer, the hovered card comes to the front with a deeper shadow, and every move can be interrupted smoothly. The fan is now set with spread, rotation and arc instead of transform strings (transformStyles still works), and new props cover card size, push distance, hover scale, bounciness, border, radius, shadow and an onCardClick callback that makes the cards focusable. Hover is on by default, and easeType is replaced by bounciness.'
+      }
+    ]
   },
   'Components/BubbleMenu': {
     videoUrl: '/assets/video/bubblemenu.webm',
@@ -826,12 +870,18 @@ export const componentMetadata = {
   },
   'Components/DecayCard': {
     videoUrl: '/assets/video/decaycard.webm',
-    description: 'Hover parallax effect that disintegrates the content of a card.',
+    description: 'An image card that tears and melts as the pointer moves, then pulls itself back together.',
     category: 'Components',
     name: 'DecayCard',
     docsUrl: 'https://reactbits.dev/components/decay-card',
     tags: [],
-    added: '2024-08-20'
+    added: '2024-08-20',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'The same decay effect, now rendered with WebGL instead of an SVG filter: smooth edges, steady frame rates and no GSAP. Normal pointer movement now shows the effect, the tear spreads evenly on every side, and an idle mode keeps the edges slowly fraying when nobody interacts. New props cover sensitivity, hover decay, recovery time, idle decay, flowing tears, color split, scope, corner radius and grayscale, and the noise props now have plain names: grain, detail and pattern instead of baseFrequency, numOctaves and seed, intensity instead of maxDisplacement, and travel instead of movementBound. Several cards on one page no longer interfere with each other.'
+      }
+    ]
   },
   'Components/Dock': {
     videoUrl: '/assets/video/dock.webm',
@@ -886,12 +936,18 @@ export const componentMetadata = {
   },
   'Components/FlyingPosters': {
     videoUrl: '/assets/video/flyingposters.webm',
-    description: '3D posters rotate on scroll infinitely.',
+    description: '3D posters that twist and flip as you scroll or drag through an endless column.',
     category: 'Components',
     name: 'FlyingPosters',
     docsUrl: 'https://reactbits.dev/components/flying-posters',
     tags: [],
-    added: '2025-01-29'
+    added: '2025-01-29',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt on plain WebGL2 with the same flip, so the ogl dependency is gone and props update live. It now only reacts to the wheel and drags over itself instead of everywhere on the page, no longer adds classes to the page, crops photos to fill their posters instead of stretching them, and stops its render loop when it unmounts or nothing moves. cameraZ and cameraFov now move and zoom a real camera, so they change how far away the posters look. New props add several columns that can move in opposite directions, the gap between posters, corner radius, the flip angle and axis, a gentle drift, a lean on fast scrolls, edge fades, depth shading, page scroll linking and onItemClick. Items can also be objects with an image and a link.'
+      }
+    ]
   },
   'Components/Folder': {
     videoUrl: '/assets/video/folder.webm',
@@ -940,12 +996,19 @@ export const componentMetadata = {
   },
   'Components/InfiniteMenu': {
     videoUrl: '/assets/video/infinitemenu.webm',
-    description: 'Horizontally looping menu effect that scrolls endlessly with seamless wrap.',
+    description:
+      'A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.',
     category: 'Components',
     name: 'InfiniteMenu',
     docsUrl: 'https://reactbits.dev/components/infinite-menu',
     tags: [],
-    added: '2025-01-28'
+    added: '2025-01-28',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt without gl-matrix, so it has no dependencies, and it now cleans up after itself: the render loop stops on unmount, sleeps when nothing moves, and props update live without restarting. Images are cropped to fill their tiles instead of stretching, neighbouring tiles never repeat the same item, and the title, description and link button show at any width. New props cover the number of tiles, tile size, roundness from squares to circles, zoom, how far the camera pulls back while dragging, motion stretch, inertia, autoplay, grayscale and dimming for the tiles around the active one, an intro spin, light and dark themes, an accent color and a custom overlay through renderInfo. Click a tile to bring it to the front, use the arrow keys and Enter, or listen with onActiveChange and onItemClick. scale is replaced by zoom.'
+      }
+    ]
   },
   'Components/Lanyard': {
     videoUrl: '/assets/video/lanyard.webm',
@@ -1469,30 +1532,49 @@ export const componentMetadata = {
   },
   'Backgrounds/GridDistortion': {
     videoUrl: '/assets/video/griddistortion.webm',
-    description: 'Warped grid mesh distorts smoothly reacting to cursor.',
+    description: 'Image background that breaks into a grid of blocks under the cursor and settles back into place.',
     category: 'Backgrounds',
     name: 'GridDistortion',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-distortion',
     tags: [],
-    added: '2025-01-25'
+    added: '2025-01-25',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt on plain WebGL2, so the three dependency is gone and props update live instead of recreating the scene. The image now covers its container instead of stretching, cells stay square, and the distortion fades after you stop moving instead of building up under a resting cursor. Displaced edges mirror the image instead of smearing. New props cover the mode (drag, push or swirl), softness from crisp blocks to a liquid warp, chroma split on moving cells, an idle drift that keeps the image alive, a ripple on click and an intro where the blocks settle into place. The mouse prop is now radius, and relaxation defaults to 0.96.'
+      }
+    ]
   },
   'Backgrounds/GridMotion': {
     videoUrl: '/assets/video/gridmotion.webm',
-    description: 'Perspective moving grid lines based on cusror position.',
+    description:
+      'A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.',
     category: 'Backgrounds',
     name: 'GridMotion',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-motion',
     tags: [],
-    added: '2024-08-18'
+    added: '2024-08-18',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt without GSAP. The wall now sizes itself to its container instead of the viewport, drifts on its own, slides with pointer parallax and can lean back in 3D. New props cover rows, tile ratio, gap, radius, angle, tilt, speed, direction, a spotlight that brings dimmed or grayscale tiles back to full color under the pointer, and a smooth edge fade. Tiles take image URLs, text or JSX, and there is a light theme. The old gradientColor prop is gone.'
+      }
+    ]
   },
   'Backgrounds/Hyperspeed': {
     videoUrl: '/assets/video/hyperspeed.webm',
-    description: 'Animated lines continuously moving to simulate hyperspace travel on click hold.',
+    description: 'Night highway of glowing light trails on a winding road that warps into hyperspace while you hold.',
     category: 'Backgrounds',
     name: 'Hyperspeed',
     docsUrl: 'https://reactbits.dev/backgrounds/hyperspeed',
     tags: [],
-    added: '2024-08-14'
+    added: '2024-08-14',
+    updates: [
+      {
+        date: '2026-10-08',
+        note: 'Rebuilt on plain three with its own lightweight bloom, so the postprocessing dependency and the preset objects are gone. Every part of the effect is now a prop that updates live: road shape and curvature, lanes, road width, color and opacity, traffic density, trail length, light size, poles, speed, boost, field of view, glow, wet road reflections, speed dust, camera steering and all the light colors. Holding punches the camera wider and stretches the trails into a warp, the camera drifts toward the pointer, the canvas is transparent so your page shows through, and there is a light theme.'
+      }
+    ]
   },
   'Backgrounds/Iridescence': {
     videoUrl: '/assets/video/iridescence.webm',

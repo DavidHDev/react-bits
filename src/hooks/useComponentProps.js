@@ -5,7 +5,20 @@ import { getBackgroundLightProps } from '../constants/backgroundThemeProps';
 
 const isHexColor = value => typeof value === 'string' && /^#?[0-9a-fA-F]{3,8}$/.test(value);
 
+const sameValue = (a, b) => (Array.isArray(a) || Array.isArray(b) ? JSON.stringify(a) === JSON.stringify(b) : a === b);
+
 const createParser = defaultValue => {
+  if (Array.isArray(defaultValue)) {
+    return {
+      parse: v =>
+        v === null || v === ''
+          ? null
+          : v.split(',').map(item => (isHexColor(item) && !item.startsWith('#') ? `#${item}` : item)),
+      serialize: v =>
+        Array.isArray(v) ? v.map(item => (isHexColor(item) ? item.replace(/^#/, '') : item)).join(',') : String(v),
+      eq: sameValue
+    };
+  }
   if (typeof defaultValue === 'number') {
     return {
       parse: v => (v === null || v === '' ? null : Number(v)),
@@ -40,7 +53,8 @@ export function useComponentProps(defaultProps) {
   const lightProps = useMemo(() => getBackgroundLightProps(), []);
 
   const effectiveDefaultProps = useMemo(
-    () => (colorMode === 'light' && lightProps ? { ...defaultPropsRef.current, ...lightProps } : defaultPropsRef.current),
+    () =>
+      colorMode === 'light' && lightProps ? { ...defaultPropsRef.current, ...lightProps } : defaultPropsRef.current,
     [colorMode, lightProps]
   );
 
@@ -70,7 +84,7 @@ export function useComponentProps(defaultProps) {
 
   const updateProp = useCallback(
     (name, value) => {
-      const newValue = value === effectiveDefaultProps[name] ? null : value;
+      const newValue = sameValue(value, effectiveDefaultProps[name]) ? null : value;
       setQueryState({ [name]: newValue });
     },
     [effectiveDefaultProps, setQueryState]
@@ -80,7 +94,7 @@ export function useComponentProps(defaultProps) {
     updates => {
       const newState = {};
       for (const [name, value] of Object.entries(updates)) {
-        newState[name] = value === effectiveDefaultProps[name] ? null : value;
+        newState[name] = sameValue(value, effectiveDefaultProps[name]) ? null : value;
       }
       setQueryState(newState);
     },

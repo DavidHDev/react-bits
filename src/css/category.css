@@ -903,15 +903,6 @@
   color: var(--color-primary);
 }
 
-.star-border-demo .inner-content {
-  padding: 1em 3em;
-}
-
-.custom-bounceCards {
-  position: relative;
-  top: 2em;
-}
-
 .custom-folder {
   margin-top: 4em;
 }

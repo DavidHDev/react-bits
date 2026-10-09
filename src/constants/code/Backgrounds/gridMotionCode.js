@@ -5,39 +5,33 @@ import tsCode from '@ts-default/Backgrounds/GridMotion/GridMotion.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/GridMotion/GridMotion.tsx?raw';
 
 export const gridMotion = {
-  dependencies: `gsap`,
   usage: `import GridMotion from './GridMotion';
-  
-// note: you'll need to make sure the parent container of this component is sized properly
+
 const items = [
-  'Item 1',
-  <div key='jsx-item-1'>Custom JSX Content</div>,
-  'https://images.unsplash.com/photo-1723403804231-f4e9b515fe9d?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'Item 2',
-  <div key='jsx-item-2'>Custom JSX Content</div>,
-  'Item 4',
-  <div key='jsx-item-2'>Custom JSX Content</div>,
-  'https://images.unsplash.com/photo-1723403804231-f4e9b515fe9d?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'Item 5',
-  <div key='jsx-item-2'>Custom JSX Content</div>,
-  'Item 7',
-  <div key='jsx-item-2'>Custom JSX Content</div>,
-  'https://images.unsplash.com/photo-1723403804231-f4e9b515fe9d?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'Item 8',
-  <div key='jsx-item-2'>Custom JSX Content</div>,
-  'Item 10',
-  <div key='jsx-item-3'>Custom JSX Content</div>,
-  'https://images.unsplash.com/photo-1723403804231-f4e9b515fe9d?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'Item 11',
-  <div key='jsx-item-2'>Custom JSX Content</div>,
-  'Item 13',
-  <div key='jsx-item-4'>Custom JSX Content</div>,
-  'https://images.unsplash.com/photo-1723403804231-f4e9b515fe9d?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'Item 14',
-  // Add more items as needed
+  'https://images.unsplash.com/photo-1705032033999-efa3082e1a4e?w=640&q=75&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1721407964262-f9864b562453?w=640&q=75&auto=format&fit=crop',
+  'Any text works too',
+  <div key="custom">Or your own JSX</div>
 ];
 
-<GridMotion items={items} />`,
+<div style={{ position: 'relative', width: '100%', height: 600 }}>
+  <GridMotion
+    items={items}
+    rows={4}
+    aspectRatio={1.33}
+    gap={16}
+    radius={14}
+    angle={-12}
+    tilt={0}
+    speed={24}
+    direction="alternate"
+    parallax={0.5}
+    spotlight={0.6}
+    dim={0.35}
+    fade={0.5}
+    grayscale={false}
+  />
+</div>`,
   code,
   css,
   tailwind,

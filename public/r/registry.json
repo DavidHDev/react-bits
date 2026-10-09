@@ -200,11 +200,9 @@
 		{
 			"name": "Crosshair-JS-CSS",
 			"title": "Crosshair",
-			"description": "Custom crosshair cursor with tracking, and link hover effects.",
+			"description": "Crosshair cursor with live coordinates that locks onto links and buttons and measures them.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -216,11 +214,9 @@
 		{
 			"name": "Crosshair-JS-TW",
 			"title": "Crosshair",
-			"description": "Custom crosshair cursor with tracking, and link hover effects.",
+			"description": "Crosshair cursor with live coordinates that locks onto links and buttons and measures them.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -232,11 +228,9 @@
 		{
 			"name": "Crosshair-TS-CSS",
 			"title": "Crosshair",
-			"description": "Custom crosshair cursor with tracking, and link hover effects.",
+			"description": "Crosshair cursor with live coordinates that locks onto links and buttons and measures them.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -248,11 +242,9 @@
 		{
 			"name": "Crosshair-TS-TW",
 			"title": "Crosshair",
-			"description": "Custom crosshair cursor with tracking, and link hover effects.",
+			"description": "Crosshair cursor with live coordinates that locks onto links and buttons and measures them.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1446,7 +1438,7 @@
 		{
 			"name": "Noise-JS-CSS",
 			"title": "Noise",
-			"description": "Animated film grain / noise overlay adding subtle texture and motion.",
+			"description": "Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1465,7 +1457,7 @@
 		{
 			"name": "Noise-JS-TW",
 			"title": "Noise",
-			"description": "Animated film grain / noise overlay adding subtle texture and motion.",
+			"description": "Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1479,7 +1471,7 @@
 		{
 			"name": "Noise-TS-CSS",
 			"title": "Noise",
-			"description": "Animated film grain / noise overlay adding subtle texture and motion.",
+			"description": "Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1498,7 +1490,7 @@
 		{
 			"name": "Noise-TS-TW",
 			"title": "Noise",
-			"description": "Animated film grain / noise overlay adding subtle texture and motion.",
+			"description": "Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1594,11 +1586,9 @@
 		{
 			"name": "PixelTransition-JS-CSS",
 			"title": "PixelTransition",
-			"description": "Pixel dissolve transition for content reveal on hover.",
+			"description": "Retro pixel dissolve that covers a card in solid pixels, swaps the content underneath and clears again.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1615,11 +1605,9 @@
 		{
 			"name": "PixelTransition-JS-TW",
 			"title": "PixelTransition",
-			"description": "Pixel dissolve transition for content reveal on hover.",
+			"description": "Retro pixel dissolve that covers a card in solid pixels, swaps the content underneath and clears again.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1631,11 +1619,9 @@
 		{
 			"name": "PixelTransition-TS-CSS",
 			"title": "PixelTransition",
-			"description": "Pixel dissolve transition for content reveal on hover.",
+			"description": "Retro pixel dissolve that covers a card in solid pixels, swaps the content underneath and clears again.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1652,11 +1638,9 @@
 		{
 			"name": "PixelTransition-TS-TW",
 			"title": "PixelTransition",
-			"description": "Pixel dissolve transition for content reveal on hover.",
+			"description": "Retro pixel dissolve that covers a card in solid pixels, swaps the content underneath and clears again.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1808,27 +1792,28 @@
 		{
 			"name": "ShapeBlur-JS-CSS",
 			"title": "ShapeBlur",
-			"description": "Morphing blurred geometric shape. The effect occurs on hover.",
+			"description": "A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "ShapeBlur.css",
+					"target": "@components/ShapeBlur.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "ShapeBlur/ShapeBlur.jsx"
+					"path": "ShapeBlur.jsx"
 				}
 			]
 		},
 		{
 			"name": "ShapeBlur-JS-TW",
 			"title": "ShapeBlur",
-			"description": "Morphing blurred geometric shape. The effect occurs on hover.",
+			"description": "A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1840,27 +1825,28 @@
 		{
 			"name": "ShapeBlur-TS-CSS",
 			"title": "ShapeBlur",
-			"description": "Morphing blurred geometric shape. The effect occurs on hover.",
+			"description": "A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "ShapeBlur.css",
+					"target": "@components/ShapeBlur.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "ShapeBlur/ShapeBlur.tsx"
+					"path": "ShapeBlur.tsx"
 				}
 			]
 		},
 		{
 			"name": "ShapeBlur-TS-TW",
 			"title": "ShapeBlur",
-			"description": "Morphing blurred geometric shape. The effect occurs on hover.",
+			"description": "A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1928,7 +1914,7 @@
 		{
 			"name": "StarBorder-JS-CSS",
 			"title": "StarBorder",
-			"description": "Animated star / sparkle border orbiting content with twinkle pulses.",
+			"description": "A twinkling star that travels the exact outline of any button, pill or card, trailing light and stardust.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1947,7 +1933,7 @@
 		{
 			"name": "StarBorder-JS-TW",
 			"title": "StarBorder",
-			"description": "Animated star / sparkle border orbiting content with twinkle pulses.",
+			"description": "A twinkling star that travels the exact outline of any button, pill or card, trailing light and stardust.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1961,7 +1947,7 @@
 		{
 			"name": "StarBorder-TS-CSS",
 			"title": "StarBorder",
-			"description": "Animated star / sparkle border orbiting content with twinkle pulses.",
+			"description": "A twinkling star that travels the exact outline of any button, pill or card, trailing light and stardust.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1980,7 +1966,7 @@
 		{
 			"name": "StarBorder-TS-TW",
 			"title": "StarBorder",
-			"description": "Animated star / sparkle border orbiting content with twinkle pulses.",
+			"description": "A twinkling star that travels the exact outline of any button, pill or card, trailing light and stardust.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -2436,11 +2422,9 @@
 		{
 			"name": "ASCIIText-JS-CSS",
 			"title": "ASCIIText",
-			"description": "Renders text with an animated ASCII background for a retro feel.",
+			"description": "Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2452,11 +2436,9 @@
 		{
 			"name": "ASCIIText-JS-TW",
 			"title": "ASCIIText",
-			"description": "Renders text with an animated ASCII background for a retro feel.",
+			"description": "Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2468,11 +2450,9 @@
 		{
 			"name": "ASCIIText-TS-CSS",
 			"title": "ASCIIText",
-			"description": "Renders text with an animated ASCII background for a retro feel.",
+			"description": "Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2484,11 +2464,9 @@
 		{
 			"name": "ASCIIText-TS-TW",
 			"title": "ASCIIText",
-			"description": "Renders text with an animated ASCII background for a retro feel.",
+			"description": "Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -4802,11 +4780,9 @@
 		{
 			"name": "BounceCards-JS-CSS",
 			"title": "BounceCards",
-			"description": "Cards bounce that bounce in on mount.",
+			"description": "A fan of photo cards that bounce in, then spread apart and straighten the one you hover.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -4823,11 +4799,9 @@
 		{
 			"name": "BounceCards-JS-TW",
 			"title": "BounceCards",
-			"description": "Cards bounce that bounce in on mount.",
+			"description": "A fan of photo cards that bounce in, then spread apart and straighten the one you hover.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -4839,11 +4813,9 @@
 		{
 			"name": "BounceCards-TS-CSS",
 			"title": "BounceCards",
-			"description": "Cards bounce that bounce in on mount.",
+			"description": "A fan of photo cards that bounce in, then spread apart and straighten the one you hover.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -4860,11 +4832,9 @@
 		{
 			"name": "BounceCards-TS-TW",
 			"title": "BounceCards",
-			"description": "Cards bounce that bounce in on mount.",
+			"description": "A fan of photo cards that bounce in, then spread apart and straighten the one you hover.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5900,11 +5870,9 @@
 		{
 			"name": "DecayCard-JS-CSS",
 			"title": "DecayCard",
-			"description": "Hover parallax effect that disintegrates the content of a card.",
+			"description": "An image card that tears and melts as the pointer moves, then pulls itself back together.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5921,11 +5889,9 @@
 		{
 			"name": "DecayCard-JS-TW",
 			"title": "DecayCard",
-			"description": "Hover parallax effect that disintegrates the content of a card.",
+			"description": "An image card that tears and melts as the pointer moves, then pulls itself back together.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5937,11 +5903,9 @@
 		{
 			"name": "DecayCard-TS-CSS",
 			"title": "DecayCard",
-			"description": "Hover parallax effect that disintegrates the content of a card.",
+			"description": "An image card that tears and melts as the pointer moves, then pulls itself back together.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5958,11 +5922,9 @@
 		{
 			"name": "DecayCard-TS-TW",
 			"title": "DecayCard",
-			"description": "Hover parallax effect that disintegrates the content of a card.",
+			"description": "An image card that tears and melts as the pointer moves, then pulls itself back together.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6350,11 +6312,9 @@
 		{
 			"name": "FlyingPosters-JS-CSS",
 			"title": "FlyingPosters",
-			"description": "3D posters rotate on scroll infinitely.",
+			"description": "3D posters that twist and flip as you scroll or drag through an endless column.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6371,11 +6331,9 @@
 		{
 			"name": "FlyingPosters-JS-TW",
 			"title": "FlyingPosters",
-			"description": "3D posters rotate on scroll infinitely.",
+			"description": "3D posters that twist and flip as you scroll or drag through an endless column.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6387,11 +6345,9 @@
 		{
 			"name": "FlyingPosters-TS-CSS",
 			"title": "FlyingPosters",
-			"description": "3D posters rotate on scroll infinitely.",
+			"description": "3D posters that twist and flip as you scroll or drag through an endless column.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6408,11 +6364,9 @@
 		{
 			"name": "FlyingPosters-TS-TW",
 			"title": "FlyingPosters",
-			"description": "3D posters rotate on scroll infinitely.",
+			"description": "3D posters that twist and flip as you scroll or drag through an endless column.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6754,11 +6708,9 @@
 		{
 			"name": "InfiniteMenu-JS-CSS",
 			"title": "InfiniteMenu",
-			"description": "Horizontally looping menu effect that scrolls endlessly with seamless wrap.",
+			"description": "A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.",
 			"type": "registry:component",
-			"dependencies": [
-				"gl-matrix@^3.4.3"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6775,11 +6727,9 @@
 		{
 			"name": "InfiniteMenu-JS-TW",
 			"title": "InfiniteMenu",
-			"description": "Horizontally looping menu effect that scrolls endlessly with seamless wrap.",
+			"description": "A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.",
 			"type": "registry:component",
-			"dependencies": [
-				"gl-matrix@^3.4.3"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6791,11 +6741,9 @@
 		{
 			"name": "InfiniteMenu-TS-CSS",
 			"title": "InfiniteMenu",
-			"description": "Horizontally looping menu effect that scrolls endlessly with seamless wrap.",
+			"description": "A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.",
 			"type": "registry:component",
-			"dependencies": [
-				"gl-matrix@^3.4.3"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6812,11 +6760,9 @@
 		{
 			"name": "InfiniteMenu-TS-TW",
 			"title": "InfiniteMenu",
-			"description": "Horizontally looping menu effect that scrolls endlessly with seamless wrap.",
+			"description": "A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.",
 			"type": "registry:component",
-			"dependencies": [
-				"gl-matrix@^3.4.3"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10840,11 +10786,9 @@
 		{
 			"name": "GridDistortion-JS-CSS",
 			"title": "GridDistortion",
-			"description": "Warped grid mesh distorts smoothly reacting to cursor.",
+			"description": "Image background that breaks into a grid of blocks under the cursor and settles back into place.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10861,11 +10805,9 @@
 		{
 			"name": "GridDistortion-JS-TW",
 			"title": "GridDistortion",
-			"description": "Warped grid mesh distorts smoothly reacting to cursor.",
+			"description": "Image background that breaks into a grid of blocks under the cursor and settles back into place.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10877,11 +10819,9 @@
 		{
 			"name": "GridDistortion-TS-CSS",
 			"title": "GridDistortion",
-			"description": "Warped grid mesh distorts smoothly reacting to cursor.",
+			"description": "Image background that breaks into a grid of blocks under the cursor and settles back into place.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10898,11 +10838,9 @@
 		{
 			"name": "GridDistortion-TS-TW",
 			"title": "GridDistortion",
-			"description": "Warped grid mesh distorts smoothly reacting to cursor.",
+			"description": "Image background that breaks into a grid of blocks under the cursor and settles back into place.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10914,11 +10852,9 @@
 		{
 			"name": "GridMotion-JS-CSS",
 			"title": "GridMotion",
-			"description": "Perspective moving grid lines based on cusror position.",
+			"description": "A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10935,11 +10871,9 @@
 		{
 			"name": "GridMotion-JS-TW",
 			"title": "GridMotion",
-			"description": "Perspective moving grid lines based on cusror position.",
+			"description": "A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10951,11 +10885,9 @@
 		{
 			"name": "GridMotion-TS-CSS",
 			"title": "GridMotion",
-			"description": "Perspective moving grid lines based on cusror position.",
+			"description": "A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10972,11 +10904,9 @@
 		{
 			"name": "GridMotion-TS-TW",
 			"title": "GridMotion",
-			"description": "Perspective moving grid lines based on cusror position.",
+			"description": "A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10988,18 +10918,13 @@
 		{
 			"name": "Hyperspeed-JS-CSS",
 			"title": "Hyperspeed",
-			"description": "Animated lines continuously moving to simulate hyperspace travel on click hold.",
+			"description": "Night highway of glowing light trails on a winding road that warps into hyperspace while you hold.",
 			"type": "registry:component",
 			"dependencies": [
-				"postprocessing@^6.36.0",
 				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
-				{
-					"type": "registry:component",
-					"path": "HyperSpeedPresets.js"
-				},
 				{
 					"type": "registry:file",
 					"path": "Hyperspeed.css",
@@ -11014,18 +10939,13 @@
 		{
 			"name": "Hyperspeed-JS-TW",
 			"title": "Hyperspeed",
-			"description": "Animated lines continuously moving to simulate hyperspace travel on click hold.",
+			"description": "Night highway of glowing light trails on a winding road that warps into hyperspace while you hold.",
 			"type": "registry:component",
 			"dependencies": [
-				"postprocessing@^6.36.0",
 				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
-				{
-					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.js"
-				},
 				{
 					"type": "registry:component",
 					"path": "Hyperspeed/Hyperspeed.jsx"
@@ -11035,18 +10955,13 @@
 		{
 			"name": "Hyperspeed-TS-CSS",
 			"title": "Hyperspeed",
-			"description": "Animated lines continuously moving to simulate hyperspace travel on click hold.",
+			"description": "Night highway of glowing light trails on a winding road that warps into hyperspace while you hold.",
 			"type": "registry:component",
 			"dependencies": [
-				"postprocessing@^6.36.0",
 				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
-				{
-					"type": "registry:component",
-					"path": "HyperSpeedPresets.ts"
-				},
 				{
 					"type": "registry:file",
 					"path": "Hyperspeed.css",
@@ -11061,18 +10976,13 @@
 		{
 			"name": "Hyperspeed-TS-TW",
 			"title": "Hyperspeed",
-			"description": "Animated lines continuously moving to simulate hyperspace travel on click hold.",
+			"description": "Night highway of glowing light trails on a winding road that warps into hyperspace while you hold.",
 			"type": "registry:component",
 			"dependencies": [
-				"postprocessing@^6.36.0",
 				"three@^0.180.0"
 			],
 			"registryDependencies": [],
 			"files": [
-				{
-					"type": "registry:component",
-					"path": "Hyperspeed/HyperSpeedPresets.ts"
-				},
 				{
 					"type": "registry:component",
 					"path": "Hyperspeed/Hyperspeed.tsx"

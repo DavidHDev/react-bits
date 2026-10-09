@@ -1,117 +1,161 @@
-/* Note: this CSS is only an example, you can overlay whatever you want using the activeItem logic */
-
-#infinite-grid-menu-canvas {
-  cursor: grab;
+.infinite-menu {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  position: relative;
   outline: none;
+  container-type: inline-size;
+  color: var(--infinite-menu-text);
+  -webkit-tap-highlight-color: transparent;
 }
 
-#infinite-grid-menu-canvas:active {
+.infinite-menu:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--infinite-menu-text);
+}
+
+.infinite-menu__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.infinite-menu__canvas:active {
   cursor: grabbing;
 }
 
-.action-button {
+.infinite-menu__info,
+.infinite-menu__custom {
   position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.infinite-menu__title,
+.infinite-menu__description,
+.infinite-menu__action {
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.infinite-menu__title {
+  position: absolute;
+  top: 50%;
+  right: calc(50% + var(--infinite-menu-tile, 160px) + 28px);
+  max-width: calc(50% - var(--infinite-menu-tile, 160px) - 48px);
+  margin: 0;
+  font-size: clamp(1.2rem, calc((50cqw - var(--infinite-menu-tile, 160px)) * 0.2), 3.4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-align: right;
+  text-shadow: var(--infinite-menu-shadow);
+  transform: translateY(-50%);
+  text-wrap: balance;
+}
+
+.infinite-menu__description {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + var(--infinite-menu-tile, 160px) + 28px);
+  max-width: min(22ch, calc(50% - var(--infinite-menu-tile, 160px) - 48px));
+  margin: 0;
+  font-size: clamp(0.85rem, 1.5cqw, 1.05rem);
+  line-height: 1.55;
+  text-shadow: var(--infinite-menu-shadow);
+  opacity: 0.72;
+  transform: translateY(-50%);
+}
+
+.infinite-menu__action {
+  position: absolute;
+  bottom: 7%;
   left: 50%;
-  z-index: 10;
-  width: 60px;
-  height: 60px;
   display: grid;
   place-items: center;
-  background: #5227ff;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   border: none;
   border-radius: 50%;
+  background: var(--infinite-menu-accent);
+  color: var(--infinite-menu-on-accent);
   cursor: pointer;
-  border: 5px solid var(--infinite-menu-background, #000);
-}
-
-.face-title {
-  user-select: none;
-  position: absolute;
-  font-weight: 900;
-  font-size: 3rem;
-  left: 1.6em;
-  top: 50%;
-}
-
-.action-button-icon {
-  user-select: none;
-  position: relative;
-  color: #fff;
-  top: 2px;
-  font-size: 26px;
-}
-
-.face-title {
-  position: absolute;
-  top: 50%;
-  transform: translate(20%, -50%);
-}
-
-.face-title.active {
-  opacity: 1;
-  transform: translate(20%, -50%);
   pointer-events: auto;
-  transition: 0.5s ease;
+  transform: translateX(-50%);
 }
 
-.face-title.inactive {
-  pointer-events: none;
+.infinite-menu__action:hover {
+  transform: translateX(-50%) scale(1.06);
+}
+
+.infinite-menu__action:focus-visible {
+  outline: 2px solid var(--infinite-menu-accent);
+  outline-offset: 3px;
+}
+
+.infinite-menu__info[data-moving='true'] .infinite-menu__title {
   opacity: 0;
-  transition: 0.1s ease;
+  transform: translate(16px, -50%);
+  transition-duration: 0.18s;
 }
 
-.face-description {
-  user-select: none;
-  position: absolute;
-  max-width: 10ch;
-  top: 50%;
-  font-size: 1.2rem;
-  right: 1%;
-  transform: translate(0, -50%);
-}
-
-.face-description.active {
-  opacity: 1;
-  transform: translate(-90%, -50%);
-  pointer-events: auto;
-  transition: 0.5s ease;
-}
-
-.face-description.inactive {
-  pointer-events: none;
-  transform: translate(-60%, -50%);
+.infinite-menu__info[data-moving='true'] .infinite-menu__description {
   opacity: 0;
-  transition: 0.1s ease;
+  transform: translate(-16px, -50%);
+  transition-duration: 0.18s;
 }
 
-.action-button {
-  position: absolute;
-  left: 50%;
-}
-
-.action-button.active {
-  bottom: 3.8em;
-  transform: translateX(-50%) scale(1);
-  opacity: 1;
-  pointer-events: auto;
-  transition: 0.5s ease;
-}
-
-.action-button.inactive {
-  bottom: -80px;
-  transform: translateX(-50%) scale(0);
+.infinite-menu__info[data-moving='true'] .infinite-menu__action {
   opacity: 0;
   pointer-events: none;
-  transition: 0.1s ease;
+  transform: translate(-50%, 16px) scale(0.6);
+  transition-duration: 0.18s;
 }
 
-@media (max-width: 1500px) {
-  .face-title,
-  .face-description {
-    display: none;
-  }
+.infinite-menu__info[data-layout='stacked'] .infinite-menu__title {
+  top: auto;
+  right: 88px;
+  bottom: 52px;
+  left: 20px;
+  max-width: none;
+  font-size: clamp(1.3rem, 6cqw, 1.8rem);
+  text-align: left;
+  transform: none;
+}
+
+.infinite-menu__info[data-layout='stacked'] .infinite-menu__description {
+  top: auto;
+  right: 88px;
+  bottom: 22px;
+  left: 20px;
+  max-width: 36ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: none;
+}
+
+.infinite-menu__info[data-layout='stacked'] .infinite-menu__action {
+  right: 20px;
+  bottom: 22px;
+  left: auto;
+  transform: none;
+}
+
+.infinite-menu__info[data-layout='stacked'] .infinite-menu__action:hover {
+  transform: scale(1.06);
+}
+
+.infinite-menu__info[data-layout='stacked'][data-moving='true'] .infinite-menu__title,
+.infinite-menu__info[data-layout='stacked'][data-moving='true'] .infinite-menu__description {
+  transform: translateY(12px);
+}
+
+.infinite-menu__info[data-layout='stacked'][data-moving='true'] .infinite-menu__action {
+  transform: translateY(12px) scale(0.6);
 }

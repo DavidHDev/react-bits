@@ -33,7 +33,7 @@ Notes:
 
 ## Text Animations
 
-- [ASCII Text](https://www.reactbits.dev/text-animations/ascii-text): Renders text with an animated ASCII background for a retro feel. CLI: `ASCIIText`.
+- [ASCII Text](https://www.reactbits.dev/text-animations/ascii-text): Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click. CLI: `ASCIIText`.
 - [Blur Text](https://www.reactbits.dev/text-animations/blur-text): Text starts blurred then crisply resolves for a soft-focus reveal effect. CLI: `BlurText`.
 - [Circular Text](https://www.reactbits.dev/text-animations/circular-text): Layouts characters around a circle with optional rotation animation. CLI: `CircularText`.
 - [Count Up](https://www.reactbits.dev/text-animations/count-up): Animated number counter supporting formatting and decimals. CLI: `CountUp`.
@@ -45,7 +45,7 @@ Notes:
 - [Fold Text](https://www.reactbits.dev/text-animations/fold-text): Lines unfold into place like creased paper opening flat. CLI: `FoldText`.
 - [Fuzzy Text](https://www.reactbits.dev/text-animations/fuzzy-text): Vibrating fuzzy text with controllable hover intensity. CLI: `FuzzyText`.
 - [Glitch Text](https://www.reactbits.dev/text-animations/glitch-text): RGB split and distortion glitch effect with jitter effects. CLI: `GlitchText`.
-- [Gradient Text](https://www.reactbits.dev/text-animations/gradient-text): Animated gradient sweep across live text with speed and color control. CLI: `GradientText`.
+- [Gradient Text](https://www.reactbits.dev/text-animations/gradient-text): Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer. CLI: `GradientText`.
 - [Masked Heading](https://www.reactbits.dev/text-animations/masked-heading): A large headline with a drifting colour mesh or image showing through the glyphs, revealed word by word. CLI: `MaskedHeading`.
 - [Particle Text](https://www.reactbits.dev/text-animations/particle-text): Text assembles from drifting particles that scatter and reform on demand. CLI: `ParticleText`.
 - [Rotating Text](https://www.reactbits.dev/text-animations/rotating-text): Cycles through multiple phrases with 3D rotate / flip transitions. CLI: `RotatingText`.
@@ -53,7 +53,7 @@ Notes:
 - [Scroll Float](https://www.reactbits.dev/text-animations/scroll-float): Text gently floats / parallax shifts on scroll. CLI: `ScrollFloat`.
 - [Scroll Reveal](https://www.reactbits.dev/text-animations/scroll-reveal): Text gently unblurs and reveals on scroll. CLI: `ScrollReveal`.
 - [Scroll Velocity](https://www.reactbits.dev/text-animations/scroll-velocity): Text marquee animatio - speed and distortion scale with user's scroll velocity. CLI: `ScrollVelocity`.
-- [Shiny Text](https://www.reactbits.dev/text-animations/shiny-text): Metallic sheen sweeps across text producing a reflective highlight. CLI: `ShinyText`.
+- [Shiny Text](https://www.reactbits.dev/text-animations/shiny-text): A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer. CLI: `ShinyText`.
 - [Shuffle](https://www.reactbits.dev/text-animations/shuffle): Animated text reveal where characters shuffle before settling. CLI: `Shuffle`.
 - [Split Flap Text](https://www.reactbits.dev/text-animations/split-flap-text): Mechanical split-flap departure board that clacks through to each new phrase. CLI: `SplitFlapText`.
 - [Split Text](https://www.reactbits.dev/text-animations/split-text): Splits text into characters / words for staggered entrance animation. CLI: `SplitText`.
@@ -71,9 +71,9 @@ Notes:
 
 - [Animated Content](https://www.reactbits.dev/animations/animated-content): Wrapper that animates any children on scroll or mount with configurable direction, distance, duration, easing and disappear options. CLI: `AnimatedContent`.
 - [Antigravity](https://www.reactbits.dev/animations/antigravity): 3D antigravity particle field that repels from the cursor with smooth motion. CLI: `Antigravity`.
-- [Blob Cursor](https://www.reactbits.dev/animations/blob-cursor): Organic blob cursor that smoothly follows the pointer with inertia and elastic morphing. CLI: `BlobCursor`.
+- [Blob Cursor](https://www.reactbits.dev/animations/blob-cursor): Liquid metal blob cursor that stretches, sloshes and bursts into droplets, in chrome, jelly, pearl or ink. CLI: `BlobCursor`.
 - [Click Spark](https://www.reactbits.dev/animations/click-spark): Creates particle spark bursts at click position. CLI: `ClickSpark`.
-- [Crosshair](https://www.reactbits.dev/animations/crosshair): Custom crosshair cursor with tracking, and link hover effects. CLI: `Crosshair`.
+- [Crosshair](https://www.reactbits.dev/animations/crosshair): Crosshair cursor with live coordinates that locks onto links and buttons and measures them. CLI: `Crosshair`.
 - [Crystalized Ball](https://www.reactbits.dev/animations/crystalized-ball): A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color. CLI: `CrystalizedBall`.
 - [Cubes](https://www.reactbits.dev/animations/cubes): 3D rotating cube cluster. Supports auto-rotation or hover interaction. CLI: `Cubes`.
 - [Cursor Grid](https://www.reactbits.dev/animations/cursor-grid): Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses. CLI: `CursorGrid`.
@@ -95,17 +95,17 @@ Notes:
 - [Magnet Lines](https://www.reactbits.dev/animations/magnet-lines): Animated field lines bend toward the cursor. CLI: `MagnetLines`.
 - [Meta Balls](https://www.reactbits.dev/animations/meta-balls): Liquid metaball blobs that merge and separate with smooth implicit surface animation. CLI: `MetaBalls`.
 - [Metallic Paint](https://www.reactbits.dev/animations/metallic-paint): Liquid metallic paint shader which can be applied to SVG elements. CLI: `MetallicPaint`.
-- [Noise](https://www.reactbits.dev/animations/noise): Animated film grain / noise overlay adding subtle texture and motion. CLI: `Noise`.
+- [Noise](https://www.reactbits.dev/animations/noise): Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static. CLI: `Noise`.
 - [Orbit Images](https://www.reactbits.dev/animations/orbit-images): SVG Path customizable orbiting images effect. CLI: `OrbitImages`.
 - [Pixel Swap](https://www.reactbits.dev/animations/pixel-swap): Pixel fragments assemble into a full cover, swap arbitrary content, then dissolve away with reversible colors and triggers. CLI: `PixelSwap`.
 - [Pixel Trail](https://www.reactbits.dev/animations/pixel-trail): Pixelated cursor trail emitting fading squares with retro digital feel. CLI: `PixelTrail`.
-- [Pixel Transition](https://www.reactbits.dev/animations/pixel-transition): Pixel dissolve transition for content reveal on hover. CLI: `PixelTransition`.
+- [Pixel Transition](https://www.reactbits.dev/animations/pixel-transition): Retro pixel dissolve that covers a card in solid pixels, swaps the content underneath and clears again. CLI: `PixelTransition`.
 - [Ribbons](https://www.reactbits.dev/animations/ribbons): Flowing responsive ribbons/cursor trail driven by physics and pointer motion. CLI: `Ribbons`.
 - [Ripple Distortion](https://www.reactbits.dev/animations/ripple-distortion): Pointer-driven water displacement that warps content and leaves a decaying wake. CLI: `RippleDistortion`.
 - [Scroll Expand](https://www.reactbits.dev/animations/scroll-expand): A rounded media frame that grows to full bleed as it scrolls through the viewport. CLI: `ScrollExpand`.
-- [Shape Blur](https://www.reactbits.dev/animations/shape-blur): Morphing blurred geometric shape. The effect occurs on hover. CLI: `ShapeBlur`.
+- [Shape Blur](https://www.reactbits.dev/animations/shape-blur): A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode. CLI: `ShapeBlur`.
 - [Splash Cursor](https://www.reactbits.dev/animations/splash-cursor): Liquid splash burst at cursor with curling ripples and waves. CLI: `SplashCursor`.
-- [Star Border](https://www.reactbits.dev/animations/star-border): Animated star / sparkle border orbiting content with twinkle pulses. CLI: `StarBorder`.
+- [Star Border](https://www.reactbits.dev/animations/star-border): A twinkling star that travels the exact outline of any button, pill or card, trailing light and stardust. CLI: `StarBorder`.
 - [Sticker Peel](https://www.reactbits.dev/animations/sticker-peel): Sticker corner lift + peel interaction using 3D transform and shadow depth. CLI: `StickerPeel`.
 - [Strands](https://www.reactbits.dev/animations/strands): Glowing ribbon-like strands that ripple and weave across a transparent canvas. CLI: `Strands`.
 - [Swarm Cursor](https://www.reactbits.dev/animations/swarm-cursor): Flocking particle swarm that chases the pointer, jostles for space and drifts apart at rest. CLI: `SwarmCursor`.
@@ -116,7 +116,7 @@ Notes:
 - [Accordion Gallery](https://www.reactbits.dev/components/accordion-gallery): Panels expand on hover or focus, revealing parallax imagery and captions. CLI: `AccordionGallery`.
 - [Animated List](https://www.reactbits.dev/components/animated-list): List items enter with staggered motion variants for polished reveals. CLI: `AnimatedList`.
 - [Border Glow](https://www.reactbits.dev/components/border-glow): Glowing mesh-gradient border that follows cursor direction and intensifies near edges. CLI: `BorderGlow`.
-- [Bounce Cards](https://www.reactbits.dev/components/bounce-cards): Cards bounce that bounce in on mount. CLI: `BounceCards`.
+- [Bounce Cards](https://www.reactbits.dev/components/bounce-cards): A fan of photo cards that bounce in, then spread apart and straighten the one you hover. CLI: `BounceCards`.
 - [Bubble Menu](https://www.reactbits.dev/components/bubble-menu): Floating circular expanding menu with staggered item reveal. CLI: `BubbleMenu`.
 - [Card Nav](https://www.reactbits.dev/components/card-nav): Expandable navigation bar with card panels revealing nested links. CLI: `CardNav`.
 - [Card Swap](https://www.reactbits.dev/components/card-swap): Cards animate position swapping with smooth layout transitions. CLI: `CardSwap`.
@@ -126,23 +126,24 @@ Notes:
 - [Circular Gallery](https://www.reactbits.dev/components/circular-gallery): Circular orbit gallery rotating images. CLI: `CircularGallery`.
 - [Counter](https://www.reactbits.dev/components/counter): Flexible animated counter supporting increments + easing. CLI: `Counter`.
 - [Curved Input](https://www.reactbits.dev/components/curved-input): Arc-bent input bar with text, caret and submit button all following the curve. CLI: `CurvedInput`.
-- [Decay Card](https://www.reactbits.dev/components/decay-card): Hover parallax effect that disintegrates the content of a card. CLI: `DecayCard`.
+- [Decay Card](https://www.reactbits.dev/components/decay-card): An image card that tears and melts as the pointer moves, then pulls itself back together. CLI: `DecayCard`.
 - [Depth Carousel](https://www.reactbits.dev/components/depth-carousel): Cards recede into depth on a 3D rail, with drag, keyboard and auto-advance. CLI: `DepthCarousel`.
-- [Dock](https://www.reactbits.dev/components/dock): macOS style magnifying dock with proximity scaling of icons. CLI: `Dock`.
+- [Dock](https://www.reactbits.dev/components/dock): macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus. CLI: `Dock`.
 - [Dome Gallery](https://www.reactbits.dev/components/dome-gallery): Immersive 3D dome gallery projecting images on a hemispheric surface. CLI: `DomeGallery`.
 - [Drift Wall](https://www.reactbits.dev/components/drift-wall): An endless perspective wall of tiles drifting past, lifting on hover. CLI: `DriftWall`.
 - [Elastic Slider](https://www.reactbits.dev/components/elastic-slider): Slider handle stretches elastically then snaps with spring physics. CLI: `ElasticSlider`.
 - [Flex Carousel](https://www.reactbits.dev/components/flex-carousel): An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus. CLI: `FlexCarousel`.
 - [Flowing Menu](https://www.reactbits.dev/components/flowing-menu): Liquid flowing active indicator glides between menu items. CLI: `FlowingMenu`.
 - [Fluid Glass](https://www.reactbits.dev/components/fluid-glass): Glassmorphism container with animated liquid distortion refraction. CLI: `FluidGlass`.
-- [Flying Posters](https://www.reactbits.dev/components/flying-posters): 3D posters rotate on scroll infinitely. CLI: `FlyingPosters`.
+- [Flying Posters](https://www.reactbits.dev/components/flying-posters): 3D posters that twist and flip as you scroll or drag through an endless column. CLI: `FlyingPosters`.
 - [Folder](https://www.reactbits.dev/components/folder): Interactive folder opens to reveal nested content smooth motion. CLI: `Folder`.
 - [Glass Icons](https://www.reactbits.dev/components/glass-icons): Icon set styled with frosted glass blur. CLI: `GlassIcons`.
 - [Glass Surface](https://www.reactbits.dev/components/glass-surface): Advanced Apple-style glass surface with real-time distortion + lighting. CLI: `GlassSurface`.
 - [Gooey Nav](https://www.reactbits.dev/components/gooey-nav): Navigation indicator morphs with gooey blob transitions between items. CLI: `GooeyNav`.
-- [Infinite Menu](https://www.reactbits.dev/components/infinite-menu): Horizontally looping menu effect that scrolls endlessly with seamless wrap. CLI: `InfiniteMenu`.
+- [Holo Card](https://www.reactbits.dev/components/holo-card): Collectible trading card with a real holographic foil. Pick bursts, stars, shards, cosmos and more, with glitter sparkling on the silver border as it tilts. CLI: `HoloCard`.
+- [Infinite Menu](https://www.reactbits.dev/components/infinite-menu): A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link. CLI: `InfiniteMenu`.
 - [Infinite Spiral](https://www.reactbits.dev/components/infinite-spiral): An endlessly looping 3D helix of images with customizable motion, depth, spacing and interaction. CLI: `InfiniteSpiral`.
-- [Lanyard](https://www.reactbits.dev/components/lanyard): Swinging 3D lanyard / badge card with realistic inertial motion. CLI: `Lanyard`.
+- [Lanyard](https://www.reactbits.dev/components/lanyard): Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it. CLI: `Lanyard`.
 - [Line Sidebar](https://www.reactbits.dev/components/line-sidebar): Static list navigation with a cursor-proximity effect that shifts and highlights nearby items. CLI: `LineSidebar`.
 - [Magic Bento](https://www.reactbits.dev/components/magic-bento): Interactive bento grid tiles expand + animate with various options. CLI: `MagicBento`.
 - [Masonry](https://www.reactbits.dev/components/masonry): Responsive masonry layout with animated reflow + gaps optimization. CLI: `Masonry`.
@@ -155,8 +156,8 @@ Notes:
 - [Reflective Card](https://www.reactbits.dev/components/reflective-card): Card with dynamic webcam reflection and glare effects that respond to cursor movement. CLI: `ReflectiveCard`.
 - [Scroll Stack](https://www.reactbits.dev/components/scroll-stack): Overlapping card stack reveals on scroll with depth layering. CLI: `ScrollStack`.
 - [Specular Button](https://www.reactbits.dev/components/specular-button): Glass button with a shader-driven specular rim light that sweeps around the edge and follows the cursor. CLI: `SpecularButton`.
-- [Spotlight Card](https://www.reactbits.dev/components/spotlight-card): Dynamic spotlight follows cursor casting gradient illumination. CLI: `SpotlightCard`.
-- [Stack](https://www.reactbits.dev/components/stack): Layered stack with swipe animations, autoplay and smooth transitions. CLI: `Stack`.
+- [Spotlight Card](https://www.reactbits.dev/components/spotlight-card): Card lit by a soft spotlight that follows the pointer, catches its edge and reaches nearby cards. CLI: `SpotlightCard`.
+- [Stack](https://www.reactbits.dev/components/stack): Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts. CLI: `Stack`.
 - [Staggered Menu](https://www.reactbits.dev/components/staggered-menu): Menu with staggered item animations and smooth transitions on open/close. CLI: `StaggeredMenu`.
 - [Stepper](https://www.reactbits.dev/components/stepper): Animated multi-step progress indicator with active state transitions. CLI: `Stepper`.
 - [Tilted Card](https://www.reactbits.dev/components/tilted-card): 3D perspective tilt card reacting to pointer. CLI: `TiltedCard`.
@@ -221,10 +222,10 @@ Notes:
 - [Gradient Blinds](https://www.reactbits.dev/backgrounds/gradient-blinds): Layered gradient blinds with spotlight and noise distortion. CLI: `GradientBlinds`.
 - [Gradient Waves](https://www.reactbits.dev/backgrounds/gradient-waves): Raymarched sine waves rolling toward a soft, hazy horizon. CLI: `GradientWaves`.
 - [Grainient](https://www.reactbits.dev/backgrounds/grainient): Grainy gradient swirls with soft wave distortion. CLI: `Grainient`.
-- [Grid Distortion](https://www.reactbits.dev/backgrounds/grid-distortion): Warped grid mesh distorts smoothly reacting to cursor. CLI: `GridDistortion`.
-- [Grid Motion](https://www.reactbits.dev/backgrounds/grid-motion): Perspective moving grid lines based on cusror position. CLI: `GridMotion`.
+- [Grid Distortion](https://www.reactbits.dev/backgrounds/grid-distortion): Image background that breaks into a grid of blocks under the cursor and settles back into place. CLI: `GridDistortion`.
+- [Grid Motion](https://www.reactbits.dev/backgrounds/grid-motion): A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests. CLI: `GridMotion`.
 - [Grid Scan](https://www.reactbits.dev/backgrounds/grid-scan): Animated grid room 3D scan effect and cool interactions. CLI: `GridScan`.
-- [Hyperspeed](https://www.reactbits.dev/backgrounds/hyperspeed): Animated lines continuously moving to simulate hyperspace travel on click hold. CLI: `Hyperspeed`.
+- [Hyperspeed](https://www.reactbits.dev/backgrounds/hyperspeed): Night highway of glowing light trails on a winding road that warps into hyperspace while you hold. CLI: `Hyperspeed`.
 - [Iridescence](https://www.reactbits.dev/backgrounds/iridescence): Slick iridescent shader with shifting waves. CLI: `Iridescence`.
 - [Letter Glitch](https://www.reactbits.dev/backgrounds/letter-glitch): Matrix style letter animation. CLI: `LetterGlitch`.
 - [Lightfall](https://www.reactbits.dev/backgrounds/lightfall): Colorful light streaks raining down a glowing tunnel with a cursor light. CLI: `Lightfall`.

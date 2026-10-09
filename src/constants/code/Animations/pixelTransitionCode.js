@@ -5,35 +5,37 @@ import tsCode from '@ts-default/Animations/PixelTransition/PixelTransition.tsx?r
 import tsTailwind from '@ts-tailwind/Animations/PixelTransition/PixelTransition.tsx?raw';
 
 export const pixelTransition = {
-  dependencies: `gsap`,
   usage: `import PixelTransition from './PixelTransition';
 
 <PixelTransition
   firstContent={
     <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg"
-      alt="default pixel transition content, a cat!"
-      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      src="/assets/demo/day-portrait.webp"
+      alt=""
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
     />
   }
   secondContent={
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "grid",
-        placeItems: "center",
-        backgroundColor: "#111"
-      }}
-    >
-      <p style={{ fontWeight: 900, fontSize: "3rem", color: "#ffffff" }}>Meow!</p>
-    </div>
+    <img
+      src="/assets/demo/night-portrait.webp"
+      alt=""
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
   }
-  gridSize={12}
-  pixelColor='#ffffff'
-  once={false}
+  pixelColor="#ffffff"
+  mosaic={0}
+  gridSize={10}
+  pixelShape="square"
+  gap={0}
+  pattern="random"
+  pixelAnimation="pop"
+  randomness={0.3}
   animationStepDuration={0.4}
-  className="custom-pixel-card"
+  fps={0}
+  trigger="hover"
+  once={false}
+  aspectRatio="125%"
+  style={{ width: 300 }}
 />`,
   code,
   css,

@@ -1,25 +1,34 @@
-.content {
+.decay-card {
   position: relative;
-}
-
-.svg {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: block;
+  flex: none;
   will-change: transform;
 }
 
-.card-text {
+.decay-card__canvas {
   position: absolute;
-  bottom: 1.2em;
-  letter-spacing: -0.5px;
-  font-weight: 900;
-  left: 1em;
-  font-size: 2.5rem;
-  line-height: 1.5em;
+  top: -12%;
+  left: -12%;
+  display: block;
+  width: 124%;
+  height: 124%;
+  pointer-events: none;
 }
 
-.card-text::first-line {
-  font-size: 6rem;
+.decay-card__fallback {
+  position: absolute;
+  top: 8.33%;
+  left: 8.33%;
+  width: 83.33%;
+  height: 83.33%;
+  object-fit: cover;
+}
+
+.decay-card__content {
+  position: absolute;
+  right: 8.33%;
+  bottom: 8.33%;
+  left: 8.33%;
+  padding: 1.25rem;
+  color: #ffffff;
+  pointer-events: none;
 }

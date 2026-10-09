@@ -5,17 +5,21 @@ import tsCode from '@ts-default/Backgrounds/GridDistortion/GridDistortion.tsx?ra
 import tsTailwind from '@ts-tailwind/Backgrounds/GridDistortion/GridDistortion.tsx?raw';
 
 export const gridDistortion = {
-  dependencies: `three`,
   usage: `import GridDistortion from './GridDistortion';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <GridDistortion
-    imageSrc="https://picsum.photos/1920/1080?grayscale"
-    grid={10}
-    mouse={0.1}
+    imageSrc="/assets/demo/night-landscape.webp"
+    grid={15}
+    radius={0.18}
     strength={0.15}
-    relaxation={0.9}
-    className="custom-class"
+    relaxation={0.96}
+    mode="drag"
+    softness={0}
+    chroma={0}
+    idle={0.3}
+    clickRipple={true}
+    intro={true}
   />
 </div>`,
   code,

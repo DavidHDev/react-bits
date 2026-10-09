@@ -830,21 +830,57 @@ export const BACKGROUNDS = [
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/hyperspeed"',
     props: [
       {
-        name: 'preset',
+        name: 'tailColors',
+        type: 'colorArray',
+        default: ['#d856bf', '#6750a2', '#c247ac'],
+        label: 'Tail Lights',
+        minItems: 1,
+        maxItems: 8
+      },
+      {
+        name: 'headColors',
+        type: 'colorArray',
+        default: ['#03b3c3', '#0e5ea5', '#324555'],
+        label: 'Headlights',
+        minItems: 1,
+        maxItems: 8
+      },
+      { name: 'poleColors', type: 'colorArray', default: ['#03b3c3'], label: 'Poles', minItems: 1, maxItems: 8 },
+      { name: 'roadColor', type: 'color', default: '#08080a', label: 'Road Color' },
+      { name: 'lineColor', type: 'color', default: '#25252d', label: 'Line Color' },
+      {
+        name: 'curve',
         type: 'select',
-        default: 'one',
-        label: 'Preset',
+        default: 'winding',
+        label: 'Curve',
         options: [
-          { value: 'one', label: 'Cyberpunk' },
-          { value: 'two', label: 'Akira' },
-          { value: 'three', label: 'Golden' },
-          { value: 'four', label: 'Split' },
-          { value: 'five', label: 'Highway' },
-          { value: 'six', label: 'Neon Waves' }
+          { value: 'straight', label: 'Straight' },
+          { value: 'gentle', label: 'Gentle' },
+          { value: 'winding', label: 'Winding' },
+          { value: 'hills', label: 'Hills' },
+          { value: 'racing', label: 'Racing' },
+          { value: 'deep', label: 'Deep' }
         ]
-      }
-    ],
-    usePresets: true
+      },
+      { name: 'curvature', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Curvature' },
+      { name: 'speed', type: 'number', default: 1, min: 0.1, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'boost', type: 'number', default: 3, min: 1, max: 8, step: 0.5, label: 'Boost' },
+      { name: 'fov', type: 'number', default: 90, min: 50, max: 130, step: 1, label: 'FOV' },
+      { name: 'boostFov', type: 'number', default: 130, min: 50, max: 160, step: 1, label: 'Boost FOV' },
+      { name: 'lanes', type: 'number', default: 3, min: 1, max: 6, step: 1, label: 'Lanes' },
+      { name: 'roadWidth', type: 'number', default: 10, min: 4, max: 20, step: 0.5, label: 'Road Width' },
+      { name: 'medianWidth', type: 'number', default: 2, min: 0, max: 8, step: 0.5, label: 'Median' },
+      { name: 'density', type: 'number', default: 40, min: 0, max: 160, step: 1, label: 'Density' },
+      { name: 'trailLength', type: 'number', default: 1, min: 0.2, max: 3, step: 0.05, label: 'Trail Length' },
+      { name: 'lightSize', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Light Size' },
+      { name: 'poles', type: 'number', default: 20, min: 0, max: 80, step: 1, label: 'Poles' },
+      { name: 'dust', type: 'number', default: 100, min: 0, max: 1500, step: 10, label: 'Dust' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 1.5, step: 0.05, label: 'Glow' },
+      { name: 'reflections', type: 'number', default: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Reflections' },
+      { name: 'roadOpacity', type: 'number', default: 0.1, min: 0, max: 1, step: 0.05, label: 'Road Opacity' },
+      { name: 'steer', type: 'number', default: 0.35, min: 0, max: 1, step: 0.05, label: 'Steer' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' }
+    ]
   },
   {
     id: 'iridescence',
@@ -862,7 +898,47 @@ export const BACKGROUNDS = [
     label: 'Grid Motion',
     component: () => import('../../../content/Backgrounds/GridMotion/GridMotion.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/grid-motion"',
-    props: [{ name: 'gradientColor', type: 'color', default: '#5227FF', label: 'Gradient Color' }]
+    props: [
+      { name: 'rows', type: 'number', default: 4, min: 1, max: 8, step: 1, label: 'Rows' },
+      { name: 'aspectRatio', type: 'number', default: 1.33, min: 0.5, max: 2.5, step: 0.05, label: 'Tile Ratio' },
+      { name: 'gap', type: 'number', default: 16, min: 0, max: 40, step: 1, label: 'Gap' },
+      { name: 'radius', type: 'number', default: 14, min: 0, max: 40, step: 1, label: 'Radius' },
+      { name: 'angle', type: 'number', default: -12, min: -45, max: 45, step: 1, label: 'Angle' },
+      { name: 'tilt', type: 'number', default: 0, min: 0, max: 65, step: 1, label: 'Tilt' },
+      { name: 'speed', type: 'number', default: 24, min: 0, max: 160, step: 2, label: 'Speed' },
+      {
+        name: 'direction',
+        type: 'select',
+        default: 'alternate',
+        label: 'Direction',
+        options: [
+          { value: 'alternate', label: 'Alternate' },
+          { value: 'left', label: 'Left' },
+          { value: 'right', label: 'Right' }
+        ]
+      },
+      { name: 'parallax', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Parallax' },
+      { name: 'spotlight', type: 'number', default: 0.6, min: 0, max: 1, step: 0.05, label: 'Spotlight' },
+      { name: 'dim', type: 'number', default: 0.35, min: 0, max: 0.9, step: 0.05, label: 'Dim' },
+      { name: 'fade', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'grayscale', type: 'boolean', default: false, label: 'Grayscale' }
+    ],
+    fixedProps: {
+      items: [
+        'https://images.unsplash.com/photo-1705032033999-efa3082e1a4e?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1721407964262-f9864b562453?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1781155451576-ae65c8816d31?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1762846818262-33c197852fa8?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1709699714159-29bc3ac99486?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1776394254711-4a0d7345269a?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1763440519433-5467759054fc?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1724152312974-d4d48b8b36fd?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1781242629922-6f39cc3671cd?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1774009485852-13a515d32e36?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1781499455083-6ccc3beb20cd?w=400&q=70&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1772440337285-8b5674e1ee8a?w=400&q=70&auto=format&fit=crop'
+      ]
+    }
   },
   {
     id: 'grid-distortion',
@@ -873,13 +949,29 @@ export const BACKGROUNDS = [
       {
         name: 'imageSrc',
         type: 'text',
-        default: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800',
+        default: '/assets/demo/night-landscape.webp',
         label: 'Image URL'
       },
-      { name: 'grid', type: 'number', default: 15, min: 5, max: 50, step: 1, label: 'Grid Size' },
-      { name: 'mouse', type: 'number', default: 0.1, min: 0, max: 1, step: 0.05, label: 'Mouse Influence' },
-      { name: 'strength', type: 'number', default: 0.15, min: 0, max: 1, step: 0.05, label: 'Strength' },
-      { name: 'relaxation', type: 'number', default: 0.9, min: 0.5, max: 1, step: 0.01, label: 'Relaxation' }
+      { name: 'grid', type: 'number', default: 15, min: 4, max: 60, step: 1, label: 'Grid' },
+      { name: 'radius', type: 'number', default: 0.18, min: 0.05, max: 0.5, step: 0.01, label: 'Radius' },
+      { name: 'strength', type: 'number', default: 0.15, min: 0, max: 0.6, step: 0.01, label: 'Strength' },
+      { name: 'relaxation', type: 'number', default: 0.96, min: 0.8, max: 0.99, step: 0.01, label: 'Relaxation' },
+      {
+        name: 'mode',
+        type: 'select',
+        default: 'drag',
+        label: 'Mode',
+        options: [
+          { value: 'drag', label: 'Drag' },
+          { value: 'push', label: 'Push' },
+          { value: 'swirl', label: 'Swirl' }
+        ]
+      },
+      { name: 'softness', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Softness' },
+      { name: 'chroma', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Chroma' },
+      { name: 'idle', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Idle' },
+      { name: 'clickRipple', type: 'boolean', default: true, label: 'Click Ripple' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1794,19 +1886,29 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Animations/Noise/Noise.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/animations/noise"',
     props: [
-      { name: 'patternSize', type: 'number', default: 250, min: 50, max: 500, step: 10, label: 'Pattern Size' },
-      { name: 'patternScaleX', type: 'number', default: 1, min: 0.1, max: 5, step: 0.1, label: 'Scale X' },
-      { name: 'patternScaleY', type: 'number', default: 1, min: 0.1, max: 5, step: 0.1, label: 'Scale Y' },
+      { name: 'opacity', type: 'number', default: 0.2, min: 0, max: 1, step: 0.01, label: 'Opacity' },
+      { name: 'size', type: 'number', default: 1, min: 0.5, max: 4, step: 0.5, label: 'Size' },
+      { name: 'fps', type: 'number', default: 24, min: 0, max: 60, step: 1, label: 'FPS' },
       {
-        name: 'patternRefreshInterval',
-        type: 'number',
-        default: 2,
-        min: 1,
-        max: 10,
-        step: 1,
-        label: 'Refresh Interval'
+        name: 'blendMode',
+        type: 'select',
+        default: 'overlay',
+        label: 'Blend',
+        options: [
+          { value: 'normal', label: 'Normal' },
+          { value: 'overlay', label: 'Overlay' },
+          { value: 'soft-light', label: 'Soft Light' },
+          { value: 'multiply', label: 'Multiply' },
+          { value: 'screen', label: 'Screen' },
+          { value: 'difference', label: 'Difference' }
+        ]
       },
-      { name: 'patternAlpha', type: 'number', default: 15, min: 5, max: 100, step: 5, label: 'Alpha' }
+      { name: 'contrast', type: 'number', default: 0.6, min: 0, max: 1, step: 0.05, label: 'Contrast' },
+      { name: 'dust', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Dust' },
+      { name: 'scratches', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Scratches' },
+      { name: 'scanlines', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Scanlines' },
+      { name: 'flicker', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Flicker' },
+      { name: 'colored', type: 'boolean', default: false, label: 'Colored' }
     ]
   },
   {

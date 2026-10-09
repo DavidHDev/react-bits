@@ -4,7 +4,6 @@ import { useSearchParams } from 'react-router-dom';
 import { Settings, ChevronUp, ChevronLeft, ChevronRight, Download, Video } from 'lucide-react';
 import Controls from './Controls';
 import { BACKGROUNDS, getBackgroundById, getDefaultProps } from './backgrounds';
-import { hyperspeedPresets } from '../../content/Backgrounds/Hyperspeed/HyperSpeedPresets';
 import { useColorMode } from '../../components/setup/color-mode';
 import { BACKGROUND_LIGHT_PROPS } from '../../constants/backgroundThemeProps';
 
@@ -105,14 +104,6 @@ const BackgroundRenderer = React.memo(({ background, props, renderKey }) => {
 
   if (background.fixedProps) {
     componentProps = { ...componentProps, ...background.fixedProps };
-  }
-
-  if (background.id === 'hyperspeed' && props.preset) {
-    const { preset, ...restProps } = componentProps;
-    componentProps = {
-      ...restProps,
-      effectOptions: hyperspeedPresets[preset] || hyperspeedPresets.one
-    };
   }
 
   const componentKey = background.forceRemountOnPropChange

@@ -4,16 +4,26 @@ import tsCode from '@ts-default/TextAnimations/ASCIIText/ASCIIText.tsx?raw';
 import tsTailwind from '@ts-tailwind/TextAnimations/ASCIIText/ASCIIText.tsx?raw';
 
 export const asciiText = {
-  dependencies: `three`,
-  usage: `// Component ported and enhanced from https://codepen.io/JuanFuentes/pen/eYEeoyE
-  
-import ASCIIText from './ASCIIText';
+  usage: `import ASCIIText from './ASCIIText';
 
-<ASCIIText
-  text='hello_world'
-  enableWaves={true}
-  asciiFontSize={8}
-/>`,
+<div style={{ position: 'relative', width: '100%', height: 440 }}>
+  <ASCIIText
+    text="Hey!"
+    asciiFontSize={8}
+    colors={['#ff6188', '#fc9867', '#ffd866']}
+    textScale={1}
+    blocks={0.9}
+    waves={1}
+    waveSpeed={1}
+    chroma={1}
+    tilt={1}
+    hueShift={1}
+    scramble={0.6}
+    clickRipple
+    idle
+    interactive
+  />
+</div>`,
   code,
   tailwind,
   tsCode,

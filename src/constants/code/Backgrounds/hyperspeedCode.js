@@ -1,4 +1,3 @@
-import presets from '@content/Backgrounds/Hyperspeed/HyperSpeedPresets.js?raw';
 import code from '@content/Backgrounds/Hyperspeed/Hyperspeed.jsx?raw';
 import css from '@content/Backgrounds/Hyperspeed/Hyperspeed.css?raw';
 import tailwind from '@tailwind/Backgrounds/Hyperspeed/Hyperspeed.jsx?raw';
@@ -6,54 +5,35 @@ import tsCode from '@ts-default/Backgrounds/Hyperspeed/Hyperspeed.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/Hyperspeed/Hyperspeed.tsx?raw';
 
 export const hyperspeed = {
-  dependencies: `three postprocessing`,
+  dependencies: `three`,
   usage: `import Hyperspeed from './Hyperspeed';
 
-// the component will fill the height/width of its parent container, edit the CSS to change this
-// the options below are the default values
-// TIP: if you pass custom effectOptions, memoize the object (e.g. useMemo or a constant)
-// to avoid unnecessary re-renders and WebGL scene recreations
-
-<Hyperspeed
-  effectOptions={{
-    onSpeedUp: () => { },
-    onSlowDown: () => { },
-    distortion: 'turbulentDistortion',
-    length: 400,
-    roadWidth: 10,
-    islandWidth: 2,
-    lanesPerRoad: 4,
-    fov: 90,
-    fovSpeedUp: 150,
-    speedUp: 2,
-    carLightsFade: 0.4,
-    totalSideLightSticks: 20,
-    lightPairsPerRoadWay: 40,
-    shoulderLinesWidthPercentage: 0.05,
-    brokenLinesWidthPercentage: 0.1,
-    brokenLinesLengthPercentage: 0.5,
-    lightStickWidth: [0.12, 0.5],
-    lightStickHeight: [1.3, 1.7],
-    movingAwaySpeed: [60, 80],
-    movingCloserSpeed: [-120, -160],
-    carLightsLength: [400 * 0.03, 400 * 0.2],
-    carLightsRadius: [0.05, 0.14],
-    carWidthPercentage: [0.3, 0.5],
-    carShiftX: [-0.8, 0.8],
-    carFloorSeparation: [0, 5],
-    colors: {
-      roadColor: 0x080808,
-      islandColor: 0x0a0a0a,
-      background: 0x000000,
-      shoulderLines: 0xFFFFFF,
-      brokenLines: 0xFFFFFF,
-      leftCars: [0xD856BF, 0x6750A2, 0xC247AC],
-      rightCars: [0x03B3C3, 0x0E5EA5, 0x324555],
-      sticks: 0x03B3C3,
-    }
-  }}
-/>`,
-  presets,
+<div style={{ position: 'relative', width: '100%', height: 600 }}>
+  <Hyperspeed
+    curve="winding"
+    curvature={1}
+    speed={1}
+    boost={3}
+    fov={90}
+    boostFov={130}
+    lanes={3}
+    roadWidth={10}
+    medianWidth={2}
+    density={40}
+    trailLength={1}
+    lightSize={1}
+    poles={20}
+    dust={100}
+    glow={0.6}
+    reflections={0.5}
+    roadOpacity={0.1}
+    steer={0.35}
+    tailColors={['#d856bf', '#6750a2', '#c247ac']}
+    headColors={['#03b3c3', '#0e5ea5', '#324555']}
+    poleColors={['#03b3c3']}
+    interactive
+  />
+</div>`,
   code,
   css,
   tailwind,
