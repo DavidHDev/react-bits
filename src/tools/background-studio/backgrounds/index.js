@@ -1877,35 +1877,21 @@ export const BACKGROUNDS = [
       import('../../../content/Animations/LaserFlow/LaserFlow.jsx').then(m => ({ default: m.LaserFlow })),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/animations/laser-flow"',
     props: [
-      { name: 'color', type: 'color', default: '#FF79C6', label: 'Color' },
-      { name: 'wispDensity', type: 'number', default: 1, min: 0, max: 2, step: 0.1, label: 'Wisp Density' },
-      { name: 'flowSpeed', type: 'number', default: 0.35, min: 0, max: 2, step: 0.05, label: 'Flow Speed' },
-      { name: 'verticalSizing', type: 'number', default: 2.0, min: 0.5, max: 5, step: 0.1, label: 'Vertical Size' },
-      { name: 'horizontalSizing', type: 'number', default: 0.5, min: 0.1, max: 3, step: 0.1, label: 'Horizontal Size' },
-      { name: 'fogIntensity', type: 'number', default: 0.45, min: 0, max: 1, step: 0.05, label: 'Fog Intensity' },
-      { name: 'fogScale', type: 'number', default: 0.3, min: 0.1, max: 1, step: 0.05, label: 'Fog Scale' },
-      { name: 'wispSpeed', type: 'number', default: 15.0, min: 1, max: 30, step: 1, label: 'Wisp Speed' },
-      { name: 'wispIntensity', type: 'number', default: 5.0, min: 0, max: 15, step: 0.5, label: 'Wisp Intensity' },
-      { name: 'flowStrength', type: 'number', default: 0.25, min: 0, max: 1, step: 0.05, label: 'Flow Strength' },
-      { name: 'decay', type: 'number', default: 1.1, min: 0.5, max: 3, step: 0.1, label: 'Decay' },
-      {
-        name: 'horizontalBeamOffset',
-        type: 'number',
-        default: 0.0,
-        min: -0.5,
-        max: 0.5,
-        step: 0.05,
-        label: 'Horizontal Offset'
-      },
-      {
-        name: 'verticalBeamOffset',
-        type: 'number',
-        default: -0.5,
-        min: -0.5,
-        max: 0.5,
-        step: 0.05,
-        label: 'Vertical Offset'
-      }
+      { name: 'color', type: 'color', default: '#3847ff', label: 'Color' },
+      { name: 'beamPosition', type: 'number', default: 0.6, min: 0.1, max: 0.9, step: 0.01, label: 'Beam Position' },
+      { name: 'surfaceLevel', type: 'number', default: 1, min: 0.3, max: 1, step: 0.01, label: 'Surface Level' },
+      { name: 'intensity', type: 'number', default: 1.8, min: 0.3, max: 2, step: 0.05, label: 'Intensity' },
+      { name: 'beamWidth', type: 'number', default: 1.5, min: 0.4, max: 3, step: 0.05, label: 'Beam Width' },
+      { name: 'flare', type: 'number', default: 1.5, min: 0.5, max: 2, step: 0.05, label: 'Flare' },
+      { name: 'spread', type: 'number', default: 1.5, min: 0.4, max: 2, step: 0.05, label: 'Spread' },
+      { name: 'fog', type: 'number', default: 0.2, min: 0, max: 2, step: 0.05, label: 'Fog' },
+      { name: 'dust', type: 'number', default: 1.6, min: 0, max: 2, step: 0.05, label: 'Dust' },
+      { name: 'streaks', type: 'number', default: 1.5, min: 0, max: 2, step: 0.05, label: 'Streaks' },
+      { name: 'dots', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Dots' },
+      { name: 'pulse', type: 'number', default: 1.5, min: 0, max: 2, step: 0.05, label: 'Pulse' },
+      { name: 'speed', type: 'number', default: 1.5, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'seed', type: 'number', default: 3, min: 0, max: 20, step: 1, label: 'Seed' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' }
     ]
   },
   {

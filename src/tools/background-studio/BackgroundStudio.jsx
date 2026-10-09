@@ -13,7 +13,7 @@ const STUDIO_BACKGROUNDS = {
 };
 
 const STUDIO_LIGHT_PROPS = {
-  'laser-flow': { backgroundColor: '#ffffff' }
+  'laser-flow': { theme: 'light' }
 };
 
 const ORDERED_BACKGROUNDS = [...BACKGROUNDS].sort((a, b) => a.label.localeCompare(b.label));

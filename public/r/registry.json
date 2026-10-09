@@ -2132,11 +2132,9 @@
 		{
 			"name": "LaserFlow-JS-CSS",
 			"title": "LaserFlow",
-			"description": "Dynamic laser light that flows onto a surface, customizable effect.",
+			"description": "A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2153,11 +2151,9 @@
 		{
 			"name": "LaserFlow-JS-TW",
 			"title": "LaserFlow",
-			"description": "Dynamic laser light that flows onto a surface, customizable effect.",
+			"description": "A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2169,11 +2165,9 @@
 		{
 			"name": "LaserFlow-TS-CSS",
 			"title": "LaserFlow",
-			"description": "Dynamic laser light that flows onto a surface, customizable effect.",
+			"description": "A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2190,11 +2184,9 @@
 		{
 			"name": "LaserFlow-TS-TW",
 			"title": "LaserFlow",
-			"description": "Dynamic laser light that flows onto a surface, customizable effect.",
+			"description": "A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

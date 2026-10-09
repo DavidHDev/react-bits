@@ -358,12 +358,18 @@ export const componentMetadata = {
   },
   'Animations/LaserFlow': {
     videoUrl: '/assets/video/laserflow.webm',
-    description: 'Dynamic laser light that flows onto a surface, customizable effect.',
+    description: 'A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.',
     category: 'Animations',
     name: 'LaserFlow',
     docsUrl: 'https://reactbits.dev/animations/laser-flow',
     tags: [],
-    added: '2025-09-09'
+    added: '2025-09-09',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt as a waterfall of light that lands on your content, pours over its corners and can reveal your UI around the cursor.'
+      }
+    ]
   },
   'Animations/Antigravity': {
     videoUrl: '/assets/video/antigravity.webm',

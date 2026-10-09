@@ -2244,3 +2244,26 @@
     transition: none;
   }
 }
+
+.laser-window {
+  container-type: inline-size;
+}
+
+@container (max-width: 440px) {
+  .laser-window-sidebar {
+    display: none !important;
+  }
+}
+
+@container (max-width: 300px) {
+  .laser-window-meta {
+    display: none !important;
+  }
+}
+
+@container (max-width: 230px) {
+  .laser-window-title,
+  .laser-window-tools {
+    display: none !important;
+  }
+}
