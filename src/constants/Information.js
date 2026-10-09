@@ -966,12 +966,18 @@ export const componentMetadata = {
   },
   'Components/GlassIcons': {
     videoUrl: '/assets/video/glassicons.webm',
-    description: 'Icon set styled with frosted glass blur.',
+    description: 'Liquid glass icons that bend the color behind them, for app grids, docks and social links.',
     category: 'Components',
     name: 'GlassIcons',
     docsUrl: 'https://reactbits.dev/components/glass-icons',
     tags: [],
-    added: '2025-02-18'
+    added: '2025-02-18',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt with real liquid glass that bends light at its edges, a smooth entrance, new card styles and presets.'
+      }
+    ]
   },
   'Components/GlassSurface': {
     videoUrl: '/assets/video/glasssurface.webm',

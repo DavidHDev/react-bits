@@ -6444,7 +6444,7 @@
 		{
 			"name": "GlassIcons-JS-CSS",
 			"title": "GlassIcons",
-			"description": "Icon set styled with frosted glass blur.",
+			"description": "Liquid glass icons that bend the color behind them, for app grids, docks and social links.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -6463,7 +6463,7 @@
 		{
 			"name": "GlassIcons-JS-TW",
 			"title": "GlassIcons",
-			"description": "Icon set styled with frosted glass blur.",
+			"description": "Liquid glass icons that bend the color behind them, for app grids, docks and social links.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -6477,7 +6477,7 @@
 		{
 			"name": "GlassIcons-TS-CSS",
 			"title": "GlassIcons",
-			"description": "Icon set styled with frosted glass blur.",
+			"description": "Liquid glass icons that bend the color behind them, for app grids, docks and social links.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -6496,7 +6496,7 @@
 		{
 			"name": "GlassIcons-TS-TW",
 			"title": "GlassIcons",
-			"description": "Icon set styled with frosted glass blur.",
+			"description": "Liquid glass icons that bend the color behind them, for app grids, docks and social links.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],

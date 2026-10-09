@@ -1,103 +1,173 @@
-.icon-btns {
-  display: grid;
-  grid-gap: 5em;
-  grid-template-columns: repeat(2, 1fr);
-  margin: auto;
-  padding: 3em 0;
-  overflow: visible;
-}
-
-.icon-btn {
-  background-color: transparent;
-  outline: none;
+.glass-icons {
   position: relative;
-  width: 4.5em;
-  height: 4.5em;
-  perspective: 24em;
-  transform-style: preserve-3d;
-  -webkit-tap-highlight-color: transparent;
-  border: none;
-  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--glass-icons-row-gap) var(--glass-icons-gap);
+  box-sizing: border-box;
+  max-width: calc(
+    var(--glass-icons-columns) * var(--glass-icons-size) + (var(--glass-icons-columns) - 1) * var(--glass-icons-gap)
+  );
+  margin: 0 auto;
+  isolation: isolate;
 }
 
-.icon-btn__back,
-.icon-btn__front,
-.icon-btn__label {
-  transition:
-    opacity 0.3s cubic-bezier(0.83, 0, 0.17, 1),
-    transform 0.3s cubic-bezier(0.83, 0, 0.17, 1);
-}
-
-.icon-btn__back,
-.icon-btn__front {
-  border-radius: 1.25em;
+.glass-icons-defs {
   position: absolute;
-  top: 0;
-  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glass-icons-canvas {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+
+.glass-icon {
+  position: relative;
+  flex: none;
+  width: var(--glass-icons-size);
+  height: var(--glass-icons-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.glass-icon-plate {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--glass-icons-radius);
+  will-change: transform, opacity;
+}
+
+.glass-icon-plate--tilt {
+  transform: rotate(var(--glass-icons-tilt));
+  transform-origin: 100% 100%;
+}
+
+.glass-icon-plate--offset {
+  transform: translate(calc(var(--glass-icons-spread) * 26%), calc(var(--glass-icons-spread) * -26%));
+}
+
+.glass-icon-plate--circle {
+  inset: 9%;
+  border-radius: 50%;
+  transform: translate(calc(var(--glass-icons-spread) * 29%), calc(var(--glass-icons-spread) * -29%));
+}
+
+.glass-icon-glass {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: var(--glass-icons-radius);
+  background: linear-gradient(var(--glass-icons-tint), var(--glass-icons-tint));
+  box-shadow: 0 12px 24px -14px var(--glass-icons-drop);
+  will-change: transform, opacity;
+}
+
+.glass-icon-shade,
+.glass-icon-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.glass-icon-shade {
+  opacity: var(--glass-icons-shade);
+}
+
+.glass-icon-shine {
+  opacity: var(--glass-icons-shine);
+}
+
+.glass-icon-face {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  border-radius: var(--glass-icons-radius);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.glass-icon:focus-visible .glass-icon-face {
+  outline: 2px solid var(--glass-icons-label);
+  outline-offset: 4px;
+}
+
+.glass-icon-glyph {
+  display: grid;
+  place-items: center;
+  width: 40%;
+  height: 40%;
+  color: var(--glass-icons-ink);
+  filter: drop-shadow(0 1px 3px var(--glass-icons-glyph-shadow));
+}
+
+.glass-icon-glyph > svg {
   width: 100%;
   height: 100%;
 }
 
-.icon-btn__back {
-  box-shadow: 0.5em -0.5em 0.75em hsla(223, 10%, 10%, 0.15);
-  display: block;
-  transform: rotate(15deg);
-  transform-origin: 100% 100%;
-  will-change: transform;
-}
-
-.icon-btn__front {
-  background-color: hsla(0, 0%, 100%, 0.15);
-  box-shadow: 0 0 0 0.1em hsla(0, 0%, 100%, 0.3) inset;
-  backdrop-filter: blur(0.75em);
-  -webkit-backdrop-filter: blur(0.75em);
-  -moz-backdrop-filter: blur(0.75em);
-  display: flex;
-  transform-origin: 80% 50%;
-  will-change: transform;
-}
-
-.icon-btn__icon {
-  margin: auto;
-  width: 1.5em;
-  height: 1.5em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-}
-
-.icon-btn__label {
-  font-size: 1em;
-  white-space: nowrap;
-  text-align: center;
-  line-height: 2;
-  opacity: 0;
+.glass-icon-label {
   position: absolute;
-  top: 100%;
-  right: 0;
-  left: 0;
-  transform: translateY(0);
+  top: calc(100% + 10px);
+  left: 50%;
+  z-index: 2;
+  color: var(--glass-icons-label);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition:
+    opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.icon-btn:focus-visible .icon-btn__back,
-.icon-btn:hover .icon-btn__back {
-  transform: rotate(25deg) translate3d(-0.5em, -0.5em, 0.5em);
+.glass-icons--labels-hover .glass-icon-label {
+  opacity: 0;
+  transform: translate(-50%, -4px);
 }
 
-.icon-btn:focus-visible .icon-btn__front,
-.icon-btn:hover .icon-btn__front {
-  transform: translate3d(0, 0, 2em);
-}
-
-.icon-btn:focus-visible .icon-btn__label,
-.icon-btn:hover .icon-btn__label {
+.glass-icons--labels-hover .glass-icon:focus-visible .glass-icon-label {
   opacity: 1;
-  transform: translateY(20%);
+  transform: translate(-50%, 0);
 }
 
-@media (min-width: 768px) {
-  .icon-btns {
-    grid-template-columns: repeat(3, 1fr);
+.glass-icons.is-intro .glass-icon-plate,
+.glass-icons.is-intro .glass-icon-glass,
+.glass-icons.is-intro .glass-icon-face,
+.glass-icons.is-intro.glass-icons--labels-always .glass-icon-label {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .glass-icons--labels-hover .glass-icon:hover .glass-icon-label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-icon-label {
+    transition: none;
   }
 }
