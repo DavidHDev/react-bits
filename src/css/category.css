@@ -78,7 +78,7 @@
 }
 
 .right-panel-inner {
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - var(--docs-header-height) - 32px);
   overflow-y: auto;
   padding-top: 0;
 }
@@ -1869,7 +1869,7 @@
   justify-content: space-between;
   gap: 12px;
   margin-top: 2px;
-  padding: 10px 20px 18px;
+  padding: 10px 20px 16px;
   color: var(--color-accent);
   font-size: 12px;
   font-weight: 600;
@@ -1886,8 +1886,8 @@
 .sc-body {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 14px 20px 10px;
+  gap: 14px;
+  padding: 12px 20px 6px;
 }
 
 .sc-tier {
@@ -1896,21 +1896,16 @@
   gap: 8px;
 }
 
-.sc-tier + .sc-tier {
-  padding-top: 2px;
-}
-
 .sc-tier-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
   color: var(--text-dimmed);
 }
 
 .sc-tier-grid {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 .sc-tier-diamond {
@@ -1923,6 +1918,10 @@
 
 .sc-tier-silver {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.sc-tier-silver > :last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 .sc-sponsor-link {
@@ -1941,7 +1940,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 0 14px;
   border: 0;
   border-radius: var(--radius-sm);
   background: var(--bg-elevated);
@@ -1950,12 +1949,14 @@
 }
 
 .sc-sponsor img {
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: var(--sc-logo-height, 24px);
   object-fit: contain;
   object-position: center;
   filter: grayscale(1);
-  opacity: 0.82;
+  opacity: 0.78;
   transition: opacity var(--transition-fast);
 }
 
@@ -1978,18 +1979,52 @@
 }
 
 .sc-sponsor-diamond {
-  height: 68px;
+  --sc-logo-height: 36px;
+  height: 64px;
   width: 100%;
+  background: var(--surface-ghost);
+  box-shadow: var(--surface-ghost-highlight);
+}
+
+.sc-sponsor-diamond img {
+  opacity: 1;
+}
+
+.sc-sponsor-silver img {
+  opacity: 0.66;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sc-sponsor-link:hover .sc-sponsor-diamond {
+    background-color: var(--surface-ghost-hover);
+  }
+}
+
+:root[data-theme='light'] .sc-sponsor-diamond {
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px var(--border-subtle),
+    0 1px 3px rgba(24, 24, 27, 0.06);
+}
+
+:root[data-theme='light'] .sc-sponsor-link:hover .sc-sponsor-diamond {
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px var(--border-primary),
+    0 2px 6px rgba(24, 24, 27, 0.08);
 }
 
 .sc-sponsor-platinum {
+  --sc-logo-height: 30px;
   height: 56px;
   width: 100%;
 }
 
 .sc-sponsor-silver {
-  height: 52px;
+  --sc-logo-height: 24px;
+  height: 46px;
   width: 100%;
+  padding: 0 8px;
 }
 
 .sc-reach {

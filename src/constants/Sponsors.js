@@ -5,6 +5,13 @@ export const diamondSponsors = [
     imageUrl: '/assets/sponsors/shadcnblocks.svg',
     lightImageUrl: '/assets/sponsors/shadcnblocks-lightmode.svg',
     url: 'https://www.shadcnblocks.com/'
+  },
+  {
+    id: 2,
+    name: 'shaders.com',
+    imageUrl: '/assets/sponsors/shaders.svg',
+    lightImageUrl: '/assets/sponsors/shaders-lightmode.svg',
+    url: 'https://shaders.com/'
   }
 ];
 

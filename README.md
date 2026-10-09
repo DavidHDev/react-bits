@@ -91,6 +91,14 @@ React Bits is proudly supported by these amazing sponsors:
   </picture>
 </a>
 
+<a href="https://shaders.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=diamond&ref=reactbits" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shaders.svg">
+    <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shaders-lightmode.svg">
+    <img src="public/assets/sponsors/shaders.svg" alt="shaders.com" style="height: 50px;">
+  </picture>
+</a>
+
 ### Silver
 
 <a href="https://shadcncraft.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits" target="_blank">

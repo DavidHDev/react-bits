@@ -72,12 +72,13 @@
 
 .ln-sp-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
 }
 
 .ln-sp-card {
   display: flex;
+  grid-column: span 2;
   min-width: 0;
   flex-direction: column;
   padding: 5px;
@@ -90,7 +91,7 @@
 }
 
 .ln-sp-card--diamond {
-  grid-column: span 2;
+  grid-column: span 3;
 }
 
 .ln-sp-well {
@@ -179,6 +180,10 @@
 @media (max-width: 1100px) {
   .ln-sp-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ln-sp-card {
+    grid-column: auto;
   }
 
   .ln-sp-card--diamond {

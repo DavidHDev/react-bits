@@ -55,7 +55,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt in three so it works in every browser, Safari included. The blob is now a smooth 3D liquid that pulls into a teardrop as it moves, with chrome, jelly, pearl and ink looks, an optional shapeshifting morph, puddle depth, drips you can soak back up, blend modes and a click burst whose droplets fly off the page while the blob grows back.'
+        note: 'Rebuilt as a smooth 3D liquid that stretches as it moves, with new looks, drips and a splashy click burst.'
       }
     ]
   },
@@ -79,7 +79,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt on a single canvas with no dependencies. Hovering a link, button or any element you mark frames it with corner brackets and shows its size, and the lines read out the pointer position at the edges. The old glitch is still there as an effect. New options for thickness, opacity, solid, dashed or dotted lines, a gap around the pointer, edge fade, smoothing, a click pulse, hiding the system cursor and a difference blend that stays visible on any background.'
+        note: 'Rebuilt from scratch. It frames what you hover with measuring brackets, with new line styles and a click pulse.'
       }
     ]
   },
@@ -251,7 +251,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt around a tiny pre-rendered grain tile that jitters each frame, so it no longer regenerates a million pixels on the CPU. It now fills its container instead of the viewport, or the whole page with fixed. New props cover opacity, grain size, frame rate (0 for a still paper texture), blend mode, contrast, colored grain, film dust with specks and hairs, running scratches, scanlines and flicker. The old pattern props are replaced: patternAlpha by opacity and patternRefreshInterval by fps.'
+        note: 'Rebuilt to be much lighter, with film dust, scratches, scanlines and flicker for a real film look.'
       }
     ]
   },
@@ -275,7 +275,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: "Rebuilt on a single canvas without GSAP, so hovering in and out quickly reverses the transition smoothly instead of glitching, and it is safe to render on the server. Pixels stay square on any card shape. New props cover the order pixels appear in (random, ordered dither, a ripple from the pointer or a wipe from the edge it crossed), randomness, how each pixel animates (pop, grow or fade), square, rounded or circle pixels, gap, a mosaic of tones and a capped frame rate for a choppy retro feel. It can run on hover or click, be controlled with active and onActiveChange, and responds to keyboard focus and taps. aspectRatio also takes CSS ratios like '4 / 5'. The card no longer has a white border or dark background, and pixelColor defaults to white."
+        note: 'Rebuilt to stay smooth on quick hovers, with new reveal patterns, pixel shapes and a choppy retro mode.'
       }
     ]
   },
@@ -309,7 +309,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-09',
-        note: 'Rebuilt on plain WebGL2, so the three dependency is gone. The blur is now a real lens defocus that follows the pointer smoothly, with color fringing, plus a focus mode that keeps the shape blurred until you point at it. Draw a rectangle frame, circle, polygon or star, or trace any SVG or transparent PNG through src, as an outline or filled, with nested echoes, rotation and spin. The lens drifts on its own while the pointer is away, the canvas is transparent and children render on top. The variation, pixelRatioProp, shapeSize, borderSize, circleSize and circleEdge props are replaced by shape, size, thickness, lensSize and lensSoftness.'
+        note: 'Rebuilt as a real lens blur that follows the cursor. Use any SVG or PNG as the shape, or switch to focus mode.'
       }
     ]
   },
@@ -334,7 +334,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt from scratch. The star now travels the real rounded outline at an even pace on any shape, with a fading trail and bloom that spills onto the surface, plus an optional twinkling glint and stardust. On hover the star can run a quick extra lap, shine brighter or only appear when needed, and a click sends light around the whole border. New props cover the trail color and length, stars, direction, radius, glow and a light theme. Content now sits directly in the root, so padding and classes apply as usual, and `speed` is now `duration` in seconds.'
+        note: 'Rebuilt from scratch. The star glides evenly around any shape with a soft trail, hover laps and a click pulse.'
       }
     ]
   },
@@ -406,7 +406,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt as a single WebGL pass without three.js. The characters and the colored blocks are drawn on one grid, so the layers can no longer slip apart on load, and late-loading fonts only change the glyph shapes. New interactions: characters scramble under the pointer, clicks send a ripple of characters across the canvas, the text decodes in on load and sways when idle. New props cover the character set, gradient colors, block opacity, wave strength and speed, color fringing, tilt, hue shift, scramble, text scale, font and a light theme. planeBaseHeight and textFontSize are replaced by textScale, and enableWaves by waves.'
+        note: 'Rebuilt so the layers never slip apart on load, with a scramble on hover, click ripples and custom characters.'
       }
     ]
   },
@@ -494,7 +494,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt with no dependencies. Adds flow and conic variants, any angle, a scale for broader or tighter bands, a soft glow and colors that drift toward the pointer. The outline is now a true gradient ring that works on light and dark backgrounds, and the component renders inline so it fits inside headings.'
+        note: 'Rebuilt with new flow and conic styles, a soft glow and colors that drift toward the cursor.'
       }
     ]
   },
@@ -555,7 +555,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt with no dependencies. Shape the shine with width, softness, angle and up to three bands, add a travelling glow, pick smooth, linear or snappy easing, play it on a loop, on hover or when scrolled into view, and let it follow the pointer. The old spread prop is now angle.'
+        note: 'Rebuilt with more control over the shine, a travelling glow and new ways to play it, like on hover or scroll.'
       }
     ]
   },
@@ -735,7 +735,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt on springs without GSAP. Hover no longer flickers when the cards slide under the pointer, the hovered card comes to the front with a deeper shadow, and every move can be interrupted smoothly. The fan is now set with spread, rotation and arc instead of transform strings (transformStyles still works), and new props cover card size, push distance, hover scale, bounciness, border, radius, shadow and an onCardClick callback that makes the cards focusable. Hover is on by default, and easeType is replaced by bounciness.'
+        note: 'Rebuilt on springs, so hovering no longer flickers. The fan is easier to shape and cards can now be clicked.'
       }
     ]
   },
@@ -879,7 +879,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'The same decay effect, now rendered with WebGL instead of an SVG filter: smooth edges, steady frame rates and no GSAP. Normal pointer movement now shows the effect, the tear spreads evenly on every side, and an idle mode keeps the edges slowly fraying when nobody interacts. New props cover sensitivity, hover decay, recovery time, idle decay, flowing tears, color split, scope, corner radius and grayscale, and the noise props now have plain names: grain, detail and pattern instead of baseFrequency, numOctaves and seed, intensity instead of maxDisplacement, and travel instead of movementBound. Several cards on one page no longer interfere with each other.'
+        note: 'Rebuilt to run smoother. The decay now shows at normal speeds, spreads evenly and frays gently when idle.'
       }
     ]
   },
@@ -894,7 +894,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt without dependencies. Icons now grow on a smooth curve and hop when clicked, and each item can show an open dot and a badge. Right click, long press or the menu key opens an Apple style context menu with checkmarks and submenus. Also new: four edge positions, auto hide, light and dark themes, roundness, accent and badge colors, separators, keyboard support, and a dock that shrinks to fit small screens.'
+        note: 'Rebuilt with smoother magnification, a right-click menu, badges, auto hide and placement on any edge.'
       }
     ]
   },
@@ -945,7 +945,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-09',
-        note: 'Rebuilt on plain WebGL2 with the same flip, so the ogl dependency is gone and props update live. It now only reacts to the wheel and drags over itself instead of everywhere on the page, no longer adds classes to the page, crops photos to fill their posters instead of stretching them, and stops its render loop when it unmounts or nothing moves. cameraZ and cameraFov now move and zoom a real camera, so they change how far away the posters look. New props add several columns that can move in opposite directions, the gap between posters, corner radius, the flip angle and axis, a gentle drift, a lean on fast scrolls, edge fades, depth shading, page scroll linking and onItemClick. Items can also be objects with an image and a link.'
+        note: 'Rebuilt so it only scrolls when you use it, with optional columns and a camera you can pull back or push in.'
       }
     ]
   },
@@ -1006,7 +1006,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-09',
-        note: 'Rebuilt without gl-matrix, so it has no dependencies, and it now cleans up after itself: the render loop stops on unmount, sleeps when nothing moves, and props update live without restarting. Images are cropped to fill their tiles instead of stretching, neighbouring tiles never repeat the same item, and the title, description and link button show at any width. New props cover the number of tiles, tile size, roundness from squares to circles, zoom, how far the camera pulls back while dragging, motion stretch, inertia, autoplay, grayscale and dimming for the tiles around the active one, an intro spin, light and dark themes, an accent color and a custom overlay through renderInfo. Click a tile to bring it to the front, use the arrow keys and Enter, or listen with onActiveChange and onItemClick. scale is replaced by zoom.'
+        note: 'Rebuilt to be lighter, with more ways to shape the tiles, autoplay, keyboard support and click to select.'
       }
     ]
   },
@@ -1022,7 +1022,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt with three as the only dependency and no model, texture or config setup. Pass any image for the front, back and band. The card swings with real momentum, the woven band stretches and slingshots it back, a click flips it over, and a new holographic finish adds a sparkling foil.'
+        note: 'Rebuilt with no setup needed. Pass any image and the card swings with real momentum and flips on click.'
       }
     ]
   },
@@ -1100,7 +1100,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt. The light glides after the pointer with a natural falloff, lights up the card edge, reaches cards as the pointer gets close so a grid shares one light, follows keyboard focus and swells on press. New options for size, intensity, softness, a beam shape, border glow, proximity, smoothing, ambient drift, grain and a light theme, and any div props now pass through.'
+        note: 'Rebuilt with a smoother light that follows the cursor, glows along the edge and can be shared across a grid.'
       }
     ]
   },
@@ -1214,7 +1214,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt so cards never jump or reset mid-drag. Throws carry their momentum and tuck the card under the stack, and there are four layouts plus spread, depth, frame, tilt, speed and keyboard controls.'
+        note: 'Rebuilt so cards never jump mid-drag. Throws carry momentum, with four new layouts and keyboard support.'
       }
     ]
   },
@@ -1541,7 +1541,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt on plain WebGL2, so the three dependency is gone and props update live instead of recreating the scene. The image now covers its container instead of stretching, cells stay square, and the distortion fades after you stop moving instead of building up under a resting cursor. Displaced edges mirror the image instead of smearing. New props cover the mode (drag, push or swirl), softness from crisp blocks to a liquid warp, chroma split on moving cells, an idle drift that keeps the image alive, a ripple on click and an intro where the blocks settle into place. The mouse prop is now radius, and relaxation defaults to 0.96.'
+        note: 'Rebuilt to be lighter. Images no longer stretch, and new modes range from crisp blocks to a liquid warp.'
       }
     ]
   },
@@ -1557,7 +1557,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt without GSAP. The wall now sizes itself to its container instead of the viewport, drifts on its own, slides with pointer parallax and can lean back in 3D. New props cover rows, tile ratio, gap, radius, angle, tilt, speed, direction, a spotlight that brings dimmed or grayscale tiles back to full color under the pointer, and a smooth edge fade. Tiles take image URLs, text or JSX, and there is a light theme. The old gradientColor prop is gone.'
+        note: 'Rebuilt to fit its container, with drift, parallax, a 3D tilt and a spotlight that follows the cursor.'
       }
     ]
   },
@@ -1572,7 +1572,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-08',
-        note: 'Rebuilt on plain three with its own lightweight bloom, so the postprocessing dependency and the preset objects are gone. Every part of the effect is now a prop that updates live: road shape and curvature, lanes, road width, color and opacity, traffic density, trail length, light size, poles, speed, boost, field of view, glow, wet road reflections, speed dust, camera steering and all the light colors. Holding punches the camera wider and stretches the trails into a warp, the camera drifts toward the pointer, the canvas is transparent so your page shows through, and there is a light theme.'
+        note: 'Rebuilt with a real glow and a transparent background. Every part of the road and lights is now customizable.'
       }
     ]
   },
