@@ -61,23 +61,23 @@ const SOCIAL = [
 
 const DEFAULT_PROPS = {
   preset: 'apps',
-  size: 72,
-  gap: 56,
+  size: 82,
+  gap: 66,
   columns: 3,
-  roundness: 0.5,
-  refraction: 0.4,
-  bevel: 0.5,
-  dispersion: 0.4,
-  frost: 0.4,
-  shine: 0.7,
-  tint: '#ffffff',
-  tintOpacity: 0.12,
+  roundness: 0.6,
+  refraction: 0.8,
+  bevel: 0.6,
+  dispersion: 0,
+  frost: 0.2,
+  shine: 0.85,
+  tint: '#dfdfdf',
+  tintOpacity: 0.2,
   iconColor: '',
   plate: 'tilt',
-  tilt: 15,
+  tilt: 30,
   spread: 0.5,
-  hover: 'lift',
-  parallax: 0.5,
+  hover: 'press',
+  parallax: 1,
   labels: 'hover',
   intro: true
 };
@@ -126,8 +126,8 @@ const propData = [
     description:
       'Icons to show. Each item takes an icon, a label and a color, plus an optional href, target, onClick, id and className. Color is a preset name (blue, purple, red, indigo, orange, green, teal, pink, graphite, silver) or any CSS color or gradient.'
   },
-  { name: 'size', type: 'number', default: '72', description: 'Width and height of each icon in px.' },
-  { name: 'gap', type: 'number', default: '56', description: 'Space between the icons in px.' },
+  { name: 'size', type: 'number', default: '82', description: 'Width and height of each icon in px.' },
+  { name: 'gap', type: 'number', default: '66', description: 'Space between the icons in px.' },
   {
     name: 'columns',
     type: 'number',
@@ -137,39 +137,39 @@ const propData = [
   {
     name: 'roundness',
     type: 'number',
-    default: '0.5',
+    default: '0.6',
     description: 'Corner rounding, from 0 for square to 1 for a circle.'
   },
   {
     name: 'refraction',
     type: 'number',
-    default: '0.4',
+    default: '0.8',
     description: 'How strongly the glass bends what is behind it around its edge. Works in Chromium browsers.'
   },
-  { name: 'bevel', type: 'number', default: '0.5', description: 'Width of the curved glass edge, from 0 to 1.' },
+  { name: 'bevel', type: 'number', default: '0.6', description: 'Width of the curved glass edge, from 0 to 1.' },
   {
     name: 'dispersion',
     type: 'number',
-    default: '0.4',
+    default: '0',
     description: 'Rainbow fringing where the edge bends the light, from 0 to 1.'
   },
   {
     name: 'frost',
     type: 'number',
-    default: '0.4',
+    default: '0.2',
     description: 'How much the glass blurs what is behind it, from 0 to 1.'
   },
   {
     name: 'shine',
     type: 'number',
-    default: '0.7',
+    default: '0.85',
     description: 'Strength of the light catching the glass edge, from 0 to 1.'
   },
-  { name: 'tint', type: 'string', default: "'#ffffff'", description: 'Color of the glass.' },
+  { name: 'tint', type: 'string', default: "'#dfdfdf'", description: 'Color of the glass.' },
   {
     name: 'tintOpacity',
     type: 'number',
-    default: '0.12',
+    default: '0.2',
     description: 'How strongly the tint colors the glass, from 0 to 1.'
   },
   {
@@ -184,7 +184,7 @@ const propData = [
     default: "'tilt'",
     description: 'Colored shape behind the glass: a tilted card, a shifted card, a disc or nothing for clear glass.'
   },
-  { name: 'tilt', type: 'number', default: '15', description: 'Angle of the tilted card in degrees.' },
+  { name: 'tilt', type: 'number', default: '30', description: 'Angle of the tilted card in degrees.' },
   {
     name: 'spread',
     type: 'number',
@@ -194,14 +194,14 @@ const propData = [
   {
     name: 'hover',
     type: "'lift' | 'float' | 'press' | 'none'",
-    default: "'lift'",
+    default: "'press'",
     description:
       'Hover animation. Lift raises the glass and swings the card, float raises the glass and press pushes it in.'
   },
   {
     name: 'parallax',
     type: 'number',
-    default: '0.5',
+    default: '1',
     description: 'How far the card behind the glass drifts with the pointer, from 0 to 1.'
   },
   {
@@ -382,8 +382,8 @@ const GlassIconsDemo = () => {
             {props.plate === 'tilt' && (
               <PreviewSlider
                 title="Tilt"
-                min={-30}
-                max={30}
+                min={-45}
+                max={45}
                 step={1}
                 value={props.tilt}
                 valueUnit="°"
