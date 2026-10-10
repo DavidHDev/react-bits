@@ -20,19 +20,25 @@ export default function MagnetLines({
     if (!container) return;
 
     const items = container.querySelectorAll('span');
+    let frameId = 0;
 
     const onPointerMove = pointer => {
-      items.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const centerX = rect.x + rect.width / 2;
-        const centerY = rect.y + rect.height / 2;
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        const rects = Array.from(items, item => item.getBoundingClientRect());
 
-        const b = pointer.x - centerX;
-        const a = pointer.y - centerY;
-        const c = Math.sqrt(a * a + b * b) || 1;
-        const r = ((Math.acos(b / c) * 180) / Math.PI) * (pointer.y > centerY ? 1 : -1);
+        items.forEach((item, index) => {
+          const rect = rects[index];
+          const centerX = rect.x + rect.width / 2;
+          const centerY = rect.y + rect.height / 2;
 
-        item.style.setProperty('--rotate', `${r}deg`);
+          const b = pointer.x - centerX;
+          const a = pointer.y - centerY;
+          const c = Math.sqrt(a * a + b * b) || 1;
+          const r = ((Math.acos(b / c) * 180) / Math.PI) * (pointer.y > centerY ? 1 : -1);
+
+          item.style.setProperty('--rotate', `${r}deg`);
+        });
       });
     };
 
@@ -45,6 +51,7 @@ export default function MagnetLines({
     }
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener('pointermove', onPointerMove);
     };
   }, [rows, columns]);
