@@ -18,7 +18,12 @@ export const glassSurface = {
   <span>Your content</span>
 </GlassSurface>
 
-<GlassSurface shape="/logo.svg" width={280} height={280} />`,
+<GlassSurface shape="/logo.svg" width={280} height={280} />
+
+const photo = useRef(null);
+
+<img ref={photo} src="/photo.jpg" alt="" />
+<GlassSurface backdrop={photo} width={320} height={76} borderRadius={38} />`,
   code,
   css,
   tailwind,

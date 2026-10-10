@@ -1,44 +1,45 @@
-.scroll-stack-scroller {
+.scroll-stack {
   position: relative;
   width: 100%;
+}
+
+.scroll-stack--contained {
   height: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
-  overflow-x: visible;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  will-change: scroll-position;
 }
 
-.scroll-stack-inner {
-  padding: 20vh 5rem 50rem;
-  min-height: 100vh;
-}
-
-.scroll-stack-card-wrapper {
+.scroll-stack__inner {
   position: relative;
+  padding-inline: clamp(1rem, 6%, 5rem);
+}
+
+.scroll-stack__slot {
+  position: sticky;
 }
 
 .scroll-stack-card {
-  transform-origin: top center;
-  will-change: transform, filter;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-  height: 20rem;
-  width: 100%;
-  margin: 30px 0;
-  padding: 3rem;
-  border-radius: 40px;
-  box-sizing: border-box;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 20rem;
+  padding: 2.5rem;
+  border-radius: 28px;
+  background: light-dark(#ffffff, #18181b);
+  color: light-dark(#18181b, #fafafa);
+  box-shadow:
+    0 0 0 1px light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.08)),
+    0 -12px 40px -16px rgb(0 0 0 / 0.35),
+    0 24px 48px -24px rgb(0 0 0 / 0.4);
+  transform-origin: 50% 0;
+  will-change: transform;
 }
 
-.scroll-stack-end {
-  width: 100%;
-  height: 1px;
+.scroll-stack-card__shade {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #000;
+  opacity: var(--scroll-stack-dim, 0);
+  pointer-events: none;
 }

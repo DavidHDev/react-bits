@@ -5,7 +5,6 @@ import tsCode from '@ts-default/Backgrounds/DarkVeil/DarkVeil.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/DarkVeil/DarkVeil.tsx?raw';
 
 export const darkVeil = {
-  dependencies: `ogl`,
   usage: `import DarkVeil from './DarkVeil';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>

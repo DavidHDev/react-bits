@@ -17,7 +17,6 @@ import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
@@ -49,7 +48,8 @@ const DEFAULT_PROPS = {
   height: 76,
   borderRadius: 38,
   ...LOOK,
-  refraction: true
+  refraction: true,
+  renderer: 'auto'
 };
 
 const PRESETS = {
@@ -69,6 +69,13 @@ const PRESETS = {
   frost: { ...LOOK, width: 320, height: 76, borderRadius: 38, displace: 3, backgroundOpacity: 0.28 },
   logo: { ...LOOK, width: 280, height: 280, borderRadius: 38 }
 };
+
+const RENDERER_OPTIONS = [
+  { value: 'auto', label: 'Auto' },
+  { value: 'svg', label: 'SVG' },
+  { value: 'webgl', label: 'WebGL' },
+  { value: 'frosted', label: 'Frosted' }
+];
 
 const PRESET_OPTIONS = [
   { value: 'tabs', label: 'Tab Bar' },
@@ -115,7 +122,21 @@ const propData = [
     type: 'boolean',
     default: 'true',
     description:
-      'Bends what is behind the glass at its edges. This needs SVG backdrop filters, which only Chromium browsers support, so Safari and Firefox always get a frosted glass fallback. Set it to false to use the fallback everywhere.'
+      'Bends what is behind the glass at its edges. Set it to false to use the frosted glass look everywhere.'
+  },
+  {
+    name: 'renderer',
+    type: "'auto' | 'svg' | 'webgl'",
+    default: "'auto'",
+    description:
+      'How the glass bends light. Auto uses SVG filters in Chromium, which bend anything behind the glass, and WebGL in Safari and Firefox when a backdrop is given. Without a backdrop, those browsers get a frosted glass look. WebGL forces the WebGL glass whenever a backdrop is given.'
+  },
+  {
+    name: 'backdrop',
+    type: 'RefObject<HTMLImageElement | HTMLVideoElement | HTMLCanvasElement>',
+    default: '-',
+    description:
+      'The image, video or canvas behind the glass. WebGL can only bend what it is given, so pass this to get real refraction outside Chromium. Images from another origin need CORS headers.'
   },
   {
     name: 'distortionScale',
@@ -195,6 +216,7 @@ const GlassSurfaceDemo = () => {
   const { preset, ...settings } = props;
   const theme = useColorModeValue('light', 'dark');
   const stageRef = useRef(null);
+  const backdropRef = useRef(null);
   const glassRef = useRef(null);
   const inputRef = useRef(null);
   const offset = useRef({ x: 0, y: 0 });
@@ -321,7 +343,13 @@ const GlassSurfaceDemo = () => {
 
   const applyPreset = value => {
     const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
-    updateProps({ ...base, ...PRESETS[value], refraction: settings.refraction, preset: value });
+    updateProps({
+      ...base,
+      ...PRESETS[value],
+      refraction: settings.refraction,
+      renderer: settings.renderer,
+      preset: value
+    });
   };
 
   const resetAll = () => {
@@ -352,10 +380,24 @@ const GlassSurfaceDemo = () => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            style={{ background: `url(/assets/demo/${theme === 'light' ? 'day' : 'night'}-sky.webp) center / cover` }}
             onPointerMove={onStageMove}
             onPointerLeave={onStageLeave}
           >
+            <img
+              ref={backdropRef}
+              src={`/assets/demo/${theme === 'light' ? 'day' : 'night'}-sky.webp`}
+              alt=""
+              draggable={false}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                pointerEvents: 'none',
+                userSelect: 'none'
+              }}
+            />
             <Box
               ref={glassRef}
               cursor="grab"
@@ -367,6 +409,7 @@ const GlassSurfaceDemo = () => {
             >
               <GlassSurface
                 {...settings}
+                backdrop={backdropRef}
                 shape={shape}
                 width={stageWidth ? Math.min(settings.width, stageWidth - 32) : settings.width}
               >
@@ -416,10 +459,15 @@ const GlassSurfaceDemo = () => {
                 />
               </div>
             )}
-            <PreviewSwitch
-              title="Refraction"
-              isChecked={settings.refraction}
-              onChange={value => updateProp('refraction', value)}
+            <PreviewSelect
+              title="Renderer"
+              options={RENDERER_OPTIONS}
+              value={settings.refraction ? settings.renderer : 'frosted'}
+              onChange={value =>
+                updateProps(
+                  value === 'frosted' ? { refraction: false, renderer: 'auto' } : { refraction: true, renderer: value }
+                )
+              }
             />
             <PreviewSlider
               title="Width"

@@ -355,12 +355,18 @@ export const componentMetadata = {
   },
   'Animations/TargetCursor': {
     videoUrl: '/assets/video/targetcursor.webm',
-    description: 'A cursor follow animation with 4 corners that lock onto targets.',
+    description: 'A reticle cursor whose corner brackets snap around targets, matching their shape and showing a label.',
     category: 'Animations',
     name: 'TargetCursor',
     docsUrl: 'https://reactbits.dev/animations/target-cursor',
     tags: [],
-    added: '2025-07-18'
+    added: '2025-07-18',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt without dependencies. The brackets now follow rounded corners, react to clicks, show labels and can stay inside one area.'
+      }
+    ]
   },
   'Animations/LaserFlow': {
     videoUrl: '/assets/video/laserflow.webm',
@@ -1003,7 +1009,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-10',
-        note: 'Turn any SVG logo into glass, with a polished frosted look in Safari and Firefox. The new demo glass follows your cursor and can be dragged.'
+        note: 'Turn any SVG logo into glass, and get real refraction in Safari and Firefox by passing in the image behind it. The new demo glass follows your cursor and can be dragged.'
       }
     ]
   },
@@ -1113,12 +1119,18 @@ export const componentMetadata = {
   },
   'Components/ScrollStack': {
     videoUrl: '/assets/video/scrollstack.webm',
-    description: 'Overlapping card stack reveals on scroll with depth layering.',
+    description: 'Cards pin and stack as you scroll, settling back into a dimmed deck with smooth, jitter-free motion.',
     category: 'Components',
     name: 'ScrollStack',
     docsUrl: 'https://reactbits.dev/components/scroll-stack',
     tags: [],
-    added: '2025-07-15'
+    added: '2025-07-15',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with native pinning that never jitters, its own smooth scrolling, snapping and new depth styles. The demo is now a minimal photo deck with presets.'
+      }
+    ]
   },
   'Components/SpotlightCard': {
     videoUrl: '/assets/video/spotlightcard.webm',
@@ -1416,12 +1428,18 @@ export const componentMetadata = {
   },
   'Backgrounds/DarkVeil': {
     videoUrl: '/assets/video/darkveil.webm',
-    description: 'Subtle dark background with a smooth animation and postprocessing.',
+    description: 'A silky veil of light that drifts in the dark and bends around the cursor.',
     category: 'Backgrounds',
     name: 'DarkVeil',
     docsUrl: 'https://reactbits.dev/backgrounds/dark-veil',
     tags: [],
-    added: '2025-07-16'
+    added: '2025-07-16',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Now reacts to the cursor, with a soft glow, any color and new shapes. Faster, and refined in light mode.'
+      }
+    ]
   },
   'Backgrounds/Dither': {
     videoUrl: '/assets/video/dither.webm',

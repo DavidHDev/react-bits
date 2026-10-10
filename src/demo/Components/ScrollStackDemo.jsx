@@ -1,276 +1,300 @@
-import { useMemo, useState } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
-import { LuComponent, LuImage, LuPlay, LuText } from 'react-icons/lu';
-import { Box, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
-import RefreshButton from '../../components/common/Preview/RefreshButton';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import useForceRerender from '../../hooks/useForceRerender';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
 import { scrollStack } from '../../constants/code/Components/scrollStackCode';
 import ScrollStack, { ScrollStackItem } from '../../content/Components/ScrollStack/ScrollStack';
 
-const DEFAULT_PROPS = {
-  itemDistance: 200,
-  itemStackDistance: 30,
-  baseScale: 0.85,
-  rotationAmount: 0,
+const PHOTOS = ['night-landscape', 'day-portrait', 'night-sky', 'day-landscape', 'night-portrait'];
+
+const LOOK = {
+  itemStackDistance: 22,
+  itemScale: 0.05,
+  baseScale: 0.8,
+  dimAmount: 0.25,
   blurAmount: 0,
-  stackPosition: '20%'
+  tiltAmount: 0,
+  rotationAmount: 0
 };
 
+const DEFAULT_PROPS = {
+  preset: 'stack',
+  itemDistance: 40,
+  stackPosition: 12,
+  ...LOOK,
+  smoothScroll: true,
+  snap: false
+};
+
+const PRESETS = {
+  stack: { ...LOOK },
+  deck: { ...LOOK, itemStackDistance: 30, itemScale: 0.03, tiltAmount: 24, dimAmount: 0.3 },
+  pile: { ...LOOK, itemStackDistance: 0, itemScale: 0.015, baseScale: 0.9, dimAmount: 0.12, rotationAmount: 3 },
+  focus: { ...LOOK, itemScale: 0.06, dimAmount: 0.35, blurAmount: 3 },
+  flat: { ...LOOK, itemStackDistance: 40, itemScale: 0, dimAmount: 0.15 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'stack', label: 'Stack' },
+  { value: 'deck', label: 'Deck' },
+  { value: 'pile', label: 'Pile' },
+  { value: 'focus', label: 'Focus' },
+  { value: 'flat', label: 'Flat' }
+];
+
+const propData = [
+  {
+    name: 'children',
+    type: 'ReactNode',
+    default: '-',
+    description: 'The cards to stack, usually ScrollStackItem elements.'
+  },
+  {
+    name: 'itemDistance',
+    type: 'number',
+    default: '100',
+    description: 'Gap between cards before they stack, in px. Larger gaps mean more scrolling between cards.'
+  },
+  {
+    name: 'itemStackDistance',
+    type: 'number',
+    default: '24',
+    description: 'How far each card rests below the one before it in the stack, in px. 0 piles them exactly.'
+  },
+  {
+    name: 'stackPosition',
+    type: 'number | string',
+    default: "'15%'",
+    description: 'Where the stack pins, from the top of the viewport or container. A number is px, or use a % string.'
+  },
+  {
+    name: 'itemScale',
+    type: 'number',
+    default: '0.05',
+    description: 'How much a card shrinks for each card stacked on top of it.'
+  },
+  {
+    name: 'baseScale',
+    type: 'number',
+    default: '0.8',
+    description: 'The smallest a buried card can shrink to.'
+  },
+  {
+    name: 'dimAmount',
+    type: 'number',
+    default: '0.2',
+    description: 'How much a card darkens for each card stacked on top of it, from 0 to 1.'
+  },
+  {
+    name: 'blurAmount',
+    type: 'number',
+    default: '0',
+    description: 'Blur added for each card stacked on top, in px.'
+  },
+  {
+    name: 'tiltAmount',
+    type: 'number',
+    default: '0',
+    description: 'How far buried cards lean back in 3D, in degrees.'
+  },
+  {
+    name: 'rotationAmount',
+    type: 'number',
+    default: '0',
+    description: 'How far buried cards turn, alternating left and right like a loose pile, in degrees.'
+  },
+  {
+    name: 'holdDistance',
+    type: 'number',
+    default: '200',
+    description: 'How long the finished stack stays pinned before it scrolls away, in px of scrolling.'
+  },
+  {
+    name: 'smoothScroll',
+    type: 'boolean',
+    default: 'true',
+    description:
+      'Glides mouse wheel scrolling smoothly. Touch, keyboard and scrollbar scrolling stay native. With useWindowScroll it smooths the whole page while the stack is mounted.'
+  },
+  {
+    name: 'snap',
+    type: 'boolean',
+    default: 'false',
+    description: 'When scrolling stops near a card, glides it the rest of the way onto the stack.'
+  },
+  {
+    name: 'useWindowScroll',
+    type: 'boolean',
+    default: 'false',
+    description:
+      'Stacks the cards as the page scrolls instead of scrolling inside its own container. Avoid overflow: hidden on parent elements, which stops cards from pinning.'
+  },
+  {
+    name: 'onStackComplete',
+    type: '() => void',
+    default: '-',
+    description: 'Called when the last card lands on the stack.'
+  },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the stack container.' },
+  {
+    name: 'itemClassName',
+    type: 'string',
+    default: "''",
+    description: 'ScrollStackItem only. Extra class names for the card, for its size, colors and content.'
+  },
+  {
+    name: 'style',
+    type: 'CSSProperties',
+    default: '-',
+    description: 'ScrollStackItem only. Inline styles for the card.'
+  }
+];
+
 const ScrollStackDemo = () => {
-  const [key, forceRerender] = useForceRerender();
-  const [isCompleted, setIsCompleted] = useState(false);
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const { itemDistance, itemStackDistance, baseScale, rotationAmount, blurAmount, stackPosition } = props;
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, stackPosition, ...settings } = props;
 
-  const handleRefresh = () => {
-    forceRerender();
-    setIsCompleted(false);
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({
+      ...base,
+      ...PRESETS[value],
+      smoothScroll: settings.smoothScroll,
+      snap: settings.snap,
+      preset: value
+    });
   };
-
-  const handlePropChange = (propName, value) => {
-    updateProp(propName, value);
-    forceRerender();
-  };
-
-  const handleStackComplete = () => {
-    setIsCompleted(true);
-  };
-
-  const stackPositionOptions = [
-    { value: '10%', label: '10%' },
-    { value: '15%', label: '15%' },
-    { value: '20%', label: '20%' },
-    { value: '25%', label: '25%' },
-    { value: '30%', label: '30%' },
-    { value: '35%', label: '35%' }
-  ];
-
-  const propData = useMemo(
-    () => [
-      {
-        name: 'children',
-        type: 'ReactNode',
-        default: 'required',
-        description: 'The content to be displayed in the scroll stack. Should contain ScrollStackItem components.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: '""',
-        description: 'Additional CSS classes to apply to the scroll stack container.'
-      },
-      {
-        name: 'itemDistance',
-        type: 'number',
-        default: '100',
-        description: 'Distance between stacked items in pixels.'
-      },
-      {
-        name: 'itemScale',
-        type: 'number',
-        default: '0.03',
-        description: 'Scale increment for each stacked item.'
-      },
-      {
-        name: 'itemStackDistance',
-        type: 'number',
-        default: '30',
-        description: 'Distance between items when they start stacking.'
-      },
-      {
-        name: 'stackPosition',
-        type: 'string',
-        default: '"20%"',
-        description: 'Position where the stacking effect begins as a percentage of viewport height.'
-      },
-      {
-        name: 'scaleEndPosition',
-        type: 'string',
-        default: '"10%"',
-        description: 'Position where the scaling effect ends as a percentage of viewport height.'
-      },
-      {
-        name: 'baseScale',
-        type: 'number',
-        default: '0.85',
-        description: 'Base scale value for the first item in the stack.'
-      },
-      {
-        name: 'scaleDuration',
-        type: 'number',
-        default: '0.5',
-        description: 'Duration of the scaling animation in seconds.'
-      },
-      {
-        name: 'rotationAmount',
-        type: 'number',
-        default: '0',
-        description: 'Rotation amount for each item in degrees.'
-      },
-      {
-        name: 'blurAmount',
-        type: 'number',
-        default: '0',
-        description: 'Blur amount for items that are further back in the stack.'
-      },
-      {
-        name: 'useWindowScroll',
-        type: 'boolean',
-        default: 'false',
-        description: 'Whether to use window scroll for the stack.'
-      },
-      {
-        name: 'onStackComplete',
-        type: 'function',
-        default: 'undefined',
-        description: 'Callback function called when the stack animation is complete.'
-      }
-    ],
-    []
-  );
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" h={400} p={0} overflow="hidden">
-            <RefreshButton onClick={handleRefresh} />
-            <Text
-              textAlign="center"
-              color="var(--text-dimmed)"
-              fontSize="clamp(2rem, 4vw, 3rem)"
-              fontWeight={600}
-              position="absolute"
-              top="25%"
-              transform="translate(-50%, -50%)"
-              left="50%"
-              pointerEvents="none"
-              transition="all 0.3s ease"
-            >
-              {isCompleted ? 'Stack Completed!' : 'Scroll Down'}
-            </Text>
-
-            <ScrollStack
-              key={key}
-              itemDistance={itemDistance}
-              className="scroll-stack-demo-container"
-              itemStackDistance={itemStackDistance}
-              stackPosition={stackPosition}
-              baseScale={baseScale}
-              rotationAmount={rotationAmount}
-              blurAmount={blurAmount}
-              onStackComplete={handleStackComplete}
-            >
-              <ScrollStackItem itemClassName="scroll-stack-card-demo ssc-demo-1">
-                <h3>Text Animations</h3>
-
-                <div className="stack-img-container">
-                  <LuText />
-                </div>
-              </ScrollStackItem>
-
-              <ScrollStackItem itemClassName="scroll-stack-card-demo ssc-demo-2">
-                <h3>Animations</h3>
-
-                <div className="stack-img-container">
-                  <LuPlay />
-                </div>
-              </ScrollStackItem>
-
-              <ScrollStackItem itemClassName="scroll-stack-card-demo ssc-demo-3">
-                <h3>Components</h3>
-
-                <div className="stack-img-container">
-                  <LuComponent />
-                </div>
-              </ScrollStackItem>
-
-              <ScrollStackItem itemClassName="scroll-stack-card-demo ssc-demo-4">
-                <h3>Backgrounds</h3>
-
-                <div className="stack-img-container">
-                  <LuImage />
-                </div>
-              </ScrollStackItem>
-
-              <ScrollStackItem itemClassName="scroll-stack-card-demo ssc-demo-5">
-                <h3>All on React Bits!</h3>
-              </ScrollStackItem>
+          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
+            <ScrollStack {...settings} stackPosition={`${stackPosition}%`}>
+              {PHOTOS.map(name => (
+                <ScrollStackItem key={name} style={{ height: 300, padding: 0, background: 'none' }}>
+                  <img
+                    src={`/assets/demo/${name}.webp`}
+                    alt=""
+                    draggable={false}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      borderRadius: 'inherit'
+                    }}
+                  />
+                </ScrollStackItem>
+              ))}
             </ScrollStack>
           </Box>
 
           <Customize>
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewSlider
               title="Item Distance"
               min={0}
-              max={1000}
-              step={10}
-              value={itemDistance}
+              max={200}
+              step={5}
+              value={settings.itemDistance}
               valueUnit="px"
-              onChange={value => handlePropChange('itemDistance', value)}
+              onChange={value => updateProp('itemDistance', value)}
             />
-
             <PreviewSlider
               title="Stack Distance"
               min={0}
-              max={40}
-              step={5}
-              value={itemStackDistance}
+              max={60}
+              step={1}
+              value={settings.itemStackDistance}
               valueUnit="px"
-              onChange={value => handlePropChange('itemStackDistance', value)}
+              onChange={value => updateProp('itemStackDistance', value)}
             />
-
-            <PreviewSelect
+            <PreviewSlider
               title="Stack Position"
-              options={stackPositionOptions}
+              min={0}
+              max={40}
+              step={1}
               value={stackPosition}
-              width={100}
-              onChange={value => handlePropChange('stackPosition', value)}
+              valueUnit="%"
+              onChange={value => updateProp('stackPosition', value)}
             />
-
+            <PreviewSlider
+              title="Item Scale"
+              min={0}
+              max={0.15}
+              step={0.005}
+              value={settings.itemScale}
+              onChange={value => updateProp('itemScale', value)}
+            />
             <PreviewSlider
               title="Base Scale"
               min={0.5}
-              max={1.0}
-              step={0.05}
-              value={baseScale}
-              onChange={value => handlePropChange('baseScale', value)}
-            />
-
-            <PreviewSlider
-              title="Rotation Amount"
-              min={0}
               max={1}
-              step={0.1}
-              value={rotationAmount}
-              valueUnit="°"
-              onChange={value => handlePropChange('rotationAmount', value)}
+              step={0.01}
+              value={settings.baseScale}
+              onChange={value => updateProp('baseScale', value)}
             />
-
             <PreviewSlider
-              title="Blur Amount"
+              title="Dim"
+              min={0}
+              max={0.6}
+              step={0.01}
+              value={settings.dimAmount}
+              onChange={value => updateProp('dimAmount', value)}
+            />
+            <PreviewSlider
+              title="Blur"
+              min={0}
+              max={8}
+              step={0.1}
+              value={settings.blurAmount}
+              valueUnit="px"
+              onChange={value => updateProp('blurAmount', value)}
+            />
+            <PreviewSlider
+              title="Tilt"
+              min={0}
+              max={45}
+              step={1}
+              value={settings.tiltAmount}
+              valueUnit="°"
+              onChange={value => updateProp('tiltAmount', value)}
+            />
+            <PreviewSlider
+              title="Rotation"
               min={0}
               max={10}
               step={0.5}
-              value={blurAmount}
-              valueUnit="px"
-              onChange={value => handlePropChange('blurAmount', value)}
+              value={settings.rotationAmount}
+              valueUnit="°"
+              onChange={value => updateProp('rotationAmount', value)}
             />
+            <PreviewSwitch
+              title="Smooth Scroll"
+              isChecked={settings.smoothScroll}
+              onChange={value => updateProp('smoothScroll', value)}
+            />
+            <PreviewSwitch title="Snap" isChecked={settings.snap} onChange={value => updateProp('snap', value)} />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['lenis']} />
         </PreviewTab>
 
         <CodeTab>

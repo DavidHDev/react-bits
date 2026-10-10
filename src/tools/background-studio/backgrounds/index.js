@@ -1153,21 +1153,23 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/DarkVeil/DarkVeil.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/dark-veil"',
     props: [
-      { name: 'hueShift', type: 'number', default: 0, min: -180, max: 180, step: 5, label: 'Hue Shift' },
-      { name: 'noiseIntensity', type: 'number', default: 0, min: 0, max: 0.5, step: 0.01, label: 'Noise Intensity' },
-      {
-        name: 'scanlineIntensity',
-        type: 'number',
-        default: 0,
-        min: 0,
-        max: 1,
-        step: 0.05,
-        label: 'Scanline Intensity'
-      },
-      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.1, label: 'Speed' },
-      { name: 'scanlineFrequency', type: 'number', default: 0, min: 0, max: 50, step: 1, label: 'Scanline Frequency' },
-      { name: 'warpAmount', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Warp Amount' },
-      { name: 'resolutionScale', type: 'number', default: 1, min: 0.25, max: 2, step: 0.25, label: 'Resolution Scale' }
+      { name: 'color', type: 'color', default: '#6b12ff', label: 'Color' },
+      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Speed' },
+      { name: 'scale', type: 'number', default: 1, min: 0.5, max: 2.5, step: 0.05, label: 'Scale' },
+      { name: 'rotation', type: 'number', default: 0, min: 0, max: 360, step: 1, label: 'Rotation' },
+      { name: 'flow', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Flow' },
+      { name: 'warp', type: 'number', default: 0, min: 0, max: 2, step: 0.05, label: 'Warp' },
+      { name: 'variation', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Variation' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2.5, step: 0.05, label: 'Brightness' },
+      { name: 'sheen', type: 'number', default: 0, min: 0, max: 2, step: 0.05, label: 'Sheen' },
+      { name: 'glow', type: 'number', default: 0.4, min: 0, max: 1.5, step: 0.05, label: 'Glow' },
+      { name: 'grain', type: 'number', default: 0.03, min: 0, max: 0.15, step: 0.01, label: 'Grain' },
+      { name: 'quality', type: 'number', default: 0.5, min: 0.25, max: 1, step: 0.05, label: 'Quality' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'mouseStrength', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Mouse Strength' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {

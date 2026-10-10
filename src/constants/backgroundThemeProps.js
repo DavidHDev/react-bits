@@ -15,7 +15,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   },
   'crt-warp': { color: '#7c3aed', backgroundColor: '#ffffff', bloom: 0.75, noise: 0.055, brightness: 0.72 },
   'color-bends': { lightMode: true, color: '#6d28d9', intensity: 1.2, noise: 0.08 },
-  'dark-veil': { lightMode: true, hueShift: 16, noiseIntensity: 0.02 },
+  'dark-veil': { lightMode: true },
   dither: { waveColor: [0.32, 0.3, 0.36], backgroundColor: [1, 1, 1] },
   'dot-field': { gradientFrom: '#7c3aed', gradientTo: '#18181b', glowColor: '#ffffff' },
   'dot-grid': { baseColor: '#d4d4d8', activeColor: '#7c3aed' },

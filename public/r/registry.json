@@ -2046,11 +2046,10 @@
 		{
 			"name": "TargetCursor-JS-CSS",
 			"title": "TargetCursor",
-			"description": "A cursor follow animation with 4 corners that lock onto targets.",
+			"description": "A reticle cursor whose corner brackets snap around targets, matching their shape and showing a label.",
 			"type": "registry:component",
 			"dependencies": [
-				"react-dom@^19.0.0",
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -2068,11 +2067,10 @@
 		{
 			"name": "TargetCursor-JS-TW",
 			"title": "TargetCursor",
-			"description": "A cursor follow animation with 4 corners that lock onto targets.",
+			"description": "A reticle cursor whose corner brackets snap around targets, matching their shape and showing a label.",
 			"type": "registry:component",
 			"dependencies": [
-				"react-dom@^19.0.0",
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -2085,11 +2083,10 @@
 		{
 			"name": "TargetCursor-TS-CSS",
 			"title": "TargetCursor",
-			"description": "A cursor follow animation with 4 corners that lock onto targets.",
+			"description": "A reticle cursor whose corner brackets snap around targets, matching their shape and showing a label.",
 			"type": "registry:component",
 			"dependencies": [
-				"react-dom@^19.0.0",
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -2107,11 +2104,10 @@
 		{
 			"name": "TargetCursor-TS-TW",
 			"title": "TargetCursor",
-			"description": "A cursor follow animation with 4 corners that lock onto targets.",
+			"description": "A reticle cursor whose corner brackets snap around targets, matching their shape and showing a label.",
 			"type": "registry:component",
 			"dependencies": [
-				"react-dom@^19.0.0",
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -7262,11 +7258,9 @@
 		{
 			"name": "ScrollStack-JS-CSS",
 			"title": "ScrollStack",
-			"description": "Overlapping card stack reveals on scroll with depth layering.",
+			"description": "Cards pin and stack as you scroll, settling back into a dimmed deck with smooth, jitter-free motion.",
 			"type": "registry:component",
-			"dependencies": [
-				"lenis@^1.3.13"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7283,11 +7277,9 @@
 		{
 			"name": "ScrollStack-JS-TW",
 			"title": "ScrollStack",
-			"description": "Overlapping card stack reveals on scroll with depth layering.",
+			"description": "Cards pin and stack as you scroll, settling back into a dimmed deck with smooth, jitter-free motion.",
 			"type": "registry:component",
-			"dependencies": [
-				"lenis@^1.3.13"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7299,11 +7291,9 @@
 		{
 			"name": "ScrollStack-TS-CSS",
 			"title": "ScrollStack",
-			"description": "Overlapping card stack reveals on scroll with depth layering.",
+			"description": "Cards pin and stack as you scroll, settling back into a dimmed deck with smooth, jitter-free motion.",
 			"type": "registry:component",
-			"dependencies": [
-				"lenis@^1.3.13"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7320,11 +7310,9 @@
 		{
 			"name": "ScrollStack-TS-TW",
 			"title": "ScrollStack",
-			"description": "Overlapping card stack reveals on scroll with depth layering.",
+			"description": "Cards pin and stack as you scroll, settling back into a dimmed deck with smooth, jitter-free motion.",
 			"type": "registry:component",
-			"dependencies": [
-				"lenis@^1.3.13"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9320,11 +9308,9 @@
 		{
 			"name": "DarkVeil-JS-CSS",
 			"title": "DarkVeil",
-			"description": "Subtle dark background with a smooth animation and postprocessing.",
+			"description": "A silky veil of light that drifts in the dark and bends around the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9341,11 +9327,9 @@
 		{
 			"name": "DarkVeil-JS-TW",
 			"title": "DarkVeil",
-			"description": "Subtle dark background with a smooth animation and postprocessing.",
+			"description": "A silky veil of light that drifts in the dark and bends around the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9357,11 +9341,9 @@
 		{
 			"name": "DarkVeil-TS-CSS",
 			"title": "DarkVeil",
-			"description": "Subtle dark background with a smooth animation and postprocessing.",
+			"description": "A silky veil of light that drifts in the dark and bends around the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9378,11 +9360,9 @@
 		{
 			"name": "DarkVeil-TS-TW",
 			"title": "DarkVeil",
-			"description": "Subtle dark background with a smooth animation and postprocessing.",
+			"description": "A silky veil of light that drifts in the dark and bends around the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
