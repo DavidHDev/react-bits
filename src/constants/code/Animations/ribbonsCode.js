@@ -5,17 +5,13 @@ import tsCode from '@ts-default/Animations/Ribbons/Ribbons.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/Ribbons/Ribbons.tsx?raw';
 
 export const ribbons = {
-  dependencies: `ogl`,
   usage: `import Ribbons from './Ribbons';
 
-<div style={{ height: '500px', position: 'relative', overflow: 'hidden'}}>
+<div style={{ height: '500px', position: 'relative', overflow: 'hidden' }}>
   <Ribbons
-    baseThickness={30}
-    colors={['#ffffff']}
-    speedMultiplier={0.5}
-    maxAge={500}
-    enableFade={false}
-    enableShaderEffect={true}
+    colors={['#3847ff', '#7c84ff', '#c7cbff']}
+    thickness={30}
+    length={1.4}
   />
 </div>`,
   code,

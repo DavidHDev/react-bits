@@ -1956,17 +1956,24 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Animations/Ribbons/Ribbons.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/animations/ribbons"',
     props: [
-      { name: 'colors', type: 'colorArray', default: ['#FC8EAC'], label: 'Colors', minItems: 1, maxItems: 5 },
-      { name: 'baseSpring', type: 'number', default: 0.03, min: 0.01, max: 0.1, step: 0.01, label: 'Spring' },
-      { name: 'baseFriction', type: 'number', default: 0.9, min: 0.5, max: 0.99, step: 0.01, label: 'Friction' },
-      { name: 'baseThickness', type: 'number', default: 30, min: 5, max: 100, step: 5, label: 'Thickness' },
-      { name: 'offsetFactor', type: 'number', default: 0.05, min: 0, max: 0.2, step: 0.01, label: 'Offset Factor' },
-      { name: 'maxAge', type: 'number', default: 500, min: 100, max: 2000, step: 50, label: 'Max Age (ms)' },
-      { name: 'pointCount', type: 'number', default: 50, min: 10, max: 150, step: 5, label: 'Point Count' },
-      { name: 'speedMultiplier', type: 'number', default: 0.6, min: 0.1, max: 2, step: 0.1, label: 'Speed' },
-      { name: 'enableFade', type: 'boolean', default: false, label: 'Enable Fade' },
-      { name: 'enableShaderEffect', type: 'boolean', default: false, label: 'Shader Effect' },
-      { name: 'effectAmplitude', type: 'number', default: 2, min: 0, max: 10, step: 0.5, label: 'Effect Amplitude' }
+      {
+        name: 'colors',
+        type: 'colorArray',
+        default: ['#3847ff', '#7c84ff', '#c7cbff'],
+        label: 'Colors',
+        minItems: 1,
+        maxItems: 8
+      },
+      { name: 'shape', type: 'select', default: 'lens', options: ['lens', 'comet', 'even'], label: 'Shape' },
+      { name: 'thickness', type: 'number', default: 30, min: 4, max: 80, step: 1, label: 'Thickness' },
+      { name: 'length', type: 'number', default: 1.4, min: 0.3, max: 3, step: 0.05, label: 'Length' },
+      { name: 'spread', type: 'number', default: 18, min: 0, max: 60, step: 1, label: 'Spread' },
+      { name: 'stiffness', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Stiffness' },
+      { name: 'bounce', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Bounce' },
+      { name: 'wave', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Wave' },
+      { name: 'softness', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Softness' },
+      { name: 'opacity', type: 'number', default: 1, min: 0.1, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'fade', type: 'boolean', default: false, label: 'Fade' }
     ]
   },
   {

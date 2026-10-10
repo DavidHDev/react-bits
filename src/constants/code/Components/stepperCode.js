@@ -5,34 +5,31 @@ import tsCode from '@ts-default/Components/Stepper/Stepper.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/Stepper/Stepper.tsx?raw';
 
 export const stepper = {
-  dependencies: `motion`,
+  dependencies: `@hugeicons/react @hugeicons/core-free-icons`,
   usage: `import Stepper, { Step } from './Stepper';
-  
+
 <Stepper
   initialStep={1}
-  onStepChange={(step) => {
-    console.log(step);
-  }}
-  onFinalStepCompleted={() => console.log("All steps completed!")}
-  backButtonText="Previous"
-  nextButtonText="Next"
+  onStepChange={step => console.log(step)}
+  onFinalStepCompleted={() => console.log('All steps completed!')}
+  backButtonText="Back"
+  nextButtonText="Continue"
 >
-  <Step>
-    <h2>Welcome to the React Bits stepper!</h2>
-    <p>Check out the next step!</p>
+  <Step title="Welcome">
+    <h3>Welcome aboard</h3>
+    <p>Set up your workspace in a few quick steps.</p>
   </Step>
-  <Step>
-    <h2>Step 2</h2>
-    <img style={{ height: '100px', width: '100%', objectFit: 'cover', objectPosition: 'center -70px', borderRadius: '15px', marginTop: '1em' }} src="https://www.purrfectcatgifts.co.uk/cdn/shop/collections/Funny_Cat_Cards_640x640.png?v=1663150894" />
-    <p>Custom step content!</p>
+  <Step title="Plan">
+    <h3>Choose a plan</h3>
+    <p>You can change this at any time.</p>
   </Step>
-  <Step>
-    <h2>How about an input?</h2>
-    <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name?" />
+  <Step title="Profile">
+    <h3>What should we call you?</h3>
+    <input placeholder="Your name" />
   </Step>
-  <Step>
-    <h2>Final Step</h2>
-    <p>You made it!</p>
+  <Step title="Review">
+    <h3>Looking good</h3>
+    <p>Complete setup to open your workspace.</p>
   </Step>
 </Stepper>`,
   code,

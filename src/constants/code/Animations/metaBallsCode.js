@@ -5,21 +5,23 @@ import tsCode from '@ts-default/Animations/MetaBalls/MetaBalls.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/MetaBalls/MetaBalls.tsx?raw';
 
 export const metaBalls = {
-  dependencies: `ogl`,
+  dependencies: ``,
   usage: `import MetaBalls from './MetaBalls';
 
-<MetaBalls
-  color="#ffffff"
-  cursorBallColor="#ffffff"
-  cursorBallSize={2}
-  ballCount={15}
-  animationSize={30}
-  enableMouseInteraction={true}
-  enableTransparency={true}
-  hoverSmoothness={0.05}
-  clumpFactor={1}
-  speed={0.3}
-/>`,
+<div style={{ width: '100%', height: '480px', position: 'relative' }}>
+  <MetaBalls
+    color="#ffffff"
+    cursorBallColor="#ffffff"
+    variant="solid"
+    motion="orbit"
+    ballCount={15}
+    animationSize={30}
+    gooeyness={0.5}
+    stretch={0.5}
+    wobble={0.5}
+    enableTransparency={true}
+  />
+</div>`,
   code,
   css,
   tailwind,

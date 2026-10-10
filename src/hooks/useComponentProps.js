@@ -33,7 +33,7 @@ const createParser = defaultValue => {
       eq: (a, b) => a === b
     };
   }
-  if (isHexColor(defaultValue)) {
+  if (typeof defaultValue === 'string' && defaultValue.startsWith('#') && isHexColor(defaultValue)) {
     return {
       parse: v => (v === null || v === '' ? null : `#${v}`),
       serialize: v => v.replace(/^#/, ''),

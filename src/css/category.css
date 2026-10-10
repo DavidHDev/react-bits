@@ -581,41 +581,6 @@
   filter: grayscale(var(--dw-gray)) saturate(1.02) contrast(1.02);
 }
 
-:root[data-theme='light'] .category-components .demo-container .step-circle-container {
-  background: #fff;
-  border: 1px solid #e4e4e7;
-  box-shadow: 0 12px 34px rgba(24, 24, 27, 0.08);
-  color: #18181b;
-}
-
-:root[data-theme='light'] .category-components .demo-container .step-indicator-inner {
-  background: #ededf0 !important;
-  color: #71717a !important;
-}
-
-:root[data-theme='light'] .category-components .demo-container .step-indicator:has(.active-dot) .step-indicator-inner,
-:root[data-theme='light'] .category-components .demo-container .step-indicator:has(.check-icon) .step-indicator-inner {
-  background: #18181b !important;
-  color: #fff !important;
-}
-
-:root[data-theme='light'] .category-components .demo-container .step-connector {
-  background: #e4e4e7;
-}
-
-:root[data-theme='light'] .category-components .demo-container .step-connector-inner {
-  background: #18181b !important;
-}
-
-:root[data-theme='light'] .category-components .demo-container .next-button {
-  background: #18181b;
-  color: #fff;
-}
-
-:root[data-theme='light'] .category-components .demo-container .back-button {
-  color: #71717a;
-}
-
 .category-animations .demo-instruction {
   color: #2f293a;
 }

@@ -230,12 +230,18 @@ export const componentMetadata = {
   },
   'Animations/MetaBalls': {
     videoUrl: '/assets/video/metaballs.webm',
-    description: 'Liquid metaball blobs that merge and separate with smooth implicit surface animation.',
+    description: 'Liquid metaballs that merge, stretch and pinch apart, with a cursor blob that pushes through them.',
     category: 'Animations',
     name: 'MetaBalls',
     docsUrl: 'https://reactbits.dev/animations/meta-balls',
     tags: [],
-    added: '2025-02-12'
+    added: '2025-02-12',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt without dependencies. Blobs now cling, stretch and wobble as they merge, the cursor pushes through them, clicks splash them apart, and there are new outline, contour and lava lamp styles.'
+      }
+    ]
   },
   'Animations/Strands': {
     videoUrl: '/assets/video/strands.webm',
@@ -278,12 +284,18 @@ export const componentMetadata = {
   },
   'Animations/PixelTrail': {
     videoUrl: '/assets/video/pixeltrail.webm',
-    description: 'Pixelated cursor trail emitting fading squares with retro digital feel.',
+    description: 'Glossy pixels melt into a fluid goo trail behind the cursor, with color shifts and drips.',
     category: 'Animations',
     name: 'PixelTrail',
     docsUrl: 'https://reactbits.dev/animations/pixel-trail',
     tags: [],
-    added: '2025-02-01'
+    added: '2025-02-01',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'The same fluid trail, now crisp and glossy, with visible pixels, depth and glow. New options add color shifts, drips, sparkle, click bursts, dither and image reveals.'
+      }
+    ]
   },
   'Animations/PixelTransition': {
     videoUrl: '/assets/video/pixeltransition.webm',
@@ -311,12 +323,18 @@ export const componentMetadata = {
   },
   'Animations/Ribbons': {
     videoUrl: '/assets/video/ribbons.webm',
-    description: 'Flowing responsive ribbons/cursor trail driven by physics and pointer motion.',
+    description: 'Springy ribbons that trail the cursor, in lens, comet or even shapes with an optional wave.',
     category: 'Animations',
     name: 'Ribbons',
     docsUrl: 'https://reactbits.dev/animations/ribbons',
     tags: [],
-    added: '2025-02-09'
+    added: '2025-02-09',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Smoother, crisper ribbons that move the same at any frame rate. New shapes, a rolling wave, soft edges and more control over how they follow the cursor.'
+      }
+    ]
   },
   'Animations/ShapeBlur': {
     videoUrl: '/assets/video/shapeblur.webm',
@@ -1334,12 +1352,18 @@ export const componentMetadata = {
   },
   'Components/Stepper': {
     videoUrl: '/assets/video/stepper.webm',
-    description: 'Animated multi-step progress indicator with active state transitions.',
+    description: 'A multi-step flow with a gliding step indicator, spring transitions and horizontal or vertical layouts.',
     category: 'Components',
     name: 'Stepper',
     docsUrl: 'https://reactbits.dev/components/stepper',
     tags: [],
-    added: '2025-02-04'
+    added: '2025-02-04',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Redesigned with a frosted panel in both themes and smoother transitions. Steps can now show titles, descriptions and icons, with dot, bar and vertical layouts.'
+      }
+    ]
   },
   'Components/TiltedCard': {
     videoUrl: '/assets/video/tiltedcard.webm',
