@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PeekRating-TS-TW",
 	"title": "PeekRating",
-	"description": "Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.",
+	"description": "Star rating that lifts a wave of stars up to the pointer, then commits with a pop on click.",
 	"type": "registry:component",
 	"files": [
 		{

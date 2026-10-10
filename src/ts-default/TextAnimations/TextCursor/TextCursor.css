@@ -1,21 +1,23 @@
-.text-cursor-container {
+.text-cursor {
+  position: relative;
   width: 100%;
   height: 100%;
-  position: relative;
 }
 
-.text-cursor-inner {
+.text-cursor__layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.text-cursor__item {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.text-cursor-item {
-  position: absolute;
-  user-select: none;
-  white-space: nowrap;
-  font-size: 1.875rem;
+  white-space: pre;
+  will-change: transform, opacity;
 }

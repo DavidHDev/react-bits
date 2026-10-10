@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ShapeWaves-JS-CSS",
 	"title": "ShapeWaves",
-	"description": "A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.",
+	"description": "A field of triangles, circles and squares that brighten and grow along rolling waves.",
 	"type": "registry:component",
 	"files": [
 		{

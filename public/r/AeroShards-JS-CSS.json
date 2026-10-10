@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "AeroShards-JS-CSS",
 	"title": "AeroShards",
-	"description": "A GPU-driven wind sculpture of folded foil shards with crisp detail, content-safe placements, and responsive pointer interactions.",
+	"description": "A GPU-driven wind sculpture of folded foil shards that responds to the pointer.",
 	"type": "registry:component",
 	"files": [
 		{

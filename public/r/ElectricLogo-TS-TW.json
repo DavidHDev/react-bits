@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ElectricLogo-TS-TW",
 	"title": "ElectricLogo",
-	"description": "Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.",
+	"description": "Turns any logo into a living lightning outline, with arcs that leap off its edges.",
 	"type": "registry:component",
 	"files": [
 		{

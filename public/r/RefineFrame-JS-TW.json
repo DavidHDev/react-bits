@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "RefineFrame-JS-TW",
 	"title": "RefineFrame",
-	"description": "Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.",
+	"description": "Media frame that steps an image through generation stages without any layout shift.",
 	"type": "registry:component",
 	"files": [
 		{

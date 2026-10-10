@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "MaskedHeading-TS-TW",
 	"title": "MaskedHeading",
-	"description": "A large headline with a drifting colour mesh or image showing through the glyphs, revealed word by word.",
+	"description": "A headline with a drifting colour mesh or image showing through, revealed word by word.",
 	"type": "registry:component",
 	"files": [
 		{

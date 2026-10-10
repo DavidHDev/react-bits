@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PatternWaves-JS-CSS",
 	"title": "PatternWaves",
-	"description": "A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.",
+	"description": "A lit halftone surface of dots, lines or glyphs that moves like draped silk.",
 	"type": "registry:component",
 	"files": [
 		{

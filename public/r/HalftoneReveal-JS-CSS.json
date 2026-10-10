@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "HalftoneReveal-JS-CSS",
 	"title": "HalftoneReveal",
-	"description": "An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.",
+	"description": "A halftone print of an image whose dots swell into the real photo under the cursor.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "GlideSelect-JS-TW",
 	"title": "GlideSelect",
-	"description": "Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.",
+	"description": "Select chip whose menu pops from its corner and whose highlight glides between rows.",
 	"type": "registry:component",
 	"files": [
 		{

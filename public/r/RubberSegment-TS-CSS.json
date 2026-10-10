@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "RubberSegment-TS-CSS",
 	"title": "RubberSegment",
-	"description": "Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.",
+	"description": "Segmented control whose rubber thumb stretches across the gap and squashes into place.",
 	"type": "registry:component",
 	"files": [
 		{

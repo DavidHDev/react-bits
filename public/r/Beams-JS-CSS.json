@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Beams-JS-CSS",
 	"title": "Beams",
-	"description": "Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.",
+	"description": "Glossy ribbons that ripple in the dark and catch the light, which follows your cursor.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "JellyRadio-TS-TW",
 	"title": "JellyRadio",
-	"description": "Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.",
+	"description": "Radio group of chips where the chosen one swells and barges its neighbours outward.",
 	"type": "registry:component",
 	"files": [
 		{

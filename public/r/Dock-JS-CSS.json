@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Dock-JS-CSS",
 	"title": "Dock",
-	"description": "macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.",
+	"description": "macOS style dock with smooth magnification, launch bounce, badges and context menus.",
 	"type": "registry:component",
 	"files": [
 		{

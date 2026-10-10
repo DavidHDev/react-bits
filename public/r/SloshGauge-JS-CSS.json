@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SloshGauge-JS-CSS",
 	"title": "SloshGauge",
-	"description": "Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.",
+	"description": "Tank gauge whose liquid chases the value, tilts as it moves and splashes when it fills.",
 	"type": "registry:component",
 	"files": [
 		{

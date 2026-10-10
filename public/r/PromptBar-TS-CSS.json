@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PromptBar-TS-CSS",
 	"title": "PromptBar",
-	"description": "Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.",
+	"description": "Chat composer with @ sources, / commands, a model picker, dictation and attachments.",
 	"type": "registry:component",
 	"files": [
 		{

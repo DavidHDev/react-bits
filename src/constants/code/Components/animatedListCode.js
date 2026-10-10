@@ -5,17 +5,21 @@ import tsCode from '@ts-default/Components/AnimatedList/AnimatedList.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/AnimatedList/AnimatedList.tsx?raw';
 
 export const animatedList = {
-  dependencies: `motion`,
+  dependencies: `@hugeicons/react @hugeicons/core-free-icons`,
   usage: `import AnimatedList from './AnimatedList'
 
-const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10']; 
-  
+const items = [
+  { title: 'Brand assets', description: '24 files', meta: '2m' },
+  { title: 'Launch hero.png', description: '2.4 MB', meta: '18m' },
+  { title: 'Product tour.mp4', description: '148 MB', meta: '1h' },
+  { title: 'Pricing notes', description: '1,240 words', meta: '3h' }
+];
+
 <AnimatedList
   items={items}
   onItemSelect={(item, index) => console.log(item, index)}
-  showGradients={true}
-  enableArrowNavigation={true}
-  displayScrollbar={true}
+  animation="pop"
+  theme="dark"
 />`,
   code,
   css,

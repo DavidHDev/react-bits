@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ChromaGrid-JS-CSS",
 	"title": "ChromaGrid",
-	"description": "A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.",
+	"description": "A grid of grayscale photo cards where a spotlight follows the cursor and brings back color.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "RippleGrid-TS-CSS",
 	"title": "RippleGrid",
-	"description": "A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.",
+	"description": "A crisp grid that ripples like water, bending and lighting up as waves pass through it.",
 	"type": "registry:component",
 	"files": [
 		{

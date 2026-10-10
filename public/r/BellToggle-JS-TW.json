@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "BellToggle-JS-TW",
 	"title": "BellToggle",
-	"description": "Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.",
+	"description": "Pill toggle where a press rings the bell, crossfades the label and unfurls the pill.",
 	"type": "registry:component",
 	"files": [
 		{

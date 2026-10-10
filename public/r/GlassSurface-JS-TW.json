@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "GlassSurface-JS-TW",
 	"title": "GlassSurface",
-	"description": "Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.",
+	"description": "Apple-style liquid glass that bends what is behind it, in a rounded panel or any logo shape.",
 	"type": "registry:component",
 	"files": [
 		{

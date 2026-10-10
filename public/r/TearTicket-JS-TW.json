@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "TearTicket-JS-TW",
 	"title": "TearTicket",
-	"description": "Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.",
+	"description": "Ticket whose perforated stub tears off by hand, fibre by fibre, and drops away.",
 	"type": "registry:component",
 	"files": [
 		{

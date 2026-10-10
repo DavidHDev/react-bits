@@ -1077,11 +1077,24 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Lightning/Lightning.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/lightning"',
     props: [
-      { name: 'hue', type: 'number', default: 230, min: 0, max: 360, step: 1, label: 'Hue' },
-      { name: 'xOffset', type: 'number', default: 0, min: -2, max: 2, step: 0.1, label: 'X Offset' },
-      { name: 'speed', type: 'number', default: 1, min: 0, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'intensity', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Intensity' },
-      { name: 'size', type: 'number', default: 1, min: 0.1, max: 3, step: 0.1, label: 'Size' }
+      { name: 'color', type: 'color', default: '#4d6bff', label: 'Color' },
+      { name: 'bolts', type: 'number', default: 1, min: 1, max: 4, step: 1, label: 'Bolts' },
+      { name: 'spread', type: 'number', default: 0.6, min: 0.2, max: 1.5, step: 0.05, label: 'Spread' },
+      { name: 'branches', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Branches' },
+      { name: 'xOffset', type: 'number', default: 0, min: -1.5, max: 1.5, step: 0.05, label: 'X Offset' },
+      { name: 'angle', type: 'number', default: 0, min: -90, max: 90, step: 1, label: 'Angle' },
+      { name: 'size', type: 'number', default: 1, min: 0.4, max: 3, step: 0.05, label: 'Size' },
+      { name: 'thickness', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Thickness' },
+      { name: 'glow', type: 'number', default: 1, min: 0.2, max: 2.5, step: 0.05, label: 'Glow' },
+      { name: 'intensity', type: 'number', default: 1, min: 0.2, max: 2.5, step: 0.05, label: 'Intensity' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'flicker', type: 'number', default: 0.6, min: 0, max: 1, step: 0.05, label: 'Flicker' },
+      { name: 'mouseStrength', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Mouse Strength' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'clickStrike', type: 'boolean', default: true, label: 'Click Strike' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "FlipCard-JS-CSS",
 	"title": "FlipCard",
-	"description": "Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.",
+	"description": "Two-faced card that flips in 3D on a click, drag or flick and settles on a spring.",
 	"type": "registry:component",
 	"files": [
 		{

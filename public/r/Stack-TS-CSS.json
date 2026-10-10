@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Stack-TS-CSS",
 	"title": "Stack",
-	"description": "Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.",
+	"description": "Pile of cards you can drag, flick or click through, with thrown cards tucking underneath.",
 	"type": "registry:component",
 	"files": [
 		{

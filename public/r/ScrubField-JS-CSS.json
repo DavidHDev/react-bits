@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ScrubField-JS-CSS",
 	"title": "ScrubField",
-	"description": "Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.",
+	"description": "Number chip you drag to scrub, with rubber-band limits and click to type.",
 	"type": "registry:component",
 	"files": [
 		{

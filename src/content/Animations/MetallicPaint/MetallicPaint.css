@@ -1,6 +1,11 @@
-.paint-container {
-  display: block;
-  height: 100%;
+.metallic-paint {
+  position: relative;
   width: 100%;
-  object-fit: contain;
+  height: 100%;
+}
+
+.metallic-paint-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

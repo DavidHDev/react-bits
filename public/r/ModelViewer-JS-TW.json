@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ModelViewer-JS-TW",
 	"title": "ModelViewer",
-	"description": "A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.",
+	"description": "A product-style 3D model viewer that frames itself and floats over a soft shadow.",
 	"type": "registry:component",
 	"files": [
 		{

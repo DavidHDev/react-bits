@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "CometDial-JS-TW",
 	"title": "CometDial",
-	"description": "Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.",
+	"description": "Tick-ring dial you flick by angle, with a comet that streaks behind the lit head.",
 	"type": "registry:component",
 	"files": [
 		{

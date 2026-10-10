@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PixelSwap-JS-TW",
 	"title": "PixelSwap",
-	"description": "Pixel fragments assemble into a full cover, swap arbitrary content, then dissolve away with reversible colors and triggers.",
+	"description": "Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.",
 	"type": "registry:component",
 	"files": [
 		{

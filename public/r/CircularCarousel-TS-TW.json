@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "CircularCarousel-TS-TW",
 	"title": "CircularCarousel",
-	"description": "A 3D ring of images with four layouts, bendable cards, depth fade, momentum drag, snapping and click to focus.",
+	"description": "A 3D ring of images with bendable cards, momentum drag, snapping and click to focus.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Radar-TS-CSS",
 	"title": "Radar",
-	"description": "A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.",
+	"description": "A radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts.",
 	"type": "registry:component",
 	"files": [
 		{

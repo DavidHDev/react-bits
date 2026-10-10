@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SwipeRow-TS-CSS",
 	"title": "SwipeRow",
-	"description": "List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.",
+	"description": "List row that swipes open to reveal actions and deletes on a full swipe.",
 	"type": "registry:component",
 	"files": [
 		{

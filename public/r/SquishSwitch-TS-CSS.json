@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SquishSwitch-TS-CSS",
 	"title": "SquishSwitch",
-	"description": "Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.",
+	"description": "Switch whose thumb stretches with speed and squashes against the end when you flick it.",
 	"type": "registry:component",
 	"files": [
 		{

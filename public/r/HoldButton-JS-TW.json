@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "HoldButton-JS-TW",
 	"title": "HoldButton",
-	"description": "Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.",
+	"description": "Hold-to-confirm button whose liquid fill rises while pressed and snaps back if you let go.",
 	"type": "registry:component",
 	"files": [
 		{

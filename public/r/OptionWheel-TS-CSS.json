@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "OptionWheel-TS-CSS",
 	"title": "OptionWheel",
-	"description": "Curved option picker that spins via scroll, drag, or arrow keys, fading and tilting items away from the selection.",
+	"description": "Curved option picker that spins with scroll, drag or arrow keys, tilting items away.",
 	"type": "registry:component",
 	"files": [
 		{

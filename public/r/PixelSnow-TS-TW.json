@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PixelSnow-TS-TW",
 	"title": "PixelSnow",
-	"description": "Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.",
+	"description": "Pixel-art snowflakes drifting down in layers of depth, brushed aside by the cursor.",
 	"type": "registry:component",
 	"files": [
 		{

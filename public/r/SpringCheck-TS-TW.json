@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SpringCheck-TS-TW",
 	"title": "SpringCheck",
-	"description": "Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.",
+	"description": "Checkbox row where one spring fills the box, draws the tick and strikes through the label.",
 	"type": "registry:component",
 	"files": [
 		{

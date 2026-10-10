@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "StatusMark-JS-CSS",
 	"title": "StatusMark",
-	"description": "A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.",
+	"description": "Agent task status glyph that morphs from an idle ring to a progress arc, then a check.",
 	"type": "registry:component",
 	"files": [
 		{

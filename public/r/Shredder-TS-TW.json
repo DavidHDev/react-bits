@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Shredder-TS-TW",
 	"title": "Shredder",
-	"description": "A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.",
+	"description": "A list with a paper shredder at the bottom that cuts dragged rows into curling strips.",
 	"type": "registry:component",
 	"files": [
 		{

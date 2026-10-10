@@ -11,7 +11,6 @@
 .docs-overview-description {
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
   margin: 0;
   color: var(--text-muted);
   font-family: 'Geist', sans-serif;
@@ -19,8 +18,6 @@
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: -0.01em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .docs-catalog {

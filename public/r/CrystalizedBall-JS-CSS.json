@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "CrystalizedBall-JS-CSS",
 	"title": "CrystalizedBall",
-	"description": "A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.",
+	"description": "A glass ball with a crackling electric rim and glowing dust that swirls with the cursor.",
 	"type": "registry:component",
 	"files": [
 		{

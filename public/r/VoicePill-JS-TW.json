@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "VoicePill-JS-TW",
 	"title": "VoicePill",
-	"description": "Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.",
+	"description": "Mic button that swells into a capsule of live equalizer bars and a timer while recording.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ShinyText-TS-TW",
 	"title": "ShinyText",
-	"description": "A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.",
+	"description": "A sheen of light that sweeps across text, from soft bands to chrome-like reflections.",
 	"type": "registry:component",
 	"files": [
 		{

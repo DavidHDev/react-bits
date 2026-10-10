@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "FlexCarousel-JS-CSS",
 	"title": "FlexCarousel",
-	"description": "An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.",
+	"description": "An infinite image row that flows through invisible liquid glass at its edges.",
 	"type": "registry:component",
 	"files": [
 		{

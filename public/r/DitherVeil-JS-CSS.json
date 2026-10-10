@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "DitherVeil-JS-CSS",
 	"title": "DitherVeil",
-	"description": "A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell.",
+	"description": "A 1-bit dithered photo the cursor burns through to full colour, knitting back cell by cell.",
 	"type": "registry:component",
 	"files": [
 		{

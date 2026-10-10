@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "WarmTooltip-TS-TW",
 	"title": "WarmTooltip",
-	"description": "Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.",
+	"description": "Tooltip group where the first label waits, then its siblings open instantly while warm.",
 	"type": "registry:component",
 	"files": [
 		{

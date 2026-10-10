@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "InfiniteSpiral-TS-TW",
 	"title": "InfiniteSpiral",
-	"description": "An endlessly looping 3D helix of images with customizable motion, depth, spacing and interaction.",
+	"description": "An endlessly looping 3D helix of images with adjustable motion, depth and spacing.",
 	"type": "registry:component",
 	"files": [
 		{

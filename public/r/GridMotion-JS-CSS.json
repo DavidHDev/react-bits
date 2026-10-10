@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "GridMotion-JS-CSS",
 	"title": "GridMotion",
-	"description": "A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.",
+	"description": "A tilted wall of drifting tiles that slides with the pointer and lights up where it rests.",
 	"type": "registry:component",
 	"files": [
 		{

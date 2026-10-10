@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Lanyard-JS-CSS",
 	"title": "Lanyard",
-	"description": "Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.",
+	"description": "Swinging 3D badge on a stretchy woven band that you can drag, throw or click to flip.",
 	"type": "registry:component",
 	"files": [
 		{

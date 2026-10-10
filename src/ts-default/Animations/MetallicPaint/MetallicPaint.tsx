@@ -1,536 +1,837 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import './MetallicPaint.css';
 
-const vertexShader = `#version 300 es
-precision highp float;
-in vec2 a_position;
-out vec2 vP;
-void main(){vP=a_position*.5+.5;gl_Position=vec4(a_position,0.,1.);}`;
-
-const fragmentShader = `#version 300 es
-precision highp float;
-in vec2 vP;
-out vec4 oC;
-uniform sampler2D u_tex;
-uniform float u_time,u_ratio,u_imgRatio,u_seed,u_scale,u_refract,u_blur,u_liquid;
-uniform float u_bright,u_contrast,u_angle,u_fresnel,u_sharp,u_wave,u_noise,u_chroma;
-uniform float u_distort,u_contour;
-uniform vec3 u_lightColor,u_darkColor,u_tint;
-
-vec3 sC,sM;
-
-vec3 pW(vec3 v){
-  vec3 i=floor(v),f=fract(v),s=sign(fract(v*.5)-.5),h=fract(sM*i+i.yzx),c=f*(f-1.);
-  return s*c*((h*16.-4.)*c-1.);
+export interface MetallicPaintProps {
+  imageSrc?: string;
+  text?: string;
+  fontFamily?: string;
+  fontWeight?: number | string;
+  color?: string;
+  backgroundColor?: string;
+  density?: number;
+  softness?: number;
+  dispersion?: number;
+  distortion?: number;
+  edgeBend?: number;
+  angle?: number;
+  speed?: number;
+  scale?: number;
+  rotation?: number;
+  mouseTilt?: number;
+  lightMode?: boolean;
+  intro?: boolean;
+  paused?: boolean;
+  dpr?: number;
+  className?: string;
+  style?: CSSProperties;
 }
 
-vec3 aF(vec3 b,vec3 c){return pW(b+c.zxy-pW(b.zxy+c.yzx)+pW(b.yzx+c.xyz));}
-vec3 lM(vec3 s,vec3 p){return(p+aF(s,p))*.5;}
+type Rgba = number[];
 
-vec2 fA(){
-  vec2 c=vP-.5;
-  c.x*=u_ratio>u_imgRatio?u_ratio/u_imgRatio:1.;
-  c.y*=u_ratio>u_imgRatio?1.:u_imgRatio/u_ratio;
-  return vec2(c.x+.5,.5-c.y);
+interface Settings {
+  tint: Rgba;
+  back: Rgba;
+  density: number;
+  softness: number;
+  dispersion: number;
+  distortion: number;
+  edgeBend: number;
+  angle: number;
+  speed: number;
+  scale: number;
+  rotation: number;
+  mouseTilt: number;
+  lightMode: boolean;
+  intro: boolean;
+  paused: boolean;
+  dpr?: number;
 }
 
-vec2 rot(vec2 p,float r){float c=cos(r),s=sin(r);return vec2(p.x*c+p.y*s,p.y*c-p.x*s);}
-
-float bM(vec2 c,float t){
-  vec2 l=smoothstep(vec2(0.),vec2(t),c),u=smoothstep(vec2(0.),vec2(t),1.-c);
-  return l.x*l.y*u.x*u.y;
+interface Engine {
+  setPending: (value: boolean) => void;
+  setImage: (data: ImageData | null) => void;
+  wake: () => void;
+  redraw: () => void;
 }
 
-float mG(float hi,float lo,float t,float sh,float cv){
-  sh*=(2.-u_sharp);
-  float ci=smoothstep(.15,.85,cv),r=lo;
-  float e1=.08/u_scale;
-  r=mix(r,hi,smoothstep(0.,sh*1.5,t));
-  r=mix(r,lo,smoothstep(e1-sh,e1+sh,t));
-  float e2=e1+.05/u_scale*(1.-ci*.35);
-  r=mix(r,hi,smoothstep(e2-sh,e2+sh,t));
-  float e3=e2+.025/u_scale*(1.-ci*.45);
-  r=mix(r,lo,smoothstep(e3-sh,e3+sh,t));
-  float e4=e1+.1/u_scale;
-  r=mix(r,hi,smoothstep(e4-sh,e4+sh,t));
-  float rm=1.-e4,gT=clamp((t-e4)/rm,0.,1.);
-  r=mix(r,mix(hi,lo,smoothstep(0.,1.,gT)),smoothstep(e4-sh*.5,e4+sh*.5,t));
-  return r;
-}
+const WORKING_SIZE = 512;
+const MAX_SIDE = 2048;
+const MAX_PIXELS = 2560 * 1600 * 2;
 
-void main(){
-  sC=fract(vec3(.7548,.5698,.4154)*(u_seed+17.31))+.5;
-  sM=fract(sC.zxy-sC.yzx*1.618);
-  vec2 sc=vec2(vP.x*u_ratio,1.-vP.y);
-  float angleRad=u_angle*3.14159/180.;
-  sc=rot(sc-.5,angleRad)+.5;
-  sc=clamp(sc,0.,1.);
-  float sl=sc.x-sc.y,an=u_time*.001;
-  vec2 iC=fA();
-  vec4 texSample=texture(u_tex,iC);
-  float dp=texSample.r;
-  float shapeMask=texSample.a;
-  vec3 hi=u_lightColor*u_bright;
-  vec3 lo=u_darkColor*(2.-u_bright);
-  lo.b+=smoothstep(.6,1.4,sc.x+sc.y)*.08;
-  vec2 fC=sc-.5;
-  float rd=length(fC+vec2(0.,sl*.15));
-  vec2 ag=rot(fC,(.22-sl*.18)*3.14159);
-  float cv=1.-pow(rd*1.65,1.15);
-  cv*=pow(sc.y,.35);
-  float vs=shapeMask;
-  vs*=bM(iC,.01);
-  float fr=pow(1.-cv,u_fresnel)*.3;
-  vs=min(vs+fr*vs,1.);
-  float mT=an*.0625;
-  vec3 wO=vec3(-1.05,1.35,1.55);
-  vec3 wA=aF(vec3(31.,73.,56.),mT+wO)*.22*u_wave;
-  vec3 wB=aF(vec3(24.,64.,42.),mT-wO.yzx)*.22*u_wave;
-  vec2 nC=sc*45.*u_noise;
-  nC+=aF(sC.zxy,an*.17*sC.yzx-sc.yxy*.35).xy*18.*u_wave;
-  vec3 tC=vec3(.00041,.00053,.00076)*mT+wB*nC.x+wA*nC.y;
-  tC=lM(sC,tC);
-  tC=lM(sC+1.618,tC);
-  float tb=sin(tC.x*3.14159)*.5+.5;
-  tb=tb*2.-1.;
-  float noiseVal=pW(vec3(sc*8.+an,an*.5)).x;
-  float edgeFactor=smoothstep(0.,.5,dp)*smoothstep(1.,.5,dp);
-  float lD=dp+(1.-dp)*u_liquid*tb;
-  lD+=noiseVal*u_distort*.15*edgeFactor;
-  float rB=clamp(1.-cv,0.,1.);
-  float fl=ag.x+sl;
-  fl+=noiseVal*sl*u_distort*edgeFactor;
-  fl*=mix(1.,1.-dp*.5,u_contour);
-  fl-=dp*u_contour*.8;
-  float eI=smoothstep(0.,1.,lD)*smoothstep(1.,0.,lD);
-  fl-=tb*sl*1.8*eI;
-  float cA=cv*clamp(pow(sc.y,.12),.25,1.);
-  fl*=.12+(1.05-lD)*cA;
-  fl*=smoothstep(1.,.65,lD);
-  float vA1=smoothstep(.08,.18,sc.y)*smoothstep(.38,.18,sc.y);
-  float vA2=smoothstep(.08,.18,1.-sc.y)*smoothstep(.38,.18,1.-sc.y);
-  fl+=vA1*.16+vA2*.025;
-  fl*=.45+pow(sc.y,2.)*.55;
-  fl*=u_scale;
-  fl-=an;
-  float rO=rB+cv*tb*.025;
-  float vM1=smoothstep(-.12,.18,sc.y)*smoothstep(.48,.08,sc.y);
-  float cM1=smoothstep(.35,.55,cv)*smoothstep(.95,.35,cv);
-  rO+=vM1*cM1*4.5;
-  rO-=sl;
-  float bO=rB*1.25;
-  float vM2=smoothstep(-.02,.35,sc.y)*smoothstep(.75,.08,sc.y);
-  float cM2=smoothstep(.35,.55,cv)*smoothstep(.75,.35,cv);
-  bO+=vM2*cM2*.9;
-  bO-=lD*.18;
-  rO*=u_refract*u_chroma;
-  bO*=u_refract*u_chroma;
-  float sf=u_blur;
-  float rP=fract(fl+rO);
-  float rC=mG(hi.r,lo.r,rP,sf+.018+u_refract*cv*.025,cv);
-  float gP=fract(fl);
-  float gC=mG(hi.g,lo.g,gP,sf+.008/max(.01,1.-sl),cv);
-  float bP=fract(fl-bO);
-  float bC=mG(hi.b,lo.b,bP,sf+.008,cv);
-  vec3 col=vec3(rC,gC,bC);
-  col=(col-.5)*u_contrast+.5;
-  col=clamp(col,0.,1.);
-  col=mix(col,1.-min(vec3(1.),(1.-col)/max(u_tint,vec3(.001))),length(u_tint-1.)*.5);
-  col=clamp(col,0.,1.);
-  oC=vec4(col*vs,vs);
+const VERTEX = `#version 300 es
+layout(location = 0) in vec2 a_position;
+uniform vec2 u_resolution;
+uniform float u_imageAspect;
+uniform float u_scale;
+uniform float u_rotation;
+out vec2 v_imageUV;
+
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+  vec2 uv = a_position * 0.5;
+  float r = u_rotation * 3.14159265358979323846 / 180.0;
+  mat2 turn = mat2(cos(r), sin(r), -sin(r), cos(r));
+  vec2 imageBox;
+  imageBox.x = min(u_resolution.x / u_imageAspect, u_resolution.y) * u_imageAspect;
+  imageBox.y = imageBox.x / u_imageAspect;
+  v_imageUV = uv * (u_resolution / imageBox) / u_scale;
+  v_imageUV.x *= u_imageAspect;
+  v_imageUV = turn * v_imageUV;
+  v_imageUV.x /= u_imageAspect;
+  v_imageUV += 0.5;
+  v_imageUV.y = 1.0 - v_imageUV.y;
 }`;
 
-interface MetallicPaintProps {
-  imageSrc: string;
-  seed?: number;
-  scale?: number;
-  refraction?: number;
-  blur?: number;
-  liquid?: number;
-  speed?: number;
-  brightness?: number;
-  contrast?: number;
-  angle?: number;
-  fresnel?: number;
-  lightColor?: string;
-  darkColor?: string;
-  patternSharpness?: number;
-  waveAmplitude?: number;
-  noiseScale?: number;
-  chromaticSpread?: number;
-  mouseAnimation?: boolean;
-  distortion?: number;
-  contour?: number;
-  tintColor?: string;
+const FRAGMENT = `#version 300 es
+precision highp float;
+
+uniform sampler2D u_image;
+uniform vec2 u_resolution;
+uniform float u_time;
+uniform vec4 u_colorBack;
+uniform vec4 u_colorTint;
+uniform float u_softness;
+uniform float u_repetition;
+uniform float u_shiftRed;
+uniform float u_shiftBlue;
+uniform float u_distortion;
+uniform float u_contour;
+uniform float u_angle;
+uniform vec2 u_tilt;
+uniform float u_reveal;
+uniform float u_light;
+
+in vec2 v_imageUV;
+
+out vec4 fragColor;
+
+#define PI 3.14159265358979323846
+
+vec2 rotate(vec2 uv, float th) {
+  return mat2(cos(th), sin(th), -sin(th), cos(th)) * uv;
 }
 
-function processImage(img: HTMLImageElement): ImageData {
-  const MAX_SIZE = 1000;
-  const MIN_SIZE = 500;
-  let width = img.naturalWidth || img.width;
-  let height = img.naturalHeight || img.height;
+vec3 permute(vec3 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
 
-  if (width > MAX_SIZE || height > MAX_SIZE || width < MIN_SIZE || height < MIN_SIZE) {
-    const scale =
-      width > height
-        ? width > MAX_SIZE
-          ? MAX_SIZE / width
-          : width < MIN_SIZE
-            ? MIN_SIZE / width
-            : 1
-        : height > MAX_SIZE
-          ? MAX_SIZE / height
-          : height < MIN_SIZE
-            ? MIN_SIZE / height
-            : 1;
-    width = Math.round(width * scale);
-    height = Math.round(height * scale);
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+  vec2 i = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+  vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+  m = m * m;
+  m = m * m;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+float getColorChanges(float c1, float c2, float stripe, vec3 w, float blur, float bump, float tint) {
+  float ch = mix(c2, c1, smoothstep(0.0, 2.0 * blur, stripe));
+  float border = w[0];
+  ch = mix(ch, c2, smoothstep(border, border + 2.0 * blur, stripe));
+  bump = smoothstep(0.2, 0.8, bump);
+  border = w[0] + 0.4 * (1.0 - bump) * w[1];
+  ch = mix(ch, c1, smoothstep(border, border + 2.0 * blur, stripe));
+  border = w[0] + 0.5 * (1.0 - bump) * w[1];
+  ch = mix(ch, c2, smoothstep(border, border + 2.0 * blur, stripe));
+  border = w[0] + w[1];
+  ch = mix(ch, c1, smoothstep(border, border + 2.0 * blur, stripe));
+  float gradientT = (stripe - w[0] - w[1]) / w[2];
+  float gradient = mix(c1, c2, smoothstep(0.0, 1.0, gradientT));
+  ch = mix(ch, gradient, smoothstep(border, border + 0.5 * blur, stripe));
+  ch = mix(ch, 1.0 - min(1.0, (1.0 - ch) / max(tint, 0.0001)), u_colorTint.a);
+  return ch;
+}
+
+float getImgFrame(vec2 uv, float th) {
+  float frame = 1.0;
+  frame *= smoothstep(0.0, th, uv.y);
+  frame *= 1.0 - smoothstep(1.0 - th, 1.0, uv.y);
+  frame *= smoothstep(0.0, th, uv.x);
+  frame *= 1.0 - smoothstep(1.0 - th, 1.0, uv.x);
+  return frame;
+}
+
+float blurEdge3x3(sampler2D tex, vec2 uv, vec2 dudx, vec2 dudy, float radius, float centerSample) {
+  vec2 texel = 1.0 / vec2(textureSize(tex, 0));
+  vec2 r = radius * texel;
+  float sum = 4.0 * centerSample;
+  sum += 2.0 * textureGrad(tex, uv + vec2(0.0, -r.y), dudx, dudy).r;
+  sum += 2.0 * textureGrad(tex, uv + vec2(0.0, r.y), dudx, dudy).r;
+  sum += 2.0 * textureGrad(tex, uv + vec2(-r.x, 0.0), dudx, dudy).r;
+  sum += 2.0 * textureGrad(tex, uv + vec2(r.x, 0.0), dudx, dudy).r;
+  sum += textureGrad(tex, uv + vec2(-r.x, -r.y), dudx, dudy).r;
+  sum += textureGrad(tex, uv + vec2(r.x, -r.y), dudx, dudy).r;
+  sum += textureGrad(tex, uv + vec2(-r.x, r.y), dudx, dudy).r;
+  sum += textureGrad(tex, uv + vec2(r.x, r.y), dudx, dudy).r;
+  return sum / 16.0;
+}
+
+void main() {
+  const float firstFrameOffset = 2.8;
+  float t = 0.3 * (u_time + firstFrameOffset);
+
+  vec2 uv = v_imageUV;
+  vec2 dudx = dFdx(v_imageUV);
+  vec2 dudy = dFdy(v_imageUV);
+  vec4 img = textureGrad(u_image, uv, dudx, dudy);
+
+  float cycleWidth = u_repetition;
+
+  vec2 rotatedUV = uv - vec2(0.5);
+  float angle = (-u_angle + 70.0) * PI / 180.0;
+  float cosA = cos(angle);
+  float sinA = sin(angle);
+  rotatedUV = vec2(rotatedUV.x * cosA - rotatedUV.y * sinA, rotatedUV.x * sinA + rotatedUV.y * cosA) + vec2(0.5);
+
+  float edge = blurEdge3x3(u_image, uv, dudx, dudy, 6.0, img.r);
+  edge = pow(edge, 1.6);
+  edge *= smoothstep(0.0, 0.4, u_contour);
+
+  float opacity = img.g * getImgFrame(v_imageUV, 0.0);
+  float depth = img.r;
+
+  float diagBLtoTR = rotatedUV.x - rotatedUV.y;
+  float diagTLtoBR = rotatedUV.x + rotatedUV.y;
+
+  vec3 color1 = mix(vec3(0.98, 0.98, 1.0), vec3(0.9, 0.9, 0.93), u_light);
+  vec3 color2 = vec3(0.1, 0.1, 0.1 + 0.1 * smoothstep(0.7, 1.3, diagTLtoBR));
+
+  vec2 gradUV = uv - 0.5 - u_tilt * vec2(0.18, -0.12);
+  float dist = length(gradUV + vec2(0.0, 0.2 * diagBLtoTR));
+  gradUV = rotate(gradUV, (0.25 - 0.2 * diagBLtoTR) * PI);
+  float direction = gradUV.x;
+
+  float bump = pow(1.8 * dist, 1.2);
+  bump = 1.0 - bump;
+  bump *= pow(uv.y, 0.3);
+
+  float thinStrip1 = 0.12 / cycleWidth * (1.0 - 0.4 * bump);
+  float thinStrip2 = 0.07 / cycleWidth * (1.0 + 0.4 * bump);
+  float wideStrip = 1.0 - thinStrip1 - thinStrip2;
+
+  float noise = snoise(uv - t);
+  edge += (1.0 - edge) * u_distortion * noise;
+
+  direction += diagBLtoTR;
+  direction -= 2.0 * noise * diagBLtoTR * (smoothstep(0.0, 1.0, edge) * (1.0 - smoothstep(0.0, 1.0, edge)));
+  direction *= mix(1.0, 1.0 - edge, smoothstep(0.5, 1.0, u_contour));
+  direction -= 1.7 * edge * smoothstep(0.5, 1.0, u_contour);
+  direction += 0.2 * pow(u_contour, 4.0) * (1.0 - smoothstep(0.0, 1.0, edge));
+
+  bump *= clamp(pow(uv.y, 0.1), 0.3, 1.0);
+  direction *= 0.1 + (1.1 - edge) * bump;
+  direction *= 0.4 + 0.6 * (1.0 - smoothstep(0.5, 1.0, edge));
+  direction += 0.18 * (smoothstep(0.1, 0.2, uv.y) * (1.0 - smoothstep(0.2, 0.4, uv.y)));
+  direction += 0.03 * (smoothstep(0.1, 0.2, 1.0 - uv.y) * (1.0 - smoothstep(0.2, 0.4, 1.0 - uv.y)));
+  direction *= 0.5 + 0.5 * pow(uv.y, 2.0);
+  direction *= cycleWidth;
+  direction -= t + dot(u_tilt, vec2(0.35, 0.2));
+
+  float colorDispersion = clamp(1.0 - bump, 0.0, 1.0);
+  float dispersionRed = colorDispersion;
+  dispersionRed += 0.03 * bump * noise;
+  dispersionRed += 5.0 * (smoothstep(-0.1, 0.2, uv.y) * (1.0 - smoothstep(0.1, 0.5, uv.y))) * (smoothstep(0.4, 0.6, bump) * (1.0 - smoothstep(0.4, 1.0, bump)));
+  dispersionRed -= diagBLtoTR;
+
+  float dispersionBlue = colorDispersion * 1.3;
+  dispersionBlue += (smoothstep(0.0, 0.4, uv.y) * (1.0 - smoothstep(0.1, 0.8, uv.y))) * (smoothstep(0.4, 0.6, bump) * (1.0 - smoothstep(0.4, 0.8, bump)));
+  dispersionBlue -= 0.2 * edge;
+
+  dispersionRed *= u_shiftRed / 20.0;
+  dispersionBlue *= u_shiftBlue / 20.0;
+
+  float softness = 0.05 * u_softness;
+  float blur = softness + 0.5 * smoothstep(1.0, 10.0, u_repetition) * smoothstep(0.0, 1.0, edge);
+  float smallCanvas = 1.0 - smoothstep(100.0, 500.0, min(u_resolution.x, u_resolution.y));
+  blur += smallCanvas * smoothstep(0.0, 1.0, edge);
+  float rExtraBlur = softness * (0.05 + 0.1 * (u_shiftRed / 20.0) * bump);
+  float gExtraBlur = softness * 0.05 / max(0.001, abs(1.0 - diagBLtoTR));
+
+  vec3 w = vec3(thinStrip1 * cycleWidth, thinStrip2 * cycleWidth, wideStrip);
+  w[1] -= 0.02 * smoothstep(0.0, 1.0, edge + bump);
+  float stripeR = fract(direction + dispersionRed);
+  float r = getColorChanges(color1.r, color2.r, stripeR, w, blur + fwidth(stripeR) + rExtraBlur, bump, u_colorTint.r);
+  float stripeG = fract(direction);
+  float g = getColorChanges(color1.g, color2.g, stripeG, w, blur + fwidth(stripeG) + gExtraBlur, bump, u_colorTint.g);
+  float stripeB = fract(direction - dispersionBlue);
+  float b = getColorChanges(color1.b, color2.b, stripeB, w, blur + fwidth(stripeB), bump, u_colorTint.b);
+
+  vec3 sheen = mix(vec3(1.0), u_colorTint.rgb, 0.45 * u_colorTint.a);
+  r *= sheen.r;
+  g *= sheen.g;
+  b *= sheen.b;
+
+  float rim = smoothstep(0.78, 1.0, depth) * u_light;
+  r *= 1.0 - rim * 0.62;
+  g *= 1.0 - rim * 0.62;
+  b *= 1.0 - rim * 0.58;
+
+  float pour = u_reveal * 1.25 - 0.1;
+  opacity *= smoothstep(1.0 - pour, 1.15 - pour, depth) * smoothstep(0.0, 0.25, u_reveal);
+
+  vec3 color = vec3(r, g, b) * opacity;
+  vec3 back = u_colorBack.rgb * u_colorBack.a;
+  color += back * (1.0 - opacity);
+  opacity += u_colorBack.a * (1.0 - opacity);
+  color += 1.0 / 256.0 * (fract(sin(dot(0.014 * gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453123) - 0.5);
+  fragColor = vec4(color, opacity);
+}`;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const parseColor = (() => {
+  let context: CanvasRenderingContext2D | null = null;
+  return (value: string, fallback: Rgba): Rgba => {
+    if (typeof document === 'undefined') return fallback;
+    context ??= document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+    if (!context) return fallback;
+    context.clearRect(0, 0, 1, 1);
+    context.fillStyle = 'rgba(0, 0, 0, 0)';
+    context.fillStyle = String(value);
+    context.fillRect(0, 0, 1, 1);
+    const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+    return [r / 255, g / 255, b / 255, a / 255];
+  };
+})();
+
+const loadImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error('MetallicPaint: failed to load the image'));
+    image.src = src;
+  });
+
+const isVector = async (src: string): Promise<boolean> => {
+  if (/\.svg($|[?#])/i.test(src) || src.startsWith('data:image/svg+xml')) return true;
+  if (!src.startsWith('blob:')) return false;
+  try {
+    const blob = await (await fetch(src)).blob();
+    return blob.type === 'image/svg+xml';
+  } catch {
+    return false;
   }
+};
 
+const drawImageSource = async (src: string): Promise<HTMLCanvasElement> => {
+  const [image, vector] = await Promise.all([loadImage(src), isVector(src)]);
+  let width = image.naturalWidth || image.width || MAX_SIDE;
+  let height = image.naturalHeight || image.height || MAX_SIDE;
+  const longest = Math.max(width, height);
+  const fit = vector ? MAX_SIDE / longest : clamp(1024 / longest, 1, MAX_SIDE / longest);
+  width = Math.max(1, Math.round(width * fit));
+  height = Math.max(1, Math.round(height * fit));
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  const ctx = canvas.getContext('2d')!;
-  ctx.drawImage(img, 0, 0, width, height);
-
-  const imageData = ctx.getImageData(0, 0, width, height);
-  const data = imageData.data;
-  const size = width * height;
-  const alphaValues = new Float32Array(size);
-  const shapeMask = new Uint8Array(size);
-  const boundaryMask = new Uint8Array(size);
-
-  for (let i = 0; i < size; i++) {
-    const idx = i * 4;
-    const r = data[idx],
-      g = data[idx + 1],
-      b = data[idx + 2],
-      a = data[idx + 3];
-    const isBackground = (r > 250 && g > 250 && b > 250 && a === 255) || a < 5;
-    alphaValues[i] = isBackground ? 0 : a / 255;
-    shapeMask[i] = alphaValues[i] > 0.1 ? 1 : 0;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+  ctx.drawImage(image, 0, 0, width, height);
+  const data = ctx.getImageData(0, 0, width, height);
+  let opaque = true;
+  for (let i = 3; i < data.data.length; i += 4) {
+    if (data.data[i] < 250) {
+      opaque = false;
+      break;
+    }
   }
+  if (opaque) {
+    for (let i = 0; i < data.data.length; i += 4) {
+      const light = Math.min(data.data[i], data.data[i + 1], data.data[i + 2]);
+      data.data[i + 3] = Math.round(clamp((250 - light) / 30, 0, 1) * 255);
+    }
+    ctx.putImageData(data, 0, 0);
+  }
+  return canvas;
+};
 
+const drawTextSource = async (
+  text: string,
+  fontFamily: string,
+  fontWeight: number | string
+): Promise<HTMLCanvasElement | null> => {
+  const size = 320;
+  const font = `${fontWeight} ${size}px ${fontFamily}`;
+  try {
+    await document.fonts?.load(font, text);
+  } catch {
+    return null;
+  }
+  const probe = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
+  probe.font = font;
+  const metrics = probe.measureText(text);
+  const ascent = metrics.actualBoundingBoxAscent || size * 0.8;
+  const descent = metrics.actualBoundingBoxDescent || size * 0.2;
+  const left = metrics.actualBoundingBoxLeft || 0;
+  const right = metrics.actualBoundingBoxRight || metrics.width;
+  const pad = size * 0.12;
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.ceil(left + right + pad * 2);
+  canvas.height = Math.ceil(ascent + descent + pad * 2);
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.font = font;
+  ctx.fillStyle = '#000';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, pad + left, pad + ascent);
+  return canvas;
+};
+
+const solvePoisson = (mask: Uint8Array, width: number, height: number) => {
+  const interior: number[] = [];
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      const idx = y * width + x;
-      if (!shapeMask[idx]) continue;
-      if (
+      const i = y * width + x;
+      if (!mask[i]) continue;
+      const boundary =
         x === 0 ||
-        x === width - 1 ||
         y === 0 ||
+        x === width - 1 ||
         y === height - 1 ||
-        !shapeMask[idx - 1] ||
-        !shapeMask[idx + 1] ||
-        !shapeMask[idx - width] ||
-        !shapeMask[idx + width]
-      ) {
-        boundaryMask[idx] = 1;
-      }
+        !mask[i - 1] ||
+        !mask[i + 1] ||
+        !mask[i - width] ||
+        !mask[i + width] ||
+        !mask[i - width - 1] ||
+        !mask[i - width + 1] ||
+        !mask[i + width - 1] ||
+        !mask[i + width + 1];
+      if (!boundary) interior.push(i);
     }
   }
-
-  const u = new Float32Array(size);
-  const ITERATIONS = 200;
-  const C = 0.01;
-  const omega = 1.85;
-
-  for (let iter = 0; iter < ITERATIONS; iter++) {
-    for (let y = 1; y < height - 1; y++) {
-      for (let x = 1; x < width - 1; x++) {
-        const idx = y * width + x;
-        if (!shapeMask[idx] || boundaryMask[idx]) continue;
-        const sum =
-          (shapeMask[idx + 1] ? u[idx + 1] : 0) +
-          (shapeMask[idx - 1] ? u[idx - 1] : 0) +
-          (shapeMask[idx + width] ? u[idx + width] : 0) +
-          (shapeMask[idx - width] ? u[idx - width] : 0);
-        const newVal = (C + sum) / 4;
-        u[idx] = omega * newVal + (1 - omega) * u[idx];
-      }
+  const field = new Float32Array(width * height);
+  const red: number[] = [];
+  const black: number[] = [];
+  interior.forEach(i => (((i % width) + Math.floor(i / width)) % 2 === 0 ? red.push(i) : black.push(i)));
+  const relax = (list: number[]) => {
+    for (let k = 0; k < list.length; k++) {
+      const i = list[k];
+      const sum = field[i + 1] + field[i - 1] + field[i - width] + field[i + width];
+      field[i] = 1.9 * ((0.01 + sum) / 4) - 0.9 * field[i];
     }
+  };
+  for (let iteration = 0; iteration < 40; iteration++) {
+    relax(red);
+    relax(black);
   }
+  let peak = 0;
+  interior.forEach(i => {
+    if (field[i] > peak) peak = field[i];
+  });
+  return { field, peak: peak || 1 };
+};
 
-  let maxVal = 0;
-  for (let i = 0; i < size; i++) if (u[i] > maxVal) maxVal = u[i];
-  if (maxVal === 0) maxVal = 1;
+const processShape = (source: HTMLCanvasElement): ImageData => {
+  const width = source.width;
+  const height = source.height;
+  const fit = WORKING_SIZE / Math.min(width, height);
+  const workW = Math.max(2, Math.round(width * fit));
+  const workH = Math.max(2, Math.round(height * fit));
 
-  const outData = ctx.createImageData(width, height);
-  for (let i = 0; i < size; i++) {
-    const px = i * 4;
-    const depth = u[i] / maxVal;
-    const gray = Math.round(255 * (1 - depth * depth));
-    outData.data[px] = outData.data[px + 1] = outData.data[px + 2] = gray;
-    outData.data[px + 3] = Math.round(alphaValues[i] * 255);
+  const small = document.createElement('canvas');
+  small.width = workW;
+  small.height = workH;
+  const smallCtx = small.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+  smallCtx.drawImage(source, 0, 0, workW, workH);
+  const smallData = smallCtx.getImageData(0, 0, workW, workH).data;
+  const mask = new Uint8Array(workW * workH);
+  for (let i = 0; i < mask.length; i++) mask[i] = smallData[i * 4 + 3] > 0 ? 1 : 0;
+
+  const { field, peak } = solvePoisson(mask, workW, workH);
+  const gradient = smallCtx.createImageData(workW, workH);
+  for (let i = 0; i < mask.length; i++) {
+    const p = i * 4;
+    const value = mask[i] ? 255 * (1 - field[i] / peak) : 255;
+    gradient.data[p] = value;
+    gradient.data[p + 1] = value;
+    gradient.data[p + 2] = value;
+    gradient.data[p + 3] = mask[i] ? 255 : 0;
   }
+  smallCtx.putImageData(gradient, 0, 0);
 
-  return outData;
-}
+  const out = document.createElement('canvas');
+  out.width = width;
+  out.height = height;
+  const outCtx = out.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+  outCtx.imageSmoothingEnabled = true;
+  outCtx.imageSmoothingQuality = 'high';
+  outCtx.drawImage(small, 0, 0, workW, workH, 0, 0, width, height);
+  const result = outCtx.getImageData(0, 0, width, height);
+  const original = (source.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D).getImageData(
+    0,
+    0,
+    width,
+    height
+  ).data;
+  for (let i = 0; i < result.data.length; i += 4) {
+    const alpha = original[i + 3];
+    if (alpha === 0) {
+      result.data[i] = 255;
+      result.data[i + 1] = 0;
+    } else {
+      result.data[i] = result.data[i + 3] === 0 ? 0 : result.data[i];
+      result.data[i + 1] = alpha;
+    }
+    result.data[i + 2] = 255;
+    result.data[i + 3] = 255;
+  }
+  return result;
+};
 
-function hexToRgb(hex: string): [number, number, number] {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? [parseInt(result[1], 16) / 255, parseInt(result[2], 16) / 255, parseInt(result[3], 16) / 255]
-    : [1, 1, 1];
-}
+const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
+  gl.deleteShader(shader);
+  return null;
+};
 
 export default function MetallicPaint({
   imageSrc,
-  seed = 42,
-  scale = 4,
-  refraction = 0.01,
-  blur = 0.015,
-  liquid = 0.75,
-  speed = 0.3,
-  brightness = 2,
-  contrast = 0.5,
-  angle = 0,
-  fresnel = 1,
-  lightColor = '#ffffff',
-  darkColor = '#000000',
-  patternSharpness = 1,
-  waveAmplitude = 1,
-  noiseScale = 0.5,
-  chromaticSpread = 2,
-  mouseAnimation = false,
-  distortion = 1,
-  contour = 0.2,
-  tintColor = '#feb3ff'
+  text,
+  fontFamily = 'system-ui, sans-serif',
+  fontWeight = 800,
+  color = '#ffffff',
+  backgroundColor = 'transparent',
+  density = 2,
+  softness = 0.1,
+  dispersion = 0.3,
+  distortion = 0.07,
+  edgeBend = 0.6,
+  angle = 70,
+  speed = 1,
+  scale = 0.6,
+  rotation = 0,
+  mouseTilt = 0.5,
+  lightMode = false,
+  intro = true,
+  paused = false,
+  dpr,
+  className = '',
+  style
 }: MetallicPaintProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const glRef = useRef<WebGL2RenderingContext | null>(null);
-  const programRef = useRef<WebGLProgram | null>(null);
-  const uniformsRef = useRef<Record<string, WebGLUniformLocation | null>>({});
-  const textureRef = useRef<WebGLTexture | null>(null);
-  const animTimeRef = useRef(0);
-  const lastTimeRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
-  const imgDataRef = useRef<ImageData | null>(null);
-  const speedRef = useRef(speed);
-  const mouseRef = useRef({ x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5 });
-  const mouseAnimRef = useRef(mouseAnimation);
+  const engineRef = useRef<Engine | null>(null);
+  const settingsRef = useRef<Settings>(null as unknown as Settings);
 
-  const [ready, setReady] = useState(false);
-  const [textureReady, setTextureReady] = useState(false);
+  settingsRef.current = {
+    tint: parseColor(color, [1, 1, 1, 1]),
+    back: parseColor(backgroundColor, [0, 0, 0, 0]),
+    density: clamp(density, 0.5, 12),
+    softness: clamp(softness, 0, 1),
+    dispersion: clamp(dispersion, -1, 1),
+    distortion: clamp(distortion, 0, 1),
+    edgeBend: clamp(edgeBend, 0, 1),
+    angle,
+    speed,
+    scale: Math.max(0.05, scale),
+    rotation,
+    mouseTilt: clamp(mouseTilt, 0, 1.5),
+    lightMode,
+    intro,
+    paused,
+    dpr
+  };
 
   useEffect(() => {
-    speedRef.current = speed;
-  }, [speed]);
-  useEffect(() => {
-    mouseAnimRef.current = mouseAnimation;
-  }, [mouseAnimation]);
-
-  const initGL = useCallback(() => {
+    const container = containerRef.current;
     const canvas = canvasRef.current;
-    if (!canvas) return false;
-
-    const gl = canvas.getContext('webgl2', { antialias: true, alpha: true });
-    if (!gl) return false;
-
-    const compile = (src: string, type: number): WebGLShader | null => {
-      const s = gl.createShader(type);
-      if (!s) return null;
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        console.error(gl.getShaderInfoLog(s));
-        return null;
-      }
-      return s;
-    };
-
-    const vs = compile(vertexShader, gl.VERTEX_SHADER);
-    const fs = compile(fragmentShader, gl.FRAGMENT_SHADER);
-    if (!vs || !fs) return false;
-
-    const prog = gl.createProgram();
-    if (!prog) return false;
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      console.error(gl.getProgramInfoLog(prog));
-      return false;
-    }
+    if (!container || !canvas) return undefined;
+    const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
+    if (!gl) return undefined;
+    const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+    const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
+    const program = gl.createProgram();
+    if (!vertex || !fragment || !program) return undefined;
+    gl.attachShader(program, vertex);
+    gl.attachShader(program, fragment);
+    gl.linkProgram(program);
+    gl.deleteShader(vertex);
+    gl.deleteShader(fragment);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return undefined;
+    gl.useProgram(program);
 
     const uniforms: Record<string, WebGLUniformLocation | null> = {};
-    const count = gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS);
+    const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     for (let i = 0; i < count; i++) {
-      const info = gl.getActiveUniform(prog, i);
-      if (info) uniforms[info.name] = gl.getUniformLocation(prog, info.name);
+      const info = gl.getActiveUniform(program, i);
+      if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
     }
 
-    const verts = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+    const vao = gl.createVertexArray();
+    const buffer = gl.createBuffer();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
-    gl.useProgram(prog);
-    const pos = gl.getAttribLocation(prog, 'a_position');
-    gl.enableVertexAttribArray(pos);
-    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
-
-    glRef.current = gl;
-    programRef.current = prog;
-    uniformsRef.current = uniforms;
-
-    return true;
-  }, []);
-
-  const uploadTexture = useCallback((imgData: ImageData) => {
-    const gl = glRef.current;
-    const uniforms = uniformsRef.current;
-    if (!gl || !imgData) return;
-
-    if (textureRef.current) gl.deleteTexture(textureRef.current);
-
-    const tex = gl.createTexture();
+    const texture = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 255, 255]));
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, imgData.width, imgData.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, imgData.data);
-    gl.uniform1i(uniforms.u_tex, 0);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.uniform1i(uniforms.u_image, 0);
 
-    const ratio = imgData.width / imgData.height;
-    gl.uniform1f(uniforms.u_imgRatio, ratio);
-    gl.uniform1f(uniforms.u_ratio, 1);
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const state = {
+      raf: 0,
+      last: 0,
+      time: 0,
+      visible: true,
+      pending: false,
+      hasImage: false,
+      imageAspect: 1,
+      width: 0,
+      height: 0,
+      revealStart: -1,
+      reveal: settingsRef.current.intro && !reduce ? 0 : 1,
+      tiltX: 0,
+      tiltY: 0,
+      velocityX: 0,
+      velocityY: 0,
+      targetX: 0,
+      targetY: 0,
+      alive: true
+    };
 
-    textureRef.current = tex;
-    imgDataRef.current = imgData;
+    const resize = () => {
+      const s = settingsRef.current;
+      const rect = container.getBoundingClientRect();
+      const base = s.dpr ?? Math.min(window.devicePixelRatio || 1, 2);
+      let ratio = Math.max(base, 2);
+      const pixels = rect.width * rect.height * ratio * ratio;
+      if (pixels > MAX_PIXELS) ratio *= Math.sqrt(MAX_PIXELS / pixels);
+      const width = Math.max(1, Math.round(rect.width * ratio));
+      const height = Math.max(1, Math.round(rect.height * ratio));
+      if (width === state.width && height === state.height) return;
+      state.width = width;
+      state.height = height;
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, width, height);
+    };
+
+    const draw = () => {
+      const s = settingsRef.current;
+      if (state.pending || !state.hasImage) {
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        return;
+      }
+      gl.useProgram(program);
+      gl.uniform2f(uniforms.u_resolution, state.width, state.height);
+      gl.uniform1f(uniforms.u_time, state.time);
+      gl.uniform1f(uniforms.u_imageAspect, state.imageAspect);
+      gl.uniform1f(uniforms.u_scale, s.scale);
+      gl.uniform1f(uniforms.u_rotation, s.rotation);
+      gl.uniform4f(uniforms.u_colorBack, s.back[0], s.back[1], s.back[2], s.back[3]);
+      gl.uniform4f(uniforms.u_colorTint, s.tint[0], s.tint[1], s.tint[2], s.tint[3]);
+      gl.uniform1f(uniforms.u_softness, s.softness);
+      gl.uniform1f(uniforms.u_repetition, s.density);
+      gl.uniform1f(uniforms.u_shiftRed, s.dispersion);
+      gl.uniform1f(uniforms.u_shiftBlue, s.dispersion);
+      gl.uniform1f(uniforms.u_distortion, s.distortion);
+      gl.uniform1f(uniforms.u_contour, s.edgeBend);
+      gl.uniform1f(uniforms.u_angle, s.angle);
+      gl.uniform2f(uniforms.u_tilt, state.tiltX, state.tiltY);
+      gl.uniform1f(uniforms.u_reveal, state.reveal);
+      gl.uniform1f(uniforms.u_light, s.lightMode ? 1 : 0);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.bindVertexArray(vao);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    };
+
+    const frame = (now: number) => {
+      state.raf = 0;
+      if (!state.alive) return;
+      const s = settingsRef.current;
+      const dt = state.last ? Math.min(0.05, (now - state.last) / 1000) : 1 / 60;
+      state.last = now;
+      const moving = !s.paused && !reduce && s.speed !== 0;
+      if (moving) state.time += dt * s.speed;
+
+      let busy = moving;
+      if (state.reveal < 1 && !state.pending) {
+        if (state.revealStart < 0) state.revealStart = now;
+        const progress = clamp((now - state.revealStart) / 1600, 0, 1);
+        state.reveal = 1 - (1 - progress) ** 3;
+        if (moving) state.time += dt * 2.4 * (1 - progress) ** 2;
+        busy = true;
+      }
+
+      const stiffness = 60;
+      const damping = 14;
+      const steps = Math.max(1, Math.ceil(dt / (1 / 240)));
+      const h = dt / steps;
+      for (let i = 0; i < steps; i++) {
+        state.velocityX += (stiffness * (state.targetX * s.mouseTilt - state.tiltX) - damping * state.velocityX) * h;
+        state.velocityY += (stiffness * (state.targetY * s.mouseTilt - state.tiltY) - damping * state.velocityY) * h;
+        state.tiltX += state.velocityX * h;
+        state.tiltY += state.velocityY * h;
+      }
+      if (
+        Math.abs(state.targetX * s.mouseTilt - state.tiltX) > 0.0005 ||
+        Math.abs(state.targetY * s.mouseTilt - state.tiltY) > 0.0005 ||
+        Math.abs(state.velocityX) + Math.abs(state.velocityY) > 0.0005
+      ) {
+        busy = true;
+      }
+
+      draw();
+      if (busy && state.visible) state.raf = requestAnimationFrame(frame);
+      else state.last = 0;
+    };
+
+    const wake = () => {
+      if (!state.raf && state.alive && state.visible) state.raf = requestAnimationFrame(frame);
+    };
+
+    const onMove = (event: PointerEvent) => {
+      const rect = container.getBoundingClientRect();
+      state.targetX = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1.2, 1.2);
+      state.targetY = clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1.2, 1.2);
+      wake();
+    };
+
+    const onLeave = () => {
+      state.targetX = 0;
+      state.targetY = 0;
+      wake();
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+      draw();
+    });
+    resizeObserver.observe(container);
+
+    const visibility = new IntersectionObserver(entries => {
+      state.visible = entries.some(entry => entry.isIntersecting);
+      if (state.visible) wake();
+    });
+    visibility.observe(container);
+
+    const onLost = (event: Event) => {
+      event.preventDefault();
+      state.alive = false;
+      cancelAnimationFrame(state.raf);
+    };
+
+    canvas.addEventListener('webglcontextlost', onLost);
+    container.addEventListener('pointermove', onMove);
+    container.addEventListener('pointerleave', onLeave);
+
+    engineRef.current = {
+      setPending: (value: boolean) => {
+        state.pending = value;
+        draw();
+      },
+      setImage: (data: ImageData | null) => {
+        state.pending = false;
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        if (data) {
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, data);
+          gl.generateMipmap(gl.TEXTURE_2D);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+          state.imageAspect = data.width / data.height;
+          state.hasImage = true;
+        } else {
+          gl.texImage2D(
+            gl.TEXTURE_2D,
+            0,
+            gl.RGBA,
+            1,
+            1,
+            0,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            new Uint8Array([255, 0, 255, 255])
+          );
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          state.imageAspect = 1;
+          state.hasImage = false;
+        }
+        draw();
+        wake();
+      },
+      wake,
+      redraw: () => {
+        resize();
+        draw();
+        wake();
+      }
+    };
+
+    resize();
+    draw();
+    wake();
+
+    return () => {
+      state.alive = false;
+      cancelAnimationFrame(state.raf);
+      resizeObserver.disconnect();
+      visibility.disconnect();
+      canvas.removeEventListener('webglcontextlost', onLost);
+      container.removeEventListener('pointermove', onMove);
+      container.removeEventListener('pointerleave', onLeave);
+      engineRef.current = null;
+      gl.deleteTexture(texture);
+      gl.deleteBuffer(buffer);
+      gl.deleteVertexArray(vao);
+      gl.deleteProgram(program);
+    };
   }, []);
 
   useEffect(() => {
-    if (!initGL()) return;
-
-    const canvas = canvasRef.current;
-    const gl = glRef.current;
-    if (!canvas || !gl) return;
-
-    const side = 1000 * devicePixelRatio;
-    canvas.width = side;
-    canvas.height = side;
-    gl.viewport(0, 0, side, side);
-
-    setReady(true);
-
+    let active = true;
+    const source = text ? drawTextSource(text, fontFamily, fontWeight) : imageSrc ? drawImageSource(imageSrc) : null;
+    if (!source) {
+      engineRef.current?.setImage(null);
+      return undefined;
+    }
+    engineRef.current?.setPending(true);
+    source
+      .then(canvas => {
+        if (!active || !canvas) return;
+        const data = processShape(canvas);
+        if (active) engineRef.current?.setImage(data);
+      })
+      .catch(() => {
+        if (active) engineRef.current?.setImage(null);
+      });
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (textureRef.current && glRef.current) {
-        glRef.current.deleteTexture(textureRef.current);
-      }
+      active = false;
     };
-  }, [initGL]);
+  }, [imageSrc, text, fontFamily, fontWeight]);
 
   useEffect(() => {
-    if (!ready || !imageSrc) return;
+    engineRef.current?.redraw();
+  });
 
-    setTextureReady(false);
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const imgData = processImage(img);
-      uploadTexture(imgData);
-      setTextureReady(true);
-    };
-    img.src = imageSrc;
-  }, [ready, imageSrc, uploadTexture]);
-
-  useEffect(() => {
-    const gl = glRef.current;
-    const u = uniformsRef.current;
-    if (!gl || !ready) return;
-
-    gl.uniform1f(u.u_seed, seed);
-    gl.uniform1f(u.u_scale, scale);
-    gl.uniform1f(u.u_refract, refraction);
-    gl.uniform1f(u.u_blur, blur);
-    gl.uniform1f(u.u_liquid, liquid);
-    gl.uniform1f(u.u_bright, brightness);
-    gl.uniform1f(u.u_contrast, contrast);
-    gl.uniform1f(u.u_angle, angle);
-    gl.uniform1f(u.u_fresnel, fresnel);
-
-    const light = hexToRgb(lightColor);
-    const dark = hexToRgb(darkColor);
-    const tint = hexToRgb(tintColor);
-    gl.uniform3f(u.u_lightColor, light[0], light[1], light[2]);
-    gl.uniform3f(u.u_darkColor, dark[0], dark[1], dark[2]);
-    gl.uniform1f(u.u_sharp, patternSharpness);
-    gl.uniform1f(u.u_wave, waveAmplitude);
-    gl.uniform1f(u.u_noise, noiseScale);
-    gl.uniform1f(u.u_chroma, chromaticSpread);
-    gl.uniform1f(u.u_distort, distortion);
-    gl.uniform1f(u.u_contour, contour);
-    gl.uniform3f(u.u_tint, tint[0], tint[1], tint[2]);
-  }, [
-    ready,
-    seed,
-    scale,
-    refraction,
-    blur,
-    liquid,
-    brightness,
-    contrast,
-    angle,
-    fresnel,
-    lightColor,
-    darkColor,
-    patternSharpness,
-    waveAmplitude,
-    noiseScale,
-    chromaticSpread,
-    distortion,
-    contour,
-    tintColor
-  ]);
-
-  useEffect(() => {
-    if (!ready || !textureReady) return;
-
-    const gl = glRef.current;
-    const u = uniformsRef.current;
-    const canvas = canvasRef.current;
-    const mouse = mouseRef.current;
-    if (!gl || !canvas) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.targetX = (e.clientX - rect.left) / rect.width;
-      mouse.targetY = (e.clientY - rect.top) / rect.height;
-    };
-
-    canvas.addEventListener('mousemove', handleMouseMove);
-
-    const render = (time: number) => {
-      const delta = time - lastTimeRef.current;
-      lastTimeRef.current = time;
-
-      if (mouseAnimRef.current) {
-        mouse.x += (mouse.targetX - mouse.x) * 0.08;
-        mouse.y += (mouse.targetY - mouse.y) * 0.08;
-        animTimeRef.current = mouse.x * 3000 + mouse.y * 1500;
-      } else {
-        animTimeRef.current += delta * speedRef.current;
-      }
-
-      gl.uniform1f(u.u_time, animTimeRef.current);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      rafRef.current = requestAnimationFrame(render);
-    };
-
-    lastTimeRef.current = performance.now();
-    rafRef.current = requestAnimationFrame(render);
-
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      canvas.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [ready, textureReady]);
-
-  return <canvas ref={canvasRef} className="paint-container" />;
+  return (
+    <div ref={containerRef} className={`metallic-paint ${className}`.trim()} style={style}>
+      <canvas ref={canvasRef} className="metallic-paint-canvas" />
+    </div>
+  );
 }

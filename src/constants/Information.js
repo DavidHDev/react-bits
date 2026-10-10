@@ -37,7 +37,7 @@ export const componentMetadata = {
 
   'Animations/AnimatedContent': {
     videoUrl: '/assets/video/animatedcontent.webm',
-    description: 'Wrapper that animates any children on scroll or mount with configurable direction, distance, duration, easing and disappear options.',
+    description: 'Wrapper that animates its children in on scroll or mount, from any direction.',
     category: 'Animations',
     name: 'AnimatedContent',
     docsUrl: 'https://reactbits.dev/animations/animated-content',
@@ -142,8 +142,7 @@ export const componentMetadata = {
   },
   'Animations/CrystalizedBall': {
     videoUrl: '/assets/video/crystalizedball.webm',
-    description:
-      'A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.',
+    description: 'A glass ball with a crackling electric rim and glowing dust that swirls with the cursor.',
     category: 'Animations',
     name: 'CrystalizedBall',
     docsUrl: 'https://reactbits.dev/animations/crystalized-ball',
@@ -152,8 +151,7 @@ export const componentMetadata = {
   },
   'Animations/ElectricLogo': {
     videoUrl: '/assets/video/electriclogo.webm',
-    description:
-      'Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.',
+    description: 'Turns any logo into a living lightning outline, with arcs that leap off its edges.',
     category: 'Animations',
     name: 'ElectricLogo',
     docsUrl: 'https://reactbits.dev/animations/electric-logo',
@@ -163,8 +161,7 @@ export const componentMetadata = {
   },
   'Animations/DitherVeil': {
     videoUrl: '/assets/video/ditherveil.webm',
-    description:
-      'A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell.',
+    description: 'A 1-bit dithered photo the cursor burns through to full colour, knitting back cell by cell.',
     category: 'Animations',
     name: 'DitherVeil',
     docsUrl: 'https://reactbits.dev/animations/dither-veil',
@@ -251,16 +248,22 @@ export const componentMetadata = {
   },
   'Animations/MetallicPaint': {
     videoUrl: '/assets/video/metallicpaint.webm',
-    description: 'Liquid metallic paint shader which can be applied to SVG elements.',
+    description: "Liquid chrome that flows over your logo or text, adapted from Paper's Liquid Metal shader.",
     category: 'Animations',
     name: 'MetallicPaint',
     docsUrl: 'https://reactbits.dev/animations/metallic-paint',
     tags: [],
-    added: '2025-02-22'
+    added: '2025-02-22',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt as liquid metal with reflections that bend around the edges. It now paints text as well as logos, tilts with the cursor and pours in on load.'
+      }
+    ]
   },
   'Animations/Noise': {
     videoUrl: '/assets/video/noise.webm',
-    description: 'Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.',
+    description: 'Film grain overlay for photos and pages, from fine 35mm grain to dust, paper and TV static.',
     category: 'Animations',
     name: 'Noise',
     docsUrl: 'https://reactbits.dev/animations/noise',
@@ -299,7 +302,7 @@ export const componentMetadata = {
   },
   'Animations/PixelSwap': {
     videoUrl: '/assets/video/pixelswap.webm',
-    description: 'Pixel fragments assemble into a full cover, swap arbitrary content, then dissolve away with reversible colors and triggers.',
+    description: 'Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.',
     category: 'Animations',
     name: 'PixelSwap',
     docsUrl: 'https://reactbits.dev/animations/pixel-swap',
@@ -317,8 +320,7 @@ export const componentMetadata = {
   },
   'Animations/ShapeBlur': {
     videoUrl: '/assets/video/shapeblur.webm',
-    description:
-      'A crisp logo, frame or shape that drifts out of focus under the pointer like a camera lens, with color fringing and a focus mode.',
+    description: 'A crisp logo or shape that drifts out of focus under the pointer like a camera lens.',
     category: 'Animations',
     name: 'ShapeBlur',
     docsUrl: 'https://reactbits.dev/animations/shape-blur',
@@ -367,7 +369,7 @@ export const componentMetadata = {
   },
   'Animations/TargetCursor': {
     videoUrl: '/assets/video/targetcursor.webm',
-    description: 'A reticle cursor whose corner brackets snap around targets, matching their shape and showing a label.',
+    description: 'A reticle cursor whose corner brackets snap around targets, matching their shape.',
     category: 'Animations',
     name: 'TargetCursor',
     docsUrl: 'https://reactbits.dev/animations/target-cursor',
@@ -382,7 +384,7 @@ export const componentMetadata = {
   },
   'Animations/LaserFlow': {
     videoUrl: '/assets/video/laserflow.webm',
-    description: 'A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.',
+    description: 'A beam of light that splashes onto your content and pours over its corners.',
     category: 'Animations',
     name: 'LaserFlow',
     docsUrl: 'https://reactbits.dev/animations/laser-flow',
@@ -427,7 +429,7 @@ export const componentMetadata = {
 
   'TextAnimations/AsciiText': {
     videoUrl: '/assets/video/asciitext.webm',
-    description: 'Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.',
+    description: 'Waving ASCII text that tilts toward the pointer, scrambles on hover and ripples on click.',
     category: 'TextAnimations',
     name: 'ASCIIText',
     docsUrl: 'https://reactbits.dev/text-animations/ascii-text',
@@ -514,8 +516,7 @@ export const componentMetadata = {
   },
   'TextAnimations/GradientText': {
     videoUrl: '/assets/video/gradienttext.webm',
-    description:
-      'Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.',
+    description: 'Living gradients inside your text: a sliding sweep, a drifting mesh or a swinging conic fan.',
     category: 'TextAnimations',
     name: 'GradientText',
     docsUrl: 'https://reactbits.dev/text-animations/gradient-text',
@@ -575,8 +576,7 @@ export const componentMetadata = {
   },
   'TextAnimations/ShinyText': {
     videoUrl: '/assets/video/shinytext.webm',
-    description:
-      'A sheen of light sweeps across text, with soft or crisp bands, chrome-like reflections, glow, hover and scroll triggers, and a shine that can follow the pointer.',
+    description: 'A sheen of light that sweeps across text, from soft bands to chrome-like reflections.',
     category: 'TextAnimations',
     name: 'ShinyText',
     docsUrl: 'https://reactbits.dev/text-animations/shiny-text',
@@ -600,12 +600,18 @@ export const componentMetadata = {
   },
   'TextAnimations/TextCursor': {
     videoUrl: '/assets/video/textcursor.webm',
-    description: 'Make any text element follow your cursor, leaving a trail of copies behind it.',
+    description: 'Text or emoji that trails your cursor as stamped copies, a following chain or a ribbon of letters.',
     category: 'TextAnimations',
     name: 'TextCursor',
     docsUrl: 'https://reactbits.dev/text-animations/text-cursor',
     tags: [],
-    added: '2025-03-18'
+    added: '2025-03-18',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with a smoother trail that pops in, tapers and pulls back when you stop, plus chain and ribbon modes.'
+      }
+    ]
   },
   'TextAnimations/TextPressure': {
     videoUrl: '/assets/video/textpressure.webm',
@@ -681,8 +687,7 @@ export const componentMetadata = {
   },
   'TextAnimations/TechText': {
     videoUrl: '/assets/video/techtext.webm',
-    description:
-      'A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.',
+    description: 'A wordmark whose letters turn into dashed vector paths under the cursor.',
     category: 'TextAnimations',
     name: 'TechText',
     docsUrl: 'https://reactbits.dev/text-animations/tech-text',
@@ -727,7 +732,7 @@ export const componentMetadata = {
   },
   'TextAnimations/MaskedHeading': {
     videoUrl: '/assets/video/maskedheading.webm',
-    description: 'A large headline with a drifting colour mesh or image showing through the glyphs, revealed word by word.',
+    description: 'A headline with a drifting colour mesh or image showing through, revealed word by word.',
     category: 'TextAnimations',
     name: 'MaskedHeading',
     docsUrl: 'https://reactbits.dev/text-animations/masked-heading',
@@ -747,12 +752,18 @@ export const componentMetadata = {
   //! Components -------------------------------------------------------------------------------------------------------------------------------
   'Components/AnimatedList': {
     videoUrl: '/assets/video/animatedlist.webm',
-    description: 'List items enter with staggered motion variants for polished reveals.',
+    description: 'A scrolling list whose rows spring into view, with a gliding selection and arrow keys.',
     category: 'Components',
     name: 'AnimatedList',
     docsUrl: 'https://reactbits.dev/components/animated-list',
     tags: [],
-    added: '2025-02-23'
+    added: '2025-02-23',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt so rows spring in from the edge they scroll in from and the selection glides between them. Rows can now show icons, images and labels, in both themes.'
+      }
+    ]
   },
   'Components/BounceCards': {
     videoUrl: '/assets/video/bouncecards.webm',
@@ -789,8 +800,7 @@ export const componentMetadata = {
   },
   'Components/CardSwap': {
     videoUrl: '/assets/video/cardswap.webm',
-    description:
-      'A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.',
+    description: 'A 3D stack of cards that sends the front card to the back on a timer, or when you fling it.',
     category: 'Components',
     name: 'CardSwap',
     docsUrl: 'https://reactbits.dev/components/card-swap',
@@ -820,8 +830,7 @@ export const componentMetadata = {
   },
   'Components/ChromaGrid': {
     videoUrl: '/assets/video/chromagrid.webm',
-    description:
-      'A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.',
+    description: 'A grid of grayscale photo cards where a spotlight follows the cursor and brings back color.',
     category: 'Components',
     name: 'ChromaGrid',
     docsUrl: 'https://reactbits.dev/components/chroma-grid',
@@ -836,8 +845,7 @@ export const componentMetadata = {
   },
   'Components/HoloCard': {
     videoUrl: '/assets/video/holocard.webm',
-    description:
-      'Collectible trading card with a real holographic foil. Pick bursts, stars, shards, cosmos and more, with glitter sparkling on the silver border as it tilts.',
+    description: 'Collectible trading card with a real holographic foil and glitter that sparkles as it tilts.',
     category: 'Components',
     name: 'HoloCard',
     docsUrl: 'https://reactbits.dev/components/holo-card',
@@ -846,8 +854,7 @@ export const componentMetadata = {
   },
   'Components/CircularCarousel': {
     videoUrl: '/assets/video/circularcarousel.webm',
-    description:
-      'A 3D ring of images with four layouts, bendable cards, depth fade, momentum drag, snapping and click to focus.',
+    description: 'A 3D ring of images with bendable cards, momentum drag, snapping and click to focus.',
     category: 'Components',
     name: 'CircularCarousel',
     docsUrl: 'https://reactbits.dev/components/circular-carousel',
@@ -856,8 +863,7 @@ export const componentMetadata = {
   },
   'Components/FlexCarousel': {
     videoUrl: '/assets/video/flexcarousel.webm',
-    description:
-      'An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.',
+    description: 'An infinite image row that flows through invisible liquid glass at its edges.',
     category: 'Components',
     name: 'FlexCarousel',
     docsUrl: 'https://reactbits.dev/components/flex-carousel',
@@ -935,7 +941,7 @@ export const componentMetadata = {
   },
   'Components/Dock': {
     videoUrl: '/assets/video/dock.webm',
-    description: 'macOS style dock with smooth magnification, launch bounce, badges and Apple style context menus.',
+    description: 'macOS style dock with smooth magnification, launch bounce, badges and context menus.',
     category: 'Components',
     name: 'Dock',
     docsUrl: 'https://reactbits.dev/components/dock',
@@ -1001,12 +1007,18 @@ export const componentMetadata = {
   },
   'Components/Folder': {
     videoUrl: '/assets/video/folder.webm',
-    description: 'Interactive folder opens to reveal nested content smooth motion.',
+    description: 'Folder that drops its flap open or swings open like a book, with pages you can pick.',
     category: 'Components',
     name: 'Folder',
     docsUrl: 'https://reactbits.dev/components/folder',
     tags: [],
-    added: '2025-02-28'
+    added: '2025-02-28',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt from scratch. It can now also lie flat and open like a book, in solid, glass or matte, and its pages rise under the cursor.'
+      }
+    ]
   },
   'Components/GlassIcons': {
     videoUrl: '/assets/video/glassicons.webm',
@@ -1025,8 +1037,7 @@ export const componentMetadata = {
   },
   'Components/GlassSurface': {
     videoUrl: '/assets/video/glasssurface.webm',
-    description:
-      'Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.',
+    description: 'Apple-style liquid glass that bends what is behind it, in a rounded panel or any logo shape.',
     category: 'Components',
     name: 'GlassSurface',
     docsUrl: 'https://reactbits.dev/components/glass-surface',
@@ -1041,16 +1052,22 @@ export const componentMetadata = {
   },
   'Components/GooeyNav': {
     videoUrl: '/assets/video/gooeynav.webm',
-    description: 'Navigation indicator morphs with gooey blob transitions between items.',
+    description: 'A navigation bar whose active pill breaks into goo that flows over to the item you pick.',
     category: 'Components',
     name: 'GooeyNav',
     docsUrl: 'https://reactbits.dev/components/gooey-nav',
     tags: [],
-    added: '2025-03-14'
+    added: '2025-03-14',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt so the active pill melts into droplets that flow to the new item, with a light theme, icons and sizes.'
+      }
+    ]
   },
   'Components/InfiniteSpiral': {
     videoUrl: '/assets/video/infinitespiral.webm',
-    description: 'An endlessly looping 3D helix of images with customizable motion, depth, spacing and interaction.',
+    description: 'An endlessly looping 3D helix of images with adjustable motion, depth and spacing.',
     category: 'Components',
     name: 'InfiniteSpiral',
     docsUrl: 'https://reactbits.dev/components/infinite-spiral',
@@ -1059,8 +1076,7 @@ export const componentMetadata = {
   },
   'Components/InfiniteMenu': {
     videoUrl: '/assets/video/infinitemenu.webm',
-    description:
-      'A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.',
+    description: 'A draggable sphere of image tiles that snaps the nearest one forward and shows its title.',
     category: 'Components',
     name: 'InfiniteMenu',
     docsUrl: 'https://reactbits.dev/components/infinite-menu',
@@ -1075,8 +1091,7 @@ export const componentMetadata = {
   },
   'Components/Lanyard': {
     videoUrl: '/assets/video/lanyard.webm',
-    description:
-      'Swinging 3D badge on a stretchy woven band. Print any image on the front, back and band, then drag, stretch, throw or click to flip it.',
+    description: 'Swinging 3D badge on a stretchy woven band that you can drag, throw or click to flip.',
     category: 'Components',
     name: 'Lanyard',
     docsUrl: 'https://reactbits.dev/components/lanyard',
@@ -1109,7 +1124,7 @@ export const componentMetadata = {
   },
   'Components/ModelViewer': {
     videoUrl: '/assets/video/modelviewer.webm',
-    description: 'A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.',
+    description: 'A product-style 3D model viewer that frames itself and floats over a soft shadow.',
     category: 'Components',
     name: 'ModelViewer',
     docsUrl: 'https://reactbits.dev/components/model-viewer',
@@ -1205,7 +1220,7 @@ export const componentMetadata = {
   },
   'Components/OptionWheel': {
     videoUrl: '/assets/video/optionwheel.webm',
-    description: 'Curved option picker that spins via scroll, drag, or arrow keys, fading and tilting items away from the selection.',
+    description: 'Curved option picker that spins with scroll, drag or arrow keys, tilting items away.',
     category: 'Components',
     name: 'OptionWheel',
     docsUrl: 'https://reactbits.dev/components/option-wheel',
@@ -1214,7 +1229,7 @@ export const componentMetadata = {
   },
   'Components/SpecularButton': {
     videoUrl: '/assets/video/specularbutton.webm',
-    description: 'Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.',
+    description: 'Glass button whose edge catches the light, with a highlight that glides toward the cursor.',
     category: 'Components',
     name: 'SpecularButton',
     docsUrl: 'https://reactbits.dev/components/specular-button',
@@ -1262,7 +1277,7 @@ export const componentMetadata = {
   },
   'Animations/HalftoneReveal': {
     videoUrl: '/assets/video/halftonereveal.webm',
-    description: 'An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.',
+    description: 'A halftone print of an image whose dots swell into the real photo under the cursor.',
     category: 'Animations',
     name: 'HalftoneReveal',
     docsUrl: 'https://reactbits.dev/animations/halftone-reveal',
@@ -1304,7 +1319,7 @@ export const componentMetadata = {
   },
   'Components/Stack': {
     videoUrl: '/assets/video/stack.webm',
-    description: 'Pile of cards you can drag, flick or click through. Thrown cards tuck under the stack, with fan, cascade, deck and pile layouts.',
+    description: 'Pile of cards you can drag, flick or click through, with thrown cards tucking underneath.',
     category: 'Components',
     name: 'Stack',
     docsUrl: 'https://reactbits.dev/components/stack',
@@ -1357,8 +1372,7 @@ export const componentMetadata = {
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
   'Backgrounds/PatternWaves': {
     videoUrl: '/assets/video/patternwaves.webm',
-    description:
-      'A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.',
+    description: 'A lit halftone surface of dots, lines or glyphs that moves like draped silk.',
     category: 'Backgrounds',
     name: 'PatternWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/pattern-waves',
@@ -1367,8 +1381,7 @@ export const componentMetadata = {
   },
   'Backgrounds/MicroSlats': {
     videoUrl: '/assets/video/microslats.webm',
-    description:
-      'A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.',
+    description: 'A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests.',
     category: 'Backgrounds',
     name: 'MicroSlats',
     docsUrl: 'https://reactbits.dev/backgrounds/micro-slats',
@@ -1377,8 +1390,7 @@ export const componentMetadata = {
   },
   'Backgrounds/ShapeWaves': {
     videoUrl: '/assets/video/shapewaves.webm',
-    description:
-      'A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.',
+    description: 'A field of triangles, circles and squares that brighten and grow along rolling waves.',
     category: 'Backgrounds',
     name: 'ShapeWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/shape-waves',
@@ -1388,7 +1400,7 @@ export const componentMetadata = {
   },
   'Backgrounds/AeroShards': {
     videoUrl: '/assets/video/aeroshards.webm',
-    description: 'A GPU-driven wind sculpture of folded foil shards with crisp detail, content-safe placements, and responsive pointer interactions.',
+    description: 'A GPU-driven wind sculpture of folded foil shards that responds to the pointer.',
     category: 'Backgrounds',
     name: 'AeroShards',
     docsUrl: 'https://reactbits.dev/backgrounds/aero-shards',
@@ -1439,8 +1451,7 @@ export const componentMetadata = {
   },
   'Backgrounds/Beams': {
     videoUrl: '/assets/video/beams.webm',
-    description:
-      'Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.',
+    description: 'Glossy ribbons that ripple in the dark and catch the light, which follows your cursor.',
     category: 'Backgrounds',
     name: 'Beams',
     docsUrl: 'https://reactbits.dev/backgrounds/beams',
@@ -1683,8 +1694,7 @@ export const componentMetadata = {
   },
   'Backgrounds/GridMotion': {
     videoUrl: '/assets/video/gridmotion.webm',
-    description:
-      'A tilted wall of drifting tiles for photos, words or JSX that slides with the pointer and lights up where it rests.',
+    description: 'A tilted wall of drifting tiles that slides with the pointer and lights up where it rests.',
     category: 'Backgrounds',
     name: 'GridMotion',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-motion',
@@ -1747,12 +1757,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Lightning': {
     videoUrl: '/assets/video/lightning.webm',
-    description: 'Procedural lightning bolts with branching and glow flicker.',
+    description: 'Crackling, branching lightning that bends toward the cursor and strikes wherever you click.',
     category: 'Backgrounds',
     name: 'Lightning',
     docsUrl: 'https://reactbits.dev/backgrounds/lightning',
     tags: [],
-    added: '2025-02-25'
+    added: '2025-02-25',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with cleaner bolts that loop seamlessly, more options, a light mode, and strikes that land where you click.'
+      }
+    ]
   },
   'Backgrounds/LineWaves': {
     videoUrl: '/assets/video/linewaves.webm',
@@ -1774,7 +1790,7 @@ export const componentMetadata = {
   },
   'Backgrounds/Radar': {
     videoUrl: '/assets/video/radar.webm',
-    description: 'A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.',
+    description: 'A radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts.',
     category: 'Backgrounds',
     name: 'Radar',
     docsUrl: 'https://reactbits.dev/backgrounds/radar',
@@ -1834,7 +1850,7 @@ export const componentMetadata = {
   },
   'Backgrounds/Plasma': {
     videoUrl: '/assets/video/plasma.webm',
-    description: 'Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.',
+    description: 'Folds of satin light twisting slowly through the dark, turning to follow the cursor.',
     category: 'Backgrounds',
     name: 'Plasma',
     docsUrl: 'https://reactbits.dev/backgrounds/plasma',
@@ -1849,7 +1865,7 @@ export const componentMetadata = {
   },
   'Backgrounds/PlasmaWave': {
     videoUrl: '/assets/video/plasmawave.webm',
-    description: 'Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.',
+    description: 'Two ribbons of plasma curling through each other, with soft glow and white-hot cores.',
     category: 'Backgrounds',
     name: 'PlasmaWave',
     docsUrl: 'https://reactbits.dev/backgrounds/plasma-wave',
@@ -1882,7 +1898,7 @@ export const componentMetadata = {
   },
   'Backgrounds/RippleGrid': {
     videoUrl: '/assets/video/ripplegrid.webm',
-    description: 'A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.',
+    description: 'A crisp grid that ripples like water, bending and lighting up as waves pass through it.',
     category: 'Backgrounds',
     name: 'RippleGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/ripple-grid',
@@ -1976,7 +1992,7 @@ export const componentMetadata = {
   },
   'Backgrounds/PixelSnow': {
     videoUrl: '/assets/video/pixelsnow.webm',
-    description: 'Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.',
+    description: 'Pixel-art snowflakes drifting down in layers of depth, brushed aside by the cursor.',
     category: 'Backgrounds',
     name: 'PixelSnow',
     docsUrl: 'https://reactbits.dev/backgrounds/pixel-snow',
@@ -1994,8 +2010,7 @@ export const componentMetadata = {
 
   'Micro/SquishSwitch': {
     videoUrl: '/assets/video/squishswitch.webm',
-    description:
-      'Drag-scrubbable switch whose thumb stretches by how fast it moves, flips at the midpoint and squashes against the track end on a flick.',
+    description: 'Switch whose thumb stretches with speed and squashes against the end when you flick it.',
     category: 'Micro',
     name: 'SquishSwitch',
     docsUrl: 'https://reactbits.dev/micro/squish-switch',
@@ -2004,8 +2019,7 @@ export const componentMetadata = {
   },
   'Micro/HoldButton': {
     videoUrl: '/assets/video/holdbutton.webm',
-    description:
-      'Hold-to-confirm button whose liquid fill rises while pressed, snaps back on an early release and swaps its label through a blur when the hold completes.',
+    description: 'Hold-to-confirm button whose liquid fill rises while pressed and snaps back if you let go.',
     category: 'Micro',
     name: 'HoldButton',
     docsUrl: 'https://reactbits.dev/micro/hold-button',
@@ -2014,8 +2028,7 @@ export const componentMetadata = {
   },
   'Micro/PeekRating': {
     videoUrl: '/assets/video/peekrating.webm',
-    description:
-      'Star rating you can try before you commit: sweeping the row lifts a trailing wave of stars up to the pointer while a tip hops along with the label; a click commits with a pop.',
+    description: 'Star rating that lifts a wave of stars up to the pointer, then commits with a pop on click.',
     category: 'Micro',
     name: 'PeekRating',
     docsUrl: 'https://reactbits.dev/micro/peek-rating',
@@ -2024,8 +2037,7 @@ export const componentMetadata = {
   },
   'Micro/SpringCheck': {
     videoUrl: '/assets/video/springcheck.webm',
-    description:
-      'Checkbox row where a single spring fills the box, draws the tick, strikes the label and dims the words in one press.',
+    description: 'Checkbox row where one spring fills the box, draws the tick and strikes through the label.',
     category: 'Micro',
     name: 'SpringCheck',
     docsUrl: 'https://reactbits.dev/micro/spring-check',
@@ -2034,8 +2046,7 @@ export const componentMetadata = {
   },
   'Micro/PulseHeart': {
     videoUrl: '/assets/video/pulseheart.webm',
-    description:
-      'Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.',
+    description: 'Like button that contracts to a dot, flips colour and pulses back as the count ticks over.',
     category: 'Micro',
     name: 'PulseHeart',
     docsUrl: 'https://reactbits.dev/micro/pulse-heart',
@@ -2044,8 +2055,7 @@ export const componentMetadata = {
   },
   'Micro/RubberSegment': {
     videoUrl: '/assets/video/rubbersegment.webm',
-    description:
-      'Segmented control with a rubber thumb: taps stretch it across the gap and squash it onto the target, and you can grab, drag and flick it between slots.',
+    description: 'Segmented control whose rubber thumb stretches across the gap and squashes into place.',
     category: 'Micro',
     name: 'RubberSegment',
     docsUrl: 'https://reactbits.dev/micro/rubber-segment',
@@ -2054,8 +2064,7 @@ export const componentMetadata = {
   },
   'Micro/SlideCommit': {
     videoUrl: '/assets/video/slidecommit.webm',
-    description:
-      'Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.',
+    description: 'Slide-to-confirm handle that spins while your action runs and unfurls into a done pill.',
     category: 'Micro',
     name: 'SlideCommit',
     docsUrl: 'https://reactbits.dev/micro/slide-commit',
@@ -2064,8 +2073,7 @@ export const componentMetadata = {
   },
   'Micro/WarmTooltip': {
     videoUrl: '/assets/video/warmtooltip.webm',
-    description:
-      'Tooltip group with one shared delay: the first label waits and pops from its trigger, then siblings open instantly while the group is warm, with an optional velocity lean.',
+    description: 'Tooltip group where the first label waits, then its siblings open instantly while warm.',
     category: 'Micro',
     name: 'WarmTooltip',
     docsUrl: 'https://reactbits.dev/micro/warm-tooltip',
@@ -2074,8 +2082,7 @@ export const componentMetadata = {
   },
   'Micro/FuseButton': {
     videoUrl: '/assets/video/fusebutton.webm',
-    description:
-      'Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.',
+    description: 'Action button whose done state carries an undo on a burning fuse.',
     category: 'Micro',
     name: 'FuseButton',
     docsUrl: 'https://reactbits.dev/micro/fuse-button',
@@ -2084,8 +2091,7 @@ export const componentMetadata = {
   },
   'Micro/ScrubField': {
     videoUrl: '/assets/video/scrubfield.webm',
-    description:
-      'Number chip you drag to scrub: the value follows the hand, pushes past the range on a rubber band, and a click without moving opens it for typing.',
+    description: 'Number chip you drag to scrub, with rubber-band limits and click to type.',
     category: 'Micro',
     name: 'ScrubField',
     docsUrl: 'https://reactbits.dev/micro/scrub-field',
@@ -2094,8 +2100,7 @@ export const componentMetadata = {
   },
   'Micro/LatticeLoader': {
     videoUrl: '/assets/video/latticeloader.webm',
-    description:
-      'Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.',
+    description: 'Agent status row with a lattice of cells that brighten in a wave beside a live stopwatch.',
     category: 'Micro',
     name: 'LatticeLoader',
     docsUrl: 'https://reactbits.dev/micro/lattice-loader',
@@ -2104,8 +2109,7 @@ export const componentMetadata = {
   },
   'Micro/DodgeField': {
     videoUrl: '/assets/video/dodgefield.webm',
-    description:
-      'Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.',
+    description: 'Wrapper that makes any child dodge the pointer until it relents and glides home.',
     category: 'Micro',
     name: 'DodgeField',
     docsUrl: 'https://reactbits.dev/micro/dodge-field',
@@ -2114,8 +2118,7 @@ export const componentMetadata = {
   },
   'Micro/CodeSlots': {
     videoUrl: '/assets/video/codeslots.webm',
-    description:
-      'One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.',
+    description: 'One-time code input whose digits spring into their slots, with paste and SMS autofill.',
     category: 'Micro',
     name: 'CodeSlots',
     docsUrl: 'https://reactbits.dev/micro/code-slots',
@@ -2124,8 +2127,7 @@ export const componentMetadata = {
   },
   'Micro/WakeSlider': {
     videoUrl: '/assets/video/wakeslider.webm',
-    description:
-      'Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.',
+    description: 'Thumbless range slider of thin bars where drag speed raises a wake behind the handle.',
     category: 'Micro',
     name: 'WakeSlider',
     docsUrl: 'https://reactbits.dev/micro/wake-slider',
@@ -2134,8 +2136,7 @@ export const componentMetadata = {
   },
   'Micro/CometDial': {
     videoUrl: '/assets/video/cometdial.webm',
-    description:
-      'Tick-ring dial you flick by angle: the reading launches on a spring and a velocity-driven comet streaks behind the lit head, trailing the direction of travel and vanishing at rest.',
+    description: 'Tick-ring dial you flick by angle, with a comet that streaks behind the lit head.',
     category: 'Micro',
     name: 'CometDial',
     docsUrl: 'https://reactbits.dev/micro/comet-dial',
@@ -2144,8 +2145,7 @@ export const componentMetadata = {
   },
   'Micro/JellyRadio': {
     videoUrl: '/assets/video/jellyradio.webm',
-    description:
-      'Radio group of labelled chips where the chosen one swells wide-then-tall on two springs and barges its neighbours outward with a travelling stagger, so a selection reads as a force moving through the row.',
+    description: 'Radio group of chips where the chosen one swells and barges its neighbours outward.',
     category: 'Micro',
     name: 'JellyRadio',
     docsUrl: 'https://reactbits.dev/micro/jelly-radio',
@@ -2154,8 +2154,7 @@ export const componentMetadata = {
   },
   'Micro/SwipeRow': {
     videoUrl: '/assets/video/swiperow.webm',
-    description:
-      'List row that swipes open to reveal actions, snaps by flick velocity, and deletes on a full swipe that stretches the action colour across the row.',
+    description: 'List row that swipes open to reveal actions and deletes on a full swipe.',
     category: 'Micro',
     name: 'SwipeRow',
     docsUrl: 'https://reactbits.dev/micro/swipe-row',
@@ -2164,8 +2163,7 @@ export const componentMetadata = {
   },
   'Micro/GlideSelect': {
     videoUrl: '/assets/video/glideselect.webm',
-    description:
-      'Select chip whose menu pops out of its own corner and whose single hover highlight glides between rows, remembering where you left it so re-entry slides from there instead of blinking in.',
+    description: 'Select chip whose menu pops from its corner and whose highlight glides between rows.',
     category: 'Micro',
     name: 'GlideSelect',
     docsUrl: 'https://reactbits.dev/micro/glide-select',
@@ -2174,8 +2172,7 @@ export const componentMetadata = {
   },
   'Micro/StatusMark': {
     videoUrl: '/assets/video/statusmark.webm',
-    description:
-      'A 20px status glyph for agent task lists that morphs in place from a dashed idle ring to a spinning or real-progress arc, then draws a check or a cross, with an optional label strike.',
+    description: 'Agent task status glyph that morphs from an idle ring to a progress arc, then a check.',
     category: 'Micro',
     name: 'StatusMark',
     docsUrl: 'https://reactbits.dev/micro/status-mark',
@@ -2184,8 +2181,7 @@ export const componentMetadata = {
   },
   'Micro/CallChip': {
     videoUrl: '/assets/video/callchip.webm',
-    description:
-      'Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.',
+    description: 'Tool-call chip whose fill wipes across as a live timer ticks, ending green or shaking red.',
     category: 'Micro',
     name: 'CallChip',
     docsUrl: 'https://reactbits.dev/micro/call-chip',
@@ -2194,8 +2190,7 @@ export const componentMetadata = {
   },
   'Micro/BellToggle': {
     videoUrl: '/assets/video/belltoggle.webm',
-    description:
-      'Pill toggle that answers a press at three tempos: the bell rings on damped keyframes, the label blur-crossfades, and the pill unfurls to the longer label through a clip-path on a critically damped spring. The pressed state is the receipt.',
+    description: 'Pill toggle where a press rings the bell, crossfades the label and unfurls the pill.',
     category: 'Micro',
     name: 'BellToggle',
     docsUrl: 'https://reactbits.dev/micro/bell-toggle',
@@ -2204,8 +2199,7 @@ export const componentMetadata = {
   },
   'Micro/SlingButton': {
     videoUrl: '/assets/video/slingbutton.webm',
-    description:
-      'Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick\'s velocity.',
+    description: 'Send button you pull back like a slingshot and release to fire.',
     category: 'Micro',
     name: 'SlingButton',
     docsUrl: 'https://reactbits.dev/micro/sling-button',
@@ -2214,8 +2208,7 @@ export const componentMetadata = {
   },
   'Micro/SwipeToast': {
     videoUrl: '/assets/video/swipetoast.webm',
-    description:
-      'Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.',
+    description: 'Toast that swipes down to dismiss and burns a thin fuse for its remaining time.',
     category: 'Micro',
     name: 'SwipeToast',
     docsUrl: 'https://reactbits.dev/micro/swipe-toast',
@@ -2224,8 +2217,7 @@ export const componentMetadata = {
   },
   'Micro/PromptBar': {
     videoUrl: '/assets/video/promptbar.webm',
-    description:
-      'Chat composer with an @ sources menu, a / commands menu, a model picker, dictation and attachments, whose send tile charges to ink the moment there is something to send and morphs its arrow into a stop square while busy.',
+    description: 'Chat composer with @ sources, / commands, a model picker, dictation and attachments.',
     category: 'Micro',
     name: 'PromptBar',
     docsUrl: 'https://reactbits.dev/micro/prompt-bar',
@@ -2234,8 +2226,7 @@ export const componentMetadata = {
   },
   'Micro/SloshGauge': {
     videoUrl: '/assets/video/sloshgauge.webm',
-    description:
-      'Tank gauge whose liquid chases the value with mass, tilts with its own speed and splashes against the top when it slams full; optionally a vertical slider.',
+    description: 'Tank gauge whose liquid chases the value, tilts as it moves and splashes when it fills.',
     category: 'Micro',
     name: 'SloshGauge',
     docsUrl: 'https://reactbits.dev/micro/slosh-gauge',
@@ -2244,8 +2235,7 @@ export const componentMetadata = {
   },
   'Micro/VoicePill': {
     videoUrl: '/assets/video/voicepill.webm',
-    description:
-      'Mic button that swells into a tinted capsule of level-driven equalizer bars and an elapsed clock while held or toggled, then relaxes back into the mic on release; simulated voice by default, real microphone as an opt-in.',
+    description: 'Mic button that swells into a capsule of live equalizer bars and a timer while recording.',
     category: 'Micro',
     name: 'VoicePill',
     docsUrl: 'https://reactbits.dev/micro/voice-pill',
@@ -2254,8 +2244,7 @@ export const componentMetadata = {
   },
   'Micro/ThoughtLine': {
     videoUrl: '/assets/video/thoughtline.webm',
-    description:
-      'Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into "Thought for 4.2s" through a blur crossfade and the trace folds into it.',
+    description: 'Reasoning trace header with a live clock that folds its steps into one line when done.',
     category: 'Micro',
     name: 'ThoughtLine',
     docsUrl: 'https://reactbits.dev/micro/thought-line',
@@ -2264,8 +2253,7 @@ export const componentMetadata = {
   },
   'Micro/RefineFrame': {
     videoUrl: '/assets/video/refineframe.webm',
-    description:
-      'Reserved-aspect frame that walks any media through queued, generating, refining and complete without layout shift: each stage is one blur, saturate, scale and opacity tween, a soft band sweeps while it works, a chip reports the stage, and an error dims the picture behind a retry pill.',
+    description: 'Media frame that steps an image through generation stages without any layout shift.',
     category: 'Micro',
     name: 'RefineFrame',
     docsUrl: 'https://reactbits.dev/micro/refine-frame',
@@ -2274,8 +2262,7 @@ export const componentMetadata = {
   },
   'Micro/FolderFloat': {
     videoUrl: '/assets/video/folderfloat.webm',
-    description:
-      'Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.',
+    description: 'Folder whose notes spring out into a floating cloud when it opens on hover or press.',
     category: 'Micro',
     name: 'FolderFloat',
     docsUrl: 'https://reactbits.dev/micro/folder-float',
@@ -2284,8 +2271,7 @@ export const componentMetadata = {
   },
   'Micro/BranchedMenu': {
     videoUrl: '/assets/video/branchedmenu.webm',
-    description:
-      'Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.',
+    description: 'Collapsible menu that branches each section from a trunk and traces a line to your pick.',
     category: 'Micro',
     name: 'BranchedMenu',
     docsUrl: 'https://reactbits.dev/micro/branched-menu',
@@ -2294,8 +2280,7 @@ export const componentMetadata = {
   },
   'Micro/FlipCard': {
     videoUrl: '/assets/video/flipcard.webm',
-    description:
-      'Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.',
+    description: 'Two-faced card that flips in 3D on a click, drag or flick and settles on a spring.',
     category: 'Micro',
     name: 'FlipCard',
     docsUrl: 'https://reactbits.dev/micro/flip-card',
@@ -2304,8 +2289,7 @@ export const componentMetadata = {
   },
   'Micro/TearTicket': {
     videoUrl: '/assets/video/tearticket.webm',
-    description:
-      'Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used. The artwork tilts in 3D with parallax on hover.',
+    description: 'Ticket whose perforated stub tears off by hand, fibre by fibre, and drops away.',
     category: 'Micro',
     name: 'TearTicket',
     docsUrl: 'https://reactbits.dev/micro/tear-ticket',
@@ -2314,8 +2298,7 @@ export const componentMetadata = {
   },
   'Micro/PaperCrumple': {
     videoUrl: '/assets/video/papercrumple.webm',
-    description:
-      'An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.',
+    description: 'An image that crumples into a textured 3D sheet while you hold and drag it.',
     category: 'Micro',
     name: 'PaperCrumple',
     docsUrl: 'https://reactbits.dev/micro/paper-crumple',
@@ -2324,8 +2307,7 @@ export const componentMetadata = {
   },
   'Micro/Shredder': {
     videoUrl: '/assets/video/shredder.webm',
-    description:
-      'A list with a paper shredder at the bottom. Drag a row into the slit and the rollers tug it in, pull it through and cut it into strips that curl out underneath, tumble away and fade out. The rest of the list settles down on a spring and the shredded item is handed to you to delete.',
+    description: 'A list with a paper shredder at the bottom that cuts dragged rows into curling strips.',
     category: 'Micro',
     name: 'Shredder',
     docsUrl: 'https://reactbits.dev/micro/shredder',

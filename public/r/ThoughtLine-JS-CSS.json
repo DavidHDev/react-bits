@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ThoughtLine-JS-CSS",
 	"title": "ThoughtLine",
-	"description": "Reasoning-trace header: a glyph and a label breathe beside a live clock while steps appear beneath, then the line settles on one beat into \"Thought for 4.2s\" through a blur crossfade and the trace folds into it.",
+	"description": "Reasoning trace header with a live clock that folds its steps into one line when done.",
 	"type": "registry:component",
 	"files": [
 		{

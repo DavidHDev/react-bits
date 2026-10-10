@@ -1,128 +1,352 @@
-:root {
-  --folder-color: #70a1ff;
-  --folder-back-color: #4785ff;
-  --paper-1: #e6e6e6;
-  --paper-2: #f2f2f2;
-  --paper-3: #ffffff;
+.folder-root {
+  --folder-ground: rgba(0, 0, 0, 0.42);
+  --folder-ground-soft: rgba(0, 0, 0, 0.26);
+  --folder-focus: #ffffff;
+  position: relative;
+  display: inline-block;
+  width: var(--folder-w);
+  height: calc(var(--folder-tab-h) + var(--folder-h));
+  vertical-align: middle;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.folder {
-  transition: all 0.2s ease-in;
+.folder-root[data-theme='light'] {
+  --folder-ground: rgba(24, 22, 40, 0.16);
+  --folder-ground-soft: rgba(24, 22, 40, 0.1);
+  --folder-focus: #18181b;
+}
+
+.folder-stage {
+  position: absolute;
+  inset: 0;
+  perspective: var(--folder-depth);
+  perspective-origin: calc(var(--folder-w) / 2) calc(var(--folder-tab-h) + var(--folder-h) / 2);
+  cursor: pointer;
+  outline: none;
+  isolation: isolate;
+}
+
+.folder-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.folder-ground {
+  z-index: 1;
+  width: var(--folder-w);
+  pointer-events: none;
+}
+
+.folder-root[data-mode='book'] .folder-ground,
+.folder-cast {
+  height: var(--folder-h);
+  border-radius: var(--folder-front-radius);
+  box-shadow:
+    0 calc(1px * var(--folder-scale)) calc(2px * var(--folder-scale)) var(--folder-ground),
+    0 calc(10px * var(--folder-scale)) calc(28px * var(--folder-scale)) var(--folder-ground-soft);
+}
+
+.folder-cast {
+  z-index: 1;
+  width: var(--folder-w);
+  height: calc(var(--folder-h) - var(--folder-front-y) + var(--folder-tab-h));
+  pointer-events: none;
+}
+
+.folder-root[data-mode='flap'] .folder-ground {
+  height: calc(var(--folder-h) * 0.14);
+  margin-top: calc(var(--folder-h) * -0.07);
+  border-radius: 50%;
+  background: var(--folder-ground);
+  filter: blur(calc(var(--folder-h) * 0.05));
+}
+
+.folder-back {
+  z-index: 4;
+  width: var(--folder-w);
+  height: calc(var(--folder-tab-h) + var(--folder-h));
+}
+
+.folder-back-fill {
+  position: absolute;
+  inset: 0;
+}
+
+.folder-gutter {
+  position: absolute;
+  top: var(--folder-tab-h);
+  bottom: 0;
+  left: 0;
+  width: calc(12px * var(--folder-scale));
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0));
+  opacity: var(--folder-gutter, 0);
+}
+
+.folder-back-rim {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.folder-focus {
+  fill: none;
+  stroke: none;
+}
+
+.folder-stage:focus-visible .folder-focus {
+  stroke: var(--folder-focus);
+  stroke-width: 2;
+}
+
+.folder-tab-text {
+  position: absolute;
+  top: 0;
+  display: flex;
+  height: var(--folder-tab-h);
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  padding-top: calc(1px * var(--folder-scale));
+  overflow: hidden;
+  color: var(--folder-tab-ink);
+  opacity: var(--folder-label, 1);
+  font-size: calc(10.5px * var(--folder-scale));
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-measure {
+  left: 0;
+  width: auto;
+  padding: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.folder-item {
+  z-index: 10;
+  width: var(--folder-doc-w);
+  height: var(--folder-doc-h);
+  overflow: hidden;
+  border-radius: calc(7px * var(--folder-scale));
+  background: var(--folder-paper);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.06),
+    0 calc(1px * var(--folder-scale)) calc(2px * var(--folder-scale)) rgba(0, 0, 0, 0.12),
+    0 calc((2px + var(--folder-lift, 0) * 16px) * var(--folder-scale))
+      calc((5px + var(--folder-lift, 0) * 26px) * var(--folder-scale))
+      rgba(0, 0, 0, calc(0.1 + var(--folder-lift, 0) * 0.14));
+  outline: none;
+}
+
+.folder-root[data-open] .folder-item {
   cursor: pointer;
 }
 
-.folder:not(.folder--click):hover {
-  transform: translateY(-8px);
+.folder-root[data-draggable] .folder-item {
+  cursor: grab;
+  touch-action: none;
 }
 
-.folder:not(.folder--click):hover .paper {
-  transform: translate(-50%, 0%);
+.folder-root[data-dragging],
+.folder-root[data-dragging] * {
+  cursor: grabbing !important;
 }
 
-.folder:not(.folder--click):hover .folder__front {
-  transform: skew(15deg) scaleY(0.6);
+.folder-item:focus-visible {
+  outline: 2px solid var(--folder-focus);
+  outline-offset: 3px;
 }
 
-.folder:not(.folder--click):hover .right {
-  transform: skew(-15deg) scaleY(0.6);
+.folder-shade {
+  z-index: 39;
+  width: var(--folder-w);
+  height: var(--folder-front-h);
+  border-radius: var(--folder-front-radius);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.16));
+  filter: blur(calc(6px * var(--folder-scale)));
+  opacity: 0;
+  pointer-events: none;
 }
 
-.folder.open {
-  transform: translateY(-8px);
+.folder-front {
+  z-index: 40;
+  width: var(--folder-w);
+  height: var(--folder-front-h);
 }
 
-.folder.open .paper:nth-child(1) {
-  transform: translate(-120%, -70%) rotateZ(-15deg);
-}
-
-.folder.open .paper:nth-child(1):hover {
-  transform: translate(-120%, -70%) rotateZ(-15deg) scale(1.1);
-}
-
-.folder.open .paper:nth-child(2) {
-  transform: translate(10%, -70%) rotateZ(15deg);
-  height: 80%;
-}
-
-.folder.open .paper:nth-child(2):hover {
-  transform: translate(10%, -70%) rotateZ(15deg) scale(1.1);
-}
-
-.folder.open .paper:nth-child(3) {
-  transform: translate(-50%, -100%) rotateZ(5deg);
-  height: 80%;
-}
-
-.folder.open .paper:nth-child(3):hover {
-  transform: translate(-50%, -100%) rotateZ(5deg) scale(1.1);
-}
-
-.folder.open .folder__front {
-  transform: skew(15deg) scaleY(0.6);
-}
-
-.folder.open .right {
-  transform: skew(-15deg) scaleY(0.6);
-}
-
-.folder__back {
-  position: relative;
-  width: 100px;
-  height: 80px;
-  background: var(--folder-back-color);
-  border-radius: 0px 10px 10px 10px;
-}
-
-.folder__back::after {
+.folder-face {
   position: absolute;
-  z-index: 0;
-  bottom: 98%;
-  left: 0;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--folder-front-radius);
+}
+
+.folder-face::after {
   content: '';
-  width: 30px;
-  height: 10px;
-  background: var(--folder-back-color);
-  border-radius: 5px 5px 0 0;
-}
-
-.paper {
   position: absolute;
-  z-index: 2;
-  bottom: 10%;
-  left: 50%;
-  transform: translate(-50%, 10%);
-  width: 70%;
-  height: 80%;
-  background: var(--paper-1);
-  border-radius: 10px;
-  transition: all 0.3s ease-in-out;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(rgba(255, 255, 255, var(--folder-glint, 0)), rgba(255, 255, 255, var(--folder-glint, 0))),
+    rgba(0, 0, 0, var(--folder-dim, 0));
+  pointer-events: none;
 }
 
-.paper:nth-child(2) {
-  background: var(--paper-2);
-  width: 80%;
-  height: 70%;
+.folder-face-inner,
+.folder-front[data-face='inner'] .folder-face-outer {
+  visibility: hidden;
 }
 
-.paper:nth-child(3) {
-  background: var(--paper-3);
-  width: 90%;
-  height: 60%;
+.folder-face-inner {
+  left: -1px;
 }
 
-.folder__front {
+.folder-front[data-face='inner'] .folder-face-inner {
+  visibility: visible;
+}
+
+.folder-inner-gutter {
   position: absolute;
-  z-index: 3;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(12px * var(--folder-scale));
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0));
+}
+
+.folder-root[data-variant='solid'] .folder-back-fill,
+.folder-root[data-variant='solid'] .folder-face-inner {
+  background: linear-gradient(180deg, var(--folder-inside-top), var(--folder-inside-bottom));
+}
+
+.folder-root[data-variant='solid'] .folder-face-outer {
+  background: linear-gradient(
+    160deg,
+    var(--folder-front-top) 0%,
+    var(--folder-base) 48%,
+    var(--folder-front-bottom) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.folder-root[data-variant='glass'] .folder-back-fill {
+  background: linear-gradient(180deg, var(--folder-inside-top), var(--folder-inside-bottom));
+}
+
+.folder-root[data-variant='glass'] .folder-face-outer,
+.folder-root[data-variant='glass'] .folder-face-inner {
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(255, 255, 255, 0.08) 46%,
+      rgba(255, 255, 255, 0.16) 100%
+    ),
+    rgba(var(--folder-rgb), 0.24);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(var(--folder-frost)) saturate(1.8);
+  backdrop-filter: blur(var(--folder-frost)) saturate(1.8);
+}
+
+.folder-root[data-gl] .folder-face {
+  visibility: hidden;
+}
+
+.folder-glass {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.folder-root[data-variant='matte'] .folder-back-fill,
+.folder-root[data-variant='matte'] .folder-face-inner {
+  background: var(--folder-inside-bottom);
+}
+
+.folder-root[data-variant='matte'] .folder-face-outer {
+  background: var(--folder-base);
+}
+
+.folder-doc {
+  display: flex;
+  height: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  gap: calc(6px * var(--folder-scale));
+  padding: calc(14px * var(--folder-scale)) calc(13px * var(--folder-scale));
+}
+
+.folder-doc-title {
+  overflow: hidden;
+  margin-bottom: calc(4px * var(--folder-scale));
+  color: var(--folder-paper-text);
+  font-size: calc(11px * var(--folder-scale));
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folder-doc-text {
+  margin-top: calc(-6px * var(--folder-scale));
+  margin-bottom: calc(4px * var(--folder-scale));
+  color: var(--folder-paper-ink-strong);
+  font-size: calc(9px * var(--folder-scale));
+  line-height: 1.3;
+}
+
+.folder-doc-heading {
+  width: 56%;
+  height: calc(7px * var(--folder-scale));
+  flex: none;
+  margin-bottom: calc(4px * var(--folder-scale));
+  border-radius: 999px;
+  background: var(--folder-paper-ink-strong);
+}
+
+.folder-doc-line {
+  height: calc(4px * var(--folder-scale));
+  flex: none;
+  border-radius: 999px;
+  background: var(--folder-paper-ink);
+}
+
+.folder-doc-block {
+  height: calc(40px * var(--folder-scale));
+  flex: none;
+  margin: calc(3px * var(--folder-scale)) 0;
+  border-radius: calc(5px * var(--folder-scale));
+  background: var(--folder-paper-ink);
+  opacity: 0.75;
+}
+
+.folder-photo {
+  position: absolute;
+  inset: calc(5px * var(--folder-scale));
+  overflow: hidden;
+  border-radius: calc(3px * var(--folder-scale));
+}
+
+.folder-photo img {
+  display: block;
   width: 100%;
   height: 100%;
-  background: var(--folder-color);
-  border-radius: 5px 10px 10px 10px;
-  transform-origin: bottom;
-  transition: all 0.3s ease-in-out;
-}
-
-.folder:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 4px;
-  border-radius: 10px;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
 }

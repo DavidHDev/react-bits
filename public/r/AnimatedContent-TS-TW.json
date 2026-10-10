@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "AnimatedContent-TS-TW",
 	"title": "AnimatedContent",
-	"description": "Wrapper that animates any children on scroll or mount with configurable direction, distance, duration, easing and disappear options.",
+	"description": "Wrapper that animates its children in on scroll or mount, from any direction.",
 	"type": "registry:component",
 	"files": [
 		{

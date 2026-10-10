@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "WakeSlider-TS-CSS",
 	"title": "WakeSlider",
-	"description": "Range slider drawn as thin bars with no thumb: drag speed raises a wake that trails behind the handle and flattens again at rest.",
+	"description": "Thumbless range slider of thin bars where drag speed raises a wake behind the handle.",
 	"type": "registry:component",
 	"files": [
 		{

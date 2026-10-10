@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SpecularButton-TS-TW",
 	"title": "SpecularButton",
-	"description": "Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.",
+	"description": "Glass button whose edge catches the light, with a highlight that glides toward the cursor.",
 	"type": "registry:component",
 	"files": [
 		{

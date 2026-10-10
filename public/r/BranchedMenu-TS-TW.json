@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "BranchedMenu-TS-TW",
 	"title": "BranchedMenu",
-	"description": "Collapsible menu whose sections unfold into a trunk with a curved branch to each child, and an accent line that travels down the trunk and around the curve to whatever you pick, while a marker glides to the open section.",
+	"description": "Collapsible menu that branches each section from a trunk and traces a line to your pick.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PulseHeart-JS-TW",
 	"title": "PulseHeart",
-	"description": "Like button that contracts to a dot, flips colour at its smallest frame and pulses back while the count swaps one glyph.",
+	"description": "Like button that contracts to a dot, flips colour and pulses back as the count ticks over.",
 	"type": "registry:component",
 	"files": [
 		{

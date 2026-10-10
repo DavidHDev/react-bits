@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "LaserFlow-JS-CSS",
 	"title": "LaserFlow",
-	"description": "A beam of light that splashes onto your content and pours over its corners, with drifting smoke and dust.",
+	"description": "A beam of light that splashes onto your content and pours over its corners.",
 	"type": "registry:component",
 	"files": [
 		{

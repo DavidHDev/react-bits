@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PlasmaWave-TS-CSS",
 	"title": "PlasmaWave",
-	"description": "Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.",
+	"description": "Two ribbons of plasma curling through each other, with soft glow and white-hot cores.",
 	"type": "registry:component",
 	"files": [
 		{

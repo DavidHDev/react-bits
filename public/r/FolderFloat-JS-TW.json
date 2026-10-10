@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "FolderFloat-JS-TW",
 	"title": "FolderFloat",
-	"description": "Folder that opens on hover or press: the flap tilts toward you, a paper edge rises, and its notes spring out from behind the flap into a floating cloud to pick from, then sink back when the folder closes.",
+	"description": "Folder whose notes spring out into a floating cloud when it opens on hover or press.",
 	"type": "registry:component",
 	"files": [
 		{

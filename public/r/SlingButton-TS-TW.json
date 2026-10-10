@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SlingButton-TS-TW",
 	"title": "SlingButton",
-	"description": "Send button you pull back like a slingshot: the band stretches, a power arc arms it, and releasing fires the action with the flick's velocity.",
+	"description": "Send button you pull back like a slingshot and release to fire.",
 	"type": "registry:component",
 	"files": [
 		{

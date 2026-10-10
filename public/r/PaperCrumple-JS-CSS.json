@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "PaperCrumple-JS-CSS",
 	"title": "PaperCrumple",
-	"description": "An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag. Release it as a crumpled ball, unfold it flat, or leave the paper creased, with customizable folds, paper grain, lighting and shadows.",
+	"description": "An image that crumples into a textured 3D sheet while you hold and drag it.",
 	"type": "registry:component",
 	"files": [
 		{

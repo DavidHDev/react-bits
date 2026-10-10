@@ -5,27 +5,30 @@ import tsCode from '@ts-default/Components/GooeyNav/GooeyNav.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/GooeyNav/GooeyNav.tsx?raw';
 
 export const gooeyNav = {
-  usage: `import GooeyNav from './GooeyNav'
+  usage: `import GooeyNav from './GooeyNav';
 
-// update with your own items
 const items = [
-  { label: "Home", href: "#" },
-  { label: "About", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: 'Home', href: '#' },
+  { label: 'Work', href: '#' },
+  { label: 'About', href: '#' },
+  { label: 'Contact', href: '#' }
 ];
 
-<div style={{ height: '600px', position: 'relative' }}>
-  <GooeyNav
-    items={items}
-    particleCount={15}
-    particleDistances={[90, 10]}
-    particleR={100}
-    initialActiveIndex={0}
-    animationTime={600}
-    timeVariance={300}
-    colors={[1, 2, 3, 1, 2, 3, 1, 4]}
-  />
-</div>`,
+<GooeyNav
+  items={items}
+  initialActiveIndex={0}
+  theme="dark"
+  size="md"
+  frame={true}
+  particleCount={15}
+  spread={56}
+  animationTime={600}
+  timeVariance={300}
+  gooeyness={0.5}
+  wobble={0.5}
+  hoverEffect={true}
+  onChange={(index, item) => console.log(index, item.label)}
+/>`,
   code,
   css,
   tailwind,

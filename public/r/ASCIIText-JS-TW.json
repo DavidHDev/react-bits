@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "ASCIIText-JS-TW",
 	"title": "ASCIIText",
-	"description": "Waving text drawn in ASCII characters that tilts toward the pointer, scrambles on hover and ripples on click.",
+	"description": "Waving ASCII text that tilts toward the pointer, scrambles on hover and ripples on click.",
 	"type": "registry:component",
 	"files": [
 		{

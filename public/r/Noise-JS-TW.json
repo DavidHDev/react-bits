@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Noise-JS-TW",
 	"title": "Noise",
-	"description": "Film grain overlay for photos, gradients and whole pages, from fine 35mm grain to dust, paper and TV static.",
+	"description": "Film grain overlay for photos and pages, from fine 35mm grain to dust, paper and TV static.",
 	"type": "registry:component",
 	"files": [
 		{

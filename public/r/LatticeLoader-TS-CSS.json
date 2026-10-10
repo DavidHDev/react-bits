@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "LatticeLoader-TS-CSS",
 	"title": "LatticeLoader",
-	"description": "Inline agent-status row: a 3x3 or 4x4 lattice whose cells brighten in a phase-offset wave beside a verb and a live stopwatch, resolving into a check or a cross when the task ends.",
+	"description": "Agent status row with a lattice of cells that brighten in a wave beside a live stopwatch.",
 	"type": "registry:component",
 	"files": [
 		{

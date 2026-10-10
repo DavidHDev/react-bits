@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "Plasma-JS-CSS",
 	"title": "Plasma",
-	"description": "Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.",
+	"description": "Folds of satin light twisting slowly through the dark, turning to follow the cursor.",
 	"type": "registry:component",
 	"files": [
 		{

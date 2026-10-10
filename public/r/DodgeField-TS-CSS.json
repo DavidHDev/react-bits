@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "DodgeField-TS-CSS",
 	"title": "DodgeField",
-	"description": "Wrapper that makes any child flee the pointer inside a bounded field, dodges once per approach, then relents after a few tries and glides home.",
+	"description": "Wrapper that makes any child dodge the pointer until it relents and glides home.",
 	"type": "registry:component",
 	"files": [
 		{

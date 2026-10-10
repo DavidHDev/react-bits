@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "FuseButton-JS-CSS",
 	"title": "FuseButton",
-	"description": "Action button whose done state carries its own undo on a burning fuse: press, the label crossfades to Undo, a hairline burns for the undo window, and Undo or Escape runs it back.",
+	"description": "Action button whose done state carries an undo on a burning fuse.",
 	"type": "registry:component",
 	"files": [
 		{

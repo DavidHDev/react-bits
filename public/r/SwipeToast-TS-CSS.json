@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SwipeToast-TS-CSS",
 	"title": "SwipeToast",
-	"description": "Single toast that rises through its bottom edge, swipes down to dismiss on a flick or a distance, and burns a thin fuse for exactly its remaining time; hover pauses it and an inline mode keeps it inside any container.",
+	"description": "Toast that swipes down to dismiss and burns a thin fuse for its remaining time.",
 	"type": "registry:component",
 	"files": [
 		{

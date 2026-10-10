@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "GradientText-JS-CSS",
 	"title": "GradientText",
-	"description": "Living gradients inside your text: a sliding linear sweep, drifting mesh-like flow or a swinging conic fan, with glow, a gradient outline and colors that follow the pointer.",
+	"description": "Living gradients inside your text: a sliding sweep, a drifting mesh or a swinging conic fan.",
 	"type": "registry:component",
 	"files": [
 		{

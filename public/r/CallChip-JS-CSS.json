@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "CallChip-JS-CSS",
 	"title": "CallChip",
-	"description": "Inline tool-call chip whose fill wipes across while a live ms counter ticks, completing with a green wash on success or stopping short and shaking red with a retry glyph on error.",
+	"description": "Tool-call chip whose fill wipes across as a live timer ticks, ending green or shaking red.",
 	"type": "registry:component",
 	"files": [
 		{

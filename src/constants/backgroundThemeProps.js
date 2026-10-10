@@ -80,7 +80,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     streakCount: 4,
     streakWidth: 1.15
   },
-  lightning: { hue: 265, intensity: 0.72 },
+  lightning: { lightMode: true },
   'line-waves': { lightMode: true, color1: '#6d28d9', color2: '#ec4899', color3: '#06b6d4', brightness: 0.8 },
   'liquid-chrome': { baseColor: [0.72, 0.72, 0.75], amplitude: 0.22 },
   'liquid-ether': {

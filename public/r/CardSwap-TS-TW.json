@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "CardSwap-TS-TW",
 	"title": "CardSwap",
-	"description": "A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.",
+	"description": "A 3D stack of cards that sends the front card to the back on a timer, or when you fling it.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "TechText-TS-CSS",
 	"title": "TechText",
-	"description": "A wordmark whose letters turn into dashed vector paths under the cursor. Grab any letter to drag it off the baseline and it springs back home.",
+	"description": "A wordmark whose letters turn into dashed vector paths under the cursor.",
 	"type": "registry:component",
 	"files": [
 		{

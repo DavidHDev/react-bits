@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "SlideCommit-JS-CSS",
 	"title": "SlideCommit",
-	"description": "Slide-to-confirm handle that plants with a spinner while your action runs, unfurls into a done pill on success and springs home with a squash and shake on failure.",
+	"description": "Slide-to-confirm handle that spins while your action runs and unfurls into a done pill.",
 	"type": "registry:component",
 	"files": [
 		{

@@ -1,70 +1,195 @@
-.scroll-list-container {
+.animated-list {
   position: relative;
-  width: 500px;
+  width: min(100%, var(--al-width));
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  border-radius: calc(var(--al-radius) + 12px);
+  color: var(--al-ink);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.scroll-list {
-  max-height: 400px;
+.animated-list--framed {
+  padding: 6px;
+  background: var(--al-frame);
+  box-shadow: var(--al-frame-shadow);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+.animated-list:has(> .animated-list__viewport:focus-visible) {
+  outline: 2px solid var(--al-accent);
+  outline-offset: 3px;
+}
+
+.animated-list__frame-rim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--al-frame-edge),
+    inset 0 1px 0 var(--al-frame-highlight);
+  pointer-events: none;
+}
+
+.animated-list__viewport {
+  --al-fade-top: 0px;
+  --al-fade-bottom: 0px;
+  position: relative;
+  box-sizing: border-box;
+  padding: 6px;
+  overflow-x: hidden;
   overflow-y: auto;
-  padding: 16px;
+  overscroll-behavior: contain;
+  border-radius: calc(var(--al-radius) + 6px);
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--al-thumb) transparent;
 }
 
-.scroll-list::-webkit-scrollbar {
-  width: 8px;
+.animated-list__viewport::-webkit-scrollbar {
+  width: 6px;
 }
 
-.scroll-list::-webkit-scrollbar-track {
-  background: #060606;
+.animated-list__viewport::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.scroll-list::-webkit-scrollbar-thumb {
-  background: #222;
-  border-radius: 4px;
+.animated-list__viewport::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--al-thumb);
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
+.animated-list__viewport--bare {
   scrollbar-width: none;
 }
 
-.item {
-  padding: 16px;
-  background-color: #111;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+.animated-list__viewport--bare::-webkit-scrollbar {
+  display: none;
 }
 
-.item.selected {
-  background-color: #222;
+.animated-list__track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--al-gap);
 }
 
-.item-text {
-  color: white;
-  margin: 0;
+.animated-list__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px 14px 10px 10px;
+  box-sizing: border-box;
+  border-radius: var(--al-radius);
+  background: var(--al-tile);
+  box-shadow: var(--al-tile-shadow);
+  color: var(--al-ink);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.top-gradient {
+.animated-list[data-animated] .animated-list__item:not([data-state]) {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .animated-list__item:hover {
+    filter: var(--al-hover);
+  }
+}
+
+.animated-list__item[data-selected]:not(:active) {
+  filter: var(--al-active);
+}
+
+.animated-list__item:active {
+  filter: var(--al-press);
+}
+
+.animated-list__lead {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: max(8px, calc(var(--al-radius) - 4px));
+  background: var(--al-well);
+  color: var(--al-ink);
+}
+
+.animated-list__lead img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.animated-list__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.animated-list__title {
+  overflow: hidden;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.animated-list__description {
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--al-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.animated-list__meta {
+  flex: none;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--al-muted);
+}
+
+.animated-list__rim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--al-tile-edge),
+    inset 0 1px 0 var(--al-tile-highlight);
+  pointer-events: none;
+}
+
+.animated-list__indicator {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 50px;
-  background: linear-gradient(to bottom, #120F17, transparent);
+  z-index: 2;
+  height: 0;
+  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
-.bottom-gradient {
+.animated-list__ring {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100px;
-  background: linear-gradient(to top, #120F17, transparent);
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+  inset: 0;
+  border-radius: var(--al-radius);
+  background: var(--al-ring-fill);
+  box-shadow: inset 0 0 0 1px var(--al-ring);
 }

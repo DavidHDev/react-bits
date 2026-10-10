@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "InfiniteMenu-TS-TW",
 	"title": "InfiniteMenu",
-	"description": "A draggable sphere of image tiles that snaps the nearest one to the front and shows its title, description and link.",
+	"description": "A draggable sphere of image tiles that snaps the nearest one forward and shows its title.",
 	"type": "registry:component",
 	"files": [
 		{

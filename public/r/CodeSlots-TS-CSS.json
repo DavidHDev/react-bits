@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "CodeSlots-TS-CSS",
 	"title": "CodeSlots",
-	"description": "One-time-code input where a hidden overlay input owns focus, paste and SMS autofill while each slot lands its digit on one spring: the fill swells from the centre, the digit rises and the caret glides; a wrong code drains the slots in a cascade, a right one merges them into a single accent wash.",
+	"description": "One-time code input whose digits spring into their slots, with paste and SMS autofill.",
 	"type": "registry:component",
 	"files": [
 		{

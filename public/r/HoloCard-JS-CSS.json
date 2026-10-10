@@ -2,7 +2,7 @@
 	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
 	"name": "HoloCard-JS-CSS",
 	"title": "HoloCard",
-	"description": "Collectible trading card with a real holographic foil. Pick bursts, stars, shards, cosmos and more, with glitter sparkling on the silver border as it tilts.",
+	"description": "Collectible trading card with a real holographic foil and glitter that sparkles as it tilts.",
 	"type": "registry:component",
 	"files": [
 		{
