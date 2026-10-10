@@ -26,11 +26,11 @@ const NIGHT_SKY = '/assets/demo/night-sky.webp';
 const LOOK = {
   gridSize: 50,
   trailSize: 0.1,
-  maxAge: 250,
+  maxAge: 500,
   interpolate: 5,
-  color: '#5227FF',
-  colorShift: false,
-  shiftColor: '#5227FF',
+  color: '#A855F7',
+  colorShift: true,
+  shiftColor: '#A855F7',
   gooeyEnabled: true,
   gooStrength: 2,
   shape: 'square',
@@ -244,13 +244,17 @@ const PixelTrailDemo = () => {
               imageSrc={imageSrc}
             />
             <Text
-              className="demo-instruction"
               position="absolute"
+              bottom={5}
+              left="50%"
+              transform="translateX(-50%)"
               zIndex={0}
-              fontSize="clamp(2rem, 6vw, 6rem)"
-              fontWeight={600}
+              fontSize="sm"
+              color="var(--text-dimmed)"
+              userSelect="none"
+              pointerEvents="none"
             >
-              Move Cursor.
+              {settings.clickBurst ? 'Move and click' : 'Move around'}
             </Text>
           </Box>
 

@@ -11,9 +11,9 @@ export const pixelTrail = {
   <PixelTrail
     gridSize={50}
     trailSize={0.1}
-    maxAge={250}
+    maxAge={500}
     interpolate={5}
-    color="#5227FF"
+    color="#A855F7"
   />
 </div>`,
   code,
