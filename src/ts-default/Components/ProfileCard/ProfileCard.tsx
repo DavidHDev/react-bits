@@ -1,398 +1,410 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import { memo, useEffect, useRef, type CSSProperties } from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Mail01Icon } from '@hugeicons/core-free-icons';
+
 import './ProfileCard.css';
 
+type Palette = 'dark' | 'light';
+
 interface ProfileCardProps {
-  avatarUrl: string;
+  avatarUrl?: string;
   iconUrl?: string;
-  grainUrl?: string;
-  innerGradient?: string;
-  behindGlowEnabled?: boolean;
-  behindGlowColor?: string;
-  behindGlowSize?: string;
-  className?: string;
-  enableTilt?: boolean;
-  enableMobileTilt?: boolean;
-  mobileTiltSensitivity?: number;
   miniAvatarUrl?: string;
   name?: string;
   title?: string;
   handle?: string;
   status?: string;
+  statusColor?: string;
   contactText?: string;
   showUserInfo?: boolean;
   onContactClick?: () => void;
+  theme?: Palette;
+  backdropColor?: string;
+  radius?: number;
+  holo?: number;
+  glare?: number;
+  enableTilt?: boolean;
+  tiltStrength?: number;
+  parallax?: number;
+  enableMobileTilt?: boolean;
+  mobileTiltSensitivity?: number;
+  intro?: boolean;
+  className?: string;
 }
 
-const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
+interface Engine {
+  aim: (nx: number, ny: number, on?: boolean) => void;
+  release: () => void;
+  write: () => void;
+}
 
-const ANIMATION_CONFIG = {
-  INITIAL_DURATION: 1200,
-  INITIAL_X_OFFSET: 70,
-  INITIAL_Y_OFFSET: 60,
-  DEVICE_BETA_OFFSET: 20,
-  ENTER_TRANSITION_MS: 180
-} as const;
+type OrientationPermission = {
+  requestPermission?: () => Promise<PermissionState>;
+};
 
-const clamp = (v: number, min = 0, max = 100): number => Math.min(Math.max(v, min), max);
-const round = (v: number, precision = 3): number => parseFloat(v.toFixed(precision));
-const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: number): number =>
-  round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
+const THEMES: Record<Palette, Record<string, string>> = {
+  dark: {
+    '--pc-frame': 'rgba(38, 35, 46, 0.66)',
+    '--pc-frame-edge': 'rgba(255, 255, 255, 0.08)',
+    '--pc-frame-highlight': 'rgba(255, 255, 255, 0.07)',
+    '--pc-frame-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
+    '--pc-tile': 'linear-gradient(180deg, #3a3644 0%, #27242f 100%)',
+    '--pc-tile-edge': 'rgba(255, 255, 255, 0.07)',
+    '--pc-tile-highlight': 'rgba(255, 255, 255, 0.12)',
+    '--pc-tile-shadow': '0 4px 10px -4px rgba(0, 0, 0, 0.7)',
+    '--pc-ink': '#f4f4f5',
+    '--pc-muted': 'rgba(244, 244, 245, 0.6)',
+    '--pc-hover': 'brightness(1.12)',
+    '--pc-press': 'brightness(0.8)',
+    '--pc-shade': 'rgba(0, 0, 0, 0.4)'
+  },
+  light: {
+    '--pc-frame': 'rgba(240, 240, 243, 0.8)',
+    '--pc-frame-edge': 'rgba(24, 24, 27, 0.07)',
+    '--pc-frame-highlight': 'rgba(255, 255, 255, 0.95)',
+    '--pc-frame-shadow': '0 22px 44px -22px rgba(24, 24, 27, 0.3), 0 6px 16px -10px rgba(24, 24, 27, 0.16)',
+    '--pc-tile': 'linear-gradient(180deg, #ffffff 0%, #f6f6f8 100%)',
+    '--pc-tile-edge': 'rgba(24, 24, 27, 0.08)',
+    '--pc-tile-highlight': 'rgba(255, 255, 255, 1)',
+    '--pc-tile-shadow': '0 4px 10px -5px rgba(24, 24, 27, 0.25)',
+    '--pc-ink': '#27272a',
+    '--pc-muted': 'rgba(39, 39, 42, 0.6)',
+    '--pc-hover': 'brightness(0.97)',
+    '--pc-press': 'brightness(0.92)',
+    '--pc-shade': 'rgba(24, 24, 27, 0.14)'
+  }
+};
 
-const ProfileCardComponent: React.FC<ProfileCardProps> = ({
-  avatarUrl = '<Placeholder for avatar URL>',
-  iconUrl = '<Placeholder for icon URL>',
-  grainUrl = '<Placeholder for grain URL>',
-  innerGradient,
-  behindGlowEnabled = true,
-  behindGlowColor,
-  behindGlowSize,
-  className = '',
-  enableTilt = true,
-  enableMobileTilt = false,
-  mobileTiltSensitivity = 5,
+const FOILS: Record<Palette, Record<string, string>> = {
+  dark: {
+    '--pc-blend': 'color-dodge',
+    '--pc-holo-filter': 'hue-rotate(0deg)',
+    '--pc-sheen': 'rgba(255, 255, 255, 0.16)'
+  },
+  light: {
+    '--pc-blend': 'multiply',
+    '--pc-holo-filter': 'invert(1) hue-rotate(180deg)',
+    '--pc-sheen': 'rgba(255, 255, 255, 0)'
+  }
+};
+
+const GRAIN = `url("data:image/svg+xml,${encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><filter id='g' x='0' y='0' width='100%' height='100%' color-interpolation-filters='sRGB'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0.55 0 0 0 -0.24 0.55 0 0 0 -0.24 0.55 0 0 0 -0.24 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>"
+)}")`;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const isDark = (color: string): boolean | null => {
+  const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(color).trim());
+  if (!match) return null;
+  const hex = match[1].length === 3 ? match[1].replace(/./g, digit => digit + digit) : match[1];
+  const [r, g, b] = [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.5;
+};
+
+const ProfileCard = ({
+  avatarUrl = '',
+  iconUrl,
   miniAvatarUrl,
   name = 'Javi A. Torres',
   title = 'Software Engineer',
   handle = 'javicodes',
   status = 'Online',
+  statusColor = '#22c55e',
   contactText = 'Contact',
   showUserInfo = true,
-  onContactClick
-}) => {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const shellRef = useRef<HTMLDivElement>(null);
-
-  const enterTimerRef = useRef<number | null>(null);
-  const leaveRafRef = useRef<number | null>(null);
-
-  const tiltEngine = useMemo(() => {
-    if (!enableTilt) return null;
-
-    let rafId: number | null = null;
-    let running = false;
-    let lastTs = 0;
-
-    let currentX = 0;
-    let currentY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const DEFAULT_TAU = 0.14;
-    const INITIAL_TAU = 0.6;
-    let initialUntil = 0;
-
-    const setVarsFromXY = (x: number, y: number) => {
-      const shell = shellRef.current;
-      const wrap = wrapRef.current;
-      if (!shell || !wrap) return;
-
-      const width = shell.clientWidth || 1;
-      const height = shell.clientHeight || 1;
-
-      const percentX = clamp((100 / width) * x);
-      const percentY = clamp((100 / height) * y);
-
-      const centerX = percentX - 50;
-      const centerY = percentY - 50;
-
-      const properties = {
-        '--pointer-x': `${percentX}%`,
-        '--pointer-y': `${percentY}%`,
-        '--background-x': `${adjust(percentX, 0, 100, 35, 65)}%`,
-        '--background-y': `${adjust(percentY, 0, 100, 35, 65)}%`,
-        '--pointer-from-center': `${clamp(Math.hypot(percentY - 50, percentX - 50) / 50, 0, 1)}`,
-        '--pointer-from-top': `${percentY / 100}`,
-        '--pointer-from-left': `${percentX / 100}`,
-        '--rotate-x': `${round(-(centerX / 5))}deg`,
-        '--rotate-y': `${round(centerY / 4)}deg`
-      } as Record<string, string>;
-
-      for (const [k, v] of Object.entries(properties)) wrap.style.setProperty(k, v);
-    };
-
-    const step = (ts: number) => {
-      if (!running) return;
-      if (lastTs === 0) lastTs = ts;
-      const dt = (ts - lastTs) / 1000;
-      lastTs = ts;
-
-      const tau = ts < initialUntil ? INITIAL_TAU : DEFAULT_TAU;
-      const k = 1 - Math.exp(-dt / tau);
-
-      currentX += (targetX - currentX) * k;
-      currentY += (targetY - currentY) * k;
-
-      setVarsFromXY(currentX, currentY);
-
-      const stillFar = Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05;
-
-      if (stillFar || document.hasFocus()) {
-        rafId = requestAnimationFrame(step);
-      } else {
-        running = false;
-        lastTs = 0;
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      }
-    };
-
-    const start = () => {
-      if (running) return;
-      running = true;
-      lastTs = 0;
-      rafId = requestAnimationFrame(step);
-    };
-
-    return {
-      setImmediate(x: number, y: number) {
-        currentX = x;
-        currentY = y;
-        setVarsFromXY(currentX, currentY);
-      },
-      setTarget(x: number, y: number) {
-        targetX = x;
-        targetY = y;
-        start();
-      },
-      toCenter() {
-        const shell = shellRef.current;
-        if (!shell) return;
-        this.setTarget(shell.clientWidth / 2, shell.clientHeight / 2);
-      },
-      beginInitial(durationMs: number) {
-        initialUntil = performance.now() + durationMs;
-        start();
-      },
-      getCurrent() {
-        return { x: currentX, y: currentY, tx: targetX, ty: targetY };
-      },
-      cancel() {
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = null;
-        running = false;
-        lastTs = 0;
-      }
-    };
-  }, [enableTilt]);
-
-  const getOffsets = (evt: PointerEvent, el: HTMLElement) => {
-    const rect = el.getBoundingClientRect();
-    return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
-  };
-
-  const handlePointerMove = useCallback(
-    (event: PointerEvent) => {
-      const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
-      const { x, y } = getOffsets(event, shell);
-      tiltEngine.setTarget(x, y);
-    },
-    [tiltEngine]
-  );
-
-  const handlePointerEnter = useCallback(
-    (event: PointerEvent) => {
-      const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
-
-      shell.classList.add('active');
-      shell.classList.add('entering');
-      if (enterTimerRef.current) window.clearTimeout(enterTimerRef.current);
-      enterTimerRef.current = window.setTimeout(() => {
-        shell.classList.remove('entering');
-      }, ANIMATION_CONFIG.ENTER_TRANSITION_MS);
-
-      const { x, y } = getOffsets(event, shell);
-      tiltEngine.setTarget(x, y);
-    },
-    [tiltEngine]
-  );
-
-  const handlePointerLeave = useCallback(() => {
-    const shell = shellRef.current;
-    if (!shell || !tiltEngine) return;
-
-    tiltEngine.toCenter();
-
-    const checkSettle = () => {
-      const { x, y, tx, ty } = tiltEngine.getCurrent();
-      const settled = Math.hypot(tx - x, ty - y) < 0.6;
-      if (settled) {
-        shell.classList.remove('active');
-        leaveRafRef.current = null;
-      } else {
-        leaveRafRef.current = requestAnimationFrame(checkSettle);
-      }
-    };
-    if (leaveRafRef.current) cancelAnimationFrame(leaveRafRef.current);
-    leaveRafRef.current = requestAnimationFrame(checkSettle);
-  }, [tiltEngine]);
-
-  const handleDeviceOrientation = useCallback(
-    (event: DeviceOrientationEvent) => {
-      const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
-
-      const { beta, gamma } = event;
-      if (beta == null || gamma == null) return;
-
-      const centerX = shell.clientWidth / 2;
-      const centerY = shell.clientHeight / 2;
-      const x = clamp(centerX + gamma * mobileTiltSensitivity, 0, shell.clientWidth);
-      const y = clamp(
-        centerY + (beta - ANIMATION_CONFIG.DEVICE_BETA_OFFSET) * mobileTiltSensitivity,
-        0,
-        shell.clientHeight
-      );
-
-      tiltEngine.setTarget(x, y);
-    },
-    [tiltEngine, mobileTiltSensitivity]
-  );
+  onContactClick,
+  theme = 'dark',
+  backdropColor,
+  radius = 16,
+  holo = 0.8,
+  glare = 0.5,
+  enableTilt = true,
+  tiltStrength = 12,
+  parallax = 8,
+  enableMobileTilt = false,
+  mobileTiltSensitivity = 5,
+  intro = true,
+  className = ''
+}: ProfileCardProps) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const engineRef = useRef<Engine | null>(null);
+  const settings = { enableTilt, tiltStrength, parallax, mobileTiltSensitivity, intro };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
-    if (!enableTilt || !tiltEngine) return;
+    const root = rootRef.current;
+    if (!root) return;
 
-    const shell = shellRef.current;
-    if (!shell) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const size = { width: root.offsetWidth, height: root.offsetHeight };
+    const x = { p: 0, v: 0, target: 0 };
+    const y = { p: 0, v: 0, target: 0 };
+    const light = { p: 0, target: 0 };
+    let raf = 0;
+    let last = 0;
+    let slowUntil = 0;
+    let touchId: number | null = null;
 
-    const pointerMoveHandler = handlePointerMove as EventListener;
-    const pointerEnterHandler = handlePointerEnter as EventListener;
-    const pointerLeaveHandler = handlePointerLeave as EventListener;
-    const deviceOrientationHandler = handleDeviceOrientation as EventListener;
+    const write = () => {
+      const { enableTilt: tiltOn, tiltStrength: strength, parallax: depth } = settingsRef.current;
+      const angle = tiltOn && !reduced ? strength : 0;
+      const tilt = Math.min(1, Math.hypot(x.p, y.p));
+      const style = root.style;
+      style.setProperty('--pc-light-x', `${((x.p + 1) * 0.5 * size.width).toFixed(1)}px`);
+      style.setProperty('--pc-light-y', `${((y.p + 1) * 0.5 * size.height).toFixed(1)}px`);
+      style.setProperty('--pc-pointer-x', `${((x.p + 1) * 50).toFixed(2)}%`);
+      style.setProperty('--pc-pointer-y', `${((y.p + 1) * 50).toFixed(2)}%`);
+      style.setProperty('--pc-band-x', `${(50 + x.p * 15).toFixed(2)}%`);
+      style.setProperty('--pc-band-y', `${(50 + y.p * 15).toFixed(2)}%`);
+      style.setProperty('--pc-rotate-x', `${(y.p * angle).toFixed(3)}deg`);
+      style.setProperty('--pc-rotate-y', `${(-x.p * angle).toFixed(3)}deg`);
+      style.setProperty('--pc-shift-x', `${(x.p * (reduced ? 0 : depth)).toFixed(2)}px`);
+      style.setProperty('--pc-shift-y', `${(y.p * (reduced ? 0 : depth)).toFixed(2)}px`);
+      style.setProperty('--pc-reach', tilt.toFixed(4));
+      style.setProperty('--pc-tilt', (tilt * light.p).toFixed(4));
+      style.setProperty('--pc-active', light.p.toFixed(4));
+    };
 
-    shell.addEventListener('pointerenter', pointerEnterHandler);
-    shell.addEventListener('pointermove', pointerMoveHandler);
-    shell.addEventListener('pointerleave', pointerLeaveHandler);
-
-    const handleClick = () => {
-      if (!enableMobileTilt || location.protocol !== 'https:') return;
-      const anyMotion = window.DeviceMotionEvent as any;
-      if (anyMotion && typeof anyMotion.requestPermission === 'function') {
-        anyMotion
-          .requestPermission()
-          .then((state: string) => {
-            if (state === 'granted') {
-              window.addEventListener('deviceorientation', deviceOrientationHandler);
-            }
-          })
-          .catch(console.error);
+    const frame = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000 || 0);
+      last = now;
+      const slow = now < slowUntil;
+      const stiffness = slow ? 24 : 120;
+      const damping = slow ? 9 : 16;
+      const steps = Math.max(1, Math.ceil(dt / (1 / 120)));
+      const h = dt / steps;
+      for (let i = 0; i < steps; i++) {
+        for (const axis of [x, y]) {
+          axis.v += (stiffness * (axis.target - axis.p) - damping * axis.v) * h;
+          axis.p += axis.v * h;
+        }
+      }
+      const tau = light.target > light.p ? 0.18 : slow ? 0.9 : 0.45;
+      light.p += (light.target - light.p) * (1 - Math.exp(-dt / tau));
+      write();
+      const moving =
+        Math.abs(x.target - x.p) > 0.0005 ||
+        Math.abs(y.target - y.p) > 0.0005 ||
+        Math.abs(x.v) > 0.0005 ||
+        Math.abs(y.v) > 0.0005 ||
+        Math.abs(light.target - light.p) > 0.002;
+      if (moving) {
+        raf = requestAnimationFrame(frame);
       } else {
-        window.addEventListener('deviceorientation', deviceOrientationHandler);
+        x.p = x.target;
+        y.p = y.target;
+        light.p = light.target;
+        write();
+        raf = 0;
       }
     };
-    shell.addEventListener('click', handleClick);
 
-    const initialX = (shell.clientWidth || 0) - ANIMATION_CONFIG.INITIAL_X_OFFSET;
-    const initialY = ANIMATION_CONFIG.INITIAL_Y_OFFSET;
-    tiltEngine.setImmediate(initialX, initialY);
-    tiltEngine.toCenter();
-    tiltEngine.beginInitial(ANIMATION_CONFIG.INITIAL_DURATION);
+    const wake = () => {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+
+    const aim = (nx: number, ny: number, on = true) => {
+      x.target = clamp(nx, -1, 1);
+      y.target = clamp(ny, -1, 1);
+      light.target = on ? 1 : 0;
+      slowUntil = 0;
+      wake();
+    };
+
+    const aimAt = (event: PointerEvent) => {
+      const rect = root.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      aim(((event.clientX - rect.left) / rect.width) * 2 - 1, ((event.clientY - rect.top) / rect.height) * 2 - 1);
+    };
+
+    const release = () => aim(0, 0, false);
+
+    const onEnter = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse') aimAt(event);
+    };
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse' || event.pointerId === touchId) aimAt(event);
+    };
+    const onLeave = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse') release();
+    };
+    const onDown = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse') return;
+      touchId = event.pointerId;
+      aimAt(event);
+    };
+    const onUp = (event: PointerEvent) => {
+      if (event.pointerId !== touchId) return;
+      touchId = null;
+      release();
+    };
+
+    root.addEventListener('pointerenter', onEnter);
+    root.addEventListener('pointermove', onMove);
+    root.addEventListener('pointerleave', onLeave);
+    root.addEventListener('pointerdown', onDown);
+    root.addEventListener('pointerup', onUp);
+    root.addEventListener('pointercancel', onUp);
+
+    const observer = new ResizeObserver(() => {
+      size.width = root.offsetWidth;
+      size.height = root.offsetHeight;
+      write();
+    });
+    observer.observe(root);
+
+    engineRef.current = { aim, release, write };
+
+    if (settingsRef.current.intro && !reduced) {
+      x.p = 0.62;
+      y.p = -0.55;
+      light.p = 1;
+      slowUntil = performance.now() + 1400;
+      write();
+      wake();
+    } else {
+      write();
+    }
 
     return () => {
-      shell.removeEventListener('pointerenter', pointerEnterHandler);
-      shell.removeEventListener('pointermove', pointerMoveHandler);
-      shell.removeEventListener('pointerleave', pointerLeaveHandler);
-      shell.removeEventListener('click', handleClick);
-      window.removeEventListener('deviceorientation', deviceOrientationHandler);
-      if (enterTimerRef.current) window.clearTimeout(enterTimerRef.current);
-      if (leaveRafRef.current) cancelAnimationFrame(leaveRafRef.current);
-      tiltEngine.cancel();
-      shell.classList.remove('entering');
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      root.removeEventListener('pointerenter', onEnter);
+      root.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerleave', onLeave);
+      root.removeEventListener('pointerdown', onDown);
+      root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointercancel', onUp);
+      engineRef.current = null;
     };
-  }, [
-    enableTilt,
-    enableMobileTilt,
-    tiltEngine,
-    handlePointerMove,
-    handlePointerEnter,
-    handlePointerLeave,
-    handleDeviceOrientation
-  ]);
+  }, []);
 
-  const cardStyle = useMemo(
-    () =>
-      ({
-        '--icon': iconUrl ? `url(${iconUrl})` : 'none',
-        '--grain': grainUrl ? `url(${grainUrl})` : 'none',
-        '--inner-gradient': innerGradient ?? DEFAULT_INNER_GRADIENT,
-        '--behind-glow-color': behindGlowColor ?? 'rgba(125, 190, 255, 0.67)',
-        '--behind-glow-size': behindGlowSize ?? '50%'
-      }) as React.CSSProperties,
-    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize]
-  );
+  useEffect(() => {
+    engineRef.current?.write();
+  }, [enableTilt, tiltStrength, parallax]);
 
-  const handleContactClick = useCallback(() => {
-    onContactClick?.();
-  }, [onContactClick]);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !enableMobileTilt) return;
+
+    let listening = false;
+    const onOrientation = (event: DeviceOrientationEvent) => {
+      if (event.beta == null || event.gamma == null) return;
+      const sensitivity = settingsRef.current.mobileTiltSensitivity;
+      engineRef.current?.aim((event.gamma * sensitivity) / 150, ((event.beta - 20) * sensitivity) / 150);
+    };
+    const listen = () => {
+      if (listening) return;
+      listening = true;
+      window.addEventListener('deviceorientation', onOrientation);
+    };
+    const onClick = () => {
+      const Motion = window.DeviceOrientationEvent as unknown as OrientationPermission | undefined;
+      if (Motion && typeof Motion.requestPermission === 'function') {
+        Motion.requestPermission()
+          .then(state => {
+            if (state === 'granted') listen();
+          })
+          .catch(() => {});
+      } else {
+        listen();
+      }
+    };
+
+    root.addEventListener('click', onClick);
+    return () => {
+      root.removeEventListener('click', onClick);
+      window.removeEventListener('deviceorientation', onOrientation);
+    };
+  }, [enableMobileTilt]);
+
+  const palette: Palette = theme === 'light' ? 'light' : 'dark';
+  const foil: Palette = backdropColor ? ((isDark(backdropColor) ?? palette === 'dark') ? 'dark' : 'light') : palette;
+  const backdrop = backdropColor
+    ? `linear-gradient(180deg, color-mix(in srgb, ${backdropColor}, #ffffff 12%) 0%, color-mix(in srgb, ${backdropColor}, #000000 18%) 100%)`
+    : 'var(--pc-tile)';
 
   return (
-    <div ref={wrapRef} className={`pc-card-wrapper ${className}`.trim()} style={cardStyle}>
-      {behindGlowEnabled && <div className="pc-behind" />}
-      <div ref={shellRef} className="pc-card-shell">
-        <section className="pc-card">
-          <div className="pc-inside">
-            <div className="pc-shine" />
-            <div className="pc-glare" />
-            <div className="pc-content pc-avatar-content">
-              <img
-                className="avatar"
-                src={avatarUrl}
-                alt={`${name || 'User'} avatar`}
-                loading="lazy"
-                onError={e => {
-                  const t = e.target as HTMLImageElement;
-                  t.style.display = 'none';
-                }}
-              />
-              {showUserInfo && (
-                <div className="pc-user-info">
-                  <div className="pc-user-details">
-                    <div className="pc-mini-avatar">
-                      <img
-                        src={miniAvatarUrl || avatarUrl}
-                        alt={`${name || 'User'} mini avatar`}
-                        loading="lazy"
-                        onError={e => {
-                          const t = e.target as HTMLImageElement;
-                          t.style.opacity = '0.5';
-                          t.src = avatarUrl;
-                        }}
-                      />
-                    </div>
-                    <div className="pc-user-text">
-                      <div className="pc-handle">@{handle}</div>
-                      <div className="pc-status">{status}</div>
-                    </div>
-                  </div>
-                  <button
-                    className="pc-contact-btn"
-                    onClick={handleContactClick}
-                    style={{ pointerEvents: 'auto' }}
-                    type="button"
-                    aria-label={`Contact ${name || 'user'}`}
-                  >
-                    {contactText}
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className="pc-content">
-              <div className="pc-details">
-                <h3>{name}</h3>
-                <p>{title}</p>
+    <div
+      ref={rootRef}
+      className={`profile-card ${className}`.trim()}
+      style={
+        {
+          ...THEMES[palette],
+          ...FOILS[foil],
+          '--pc-radius': `${Math.max(0, radius)}px`,
+          '--pc-backdrop': backdrop,
+          '--pc-holo': clamp(holo, 0, 1),
+          '--pc-glare': clamp(glare, 0, 1),
+          '--pc-parallax': `${Math.max(0, parallax)}px`,
+          '--pc-status': statusColor,
+          '--pc-grain': GRAIN,
+          '--pc-pattern': iconUrl ? `url("${iconUrl}")` : 'linear-gradient(#000, #000)',
+          '--pc-pattern-size': iconUrl ? '180% auto' : '100% 100%',
+          '--pc-holo-gain': iconUrl ? 1.25 : 0.75,
+          '--pc-holo-detail': iconUrl && foil === 'dark' ? 1 : 0
+        } as CSSProperties
+      }
+    >
+      <div className="profile-card__body">
+        <div className="profile-card__tile">
+          <span className="profile-card__sheen" />
+          <span className="profile-card__holo">
+            <span className="profile-card__holo-glow" />
+            <span className="profile-card__holo-shift" />
+          </span>
+          {avatarUrl && (
+            <img className="profile-card__photo" src={avatarUrl} alt={name || ''} loading="lazy" draggable={false} />
+          )}
+          {(name || title) && (
+            <>
+              <span className="profile-card__scrim" />
+              <div className="profile-card__info">
+                {name && <h3 className="profile-card__name">{name}</h3>}
+                {title && <p className="profile-card__title">{title}</p>}
               </div>
+            </>
+          )}
+          <span className="profile-card__tile-rim" />
+        </div>
+
+        {showUserInfo && (
+          <div className="profile-card__footer">
+            {miniAvatarUrl && (
+              <span className="profile-card__avatar">
+                <img src={miniAvatarUrl} alt="" loading="lazy" draggable={false} />
+              </span>
+            )}
+            <div className="profile-card__meta">
+              {handle && <span className="profile-card__handle">@{handle}</span>}
+              {status && <span className="profile-card__status">{status}</span>}
             </div>
+            {contactText && (
+              <button
+                type="button"
+                className="profile-card__contact"
+                onClick={onContactClick}
+                aria-label={name ? `${contactText} ${name}` : contactText}
+              >
+                <HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={1.8} />
+                {contactText}
+              </button>
+            )}
           </div>
-        </section>
+        )}
+
+        <span className="profile-card__glare" />
+        <span className="profile-card__shade" />
+        <span className="profile-card__rim" />
       </div>
     </div>
   );
 };
 
-const ProfileCard = React.memo(ProfileCardComponent);
-export default ProfileCard;
+export default memo(ProfileCard);

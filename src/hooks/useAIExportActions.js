@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Sparkles, FileCode2, Terminal, FileText } from 'lucide-react';
+import { CodeSquareIcon, CommandLineIcon, FileScriptIcon, SparklesIcon } from '@hugeicons/core-free-icons';
 import { SiOpenai, SiClaude, SiVercel } from 'react-icons/si';
 import { toast } from 'sonner';
 import { generateCliCommands } from '../utils/cli';
@@ -51,25 +51,25 @@ export function useAIExportActions({
       {
         key: 'prompt',
         label: 'Copy prompt',
-        icon: Sparkles,
+        icon: SparklesIcon,
         run: () => run('prompt', fullPrompt, 'Prompt copied — paste into any AI assistant')
       },
       {
         key: 'usage',
         label: 'Copy configured code',
-        icon: FileText,
+        icon: CodeSquareIcon,
         run: () => run('usage', configuredUsage, 'Configured usage copied')
       },
       {
         key: 'source',
         label: 'Copy component source',
-        icon: FileCode2,
+        icon: FileScriptIcon,
         run: () => run('source', sourceWithCss, 'Component source copied')
       },
       {
         key: 'install',
         label: 'Copy install command',
-        icon: Terminal,
+        icon: CommandLineIcon,
         run: () => run('install', installCommand, 'Install command copied')
       }
     ];

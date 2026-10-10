@@ -256,11 +256,9 @@
 		{
 			"name": "Cubes-JS-CSS",
 			"title": "Cubes",
-			"description": "3D rotating cube cluster. Supports auto-rotation or hover interaction.",
+			"description": "A grid of outlined 3D cubes that turn to face the cursor, spin when swept and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -277,11 +275,9 @@
 		{
 			"name": "Cubes-JS-TW",
 			"title": "Cubes",
-			"description": "3D rotating cube cluster. Supports auto-rotation or hover interaction.",
+			"description": "A grid of outlined 3D cubes that turn to face the cursor, spin when swept and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -293,11 +289,9 @@
 		{
 			"name": "Cubes-TS-CSS",
 			"title": "Cubes",
-			"description": "3D rotating cube cluster. Supports auto-rotation or hover interaction.",
+			"description": "A grid of outlined 3D cubes that turn to face the cursor, spin when swept and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -314,11 +308,9 @@
 		{
 			"name": "Cubes-TS-TW",
 			"title": "Cubes",
-			"description": "3D rotating cube cluster. Supports auto-rotation or hover interaction.",
+			"description": "A grid of outlined 3D cubes that turn to face the cursor, spin when swept and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -4978,10 +4970,11 @@
 		{
 			"name": "CardSwap-JS-CSS",
 			"title": "CardSwap",
-			"description": "Cards animate position swapping with smooth layout transitions.",
+			"description": "A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -4999,10 +4992,11 @@
 		{
 			"name": "CardSwap-JS-TW",
 			"title": "CardSwap",
-			"description": "Cards animate position swapping with smooth layout transitions.",
+			"description": "A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5015,10 +5009,11 @@
 		{
 			"name": "CardSwap-TS-CSS",
 			"title": "CardSwap",
-			"description": "Cards animate position swapping with smooth layout transitions.",
+			"description": "A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5036,10 +5031,11 @@
 		{
 			"name": "CardSwap-TS-TW",
 			"title": "CardSwap",
-			"description": "Cards animate position swapping with smooth layout transitions.",
+			"description": "A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5130,11 +5126,9 @@
 		{
 			"name": "ChromaGrid-JS-CSS",
 			"title": "ChromaGrid",
-			"description": "A responsive grid of grayscale tiles. Hovering the grid reaveals their colors.",
+			"description": "A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5151,11 +5145,9 @@
 		{
 			"name": "ChromaGrid-JS-TW",
 			"title": "ChromaGrid",
-			"description": "A responsive grid of grayscale tiles. Hovering the grid reaveals their colors.",
+			"description": "A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5167,11 +5159,9 @@
 		{
 			"name": "ChromaGrid-TS-CSS",
 			"title": "ChromaGrid",
-			"description": "A responsive grid of grayscale tiles. Hovering the grid reaveals their colors.",
+			"description": "A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5188,11 +5178,9 @@
 		{
 			"name": "ChromaGrid-TS-TW",
 			"title": "ChromaGrid",
-			"description": "A responsive grid of grayscale tiles. Hovering the grid reaveals their colors.",
+			"description": "A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6976,7 +6964,7 @@
 		{
 			"name": "ModelViewer-JS-CSS",
 			"title": "ModelViewer",
-			"description": "Three.js model viewer with orbit controls and lighting presets.",
+			"description": "A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.",
 			"type": "registry:component",
 			"dependencies": [
 				"@react-three/fiber@^9.3.0",
@@ -6994,7 +6982,7 @@
 		{
 			"name": "ModelViewer-JS-TW",
 			"title": "ModelViewer",
-			"description": "Three.js model viewer with orbit controls and lighting presets.",
+			"description": "A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.",
 			"type": "registry:component",
 			"dependencies": [
 				"@react-three/fiber@^9.3.0",
@@ -7012,7 +7000,7 @@
 		{
 			"name": "ModelViewer-TS-CSS",
 			"title": "ModelViewer",
-			"description": "Three.js model viewer with orbit controls and lighting presets.",
+			"description": "A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.",
 			"type": "registry:component",
 			"dependencies": [
 				"@react-three/fiber@^9.3.0",
@@ -7030,7 +7018,7 @@
 		{
 			"name": "ModelViewer-TS-TW",
 			"title": "ModelViewer",
-			"description": "Three.js model viewer with orbit controls and lighting presets.",
+			"description": "A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.",
 			"type": "registry:component",
 			"dependencies": [
 				"@react-three/fiber@^9.3.0",
@@ -7192,9 +7180,12 @@
 		{
 			"name": "ProfileCard-JS-CSS",
 			"title": "ProfileCard",
-			"description": "Animated profile card glare with 3D hover effect.",
+			"description": "A framed profile card that tilts toward the cursor, with holographic foil shining through a tiled pattern.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7211,9 +7202,12 @@
 		{
 			"name": "ProfileCard-JS-TW",
 			"title": "ProfileCard",
-			"description": "Animated profile card glare with 3D hover effect.",
+			"description": "A framed profile card that tilts toward the cursor, with holographic foil shining through a tiled pattern.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7225,9 +7219,12 @@
 		{
 			"name": "ProfileCard-TS-CSS",
 			"title": "ProfileCard",
-			"description": "Animated profile card glare with 3D hover effect.",
+			"description": "A framed profile card that tilts toward the cursor, with holographic foil shining through a tiled pattern.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7244,9 +7241,12 @@
 		{
 			"name": "ProfileCard-TS-TW",
 			"title": "ProfileCard",
-			"description": "Animated profile card glare with 3D hover effect.",
+			"description": "A framed profile card that tilts toward the cursor, with holographic foil shining through a tiled pattern.",
 			"type": "registry:component",
-			"dependencies": [],
+			"dependencies": [
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
+			],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12038,11 +12038,9 @@
 		{
 			"name": "RippleGrid-JS-CSS",
 			"title": "RippleGrid",
-			"description": "A grid that continuously animates with a ripple effect.",
+			"description": "A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12059,11 +12057,9 @@
 		{
 			"name": "RippleGrid-JS-TW",
 			"title": "RippleGrid",
-			"description": "A grid that continuously animates with a ripple effect.",
+			"description": "A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12075,11 +12071,9 @@
 		{
 			"name": "RippleGrid-TS-CSS",
 			"title": "RippleGrid",
-			"description": "A grid that continuously animates with a ripple effect.",
+			"description": "A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12096,11 +12090,9 @@
 		{
 			"name": "RippleGrid-TS-TW",
 			"title": "RippleGrid",
-			"description": "A grid that continuously animates with a ripple effect.",
+			"description": "A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

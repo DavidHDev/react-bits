@@ -1,13 +1,22 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState, useCallback } from 'react';
 import TabsFooter from './TabsFooter';
 import CategoryProFooter from './Pro/CategoryProFooter';
 import Customize from './Preview/Customize';
 
-import { Tabs, Icon, Flex, Tooltip, Box, Menu, Portal } from '@chakra-ui/react';
-import { FiCode, FiEye } from 'react-icons/fi';
-import { FaRegShareFromSquare } from 'react-icons/fa6';
-import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
-import { Maximize2, Monitor, MoreHorizontal, Palette, Smartphone, Tablet } from 'lucide-react';
+import { Tabs, Tooltip, Menu, Portal } from '@chakra-ui/react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
+  ComputerIcon,
+  FavouriteIcon,
+  FullScreenIcon,
+  MoreHorizontalIcon,
+  PaintBoardIcon,
+  Share08Icon,
+  SmartPhone01Icon,
+  SourceCodeIcon,
+  Tablet01Icon,
+  ViewIcon
+} from '@hugeicons/core-free-icons';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { toggleSavedComponent, isComponentSaved } from '../../utils/favorites';
@@ -18,7 +27,7 @@ import PropTable from './Preview/PropTable';
 import CodeExample, { injectPropsIntoCode } from '../code/CodeExample';
 import OpenInStudioButton from './Preview/OpenInStudioButton';
 import { buildStudioUrl } from './Preview/studio-url';
-import CopyForAIMenu, { AIMenuItem, AIMenuSeparator } from './CopyForAIMenu';
+import CopyForAIMenu, { AIMenuSections, MenuGroup } from './CopyForAIMenu';
 import FluidMenuContent from './FluidMenuContent';
 import { useAIExportActions } from '../../hooks/useAIExportActions';
 import ComponentPager from './ComponentPager';
@@ -27,29 +36,6 @@ import PreviewResizer, { PreviewStage } from './Preview/PreviewResizer';
 import { usePreviewFrame } from '../../hooks/usePreviewFrame';
 import { RelatedComponents } from './DocsOverview';
 import { getComponentSEOByPath } from '../../utils/seo';
-
-const TAB_STYLE_PROPS = {
-  flex: '0 0 auto',
-  border: '1px solid var(--action-control-border)',
-  borderRadius: '10px',
-  fontSize: '14px',
-  fontWeight: '500',
-  h: 10,
-  px: 4,
-  color: 'var(--text-muted)',
-  bg: 'var(--action-control-bg)',
-  justifyContent: 'center',
-  transition:
-    'transform var(--dur-press) var(--ease-out), background-color var(--dur-menu) var(--ease-out), color var(--dur-menu) var(--ease-out)',
-  _hover: { bg: 'var(--action-control-hover)', color: 'var(--text-primary)' },
-  _active: { transform: 'scale(0.97)' },
-  _selected: {
-    bg: 'var(--action-control-selected)',
-    borderColor: 'var(--action-control-selected-border)',
-    color: colors.accent,
-    boxShadow: 'var(--action-control-shadow)'
-  }
-};
 
 /**
  * Recursively searches React children for a component of the given type
@@ -97,43 +83,13 @@ function insertCategoryPro(children, category) {
   return visit(children);
 }
 
-const TOOLTIP_CONTENT_PROPS = {
-  bg: colors.bgBody,
-  border: `1px solid ${colors.borderPrimary}`,
-  color: colors.accent,
-  fontSize: '12px',
-  fontWeight: '500',
-  lineHeight: '0',
-  px: 4,
-  whiteSpace: 'nowrap',
-  h: 10,
-  borderRadius: '10px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  textAlign: 'center',
-  pointerEvents: 'none'
-};
+const ToolIcon = ({ icon }) => <HugeiconsIcon icon={icon} size={16} strokeWidth={1.6} aria-hidden="true" />;
 
-const PreviewAction = ({ label, icon, onClick }) => (
-  <Tooltip.Root openDelay={250} closeDelay={100} positioning={{ placement: 'left', gutter: 8 }}>
-    <Tooltip.Trigger asChild>
-      <Box
-        as="button"
-        aria-label={label}
-        onClick={onClick}
-        display="flex"
-        cursor="pointer"
-        alignItems="center"
-        justifyContent="center"
-        {...TAB_STYLE_PROPS}
-        w={10}
-      >
-        <Icon as={icon} boxSize={4} flexShrink={0} color="var(--text-primary)" />
-      </Box>
-    </Tooltip.Trigger>
+const ToolTip = ({ label, children }) => (
+  <Tooltip.Root openDelay={300} closeDelay={80} positioning={{ placement: 'top', gutter: 8 }}>
+    <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
     <Tooltip.Positioner>
-      <Tooltip.Content {...TOOLTIP_CONTENT_PROPS}>{label}</Tooltip.Content>
+      <Tooltip.Content className="docs-tooltip">{label}</Tooltip.Content>
     </Tooltip.Positioner>
   </Tooltip.Root>
 );
@@ -142,38 +98,51 @@ const TABLET_WIDTH = 768;
 const MOBILE_WIDTH = 375;
 
 const WIDTH_PRESETS = [
-  { label: 'Desktop', icon: Monitor, width: null },
-  { label: `Tablet · ${TABLET_WIDTH}px`, icon: Tablet, width: TABLET_WIDTH },
-  { label: `Mobile · ${MOBILE_WIDTH}px`, icon: Smartphone, width: MOBILE_WIDTH }
+  { label: 'Desktop', icon: ComputerIcon, width: null },
+  { label: `Tablet · ${TABLET_WIDTH}px`, icon: Tablet01Icon, width: TABLET_WIDTH },
+  { label: `Mobile · ${MOBILE_WIDTH}px`, icon: SmartPhone01Icon, width: MOBILE_WIDTH }
 ];
 
-const PreviewWidthPresets = ({ fullWidth, width, onChange }) => {
-  const presets = WIDTH_PRESETS.filter(preset => preset.width === null || preset.width < fullWidth);
-  if (presets.length < 2) return null;
+const MenuIcon = ({ icon, saved }) => (
+  <span className="docs-menu-icon" data-saved={saved ? '' : undefined}>
+    <ToolIcon icon={icon} />
+  </span>
+);
 
-  return (
-    <div className="preview-width-presets" role="group" aria-label="Preview width">
-      {presets.map(preset => (
-        <Tooltip.Root key={preset.label} openDelay={250} closeDelay={100} positioning={{ placement: 'top', gutter: 8 }}>
-          <Tooltip.Trigger asChild>
-            <button
-              type="button"
-              className="preview-width-preset"
-              aria-label={preset.label}
-              aria-pressed={width === preset.width}
-              onClick={() => onChange(preset.width)}
-            >
-              <preset.icon aria-hidden="true" />
-            </button>
-          </Tooltip.Trigger>
-          <Tooltip.Positioner>
-            <Tooltip.Content {...TOOLTIP_CONTENT_PROPS}>{preset.label}</Tooltip.Content>
-          </Tooltip.Positioner>
-        </Tooltip.Root>
-      ))}
-    </div>
-  );
+const usePill = (trackRef, selection) => {
+  const [pill, setPill] = useState(null);
+
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
+    const measure = () => {
+      const active = track.querySelector('[aria-selected="true"], [aria-pressed="true"]');
+      setPill(previous => {
+        if (!active) return previous ? { ...previous, hidden: true } : null;
+        const next = { x: active.offsetLeft, width: active.offsetWidth, hidden: false, ready: Boolean(previous) };
+        const same = previous && previous.x === next.x && previous.width === next.width && !previous.hidden;
+        return same ? previous : next;
+      });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [trackRef, selection]);
+
+  return pill;
 };
+
+const Pill = ({ pill }) => (
+  <span
+    className="docs-pill"
+    aria-hidden="true"
+    data-ready={pill?.ready ? '' : undefined}
+    style={
+      pill ? { width: pill.width, transform: `translateX(${pill.x}px)`, opacity: pill.hidden ? 0 : 1 } : { opacity: 0 }
+    }
+  />
+);
 
 const canFullscreen = () =>
   typeof document !== 'undefined' && Boolean(document.fullscreenEnabled || document.webkitFullscreenEnabled);
@@ -374,6 +343,9 @@ const TabsLayout = ({ children, className }) => {
 
   const [activeTab, setActiveTab] = useState('preview');
   const [previewWidth, setPreviewWidth] = useState(null);
+  const tabsTrackRef = useRef(null);
+  const sizeTrackRef = useRef(null);
+  const tabsPill = usePill(tabsTrackRef, activeTab);
   const [resizing, setResizing] = useState(false);
   const previewRef = useRef(null);
   const isPreview = activeTab === 'preview';
@@ -394,6 +366,11 @@ const TabsLayout = ({ children, className }) => {
   const showFavorite = favoriteKey && category !== 'get-started';
   const showFullscreen = category === 'backgrounds' && isPreview && canFullscreen();
   const hasOverflowActions = showFavorite || Boolean(codeExampleProps) || Boolean(studioButtonProps) || showFullscreen;
+  const widthPresets =
+    canResize && frame ? WIDTH_PRESETS.filter(preset => preset.width === null || preset.width < frame.fullWidth) : [];
+  const showWidthPresets = widthPresets.length > 1;
+  const sizePill = usePill(sizeTrackRef, `${previewWidth}-${widthPresets.length}-${showFullscreen}`);
+  const favoriteLabel = isSaved ? 'Remove from favorites' : 'Add to favorites';
 
   return (
     <Tabs.Root
@@ -404,277 +381,141 @@ const TabsLayout = ({ children, className }) => {
       onValueChange={({ value }) => setActiveTab(value)}
       className={className}
     >
-      <Tabs.List w="100%">
-        <Flex gap={2} justifyContent="space-between" alignItems="center" w="100%" wrap="nowrap">
-          {/* Primary tabs */}
-          <Flex gap={2} wrap="nowrap" flex={{ base: '1 1 0', md: '0 0 auto' }} minW="0">
-            <Tabs.Trigger value="preview" {...TAB_STYLE_PROPS} flex={{ base: '1 1 0', md: '0 0 auto' }}>
-              <Icon as={FiEye} /> Preview
-            </Tabs.Trigger>
+      <Tabs.List className="docs-toolbar">
+        <div className="docs-track docs-tabs" ref={tabsTrackRef} data-pill="">
+          <Pill pill={tabsPill} />
+          <Tabs.Trigger value="preview" className="docs-segment">
+            <ToolIcon icon={ViewIcon} />
+            Preview
+          </Tabs.Trigger>
+          <Tabs.Trigger value="code" className="docs-segment">
+            <ToolIcon icon={SourceCodeIcon} />
+            Code
+          </Tabs.Trigger>
+        </div>
 
-            <Tabs.Trigger value="code" {...TAB_STYLE_PROPS} flex={{ base: '1 1 0', md: '0 0 auto' }}>
-              <Icon as={FiCode} /> Code
-            </Tabs.Trigger>
-          </Flex>
-
-          {/* Desktop: full action buttons */}
-          <Flex alignItems="center" gap={2} flexShrink={0} display={{ base: 'none', md: 'flex' }}>
-            {canResize && frame && (
-              <PreviewWidthPresets fullWidth={frame.fullWidth} width={previewWidth} onChange={setPreviewWidth} />
-            )}
-
-            {showFullscreen && <PreviewAction label="Fullscreen" icon={Maximize2} onClick={openFullscreen} />}
-
-            {showFavorite && (
-              <Tooltip.Root openDelay={250} closeDelay={100} positioning={{ placement: 'left', gutter: 8 }}>
-                <Tooltip.Trigger asChild>
-                  <Box
-                    as="button"
-                    aria-label={isSaved ? 'Remove from Favorites' : 'Add to Favorites'}
-                    onClick={toggleFavorite}
-                    aria-pressed={isSaved}
-                    display="flex"
-                    cursor="pointer"
-                    alignItems="center"
-                    gap={2}
-                    {...TAB_STYLE_PROPS}
-                    w={10}
-                    borderColor={isSaved ? 'rgba(168, 85, 247, 0.3)' : 'var(--action-control-border)'}
-                    boxShadow={isSaved ? 'inset 0 0 0 1px rgba(168, 85, 247, 0.04)' : undefined}
-                    _hover={
-                      isSaved
-                        ? {
-                            bg: 'var(--action-control-hover)',
-                            borderColor: 'rgba(168, 85, 247, 0.48)'
-                          }
-                        : TAB_STYLE_PROPS._hover
-                    }
-                  >
-                    <Icon
-                      as={isSaved ? RiHeartFill : RiHeartLine}
-                      color={isSaved ? '#a855f7' : 'var(--text-primary)'}
-                      boxSize={4}
-                      filter={isSaved ? 'drop-shadow(0 1px 3px rgba(168, 85, 247, 0.2))' : undefined}
-                    />
-                  </Box>
-                </Tooltip.Trigger>
-                <Tooltip.Positioner>
-                  <Tooltip.Content
-                    bg={colors.bgBody}
-                    border={`1px solid ${colors.borderPrimary}`}
-                    color={colors.accent}
-                    fontSize="12px"
-                    fontWeight="500"
-                    lineHeight="0"
-                    px={4}
-                    whiteSpace="nowrap"
-                    h={10}
-                    borderRadius="10px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="center"
-                    pointerEvents="none"
-                  >
-                    {isSaved ? 'Remove from Favorites' : 'Add to Favorites'}
-                  </Tooltip.Content>
-                </Tooltip.Positioner>
-              </Tooltip.Root>
-            )}
-
-            {showFavorite && (
-              <Tooltip.Root openDelay={250} closeDelay={100} positioning={{ placement: 'left', gutter: 8 }}>
-                <Tooltip.Trigger asChild>
-                  <Box
-                    as="button"
-                    aria-label="Copy share link"
-                    onClick={copyShareLink}
-                    display="flex"
-                    cursor="pointer"
-                    alignItems="center"
-                    justifyContent="center"
-                    {...TAB_STYLE_PROPS}
-                    w={10}
-                  >
-                    <Icon as={FaRegShareFromSquare} boxSize={4} flexShrink={0} color="var(--text-primary)" />
-                  </Box>
-                </Tooltip.Trigger>
-                <Tooltip.Positioner>
-                  <Tooltip.Content
-                    bg={colors.bgBody}
-                    border={`1px solid ${colors.borderPrimary}`}
-                    color={colors.accent}
-                    fontSize="12px"
-                    fontWeight="500"
-                    lineHeight="0"
-                    px={4}
-                    whiteSpace="nowrap"
-                    h={10}
-                    borderRadius="10px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    textAlign="center"
-                    pointerEvents="none"
-                  >
-                    Copy share link
-                  </Tooltip.Content>
-                </Tooltip.Positioner>
-              </Tooltip.Root>
-            )}
-
-            {aiExport && <CopyForAIMenu {...aiActions} triggerProps={TAB_STYLE_PROPS} />}
-          </Flex>
-
-          {/* Mobile: overflow menu */}
-          {hasOverflowActions && (
-            <Box display={{ base: 'flex', md: 'none' }} flexShrink={0}>
-              <Menu.Root
-                positioning={{
-                  placement: 'bottom-end',
-                  gutter: 12,
-                  offset: { mainAxis: 6, crossAxis: 0 },
-                  flip: false,
-                  overflowPadding: 0
-                }}
-              >
-                <Menu.Trigger asChild>
-                  <Box
-                    as="button"
-                    aria-label="More actions"
-                    display="flex"
-                    cursor="pointer"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={2}
-                    {...TAB_STYLE_PROPS}
-                    w={10}
-                    px={0}
-                    position="relative"
-                  >
-                    <MoreHorizontal size={18} />
-                    {isSaved && (
-                      <Box
-                        position="absolute"
-                        top="6px"
-                        right="6px"
-                        w="6px"
-                        h="6px"
-                        borderRadius="full"
-                        bg={colors.accent}
-                      />
-                    )}
-                  </Box>
-                </Menu.Trigger>
-                <Portal>
-                  <Menu.Positioner>
-                    <FluidMenuContent
-                      bg={colors.bgBody}
-                      border={`1px solid ${colors.borderPrimary}`}
-                      borderRadius="10px"
-                      p={1}
-                      minW="180px"
-                      boxShadow="var(--shadow-menu)"
-                      zIndex={1500}
-                      transformOrigin="top right"
+        <div className="docs-toolbar-actions">
+          {(showWidthPresets || showFullscreen) && (
+            <div className="docs-track" role="group" aria-label="Preview size" ref={sizeTrackRef} data-pill="">
+              <Pill pill={sizePill} />
+              {showWidthPresets &&
+                widthPresets.map(preset => (
+                  <ToolTip key={preset.label} label={preset.label}>
+                    <button
+                      type="button"
+                      className="docs-segment docs-segment--icon"
+                      aria-label={preset.label}
+                      aria-pressed={previewWidth === preset.width}
+                      onClick={() => setPreviewWidth(preset.width)}
                     >
-                      {showFavorite && (
-                        <Menu.Item
-                          value="favorite"
-                          onSelect={toggleFavorite}
-                          display="flex"
-                          alignItems="center"
-                          gap={3}
-                          px={3}
-                          py={2}
-                          fontSize="14px"
-                          color="var(--text-primary)"
-                          borderRadius="8px"
-                          cursor="pointer"
-                          _hover={{ bg: colors.bgHover }}
-                        >
-                          <Icon
-                            as={isSaved ? RiHeartFill : RiHeartLine}
-                            color={isSaved ? '#a855f7' : 'var(--text-primary)'}
-                            boxSize={4}
-                          />
-                          {isSaved ? 'Remove from favorites' : 'Add to favorites'}
-                        </Menu.Item>
-                      )}
-                      {showFavorite && (
-                        <Menu.Item
-                          value="share"
-                          onSelect={copyShareLink}
-                          display="flex"
-                          alignItems="center"
-                          gap={3}
-                          px={3}
-                          py={2}
-                          fontSize="14px"
-                          color="var(--text-primary)"
-                          borderRadius="8px"
-                          cursor="pointer"
-                          _hover={{ bg: colors.bgHover }}
-                        >
-                          <Icon as={FaRegShareFromSquare} boxSize={4} flexShrink={0} color="var(--text-primary)" /> Copy
-                          share link
-                        </Menu.Item>
-                      )}
-                      {aiExport && (
-                        <>
-                          <AIMenuSeparator />
-                          {aiActions.copyItems.map(item => (
-                            <AIMenuItem key={item.key} item={item} done={aiActions.done} />
-                          ))}
-                          <AIMenuSeparator />
-                          {aiActions.openItems.map(item => (
-                            <AIMenuItem key={item.key} item={item} done={aiActions.done} />
-                          ))}
-                        </>
-                      )}
+                      <ToolIcon icon={preset.icon} />
+                    </button>
+                  </ToolTip>
+                ))}
+              {showFullscreen && (
+                <ToolTip label="Fullscreen">
+                  <button
+                    type="button"
+                    className="docs-segment docs-segment--icon"
+                    aria-label="Fullscreen"
+                    onClick={openFullscreen}
+                  >
+                    <ToolIcon icon={FullScreenIcon} />
+                  </button>
+                </ToolTip>
+              )}
+            </div>
+          )}
+
+          {showFavorite && (
+            <div className="docs-track" role="group" aria-label="Page actions">
+              <ToolTip label={favoriteLabel}>
+                <button
+                  type="button"
+                  className="docs-segment docs-segment--icon docs-favorite"
+                  aria-label={favoriteLabel}
+                  aria-pressed={isSaved}
+                  data-saved={isSaved ? '' : undefined}
+                  onClick={toggleFavorite}
+                >
+                  <ToolIcon icon={FavouriteIcon} />
+                </button>
+              </ToolTip>
+              <ToolTip label="Copy share link">
+                <button
+                  type="button"
+                  className="docs-segment docs-segment--icon"
+                  aria-label="Copy share link"
+                  onClick={copyShareLink}
+                >
+                  <ToolIcon icon={Share08Icon} />
+                </button>
+              </ToolTip>
+            </div>
+          )}
+
+          {aiExport && <CopyForAIMenu {...aiActions} />}
+        </div>
+
+        {hasOverflowActions && (
+          <Menu.Root
+            positioning={{
+              placement: 'bottom-end',
+              gutter: 12,
+              offset: { mainAxis: 6, crossAxis: 0 },
+              flip: false,
+              overflowPadding: 0
+            }}
+          >
+            <Menu.Trigger asChild>
+              <button type="button" className="docs-tool docs-tool--icon docs-toolbar-more" aria-label="More actions">
+                <ToolIcon icon={MoreHorizontalIcon} />
+                {isSaved && <span className="docs-tool-dot" />}
+              </button>
+            </Menu.Trigger>
+            <Portal>
+              <Menu.Positioner>
+                <FluidMenuContent minW="220px" zIndex={1500} transformOrigin="top right">
+                  {showFavorite && (
+                    <MenuGroup label="Page">
+                      <Menu.Item value="favorite" onSelect={toggleFavorite} className="docs-menu-item">
+                        <MenuIcon icon={FavouriteIcon} saved={isSaved} />
+                        {favoriteLabel}
+                      </Menu.Item>
+                      <Menu.Item value="share" onSelect={copyShareLink} className="docs-menu-item">
+                        <MenuIcon icon={Share08Icon} />
+                        Copy share link
+                      </Menu.Item>
+                    </MenuGroup>
+                  )}
+                  {aiExport && (
+                    <AIMenuSections
+                      copyItems={aiActions.copyItems}
+                      openItems={aiActions.openItems}
+                      done={aiActions.done}
+                    />
+                  )}
+                  {(showFullscreen || studioButtonProps) && (
+                    <MenuGroup label="View">
                       {showFullscreen && (
-                        <Menu.Item
-                          value="fullscreen"
-                          onSelect={openFullscreen}
-                          display="flex"
-                          alignItems="center"
-                          gap={3}
-                          px={3}
-                          py={2}
-                          fontSize="14px"
-                          color="var(--text-primary)"
-                          borderRadius="8px"
-                          cursor="pointer"
-                          _hover={{ bg: colors.bgHover }}
-                        >
-                          <Maximize2 size={16} /> Fullscreen
+                        <Menu.Item value="fullscreen" onSelect={openFullscreen} className="docs-menu-item">
+                          <MenuIcon icon={FullScreenIcon} />
+                          Fullscreen
                         </Menu.Item>
                       )}
                       {studioButtonProps && (
-                        <Menu.Item
-                          value="open-studio"
-                          onSelect={handleOpenStudio}
-                          display="flex"
-                          alignItems="center"
-                          gap={3}
-                          px={3}
-                          py={2}
-                          fontSize="14px"
-                          color="var(--text-primary)"
-                          borderRadius="8px"
-                          cursor="pointer"
-                          _hover={{ bg: colors.bgHover }}
-                        >
-                          <Palette size={16} /> Open in BG Studio
+                        <Menu.Item value="open-studio" onSelect={handleOpenStudio} className="docs-menu-item">
+                          <MenuIcon icon={PaintBoardIcon} />
+                          Open in BG Studio
                         </Menu.Item>
                       )}
-                    </FluidMenuContent>
-                  </Menu.Positioner>
-                </Portal>
-              </Menu.Root>
-            </Box>
-          )}
-        </Flex>
+                    </MenuGroup>
+                  )}
+                </FluidMenuContent>
+              </Menu.Positioner>
+            </Portal>
+          </Menu.Root>
+        )}
       </Tabs.List>
 
       <Tabs.Content

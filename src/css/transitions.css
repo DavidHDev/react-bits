@@ -24,17 +24,3 @@
   pointer-events: none;
   opacity: 1;
 }
-
-.skeleton-loader {
-  animation: fadeIn 300ms var(--ease-out);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}

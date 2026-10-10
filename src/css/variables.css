@@ -99,6 +99,24 @@
   --code-bg-accent: #1b1722;
   --new-badge-text: #e2c9ff;
   --new-badge-bg: rgba(168, 85, 247, 0.32);
+  --tool-track: rgba(255, 255, 255, 0.045);
+  --tool-track-hover: rgba(255, 255, 255, 0.08);
+  --tool-hover: rgba(255, 255, 255, 0.06);
+  --tool-raised: rgba(255, 255, 255, 0.1);
+  --tool-raised-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --tool-muted: rgba(244, 244, 245, 0.58);
+  --tool-float: rgba(38, 33, 46, 0.62);
+  --tool-float-hover: rgba(52, 46, 62, 0.78);
+  --tool-float-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --tool-tooltip: #1e1a25;
+  --tool-tooltip-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --menu-bg: #1a1720;
+  --menu-bg-rgb: 26, 23, 32;
+  --menu-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 18px 44px -12px rgba(0, 0, 0, 0.7),
+    0 6px 14px -6px rgba(0, 0, 0, 0.45);
+  --menu-highlight: rgba(255, 255, 255, 0.065);
+  --menu-label: rgba(244, 244, 245, 0.42);
 }
 
 :root[data-theme='light'] {
@@ -162,6 +180,23 @@
   --code-bg-accent: #ececee;
   --new-badge-text: #6f249d;
   --new-badge-bg: #eee1f7;
+  --tool-track: rgba(24, 24, 27, 0.045);
+  --tool-track-hover: rgba(24, 24, 27, 0.075);
+  --tool-hover: rgba(24, 24, 27, 0.045);
+  --tool-raised: #ffffff;
+  --tool-raised-shadow: 0 1px 2px rgba(24, 24, 27, 0.08), 0 0 0 1px rgba(24, 24, 27, 0.05);
+  --tool-muted: rgba(39, 39, 42, 0.6);
+  --tool-float: rgba(255, 255, 255, 0.86);
+  --tool-float-hover: #ffffff;
+  --tool-float-shadow: 0 1px 3px rgba(24, 24, 27, 0.08), 0 0 0 1px rgba(24, 24, 27, 0.06);
+  --tool-tooltip: #ffffff;
+  --tool-tooltip-shadow: 0 8px 20px rgba(24, 24, 27, 0.12), 0 0 0 1px rgba(24, 24, 27, 0.07);
+  --menu-bg: #ffffff;
+  --menu-bg-rgb: 255, 255, 255;
+  --menu-shadow:
+    0 0 0 1px rgba(24, 24, 27, 0.07), 0 18px 44px -14px rgba(24, 24, 27, 0.2), 0 6px 14px -8px rgba(24, 24, 27, 0.1);
+  --menu-highlight: rgba(24, 24, 27, 0.05);
+  --menu-label: rgba(39, 39, 42, 0.46);
   --gradient-title: linear-gradient(135deg, #24192d 0%, #7550c8 25%, #9138df 50%, #7340bd 75%, #24192d 100%);
 }
 

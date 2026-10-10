@@ -14,7 +14,6 @@ const IndexPage = () => {
     <Box>
       <ComponentList
         title={INDEX_SEO.heading}
-        intro={INDEX_SEO.intro}
         list={componentMetadata}
         hasFavoriteButton
         sorting="newest"

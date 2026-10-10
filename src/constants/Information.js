@@ -85,12 +85,18 @@ export const componentMetadata = {
   },
   'Animations/Cubes': {
     videoUrl: '/assets/video/cubes.webm',
-    description: '3D rotating cube cluster. Supports auto-rotation or hover interaction.',
+    description: 'A grid of outlined 3D cubes that turn to face the cursor, spin when swept and ripple on click.',
     category: 'Animations',
     name: 'Cubes',
     docsUrl: 'https://reactbits.dev/animations/cubes',
     tags: [],
-    added: '2025-06-17'
+    added: '2025-06-17',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with springy cubes that face the cursor, spin when you sweep past and ripple on click, plus new edge styles, shading and depth.'
+      }
+    ]
   },
   'Animations/ElectricBorder': {
     videoUrl: '/assets/video/electricborder.webm',
@@ -777,12 +783,19 @@ export const componentMetadata = {
   },
   'Components/CardSwap': {
     videoUrl: '/assets/video/cardswap.webm',
-    description: 'Cards animate position swapping with smooth layout transitions.',
+    description:
+      'A 3D stack of cards that sends the front card to the back on a timer. Drag or fling it away, or click a card behind to bring it forward.',
     category: 'Components',
     name: 'CardSwap',
     docsUrl: 'https://reactbits.dev/components/card-swap',
     tags: [],
-    added: '2025-06-02'
+    added: '2025-06-02',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with springy swaps you can drag or fling, depth that follows the cursor, cleaner cards in both themes and a layout that fits any container.'
+      }
+    ]
   },
   'Components/Carousel': {
     videoUrl: '/assets/video/carousel.webm',
@@ -801,12 +814,19 @@ export const componentMetadata = {
   },
   'Components/ChromaGrid': {
     videoUrl: '/assets/video/chromagrid.webm',
-    description: 'A responsive grid of grayscale tiles. Hovering the grid reaveals their colors.',
+    description:
+      'A responsive grid of grayscale photo cards. A soft spotlight follows the cursor, bringing back their colors and lighting up each card border.',
     category: 'Components',
     name: 'ChromaGrid',
     docsUrl: 'https://reactbits.dev/components/chroma-grid',
     tags: [],
-    added: '2025-05-30'
+    added: '2025-05-30',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Redesigned with responsive cards in both themes, a smoother color spotlight and borders that light up near the cursor.'
+      }
+    ]
   },
   'Components/HoloCard': {
     videoUrl: '/assets/video/holocard.webm',
@@ -1083,12 +1103,18 @@ export const componentMetadata = {
   },
   'Components/ModelViewer': {
     videoUrl: '/assets/video/modelviewer.webm',
-    description: 'Three.js model viewer with orbit controls and lighting presets.',
+    description: 'A product-style 3D model viewer that frames itself, floats over a soft shadow and turns with drag, pinch and hover.',
     category: 'Components',
     name: 'ModelViewer',
     docsUrl: 'https://reactbits.dev/components/model-viewer',
     tags: [],
-    added: '2025-06-13'
+    added: '2025-06-13',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with automatic framing, studio lighting, momentum dragging, intros and many new options. New demo models.'
+      }
+    ]
   },
   'Components/PillNav': {
     videoUrl: '/assets/video/pillnav.webm',
@@ -1110,12 +1136,18 @@ export const componentMetadata = {
   },
   'Components/ProfileCard': {
     videoUrl: '/assets/video/profilecard.webm',
-    description: 'Animated profile card glare with 3D hover effect.',
+    description: 'A framed profile card that tilts toward the cursor, with holographic foil shining through a tiled pattern.',
     category: 'Components',
     name: 'ProfileCard',
     docsUrl: 'https://reactbits.dev/components/profile-card',
     tags: [],
-    added: '2025-06-01'
+    added: '2025-06-01',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Redesigned in the Carousel style, with smoother tilt, a light theme and holo that shows only through the pattern.'
+      }
+    ]
   },
   'Components/ScrollStack': {
     videoUrl: '/assets/video/scrollstack.webm',
@@ -1831,12 +1863,18 @@ export const componentMetadata = {
   },
   'Backgrounds/RippleGrid': {
     videoUrl: '/assets/video/ripplegrid.webm',
-    description: 'A grid that continuously animates with a ripple effect.',
+    description: 'A crisp grid that ripples like water, bending and lighting up as waves pass, from the cursor, clicks or on its own.',
     category: 'Backgrounds',
     name: 'RippleGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/ripple-grid',
     tags: [],
-    added: '2025-07-14'
+    added: '2025-07-14',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with crisp lines, real traveling waves from the cursor and clicks, dot and cross styles, and a perspective floor.'
+      }
+    ]
   },
   'Backgrounds/Silk': {
     videoUrl: '/assets/video/silk.webm',

@@ -1,6 +1,17 @@
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
-import { FiSearch, FiLayers, FiImage, FiType, FiCircle, FiFile, FiArrowUpRight, FiToggleRight } from 'react-icons/fi';
-import { AiOutlineEnter } from 'react-icons/ai';
+import { useEffect, useLayoutEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
+  ArrowTurnBackwardIcon,
+  ArrowUpRight01Icon,
+  File01Icon,
+  Image01Icon,
+  Layers01Icon,
+  Motion01Icon,
+  MousePointerClickIcon,
+  PuzzleIcon,
+  Search01Icon,
+  TextFontIcon
+} from '@hugeicons/core-free-icons';
 import { useNavigate } from 'react-router-dom';
 import { CATEGORIES } from '../../constants/Categories';
 import { componentMetadata } from '../../constants/Information';
@@ -62,20 +73,42 @@ function searchComponents(query) {
   return results.sort((a, b) => b.score - a.score || a.componentName.localeCompare(b.componentName)).slice(0, 8);
 }
 
-const Result = ({ children, dataIndex, onMouseEnter, onClick }) => (
-  <div data-index={dataIndex} onMouseEnter={onMouseEnter} onClick={onClick} style={{ cursor: 'pointer' }}>
-    {children}
+const categoryIconMapping = {
+  'Get Started': File01Icon,
+  'Text Animations': TextFontIcon,
+  Animations: Motion01Icon,
+  Components: PuzzleIcon,
+  Micro: MousePointerClickIcon,
+  Backgrounds: Image01Icon
+};
+
+const Glyph = ({ icon, size = 16 }) => <HugeiconsIcon icon={icon} size={size} strokeWidth={1.6} aria-hidden="true" />;
+
+const ResultRow = ({ index, selected, icon, title, badge, meta, trail, onHover, onSelect }) => (
+  <div
+    className="search-row"
+    data-index={index}
+    data-selected={selected ? '' : undefined}
+    role="option"
+    aria-selected={selected}
+    onMouseMove={onHover}
+    onClick={onSelect}
+  >
+    <span className="search-row-icon">
+      <Glyph icon={icon} />
+    </span>
+    <span className="search-row-text">
+      <span className="search-row-title">
+        {title}
+        {badge && <span className="search-row-badge">{badge}</span>}
+      </span>
+      <span className="search-row-meta">{meta}</span>
+    </span>
+    <span className="search-row-trail">
+      <Glyph icon={trail} />
+    </span>
   </div>
 );
-
-const categoryIconMapping = {
-  'Get Started': FiFile,
-  'Text Animations': FiType,
-  Animations: FiCircle,
-  Components: FiLayers,
-  Micro: FiToggleRight,
-  Backgrounds: FiImage
-};
 
 const SearchDialog = ({ isOpen, onClose }) => {
   const [inputValue, setInputValue] = useState('');
@@ -87,6 +120,7 @@ const SearchDialog = ({ isOpen, onClose }) => {
   const [freeOnly, setFreeOnly] = useState(readFreeOnly);
   const resultsRef = useRef(null);
   const inputRef = useRef(null);
+  const [highlight, setHighlight] = useState(null);
   const navigate = useNavigate();
   const { toggleSearch } = useSearch();
 
@@ -183,6 +217,14 @@ const SearchDialog = ({ isOpen, onClose }) => {
     return () => window.removeEventListener('keydown', onKey);
   }, [results, searchValue, selectedIndex, handleSelect]);
 
+  useLayoutEffect(() => {
+    const row = selectedIndex >= 0 ? resultsRef.current?.querySelector(`[data-index="${selectedIndex}"]`) : null;
+    setHighlight(previous => {
+      if (!row) return previous ? { ...previous, visible: false } : null;
+      return { y: row.offsetTop, height: row.offsetHeight, visible: true, ready: Boolean(previous) };
+    });
+  }, [selectedIndex, results]);
+
   useEffect(() => {
     if (!keyboardNav || selectedIndex < 0 || !resultsRef.current) return;
     const container = resultsRef.current;
@@ -232,15 +274,18 @@ const SearchDialog = ({ isOpen, onClose }) => {
 
   return (
     <div className="search-backdrop" onClick={onClose}>
-      <div className="search-dialog" onClick={e => e.stopPropagation()}>
+      <div className="search-dialog" role="dialog" aria-label="Search" onClick={e => e.stopPropagation()}>
         <div className="search-input-row">
-          <FiSearch className="search-input-icon" size={16} />
+          <span className="search-input-icon">
+            <Glyph icon={Search01Icon} size={18} />
+          </span>
           <input
             ref={inputRef}
             className="search-input"
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             placeholder="Search components, categories, or keywords..."
+            aria-label="Search"
           />
           <kbd className="search-kbd" onClick={onClose}>
             esc
@@ -249,33 +294,39 @@ const SearchDialog = ({ isOpen, onClose }) => {
 
         {searchValue && (
           <div className="search-results-wrapper">
-            <div ref={resultsRef} className="search-results" onScroll={handleScroll}>
+            <div ref={resultsRef} className="search-results" role="listbox" onScroll={handleScroll}>
               {results.length > 0 ? (
                 <>
-                  {freeResults.map((r, i) => {
-                    const IconComp = categoryIconMapping[r.categoryName] || FiSearch;
-                    return (
-                      <Result
-                        key={`free-${r.categoryName}-${r.componentName}-${i}`}
-                        dataIndex={i}
-                        onMouseEnter={() => setSelectedIndex(i)}
-                        onClick={() => handleSelect(results[i])}
-                      >
-                        <div className={`search-result-item${i === selectedIndex ? ' selected' : ''}`}>
-                          <div className="search-result-icon">
-                            <IconComp size={20} />
-                          </div>
-                          <div className="search-result-text">
-                            <span className="search-result-name">{r.componentName}</span>
-                            <span className="search-result-category">{r.matchLabel}</span>
-                          </div>
-                          <div className="search-result-enter">
-                            <AiOutlineEnter size={16} />
-                          </div>
-                        </div>
-                      </Result>
-                    );
-                  })}
+                  <span
+                    className="search-highlight"
+                    aria-hidden="true"
+                    data-ready={highlight?.ready ? '' : undefined}
+                    style={
+                      highlight
+                        ? {
+                            height: highlight.height,
+                            transform: `translateY(${highlight.y}px)`,
+                            opacity: highlight.visible ? 1 : 0
+                          }
+                        : { opacity: 0 }
+                    }
+                  />
+
+                  {freeResults.length > 0 && <div className="search-group-label">React Bits</div>}
+
+                  {freeResults.map((r, i) => (
+                    <ResultRow
+                      key={`free-${r.categoryName}-${r.componentName}-${i}`}
+                      index={i}
+                      selected={i === selectedIndex}
+                      icon={categoryIconMapping[r.categoryName] || Search01Icon}
+                      title={r.componentName}
+                      meta={r.matchLabel}
+                      trail={ArrowTurnBackwardIcon}
+                      onHover={() => i !== selectedIndex && setSelectedIndex(i)}
+                      onSelect={() => handleSelect(results[i])}
+                    />
+                  ))}
 
                   {proResults.length > 0 && (
                     <div className="search-group-label">
@@ -287,34 +338,24 @@ const SearchDialog = ({ isOpen, onClose }) => {
                   {proResults.map((r, i) => {
                     const index = freeResults.length + i;
                     return (
-                      <Result
+                      <ResultRow
                         key={r.id}
-                        dataIndex={index}
-                        onMouseEnter={() => setSelectedIndex(index)}
-                        onClick={() => handleSelect(results[index])}
-                      >
-                        <div className={`search-result-item is-pro${index === selectedIndex ? ' selected' : ''}`}>
-                          <div className="search-result-icon">
-                            <FiLayers size={20} />
-                          </div>
-                          <div className="search-result-text">
-                            <span className="search-result-name">
-                              {r.name}
-                              {r.isFree && <span className="search-result-free">Free</span>}
-                            </span>
-                            <span className="search-result-category">{r.context}</span>
-                          </div>
-                          <div className="search-result-enter">
-                            <FiArrowUpRight size={16} />
-                          </div>
-                        </div>
-                      </Result>
+                        index={index}
+                        selected={index === selectedIndex}
+                        icon={Layers01Icon}
+                        title={r.name}
+                        badge={r.isFree ? 'Free' : null}
+                        meta={r.context}
+                        trail={ArrowUpRight01Icon}
+                        onHover={() => index !== selectedIndex && setSelectedIndex(index)}
+                        onSelect={() => handleSelect(results[index])}
+                      />
                     );
                   })}
                 </>
               ) : (
                 <p className="search-no-results">
-                  No results found for <strong>{searchValue}</strong>
+                  No results for <strong>{searchValue}</strong>
                 </p>
               )}
             </div>
@@ -325,10 +366,21 @@ const SearchDialog = ({ isOpen, onClose }) => {
         )}
 
         <div className="search-footer">
+          <div className="search-hints" aria-hidden="true">
+            <span>
+              <kbd>↑</kbd>
+              <kbd>↓</kbd>
+              Navigate
+            </span>
+            <span>
+              <kbd>↵</kbd>
+              Open
+            </span>
+          </div>
           <label className="search-toggle">
-            <input type="checkbox" checked={freeOnly} onChange={toggleFreeOnly} />
-            <span className="search-toggle-box" aria-hidden="true" />
             Free only
+            <input type="checkbox" role="switch" checked={freeOnly} onChange={toggleFreeOnly} />
+            <span className="search-switch" aria-hidden="true" />
           </label>
         </div>
       </div>

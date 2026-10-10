@@ -8,11 +8,12 @@ export const modelViewer = {
   usage: `import ModelViewer from './ModelViewer';
 
 <ModelViewer
-  url="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/ToyCar/glTF-Binary/ToyCar.glb"
-  width={400}
-  height={400}
-/>
-`,
+  url="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/MaterialsVariantsShoe/glTF-Binary/MaterialsVariantsShoe.glb"
+  width={500}
+  height={500}
+  environment="studio"
+  autoRotate
+/>`,
   code,
   tailwind,
   tsCode,

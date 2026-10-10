@@ -44,7 +44,6 @@ const CategoryIndexPage = () => {
     <Box>
       <ComponentList
         title={seo.heading}
-        intro={seo.intro}
         list={list}
         hasFavoriteButton
         sorting="alphabetical"

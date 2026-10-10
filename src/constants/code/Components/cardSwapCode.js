@@ -5,28 +5,25 @@ import tsCode from '@ts-default/Components/CardSwap/CardSwap.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/CardSwap/CardSwap.tsx?raw';
 
 export const cardSwap = {
-  dependencies: `gsap`,
+  dependencies: `@hugeicons/react @hugeicons/core-free-icons`,
   usage: `import CardSwap, { Card } from './CardSwap'
 
-<div style={{ height: '600px', position: 'relative' }}>
-  <CardSwap
-    cardDistance={60}
-    verticalDistance={70}
-    delay={5000}
-    pauseOnHover={false}
-  >
-    <Card>
-      <h3>Card 1</h3>
-      <p>Your content here</p>
-    </Card>
-    <Card>
-      <h3>Card 2</h3>
-      <p>Your content here</p>
-    </Card>
-    <Card>
-      <h3>Card 3</h3>
-      <p>Your content here</p>
-    </Card>
+const items = [
+  { title: 'Golden hour', image: '/photos/sky.jpg' },
+  { title: 'Canola field', image: '/photos/field.jpg' },
+  { title: 'The pier', image: '/photos/pier.jpg' },
+  { title: 'Pink drift', image: '/photos/clouds.jpg' }
+];
+
+<div style={{ height: 600 }}>
+  <CardSwap items={items} delay={4000} />
+</div>
+
+<div style={{ height: 600 }}>
+  <CardSwap width={420} height={300}>
+    <Card>Your content</Card>
+    <Card>Your content</Card>
+    <Card>Your content</Card>
   </CardSwap>
 </div>`,
   code,

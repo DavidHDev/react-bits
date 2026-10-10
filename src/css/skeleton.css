@@ -1,40 +1,239 @@
-.skeleton-pulse {
-  background: linear-gradient(110deg, var(--skeleton-base) 8%, var(--skeleton-shine) 18%, var(--skeleton-base) 33%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.4s linear infinite;
+.skel {
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+  animation: skel-enter 240ms var(--ease-out) 140ms both;
+}
+
+.skel--docs {
+  max-width: var(--docs-content-max-width);
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 8px;
+}
+
+.skel-pulse {
+  animation: skel-pulse 1.8s ease-in-out infinite;
+}
+
+.skel-block,
+.skel-control,
+.skel-code {
+  display: block;
+  background: var(--surface-ghost-track);
+}
+
+.skel-line {
+  display: block;
+  height: 10px;
+  max-width: 100%;
+  border-radius: 5px;
+  background: var(--surface-ghost);
+}
+
+.skel-toolbar {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.skel-actions {
+  display: none;
+  gap: 8px;
+}
+
+.skel-block {
+  height: 36px;
+  border-radius: 11px;
+}
+
+.skel-tabs {
+  width: 187px;
+}
+
+.skel-more {
+  width: 36px;
+  flex: none;
+}
+
+.skel-preview {
   position: relative;
+  height: 500px;
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1px solid var(--preview-border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-body);
+}
+
+.skel-preview-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--surface-ghost-track);
+}
+
+.skel-frame {
+  margin-top: 2rem;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: var(--surface-ghost-track);
+  box-shadow: var(--surface-ghost-highlight);
+}
+
+.skel-frame--props {
+  margin-top: 3rem;
+}
+
+.skel-frame-head {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px 2px;
+}
+
+.skel-inset {
+  border: 1px solid var(--inset-border);
+  border-radius: calc(var(--radius-lg) - 5px);
+  background: var(--bg-body);
+}
+
+.skel-controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 14px 12px;
+}
+
+.skel-control {
+  height: 40px;
+  border-radius: var(--radius-sm);
+}
+
+.skel-table {
   overflow: hidden;
 }
 
-@keyframes skeleton-shimmer {
-  0% {
-    background-position: 200% 0;
+.skel-row {
+  display: grid;
+  grid-template-columns: 22% 18% 14% 1fr;
+  align-items: center;
+  min-height: 52px;
+  border-top: 1px solid var(--inset-divider);
+}
+
+.skel-row--head {
+  min-height: 40px;
+  border-top: 0;
+}
+
+.skel-cell {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.skel-line--chip {
+  height: 18px;
+  border-radius: 6px;
+}
+
+.skel-line--title {
+  height: 26px;
+  margin-bottom: 28px;
+  border-radius: 8px;
+}
+
+.skel-line--heading {
+  height: 16px;
+  margin: 36px 0 18px;
+  border-radius: 6px;
+}
+
+.skel-line--text {
+  margin-bottom: 14px;
+}
+
+.skel-code {
+  margin-top: 22px;
+  border: 1px solid var(--inset-border);
+  border-radius: var(--radius-md);
+}
+
+:root[data-theme='light'] .skel-frame {
+  border-color: var(--border-subtle);
+  background: #fafafa;
+  box-shadow: none;
+}
+
+:root[data-theme='light'] .skel-inset {
+  background: #ffffff;
+}
+
+@keyframes skel-pulse {
+  0%,
+  100% {
+    opacity: 1;
   }
 
-  100% {
-    background-position: -200% 0;
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes skel-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .skel-actions {
+    display: flex;
+  }
+
+  .skel-more {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .skel-tabs {
+    width: auto;
+    flex: 1 1 0;
+  }
+
+  .skel-preview {
+    height: 400px;
+  }
+
+  .skel-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .skel-control:nth-child(n + 7) {
+    display: none;
+  }
+
+  .skel-row {
+    grid-template-columns: 40% 1fr;
+  }
+
+  .skel-row .skel-cell:nth-child(n + 3) {
+    display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skeleton-pulse {
+  .skel,
+  .skel-pulse {
     animation: none;
-    background: var(--skeleton-base);
   }
-}
-
-.skeleton-loader {
-  user-select: none;
-  pointer-events: none;
-  border-radius: 4px;
-}
-
-.skeleton-content {
-  width: 100%;
-}
-
-.skeleton-loader--docs {
-  max-width: var(--docs-content-max-width);
-  margin-left: auto;
-  margin-right: auto;
 }

@@ -1,25 +1,17 @@
 import code from '@content/Backgrounds/RippleGrid/RippleGrid.jsx?raw';
+import css from '@content/Backgrounds/RippleGrid/RippleGrid.css?raw';
 import tailwind from '@tailwind/Backgrounds/RippleGrid/RippleGrid.jsx?raw';
 import tsCode from '@ts-default/Backgrounds/RippleGrid/RippleGrid.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/RippleGrid/RippleGrid.tsx?raw';
 
 export const rippleGrid = {
-  dependencies: `ogl`,
   usage: `import RippleGrid from './RippleGrid';
 
-<div style={{position: 'relative', height: '500px', overflow: 'hidden'}}>
-  <RippleGrid
-    enableRainbow={false}
-    gridColor="#ffffff"
-    rippleIntensity={0.05}
-    gridSize={10}
-    gridThickness={15}
-    mouseInteraction={true}
-    mouseInteractionRadius={1.2}
-    opacity={0.8}
-  />
+<div style={{ width: '100%', height: '600px', position: 'relative' }}>
+  <RippleGrid color="#ffffff" cellSize={48} rippleStrength={1} autoRipple="center" />
 </div>`,
   code,
+  css,
   tailwind,
   tsCode,
   tsTailwind

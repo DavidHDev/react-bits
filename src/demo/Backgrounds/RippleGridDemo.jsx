@@ -1,292 +1,298 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
 
-import useComponentProps from '../../hooks/useComponentProps';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
-import { rippleGrid } from '../../constants/code/Backgrounds/rippleGridCode';
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+
 import RippleGrid from '../../content/Backgrounds/RippleGrid/RippleGrid';
+import { rippleGrid } from '../../constants/code/Backgrounds/rippleGridCode';
 
-const DEFAULT_PROPS = {
-  enableRainbow: false,
-  gridColor: '#5227FF',
-  rippleIntensity: 0.05,
-  gridSize: 10.0,
-  gridThickness: 15.0,
-  fadeDistance: 1.5,
-  vignetteStrength: 2.0,
-  glowIntensity: 0.1,
-  opacity: 1.0,
-  gridRotation: 0,
-  mouseInteraction: true,
-  mouseInteractionRadius: 0.8
+const SHAPE = {
+  variant: 'lines',
+  cellSize: 48,
+  lineWidth: 1,
+  glow: 0.6,
+  rippleStrength: 1,
+  rippleSpeed: 1,
+  rippleSize: 1,
+  autoRipple: 'center',
+  rippleInterval: 2.6,
+  tilt: 0,
+  rotation: 0,
+  fade: 0.5
 };
 
-const RippleGridDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    enableRainbow,
-    gridColor,
-    rippleIntensity,
-    gridSize,
-    gridThickness,
-    fadeDistance,
-    vignetteStrength,
-    glowIntensity,
-    opacity,
-    gridRotation,
-    mouseInteraction,
-    mouseInteractionRadius
-  } = props;
+const DEFAULT_PROPS = {
+  preset: 'pulse',
+  color: '#ffffff',
+  ...SHAPE,
+  opacity: 1,
+  mouseInteraction: true,
+  clickRipple: true,
+  intro: true,
+  lightMode: false
+};
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'enableRainbow',
-        type: 'boolean',
-        default: 'false',
-        description: 'Enables rainbow color cycling animation for the grid.'
-      },
-      {
-        name: 'gridColor',
-        type: 'string',
-        default: "'#ffffff'",
-        description: 'Color of the grid when rainbow mode is disabled.'
-      },
-      {
-        name: 'rippleIntensity',
-        type: 'number',
-        default: '0.05',
-        description: 'Controls the intensity of the ripple effect from the center.'
-      },
-      {
-        name: 'gridSize',
-        type: 'number',
-        default: '10.0',
-        description: 'Controls the density/size of the grid pattern.'
-      },
-      {
-        name: 'gridThickness',
-        type: 'number',
-        default: '15.0',
-        description: 'Controls the thickness of the grid lines.'
-      },
-      {
-        name: 'fadeDistance',
-        type: 'number',
-        default: '1.5',
-        description: 'Controls how far the fade effect extends from the center.'
-      },
-      {
-        name: 'vignetteStrength',
-        type: 'number',
-        default: '2.0',
-        description: 'Controls the intensity of the vignette (edge darkening) effect.'
-      },
-      {
-        name: 'glowIntensity',
-        type: 'number',
-        default: '0.1',
-        description: 'Adds a glow effect to the grid lines.'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '1.0',
-        description: 'Overall opacity of the entire effect.'
-      },
-      {
-        name: 'gridRotation',
-        type: 'number',
-        default: '0',
-        description: 'Rotate the entire grid pattern by degrees.'
-      },
-      {
-        name: 'mouseInteraction',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enable mouse/touch interaction to create ripples.'
-      },
-      {
-        name: 'mouseInteractionRadius',
-        type: 'number',
-        default: '1',
-        description: 'Controls the radius of the mouse interaction effect.'
-      }
-    ],
-    []
-  );
+const PRESETS = {
+  pulse: { ...SHAPE },
+  floor: { ...SHAPE, tilt: 62, cellSize: 56, autoRipple: 'random', rippleInterval: 1.6, fade: 0.35 },
+  dots: { ...SHAPE, variant: 'dots', cellSize: 32, glow: 0.4 },
+  cross: { ...SHAPE, variant: 'cross', cellSize: 56, lineWidth: 1.5 },
+  calm: { ...SHAPE, autoRipple: 'none', rippleStrength: 0.8, glow: 0.4 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'pulse', label: 'Pulse' },
+  { value: 'floor', label: 'Floor' },
+  { value: 'dots', label: 'Dots' },
+  { value: 'cross', label: 'Cross' },
+  { value: 'calm', label: 'Calm' }
+];
+
+const VARIANT_OPTIONS = [
+  { value: 'lines', label: 'Lines' },
+  { value: 'dots', label: 'Dots' },
+  { value: 'cross', label: 'Cross' }
+];
+
+const AUTO_OPTIONS = [
+  { value: 'center', label: 'Center' },
+  { value: 'random', label: 'Random' },
+  { value: 'none', label: 'None' }
+];
+
+const propData = [
+  {
+    name: 'color',
+    type: 'string',
+    default: "'#ffffff'",
+    description: 'Color of the grid. Light mode derives its ink from it.'
+  },
+  {
+    name: 'variant',
+    type: "'lines' | 'dots' | 'cross'",
+    default: "'lines'",
+    description: 'Draws the grid as lines, dots at each crossing, or small crosses.'
+  },
+  { name: 'cellSize', type: 'number', default: '48', description: 'Size of each grid cell, in px.' },
+  { name: 'lineWidth', type: 'number', default: '1', description: 'Width of the lines, in px.' },
+  { name: 'glow', type: 'number', default: '0.6', description: 'Soft glow around the lines.' },
+  {
+    name: 'rippleStrength',
+    type: 'number',
+    default: '1',
+    description: 'How far ripples bend the grid and how brightly their crests light it.'
+  },
+  { name: 'rippleSpeed', type: 'number', default: '1', description: 'How fast ripples travel outward.' },
+  { name: 'rippleSize', type: 'number', default: '1', description: 'Wavelength of the ripples.' },
+  {
+    name: 'autoRipple',
+    type: "'center' | 'random' | 'none'",
+    default: "'center'",
+    description: 'Where idle ripples start: from the center, at random spots, or not at all.'
+  },
+  { name: 'rippleInterval', type: 'number', default: '2.6', description: 'Seconds between idle ripples.' },
+  {
+    name: 'tilt',
+    type: 'number',
+    default: '0',
+    description: 'Lays the grid back in perspective, like a floor, in degrees.'
+  },
+  { name: 'rotation', type: 'number', default: '0', description: 'Turns the grid, in degrees.' },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The cursor leaves a wake of small ripples and lights up the lines nearby.'
+  },
+  { name: 'clickRipple', type: 'boolean', default: 'true', description: 'Clicking sends a strong ripple.' },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'Reveals the grid with a ripple from the center.' },
+  { name: 'fade', type: 'number', default: '0.5', description: 'Fades the edges into the page, from 0 to 1.' },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the grid as ink for light backgrounds.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the animation.' },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' }
+];
+
+const RippleGridDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], color: settings.color, preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" h={500} overflow="hidden">
-            <RippleGrid
-              enableRainbow={enableRainbow}
-              gridColor={gridColor}
-              rippleIntensity={rippleIntensity}
-              gridSize={gridSize}
-              gridThickness={gridThickness}
-              fadeDistance={fadeDistance}
-              vignetteStrength={vignetteStrength}
-              glowIntensity={glowIntensity}
-              opacity={opacity}
-              gridRotation={gridRotation}
-              mouseInteraction={mouseInteraction}
-              mouseInteractionRadius={mouseInteractionRadius}
-            />
-
-            {/* For Demo Purposes Only */}
-            <BackgroundContent pillText="New Background" headline="Retro yet futuristic, this is Ripple Grid!" />
+          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
+            <RippleGrid key={key} {...settings} />
+            <BackgroundContent pillText="New Background" headline="Every move sends ripples through the grid" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="ripple-grid"
-              currentProps={{
-                enableRainbow,
-                gridColor,
-                rippleIntensity,
-                gridSize,
-                gridThickness,
-                fadeDistance,
-                vignetteStrength,
-                glowIntensity,
-                opacity,
-                gridRotation,
-                mouseInteraction,
-                mouseInteractionRadius
-              }}
-              defaultProps={{
-                enableRainbow: false,
-                gridColor: '#ffffff',
-                rippleIntensity: 0.05,
-                gridSize: 10,
-                gridThickness: 15,
-                fadeDistance: 1.5,
-                vignetteStrength: 2,
-                glowIntensity: 0.1,
-                opacity: 1,
-                gridRotation: 0,
-                mouseInteraction: true,
-                mouseInteractionRadius: 1
-              }}
-            />
+            <OpenInStudioButton backgroundId="ripple-grid" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Grid Color" color={gridColor} onChange={val => updateProp('gridColor', val)} />
-
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewColorPickerCustom
+              title="Color"
+              color={settings.color}
+              onChange={value => updateProp('color', value)}
+            />
+            <PreviewSelect
+              title="Variant"
+              options={VARIANT_OPTIONS}
+              value={settings.variant}
+              onChange={value => updateProp('variant', value)}
+            />
+            <PreviewSelect
+              title="Auto Ripple"
+              options={AUTO_OPTIONS}
+              value={settings.autoRipple}
+              onChange={value => updateProp('autoRipple', value)}
+            />
             <PreviewSlider
-              title="Ripple Intensity"
+              title="Cell Size"
+              min={16}
+              max={120}
+              step={1}
+              value={settings.cellSize}
+              valueUnit="px"
+              onChange={value => updateProp('cellSize', value)}
+            />
+            <PreviewSlider
+              title="Line Width"
+              min={0.5}
+              max={4}
+              step={0.25}
+              value={settings.lineWidth}
+              valueUnit="px"
+              onChange={value => updateProp('lineWidth', value)}
+            />
+            <PreviewSlider
+              title="Glow"
               min={0}
-              max={0.3}
-              step={0.01}
-              value={rippleIntensity}
-              onChange={val => updateProp('rippleIntensity', val)}
+              max={2}
+              step={0.05}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
             />
-
             <PreviewSlider
-              title="Grid Size"
-              min={5}
-              max={30}
-              step={1}
-              value={gridSize}
-              onChange={val => updateProp('gridSize', val)}
+              title="Ripple Strength"
+              min={0}
+              max={2.5}
+              step={0.05}
+              value={settings.rippleStrength}
+              onChange={value => updateProp('rippleStrength', value)}
             />
-
             <PreviewSlider
-              title="Grid Thickness"
-              min={5}
-              max={50}
-              step={1}
-              value={gridThickness}
-              onChange={val => updateProp('gridThickness', val)}
-            />
-
-            <PreviewSlider
-              title="Fade Distance"
-              min={0.5}
+              title="Ripple Speed"
+              min={0.2}
               max={3}
-              step={0.1}
-              value={fadeDistance}
-              onChange={val => updateProp('fadeDistance', val)}
+              step={0.05}
+              value={settings.rippleSpeed}
+              onChange={value => updateProp('rippleSpeed', value)}
             />
-
             <PreviewSlider
-              title="Vignette Strength"
+              title="Ripple Size"
+              min={0.4}
+              max={3}
+              step={0.05}
+              value={settings.rippleSize}
+              onChange={value => updateProp('rippleSize', value)}
+            />
+            <PreviewSlider
+              title="Ripple Interval"
               min={0.5}
-              max={5}
+              max={8}
               step={0.1}
-              value={vignetteStrength}
-              onChange={val => updateProp('vignetteStrength', val)}
+              value={settings.rippleInterval}
+              valueUnit="s"
+              onChange={value => updateProp('rippleInterval', value)}
             />
-
             <PreviewSlider
-              title="Glow Intensity"
+              title="Tilt"
+              min={0}
+              max={75}
+              step={1}
+              value={settings.tilt}
+              valueUnit="°"
+              onChange={value => updateProp('tilt', value)}
+            />
+            <PreviewSlider
+              title="Rotation"
+              min={0}
+              max={90}
+              step={1}
+              value={settings.rotation}
+              valueUnit="°"
+              onChange={value => updateProp('rotation', value)}
+            />
+            <PreviewSlider
+              title="Fade"
               min={0}
               max={1}
               step={0.05}
-              value={glowIntensity}
-              onChange={val => updateProp('glowIntensity', val)}
+              value={settings.fade}
+              onChange={value => updateProp('fade', value)}
             />
-
             <PreviewSlider
               title="Opacity"
               min={0}
               max={1}
               step={0.05}
-              value={opacity}
-              onChange={val => updateProp('opacity', val)}
+              value={settings.opacity}
+              onChange={value => updateProp('opacity', value)}
             />
-
-            <PreviewSlider
-              title="Grid Rotation"
-              min={0}
-              max={360}
-              step={1}
-              value={gridRotation}
-              onChange={val => updateProp('gridRotation', val)}
-              valueUnit="°"
-            />
-
-            <PreviewSlider
-              title="Mouse Interaction Radius"
-              min={0.2}
-              max={2}
-              step={0.1}
-              value={mouseInteractionRadius}
-              onChange={val => updateProp('mouseInteractionRadius', val)}
-            />
-
             <PreviewSwitch
               title="Mouse Interaction"
-              isChecked={mouseInteraction}
-              onChange={val => updateProp('mouseInteraction', val)}
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
             />
-
             <PreviewSwitch
-              title="Enable Rainbow"
-              isChecked={enableRainbow}
-              onChange={val => updateProp('enableRainbow', val)}
+              title="Click Ripple"
+              isChecked={settings.clickRipple}
+              onChange={value => updateProp('clickRipple', value)}
+            />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

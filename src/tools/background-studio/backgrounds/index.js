@@ -1125,26 +1125,29 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/RippleGrid/RippleGrid.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/ripple-grid"',
     props: [
-      { name: 'enableRainbow', type: 'boolean', default: false, label: 'Enable Rainbow' },
-      { name: 'gridColor', type: 'color', default: '#ffffff', label: 'Grid Color' },
+      { name: 'color', type: 'color', default: '#ffffff', label: 'Color' },
+      { name: 'variant', type: 'select', default: 'lines', options: ['lines', 'dots', 'cross'], label: 'Variant' },
       {
-        name: 'rippleIntensity',
-        type: 'number',
-        default: 0.05,
-        min: 0,
-        max: 0.2,
-        step: 0.01,
-        label: 'Ripple Intensity'
+        name: 'autoRipple',
+        type: 'select',
+        default: 'center',
+        options: ['center', 'random', 'none'],
+        label: 'Auto Ripple'
       },
-      { name: 'gridSize', type: 'number', default: 10, min: 2, max: 30, step: 1, label: 'Grid Size' },
-      { name: 'gridThickness', type: 'number', default: 15, min: 1, max: 50, step: 1, label: 'Grid Thickness' },
-      { name: 'fadeDistance', type: 'number', default: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Fade Distance' },
-      { name: 'vignetteStrength', type: 'number', default: 2, min: 0, max: 5, step: 0.5, label: 'Vignette Strength' },
-      { name: 'glowIntensity', type: 'number', default: 0.1, min: 0, max: 1, step: 0.05, label: 'Glow Intensity' },
+      { name: 'cellSize', type: 'number', default: 48, min: 16, max: 120, step: 1, label: 'Cell Size' },
+      { name: 'lineWidth', type: 'number', default: 1, min: 0.5, max: 4, step: 0.25, label: 'Line Width' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'rippleStrength', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Ripple Strength' },
+      { name: 'rippleSpeed', type: 'number', default: 1, min: 0.2, max: 3, step: 0.05, label: 'Ripple Speed' },
+      { name: 'rippleSize', type: 'number', default: 1, min: 0.4, max: 3, step: 0.05, label: 'Ripple Size' },
+      { name: 'rippleInterval', type: 'number', default: 2.6, min: 0.5, max: 8, step: 0.1, label: 'Ripple Interval' },
+      { name: 'tilt', type: 'number', default: 0, min: 0, max: 75, step: 1, label: 'Tilt' },
+      { name: 'rotation', type: 'number', default: 0, min: 0, max: 90, step: 1, label: 'Rotation' },
+      { name: 'fade', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Fade' },
       { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
-      { name: 'gridRotation', type: 'number', default: 0, min: 0, max: 360, step: 5, label: 'Grid Rotation' },
       { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
-      { name: 'mouseInteractionRadius', type: 'number', default: 1, min: 0.1, max: 3, step: 0.1, label: 'Mouse Radius' }
+      { name: 'clickRipple', type: 'boolean', default: true, label: 'Click Ripple' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {

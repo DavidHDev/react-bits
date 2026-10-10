@@ -1,21 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Box,
-  Flex,
-  Icon,
-  IconButton,
-  Input,
-  InputGroup,
-  Portal,
-  Select,
-  Text,
-  createListCollection
-} from '@chakra-ui/react';
+import { Box, Flex, Icon, IconButton, Portal, Select, Text, createListCollection } from '@chakra-ui/react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowDown01Icon, Cancel01Icon, Search01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
 import { Grid as RVGrid, AutoSizer, WindowScroller } from 'react-virtualized';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { Link as RouterLink } from 'react-router-dom';
-import { FiSearch, FiTrash2, FiX } from 'react-icons/fi';
+import { FiTrash2 } from 'react-icons/fi';
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri';
 import { toast } from 'sonner';
 import { componentMetadata } from '../../constants/Information';
@@ -31,6 +22,7 @@ import {
 import { colors } from '../../constants/colors';
 import { CATEGORIES, NEW_KEYS } from '../../constants/Categories';
 import usePreviewMediaAllowed from '../../hooks/usePreviewMediaAllowed';
+import { FluidSelectContent } from './FluidMenuContent';
 import '../../css/docs-overview.css';
 
 const CARD_RADIUS = 16;
@@ -83,74 +75,35 @@ const ToolbarSelect = ({ collection, value, onChange, name, width, disabled, ...
     collection={collection}
     value={[value]}
     onValueChange={({ value: next }) => onChange(next[0])}
-    size="sm"
+    positioning={{ sameWidth: true, gutter: 8 }}
     width={{ base: '100%', md: width }}
     disabled={disabled}
   >
     <Select.HiddenSelect name={name} />
     <Select.Control>
-      <Select.Trigger
-        fontSize="13px"
-        bg="var(--action-control-bg)"
-        border="1px solid var(--action-control-border)"
-        backdropFilter="var(--surface-ghost-blur)"
-        rounded="10px"
-        h="36px"
-        fontWeight={500}
-        cursor={disabled ? 'default' : 'pointer'}
-        transition="background 0.2s ease, border-color 0.2s ease"
-        _hover={
-          disabled
-            ? undefined
-            : {
-                background: 'var(--action-control-hover)',
-                borderColor: 'var(--action-control-selected-border)'
-              }
-        }
-        css={{
-          '&[data-state="open"]': {
-            background: 'var(--action-control-selected)',
-            borderColor: 'var(--action-control-selected-border)',
-            boxShadow: 'var(--action-control-shadow)'
-          }
-        }}
-        w="full"
-      >
-        <Select.ValueText color={disabled ? 'var(--text-dimmed)' : 'var(--text-primary)'} pl={2}>
-          {value}
-        </Select.ValueText>
-        <Select.IndicatorGroup>
-          <Select.Indicator />
-        </Select.IndicatorGroup>
+      <Select.Trigger className="docs-tool docs-select-trigger">
+        <Select.ValueText>{value}</Select.ValueText>
+        <HugeiconsIcon
+          icon={ArrowDown01Icon}
+          size={14}
+          strokeWidth={1.8}
+          className="docs-tool-chevron"
+          aria-hidden="true"
+        />
       </Select.Trigger>
     </Select.Control>
     <Portal>
       <Select.Positioner>
-        <Select.Content
-          bg="var(--shell-panel)"
-          backdropFilter="blur(32px) saturate(1.3)"
-          border="1px solid var(--shell-border-strong)"
-          borderRadius="12px"
-          w={{ base: '100%', md: width }}
-          px={1.5}
-          py={1.5}
-          boxShadow="var(--shadow-menu)"
-        >
+        <FluidSelectContent>
           {collection.items.map(option => (
-            <Select.Item
-              key={option}
-              item={option}
-              borderRadius="8px"
-              px={3}
-              py={2}
-              fontSize="13px"
-              cursor="pointer"
-              _highlighted={{ bg: 'var(--surface-ghost)' }}
-            >
+            <Select.Item key={option} item={option} className="docs-menu-item">
               {option}
+              <Select.ItemIndicator className="docs-menu-check">
+                <HugeiconsIcon icon={Tick02Icon} size={16} strokeWidth={1.6} aria-hidden="true" />
+              </Select.ItemIndicator>
             </Select.Item>
           ))}
-        </Select.Content>
+        </FluidSelectContent>
       </Select.Positioner>
     </Portal>
   </Select.Root>
@@ -170,7 +123,6 @@ const ComponentList = ({
   hasFavoriteButton = false,
   sorting = 'none',
   title,
-  intro,
   newSinceLastVisit = EMPTY_SET,
   basePath = '',
   showCategoryFilter = true,
@@ -298,6 +250,7 @@ const ComponentList = ({
   const hasCategoryFilter = showCategoryFilter && selectedCategory !== categories.items[0];
   const newSinceLastVisitCount = useMemo(() => items.filter(item => item.isNewSinceLastVisit).length, [items]);
   const hasActiveFilters = hasCategoryFilter || newOnly || search.trim().length > 0;
+  const showNewStatus = newSinceLastVisitCount > 0 && (!hasActiveFilters || newOnly);
 
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   useEffect(() => {
@@ -315,7 +268,7 @@ const ComponentList = ({
 
     if (showClear) {
       const tl = gsap.timeline();
-      tl.to(slot, { width: 40, duration: 0.3, ease: 'power2.out' }).fromTo(
+      tl.to(slot, { width: 44, duration: 0.3, ease: 'power2.out' }).fromTo(
         btn,
         { scale: 0.6, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.25, ease: 'power2.out', force3D: true },
@@ -340,7 +293,7 @@ const ComponentList = ({
   };
 
   return (
-    <Box className="category-page" ref={scrollRef}>
+    <Box className="category-page docs-catalog" ref={scrollRef}>
       {/* <Flex
         position="relative"
         w="100%"
@@ -388,106 +341,50 @@ const ComponentList = ({
         </Box>
       </Flex> */}
 
-      <Flex
-        className="page-transition-fade"
-        mb={12}
-        alignItems={{ base: 'flex-start', md: 'center' }}
-        justifyContent={{ base: 'flex-start', md: 'space-between' }}
-        direction={{ base: 'column', md: 'row' }}
-        gap={4}
-      >
+      <header className="docs-catalog-header page-transition-fade">
         {title ? (
-          <Box minW={0} w={{ base: '100%', md: 'auto' }} flex={{ md: 1 }}>
-            <h1 className="sub-category" style={{ margin: 0 }}>
-              {title}
-            </h1>
-            {intro && (
-              <p className="docs-overview-description docs-catalog-intro" title={intro}>
-                {intro}
-              </p>
-            )}
-            {hasActiveFilters ? (
-              <Text mt={2} color={colors.textMuted} fontSize="13px" fontWeight={500} aria-live="polite">
-                {filtered.length} {filtered.length === 1 ? 'component' : 'components'} found
-              </Text>
-            ) : null}
-            {newSinceLastVisitCount > 0 ? (
-              <Box
-                as="button"
-                mt={2}
-                color={newOnly ? colors.accent : colors.textMuted}
-                fontSize="13px"
-                fontWeight={500}
-                cursor="pointer"
-                textAlign="left"
-                transition="color var(--transition-base)"
-                onClick={() => setNewOnly(value => !value)}
-                aria-pressed={newOnly}
-                _hover={{ color: colors.accent }}
-              >
-                {newSinceLastVisitCount} new since your last visit
-              </Box>
-            ) : null}
-          </Box>
+          <div className="docs-catalog-heading">
+            <h1 className="docs-catalog-title">{title}</h1>
+            <div className="docs-catalog-status" aria-live="polite">
+              {showNewStatus ? (
+                <button
+                  type="button"
+                  onClick={() => setNewOnly(value => !value)}
+                  aria-pressed={newOnly}
+                  title={newOnly ? 'Show all components' : 'Show new components'}
+                >
+                  {newOnly ? filtered.length : newSinceLastVisitCount} new since your last visit
+                </button>
+              ) : hasActiveFilters ? (
+                <span>
+                  {filtered.length} {filtered.length === 1 ? 'component' : 'components'} found
+                </span>
+              ) : null}
+            </div>
+          </div>
         ) : null}
 
         <Flex
+          className="docs-catalog-toolbar"
           direction={{ base: 'column', md: 'row' }}
           alignItems="center"
-          position="relative"
-          left={{ base: 0, md: '6px' }}
-          justifyContent="flex-end"
           gap={{ base: 2, md: 0 }}
           w={{ base: '100%', md: 'auto' }}
           flexShrink={0}
           opacity={controlsDisabled ? 0.5 : 1}
         >
-          <InputGroup
-            startElement={<Icon as={FiSearch} color="var(--text-dimmed)" fontSize="14px" />}
-            w={{ base: '100%', md: '180px' }}
-            mr={{ base: 0, md: 2 }}
-          >
-            <Input
+          <label className="docs-search" data-disabled={controlsDisabled ? '' : undefined}>
+            <HugeiconsIcon icon={Search01Icon} size={16} strokeWidth={1.6} aria-hidden="true" />
+            <input
+              type="search"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search..."
-              h="36px"
-              borderRadius="10px"
-              bg="var(--action-control-bg)"
-              border="1px solid var(--action-control-border)"
-              backdropFilter="var(--surface-ghost-blur)"
-              transition="background var(--transition-base), border-color var(--transition-base)"
-              color="var(--text-primary)"
-              fontSize="13px"
-              fontWeight={500}
+              aria-label="Search components"
               disabled={controlsDisabled}
               tabIndex={controlsDisabled ? -1 : 0}
-              onFocus={e => {
-                if (controlsDisabled) {
-                  try {
-                    e.target.blur();
-                  } catch {
-                    /* noop */
-                  }
-                }
-              }}
-              pointerEvents={controlsDisabled ? 'none' : 'auto'}
-              _focus={{
-                bg: 'var(--action-control-selected)',
-                borderColor: 'var(--action-control-selected-border)',
-                boxShadow: 'var(--action-control-shadow)',
-                outline: 'none'
-              }}
-              _focusVisible={{
-                bg: 'var(--action-control-selected)',
-                borderColor: 'var(--action-control-selected-border)',
-                boxShadow: 'var(--action-control-shadow)',
-                outline: 'none'
-              }}
-              _hover={{ bg: 'var(--action-control-hover)', borderColor: 'var(--action-control-selected-border)' }}
-              _placeholder={{ color: 'var(--text-dimmed)', fontWeight: 500 }}
             />
-          </InputGroup>
+          </label>
 
           {showCategoryFilter ? (
             <ToolbarSelect
@@ -514,38 +411,26 @@ const ComponentList = ({
 
           <Box
             ref={clearSlotRef}
-            marginLeft={1.5}
             display={{ base: 'none', md: 'flex' }}
             alignItems="center"
-            justifyContent="center"
+            justifyContent="flex-end"
+            flexShrink={0}
             style={{ width: 0, overflow: 'hidden' }}
           >
-            <IconButton
+            <button
               ref={clearBtnRef}
+              type="button"
               aria-label="Clear filters"
-              rounded="10px"
-              size="sm"
-              variant="ghost"
-              color="var(--text-muted)"
+              className="docs-tool docs-tool--icon docs-clear"
               onClick={clearFilters}
-              h="36px"
-              w="36px"
-              bg="var(--action-control-bg)"
-              border="1px solid var(--action-control-border)"
-              backdropFilter="var(--surface-ghost-blur)"
-              opacity={0}
-              style={{ transformOrigin: '50% 50%' }}
-              pointerEvents={showClear ? 'auto' : 'none'}
               tabIndex={showClear ? 0 : -1}
-              _hover={{ bg: 'var(--action-control-hover)', borderColor: 'var(--action-control-selected-border)' }}
-              _focus={{ boxShadow: 'none', outline: 'none' }}
-              _focusVisible={{ boxShadow: 'none', outline: 'none' }}
+              style={{ pointerEvents: showClear ? 'auto' : 'none' }}
             >
-              <Icon as={FiX} />
-            </IconButton>
+              <HugeiconsIcon icon={Cancel01Icon} size={16} strokeWidth={1.6} aria-hidden="true" />
+            </button>
           </Box>
         </Flex>
-      </Flex>
+      </header>
 
       <Box mt={4}>
         {filtered.length === 0 ? (

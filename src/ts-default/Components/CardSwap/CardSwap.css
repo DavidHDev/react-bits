@@ -1,36 +1,157 @@
-.card-swap-container {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transform: translate(5%, 20%);
-  transform-origin: bottom right;
-
-  perspective: 900px;
-  overflow: visible;
+.card-swap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.card {
+.card-swap-sizer {
+  max-height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.card-swap-sizer > span {
+  display: block;
+  width: 100%;
+  max-width: var(--swap-stage-w);
+  aspect-ratio: var(--swap-ratio);
+}
+
+.card-swap-stage {
   position: absolute;
   top: 50%;
   left: 50%;
-  border-radius: 12px;
-  border: 1px solid #fff;
-  background: #000;
+  width: var(--swap-stage-w);
+  height: var(--swap-stage-h);
+  perspective: 900px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
 
-  transform-style: preserve-3d;
-  will-change: transform;
+.card-swap-slot {
+  position: absolute;
+  top: var(--swap-oy);
+  left: var(--swap-ox);
+  width: var(--swap-w);
+  height: var(--swap-h);
+  margin: calc(var(--swap-h) / -2) 0 0 calc(var(--swap-w) / -2);
+  border-radius: var(--swap-radius);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: var(--swap-shadow);
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-@media (max-width: 768px) {
-  .card-swap-container {
-    transform: scale(0.75) translate(25%, 25%);
-  }
+.card-swap:focus-visible .card-swap-slot[data-front] {
+  outline: 2px solid var(--swap-ink);
+  outline-offset: 3px;
 }
 
-@media (max-width: 480px) {
-  .card-swap-container {
-    transform: scale(0.55) translate(25%, 25%);
-  }
+.card-swap-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  background: var(--swap-shade);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-swap-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: inherit;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--swap-tile);
+  color: var(--swap-ink);
+}
+
+.card-swap-card-rim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--swap-tile-edge),
+    inset 0 1px 0 var(--swap-tile-highlight);
+  pointer-events: none;
+}
+
+.card-swap-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.card-swap-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 30px;
+  padding: 0 6px;
+}
+
+.card-swap-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--swap-badge);
+}
+
+.card-swap-title {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-swap-media {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: max(0px, calc(var(--swap-radius) - 6px));
+  background: var(--swap-badge);
+}
+
+.card-swap-media img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.card-swap-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--swap-media-edge);
+  pointer-events: none;
 }

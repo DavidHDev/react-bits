@@ -1,612 +1,497 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import { memo, useEffect, useRef } from 'react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Mail01Icon } from '@hugeicons/core-free-icons';
 
-const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
-
-const ANIMATION_CONFIG = {
-  INITIAL_DURATION: 1200,
-  INITIAL_X_OFFSET: 70,
-  INITIAL_Y_OFFSET: 60,
-  DEVICE_BETA_OFFSET: 20,
-  ENTER_TRANSITION_MS: 180
+const THEMES = {
+  dark: {
+    '--pc-frame': 'rgba(38, 35, 46, 0.66)',
+    '--pc-frame-edge': 'rgba(255, 255, 255, 0.08)',
+    '--pc-frame-highlight': 'rgba(255, 255, 255, 0.07)',
+    '--pc-frame-shadow': '0 22px 44px -20px rgba(0, 0, 0, 0.8), 0 6px 16px -8px rgba(0, 0, 0, 0.5)',
+    '--pc-tile': 'linear-gradient(180deg, #3a3644 0%, #27242f 100%)',
+    '--pc-tile-edge': 'rgba(255, 255, 255, 0.07)',
+    '--pc-tile-highlight': 'rgba(255, 255, 255, 0.12)',
+    '--pc-tile-shadow': '0 4px 10px -4px rgba(0, 0, 0, 0.7)',
+    '--pc-ink': '#f4f4f5',
+    '--pc-muted': 'rgba(244, 244, 245, 0.6)',
+    '--pc-hover': 'brightness(1.12)',
+    '--pc-press': 'brightness(0.8)',
+    '--pc-shade': 'rgba(0, 0, 0, 0.4)'
+  },
+  light: {
+    '--pc-frame': 'rgba(240, 240, 243, 0.8)',
+    '--pc-frame-edge': 'rgba(24, 24, 27, 0.07)',
+    '--pc-frame-highlight': 'rgba(255, 255, 255, 0.95)',
+    '--pc-frame-shadow': '0 22px 44px -22px rgba(24, 24, 27, 0.3), 0 6px 16px -10px rgba(24, 24, 27, 0.16)',
+    '--pc-tile': 'linear-gradient(180deg, #ffffff 0%, #f6f6f8 100%)',
+    '--pc-tile-edge': 'rgba(24, 24, 27, 0.08)',
+    '--pc-tile-highlight': 'rgba(255, 255, 255, 1)',
+    '--pc-tile-shadow': '0 4px 10px -5px rgba(24, 24, 27, 0.25)',
+    '--pc-ink': '#27272a',
+    '--pc-muted': 'rgba(39, 39, 42, 0.6)',
+    '--pc-hover': 'brightness(0.97)',
+    '--pc-press': 'brightness(0.92)',
+    '--pc-shade': 'rgba(24, 24, 27, 0.14)'
+  }
 };
 
-const clamp = (v, min = 0, max = 100) => Math.min(Math.max(v, min), max);
-const round = (v, precision = 3) => parseFloat(v.toFixed(precision));
-const adjust = (v, fMin, fMax, tMin, tMax) => round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
+const FOILS = {
+  dark: {
+    '--pc-blend': 'color-dodge',
+    '--pc-holo-filter': 'hue-rotate(0deg)',
+    '--pc-sheen': 'rgba(255, 255, 255, 0.16)'
+  },
+  light: {
+    '--pc-blend': 'multiply',
+    '--pc-holo-filter': 'invert(1) hue-rotate(180deg)',
+    '--pc-sheen': 'rgba(255, 255, 255, 0)'
+  }
+};
 
-// Inject keyframes once
-const KEYFRAMES_ID = 'pc-keyframes';
-if (typeof document !== 'undefined' && !document.getElementById(KEYFRAMES_ID)) {
-  const style = document.createElement('style');
-  style.id = KEYFRAMES_ID;
-  style.textContent = `
-    @keyframes pc-holo-bg {
-      0% { background-position: 0 var(--background-y), 0 0, center; }
-      100% { background-position: 0 var(--background-y), 90% 90%, center; }
-    }
-  `;
-  document.head.appendChild(style);
-}
+const GRAIN = `url("data:image/svg+xml,${encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><filter id='g' x='0' y='0' width='100%' height='100%' color-interpolation-filters='sRGB'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0.55 0 0 0 -0.24 0.55 0 0 0 -0.24 0.55 0 0 0 -0.24 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>"
+)}")`;
 
-const ProfileCardComponent = ({
-  avatarUrl = '<Placeholder for avatar URL>',
-  iconUrl = '<Placeholder for icon URL>',
-  grainUrl = '<Placeholder for grain URL>',
-  innerGradient,
-  behindGlowEnabled = true,
-  behindGlowColor,
-  behindGlowSize,
-  className = '',
-  enableTilt = true,
-  enableMobileTilt = false,
-  mobileTiltSensitivity = 5,
+const SPECTRUM =
+  'repeating-linear-gradient(0deg, hsl(2, 100%, 73%) 5%, hsl(53, 100%, 69%) 10%, hsl(93, 100%, 69%) 15%, hsl(176, 100%, 76%) 20%, hsl(228, 100%, 74%) 25%, hsl(260, 100%, 76%) 30%, hsl(2, 100%, 73%) 35%)';
+const BARS =
+  'repeating-linear-gradient(-45deg, #0e152e 0%, hsl(180, 10%, 60%) 3.8%, hsl(180, 29%, 66%) 4.5%, hsl(180, 10%, 60%) 5.2%, #0e152e 10%, #0e152e 12%)';
+const FALLOFF =
+  'radial-gradient(farthest-corner circle at var(--pc-pointer-x) var(--pc-pointer-y), hsla(0, 0%, 0%, 0.1) 12%, hsla(0, 0%, 0%, 0.15) 20%, hsla(0, 0%, 0%, 0.25) 120%)';
+const PATTERN_POSITION = 'calc(50% - var(--pc-shift-x) * 1.5) calc(65% - var(--pc-shift-y) * 1.5)';
+
+const ROOT_VARS = {
+  '--pc-light-x': '50%',
+  '--pc-light-y': '50%',
+  '--pc-pointer-x': '50%',
+  '--pc-pointer-y': '50%',
+  '--pc-band-x': '50%',
+  '--pc-band-y': '50%',
+  '--pc-reach': 0,
+  '--pc-rotate-x': '0deg',
+  '--pc-rotate-y': '0deg',
+  '--pc-shift-x': '0px',
+  '--pc-shift-y': '0px',
+  '--pc-tilt': 0,
+  '--pc-active': 0
+};
+
+const SHEEN_STYLE = {
+  background:
+    'radial-gradient(farthest-corner circle at calc(var(--pc-light-x) - 10px) calc(var(--pc-light-y) - 10px), var(--pc-sheen) 0%, transparent 55%)',
+  opacity: 'calc(var(--pc-holo) * var(--pc-active))'
+};
+
+const HOLO_STYLE = {
+  backgroundImage: `${SPECTRUM}, ${BARS}, ${FALLOFF}`,
+  backgroundPosition: '0 var(--pc-band-y), var(--pc-band-x) var(--pc-band-y), center',
+  backgroundSize: '500% 500%, 300% 300%, 200% 200%',
+  backgroundBlendMode: 'color, hard-light',
+  filter:
+    'brightness(calc(0.66 + 0.19 * var(--pc-active))) contrast(calc(1.33 + 0.17 * var(--pc-active))) saturate(calc(0.33 + 0.17 * var(--pc-active))) var(--pc-holo-filter)',
+  opacity: 'calc(var(--pc-holo) * var(--pc-holo-gain) * (0.5 + 0.5 * var(--pc-active)))',
+  WebkitMaskImage: 'var(--pc-pattern)',
+  WebkitMaskSize: 'var(--pc-pattern-size)',
+  WebkitMaskPosition: PATTERN_POSITION,
+  WebkitMaskRepeat: 'repeat',
+  maskImage: 'var(--pc-pattern)',
+  maskSize: 'var(--pc-pattern-size)',
+  maskPosition: PATTERN_POSITION,
+  maskRepeat: 'repeat'
+};
+
+const GLOW_STYLE = {
+  backgroundImage:
+    'linear-gradient(45deg, hsl(176, 100%, 76%), hsl(228, 100%, 74%), hsl(260, 100%, 76%), hsl(2, 100%, 73%), hsl(53, 100%, 69%), hsl(93, 100%, 69%)), radial-gradient(circle at var(--pc-pointer-x) var(--pc-pointer-y), hsl(0, 0%, 70%) 0%, hsla(0, 0%, 30%, 0.2) 90%), var(--pc-grain)',
+  backgroundSize: '250% 250%, 100% 100%, 220px 220px',
+  backgroundPosition: 'var(--pc-pointer-x) var(--pc-pointer-y), center, 0 0',
+  backgroundBlendMode: 'color-dodge',
+  filter:
+    'brightness(calc(2 - var(--pc-reach))) contrast(calc(var(--pc-reach) + 2)) saturate(calc(0.5 + var(--pc-reach)))',
+  mixBlendMode: 'luminosity',
+  opacity: 'calc(var(--pc-active) * var(--pc-holo-detail))'
+};
+
+const SHIFT_STYLE = {
+  backgroundImage: `${SPECTRUM}, ${BARS}, ${FALLOFF}`,
+  backgroundPosition: '0 var(--pc-band-y), calc(var(--pc-band-x) * 0.4) calc(var(--pc-band-y) * 0.5), center',
+  backgroundSize: '200% 300%, 700% 700%, 100% 100%',
+  backgroundBlendMode: 'color, hard-light',
+  mixBlendMode: 'difference',
+  filter: 'brightness(0.8) contrast(1.5)',
+  opacity: 'calc(var(--pc-active) * var(--pc-holo-detail))'
+};
+
+const PHOTO_STYLE = {
+  inset: 'calc(var(--pc-parallax) * -1)',
+  width: 'calc(100% + var(--pc-parallax) * 2)',
+  height: 'calc(100% + var(--pc-parallax) * 2)',
+  transform: 'translate3d(var(--pc-shift-x), var(--pc-shift-y), 0)'
+};
+
+const SCRIM_STYLE = {
+  background:
+    'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.57) 6%, rgba(0, 0, 0, 0.5) 12%, rgba(0, 0, 0, 0.4) 19%, rgba(0, 0, 0, 0.28) 26%, rgba(0, 0, 0, 0.16) 33%, rgba(0, 0, 0, 0.07) 40%, rgba(0, 0, 0, 0.02) 46%, rgba(0, 0, 0, 0) 52%)'
+};
+
+const GLARE_STYLE = {
+  background:
+    'radial-gradient(farthest-corner circle at var(--pc-light-x) var(--pc-light-y), rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.36) 20%, rgba(255, 255, 255, 0) 60%)',
+  opacity: 'calc(var(--pc-glare) * var(--pc-active))'
+};
+
+const SHADE_STYLE = {
+  background:
+    'radial-gradient(farthest-corner circle at var(--pc-light-x) var(--pc-light-y), transparent 30%, var(--pc-shade) 100%)',
+  opacity: 'calc(var(--pc-glare) * var(--pc-tilt))'
+};
+
+const ROOT = 'relative w-[340px] max-w-full touch-pan-y [perspective:1000px] [-webkit-tap-highlight-color:transparent]';
+const BODY =
+  'relative flex flex-col gap-[10px] rounded-[calc(var(--pc-radius)+10px)] p-[10px] backdrop-blur-[20px] backdrop-saturate-[1.6] will-change-transform [background:var(--pc-frame)] [box-shadow:var(--pc-frame-shadow)] [transform:rotateX(var(--pc-rotate-x))_rotateY(var(--pc-rotate-y))]';
+const TILE =
+  'relative isolate aspect-[4/5] overflow-hidden rounded-[var(--pc-radius)] [background:var(--pc-backdrop)] [box-shadow:var(--pc-tile-shadow)]';
+const LAYER = 'pointer-events-none absolute inset-0 rounded-[inherit]';
+const HOLO = `${LAYER} [mix-blend-mode:var(--pc-blend)]`;
+const HOLO_LAYER = 'absolute inset-0';
+const PHOTO = 'pointer-events-none absolute select-none object-cover object-bottom';
+const INFO = 'absolute bottom-[18px] left-5 right-5 text-white';
+const NAME = 'm-0 text-[20px] font-semibold leading-[1.25] tracking-[-0.01em] text-[inherit]';
+const TITLE = 'mx-0 mb-0 mt-1 text-[14px] leading-[1.45] text-white/78';
+const TILE_RIM = `${LAYER} [box-shadow:inset_0_0_0_1px_var(--pc-tile-edge),inset_0_1px_0_var(--pc-tile-highlight)]`;
+const FOOTER = 'flex min-w-0 items-center gap-3 px-5 pb-2 pt-1.5';
+const AVATAR =
+  "relative h-9 w-9 flex-none overflow-hidden rounded-full [background:var(--pc-tile)] after:absolute after:inset-0 after:rounded-[inherit] after:content-[''] after:[box-shadow:inset_0_0_0_1px_var(--pc-tile-edge)]";
+const AVATAR_IMAGE = 'block h-full w-full object-cover object-top';
+const META = 'flex min-w-0 flex-1 flex-col gap-[3px]';
+const HANDLE =
+  'overflow-hidden text-ellipsis whitespace-nowrap text-[14px] font-semibold leading-[1.25] text-[var(--pc-ink)]';
+const STATUS =
+  "flex items-center gap-1.5 whitespace-nowrap text-[12.5px] leading-[1.25] text-[var(--pc-muted)] before:h-1.5 before:w-1.5 before:flex-none before:rounded-full before:bg-[var(--pc-status)] before:content-['']";
+const CONTACT =
+  'flex h-9 flex-none cursor-pointer items-center gap-1.5 rounded-[calc(var(--pc-radius)*0.75)] border-none px-3.5 font-[inherit] text-[13px] font-semibold text-[var(--pc-ink)] [background:var(--pc-tile)] [box-shadow:inset_0_0_0_1px_var(--pc-tile-edge),inset_0_1px_0_var(--pc-tile-highlight),var(--pc-tile-shadow)] transition-[filter,transform] duration-200 hover:[filter:var(--pc-hover)] active:scale-[0.96] active:duration-0 active:[filter:var(--pc-press)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--pc-ink)]';
+const GLARE = `${LAYER} mix-blend-overlay`;
+const RIM = `${LAYER} [box-shadow:inset_0_0_0_1px_var(--pc-frame-edge),inset_0_1px_0_var(--pc-frame-highlight)]`;
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const isDark = color => {
+  const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(color).trim());
+  if (!match) return null;
+  const hex = match[1].length === 3 ? match[1].replace(/./g, digit => digit + digit) : match[1];
+  const [r, g, b] = [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.5;
+};
+
+const ProfileCard = ({
+  avatarUrl = '',
+  iconUrl,
   miniAvatarUrl,
   name = 'Javi A. Torres',
   title = 'Software Engineer',
   handle = 'javicodes',
   status = 'Online',
+  statusColor = '#22c55e',
   contactText = 'Contact',
   showUserInfo = true,
-  onContactClick
+  onContactClick,
+  theme = 'dark',
+  backdropColor,
+  radius = 16,
+  holo = 0.8,
+  glare = 0.5,
+  enableTilt = true,
+  tiltStrength = 12,
+  parallax = 8,
+  enableMobileTilt = false,
+  mobileTiltSensitivity = 5,
+  intro = true,
+  className = ''
 }) => {
-  const wrapRef = useRef(null);
-  const shellRef = useRef(null);
-
-  const enterTimerRef = useRef(null);
-  const leaveRafRef = useRef(null);
-
-  const tiltEngine = useMemo(() => {
-    if (!enableTilt) return null;
-
-    let rafId = null;
-    let running = false;
-    let lastTs = 0;
-
-    let currentX = 0;
-    let currentY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const DEFAULT_TAU = 0.14;
-    const INITIAL_TAU = 0.6;
-    let initialUntil = 0;
-
-    const setVarsFromXY = (x, y) => {
-      const shell = shellRef.current;
-      const wrap = wrapRef.current;
-      if (!shell || !wrap) return;
-
-      const width = shell.clientWidth || 1;
-      const height = shell.clientHeight || 1;
-
-      const percentX = clamp((100 / width) * x);
-      const percentY = clamp((100 / height) * y);
-
-      const centerX = percentX - 50;
-      const centerY = percentY - 50;
-
-      const properties = {
-        '--pointer-x': `${percentX}%`,
-        '--pointer-y': `${percentY}%`,
-        '--background-x': `${adjust(percentX, 0, 100, 35, 65)}%`,
-        '--background-y': `${adjust(percentY, 0, 100, 35, 65)}%`,
-        '--pointer-from-center': `${clamp(Math.hypot(percentY - 50, percentX - 50) / 50, 0, 1)}`,
-        '--pointer-from-top': `${percentY / 100}`,
-        '--pointer-from-left': `${percentX / 100}`,
-        '--rotate-x': `${round(-(centerX / 5))}deg`,
-        '--rotate-y': `${round(centerY / 4)}deg`
-      };
-
-      for (const [k, v] of Object.entries(properties)) wrap.style.setProperty(k, v);
-    };
-
-    const step = ts => {
-      if (!running) return;
-      if (lastTs === 0) lastTs = ts;
-      const dt = (ts - lastTs) / 1000;
-      lastTs = ts;
-
-      const tau = ts < initialUntil ? INITIAL_TAU : DEFAULT_TAU;
-      const k = 1 - Math.exp(-dt / tau);
-
-      currentX += (targetX - currentX) * k;
-      currentY += (targetY - currentY) * k;
-
-      setVarsFromXY(currentX, currentY);
-
-      const stillFar = Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05;
-
-      if (stillFar || document.hasFocus()) {
-        rafId = requestAnimationFrame(step);
-      } else {
-        running = false;
-        lastTs = 0;
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      }
-    };
-
-    const start = () => {
-      if (running) return;
-      running = true;
-      lastTs = 0;
-      rafId = requestAnimationFrame(step);
-    };
-
-    return {
-      setImmediate(x, y) {
-        currentX = x;
-        currentY = y;
-        setVarsFromXY(currentX, currentY);
-      },
-      setTarget(x, y) {
-        targetX = x;
-        targetY = y;
-        start();
-      },
-      toCenter() {
-        const shell = shellRef.current;
-        if (!shell) return;
-        this.setTarget(shell.clientWidth / 2, shell.clientHeight / 2);
-      },
-      beginInitial(durationMs) {
-        initialUntil = performance.now() + durationMs;
-        start();
-      },
-      getCurrent() {
-        return { x: currentX, y: currentY, tx: targetX, ty: targetY };
-      },
-      cancel() {
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = null;
-        running = false;
-        lastTs = 0;
-      }
-    };
-  }, [enableTilt]);
-
-  const getOffsets = (evt, el) => {
-    const rect = el.getBoundingClientRect();
-    return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
-  };
-
-  const handlePointerMove = useCallback(
-    event => {
-      const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
-      const { x, y } = getOffsets(event, shell);
-      tiltEngine.setTarget(x, y);
-    },
-    [tiltEngine]
-  );
-
-  const handlePointerEnter = useCallback(
-    event => {
-      const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
-
-      shell.classList.add('active');
-      shell.classList.add('entering');
-      if (enterTimerRef.current) window.clearTimeout(enterTimerRef.current);
-      enterTimerRef.current = window.setTimeout(() => {
-        shell.classList.remove('entering');
-      }, ANIMATION_CONFIG.ENTER_TRANSITION_MS);
-
-      const { x, y } = getOffsets(event, shell);
-      tiltEngine.setTarget(x, y);
-    },
-    [tiltEngine]
-  );
-
-  const handlePointerLeave = useCallback(() => {
-    const shell = shellRef.current;
-    if (!shell || !tiltEngine) return;
-
-    tiltEngine.toCenter();
-
-    const checkSettle = () => {
-      const { x, y, tx, ty } = tiltEngine.getCurrent();
-      const settled = Math.hypot(tx - x, ty - y) < 0.6;
-      if (settled) {
-        shell.classList.remove('active');
-        leaveRafRef.current = null;
-      } else {
-        leaveRafRef.current = requestAnimationFrame(checkSettle);
-      }
-    };
-    if (leaveRafRef.current) cancelAnimationFrame(leaveRafRef.current);
-    leaveRafRef.current = requestAnimationFrame(checkSettle);
-  }, [tiltEngine]);
-
-  const handleDeviceOrientation = useCallback(
-    event => {
-      const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
-
-      const { beta, gamma } = event;
-      if (beta == null || gamma == null) return;
-
-      const centerX = shell.clientWidth / 2;
-      const centerY = shell.clientHeight / 2;
-      const x = clamp(centerX + gamma * mobileTiltSensitivity, 0, shell.clientWidth);
-      const y = clamp(
-        centerY + (beta - ANIMATION_CONFIG.DEVICE_BETA_OFFSET) * mobileTiltSensitivity,
-        0,
-        shell.clientHeight
-      );
-
-      tiltEngine.setTarget(x, y);
-    },
-    [tiltEngine, mobileTiltSensitivity]
-  );
+  const rootRef = useRef(null);
+  const engineRef = useRef(null);
+  const settings = { enableTilt, tiltStrength, parallax, mobileTiltSensitivity, intro };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
-    if (!enableTilt || !tiltEngine) return;
+    const root = rootRef.current;
+    if (!root) return;
 
-    const shell = shellRef.current;
-    if (!shell) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const size = { width: root.offsetWidth, height: root.offsetHeight };
+    const x = { p: 0, v: 0, target: 0 };
+    const y = { p: 0, v: 0, target: 0 };
+    const light = { p: 0, target: 0 };
+    let raf = 0;
+    let last = 0;
+    let slowUntil = 0;
+    let touchId = null;
 
-    const pointerMoveHandler = handlePointerMove;
-    const pointerEnterHandler = handlePointerEnter;
-    const pointerLeaveHandler = handlePointerLeave;
-    const deviceOrientationHandler = handleDeviceOrientation;
+    const write = () => {
+      const { enableTilt: tiltOn, tiltStrength: strength, parallax: depth } = settingsRef.current;
+      const angle = tiltOn && !reduced ? strength : 0;
+      const tilt = Math.min(1, Math.hypot(x.p, y.p));
+      const style = root.style;
+      style.setProperty('--pc-light-x', `${((x.p + 1) * 0.5 * size.width).toFixed(1)}px`);
+      style.setProperty('--pc-light-y', `${((y.p + 1) * 0.5 * size.height).toFixed(1)}px`);
+      style.setProperty('--pc-pointer-x', `${((x.p + 1) * 50).toFixed(2)}%`);
+      style.setProperty('--pc-pointer-y', `${((y.p + 1) * 50).toFixed(2)}%`);
+      style.setProperty('--pc-band-x', `${(50 + x.p * 15).toFixed(2)}%`);
+      style.setProperty('--pc-band-y', `${(50 + y.p * 15).toFixed(2)}%`);
+      style.setProperty('--pc-rotate-x', `${(y.p * angle).toFixed(3)}deg`);
+      style.setProperty('--pc-rotate-y', `${(-x.p * angle).toFixed(3)}deg`);
+      style.setProperty('--pc-shift-x', `${(x.p * (reduced ? 0 : depth)).toFixed(2)}px`);
+      style.setProperty('--pc-shift-y', `${(y.p * (reduced ? 0 : depth)).toFixed(2)}px`);
+      style.setProperty('--pc-reach', tilt.toFixed(4));
+      style.setProperty('--pc-tilt', (tilt * light.p).toFixed(4));
+      style.setProperty('--pc-active', light.p.toFixed(4));
+    };
 
-    shell.addEventListener('pointerenter', pointerEnterHandler);
-    shell.addEventListener('pointermove', pointerMoveHandler);
-    shell.addEventListener('pointerleave', pointerLeaveHandler);
-
-    const handleClick = () => {
-      if (!enableMobileTilt || location.protocol !== 'https:') return;
-      const anyMotion = window.DeviceMotionEvent;
-      if (anyMotion && typeof anyMotion.requestPermission === 'function') {
-        anyMotion
-          .requestPermission()
-          .then(state => {
-            if (state === 'granted') {
-              window.addEventListener('deviceorientation', deviceOrientationHandler);
-            }
-          })
-          .catch(console.error);
+    const frame = now => {
+      const dt = Math.min(0.05, (now - last) / 1000 || 0);
+      last = now;
+      const slow = now < slowUntil;
+      const stiffness = slow ? 24 : 120;
+      const damping = slow ? 9 : 16;
+      const steps = Math.max(1, Math.ceil(dt / (1 / 120)));
+      const h = dt / steps;
+      for (let i = 0; i < steps; i++) {
+        for (const axis of [x, y]) {
+          axis.v += (stiffness * (axis.target - axis.p) - damping * axis.v) * h;
+          axis.p += axis.v * h;
+        }
+      }
+      const tau = light.target > light.p ? 0.18 : slow ? 0.9 : 0.45;
+      light.p += (light.target - light.p) * (1 - Math.exp(-dt / tau));
+      write();
+      const moving =
+        Math.abs(x.target - x.p) > 0.0005 ||
+        Math.abs(y.target - y.p) > 0.0005 ||
+        Math.abs(x.v) > 0.0005 ||
+        Math.abs(y.v) > 0.0005 ||
+        Math.abs(light.target - light.p) > 0.002;
+      if (moving) {
+        raf = requestAnimationFrame(frame);
       } else {
-        window.addEventListener('deviceorientation', deviceOrientationHandler);
+        x.p = x.target;
+        y.p = y.target;
+        light.p = light.target;
+        write();
+        raf = 0;
       }
     };
-    shell.addEventListener('click', handleClick);
 
-    const initialX = (shell.clientWidth || 0) - ANIMATION_CONFIG.INITIAL_X_OFFSET;
-    const initialY = ANIMATION_CONFIG.INITIAL_Y_OFFSET;
-    tiltEngine.setImmediate(initialX, initialY);
-    tiltEngine.toCenter();
-    tiltEngine.beginInitial(ANIMATION_CONFIG.INITIAL_DURATION);
+    const wake = () => {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+
+    const aim = (nx, ny, on = true) => {
+      x.target = clamp(nx, -1, 1);
+      y.target = clamp(ny, -1, 1);
+      light.target = on ? 1 : 0;
+      slowUntil = 0;
+      wake();
+    };
+
+    const aimAt = event => {
+      const rect = root.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      aim(((event.clientX - rect.left) / rect.width) * 2 - 1, ((event.clientY - rect.top) / rect.height) * 2 - 1);
+    };
+
+    const release = () => aim(0, 0, false);
+
+    const onEnter = event => {
+      if (event.pointerType === 'mouse') aimAt(event);
+    };
+    const onMove = event => {
+      if (event.pointerType === 'mouse' || event.pointerId === touchId) aimAt(event);
+    };
+    const onLeave = event => {
+      if (event.pointerType === 'mouse') release();
+    };
+    const onDown = event => {
+      if (event.pointerType === 'mouse') return;
+      touchId = event.pointerId;
+      aimAt(event);
+    };
+    const onUp = event => {
+      if (event.pointerId !== touchId) return;
+      touchId = null;
+      release();
+    };
+
+    root.addEventListener('pointerenter', onEnter);
+    root.addEventListener('pointermove', onMove);
+    root.addEventListener('pointerleave', onLeave);
+    root.addEventListener('pointerdown', onDown);
+    root.addEventListener('pointerup', onUp);
+    root.addEventListener('pointercancel', onUp);
+
+    const observer = new ResizeObserver(() => {
+      size.width = root.offsetWidth;
+      size.height = root.offsetHeight;
+      write();
+    });
+    observer.observe(root);
+
+    engineRef.current = { aim, release, write };
+
+    if (settingsRef.current.intro && !reduced) {
+      x.p = 0.62;
+      y.p = -0.55;
+      light.p = 1;
+      slowUntil = performance.now() + 1400;
+      write();
+      wake();
+    } else {
+      write();
+    }
 
     return () => {
-      shell.removeEventListener('pointerenter', pointerEnterHandler);
-      shell.removeEventListener('pointermove', pointerMoveHandler);
-      shell.removeEventListener('pointerleave', pointerLeaveHandler);
-      shell.removeEventListener('click', handleClick);
-      window.removeEventListener('deviceorientation', deviceOrientationHandler);
-      if (enterTimerRef.current) window.clearTimeout(enterTimerRef.current);
-      if (leaveRafRef.current) cancelAnimationFrame(leaveRafRef.current);
-      tiltEngine.cancel();
-      shell.classList.remove('entering');
+      cancelAnimationFrame(raf);
+      observer.disconnect();
+      root.removeEventListener('pointerenter', onEnter);
+      root.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerleave', onLeave);
+      root.removeEventListener('pointerdown', onDown);
+      root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointercancel', onUp);
+      engineRef.current = null;
     };
-  }, [
-    enableTilt,
-    enableMobileTilt,
-    tiltEngine,
-    handlePointerMove,
-    handlePointerEnter,
-    handlePointerLeave,
-    handleDeviceOrientation
-  ]);
+  }, []);
 
-  const cardRadius = '30px';
+  useEffect(() => {
+    engineRef.current?.write();
+  }, [enableTilt, tiltStrength, parallax]);
 
-  const cardStyle = useMemo(
-    () => ({
-      '--icon': iconUrl ? `url(${iconUrl})` : 'none',
-      '--grain': grainUrl ? `url(${grainUrl})` : 'none',
-      '--inner-gradient': innerGradient ?? DEFAULT_INNER_GRADIENT,
-      '--behind-glow-color': behindGlowColor ?? 'rgba(125, 190, 255, 0.67)',
-      '--behind-glow-size': behindGlowSize ?? '50%',
-      '--pointer-x': '50%',
-      '--pointer-y': '50%',
-      '--pointer-from-center': '0',
-      '--pointer-from-top': '0.5',
-      '--pointer-from-left': '0.5',
-      '--card-opacity': '0',
-      '--rotate-x': '0deg',
-      '--rotate-y': '0deg',
-      '--background-x': '50%',
-      '--background-y': '50%',
-      '--card-radius': cardRadius,
-      '--sunpillar-1': 'hsl(2, 100%, 73%)',
-      '--sunpillar-2': 'hsl(53, 100%, 69%)',
-      '--sunpillar-3': 'hsl(93, 100%, 69%)',
-      '--sunpillar-4': 'hsl(176, 100%, 76%)',
-      '--sunpillar-5': 'hsl(228, 100%, 74%)',
-      '--sunpillar-6': 'hsl(283, 100%, 73%)',
-      '--sunpillar-clr-1': 'var(--sunpillar-1)',
-      '--sunpillar-clr-2': 'var(--sunpillar-2)',
-      '--sunpillar-clr-3': 'var(--sunpillar-3)',
-      '--sunpillar-clr-4': 'var(--sunpillar-4)',
-      '--sunpillar-clr-5': 'var(--sunpillar-5)',
-      '--sunpillar-clr-6': 'var(--sunpillar-6)'
-    }),
-    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize, cardRadius]
-  );
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !enableMobileTilt) return;
 
-  const handleContactClick = useCallback(() => {
-    onContactClick?.();
-  }, [onContactClick]);
+    let listening = false;
+    const onOrientation = event => {
+      if (event.beta == null || event.gamma == null) return;
+      const sensitivity = settingsRef.current.mobileTiltSensitivity;
+      engineRef.current?.aim((event.gamma * sensitivity) / 150, ((event.beta - 20) * sensitivity) / 150);
+    };
+    const listen = () => {
+      if (listening) return;
+      listening = true;
+      window.addEventListener('deviceorientation', onOrientation);
+    };
+    const onClick = () => {
+      const Motion = window.DeviceOrientationEvent;
+      if (Motion && typeof Motion.requestPermission === 'function') {
+        Motion.requestPermission()
+          .then(state => {
+            if (state === 'granted') listen();
+          })
+          .catch(() => {});
+      } else {
+        listen();
+      }
+    };
 
-  // Complex styles that require CSS variables and can't be done with Tailwind
-  const shineStyle = {
-    maskImage: 'var(--icon)',
-    maskMode: 'luminance',
-    maskRepeat: 'repeat',
-    maskSize: '150%',
-    maskPosition: 'top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x))',
-    filter: 'brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5)',
-    animation: 'pc-holo-bg 18s linear infinite',
-    animationPlayState: 'running',
-    mixBlendMode: 'color-dodge',
-    '--space': '5%',
-    '--angle': '-45deg',
-    transform: 'translate3d(0, 0, 1px)',
-    overflow: 'hidden',
-    zIndex: 3,
-    background: 'transparent',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundImage: `
-      repeating-linear-gradient(
-        0deg,
-        var(--sunpillar-clr-1) calc(var(--space) * 1),
-        var(--sunpillar-clr-2) calc(var(--space) * 2),
-        var(--sunpillar-clr-3) calc(var(--space) * 3),
-        var(--sunpillar-clr-4) calc(var(--space) * 4),
-        var(--sunpillar-clr-5) calc(var(--space) * 5),
-        var(--sunpillar-clr-6) calc(var(--space) * 6),
-        var(--sunpillar-clr-1) calc(var(--space) * 7)
-      ),
-      repeating-linear-gradient(
-        var(--angle),
-        #0e152e 0%,
-        hsl(180, 10%, 60%) 3.8%,
-        hsl(180, 29%, 66%) 4.5%,
-        hsl(180, 10%, 60%) 5.2%,
-        #0e152e 10%,
-        #0e152e 12%
-      ),
-      radial-gradient(
-        farthest-corner circle at var(--pointer-x) var(--pointer-y),
-        hsla(0, 0%, 0%, 0.1) 12%,
-        hsla(0, 0%, 0%, 0.15) 20%,
-        hsla(0, 0%, 0%, 0.25) 120%
-      )
-    `.replace(/\s+/g, ' '),
-    gridArea: '1 / -1',
-    borderRadius: cardRadius,
-    pointerEvents: 'none'
-  };
+    root.addEventListener('click', onClick);
+    return () => {
+      root.removeEventListener('click', onClick);
+      window.removeEventListener('deviceorientation', onOrientation);
+    };
+  }, [enableMobileTilt]);
 
-  const glareStyle = {
-    transform: 'translate3d(0, 0, 1.1px)',
-    overflow: 'hidden',
-    backgroundImage: `radial-gradient(
-      farthest-corner circle at var(--pointer-x) var(--pointer-y),
-      hsl(248, 25%, 80%) 12%,
-      hsla(207, 40%, 30%, 0.8) 90%
-    )`,
-    mixBlendMode: 'overlay',
-    filter: 'brightness(0.8) contrast(1.2)',
-    zIndex: 4,
-    gridArea: '1 / -1',
-    borderRadius: cardRadius,
-    pointerEvents: 'none'
-  };
+  const palette = theme === 'light' ? 'light' : 'dark';
+  const foil = backdropColor ? ((isDark(backdropColor) ?? palette === 'dark') ? 'dark' : 'light') : palette;
+  const backdrop = backdropColor
+    ? `linear-gradient(180deg, color-mix(in srgb, ${backdropColor}, #ffffff 12%) 0%, color-mix(in srgb, ${backdropColor}, #000000 18%) 100%)`
+    : 'var(--pc-tile)';
 
   return (
     <div
-      ref={wrapRef}
-      className={`relative touch-none ${className}`.trim()}
-      style={{ perspective: '500px', transform: 'translate3d(0, 0, 0.1px)', ...cardStyle }}
+      ref={rootRef}
+      className={`${ROOT} ${className}`.trim()}
+      style={{
+        ...ROOT_VARS,
+        ...THEMES[palette],
+        ...FOILS[foil],
+        '--pc-radius': `${Math.max(0, radius)}px`,
+        '--pc-backdrop': backdrop,
+        '--pc-holo': clamp(holo, 0, 1),
+        '--pc-glare': clamp(glare, 0, 1),
+        '--pc-parallax': `${Math.max(0, parallax)}px`,
+        '--pc-status': statusColor,
+        '--pc-grain': GRAIN,
+        '--pc-pattern': iconUrl ? `url("${iconUrl}")` : 'linear-gradient(#000, #000)',
+        '--pc-pattern-size': iconUrl ? '180% auto' : '100% 100%',
+        '--pc-holo-gain': iconUrl ? 1.25 : 0.75,
+        '--pc-holo-detail': iconUrl && foil === 'dark' ? 1 : 0
+      }}
     >
-      {behindGlowEnabled && (
-        <div
-          className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-200 ease-out"
-          style={{
-            background: `radial-gradient(circle at var(--pointer-x) var(--pointer-y), var(--behind-glow-color) 0%, transparent var(--behind-glow-size))`,
-            filter: 'blur(50px) saturate(1.1)',
-            opacity: 'calc(0.8 * var(--card-opacity))'
-          }}
-        />
-      )}
-      <div ref={shellRef} className="relative z-[1] group">
-        <section
-          className="grid relative overflow-hidden backface-hidden"
-          style={{
-            height: '80svh',
-            maxHeight: '540px',
-            aspectRatio: '0.718',
-            borderRadius: cardRadius,
-            backgroundBlendMode: 'color-dodge, normal, normal, normal',
-            boxShadow:
-              'rgba(0, 0, 0, 0.8) calc((var(--pointer-from-left) * 10px) - 3px) calc((var(--pointer-from-top) * 20px) - 6px) 20px -5px',
-            transition: 'transform 1s ease',
-            transform: 'translateZ(0) rotateX(0deg) rotateY(0deg)',
-            background: 'rgba(0, 0, 0, 0.9)'
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.transition = 'none';
-            e.currentTarget.style.transform = 'translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x))';
-          }}
-          onMouseLeave={e => {
-            const shell = shellRef.current;
-            if (shell?.classList.contains('entering')) {
-              e.currentTarget.style.transition = 'transform 180ms ease-out';
-            } else {
-              e.currentTarget.style.transition = 'transform 1s ease';
-            }
-            e.currentTarget.style.transform = 'translateZ(0) rotateX(0deg) rotateY(0deg)';
-          }}
-        >
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'var(--inner-gradient)',
-              backgroundColor: 'rgba(0, 0, 0, 0.9)',
-              borderRadius: cardRadius,
-              display: 'grid',
-              gridArea: '1 / -1'
-            }}
-          >
-            {/* Shine layer */}
-            <div style={shineStyle} />
-
-            {/* Glare layer */}
-            <div style={glareStyle} />
-
-            {/* Avatar content */}
-            <div
-              className="overflow-visible backface-hidden"
-              style={{
-                mixBlendMode: 'luminosity',
-                transform: 'translateZ(2px)',
-                gridArea: '1 / -1',
-                borderRadius: cardRadius,
-                pointerEvents: 'none'
-              }}
-            >
-              <img
-                className="w-full absolute left-1/2 bottom-[-1px] backface-hidden will-change-transform transition-transform duration-[120ms] ease-out"
-                src={avatarUrl}
-                alt={`${name || 'User'} avatar`}
-                loading="lazy"
-                style={{
-                  transformOrigin: '50% 100%',
-                  transform:
-                    'translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01))',
-                  borderRadius: cardRadius
-                }}
-                onError={e => {
-                  const t = e.target;
-                  t.style.display = 'none';
-                }}
-              />
-              {showUserInfo && (
-                <div
-                  className="absolute z-[2] flex items-center justify-between backdrop-blur-[30px] border border-white/10 pointer-events-auto"
-                  style={{
-                    '--ui-inset': '20px',
-                    '--ui-radius-bias': '6px',
-                    bottom: 'var(--ui-inset)',
-                    left: 'var(--ui-inset)',
-                    right: 'var(--ui-inset)',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    borderRadius: 'calc(max(0px, var(--card-radius) - var(--ui-inset) + var(--ui-radius-bias)))',
-                    padding: '12px 14px'
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="rounded-full overflow-hidden border border-white/10 flex-shrink-0"
-                      style={{ width: '48px', height: '48px' }}
-                    >
-                      <img
-                        className="w-full h-full object-cover rounded-full"
-                        src={miniAvatarUrl || avatarUrl}
-                        alt={`${name || 'User'} mini avatar`}
-                        loading="lazy"
-                        style={{ display: 'block', gridArea: 'auto', borderRadius: '50%', pointerEvents: 'auto' }}
-                        onError={e => {
-                          const t = e.target;
-                          t.style.opacity = '0.5';
-                          t.src = avatarUrl;
-                        }}
-                      />
-                    </div>
-                    <div className="flex flex-col items-start gap-1.5">
-                      <div className="text-sm font-medium text-white/90 leading-none">@{handle}</div>
-                      <div className="text-sm text-white/70 leading-none">{status}</div>
-                    </div>
-                  </div>
-                  <button
-                    className="border border-white/10 rounded-lg px-4 py-3 text-xs font-semibold text-white/90 cursor-pointer backdrop-blur-[10px] transition-all duration-200 ease-out hover:border-white/40 hover:-translate-y-px"
-                    onClick={handleContactClick}
-                    style={{ pointerEvents: 'auto', display: 'block', gridArea: 'auto', borderRadius: '8px' }}
-                    type="button"
-                    aria-label={`Contact ${name || 'user'}`}
-                  >
-                    {contactText}
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Details content */}
-            <div
-              className="max-h-full overflow-hidden text-center relative z-[5]"
-              style={{
-                transform:
-                  'translate3d(calc(var(--pointer-from-left) * -6px + 3px), calc(var(--pointer-from-top) * -6px + 3px), 0.1px)',
-                mixBlendMode: 'luminosity',
-                gridArea: '1 / -1',
-                borderRadius: cardRadius,
-                pointerEvents: 'none'
-              }}
-            >
-              <div className="w-full absolute flex flex-col" style={{ top: '3em', display: 'flex', gridArea: 'auto' }}>
-                <h3
-                  className="font-semibold m-0"
-                  style={{
-                    fontSize: 'min(5svh, 3em)',
-                    backgroundImage: 'linear-gradient(to bottom, #fff, #6f6fbe)',
-                    backgroundSize: '1em 1.5em',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    display: 'block',
-                    gridArea: 'auto',
-                    borderRadius: '0',
-                    pointerEvents: 'auto'
-                  }}
-                >
-                  {name}
-                </h3>
-                <p
-                  className="font-semibold whitespace-nowrap mx-auto w-min"
-                  style={{
-                    position: 'relative',
-                    top: '-12px',
-                    fontSize: '16px',
-                    margin: '0 auto',
-                    backgroundImage: 'linear-gradient(to bottom, #fff, #4a4ac0)',
-                    backgroundSize: '1em 1.5em',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    display: 'block',
-                    gridArea: 'auto',
-                    borderRadius: '0',
-                    pointerEvents: 'auto'
-                  }}
-                >
-                  {title}
-                </p>
+      <div className={BODY}>
+        <div className={TILE}>
+          <span className={LAYER} style={SHEEN_STYLE} />
+          <span className={HOLO} style={HOLO_STYLE}>
+            <span className={HOLO_LAYER} style={GLOW_STYLE} />
+            <span className={HOLO_LAYER} style={SHIFT_STYLE} />
+          </span>
+          {avatarUrl && (
+            <img
+              className={PHOTO}
+              style={PHOTO_STYLE}
+              src={avatarUrl}
+              alt={name || ''}
+              loading="lazy"
+              draggable={false}
+            />
+          )}
+          {(name || title) && (
+            <>
+              <span className={LAYER} style={SCRIM_STYLE} />
+              <div className={INFO}>
+                {name && <h3 className={NAME}>{name}</h3>}
+                {title && <p className={TITLE}>{title}</p>}
               </div>
+            </>
+          )}
+          <span className={TILE_RIM} />
+        </div>
+
+        {showUserInfo && (
+          <div className={FOOTER}>
+            {miniAvatarUrl && (
+              <span className={AVATAR}>
+                <img className={AVATAR_IMAGE} src={miniAvatarUrl} alt="" loading="lazy" draggable={false} />
+              </span>
+            )}
+            <div className={META}>
+              {handle && <span className={HANDLE}>@{handle}</span>}
+              {status && <span className={STATUS}>{status}</span>}
             </div>
+            {contactText && (
+              <button
+                type="button"
+                className={CONTACT}
+                onClick={onContactClick}
+                aria-label={name ? `${contactText} ${name}` : contactText}
+              >
+                <HugeiconsIcon icon={Mail01Icon} size={16} strokeWidth={1.8} />
+                {contactText}
+              </button>
+            )}
           </div>
-        </section>
+        )}
+
+        <span className={GLARE} style={GLARE_STYLE} />
+        <span className={LAYER} style={SHADE_STYLE} />
+        <span className={RIM} />
       </div>
     </div>
   );
 };
 
-const ProfileCard = React.memo(ProfileCardComponent);
-export default ProfileCard;
+export default memo(ProfileCard);

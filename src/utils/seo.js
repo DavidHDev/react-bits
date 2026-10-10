@@ -17,9 +17,9 @@ export const INDEX_SEO = {
   title: 'Browse Free React Components | React Bits',
   description:
     'Browse the React Bits library of free animated React components. Find text effects, backgrounds, cards, galleries and micro interactions with live demos.',
-  heading: 'Browse React Components',
+  heading: 'Components',
   path: '/get-started/index',
-  intro: 'Creative React components, ready to make your own.'
+  intro: ''
 };
 
 export const CATEGORY_SEO = {
@@ -27,46 +27,46 @@ export const CATEGORY_SEO = {
     title: 'React Text Animations — Free Components | React Bits',
     description:
       'Free React text animation components: split text, typewriter effects, rotating text, scroll reveals and more. Try live demos and customize the source.',
-    heading: 'React Text Animations',
+    heading: 'Text Animations',
     label: 'Text Animations',
     path: '/c/text-animations',
-    intro: 'Text effects that bring your words to life.'
+    intro: ''
   },
   animations: {
     title: 'React Animation Effects — Free Components | React Bits',
     description:
       'Explore free React animation effects for cursors, hover interactions, scroll reveals, borders and images. Customize each effect in a live demo.',
-    heading: 'React Animation Effects',
+    heading: 'Animations',
     label: 'Animations',
     path: '/c/animations',
-    intro: 'Cursors, hover effects and scroll reveals with character.'
+    intro: ''
   },
   components: {
     title: 'Interactive React UI Components — Free Library | React Bits',
     description:
       'Free interactive React UI components for cards, navigation, carousels and galleries. Preview each component and use the JavaScript or TypeScript source.',
-    heading: 'Interactive React Components',
+    heading: 'Components',
     label: 'Components',
     path: '/c/components',
-    intro: 'Standout cards, navigation, carousels and galleries.'
+    intro: ''
   },
   backgrounds: {
     title: 'Animated React Backgrounds — Free Components | React Bits',
     description:
       'Free animated React backgrounds, including gradients, particles, grids and shader effects. Explore live previews and customize the look of your page.',
-    heading: 'Animated React Backgrounds',
+    heading: 'Backgrounds',
     label: 'Backgrounds',
     path: '/c/backgrounds',
-    intro: 'Set the scene with gradients, particles and shaders.'
+    intro: ''
   },
   micro: {
     title: 'React Micro Interactions — Free Components | React Bits',
     description:
       'Free React micro interaction components for buttons, toggles, indicators and other interface details. Explore interactive demos and copy the source.',
-    heading: 'React Micro Interactions',
+    heading: 'Micro Interactions',
     label: 'Micro',
     path: '/c/micro',
-    intro: 'Small interactions that make every detail feel alive.'
+    intro: ''
   }
 };
 

@@ -115,7 +115,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   prism: { lightMode: true, glow: 0.72, noise: 0.025 },
   'prismatic-burst': { lightMode: true, intensity: 1.15, color0: '#7c3aed', color1: '#4338ca', color2: '#0e7490' },
   radar: { lightMode: true, color: '#0a9f5f' },
-  'ripple-grid': { lightMode: true, gridColor: '#6d28d9', glowIntensity: 0.16, vignetteStrength: 0.12 },
+  'ripple-grid': { lightMode: true },
   scanner: {
     color1: '#5b21b6',
     color2: '#be185d',

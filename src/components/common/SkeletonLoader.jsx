@@ -1,65 +1,92 @@
-import { Box, Flex } from '@chakra-ui/react';
 import '../../css/skeleton.css';
 
-const Bar = ({ h = '24px', mb = 4, maxW, mt, ...rest }) => (
-  <Box height={h} borderRadius="20px" mb={mb} mt={mt} className="skeleton-pulse" maxWidth={maxW} {...rest} />
-);
+const CONTROLS = Array.from({ length: 9 });
+const PROP_ROWS = [
+  [70, 48, 30, 78],
+  [88, 54, 26, 64],
+  [62, 40, 34, 86],
+  [94, 58, 22, 58],
+  [76, 46, 30, 72],
+  [68, 52, 26, 80]
+];
 
-const TabBar = ({ w }) => <Box borderRadius="10px" maxWidth={w} flex="1" height="100%" className="skeleton-pulse" />;
+const Line = ({ width, className = '' }) => (
+  <span className={`skel-line skel-pulse ${className}`.trim()} style={{ width }} />
+);
 
 export const SkeletonLoader = () => (
-  <Box className="skeleton-loader">
-    <Flex height="36px" borderRadius="md" mb={6} gap={2} maxWidth="300px">
-      <TabBar w="92px" />
-      <TabBar w="92px" />
-      <TabBar w="80px" />
-    </Flex>
+  <div className="skel" aria-hidden="true">
+    <div className="skel-toolbar">
+      <span className="skel-block skel-pulse skel-tabs" />
+      <div className="skel-actions">
+        <span className="skel-block skel-pulse" style={{ width: 68 }} />
+        <span className="skel-block skel-pulse" style={{ width: 68 }} />
+        <span className="skel-block skel-pulse" style={{ width: 136 }} />
+      </div>
+      <span className="skel-block skel-pulse skel-more" />
+    </div>
 
-    <Box className="skeleton-content">
-      <Bar h="500px" mb={3} />
-      <Bar maxW="200px" />
-      <Bar maxW="300px" />
-      <Bar maxW="230px" mb={12} />
-      <Bar maxW="100px" />
-      <Bar h="500px" mb={3} />
-    </Box>
-  </Box>
+    <div className="skel-preview">
+      <span className="skel-preview-fill skel-pulse" />
+    </div>
+
+    <div className="skel-frame">
+      <div className="skel-frame-head">
+        <Line width={72} />
+        <Line width={56} />
+      </div>
+      <div className="skel-inset skel-controls">
+        {CONTROLS.map((_, index) => (
+          <span key={index} className="skel-control skel-pulse" />
+        ))}
+      </div>
+    </div>
+
+    <div className="skel-frame skel-frame--props">
+      <div className="skel-frame-head">
+        <Line width={44} />
+        <Line width={72} />
+      </div>
+      <div className="skel-inset skel-table">
+        <div className="skel-row skel-row--head">
+          {[56, 36, 44, 76].map((width, index) => (
+            <span key={index} className="skel-cell">
+              <Line width={width} />
+            </span>
+          ))}
+        </div>
+        {PROP_ROWS.map((row, rowIndex) => (
+          <div key={rowIndex} className="skel-row">
+            {row.map((percent, index) => (
+              <span key={index} className="skel-cell">
+                <Line width={`${percent}%`} className={index === 0 ? 'skel-line--chip' : ''} />
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
 );
 
+const DOC_SECTIONS = [
+  { lines: [96, 100, 88, 62], code: 0 },
+  { lines: [92, 84], code: 112 },
+  { lines: [100, 94, 70], code: 0 },
+  { lines: [88, 64], code: 84 }
+];
+
 export const GetStartedLoader = () => (
-  <Box className="skeleton-loader skeleton-loader--docs">
-    <Box className="skeleton-content">
-      <Bar mt={6} maxW="600px" />
-      <Bar maxW="500px" />
-      <Bar maxW="550px" mb={12} />
-      <Bar maxW="500px" />
-      <Bar maxW="400px" />
-      <Bar h="60px" maxW="600px" />
-      <Bar maxW="450px" />
-      <Bar maxW="200px" mb={12} />
-
-      <Bar mt={6} maxW="350px" />
-      <Bar maxW="590px" />
-      <Bar maxW="520px" mb={12} />
-      <Bar h="100px" maxW="600px" mb={6} />
-
-      <Bar mt={6} maxW="600px" />
-      <Bar maxW="500px" />
-      <Bar maxW="550px" mb={12} />
-      <Bar maxW="500px" />
-      <Bar maxW="400px" />
-      <Bar h="60px" maxW="600px" />
-      <Bar maxW="450px" />
-      <Bar maxW="200px" mb={12} />
-
-      <Bar mt={6} maxW="350px" />
-      <Bar maxW="590px" />
-      <Bar maxW="520px" mb={12} />
-      <Bar h="100px" maxW="600px" mb={6} />
-
-      <Flex height="36px" borderRadius="md" justifyContent="space-between" mb={6} gap={2}>
-        <TabBar w="92px" />
-      </Flex>
-    </Box>
-  </Box>
+  <div className="skel skel--docs" aria-hidden="true">
+    <Line width="42%" className="skel-line--title" />
+    {DOC_SECTIONS.map((section, index) => (
+      <div key={index} className="skel-section">
+        {index > 0 && <Line width={`${28 + index * 6}%`} className="skel-line--heading" />}
+        {section.lines.map((width, lineIndex) => (
+          <Line key={lineIndex} width={`${width}%`} className="skel-line--text" />
+        ))}
+        {section.code > 0 && <span className="skel-code skel-pulse" style={{ height: section.code }} />}
+      </div>
+    ))}
+  </div>
 );

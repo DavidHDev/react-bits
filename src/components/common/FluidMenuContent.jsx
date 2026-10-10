@@ -1,20 +1,28 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { Menu, useMenuContext } from '@chakra-ui/react';
+import { Menu, Select, useMenuContext, useSelectContext } from '@chakra-ui/react';
 import { motion, useReducedMotion } from 'motion/react';
 
-const FluidMenuContent = ({ children, ...props }) => {
-  const menu = useMenuContext();
+const ITEM_CSS = {
+  '& [data-part="item"]': {
+    position: 'relative',
+    zIndex: 1,
+    bg: 'transparent',
+    _hover: { bg: 'transparent' },
+    _highlighted: { bg: 'transparent' }
+  }
+};
+
+const useFluidHighlight = (open, highlightedValue) => {
   const contentRef = useRef(null);
   const [highlight, setHighlight] = useState(null);
-  const reduceMotion = useReducedMotion();
 
   useLayoutEffect(() => {
-    if (!menu.open) {
+    if (!open) {
       setHighlight(null);
       return;
     }
 
-    if (!menu.highlightedValue) return;
+    if (!highlightedValue) return;
 
     const content = contentRef.current;
     const item = content?.querySelector('[data-part="item"][data-highlighted]');
@@ -39,64 +47,96 @@ const FluidMenuContent = ({ children, ...props }) => {
     observer.observe(content);
     observer.observe(item);
     return () => observer.disconnect();
-  }, [menu.open, menu.highlightedValue]);
+  }, [open, highlightedValue]);
 
-  const revealHighlight = () => {
+  const reveal = () => {
     setHighlight(previous => (previous && !previous.visible ? { ...previous, visible: true } : previous));
   };
+
+  const handlers = {
+    onPointerMove: event => {
+      if (event.pointerType === 'mouse' && event.target.closest('[data-part="item"]:not([data-disabled])')) {
+        reveal();
+      }
+    },
+    onKeyDown: reveal,
+    onPointerLeave: () => setHighlight(previous => (previous ? { ...previous, visible: false } : previous))
+  };
+
+  return { contentRef, highlight, handlers };
+};
+
+const Highlight = ({ highlight }) => {
+  const reduceMotion = useReducedMotion();
+  if (!highlight) return null;
+  return (
+    <motion.div
+      aria-hidden="true"
+      data-menu-highlight=""
+      initial={false}
+      animate={{
+        x: highlight.x,
+        y: highlight.y,
+        width: highlight.width,
+        height: highlight.height,
+        opacity: highlight.visible ? 1 : 0
+      }}
+      transition={
+        reduceMotion
+          ? { duration: 0 }
+          : { type: 'spring', stiffness: 550, damping: 42, mass: 0.7, opacity: { duration: 0.12 } }
+      }
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 0,
+        borderRadius: 9,
+        background: 'var(--menu-highlight)',
+        pointerEvents: 'none'
+      }}
+    />
+  );
+};
+
+const withMenuClass = className => (className ? `docs-menu ${className}` : 'docs-menu');
+
+export const FluidSelectContent = ({ children, className, ...props }) => {
+  const select = useSelectContext();
+  const { contentRef, highlight, handlers } = useFluidHighlight(select.open, select.highlightedValue);
+
+  return (
+    <Select.Content
+      {...props}
+      {...handlers}
+      className={withMenuClass(className)}
+      ref={contentRef}
+      position="relative"
+      isolation="isolate"
+      css={ITEM_CSS}
+    >
+      {children}
+      <Highlight highlight={highlight} />
+    </Select.Content>
+  );
+};
+
+const FluidMenuContent = ({ children, className, ...props }) => {
+  const menu = useMenuContext();
+  const { contentRef, highlight, handlers } = useFluidHighlight(menu.open, menu.highlightedValue);
 
   return (
     <Menu.Content
       {...props}
+      {...handlers}
+      className={withMenuClass(className)}
       ref={contentRef}
       position="relative"
       isolation="isolate"
-      onPointerMove={event => {
-        if (event.pointerType === 'mouse' && event.target.closest('[data-part="item"]:not([data-disabled])')) {
-          revealHighlight();
-        }
-      }}
-      onKeyDown={revealHighlight}
-      onPointerLeave={() => setHighlight(previous => (previous ? { ...previous, visible: false } : previous))}
-      css={{
-        '& [data-part="item"]': {
-          position: 'relative',
-          zIndex: 1,
-          bg: 'transparent',
-          _hover: { bg: 'transparent' },
-          _highlighted: { bg: 'transparent' }
-        }
-      }}
+      css={ITEM_CSS}
     >
-      {highlight && (
-        <motion.div
-          aria-hidden="true"
-          data-menu-highlight=""
-          initial={false}
-          animate={{
-            x: highlight.x,
-            y: highlight.y,
-            width: highlight.width,
-            height: highlight.height,
-            opacity: highlight.visible ? 1 : 0
-          }}
-          transition={
-            reduceMotion
-              ? { duration: 0 }
-              : { type: 'spring', stiffness: 550, damping: 42, mass: 0.7, opacity: { duration: 0.12 } }
-          }
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 0,
-            borderRadius: 6,
-            background: 'var(--bg-hover)',
-            pointerEvents: 'none'
-          }}
-        />
-      )}
       {children}
+      <Highlight highlight={highlight} />
     </Menu.Content>
   );
 };

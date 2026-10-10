@@ -1,80 +1,15 @@
-:root {
-  --col-gap: 5%;
-  --row-gap: 5%;
-  --cube-perspective: 99999999px;
-  --cube-face-border: 1px solid #fff;
-  --cube-face-bg: #120F17;
-}
-
-.default-animation {
-  position: relative;
-  width: 50%;
-  aspect-ratio: 1 / 1;
-  height: auto;
-}
-
-.default-animation--scene {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  column-gap: var(--col-gap);
-  row-gap: var(--row-gap);
-  perspective: var(--cube-perspective);
-  grid-auto-rows: 1fr;
-}
-
-.cube {
+.cubes-container {
   position: relative;
   width: 100%;
   height: 100%;
-  aspect-ratio: 1 / 1;
-  transform-style: preserve-3d;
+  overflow: hidden;
+  touch-action: pan-y;
 }
 
-.cube::before {
-  content: '';
+.cubes-canvas {
   position: absolute;
-  top: -36px;
-  right: -36px;
-  bottom: -36px;
-  left: -36px;
-}
-
-.default-animation .cube-face {
-  position: absolute;
+  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--cube-face-bg);
-  border: var(--cube-face-border);
-  opacity: 1;
-}
-
-.default-animation .cube-face--top {
-  transform: translateY(-50%) rotateX(90deg);
-}
-
-.default-animation .cube-face--bottom {
-  transform: translateY(50%) rotateX(-90deg);
-}
-
-.default-animation .cube-face--left {
-  transform: translateX(-50%) rotateY(-90deg);
-}
-
-.default-animation .cube-face--right {
-  transform: translateX(50%) rotateY(90deg);
-}
-
-.default-animation .cube-face--back,
-.default-animation .cube-face--front {
-  transform: rotateY(-90deg) translateX(50%) rotateY(90deg);
-}
-
-@media (max-width: 768px) {
-  .default-animation {
-    width: 90%;
-  }
 }
