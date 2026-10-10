@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useMotionValueEvent, useSpring } from 'motion/react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
 import Navbar from '../components/landingnew/Navbar/Navbar';
 import FloatingShards from '../components/common/NotFound/FloatingShards';
 import CategoryGallery from '../components/common/NotFound/CategoryGallery';
@@ -16,8 +18,8 @@ const MARK_PATH = markup.match(/ d="([^"]+)"/)[1];
 const STAGE_SCALE = 0.56;
 
 const PALETTES = {
-  dark: { color: '#ecc7ff', glowColor: '#ad6dff', bend: 0.6, glow: 0.35 },
-  light: { color: '#a953ff', glowColor: '#c79bff', bend: 0.5, glow: 0.7 }
+  dark: { color: '#e9d5ff', glowColor: '#a876f0', bend: 0.5, glow: 0.2 },
+  light: { color: '#a953ff', glowColor: '#c79bff', bend: 0.45, glow: 0.42 }
 };
 
 const CATEGORY_LINKS = [
@@ -36,10 +38,10 @@ const BOOT = [
   [1080, 1]
 ];
 const BROWNOUT = [
-  [0, 0.3],
-  [70, 1],
-  [150, 0.55],
-  [210, 1]
+  [0, 0.62],
+  [80, 1],
+  [170, 0.8],
+  [240, 1]
 ];
 
 const prefersReducedMotion = () =>
@@ -176,7 +178,7 @@ const NotFoundPage = () => {
           play(BROWNOUT);
           schedule();
         },
-        5200 + Math.random() * 7000
+        10000 + Math.random() * 9000
       );
     };
     schedule();
@@ -222,9 +224,9 @@ const NotFoundPage = () => {
                 glow={palette.glow}
                 intensity={power}
                 interactive={!reducedMotion}
-                speed={reducedMotion ? 0 : 2.5}
-                arcs={reducedMotion ? 0 : 1}
-                flicker={reducedMotion ? 0 : 0.6}
+                speed={reducedMotion ? 0 : 1.8}
+                arcs={reducedMotion ? 0 : 0.55}
+                flicker={reducedMotion ? 0 : 0.3}
                 scale={STAGE_SCALE}
                 thickness={1.6}
                 cursorRadius={90}
@@ -236,6 +238,7 @@ const NotFoundPage = () => {
             <span className="nf-sr-only">404. </span>
             This page doesn’t exist
           </h1>
+          <p className="nf-lede">The link may be broken, or the page may have moved.</p>
 
           {suggestions.length > 0 && (
             <nav className="nf-suggest" aria-label="Suggested components">
@@ -244,13 +247,20 @@ const NotFoundPage = () => {
                 <Link key={item.path} to={item.path} className="nf-suggest-link">
                   <span className="nf-suggest-name">{item.name}</span>
                   <span className="nf-suggest-category">{item.category}</span>
+                  <HugeiconsIcon
+                    icon={ArrowRight01Icon}
+                    size={14}
+                    strokeWidth={1.8}
+                    className="nf-suggest-arrow"
+                    aria-hidden="true"
+                  />
                 </Link>
               ))}
             </nav>
           )}
 
           <Link to="/get-started/index" className="nf-btn">
-            Browse Components
+            Browse components
           </Link>
         </div>
 

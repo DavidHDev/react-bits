@@ -118,12 +118,18 @@ export const componentMetadata = {
   },
   'Animations/GlareHover': {
     videoUrl: '/assets/video/glarehover.webm',
-    description: 'Adds a realistic moving glare highlight on hover over any element.',
+    description: 'A glossy light streak that sweeps across any element in the direction the cursor moves.',
     category: 'Animations',
     name: 'GlareHover',
     docsUrl: 'https://reactbits.dev/animations/glare-hover',
     tags: [],
-    added: '2025-05-30'
+    added: '2025-05-30',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with a more realistic glare that follows the cursor direction, a glinting edge and new shapes and modes.'
+      }
+    ]
   },
   'Animations/GradualBlur': {
     videoUrl: '/assets/video/gradualblur.webm',
@@ -1433,12 +1439,19 @@ export const componentMetadata = {
   },
   'Backgrounds/Beams': {
     videoUrl: '/assets/video/beams.webm',
-    description: 'Crossing animated ribbons with customizable properties.',
+    description:
+      'Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.',
     category: 'Backgrounds',
     name: 'Beams',
     docsUrl: 'https://reactbits.dev/backgrounds/beams',
     tags: [],
-    added: '2025-05-27'
+    added: '2025-05-27',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with brighter, glowing glints, a light that follows the cursor, a light theme and simpler controls, with no 3D library needed.'
+      }
+    ]
   },
   'Backgrounds/ColorBends': {
     videoUrl: '/assets/video/colorbends.webm',
@@ -1493,12 +1506,18 @@ export const componentMetadata = {
   },
   'Backgrounds/DotGrid': {
     videoUrl: '/assets/video/dotgrid.webm',
-    description: 'Animated dot grid with cursor interactions.',
+    description: 'A springy dot grid that the cursor flicks and drags through like jelly, with click shockwaves.',
     category: 'Backgrounds',
     name: 'DotGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/dot-grid',
     tags: [],
-    added: '2025-05-23'
+    added: '2025-05-23',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with springy physics, so the dots wobble back, streak as they move and pass ripples to their neighbours.'
+      }
+    ]
   },
   'Backgrounds/FaultyTerminal': {
     videoUrl: '/assets/video/faultyterminal.webm',

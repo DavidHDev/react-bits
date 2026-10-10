@@ -3,7 +3,7 @@
   --nf-background: #120f17;
   --nf-title-size: clamp(22px, 2.6vw, 28px);
   --nf-tube: rgb(232 220 255 / 0.12);
-  --nf-spill: rgb(173 109 255 / 0.1);
+  --nf-spill: rgb(173 109 255 / 0.06);
   position: relative;
   display: flex;
   min-height: 100svh;
@@ -17,7 +17,7 @@
 :root[data-theme='light'] .nf {
   --nf-background: #ffffff;
   --nf-tube: rgb(24 24 27 / 0.12);
-  --nf-spill: rgb(169 83 255 / 0.05);
+  --nf-spill: rgb(169 83 255 / 0.035);
 }
 
 .nf-shards {
@@ -120,7 +120,7 @@
   -webkit-mask-composite: source-in;
   mask-image: var(--nf-fade-x), var(--nf-fade-y);
   mask-composite: intersect;
-  -webkit-box-reflect: below var(--nf-reflect, 0px) linear-gradient(transparent 64%, rgb(0 0 0 / 0.34));
+  -webkit-box-reflect: below var(--nf-reflect, 0px) linear-gradient(transparent 64%, rgb(0 0 0 / 0.16));
 }
 
 .nf-sign,
@@ -138,6 +138,7 @@
 }
 
 .nf[data-entering] .nf-title,
+.nf[data-entering] .nf-lede,
 .nf[data-entering] .nf-suggest,
 .nf[data-entering] .nf-btn,
 .nf[data-entering] .nf-categories a {
@@ -147,8 +148,11 @@
 .nf[data-entering] .nf-title {
   animation-delay: 480ms;
 }
+.nf[data-entering] .nf-lede {
+  animation-delay: 530ms;
+}
 .nf[data-entering] .nf-suggest {
-  animation-delay: 560ms;
+  animation-delay: 580ms;
 }
 .nf[data-entering] .nf-btn {
   animation-delay: 640ms;
@@ -227,8 +231,19 @@
   margin: 0;
   font-size: var(--nf-title-size);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   line-height: 1.2;
+  text-wrap: balance;
+}
+
+.nf-lede {
+  position: relative;
+  z-index: 4;
+  max-width: 48ch;
+  margin: 10px 0 0;
+  color: var(--tool-muted);
+  font-size: 15px;
+  line-height: 1.5;
   text-wrap: balance;
 }
 
@@ -237,60 +252,85 @@
   z-index: 4;
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 8px 18px;
-  margin-top: 18px;
-  font-size: 14px;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .nf-suggest-label {
-  color: var(--text-muted);
+  margin-right: 4px;
+  color: var(--tool-muted);
+  font-size: 13.5px;
 }
 
 .nf-suggest-link {
   display: inline-flex;
-  align-items: baseline;
-  gap: 7px;
+  height: 34px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 0 13px;
+  border-radius: 10px;
+  background: var(--tool-track);
   color: var(--text-primary);
-  text-decoration: none;
-}
-
-.nf-suggest-name {
+  font-size: 13.5px;
   font-weight: 500;
-  text-decoration: underline;
-  text-decoration-color: var(--border-primary);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-  transition: text-decoration-color var(--transition-fast);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition:
+    background-color var(--dur-menu) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
 }
 
-.nf-suggest-link:hover .nf-suggest-name {
-  text-decoration-color: currentColor;
+.nf-suggest-link:hover {
+  background: var(--tool-track-hover);
+}
+
+.nf-suggest-link:active {
+  transform: scale(0.97);
 }
 
 .nf-suggest-category {
-  color: var(--text-dimmed);
-  font-size: 12px;
+  color: var(--tool-muted);
+  font-weight: 450;
+}
+
+.nf-suggest-arrow {
+  color: var(--tool-muted);
+  transition:
+    color var(--dur-menu) var(--ease-out),
+    transform var(--dur-menu) var(--ease-out);
+}
+
+.nf-suggest-link:hover .nf-suggest-arrow {
+  color: var(--text-primary);
+  transform: translateX(2px);
 }
 
 .nf-btn {
   position: relative;
   z-index: 4;
   display: inline-flex;
-  height: 42px;
+  height: 40px;
   align-items: center;
-  margin-top: 28px;
-  padding: 0 20px;
+  margin-top: 24px;
+  padding: 0 18px;
   border-radius: 11px;
   background: #f4f4f5;
   color: #120f17;
   font-size: 14px;
   font-weight: 500;
+  letter-spacing: -0.01em;
   text-decoration: none;
   transition:
     background-color var(--transition-base),
     transform var(--dur-press) var(--ease-out);
+}
+
+.nf-suggest + .nf-btn {
+  margin-top: 16px;
 }
 
 .nf-btn:hover {
@@ -345,6 +385,11 @@
     top: calc(50% + 12px);
   }
 
+  .nf-suggest-label {
+    flex-basis: 100%;
+    margin: 0 0 2px;
+  }
+
   .nf-main {
     padding-top: 84px;
   }
@@ -380,8 +425,13 @@
     animation: none;
   }
 
+  .nf[data-entering] .nf-lede {
+    animation: none;
+  }
+
   .nf-btn,
-  .nf-suggest-name,
+  .nf-suggest-link,
+  .nf-suggest-arrow,
   .nf-categories a {
     transition: none;
   }

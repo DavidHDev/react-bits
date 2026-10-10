@@ -98,10 +98,10 @@ const createShards = () => {
 
   // Each fragment is placed independently. Conservative circular clearances
   // leave room for arbitrary in-plane rotation and the separate spring motion.
-  for (let index = 0; index < 56; index++) {
-    const large = index < 12;
-    const chip = index >= 30;
-    const protruding = [3, 9, 18, 27].includes(index);
+  for (let index = 0; index < 32; index++) {
+    const large = index < 8;
+    const chip = index >= 21;
+    const protruding = [3, 9, 18].includes(index);
     let placement;
     for (let attempt = 0; attempt < 1800; attempt++) {
       const angle = random(0, TAU);
@@ -110,10 +110,10 @@ const createShards = () => {
       const boundary = FIELD_RADIUS * (1 + 0.075 * Math.sin(angle * 3 + 0.6) + 0.055 * Math.cos(angle * 5 - 0.4));
       const distance = protruding ? random(265, 286) : Math.sqrt(random()) * boundary;
       const radial = distance / FIELD_RADIUS;
-      if (radial < (large ? 0.45 : chip ? 0.48 : 0.25)) continue;
+      if (radial < (large ? 0.68 : chip ? 0.55 : 0.5)) continue;
       const px = Math.cos(angle) * distance;
       const py = Math.sin(angle) * distance;
-      const radius = chip ? random(5, 10) : (large ? 64 - radial * 28 : 32 - radial * 16) * random(0.78, 1.18);
+      const radius = chip ? random(4, 8) : (large ? 52 - radial * 22 : 27 - radial * 13) * random(0.78, 1.18);
       if (shards.some(shard => Math.hypot(px - shard.px, py - shard.py) < (radius + shard.radius) * 1.08 + 14))
         continue;
       const fadeDistance = distance / (boundary + (protruding ? 55 : 0));

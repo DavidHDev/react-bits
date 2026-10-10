@@ -452,7 +452,7 @@
 		{
 			"name": "GlareHover-JS-CSS",
 			"title": "GlareHover",
-			"description": "Adds a realistic moving glare highlight on hover over any element.",
+			"description": "A glossy light streak that sweeps across any element in the direction the cursor moves.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -471,7 +471,7 @@
 		{
 			"name": "GlareHover-JS-TW",
 			"title": "GlareHover",
-			"description": "Adds a realistic moving glare highlight on hover over any element.",
+			"description": "A glossy light streak that sweeps across any element in the direction the cursor moves.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -485,7 +485,7 @@
 		{
 			"name": "GlareHover-TS-CSS",
 			"title": "GlareHover",
-			"description": "Adds a realistic moving glare highlight on hover over any element.",
+			"description": "A glossy light streak that sweeps across any element in the direction the cursor moves.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -504,7 +504,7 @@
 		{
 			"name": "GlareHover-TS-TW",
 			"title": "GlareHover",
-			"description": "Adds a realistic moving glare highlight on hover over any element.",
+			"description": "A glossy light streak that sweeps across any element in the direction the cursor moves.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -9078,13 +9078,9 @@
 		{
 			"name": "Beams-JS-CSS",
 			"title": "Beams",
-			"description": "Crossing animated ribbons with customizable properties.",
+			"description": "Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9101,13 +9097,9 @@
 		{
 			"name": "Beams-JS-TW",
 			"title": "Beams",
-			"description": "Crossing animated ribbons with customizable properties.",
+			"description": "Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9119,13 +9111,9 @@
 		{
 			"name": "Beams-TS-CSS",
 			"title": "Beams",
-			"description": "Crossing animated ribbons with customizable properties.",
+			"description": "Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9142,13 +9130,9 @@
 		{
 			"name": "Beams-TS-TW",
 			"title": "Beams",
-			"description": "Crossing animated ribbons with customizable properties.",
+			"description": "Glossy ribbons that ripple in the dark and catch the light as glinting beams. The light follows your cursor along them.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9526,11 +9510,9 @@
 		{
 			"name": "DotGrid-JS-CSS",
 			"title": "DotGrid",
-			"description": "Animated dot grid with cursor interactions.",
+			"description": "A springy dot grid that the cursor flicks and drags through like jelly, with click shockwaves.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9547,11 +9529,9 @@
 		{
 			"name": "DotGrid-JS-TW",
 			"title": "DotGrid",
-			"description": "Animated dot grid with cursor interactions.",
+			"description": "A springy dot grid that the cursor flicks and drags through like jelly, with click shockwaves.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9563,11 +9543,9 @@
 		{
 			"name": "DotGrid-TS-CSS",
 			"title": "DotGrid",
-			"description": "Animated dot grid with cursor interactions.",
+			"description": "A springy dot grid that the cursor flicks and drags through like jelly, with click shockwaves.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9584,11 +9562,9 @@
 		{
 			"name": "DotGrid-TS-TW",
 			"title": "DotGrid",
-			"description": "Animated dot grid with cursor interactions.",
+			"description": "A springy dot grid that the cursor flicks and drags through like jelly, with click shockwaves.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

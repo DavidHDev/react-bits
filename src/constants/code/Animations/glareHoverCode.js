@@ -5,22 +5,25 @@ import tsCode from '@ts-default/Animations/GlareHover/GlareHover.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/GlareHover/GlareHover.tsx?raw';
 
 export const glareHover = {
-  usage: `import GlareHover from './GlareHover'
+  usage: `import GlareHover from './GlareHover';
 
-<div style={{ height: '600px', position: 'relative' }}>
-  <GlareHover
-    glareColor="#ffffff"
-    glareOpacity={0.3}
-    glareAngle={-30}
-    glareSize={300}
-    transitionDuration={800}
-    playOnce={false}
-  >
-    <h2 style={{ fontSize: '3rem', fontWeight: '900', color: '#333', margin: 0 }}>
-      Hover Me
-    </h2>
-  </GlareHover>
-</div>`,
+<GlareHover
+  width="360px"
+  height="240px"
+  borderRadius="20px"
+  mode="hover"
+  variant="streak"
+  glareColor="#ffffff"
+  glareOpacity={0.5}
+  glareSize={30}
+  softness={0.6}
+  glareAngle={-45}
+  blendMode="screen"
+  rimGlint={true}
+  transitionDuration={650}
+>
+  <img src="/photo.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+</GlareHover>`,
   code,
   css,
   tailwind,

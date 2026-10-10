@@ -157,19 +157,19 @@ const reflectedElectricity = /* glsl */ `
     5.0 * glassStudioCard(vWorldPosition, ray, -180.0, vec2(250.0, -20.0), vec2(24.0, 520.0), 0.2);
   // On white, a dark studio flag supplies contrast; on dark, the same finite
   // reflector is luminous. Fresnel keeps nearly face-on glass transparent.
-  outgoingLight *= 1.0 - electricInk * fresnel * min(studio, 1.0) * 0.65;
-  outgoingLight += vec3(studio * fresnel * (1.0 - electricInk));
+  outgoingLight *= 1.0 - electricInk * fresnel * min(studio, 1.0) * 0.45;
+  outgoingLight += vec3(studio * fresnel * (1.0 - electricInk) * 0.6);
   float energy = center.a;
   float electricAmount = inside * (1.0 - glassPreview);
   float galleryAmount = galleryInside * gallery.a * glassPreview;
-  outgoingLight += electric * fresnel * electricAmount * 2.6 * (1.0 - electricInk);
-  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * electricAmount * energy * 0.32);
+  outgoingLight += electric * fresnel * electricAmount * 1.5 * (1.0 - electricInk);
+  outgoingLight = mix(outgoingLight, electric / max(energy, 0.001), electricInk * electricAmount * energy * 0.22);
   outgoingLight += gallery.rgb * fresnel * galleryAmount * 5.0 * (1.0 - electricInk);
   outgoingLight = mix(outgoingLight, gallery.rgb, electricInk * galleryAmount * 0.3);
   // A long Gaussian shoulder protects the text without a visible mask edge.
-  vec2 centerDistance = (vWorldPosition.xy - vec2(0.0, -12.0)) / 155.0;
-  float centerVisibility = 1.0 - exp(-dot(centerDistance, centerDistance) * 1.4);
-  outgoingLight = mix(glassBackdrop, outgoingLight, vGlassVisibility * centerVisibility);
+  vec2 centerDistance = (vWorldPosition.xy - glassClear.xy) / glassClear.zw;
+  float centerVisibility = smoothstep(0.72, 1.18, length(centerDistance));
+  outgoingLight = mix(glassBackdrop, outgoingLight, vGlassVisibility * centerVisibility * glassStrength);
 `;
 
 export const createGlassScene = (container, theme) => {
@@ -215,6 +215,7 @@ export const createGlassScene = (container, theme) => {
   galleryFrame.generateMipmaps = false;
   const galleryBounds = electricBounds.clone();
   const glassPreview = { value: 0 };
+  const glassClear = new Vector4(0, -6, 250, 185);
   let hasGalleryBounds = false;
   const glassIntroTime = { value: 0 };
   const material = new MeshPhysicalMaterial({
@@ -240,6 +241,8 @@ export const createGlassScene = (container, theme) => {
     shader.uniforms.glassPreview = glassPreview;
     shader.uniforms.glassBackdrop = { value: scene.background };
     shader.uniforms.glassIntroTime = glassIntroTime;
+    shader.uniforms.glassStrength = { value: light ? 0.7 : 0.74 };
+    shader.uniforms.glassClear = { value: glassClear };
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
@@ -254,7 +257,7 @@ export const createGlassScene = (container, theme) => {
     shader.fragmentShader = shader.fragmentShader
       .replace(
         '#include <common>',
-        `#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\nuniform sampler2D galleryFrame;\nuniform vec4 galleryBounds;\nuniform float glassPreview;\nuniform vec3 glassBackdrop;\nvarying float vGlassVisibility;\n${studioReflection}`
+        `#include <common>\nuniform sampler2D electricFrame;\nuniform vec4 electricBounds;\nuniform float electricInk;\nuniform sampler2D galleryFrame;\nuniform vec4 galleryBounds;\nuniform float glassPreview;\nuniform vec3 glassBackdrop;\nuniform float glassStrength;\nuniform vec4 glassClear;\nvarying float vGlassVisibility;\n${studioReflection}`
       )
       .replace('#include <opaque_fragment>', `${reflectedElectricity}\n#include <opaque_fragment>`);
   };
@@ -265,7 +268,7 @@ export const createGlassScene = (container, theme) => {
   cutMaterial.thickness = 5;
   cutMaterial.attenuationColor = new Color('#989898');
   cutMaterial.attenuationDistance = 9;
-  cutMaterial.envMapIntensity = light ? 0.55 : 3.5;
+  cutMaterial.envMapIntensity = light ? 0.45 : 2.1;
   cutMaterial.onBeforeCompile = shadeGlass;
   const shards = SHARDS.map((shard, index) => {
     const geometry = createShardGeometry(shard);
@@ -286,12 +289,12 @@ export const createGlassScene = (container, theme) => {
     const mesh = new Mesh(geometry, [material, cutMaterial]);
     scene.add(mesh);
     const target =
-      index < 12 && index % 7 !== 0
+      index < 5 && index % 7 !== 0
         ? SIGN_TARGETS[index % SIGN_TARGETS.length].map(
             (coordinate, axis) => 0.5 + (coordinate / (axis === 0 ? 1897 : 742) - 0.5) * 0.56
           )
         : null;
-    const galleryTarget = index < 30 && index % 7 !== 0 ? GALLERY_TARGETS[index % GALLERY_TARGETS.length] : null;
+    const galleryTarget = index < 20 && index % 7 !== 0 ? GALLERY_TARGETS[index % GALLERY_TARGETS.length] : null;
     const motion = createShardMotion(shard, index);
     const signNormal = new Vector3(
       Math.sin(motion.ry),
@@ -342,8 +345,21 @@ export const createGlassScene = (container, theme) => {
     setPreview(progress) {
       glassPreview.value = Number.isFinite(progress) ? Math.max(0, Math.min(1, progress)) : 0;
     },
-    resize(rect, stage, gallery) {
+    resize(rect, stage, gallery, blocks = []) {
       const scale = rect.width / PANE_WIDTH;
+      const boxes = blocks.filter(box => box && box.width > 0 && box.height > 0);
+      if (boxes.length) {
+        const left = Math.min(...boxes.map(box => box.left));
+        const right = Math.max(...boxes.map(box => box.right));
+        const top = Math.min(...boxes.map(box => box.top));
+        const bottom = Math.max(...boxes.map(box => box.bottom));
+        glassClear.set(
+          ((left + right) / 2 - rect.left - rect.width / 2) / scale,
+          -((top + bottom) / 2 - rect.top - rect.height / 2) / scale,
+          (((right - left) / 2 + 36) * 1.3) / scale,
+          (((bottom - top) / 2 + 30) * 1.3) / scale
+        );
+      }
       // Leave room for drifting geometry; each outer fragment fades separately.
       const width = rect.width + 120 * scale;
       const height = rect.height + 120 * scale;

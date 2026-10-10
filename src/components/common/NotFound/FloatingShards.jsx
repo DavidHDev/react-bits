@@ -86,7 +86,15 @@ const FloatingShards = ({
 
     const updateLayout = () => {
       rect = plane.getBoundingClientRect();
-      glass.resize(rect, stageRef.current?.getBoundingClientRect(), galleryRef.current?.getBoundingClientRect());
+      const blocks = ['.nf-title', '.nf-lede', '.nf-suggest', '.nf-btn'].map(selector =>
+        root.parentElement?.querySelector(selector)?.getBoundingClientRect()
+      );
+      glass.resize(
+        rect,
+        stageRef.current?.getBoundingClientRect(),
+        galleryRef.current?.getBoundingClientRect(),
+        blocks
+      );
     };
     const measure = () => {
       updateLayout();
