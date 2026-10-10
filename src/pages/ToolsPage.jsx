@@ -10,6 +10,8 @@ import SponsorsCard from '../components/common/SponsorsCard';
 import { TOOLS as BASE_TOOLS } from '../constants/Tools';
 import { colors } from '../constants/colors';
 import { useColorModeValue } from '../components/setup/color-mode';
+import usePageSEO from '../hooks/usePageSEO';
+import { PAGE_METADATA, getToolSEO } from '../constants/pageMetadata';
 import '../tools/tools.css';
 import '../css/site-page.css';
 import '../css/tools-landing.css';
@@ -262,25 +264,14 @@ export default function ToolsPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
   const light = useColorModeValue(true, false);
-
-  useEffect(() => {
-    if (!toolId) {
-      document.title = 'React Bits - Tools';
-    } else {
-      const tool = TOOLS.find(t => t.id === toolId);
-      if (tool) {
-        document.title = `React Bits - ${tool.label}`;
-      }
-    }
-  }, [toolId]);
+  const activeTool = TOOLS.find(tool => tool.id === toolId);
+  usePageSEO(activeTool ? getToolSEO(activeTool) : { ...PAGE_METADATA['/tools'], path: '/tools' });
 
   if (!toolId) {
     return (
       <>
         <Navbar showDocs />
         <main className="pg tl">
-          <title>React Bits - Tools</title>
-
           <div className="tl-layout">
             <div className="tl-main">
               <header className="pg-head tl-head">

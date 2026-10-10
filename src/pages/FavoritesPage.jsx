@@ -4,8 +4,11 @@ import BackToTopButton from '../components/common/BackToTopButton';
 import { getSavedComponents } from '../utils/favorites';
 import { componentMetadata } from '../constants/Information';
 import ComponentList from '../components/common/ComponentList';
+import usePageSEO from '../hooks/usePageSEO';
+import { PAGE_METADATA } from '../constants/pageMetadata';
 
 const FavoritesPage = () => {
+  usePageSEO({ ...PAGE_METADATA['/favorites'], path: '/favorites' });
   const [savedKeys, setSavedKeys] = useState(() => getSavedComponents());
 
   useEffect(() => {
@@ -30,7 +33,6 @@ const FavoritesPage = () => {
 
   return (
     <Box>
-      <title>{`React Bits - Favorites`}</title>
       <ComponentList title="Favorites" list={savedList} hasDeleteButton sorting="none" />
       <BackToTopButton />
     </Box>

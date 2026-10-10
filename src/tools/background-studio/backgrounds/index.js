@@ -1275,8 +1275,7 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Plasma/Plasma.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/plasma"',
     props: [
-      { name: 'color', type: 'color', default: '#ffffff', label: 'Color' },
-      { name: 'speed', type: 'number', default: 1, min: 0, max: 5, step: 0.1, label: 'Speed' },
+      { name: 'color', type: 'color', default: '#a6a3b8', label: 'Color' },
       {
         name: 'direction',
         type: 'select',
@@ -1284,13 +1283,19 @@ export const BACKGROUNDS = [
         options: ['forward', 'reverse', 'pingpong'],
         label: 'Direction'
       },
-      { name: 'scale', type: 'number', default: 1, min: 0.1, max: 3, step: 0.1, label: 'Scale' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'scale', type: 'number', default: 1, min: 0.5, max: 2, step: 0.05, label: 'Scale' },
+      { name: 'twist', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Twist' },
+      { name: 'wave', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Wave' },
+      { name: 'softness', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Softness' },
+      { name: 'shine', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Shine' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.3, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'grain', type: 'number', default: 0.04, min: 0, max: 0.15, step: 0.01, label: 'Grain' },
+      { name: 'quality', type: 'number', default: 0.75, min: 0.25, max: 1, step: 0.05, label: 'Quality' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
       { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
       { name: 'mouseInteractive', type: 'boolean', default: true, label: 'Mouse Interactive' },
-      { name: 'iterations', type: 'number', default: 60, min: 10, max: 80, step: 5, label: 'Iterations' },
-      { name: 'renderScale', type: 'number', default: 0.55, min: 0.2, max: 1.0, step: 0.05, label: 'Render Scale' },
-      { name: 'targetFps', type: 'number', default: 60, min: 10, max: 60, step: 5, label: 'Target FPS' },
-      { name: 'maxDpr', type: 'number', default: 1.5, min: 0.5, max: 3.0, step: 0.5, label: 'Max DPR' }
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1307,12 +1312,24 @@ export const BACKGROUNDS = [
         minItems: 2,
         maxItems: 2
       },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
       { name: 'speed1', type: 'number', default: 0.05, min: 0, max: 0.2, step: 0.005, label: 'Speed 1' },
       { name: 'speed2', type: 'number', default: 0.05, min: 0, max: 0.2, step: 0.005, label: 'Speed 2' },
-      { name: 'dir2', type: 'number', default: 1.0, min: -1, max: 1, step: 0.1, label: 'Direction 2' },
-      { name: 'focalLength', type: 'number', default: 0.8, min: 0.1, max: 2, step: 0.05, label: 'Focal Length' },
-      { name: 'bend1', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Bend 1' },
-      { name: 'bend2', type: 'number', default: 0.5, min: 0, max: 3, step: 0.1, label: 'Bend 2' }
+      { name: 'dir2', type: 'number', default: 1, min: -1, max: 1, step: 0.1, label: 'Direction 2' },
+      { name: 'bend1', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Bend 1' },
+      { name: 'bend2', type: 'number', default: 0.5, min: 0, max: 3, step: 0.05, label: 'Bend 2' },
+      { name: 'thickness', type: 'number', default: 0.3, min: 0.1, max: 0.6, step: 0.01, label: 'Thickness' },
+      { name: 'focalLength', type: 'number', default: 1.25, min: 0.3, max: 2, step: 0.05, label: 'Focal Length' },
+      { name: 'rotationDeg', type: 'number', default: 0, min: 0, max: 360, step: 1, label: 'Rotation' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.3, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'glow', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'core', type: 'number', default: 0.6, min: 0, max: 1, step: 0.05, label: 'Core' },
+      { name: 'grain', type: 'number', default: 0.03, min: 0, max: 0.15, step: 0.01, label: 'Grain' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'quality', type: 'number', default: 1, min: 0.25, max: 1, step: 0.05, label: 'Quality' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1620,23 +1637,28 @@ export const BACKGROUNDS = [
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/pixel-snow"',
     props: [
       { name: 'color', type: 'color', default: '#ffffff', label: 'Color' },
-      { name: 'flakeSize', type: 'number', default: 0.01, min: 0.001, max: 0.05, step: 0.002, label: 'Flake Size' },
-      { name: 'minFlakeSize', type: 'number', default: 1.25, min: 0.5, max: 3, step: 0.25, label: 'Min Flake Size' },
-      { name: 'pixelResolution', type: 'number', default: 200, min: 50, max: 500, step: 25, label: 'Pixel Resolution' },
-      { name: 'speed', type: 'number', default: 1.25, min: 0.1, max: 5, step: 0.25, label: 'Speed' },
-      { name: 'depthFade', type: 'number', default: 8, min: 1, max: 20, step: 1, label: 'Depth Fade' },
-      { name: 'farPlane', type: 'number', default: 20, min: 5, max: 50, step: 5, label: 'Far Plane' },
-      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 3, step: 0.1, label: 'Brightness' },
-      { name: 'gamma', type: 'number', default: 0.4545, min: 0.1, max: 1, step: 0.05, label: 'Gamma' },
-      { name: 'density', type: 'number', default: 0.3, min: 0.1, max: 1, step: 0.05, label: 'Density' },
       {
         name: 'variant',
         type: 'select',
-        default: 'square',
-        options: ['square', 'round', 'snowflake'],
+        default: 'snowflake',
+        options: ['snowflake', 'square', 'round'],
         label: 'Variant'
       },
-      { name: 'direction', type: 'number', default: 125, min: 0, max: 360, step: 5, label: 'Direction' }
+      { name: 'density', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Density' },
+      { name: 'speed', type: 'number', default: 1, min: -1, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'wind', type: 'number', default: 0.25, min: -2, max: 2, step: 0.05, label: 'Wind' },
+      { name: 'sway', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Sway' },
+      { name: 'flakeSize', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Flake Size' },
+      { name: 'pixelSize', type: 'number', default: 3, min: 1, max: 8, step: 1, label: 'Pixel Size' },
+      { name: 'depth', type: 'number', default: 0.6, min: 0, max: 1, step: 0.05, label: 'Depth' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'glow', type: 'number', default: 0.8, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'twinkle', type: 'number', default: 0.35, min: 0, max: 1, step: 0.05, label: 'Twinkle' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'accumulate', type: 'boolean', default: false, label: 'Accumulate' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1692,37 +1714,28 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Radar/Radar.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/radar"',
     props: [
-      { name: 'speed', type: 'number', default: 1.0, min: 0.1, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'scale', type: 'number', default: 0.5, min: 0.1, max: 3, step: 0.1, label: 'Scale' },
-      { name: 'ringCount', type: 'number', default: 10, min: 1, max: 30, step: 1, label: 'Ring Count' },
-      { name: 'spokeCount', type: 'number', default: 10, min: 1, max: 36, step: 1, label: 'Spoke Count' },
-      {
-        name: 'ringThickness',
-        type: 'number',
-        default: 0.05,
-        min: 0.01,
-        max: 0.3,
-        step: 0.01,
-        label: 'Ring Thickness'
-      },
-      {
-        name: 'spokeThickness',
-        type: 'number',
-        default: 0.01,
-        min: 0.01,
-        max: 0.2,
-        step: 0.01,
-        label: 'Spoke Thickness'
-      },
-      { name: 'sweepSpeed', type: 'number', default: 1.0, min: 0.1, max: 5, step: 0.1, label: 'Sweep Speed' },
-      { name: 'sweepWidth', type: 'number', default: 2, min: 1, max: 20, step: 1, label: 'Sweep Width' },
-      { name: 'sweepLobes', type: 'number', default: 1, min: 1, max: 6, step: 1, label: 'Sweep Lobes' },
-      { name: 'color', type: 'color', default: '#9f29ff', label: 'Color' },
-      { name: 'backgroundColor', type: 'color', default: '#000000', label: 'Background Color' },
-      { name: 'falloff', type: 'number', default: 2.0, min: 0.1, max: 3, step: 0.1, label: 'Falloff' },
-      { name: 'brightness', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.1, label: 'Brightness' },
-      { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
-      { name: 'mouseInfluence', type: 'number', default: 0.1, min: 0.1, max: 1, step: 0.05, label: 'Mouse Influence' }
+      { name: 'color', type: 'color', default: '#3ef09a', label: 'Color' },
+      { name: 'mode', type: 'select', default: 'sweep', options: ['sweep', 'pulse'], label: 'Mode' },
+      { name: 'speed', type: 'number', default: 1, min: -2, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'trail', type: 'number', default: 0.35, min: 0.05, max: 1, step: 0.01, label: 'Trail' },
+      { name: 'scale', type: 'number', default: 0.9, min: 0.3, max: 2.5, step: 0.05, label: 'Scale' },
+      { name: 'ringCount', type: 'number', default: 6, min: 1, max: 16, step: 1, label: 'Ring Count' },
+      { name: 'spokeCount', type: 'number', default: 12, min: 0, max: 36, step: 1, label: 'Spoke Count' },
+      { name: 'targets', type: 'number', default: 6, min: 0, max: 16, step: 1, label: 'Targets' },
+      { name: 'clutter', type: 'number', default: 0.35, min: 0, max: 1, step: 0.05, label: 'Clutter' },
+      { name: 'glow', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'gridOpacity', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Grid Opacity' },
+      { name: 'lineWidth', type: 'number', default: 1, min: 0.5, max: 3, step: 0.25, label: 'Line Width' },
+      { name: 'tilt', type: 'number', default: 0, min: 0, max: 75, step: 1, label: 'Tilt' },
+      { name: 'centerX', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Center X' },
+      { name: 'centerY', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Center Y' },
+      { name: 'grain', type: 'number', default: 0.03, min: 0, max: 0.15, step: 0.01, label: 'Grain' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'ticks', type: 'boolean', default: true, label: 'Ticks' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {

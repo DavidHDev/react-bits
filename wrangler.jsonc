@@ -1,8 +1,11 @@
 {
   "name": "react-bits",
+  "main": "worker/index.js",
   "compatibility_date": "2025-06-15",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
   }
 }

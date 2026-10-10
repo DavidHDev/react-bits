@@ -993,12 +993,19 @@ export const componentMetadata = {
   },
   'Components/GlassSurface': {
     videoUrl: '/assets/video/glasssurface.webm',
-    description: 'Advanced Apple-style glass surface with real-time distortion + lighting.',
+    description:
+      'Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.',
     category: 'Components',
     name: 'GlassSurface',
     docsUrl: 'https://reactbits.dev/components/glass-surface',
     tags: [],
-    added: '2025-07-19'
+    added: '2025-07-19',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Turn any SVG logo into glass, with a polished frosted look in Safari and Firefox. The new demo glass follows your cursor and can be dragged.'
+      }
+    ]
   },
   'Components/GooeyNav': {
     videoUrl: '/assets/video/gooeynav.webm',
@@ -1698,12 +1705,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Radar': {
     videoUrl: '/assets/video/radar.webm',
-    description: 'Radar sweep effect with concentric rings, radial spokes, and a rotating beam.',
+    description: 'A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.',
     category: 'Backgrounds',
     name: 'Radar',
     docsUrl: 'https://reactbits.dev/backgrounds/radar',
     tags: [],
-    added: '2026-03-17'
+    added: '2026-03-17',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt as a detailed radar scope with a glowing sweep, contacts that ping and fade, a sonar mode and a tilted floor view.'
+      }
+    ]
   },
   'Backgrounds/SoftAurora': {
     videoUrl: '/assets/video/softaurora.webm',
@@ -1752,21 +1765,33 @@ export const componentMetadata = {
   },
   'Backgrounds/Plasma': {
     videoUrl: '/assets/video/plasma.webm',
-    description: 'Organic plasma gradients swirl + morph with smooth turbulence.',
+    description: 'Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.',
     category: 'Backgrounds',
     name: 'Plasma',
     docsUrl: 'https://reactbits.dev/backgrounds/plasma',
     tags: [],
-    added: '2025-08-18'
+    added: '2025-08-18',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt as soft folds of satin light with bright highlights, a cursor that turns them in 3D and a new light mode.'
+      }
+    ]
   },
   'Backgrounds/PlasmaWave': {
     videoUrl: '/assets/video/plasmawave.webm',
-    description: 'Raymarched plasma waves with dual-wave interference and OGL.',
+    description: 'Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.',
     category: 'Backgrounds',
     name: 'PlasmaWave',
     docsUrl: 'https://reactbits.dev/backgrounds/plasma-wave',
     tags: [],
-    added: '2026-04-14'
+    added: '2026-04-14',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Smoother, faster plasma with soft glow, white-hot cores and a cursor that stirs it, plus a new light mode.'
+      }
+    ]
   },
   'Backgrounds/Prism': {
     videoUrl: '/assets/video/prism.webm',
@@ -1876,12 +1901,18 @@ export const componentMetadata = {
   },
   'Backgrounds/PixelSnow': {
     videoUrl: '/assets/video/pixelsnow.webm',
-    description: 'Falling pixelated snow effect with customizable density and speed.',
+    description: 'Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.',
     category: 'Backgrounds',
     name: 'PixelSnow',
     docsUrl: 'https://reactbits.dev/backgrounds/pixel-snow',
     tags: [],
-    added: '2025-12-20'
+    added: '2025-12-20',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with crisp pixel-art flakes in layers of depth, a soft glow, wind and cursor play, snow that can pile up, and a light mode.'
+      }
+    ]
   },
 
   //! Micro ------------------------------------------------------------------------------------------------------------------------------------

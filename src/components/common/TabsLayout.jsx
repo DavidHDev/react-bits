@@ -25,6 +25,8 @@ import ComponentPager from './ComponentPager';
 import CustomizeActionsContext from './Preview/CustomizeContext';
 import PreviewResizer, { PreviewStage } from './Preview/PreviewResizer';
 import { usePreviewFrame } from '../../hooks/usePreviewFrame';
+import { RelatedComponents } from './DocsOverview';
+import { getComponentSEOByPath } from '../../utils/seo';
 
 const TAB_STYLE_PROPS = {
   flex: '0 0 auto',
@@ -251,6 +253,7 @@ The full library index, including everything reactbits.dev offers, is at https:/
 
 const TabsLayout = ({ children, className }) => {
   const { category, subcategory } = useParams();
+  const componentSEO = useMemo(() => getComponentSEOByPath(`/${category}/${subcategory}`), [category, subcategory]);
   const {
     hasChanges,
     resetProps,
@@ -705,6 +708,7 @@ const TabsLayout = ({ children, className }) => {
         {contentMap.CodeTab}
       </Tabs.Content>
 
+      {componentSEO && <RelatedComponents seo={componentSEO} />}
       {category !== 'get-started' && <ComponentPager category={category} subcategory={subcategory} />}
 
       <TabsFooter />

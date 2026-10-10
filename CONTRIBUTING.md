@@ -30,6 +30,18 @@ We welcome pull requests from everyone as long as they respect the quality stand
 
 ## Note
 
+### Search pages and static delivery
+
+The production build generates readable HTML before JavaScript starts, then the React app replaces that document shell with the interactive interface. It is not full-app SSR or hydration. Keep the visible descriptions and headings in `src/utils/seo.js` and general page metadata in `src/constants/pageMetadata.js` in sync with the UI. Do not add hidden or crawler-only content.
+
+`scripts/seoRoutes.js` is the shared route inventory for static documents and the sitemap. Add new public routes there. Private utility pages such as Favorites must stay `noindex` and out of the sitemap. Component `lastmod` values come from recorded release/update dates; pages without a reliable date omit it.
+
+Cloudflare serves the generated assets first, with real 404 responses for missing routes. `worker/index.js` runs on asset misses to preserve legacy component redirects; normal static pages do not need a Worker invocation. Keep `html_handling: drop-trailing-slash` and the special output directory for URLs ending in `/index` together. Do not restore a catch-all homepage rewrite.
+
+Run `npm run test:seo` for metadata, content and alias tests. `npm run build` also runs `npm run verify:seo` against the output. To check actual Cloudflare HTTP behavior, run `npx wrangler dev --local --port 8788` after building, then `npm run verify:seo:http` in another terminal. Set `SEO_BASE_URL` to test another local or deployed origin. Check representative pages with JavaScript disabled as well as desktop/mobile and light/dark themes.
+
+### Community contributions
+
 New components from the community are currently not being accepted into the library, only component enhancements and bug fixes are open for contributions.
 
 ## Conclusion

@@ -5,31 +5,20 @@ import tsCode from '@ts-default/Components/GlassSurface/GlassSurface.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/GlassSurface/GlassSurface.tsx?raw';
 
 export const glassSurface = {
-  usage: `import GlassSurface from './GlassSurface'
+  usage: `import GlassSurface from './GlassSurface';
 
-// Basic usage
-<GlassSurface 
-  width={300} 
-  height={200}
-  borderRadius={24}
-  className="my-custom-class"
+<GlassSurface
+  width={320}
+  height={76}
+  borderRadius={38}
+  distortionScale={-180}
+  displace={0.5}
+  backgroundOpacity={0.1}
 >
-  <h2>Glass Surface Content</h2>
+  <span>Your content</span>
 </GlassSurface>
 
-// Custom displacement effects
-<GlassSurface
-  displace={15}
-  distortionScale={-150}
-  redOffset={5}
-  greenOffset={15}
-  blueOffset={25}
-  brightness={60}
-  opacity={0.8}
-  mixBlendMode="screen"
->
-  <span>Advanced Glass Distortion</span>
-</GlassSurface>`,
+<GlassSurface shape="/logo.svg" width={280} height={280} />`,
   code,
   css,
   tailwind,

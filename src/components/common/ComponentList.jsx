@@ -31,6 +31,7 @@ import {
 import { colors } from '../../constants/colors';
 import { CATEGORIES, NEW_KEYS } from '../../constants/Categories';
 import usePreviewMediaAllowed from '../../hooks/usePreviewMediaAllowed';
+import '../../css/docs-overview.css';
 
 const CARD_RADIUS = 16;
 const SORT_NAME = 'A to Z';
@@ -169,10 +170,12 @@ const ComponentList = ({
   hasFavoriteButton = false,
   sorting = 'none',
   title,
+  intro,
   newSinceLastVisit = EMPTY_SET,
   basePath = '',
   showCategoryFilter = true,
-  showSortControl = false
+  showSortControl = false,
+  showDirectory = false
 }) => {
   const scrollRef = useRef(null);
   const GAP_PX = 16;
@@ -394,10 +397,15 @@ const ComponentList = ({
         gap={4}
       >
         {title ? (
-          <Box>
-            <h2 className="sub-category" style={{ margin: 0 }}>
+          <Box minW={0} w={{ base: '100%', md: 'auto' }} flex={{ md: 1 }}>
+            <h1 className="sub-category" style={{ margin: 0 }}>
               {title}
-            </h2>
+            </h1>
+            {intro && (
+              <p className="docs-overview-description docs-catalog-intro" title={intro}>
+                {intro}
+              </p>
+            )}
             {hasActiveFilters ? (
               <Text mt={2} color={colors.textMuted} fontSize="13px" fontWeight={500} aria-live="polite">
                 {filtered.length} {filtered.length === 1 ? 'component' : 'components'} found
@@ -431,6 +439,7 @@ const ComponentList = ({
           justifyContent="flex-end"
           gap={{ base: 2, md: 0 }}
           w={{ base: '100%', md: 'auto' }}
+          flexShrink={0}
           opacity={controlsDisabled ? 0.5 : 1}
         >
           <InputGroup
@@ -770,6 +779,26 @@ const ComponentList = ({
           </>
         )}
       </Box>
+      {showDirectory && filtered.length > 0 && (
+        <details className="docs-directory">
+          <summary>Browse by name</summary>
+          <nav aria-label="Component directory">
+            <ul>
+              {[...filtered]
+                .sort((a, b) => a.title.localeCompare(b.title))
+                .map(item => (
+                  <li key={item.key}>
+                    <RouterLink
+                      to={`${basePath}/${slug(fromPascal(item.categoryKey))}/${slug(fromPascal(item.componentKey))}`}
+                    >
+                      {item.title}
+                    </RouterLink>
+                  </li>
+                ))}
+            </ul>
+          </nav>
+        </details>
+      )}
     </Box>
   );
 };

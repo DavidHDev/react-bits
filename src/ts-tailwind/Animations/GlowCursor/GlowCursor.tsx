@@ -325,7 +325,7 @@ const QUALITY: Record<Quality, { sim: number; dye: number }> = {
 };
 
 const PRESSURE_STEPS = 20;
-const FLOW = 0.1;
+const FLOW = 0.75;
 const BLOOM_LEVELS = 5;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));

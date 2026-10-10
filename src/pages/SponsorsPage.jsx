@@ -1,6 +1,7 @@
 import { LuArrowRight, LuCheck } from 'react-icons/lu';
 import useScrollToTop from '../hooks/useScrollToTop';
 import usePageSEO from '../hooks/usePageSEO';
+import { PAGE_METADATA } from '../constants/pageMetadata';
 import { useStars } from '../hooks/useStars';
 import Navbar from '../components/landingnew/Navbar/Navbar';
 import Footer from '../components/landingnew/Footer/Footer';
@@ -47,12 +48,7 @@ const formatStars = stars => (stars >= 1000 ? `${(stars / 1000).toFixed(1).repla
 
 const SponsorsPage = () => {
   useScrollToTop();
-  usePageSEO({
-    title: 'React Bits - Sponsors',
-    description:
-      'Sponsor React Bits and get your brand in front of 500K+ developers monthly. Simple monthly plans for Diamond, Platinum and Silver tiers.',
-    path: '/sponsors'
-  });
+  usePageSEO({ ...PAGE_METADATA['/sponsors'], path: '/sponsors' });
 
   const stars = useStars();
 

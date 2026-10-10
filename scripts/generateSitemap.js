@@ -1,93 +1,38 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+import { SITE_URL } from '../src/utils/seo.js';
+import { getSeoRoutes } from './seoRoutes.js';
+import { escapeHtml } from './prerenderContent.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const BASE_URL = 'https://reactbits.dev';
+export const getLastModified = (metadata, today = new Date().toISOString().slice(0, 10)) => {
+  const dates = [metadata?.added, ...(metadata?.updates ?? []).map(update => update.date)];
+  return dates
+    .filter(
+      date =>
+        typeof date === 'string' &&
+        /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+        !Number.isNaN(Date.parse(date)) &&
+        new Date(date).toISOString().slice(0, 10) === date &&
+        date <= today
+    )
+    .sort()
+    .at(-1);
+};
 
-const toSlug = name => name.toLowerCase().replace(/\s+/g, '-');
-const categoriesPath = path.join(__dirname, '../src/constants/Categories.js');
-const categoriesContent = fs.readFileSync(categoriesPath, 'utf-8');
-const categoriesMatch = categoriesContent.match(/export const CATEGORIES\s*=\s*(\[[\s\S]*?\n\];)/);
-if (!categoriesMatch) {
-  throw new Error('Could not parse CATEGORIES from Categories.js');
-}
-
-const CATEGORIES = eval(categoriesMatch[1]);
-const toolsPagePath = path.join(__dirname, '../src/pages/ToolsPage.jsx');
-const toolsPageContent = fs.readFileSync(toolsPagePath, 'utf-8');
-const toolIdMatches = toolsPageContent.matchAll(/id:\s*['"]([^'"]+)['"]/g);
-const toolIds = [...toolIdMatches].map(m => m[1]);
-
-const staticPages = [
-  { loc: '/', priority: '1.0', changefreq: 'weekly' },
-  { loc: '/showcase', priority: '0.8', changefreq: 'weekly' },
-  { loc: '/sponsors', priority: '0.5', changefreq: 'monthly' },
-  { loc: '/favorites', priority: '0.5', changefreq: 'monthly' }
-];
-
-function generateSitemap() {
-  const today = new Date().toISOString().split('T')[0];
-
-  let urls = [];
-
-  staticPages.forEach(page => {
-    urls.push({
-      loc: `${BASE_URL}${page.loc}`,
-      lastmod: today,
-      changefreq: page.changefreq,
-      priority: page.priority
-    });
-  });
-
-  urls.push({
-    loc: `${BASE_URL}/pro`,
-    lastmod: today,
-    changefreq: 'weekly',
-    priority: '0.9'
-  });
-
-  toolIds.forEach(toolId => {
-    urls.push({
-      loc: `${BASE_URL}/tools/${toolId}`,
-      lastmod: today,
-      changefreq: 'weekly',
-      priority: '0.8'
-    });
-  });
-
-  CATEGORIES.forEach(({ name, subcategories }) => {
-    const categorySlug = toSlug(name);
-    subcategories.forEach(subcategory => {
-      if (subcategory === 'Index') return;
-      urls.push({
-        loc: `${BASE_URL}/${categorySlug}/${toSlug(subcategory)}`,
-        lastmod: today,
-        changefreq: 'weekly',
-        priority: '0.7'
-      });
-    });
-  });
-
+export const generateSitemap = () => {
+  const pages = getSeoRoutes().filter(page => !page.robots?.includes('noindex'));
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
-  .map(
-    url => `  <url>
-    <loc>${url.loc}</loc>
-    <lastmod>${url.lastmod}</lastmod>
-    <changefreq>${url.changefreq}</changefreq>
-    <priority>${url.priority}</priority>
-  </url>`
-  )
+${pages
+  .map(page => {
+    const lastmod = getLastModified(page.item?.meta);
+    return `  <url>\n    <loc>${escapeHtml(`${SITE_URL}${page.path}`)}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''}\n  </url>`;
+  })
   .join('\n')}
-</urlset>`;
+</urlset>\n`;
+  fs.writeFileSync(fileURLToPath(new URL('../public/sitemap.xml', import.meta.url)), xml);
+  console.log(`Sitemap: ${pages.length} canonical public pages; lastmod uses recorded component release/update dates.`);
+};
 
-  const outputPath = path.join(__dirname, '../public/sitemap.xml');
-  fs.writeFileSync(outputPath, xml, 'utf-8');
-
-  console.log(`✓ Sitemap generated with ${urls.length} URLs`);
-  console.log(`  Output: ${outputPath}`);
-}
-
-generateSitemap();
+if (process.argv[1] === fileURLToPath(import.meta.url)) generateSitemap();

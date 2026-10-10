@@ -5,19 +5,20 @@ import tsCode from '@ts-default/Backgrounds/PlasmaWave/PlasmaWave.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/PlasmaWave/PlasmaWave.tsx?raw';
 
 export const plasmaWave = {
-  dependencies: `ogl`,
   usage: `import PlasmaWave from './PlasmaWave';
-  
-<PlasmaWave
-  colors={["#A855F7", "#06B6D4"]}
-  speed1={0.05}
-  speed2={0.05}
-  focalLength={0.8}
-  bend1={1}
-  bend2={0.5}
-  dir2={1.0}
-  rotationDeg={0}
-/>`,
+
+<div style={{ width: '100%', height: '600px', position: 'relative' }}>
+  <PlasmaWave
+    colors={['#A855F7', '#06B6D4']}
+    speed={1}
+    bend1={1}
+    bend2={0.5}
+    thickness={0.3}
+    glow={1}
+    core={0.6}
+    mouseInteraction={true}
+  />
+</div>`,
   code,
   css,
   tailwind,

@@ -18,6 +18,7 @@ import { CATEGORIES } from './constants/Categories';
 import { componentMap } from './constants/Components';
 import { toSlug } from './utils/catalog';
 import { findComponentBySlug } from './utils/routeMatch';
+import { TOOLS } from './constants/Tools';
 
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
@@ -36,6 +37,10 @@ const DocsRoute = ({ prefix = '' }) => {
 
   if (match && match.path !== `/${category}/${subcategory}`) {
     return <Navigate to={{ pathname: `${prefix}${match.path}`, search, hash }} replace />;
+  }
+
+  if (subcategory === 'index' && category !== 'get-started' && DOCS_CATEGORIES.has(category)) {
+    return <Navigate to={{ pathname: `/c/${category}`, search, hash }} replace />;
   }
 
   if (!DOCS_CATEGORIES.has(category) || (subcategory !== 'index' && !componentMap[subcategory])) {
@@ -61,6 +66,11 @@ const CategoryIndexRoute = () => {
   );
 };
 
+const ToolsRoute = () => {
+  const { toolId } = useParams();
+  return !toolId || TOOLS.some(tool => tool.id === toolId) ? <ToolsPage /> : <NotFound />;
+};
+
 function AppContent() {
   return (
     <>
@@ -70,7 +80,7 @@ function AppContent() {
           <Route exact path="/showcase" element={<ShowcasePage />} />
           <Route exact path="/sponsors" element={<SponsorsPage />} />
           <Route exact path="/changelog" element={<Navigate to="/get-started/changelog" replace />} />
-          <Route path="/tools/:toolId?" element={<ToolsPage />} />
+          <Route path="/tools/:toolId?" element={<ToolsRoute />} />
           <Route exact path="/pro" element={<ProPage />} />
           <Route path="/c/:category" element={<CategoryIndexRoute />} />
           <Route path="/c/:category/:subcategory" element={<DocsRoute prefix="/c" />} />

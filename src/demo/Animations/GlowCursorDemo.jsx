@@ -187,7 +187,7 @@ const GlowCursorDemo = () => {
             <PreviewSlider
               title="Trail Width"
               min={1}
-              max={14}
+              max={64}
               step={0.5}
               value={props.trailWidth}
               valueUnit="px"

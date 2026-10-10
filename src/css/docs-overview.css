@@ -1,0 +1,112 @@
+.docs-overview {
+  margin-bottom: 24px;
+  min-width: 0;
+}
+
+.category-page .docs-overview .sub-category {
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.docs-overview-description {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-muted);
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docs-catalog-intro {
+  margin-top: 8px;
+}
+
+.docs-related {
+  margin-top: 3rem;
+}
+
+.docs-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.docs-related-card.component-pager-link {
+  min-height: 52px;
+  justify-content: space-between;
+}
+
+.docs-related-card > svg {
+  flex-shrink: 0;
+}
+
+.docs-related-card.component-pager-link > .component-pager-name {
+  display: block;
+}
+
+.docs-related a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.docs-directory {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.docs-directory summary {
+  width: fit-content;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.docs-directory ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 20px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docs-directory a {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-underline-offset: 4px;
+}
+
+.docs-directory a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.docs-directory a:focus-visible,
+.docs-directory summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 767px) {
+  .docs-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .docs-directory ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-related-card {
+    transition: none;
+  }
+}

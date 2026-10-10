@@ -6,6 +6,7 @@ import ComponentList from '../components/common/ComponentList';
 import { componentMetadata } from '../constants/Information';
 import useNewSinceLastVisit from '../hooks/useNewSinceLastVisit';
 import usePageSEO from '../hooks/usePageSEO';
+import { CATEGORY_SEO } from '../utils/seo';
 
 const CATEGORY_KEYS = {
   components: 'Components',
@@ -14,28 +15,17 @@ const CATEGORY_KEYS = {
   'text-animations': 'TextAnimations',
   micro: 'Micro'
 };
-const CATEGORY_LABELS = {
-  components: 'Components',
-  animations: 'Animations',
-  backgrounds: 'Backgrounds',
-  'text-animations': 'Text Animations',
-  micro: 'Micro'
-};
-
 const CategoryIndexPage = () => {
   const { category } = useParams();
   const key = CATEGORY_KEYS[category];
-  const label = CATEGORY_LABELS[category];
+  const seo = CATEGORY_SEO[category];
   const list = useMemo(
     () => Object.fromEntries(Object.entries(componentMetadata).filter(([, meta]) => meta.category === key)),
     [key]
   );
   const newSinceLastVisit = useNewSinceLastVisit(Object.keys(list));
 
-  usePageSEO({
-    title: label ? `React Bits - ${label}` : undefined,
-    path: `/c/${category}`
-  });
+  usePageSEO(seo ?? { title: 'Category not found | React Bits', robots: 'noindex, follow' });
 
   if (!key) {
     return (
@@ -53,7 +43,8 @@ const CategoryIndexPage = () => {
   return (
     <Box>
       <ComponentList
-        title={label}
+        title={seo.heading}
+        intro={seo.intro}
         list={list}
         hasFavoriteButton
         sorting="alphabetical"
@@ -61,6 +52,7 @@ const CategoryIndexPage = () => {
         newSinceLastVisit={newSinceLastVisit}
         basePath="/c"
         showCategoryFilter={false}
+        showDirectory
       />
       <BackToTopButton />
     </Box>

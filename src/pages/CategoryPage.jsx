@@ -1,30 +1,16 @@
-import { useEffect, Suspense, lazy } from 'react';
+import { useEffect, useMemo, Suspense, lazy } from 'react';
 import { useParams } from 'react-router-dom';
 import { componentMap } from '../constants/Components';
-import { componentMetadata } from '../constants/Information';
 import { decodeLabel } from '../utils/utils';
 import { Box, Text } from '@chakra-ui/react';
 import { useTransition } from '../hooks/useTransition';
 import usePageSEO from '../hooks/usePageSEO';
-import { CHANGELOG_DESCRIPTION } from '../utils/changelog';
+import { PAGE_METADATA } from '../constants/pageMetadata';
 import BackToTopButton from '../components/common/BackToTopButton';
 import { SkeletonLoader, GetStartedLoader } from '../components/common/SkeletonLoader';
 import IndexPage from './IndexPage';
-
-const CATEGORY_KEYS = {
-  components: 'Components',
-  animations: 'Animations',
-  backgrounds: 'Backgrounds',
-  'text-animations': 'TextAnimations',
-  micro: 'Micro'
-};
-
-const DOCS_DESCRIPTIONS = {
-  changelog: CHANGELOG_DESCRIPTION
-};
-
-const FALLBACK_DESCRIPTION =
-  'High quality, animated, interactive & fully customizable React components for building stunning, memorable user interfaces.';
+import { DEFAULT_DESCRIPTION, INDEX_SEO, getComponentSEOByPath } from '../utils/seo';
+import { DocsOverview } from '../components/common/DocsOverview';
 
 const lazyComponentCache = new Map();
 
@@ -61,15 +47,18 @@ const CategoryPage = () => {
     }
   }, [subcategory, transitionPhase]);
 
-  const metadataKey = `${CATEGORY_KEYS[category]}/${decodedLabel?.replace(/\s+/g, '')}`;
-  const isComponent = Boolean(componentMetadata[metadataKey]);
-  usePageSEO({
-    title: decodedLabel ? `React Bits - ${decodedLabel}` : undefined,
-    description: componentMetadata[metadataKey]?.description || DOCS_DESCRIPTIONS[subcategory] || FALLBACK_DESCRIPTION,
-    path: `/${category}/${subcategory}`,
-    image: isComponent ? `/og/${category}/${subcategory}.jpg` : undefined,
-    imageAlt: isComponent ? `${decodedLabel}, a React Bits component` : undefined
-  });
+  const path = `/${category}/${subcategory}`;
+  const componentSEO = useMemo(() => getComponentSEOByPath(path), [path]);
+  usePageSEO(
+    isIndexPage
+      ? INDEX_SEO
+      : (componentSEO ?? {
+          title: decodedLabel ? `React Bits - ${decodedLabel}` : undefined,
+          description: DEFAULT_DESCRIPTION,
+          ...PAGE_METADATA[path],
+          path
+        })
+  );
 
   return (
     <>
@@ -78,7 +67,11 @@ const CategoryPage = () => {
       ) : (
         <Box className={`category-page category-${category} ${isLoading ? 'loading' : ''}`}>
           <Box className="page-transition-fade" style={{ opacity }}>
-            {!isGetStartedRoute && <h2 className="sub-category">{decodedLabel}</h2>}
+            {componentSEO ? (
+              <DocsOverview seo={componentSEO} />
+            ) : (
+              !isGetStartedRoute && <h1 className="sub-category">{decodedLabel}</h1>
+            )}
 
             {SubcategoryComponent ? (
               <Suspense fallback={<Loader />}>

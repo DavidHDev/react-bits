@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
+import { DEFAULT_DESCRIPTION, HOME_SEO, SITE_URL } from '../utils/seo';
 
-const BASE_URL = 'https://reactbits.dev';
 const DEFAULT_IMAGE = '/og.jpg';
-const DEFAULT_IMAGE_ALT = 'React Bits: React components that stand out. 200+ free creative components.';
+const DEFAULT_IMAGE_ALT = 'React Bits: free React components for creative websites.';
 
 const setMeta = (attr, key, content) => {
   let el = document.head.querySelector(`meta[${attr}="${key}"]`);
@@ -19,24 +19,28 @@ const setMeta = (attr, key, content) => {
  * with the current route. Updates the existing tags in <head> in place, so
  * crawlers never see duplicates.
  */
-const usePageSEO = ({ title, description, path, image, imageAlt }) => {
+const usePageSEO = ({
+  title = HOME_SEO.title,
+  description = DEFAULT_DESCRIPTION,
+  path,
+  image,
+  imageAlt,
+  robots = 'index, follow'
+}) => {
   useEffect(() => {
-    if (title) {
-      document.title = title;
-      setMeta('property', 'og:title', title);
-      setMeta('name', 'twitter:title', title);
-    }
+    document.title = title || HOME_SEO.title;
+    setMeta('property', 'og:title', title || HOME_SEO.title);
+    setMeta('name', 'twitter:title', title || HOME_SEO.title);
 
-    if (description) {
-      setMeta('name', 'description', description);
-      setMeta('property', 'og:description', description);
-      setMeta('name', 'twitter:description', description);
-    }
+    setMeta('name', 'description', description || DEFAULT_DESCRIPTION);
+    setMeta('property', 'og:description', description || DEFAULT_DESCRIPTION);
+    setMeta('name', 'twitter:description', description || DEFAULT_DESCRIPTION);
+    setMeta('name', 'robots', robots);
 
-    const url = `${BASE_URL}${path ?? window.location.pathname}`;
+    const url = `${SITE_URL}${path ?? window.location.pathname}`;
     setMeta('property', 'og:url', url);
 
-    const imageUrl = `${BASE_URL}${image || DEFAULT_IMAGE}`;
+    const imageUrl = `${SITE_URL}${image || DEFAULT_IMAGE}`;
     const alt = imageAlt || DEFAULT_IMAGE_ALT;
     setMeta('property', 'og:image', imageUrl);
     setMeta('name', 'twitter:image', imageUrl);
@@ -50,7 +54,7 @@ const usePageSEO = ({ title, description, path, image, imageAlt }) => {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute('href', url);
-  }, [title, description, path, image, imageAlt]);
+  }, [title, description, path, image, imageAlt, robots]);
 };
 
 export default usePageSEO;

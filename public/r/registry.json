@@ -6494,7 +6494,7 @@
 		{
 			"name": "GlassSurface-JS-CSS",
 			"title": "GlassSurface",
-			"description": "Advanced Apple-style glass surface with real-time distortion + lighting.",
+			"description": "Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -6513,7 +6513,7 @@
 		{
 			"name": "GlassSurface-JS-TW",
 			"title": "GlassSurface",
-			"description": "Advanced Apple-style glass surface with real-time distortion + lighting.",
+			"description": "Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -6527,7 +6527,7 @@
 		{
 			"name": "GlassSurface-TS-CSS",
 			"title": "GlassSurface",
-			"description": "Advanced Apple-style glass surface with real-time distortion + lighting.",
+			"description": "Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -6546,7 +6546,7 @@
 		{
 			"name": "GlassSurface-TS-TW",
 			"title": "GlassSurface",
-			"description": "Advanced Apple-style glass surface with real-time distortion + lighting.",
+			"description": "Apple-style liquid glass that bends what is behind its edges, in a rounded panel or the shape of any SVG logo.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -11338,11 +11338,9 @@
 		{
 			"name": "Radar-JS-CSS",
 			"title": "Radar",
-			"description": "Radar sweep effect with concentric rings, radial spokes, and a rotating beam.",
+			"description": "A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11359,11 +11357,9 @@
 		{
 			"name": "Radar-JS-TW",
 			"title": "Radar",
-			"description": "Radar sweep effect with concentric rings, radial spokes, and a rotating beam.",
+			"description": "A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11375,11 +11371,9 @@
 		{
 			"name": "Radar-TS-CSS",
 			"title": "Radar",
-			"description": "Radar sweep effect with concentric rings, radial spokes, and a rotating beam.",
+			"description": "A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11396,11 +11390,9 @@
 		{
 			"name": "Radar-TS-TW",
 			"title": "Radar",
-			"description": "Radar sweep effect with concentric rings, radial spokes, and a rotating beam.",
+			"description": "A refined radar scope whose sweep leaves a phosphor afterglow and picks up moving contacts, flat or tilted into perspective.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11786,11 +11778,9 @@
 		{
 			"name": "Plasma-JS-CSS",
 			"title": "Plasma",
-			"description": "Organic plasma gradients swirl + morph with smooth turbulence.",
+			"description": "Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11807,11 +11797,9 @@
 		{
 			"name": "Plasma-JS-TW",
 			"title": "Plasma",
-			"description": "Organic plasma gradients swirl + morph with smooth turbulence.",
+			"description": "Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11823,11 +11811,9 @@
 		{
 			"name": "Plasma-TS-CSS",
 			"title": "Plasma",
-			"description": "Organic plasma gradients swirl + morph with smooth turbulence.",
+			"description": "Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11844,11 +11830,9 @@
 		{
 			"name": "Plasma-TS-TW",
 			"title": "Plasma",
-			"description": "Organic plasma gradients swirl + morph with smooth turbulence.",
+			"description": "Folds of satin light twisting slowly through the dark, with bright highlights and a turn that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11860,11 +11844,9 @@
 		{
 			"name": "PlasmaWave-JS-CSS",
 			"title": "PlasmaWave",
-			"description": "Raymarched plasma waves with dual-wave interference and OGL.",
+			"description": "Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11881,11 +11863,9 @@
 		{
 			"name": "PlasmaWave-JS-TW",
 			"title": "PlasmaWave",
-			"description": "Raymarched plasma waves with dual-wave interference and OGL.",
+			"description": "Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11897,11 +11877,9 @@
 		{
 			"name": "PlasmaWave-TS-CSS",
 			"title": "PlasmaWave",
-			"description": "Raymarched plasma waves with dual-wave interference and OGL.",
+			"description": "Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11918,11 +11896,9 @@
 		{
 			"name": "PlasmaWave-TS-TW",
 			"title": "PlasmaWave",
-			"description": "Raymarched plasma waves with dual-wave interference and OGL.",
+			"description": "Two ribbons of plasma curling through each other, with soft glow, white-hot cores and a cursor that stirs them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12718,11 +12694,9 @@
 		{
 			"name": "PixelSnow-JS-CSS",
 			"title": "PixelSnow",
-			"description": "Falling pixelated snow effect with customizable density and speed.",
+			"description": "Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12739,11 +12713,9 @@
 		{
 			"name": "PixelSnow-JS-TW",
 			"title": "PixelSnow",
-			"description": "Falling pixelated snow effect with customizable density and speed.",
+			"description": "Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12755,11 +12727,9 @@
 		{
 			"name": "PixelSnow-TS-CSS",
 			"title": "PixelSnow",
-			"description": "Falling pixelated snow effect with customizable density and speed.",
+			"description": "Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12776,11 +12746,9 @@
 		{
 			"name": "PixelSnow-TS-TW",
 			"title": "PixelSnow",
-			"description": "Falling pixelated snow effect with customizable density and speed.",
+			"description": "Crisp pixel-art snowflakes drifting down in layers of depth, with a soft glow, wind and a cursor that brushes them aside.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

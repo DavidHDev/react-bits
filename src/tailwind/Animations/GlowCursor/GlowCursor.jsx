@@ -257,7 +257,7 @@ const QUALITY = {
 };
 
 const PRESSURE_STEPS = 20;
-const FLOW = 0.1;
+const FLOW = 0.75;
 const BLOOM_LEVELS = 5;
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));

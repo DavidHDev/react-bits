@@ -1,25 +1,35 @@
-import { useMemo, useEffect, useRef, useState } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
-import { Box, Flex, Image, Text } from '@chakra-ui/react';
-import { TbBackground, TbMenu } from 'react-icons/tb';
-import Lenis from 'lenis';
+import { useEffect, useRef, useState } from 'react';
+import { Box } from '@chakra-ui/react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
+  FavouriteIcon,
+  Home01Icon,
+  NextIcon,
+  PauseIcon,
+  PreviousIcon,
+  Search01Icon,
+  UserIcon
+} from '@hugeicons/core-free-icons';
 
-import useComponentProps from '../../hooks/useComponentProps';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import logo from '../../assets/logos/react-bits-logo-small.svg';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 
-import LiquidEther from '@/content/Backgrounds/LiquidEther/LiquidEther';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { useColorModeValue } from '../../components/setup/color-mode';
+
 import { glassSurface } from '../../constants/code/Components/glassSurfaceCode';
 import GlassSurface from '../../content/Components/GlassSurface/GlassSurface';
+import logo from '../../assets/logos/react-bits-logo-small.svg';
 
-const DEFAULT_PROPS = {
-  borderRadius: 50,
+const DRIFT = [24, 16];
+
+const LOOK = {
   borderWidth: 0.07,
   brightness: 50,
   opacity: 0.93,
@@ -33,537 +43,502 @@ const DEFAULT_PROPS = {
   blueOffset: 20
 };
 
+const DEFAULT_PROPS = {
+  preset: 'tabs',
+  width: 320,
+  height: 76,
+  borderRadius: 38,
+  ...LOOK,
+  refraction: true
+};
+
+const PRESETS = {
+  tabs: { ...LOOK, width: 320, height: 76, borderRadius: 38 },
+  lens: { ...LOOK, width: 200, height: 200, borderRadius: 100, borderWidth: 0.12, distortionScale: -240 },
+  player: { ...LOOK, width: 260, height: 96, borderRadius: 30 },
+  prism: {
+    ...LOOK,
+    width: 320,
+    height: 76,
+    borderRadius: 38,
+    distortionScale: -220,
+    redOffset: 0,
+    greenOffset: 28,
+    blueOffset: 56
+  },
+  frost: { ...LOOK, width: 320, height: 76, borderRadius: 38, displace: 3, backgroundOpacity: 0.28 },
+  logo: { ...LOOK, width: 280, height: 280, borderRadius: 38 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'tabs', label: 'Tab Bar' },
+  { value: 'lens', label: 'Lens' },
+  { value: 'player', label: 'Player' },
+  { value: 'prism', label: 'Prism' },
+  { value: 'frost', label: 'Frost' },
+  { value: 'logo', label: 'Logo' }
+];
+
+const CONTENT = {
+  tabs: [Home01Icon, Search01Icon, FavouriteIcon, UserIcon],
+  prism: [Home01Icon, Search01Icon, FavouriteIcon, UserIcon],
+  frost: [Home01Icon, Search01Icon, FavouriteIcon, UserIcon],
+  player: [PreviousIcon, PauseIcon, NextIcon],
+  lens: [],
+  logo: []
+};
+
+const propData = [
+  { name: 'children', type: 'ReactNode', default: '-', description: 'Content shown on the glass.' },
+  {
+    name: 'width',
+    type: 'number | string',
+    default: '200',
+    description: "Width in px, or any CSS value like '100%'."
+  },
+  {
+    name: 'height',
+    type: 'number | string',
+    default: '80',
+    description: "Height in px, or any CSS value like '100vh'."
+  },
+  { name: 'borderRadius', type: 'number', default: '20', description: 'Corner radius in px. Not used with a shape.' },
+  {
+    name: 'shape',
+    type: 'string',
+    default: '-',
+    description:
+      'URL of an SVG or transparent PNG that gives the glass its outline, fitted inside the width and height. Files from another origin need CORS headers.'
+  },
+  {
+    name: 'refraction',
+    type: 'boolean',
+    default: 'true',
+    description:
+      'Bends what is behind the glass at its edges. This needs SVG backdrop filters, which only Chromium browsers support, so Safari and Firefox always get a frosted glass fallback. Set it to false to use the fallback everywhere.'
+  },
+  {
+    name: 'distortionScale',
+    type: 'number',
+    default: '-180',
+    description: 'How strongly the edge bends what is behind it. Negative values pull the view inward.'
+  },
+  {
+    name: 'borderWidth',
+    type: 'number',
+    default: '0.07',
+    description: 'Width of the bending edge, as a fraction of the shorter side.'
+  },
+  {
+    name: 'blur',
+    type: 'number',
+    default: '11',
+    description: 'Softness of the transition from the bending edge to the calm center, in px.'
+  },
+  {
+    name: 'brightness',
+    type: 'number',
+    default: '50',
+    description: 'Brightness of the calm center, in %. 50 leaves it undistorted.'
+  },
+  {
+    name: 'opacity',
+    type: 'number',
+    default: '0.93',
+    description: 'How strongly the calm center holds the view still, from 0 to 1.'
+  },
+  {
+    name: 'displace',
+    type: 'number',
+    default: '0',
+    description: 'Blurs the light coming through the glass, for a frosted look.'
+  },
+  {
+    name: 'redOffset',
+    type: 'number',
+    default: '0',
+    description: 'Extra bending for the red channel. Different offsets split light into colored fringes.'
+  },
+  { name: 'greenOffset', type: 'number', default: '10', description: 'Extra bending for the green channel.' },
+  { name: 'blueOffset', type: 'number', default: '20', description: 'Extra bending for the blue channel.' },
+  {
+    name: 'backgroundOpacity',
+    type: 'number',
+    default: '0',
+    description: 'Opacity of a soft frosted tint over the glass, from 0 to 1.'
+  },
+  { name: 'saturation', type: 'number', default: '1', description: 'Saturation of what is seen through the glass.' },
+  {
+    name: 'xChannel',
+    type: "'R' | 'G' | 'B'",
+    default: "'R'",
+    description: 'Channel of the displacement map that moves pixels sideways.'
+  },
+  {
+    name: 'yChannel',
+    type: "'R' | 'G' | 'B'",
+    default: "'G'",
+    description: 'Channel of the displacement map that moves pixels up and down.'
+  },
+  {
+    name: 'mixBlendMode',
+    type: 'BlendMode',
+    default: "'difference'",
+    description: 'How the two edge gradients of the displacement map are combined.'
+  },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the glass.' },
+  { name: 'style', type: 'CSSProperties', default: '{}', description: 'Inline styles for the glass.' }
+];
+
 const GlassSurfaceDemo = () => {
-  const [selectedExample, setSelectedExample] = useState('scroll');
-  const scrollContainerRef = useRef(null);
-  const lenisRef = useRef(null);
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+  const theme = useColorModeValue('light', 'dark');
+  const stageRef = useRef(null);
+  const glassRef = useRef(null);
+  const inputRef = useRef(null);
+  const offset = useRef({ x: 0, y: 0 });
+  const shown = useRef({ x: 0, y: 0 });
+  const drag = useRef(null);
+  const drift = useRef({ x: 0, y: 0, vx: 0, vy: 0, tx: 0, ty: 0, time: 0, frame: 0 });
+  const [stageWidth, setStageWidth] = useState(0);
+  const [upload, setUpload] = useState(null);
 
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    borderRadius,
-    borderWidth,
-    brightness,
-    opacity,
-    blur,
-    displace,
-    backgroundOpacity,
-    saturation,
-    distortionScale,
-    redOffset,
-    greenOffset,
-    blueOffset
-  } = props;
-
-  const exampleOptions = [
-    { value: 'scroll', label: 'Scroll' },
-    { value: 'landingPage', label: 'Landing Page' }
-  ];
-
-  const commonGlassProps = {
-    borderRadius,
-    borderWidth,
-    brightness,
-    opacity,
-    blur,
-    backgroundOpacity,
-    saturation,
-    distortionScale,
-    redOffset,
-    greenOffset,
-    blueOffset,
-    displace
+  const place = () => {
+    const stage = stageRef.current;
+    const glass = glassRef.current;
+    if (!stage || !glass) return;
+    const { x: driftX, y: driftY } = drift.current;
+    const ratio = window.devicePixelRatio || 1;
+    const limitX = Math.max(0, (stage.clientWidth - glass.offsetWidth) / 2 - 16);
+    const limitY = Math.max(0, (stage.clientHeight - glass.offsetHeight) / 2 - 16);
+    const leanX = driftX * DRIFT[0];
+    const leanY = driftY * DRIFT[1];
+    const grab = drag.current;
+    const x = Math.min(limitX, Math.max(-limitX, grab ? grab.pointerX - grab.x : offset.current.x + leanX));
+    const y = Math.min(limitY, Math.max(-limitY, grab ? grab.pointerY - grab.y : offset.current.y + leanY));
+    if (grab) offset.current = { x: x - leanX, y: y - leanY };
+    shown.current = { x, y };
+    glass.style.transform = `translate(${Math.round(x * ratio) / ratio}px, ${Math.round(y * ratio) / ratio}px)`;
   };
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'children',
-        type: 'React.ReactNode',
-        default: 'undefined',
-        description: 'Content to display inside the glass surface'
-      },
-      {
-        name: 'width',
-        type: 'number | string',
-        default: '200',
-        description: "Width of the glass surface (pixels or CSS value like '100%')"
-      },
-      {
-        name: 'height',
-        type: 'number | string',
-        default: '80',
-        description: "Height of the glass surface (pixels or CSS value like '100vh')"
-      },
-      {
-        name: 'borderRadius',
-        type: 'number',
-        default: '20',
-        description: 'Border radius in pixels'
-      },
-      {
-        name: 'borderWidth',
-        type: 'number',
-        default: '0.07',
-        description: 'Border width factor for displacement map'
-      },
-      {
-        name: 'brightness',
-        type: 'number',
-        default: '50',
-        description: 'Brightness percentage for displacement map'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '0.93',
-        description: 'Opacity of displacement map elements'
-      },
-      {
-        name: 'blur',
-        type: 'number',
-        default: '11',
-        description: 'Input blur amount in pixels'
-      },
-      {
-        name: 'displace',
-        type: 'number',
-        default: '0',
-        description: 'Output blur (stdDeviation)'
-      },
-      {
-        name: 'backgroundOpacity',
-        type: 'number',
-        default: '0',
-        description: 'Background frost opacity (0-1)'
-      },
-      {
-        name: 'saturation',
-        type: 'number',
-        default: '1',
-        description: 'Backdrop filter saturation factor'
-      },
-      {
-        name: 'distortionScale',
-        type: 'number',
-        default: '-180',
-        description: 'Main displacement scale'
-      },
-      {
-        name: 'redOffset',
-        type: 'number',
-        default: '0',
-        description: 'Red channel extra displacement offset'
-      },
-      {
-        name: 'greenOffset',
-        type: 'number',
-        default: '10',
-        description: 'Green channel extra displacement offset'
-      },
-      {
-        name: 'blueOffset',
-        type: 'number',
-        default: '20',
-        description: 'Blue channel extra displacement offset'
-      },
-      {
-        name: 'xChannel',
-        type: "'R' | 'G' | 'B'",
-        default: "'R'",
-        description: 'X displacement channel selector'
-      },
-      {
-        name: 'yChannel',
-        type: "'R' | 'G' | 'B'",
-        default: "'G'",
-        description: 'Y displacement channel selector'
-      },
-      {
-        name: 'mixBlendMode',
-        type: 'BlendMode',
-        default: "'difference'",
-        description: 'Mix blend mode for displacement map'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Additional CSS class names'
-      },
-      {
-        name: 'style',
-        type: 'React.CSSProperties',
-        default: '{}',
-        description: 'Inline styles object'
-      }
-    ],
-    []
-  );
+  const step = now => {
+    const state = drift.current;
+    const dt = Math.min(0.05, (now - state.time) / 1000);
+    state.time = now;
+    state.vx += (50 * (state.tx - state.x) - 14 * state.vx) * dt;
+    state.vy += (50 * (state.ty - state.y) - 14 * state.vy) * dt;
+    state.x += state.vx * dt;
+    state.y += state.vy * dt;
+    const resting =
+      Math.abs(state.tx - state.x) + Math.abs(state.ty - state.y) + Math.abs(state.vx) + Math.abs(state.vy) < 0.0005;
+    if (resting) {
+      state.x = state.tx;
+      state.y = state.ty;
+      state.vx = 0;
+      state.vy = 0;
+    }
+    place();
+    state.frame = resting ? 0 : requestAnimationFrame(step);
+  };
+
+  const wake = () => {
+    const state = drift.current;
+    if (state.frame) return;
+    state.time = performance.now();
+    state.frame = requestAnimationFrame(step);
+  };
 
   useEffect(() => {
-    const el = scrollContainerRef.current;
-    if (!el) return;
+    place();
+  });
 
-    if (lenisRef.current) {
-      lenisRef.current.destroy();
-      lenisRef.current = null;
-    }
-
-    const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    const isReducedMotion =
-      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const shouldUseNative = isTouch || isReducedMotion;
-
-    if (shouldUseNative) {
-      el.style.overflowY = 'auto';
-      el.style.webkitOverflowScrolling = 'touch';
-      return;
-    } else {
-      el.style.overflowY = 'hidden';
-    }
-
-    if (selectedExample !== 'scroll') return;
-
-    let rafId;
-    const lenis = new Lenis({
-      wrapper: el,
-      content: el.firstElementChild,
-      duration: 2,
-      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      smoothTouch: false,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
-      infinite: false,
-      lerp: 0.1
+  useEffect(() => {
+    const stage = stageRef.current;
+    const state = drift.current;
+    if (!stage) return undefined;
+    const observer = new ResizeObserver(() => {
+      setStageWidth(stage.clientWidth);
+      place();
     });
-    lenisRef.current = lenis;
-
-    const raf = time => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-
+    observer.observe(stage);
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      if (lenisRef.current) {
-        lenisRef.current.destroy();
-        lenisRef.current = null;
-      }
+      observer.disconnect();
+      cancelAnimationFrame(state.frame);
+      state.frame = 0;
     };
-  }, [selectedExample]);
+  }, []);
+
+  useEffect(() => {
+    if (!upload) return undefined;
+    return () => URL.revokeObjectURL(upload.url);
+  }, [upload]);
+
+  const onStageMove = event => {
+    const stage = stageRef.current;
+    const grab = drag.current;
+    if (grab) {
+      grab.pointerX = event.clientX;
+      grab.pointerY = event.clientY;
+      place();
+    }
+    if (stage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const rect = stage.getBoundingClientRect();
+      drift.current.tx = Math.min(1, Math.max(-1, ((event.clientX - rect.left) / rect.width) * 2 - 1));
+      drift.current.ty = Math.min(1, Math.max(-1, ((event.clientY - rect.top) / rect.height) * 2 - 1));
+      wake();
+    }
+  };
+
+  const onStageLeave = () => {
+    drift.current.tx = 0;
+    drift.current.ty = 0;
+    wake();
+  };
+
+  const onPointerDown = event => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    drag.current = {
+      x: event.clientX - shown.current.x,
+      y: event.clientY - shown.current.y,
+      pointerX: event.clientX,
+      pointerY: event.clientY
+    };
+    glassRef.current.style.cursor = 'grabbing';
+  };
+
+  const onPointerUp = () => {
+    drag.current = null;
+    if (glassRef.current) glassRef.current.style.cursor = 'grab';
+  };
+
+  const onFile = event => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    setUpload({ url: URL.createObjectURL(file), name: file.name });
+  };
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], refraction: settings.refraction, preset: value });
+  };
+
+  const resetAll = () => {
+    resetProps();
+    setUpload(null);
+  };
+
+  const icons = CONTENT[preset] ?? CONTENT.tabs;
+  const shape = preset === 'logo' ? upload?.url || logo : undefined;
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetAll}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box
-            ref={scrollContainerRef}
+            ref={stageRef}
             position="relative"
             className="demo-container"
             h={500}
             p={0}
-            css={{
-              overflow: 'hidden'
-            }}
+            overflow="hidden"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            style={{ background: `url(/assets/demo/${theme === 'light' ? 'day' : 'night'}-sky.webp) center / cover` }}
+            onPointerMove={onStageMove}
+            onPointerLeave={onStageLeave}
           >
-            {selectedExample === 'scroll' && (
-              <>
-                <GlassSurface
-                  width={360}
-                  height={100}
-                  {...commonGlassProps}
-                  style={{
-                    position: 'sticky',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    zIndex: 10
-                  }}
-                />
-
-                <Flex gap={16} alignItems="center" direction="column" position="absolute" top={0} left={0} right={0}>
-                  <Text
-                    position="absolute"
-                    left="50%"
-                    textAlign="center"
-                    whiteSpace="nowrap"
-                    top="3em"
-                    transform="translate(-50%, -50%)"
-                    fontSize="2.6rem"
-                    fontWeight={600}
-                    zIndex={0}
-                    color="#999"
+            <Box
+              ref={glassRef}
+              cursor="grab"
+              userSelect="none"
+              style={{ touchAction: 'none' }}
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+            >
+              <GlassSurface
+                {...settings}
+                shape={shape}
+                width={stageWidth ? Math.min(settings.width, stageWidth - 32) : settings.width}
+              >
+                {icons.length > 0 && (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-around"
+                    w="100%"
+                    px={3}
+                    color={theme === 'light' ? '#18181b' : '#ffffff'}
                   >
-                    Try scrolling.
-                  </Text>
-
-                  <Box height="240px" width="100%" />
-
-                  {[
-                    {
-                      src: 'https://images.unsplash.com/photo-1782977389500-dd7adad33ebe?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MzZ8fHxlbnwwfHx8fHw%3D',
-                      text: 'The Summer Of Glass'
-                    },
-                    {
-                      src: 'https://images.unsplash.com/photo-1776394254711-4a0d7345269a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NjF8fHxlbnwwfHx8fHw%3D',
-                      text: 'Can Hold Any Content'
-                    },
-                    {
-                      src: 'https://images.unsplash.com/photo-1781155451576-ae65c8816d31?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NDZ8fHxlbnwwfHx8fHw%3D',
-                      text: 'Has Built-In Fallback'
-                    }
-                  ].map((item, index) => (
-                    <Box key={index} position="relative">
-                      <Image w="500px" borderRadius="20px" objectFit="cover" src={item.src} filter="grayscale(100%)" />
-                      <Text
-                        position="absolute"
-                        top="50%"
-                        left="50%"
-                        transform="translate(-50%, -50%)"
-                        color="white"
-                        fontWeight={600}
-                        textAlign="center"
-                        lineHeight="100%"
-                        fontSize="3rem"
-                        minW="300px"
-                        zIndex={5}
-                        mixBlendMode="overlay"
-                      >
-                        {item.text}
-                      </Text>
-                      <Text
-                        position="absolute"
-                        top="50%"
-                        left="50%"
-                        transform="translate(-50%, -50%)"
-                        color="white"
-                        fontWeight={600}
-                        textAlign="center"
-                        lineHeight="100%"
-                        fontSize="3rem"
-                        minW="300px"
-                        zIndex={5}
-                        opacity={0.5}
-                        mixBlendMode="overlay"
-                      >
-                        {item.text}
-                      </Text>
-                    </Box>
-                  ))}
-
-                  <Box height="240px" width="100%" />
-                </Flex>
-              </>
-            )}
-
-            {selectedExample === 'landingPage' && (
-              <>
-                <Box w="100%" h="100%" position="absolute" top={0} left={0} zIndex={0}>
-                  <LiquidEther isBounce />
-                </Box>
-
-                <Box position="absolute" top="2em" left={0} width="100%" height="60px" zIndex={0} pointerEvents="none">
-                  <GlassSurface className="custom-glass-surface" width="90%" height={60} {...commonGlassProps}>
-                    <img src={logo} alt="React Bits Logo" style={{ height: '24px', borderRadius: '50px' }} />
-
-                    <Box display={{ base: 'flex', md: 'none' }} alignItems="center" color="white">
-                      <TbMenu size={20} />
-                    </Box>
-
-                    <Box display={{ base: 'none', md: 'flex' }} alignItems="center" gap={6} fontWeight={600}>
-                      <Text color="white" fontSize="14px" display="flex" alignItems="center">
-                        Home
-                      </Text>
-                      <Text color="white" fontSize="14px" display="flex" alignItems="center">
-                        Docs
-                      </Text>
-                    </Box>
-                  </GlassSurface>
-                </Box>
-
-                <Box
-                  position="absolute"
-                  top={0}
-                  left={0}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  flexDirection="column"
-                  width="100%"
-                  height="100%"
-                  zIndex={1}
-                  pointerEvents="none"
-                >
-                  <GlassSurface height={40} width={160} {...commonGlassProps}>
-                    <TbBackground />
-                    <Text ml={1}>Super Shiny</Text>
-                  </GlassSurface>
-
-                  <Text
-                    textShadow="0 0 16px rgba(0, 0, 0, 0.5)"
-                    mt={4}
-                    color="white"
-                    fontSize="clamp(2rem, 4vw, 2.6rem)"
-                    lineHeight="1.2"
-                    textAlign="center"
-                    letterSpacing="-2px"
-                    maxWidth="18ch"
-                    fontWeight="bold"
-                  >
-                    The summer of glass, thanks a lot Apple!
-                  </Text>
-
-                  <Box display="flex" gap={4} mt={8} alignItems="center">
-                    <Box
-                      as="button"
-                      px={10}
-                      py={3}
-                      bg="white"
-                      color="black"
-                      borderRadius="50px"
-                      fontSize="14px"
-                      fontWeight="500"
-                      border="none"
-                      cursor="pointer"
-                      _hover={{
-                        bg: 'gray.100',
-                        transform: 'translateY(-1px)'
-                      }}
-                      transition="all 0.2s ease"
-                    >
-                      Get Started
-                    </Box>
-
-                    <GlassSurface height={44.98} width={154.31} borderRadius={100} {...commonGlassProps}>
-                      Learn More
-                    </GlassSurface>
+                    {icons.map((icon, index) => (
+                      <HugeiconsIcon key={index} icon={icon} size={preset === 'player' ? 28 : 24} strokeWidth={1.8} />
+                    ))}
                   </Box>
-                </Box>
-              </>
-            )}
+                )}
+              </GlassSurface>
+            </Box>
           </Box>
 
           <Customize>
-            <PreviewSelect
-              title="Example"
-              options={exampleOptions}
-              value={selectedExample}
-              onChange={setSelectedExample}
-              width={160}
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            {preset === 'logo' && (
+              <div className="scrubber">
+                <button
+                  type="button"
+                  className="scrubber-track scrubber-track--select"
+                  onClick={() => inputRef.current?.click()}
+                >
+                  <span className="scrubber-label">Upload</span>
+                  <span className="scrubber-select-right">
+                    <span
+                      className="scrubber-value"
+                      style={{ maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    >
+                      {upload ? upload.name : 'SVG or PNG'}
+                    </span>
+                  </span>
+                </button>
+                <input
+                  ref={inputRef}
+                  type="file"
+                  accept="image/svg+xml,image/png,image/webp"
+                  hidden
+                  onChange={onFile}
+                />
+              </div>
+            )}
+            <PreviewSwitch
+              title="Refraction"
+              isChecked={settings.refraction}
+              onChange={value => updateProp('refraction', value)}
             />
-
             <PreviewSlider
-              title="Border Radius"
-              min={0}
-              max={50}
-              step={1}
-              value={borderRadius}
+              title="Width"
+              min={120}
+              max={600}
+              step={2}
+              value={settings.width}
               valueUnit="px"
-              onChange={val => updateProp('borderRadius', val)}
+              onChange={value => updateProp('width', value)}
             />
-
             <PreviewSlider
-              title="Background Opacity"
-              min={0}
-              max={1}
-              step={0.01}
-              value={backgroundOpacity}
-              onChange={val => updateProp('backgroundOpacity', val)}
-            />
-
-            <PreviewSlider
-              title="Saturation"
-              min={0}
-              max={3}
-              step={0.1}
-              value={saturation}
-              onChange={val => updateProp('saturation', val)}
-            />
-
-            <PreviewSlider
-              title="Border Width"
-              min={0}
-              max={0.2}
-              step={0.01}
-              value={borderWidth}
-              onChange={val => updateProp('borderWidth', val)}
-            />
-
-            <PreviewSlider
-              title="Brightness"
-              min={0}
-              max={100}
-              step={1}
-              value={brightness}
-              valueUnit="%"
-              onChange={val => updateProp('brightness', val)}
-            />
-
-            <PreviewSlider
-              title="Opacity"
-              min={0}
-              max={1}
-              step={0.01}
-              value={opacity}
-              onChange={val => updateProp('opacity', val)}
-            />
-
-            <PreviewSlider
-              title="Blur"
-              min={0}
-              max={30}
-              step={1}
-              value={blur}
+              title="Height"
+              min={48}
+              max={320}
+              step={2}
+              value={settings.height}
               valueUnit="px"
-              onChange={val => updateProp('blur', val)}
+              onChange={value => updateProp('height', value)}
             />
-
-            <PreviewSlider
-              title="Displace"
-              min={0}
-              max={5}
-              step={0.1}
-              value={displace}
-              onChange={val => updateProp('displace', val)}
-            />
-
+            {preset !== 'logo' && (
+              <PreviewSlider
+                title="Border Radius"
+                min={0}
+                max={160}
+                step={1}
+                value={settings.borderRadius}
+                valueUnit="px"
+                onChange={value => updateProp('borderRadius', value)}
+              />
+            )}
             <PreviewSlider
               title="Distortion Scale"
               min={-300}
               max={300}
               step={10}
-              value={distortionScale}
-              onChange={val => updateProp('distortionScale', val)}
+              value={settings.distortionScale}
+              onChange={value => updateProp('distortionScale', value)}
             />
-
+            <PreviewSlider
+              title="Border Width"
+              min={0}
+              max={0.3}
+              step={0.01}
+              value={settings.borderWidth}
+              onChange={value => updateProp('borderWidth', value)}
+            />
+            <PreviewSlider
+              title="Blur"
+              min={0}
+              max={30}
+              step={1}
+              value={settings.blur}
+              valueUnit="px"
+              onChange={value => updateProp('blur', value)}
+            />
+            <PreviewSlider
+              title="Brightness"
+              min={0}
+              max={100}
+              step={1}
+              value={settings.brightness}
+              valueUnit="%"
+              onChange={value => updateProp('brightness', value)}
+            />
+            <PreviewSlider
+              title="Opacity"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.opacity}
+              onChange={value => updateProp('opacity', value)}
+            />
+            <PreviewSlider
+              title="Displace"
+              min={0}
+              max={5}
+              step={0.1}
+              value={settings.displace}
+              onChange={value => updateProp('displace', value)}
+            />
             <PreviewSlider
               title="Red Offset"
               min={-50}
               max={50}
               step={1}
-              value={redOffset}
-              onChange={val => updateProp('redOffset', val)}
+              value={settings.redOffset}
+              onChange={value => updateProp('redOffset', value)}
             />
-
             <PreviewSlider
               title="Green Offset"
               min={-50}
               max={50}
               step={1}
-              value={greenOffset}
-              onChange={val => updateProp('greenOffset', val)}
+              value={settings.greenOffset}
+              onChange={value => updateProp('greenOffset', value)}
             />
-
             <PreviewSlider
               title="Blue Offset"
               min={-50}
               max={50}
               step={1}
-              value={blueOffset}
-              onChange={val => updateProp('blueOffset', val)}
+              value={settings.blueOffset}
+              onChange={value => updateProp('blueOffset', value)}
+            />
+            <PreviewSlider
+              title="Background Opacity"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.backgroundOpacity}
+              onChange={value => updateProp('backgroundOpacity', value)}
+            />
+            <PreviewSlider
+              title="Saturation"
+              min={0}
+              max={3}
+              step={0.1}
+              value={settings.saturation}
+              onChange={value => updateProp('saturation', value)}
             />
           </Customize>
 

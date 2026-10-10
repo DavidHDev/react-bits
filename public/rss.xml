@@ -5,8 +5,80 @@
     <link>https://reactbits.dev/get-started/changelog</link>
     <description>Keep up with the newest additions to React Bits.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://reactbits.dev/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Updated: Glass Surface</title>
+      <link>https://reactbits.dev/components/glass-surface</link>
+      <guid isPermaLink="false">reactbits:Components/GlassSurface@2026-10-10</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Turn any SVG logo into glass, with a polished frosted look in Safari and Firefox. The new demo glass follows your cursor and can be dragged.</description>
+    </item>
+    <item>
+      <title>Updated: Pixel Snow</title>
+      <link>https://reactbits.dev/backgrounds/pixel-snow</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/PixelSnow@2026-10-10</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with crisp pixel-art flakes in layers of depth, a soft glow, wind and cursor play, snow that can pile up, and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Plasma</title>
+      <link>https://reactbits.dev/backgrounds/plasma</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Plasma@2026-10-10</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as soft folds of satin light with bright highlights, a cursor that turns them in 3D and a new light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Plasma Wave</title>
+      <link>https://reactbits.dev/backgrounds/plasma-wave</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/PlasmaWave@2026-10-10</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Smoother, faster plasma with soft glow, white-hot cores and a cursor that stirs it, plus a new light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Radar</title>
+      <link>https://reactbits.dev/backgrounds/radar</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Radar@2026-10-10</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as a detailed radar scope with a glowing sweep, contacts that ping and fade, a sonar mode and a tilted floor view.</description>
+    </item>
+    <item>
+      <title>Updated: Specular Button</title>
+      <link>https://reactbits.dev/components/specular-button</link>
+      <guid isPermaLink="false">reactbits:Components/SpecularButton@2026-10-10</guid>
+      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with a crisp glass edge whose light glides around the rim toward the cursor, rests softly when idle and flashes on press.</description>
+    </item>
+    <item>
+      <title>Updated: Acid Squares</title>
+      <link>https://reactbits.dev/backgrounds/acid-squares</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/AcidSquares@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Crisp glass edges, travelling rings of light and twinkling squares, plus a clean light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Carousel</title>
+      <link>https://reactbits.dev/components/carousel</link>
+      <guid isPermaLink="false">reactbits:Components/Carousel@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with momentum swiping, five transitions, photo cards, an autoplay timer and a cleaner frame in both themes.</description>
+    </item>
+    <item>
+      <title>Updated: Elastic Mesh</title>
+      <link>https://reactbits.dev/animations/elastic-mesh</link>
+      <guid isPermaLink="false">reactbits:Animations/ElasticMesh@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as inflated, squishy type and logos that dent, stretch and snap back with a jiggle.</description>
+    </item>
     <item>
       <title>Updated: Flying Posters</title>
       <link>https://reactbits.dev/components/flying-posters</link>
@@ -14,6 +86,38 @@
       <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
       <category>Components</category>
       <description>Rebuilt so it only scrolls when you use it, with optional columns and a camera you can pull back or push in.</description>
+    </item>
+    <item>
+      <title>Updated: Ghost Fibers</title>
+      <link>https://reactbits.dev/backgrounds/ghost-fibers</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/GhostFibers@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Sharper fibers with crisp cores and a cleaner glow, plus a light mode that matches the dark one.</description>
+    </item>
+    <item>
+      <title>Updated: Glass Icons</title>
+      <link>https://reactbits.dev/components/glass-icons</link>
+      <guid isPermaLink="false">reactbits:Components/GlassIcons@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with real liquid glass that bends light at its edges, a smooth entrance, new card styles and presets.</description>
+    </item>
+    <item>
+      <title>Updated: Glow Cursor</title>
+      <link>https://reactbits.dev/animations/glow-cursor</link>
+      <guid isPermaLink="false">reactbits:Animations/GlowCursor@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as light that pours from the cursor and drifts softly as it fades, with a burst on click and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Halftone Reveal</title>
+      <link>https://reactbits.dev/animations/halftone-reveal</link>
+      <guid isPermaLink="false">reactbits:Animations/HalftoneReveal@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as a print on the page in mono, duotone or full color, with dots that swell into the photo.</description>
     </item>
     <item>
       <title>Updated: Infinite Menu</title>
@@ -24,12 +128,44 @@
       <description>Rebuilt to be lighter, with more ways to shape the tiles, autoplay, keyboard support and click to select.</description>
     </item>
     <item>
+      <title>Updated: Iridescence</title>
+      <link>https://reactbits.dev/backgrounds/iridescence</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Iridescence@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with full control over color, folds and motion, a liquid stir under the cursor, a swirl on click and presets.</description>
+    </item>
+    <item>
+      <title>Updated: Laser Flow</title>
+      <link>https://reactbits.dev/animations/laser-flow</link>
+      <guid isPermaLink="false">reactbits:Animations/LaserFlow@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as a waterfall of light that lands on your content, pours over its corners and can reveal your UI around the cursor.</description>
+    </item>
+    <item>
       <title>Updated: Shape Blur</title>
       <link>https://reactbits.dev/animations/shape-blur</link>
       <guid isPermaLink="false">reactbits:Animations/ShapeBlur@2026-10-09</guid>
       <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
       <category>Animations</category>
       <description>Rebuilt as a real lens blur that follows the cursor. Use any SVG or PNG as the shape, or switch to focus mode.</description>
+    </item>
+    <item>
+      <title>Updated: Sliced Waves</title>
+      <link>https://reactbits.dev/backgrounds/sliced-waves</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/SlicedWaves@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as waves of light sliced into glowing bars, seen in depth with a focus that follows the cursor.</description>
+    </item>
+    <item>
+      <title>Updated: Threads</title>
+      <link>https://reactbits.dev/backgrounds/threads</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Threads@2026-10-09</guid>
+      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt to run several times faster, with presets, much more control over the threads and a cursor that parts them.</description>
     </item>
     <item>
       <title>New: Holo Card</title>

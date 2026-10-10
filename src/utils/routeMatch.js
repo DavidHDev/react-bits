@@ -1,4 +1,4 @@
-import { getComponentCatalog } from './catalog';
+import { getComponentCatalog } from './catalog.js';
 
 const catalog = getComponentCatalog();
 

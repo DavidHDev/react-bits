@@ -114,7 +114,8 @@ const NotFoundPage = () => {
   usePageSEO({
     title: 'Page not found - React Bits',
     description: 'This page does not exist. Browse free animated React components, backgrounds and micro-interactions.',
-    path: pathname
+    path: pathname,
+    robots: 'noindex, follow'
   });
 
   useEffect(() => {
@@ -133,14 +134,6 @@ const NotFoundPage = () => {
   useEffect(() => {
     const timeout = setTimeout(() => setEntering(false), 1900);
     return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    const robots = document.head.querySelector('meta[name="robots"]');
-    if (!robots) return undefined;
-    const previous = robots.getAttribute('content');
-    robots.setAttribute('content', 'noindex');
-    return () => robots.setAttribute('content', previous);
   }, []);
 
   useLayoutEffect(() => {
