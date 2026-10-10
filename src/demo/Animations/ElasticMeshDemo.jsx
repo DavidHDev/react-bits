@@ -1,132 +1,154 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Box, Text } from '@chakra-ui/react';
+
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
-
-import { Flex, Text } from '@chakra-ui/react';
-
 import CodeExample from '../../components/code/CodeExample';
-import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import Customize from '../../components/common/Preview/Customize';
-import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import PreviewSelect from '../../components/common/Preview/PreviewSelect';
-import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
-import useForceRerender from '../../hooks/useForceRerender';
-import useComponentProps from '../../hooks/useComponentProps';
+import PreviewInput from '../../components/common/Preview/PreviewInput';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PropTable from '../../components/common/Preview/PropTable';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import useComponentProps from '../../hooks/useComponentProps';
+import useForceRerender from '../../hooks/useForceRerender';
+import { useColorModeValue } from '../../components/setup/color-mode';
 
 import ElasticMesh from '../../content/Animations/ElasticMesh/ElasticMesh';
 import { elasticMesh } from '../../constants/code/Animations/elasticMeshCode';
+import logo from '../../assets/logos/react-bits-logo-small.svg';
+
+const BALLOON = {
+  material: 'balloon',
+  color: '#3b5bff',
+  inflate: 1,
+  stiffness: 0.5,
+  wobble: 0.6
+};
+
+const DEFAULT_PROPS = {
+  preset: 'balloon',
+  content: 'text',
+  text: 'Squish',
+  ...BALLOON,
+  grabRadius: 70,
+  stretch: 0.5,
+  press: 0.5,
+  shadow: 0.5,
+  intro: true
+};
+
+const PRESETS = {
+  balloon: BALLOON,
+  chrome: { ...BALLOON, material: 'chrome', color: '#ffffff', stiffness: 0.65, wobble: 0.5 },
+  jelly: { ...BALLOON, material: 'jelly', color: '#ff5a1f', stiffness: 0.35, wobble: 0.85 },
+  clay: { ...BALLOON, material: 'clay', color: '#ece6dc', inflate: 0.85, stiffness: 0.6, wobble: 0.35 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'balloon', label: 'Balloon' },
+  { value: 'chrome', label: 'Chrome' },
+  { value: 'jelly', label: 'Jelly' },
+  { value: 'clay', label: 'Clay' }
+];
+
+const CONTENT_OPTIONS = [
+  { value: 'text', label: 'Text' },
+  { value: 'logo', label: 'Logo' }
+];
+
+const MATERIAL_OPTIONS = [
+  { value: 'balloon', label: 'Balloon' },
+  { value: 'chrome', label: 'Chrome' },
+  { value: 'jelly', label: 'Jelly' },
+  { value: 'clay', label: 'Clay' }
+];
 
 const propData = [
+  { name: 'text', type: 'string', default: "'Squish'", description: 'Text to inflate. Use \\n for more lines.' },
   {
-    name: 'image',
+    name: 'src',
     type: 'string',
     default: "''",
-    description: 'Optional image URL to warp. When empty, a color gradient surface is rendered instead.'
+    description: 'URL of an SVG or PNG to inflate instead of text. Its transparent pixels define the shape.'
   },
-  { name: 'color1', type: 'string', default: '#5227FF', description: 'Top color of the gradient surface.' },
-  { name: 'color2', type: 'string', default: '#B19EEF', description: 'Bottom color of the gradient surface.' },
-  { name: 'showGrid', type: 'boolean', default: 'true', description: 'Draw the mesh lattice over the surface.' },
-  { name: 'gridDensity', type: 'number', default: '20', description: 'Number of lattice cells across the sheet.' },
-  { name: 'gridOpacity', type: 'number', default: '0.28', description: 'Opacity of the lattice lines.' },
-  { name: 'gridColor', type: 'string', default: '#ffffff', description: 'Color of the lattice lines.' },
   {
-    name: 'highlight',
+    name: 'fontFamily',
     type: 'string',
-    default: '#ffffff',
-    description: 'Specular highlight color used by the shading.'
+    default: "'system-ui, sans-serif'",
+    description: 'Font used for the text. Heavy, rounded faces inflate best.'
   },
-  { name: 'borderRadius', type: 'number', default: '25', description: 'Corner radius of the sheet in pixels.' },
+  { name: 'fontWeight', type: 'number', default: '900', description: 'Weight of the text.' },
+  { name: 'color', type: 'string', default: "'#3b5bff'", description: 'Base color of the material.' },
+  {
+    name: 'imageColors',
+    type: 'boolean',
+    default: 'true',
+    description: 'Keeps the colors of the image passed to src instead of using color.'
+  },
+  {
+    name: 'material',
+    type: "'balloon' | 'chrome' | 'jelly' | 'clay'",
+    default: "'balloon'",
+    description: 'Surface finish: glossy balloon, mirror chrome, glowing jelly or soft matte clay.'
+  },
+  { name: 'inflate', type: 'number', default: '1', description: 'How puffy the shape is. 1 gives round tubes.' },
   {
     name: 'stiffness',
     type: 'number',
-    default: '0.05',
-    description: 'How hard the mesh springs back to flat. Higher settles faster.'
+    default: '0.5',
+    description: 'How firm the material feels, from 0 for soft and stretchy to 1 for firm and quick.'
   },
   {
-    name: 'damping',
+    name: 'wobble',
     type: 'number',
-    default: '0.2',
-    description: 'How quickly wobbles die out. Higher damping settles faster with fewer oscillations.'
+    default: '0.6',
+    description: 'How long it jiggles after a poke or a pull, from 0 to 1.'
   },
   {
     name: 'grabRadius',
     type: 'number',
-    default: '0.6',
-    description: 'How much of the sheet the pointer grabs (fraction of the surface).'
+    default: '70',
+    description: 'Size of the area the cursor grabs and presses, in pixels.'
   },
-  { name: 'pull', type: 'number', default: '0.4', description: 'How far the surface stretches toward the pointer.' },
+  { name: 'stretch', type: 'number', default: '0.5', description: 'How far the material can be pulled, from 0 to 1.' },
+  { name: 'press', type: 'number', default: '0.5', description: 'Depth of the dent under the cursor and of a poke.' },
+  { name: 'shadow', type: 'number', default: '0.5', description: 'Strength of the soft drop shadow.' },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'Inflates the shape letter by letter on mount.' },
   {
-    name: 'wobble',
-    type: 'number',
-    default: '5',
-    description: 'Neighbor coupling — higher spreads the deformation into more visible ripples.'
+    name: 'theme',
+    type: "'dark' | 'light'",
+    default: "'dark'",
+    description: 'Lighting setup for dark or light pages.'
   },
-  { name: 'tilt', type: 'number', default: '14', description: 'Perspective tilt of the sheet in degrees.' },
-  {
-    name: 'shading',
-    type: 'number',
-    default: '0.5',
-    description: 'Fake lighting strength that gives the warp depth. Keep above 0 to read the deformation.'
-  },
-  { name: 'resolution', type: 'number', default: '25', description: 'Mesh grid density (nodes per side).' },
-  {
-    name: 'interaction',
-    type: '"hover" | "drag"',
-    default: '"hover"',
-    description: 'Whether the mesh reacts to hover or only while dragging.'
-  },
-  { name: 'enabled', type: 'boolean', default: 'true', description: 'Enables or disables the pointer interaction.' },
-  { name: 'className', type: 'string', default: "''", description: 'Additional class names for the container.' },
-  { name: 'style', type: 'object', default: '—', description: 'Inline styles for the container.' }
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
 ];
 
-const DEFAULT_PROPS = {
-  showImage: true,
-  color1: '#5227FF',
-  color2: '#B19EEF',
-  showGrid: true,
-  gridDensity: 20,
-  gridOpacity: 0.28,
-  gridColor: '#ffffff',
-  highlight: '#ffffff',
-  borderRadius: 25,
-  stiffness: 0.05,
-  damping: 0.2,
-  grabRadius: 0.6,
-  pull: 0.4,
-  wobble: 5,
-  tilt: 14,
-  shading: 0.5,
-  resolution: 25,
-  interaction: 'hover',
-  enabled: true
-};
-
 const ElasticMeshDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    showImage,
-    color1,
-    color2,
-    showGrid,
-    gridDensity,
-    gridOpacity,
-    gridColor,
-    highlight,
-    borderRadius,
-    stiffness,
-    damping,
-    grabRadius,
-    pull,
-    wobble,
-    tilt,
-    shading,
-    resolution,
-    interaction,
-    enabled
-  } = props;
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, content, text, ...settings } = props;
+  const theme = useColorModeValue('light', 'dark');
   const [key, forceRerender] = useForceRerender();
+  const [typed, setTyped] = useState(text);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setTyped(text), 350);
+    return () => clearTimeout(timer);
+  }, [text]);
+
+  const computedProps = useMemo(
+    () => (content === 'logo' ? { src: logo, imageColors: false } : { text: typed }),
+    [content, typed]
+  );
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], content, text, preset: value });
+  };
 
   return (
     <ComponentPropsProvider
@@ -134,182 +156,116 @@ const ElasticMeshDemo = () => {
       defaultProps={DEFAULT_PROPS}
       resetProps={resetProps}
       hasChanges={hasChanges}
-      demoOnlyProps={['showImage']}
-      computedProps={{ image: showImage ? 'https://picsum.photos/seed/elastic/900/600' : '' }}
+      demoOnlyProps={['preset', 'content', 'text']}
+      computedProps={computedProps}
     >
       <TabsLayout>
         <PreviewTab>
-          <Flex direction="column" position="relative" className="demo-container" h={460} p={6} overflow="hidden">
-            <ElasticMesh
-              key={key}
-              image={showImage ? 'https://picsum.photos/seed/elastic/900/600' : ''}
-              color1={color1}
-              color2={color2}
-              showGrid={showGrid}
-              gridDensity={gridDensity}
-              gridOpacity={gridOpacity}
-              gridColor={gridColor}
-              highlight={highlight}
-              borderRadius={borderRadius}
-              stiffness={stiffness}
-              damping={damping}
-              grabRadius={grabRadius}
-              pull={pull}
-              wobble={wobble}
-              tilt={tilt}
-              shading={shading}
-              resolution={resolution}
-              interaction={interaction}
-              enabled={enabled}
-            />
+          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
+            <RefreshButton onClick={forceRerender} />
+            <ElasticMesh key={key} {...settings} {...computedProps} theme={theme} />
             <Text
               position="absolute"
-              bottom={3}
-              left={0}
-              right={0}
-              textAlign="center"
+              bottom={5}
+              left="50%"
+              transform="translateX(-50%)"
               fontSize="sm"
-              className="demo-instruction"
+              color="var(--text-dimmed)"
+              userSelect="none"
+              pointerEvents="none"
+              whiteSpace="nowrap"
             >
-              {interaction === 'drag' ? 'Click and drag across the sheet.' : 'Move your cursor across the sheet.'}
+              Press, poke and pull
             </Text>
-          </Flex>
+          </Box>
 
           <Customize>
-            <PreviewSwitch title="Use Image" isChecked={showImage} onChange={val => updateProp('showImage', val)} />
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => updateProp('color2', val)} />
-            <PreviewColorPickerCustom
-              title="Grid Color"
-              color={gridColor}
-              onChange={val => updateProp('gridColor', val)}
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewSelect
+              title="Content"
+              options={CONTENT_OPTIONS}
+              value={content}
+              onChange={value => updateProp('content', value)}
             />
-            <PreviewSwitch title="Show Grid" isChecked={showGrid} onChange={val => updateProp('showGrid', val)} />
-            <PreviewSlider
-              title="Grid Density"
-              min={4}
-              max={40}
-              step={1}
-              value={gridDensity}
-              onChange={val => updateProp('gridDensity', val)}
+            <PreviewInput
+              title="Text"
+              value={text}
+              maxLength={24}
+              isDisabled={content !== 'text'}
+              onChange={value => updateProp('text', value)}
             />
-            <PreviewSlider
-              title="Grid Opacity"
-              min={0}
-              max={1}
-              step={0.01}
-              value={gridOpacity}
-              onChange={val => updateProp('gridOpacity', val)}
+            <PreviewSelect
+              title="Material"
+              options={MATERIAL_OPTIONS}
+              value={settings.material}
+              onChange={value => updateProp('material', value)}
             />
             <PreviewColorPickerCustom
-              title="Highlight"
-              color={highlight}
-              onChange={val => updateProp('highlight', val)}
+              title="Color"
+              color={settings.color}
+              onChange={value => updateProp('color', value)}
             />
-
+            <PreviewSlider
+              title="Inflate"
+              min={0.4}
+              max={1.6}
+              step={0.05}
+              value={settings.inflate}
+              onChange={value => updateProp('inflate', value)}
+            />
             <PreviewSlider
               title="Stiffness"
-              min={0.02}
-              max={0.15}
-              step={0.005}
-              value={stiffness}
-              onChange={val => updateProp('stiffness', val)}
-              width={200}
-            />
-            <PreviewSlider
-              title="Damping"
-              min={0.03}
-              max={0.25}
-              step={0.01}
-              value={damping}
-              onChange={val => updateProp('damping', val)}
-              width={200}
-            />
-            <PreviewSlider
-              title="Grab Radius"
-              min={0.15}
-              max={0.8}
-              step={0.01}
-              value={grabRadius}
-              onChange={val => updateProp('grabRadius', val)}
-              width={200}
-            />
-            <PreviewSlider
-              title="Pull"
               min={0}
               max={1}
-              step={0.02}
-              value={pull}
-              onChange={val => updateProp('pull', val)}
-              width={200}
+              step={0.05}
+              value={settings.stiffness}
+              onChange={value => updateProp('stiffness', value)}
             />
             <PreviewSlider
               title="Wobble"
               min={0}
-              max={8}
-              step={1}
-              value={wobble}
-              onChange={val => updateProp('wobble', val)}
-              width={200}
-            />
-
-            <PreviewSlider
-              title="Tilt"
-              min={0}
-              max={32}
-              step={1}
-              value={tilt}
-              valueUnit="°"
-              onChange={val => updateProp('tilt', val)}
-              width={200}
-            />
-            <PreviewSlider
-              title="Shading"
-              min={0}
-              max={1.5}
+              max={1}
               step={0.05}
-              value={shading}
-              onChange={val => updateProp('shading', val)}
-              width={200}
+              value={settings.wobble}
+              onChange={value => updateProp('wobble', value)}
             />
             <PreviewSlider
-              title="Border Radius"
-              min={0}
-              max={80}
-              step={1}
-              value={borderRadius}
+              title="Grab Radius"
+              min={30}
+              max={160}
+              step={5}
+              value={settings.grabRadius}
               valueUnit="px"
-              onChange={val => updateProp('borderRadius', val)}
-              width={200}
+              onChange={value => updateProp('grabRadius', value)}
             />
             <PreviewSlider
-              title="Resolution"
-              min={10}
-              max={36}
-              step={1}
-              value={resolution}
-              onChange={val => {
-                updateProp('resolution', val);
-                forceRerender();
-              }}
-              width={200}
+              title="Stretch"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.stretch}
+              onChange={value => updateProp('stretch', value)}
             />
-
-            <PreviewSelect
-              title="Interaction"
-              options={[
-                { label: 'Hover', value: 'hover' },
-                { label: 'Drag', value: 'drag' }
-              ]}
-              value={interaction}
-              onChange={val => updateProp('interaction', val)}
-              width={120}
+            <PreviewSlider
+              title="Press"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.press}
+              onChange={value => updateProp('press', value)}
             />
-            <PreviewSwitch title="Enabled" isChecked={enabled} onChange={val => updateProp('enabled', val)} />
+            <PreviewSlider
+              title="Shadow"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.shadow}
+              onChange={value => updateProp('shadow', value)}
+            />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

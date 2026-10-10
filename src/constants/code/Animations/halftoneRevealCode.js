@@ -5,18 +5,18 @@ import tsCode from '@ts-default/Animations/HalftoneReveal/HalftoneReveal.tsx?raw
 import tsTailwind from '@ts-tailwind/Animations/HalftoneReveal/HalftoneReveal.tsx?raw';
 
 export const halftoneReveal = {
-  dependencies: `ogl`,
   usage: `import HalftoneReveal from './HalftoneReveal';
 
-<div style={{ height: '500px', position: 'relative' }}>
+<div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <HalftoneReveal
-    src="https://picsum.photos/seed/halftone-reveal/1200/800"
-    inkColor="#141414"
-    paperColor="#f4efe4"
+    src="https://images.unsplash.com/photo-1693250707557-a846a014b321?q=80&w=1400&auto=format&fit=crop"
     mode="mono"
-    dotDensity={90}
-    angle={28}
-    revealRadius={0.28}
+    shape="dot"
+    cellSize={6}
+    angle={45}
+    inkColor="#120f17"
+    paperColor="#ffffff"
+    revealRadius={160}
   />
 </div>`,
   code,

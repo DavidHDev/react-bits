@@ -5,26 +5,24 @@ import tsCode from '@ts-default/Components/SpecularButton/SpecularButton.tsx?raw
 import tsTailwind from '@ts-tailwind/Components/SpecularButton/SpecularButton.tsx?raw';
 
 export const specularButton = {
-  dependencies: `ogl`,
   usage: `import SpecularButton from './SpecularButton';
 
 <SpecularButton
   size="lg"
   radius={18}
   tint="#ffffff"
-  tintOpacity={0}
-  blur={0}
+  tintOpacity={0.04}
   textColor="#f5f5f5"
   lineColor="#ffffff"
   baseColor="#525252"
   intensity={1}
+  idleIntensity={0.35}
   shineSize={10}
-  shineFade={40}
-  thickness={1}
-  speed={0.35}
+  shineFade={34}
+  thickness={1.2}
+  glow={1}
   followMouse
   proximity={250}
-  autoAnimate={false}
   onClick={() => console.log('clicked')}
 >
   Get Started

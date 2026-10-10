@@ -5,33 +5,20 @@ import tsCode from '@ts-default/Backgrounds/SlicedWaves/SlicedWaves.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/SlicedWaves/SlicedWaves.tsx?raw';
 
 export const slicedWaves = {
-  dependencies: `ogl`,
   usage: `import SlicedWaves from './SlicedWaves';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <SlicedWaves
-    color1="#FF9FFC"
-    color2="#5227FF"
-    color3="#B497CF"
-    columns={14}
-    rows={8}
-    barThickness={0.1}
-    speed={0.35}
-    travel={0.7}
-    waveSpread={0.9}
-    rowOffset={1.0}
-    softness={0.05}
-    glow={0}
-    brightness={1.0}
-    contrast={1.0}
-    opacity={0.5}
-    orientation="horizontal"
-    alternate={false}
+    color1="#ffd9a8"
+    color2="#ff5fa2"
+    color3="#5b8cff"
+    ribbons={3}
+    spacing={28}
+    perspective={0.45}
+    blur={0.6}
+    glow={1}
+    position={0.78}
     mouseInteraction={true}
-    mouseStrength={1}
-    mouseRadius={0.3}
-    grain={true}
-    grainIntensity={0.05}
   />
 </div>`,
   code,

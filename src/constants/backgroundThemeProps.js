@@ -2,15 +2,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   'aero-shards': {
     backgroundColor: '#ffffff'
   },
-  'acid-squares': {
-    lightMode: true,
-    color1: '#5b21b6',
-    color2: '#ec4899',
-    color3: '#06b6d4',
-    glow: 0.48,
-    exposure: 2250,
-    grainIntensity: 0.025
-  },
+  'acid-squares': { lightMode: true, color: '#ffffff', accentColor: '#8fd61f' },
   aurora: { lightMode: true, color1: '#6d28d9', color2: '#ec4899', color3: '#06b6d4', blend: 0.5 },
   balatro: { color1: '#dc2626', color2: '#1d4ed8', color3: '#e4e4e7' },
   ballpit: { colors: [0x7c3aed, 0x18181b, 0xa1a1aa] },
@@ -40,29 +32,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   galaxy: { lightMode: true, saturation: 0.3, hueShift: 265, glowIntensity: 0.18, backgroundColor: '#ffffff' },
   'gradient-blinds': { lightMode: true, color1: '#be185d', color2: '#5b21b6', noise: 0.28 },
   'gradient-waves': { horizonColor: '#5b21b6', waveColor: '#be185d', crestColor: '#18181b', grainIntensity: 0.025 },
-  'ghost-fibers': {
-    lightMode: true,
-    lineColor: '#2563eb',
-    glowColor: '#38bdf8',
-    speed: 0.55,
-    scale: 1,
-    rotationSpeed: 0.08,
-    layers: 8,
-    waveAmplitude: 0.12,
-    waveFrequency: 2.5,
-    waveSpeed: 0.7,
-    twist: 0.18,
-    lineFrequency: 4,
-    lineSpacing: 1.5,
-    lineSharpness: 7,
-    glowFalloff: 7,
-    glowIntensity: 1,
-    brightness: 1.8,
-    blueBoost: 1.15,
-    vignette: 0.65,
-    grain: 0,
-    dpr: 1.25
-  },
+  'ghost-fibers': { lightMode: true },
   grainient: {
     lightMode: true,
     color1: '#be185d',
@@ -157,14 +127,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   'shape-grid': { borderColor: '#d4d4d8', hoverColor: '#27272a' },
   'side-rays': { rayColor1: '#a16207', rayColor2: '#1d4ed8', intensity: 1.15, saturation: 1.1, blend: 0.55 },
   silk: { lightMode: true, color: '#5227FF', noiseIntensity: 1.35 },
-  'sliced-waves': {
-    lightMode: true,
-    color1: '#ec4899',
-    color2: '#6d28d9',
-    color3: '#06b6d4',
-    opacity: 0.9,
-    grainIntensity: 0.018
-  },
+  'sliced-waves': { lightMode: true, color1: '#ff9d4d', color2: '#ff2d78', color3: '#3060ff' },
   'soft-aurora': { lightMode: true, color1: '#6d28d9', color2: '#ec4899', brightness: 0.9 },
   threads: { color: '#52525b' },
   topography: {

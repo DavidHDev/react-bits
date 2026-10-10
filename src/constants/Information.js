@@ -161,12 +161,18 @@ export const componentMetadata = {
   },
   'Animations/GlowCursor': {
     videoUrl: '/assets/video/glowcursor.webm',
-    description: 'Shader-powered light trail that smoothly follows the pointer with customizable glow, color, taper and pulse.',
+    description: 'Light that pours from the cursor, drifts softly through the air and cools as it fades.',
     category: 'Animations',
     name: 'GlowCursor',
     docsUrl: 'https://reactbits.dev/animations/glow-cursor',
     tags: [],
-    added: '2026-08-26'
+    added: '2026-08-26',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt as light that pours from the cursor and drifts softly as it fades, with a burst on click and a light mode.'
+      }
+    ]
   },
   'Animations/GhostCursor': {
     videoUrl: '/assets/video/ghostcursor.webm',
@@ -1151,21 +1157,33 @@ export const componentMetadata = {
   },
   'Components/SpecularButton': {
     videoUrl: '/assets/video/specularbutton.webm',
-    description: 'Glass button with a shader-driven specular rim light that sweeps around the edge and follows the cursor.',
+    description: 'Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.',
     category: 'Components',
     name: 'SpecularButton',
     docsUrl: 'https://reactbits.dev/components/specular-button',
     tags: [],
-    added: '2026-07-14'
+    added: '2026-07-14',
+    updates: [
+      {
+        date: '2026-10-10',
+        note: 'Rebuilt with a crisp glass edge whose light glides around the rim toward the cursor, rests softly when idle and flashes on press.'
+      }
+    ]
   },
   'Animations/ElasticMesh': {
     videoUrl: '/assets/video/elasticmesh.webm',
-    description: 'Spring-mesh surface that stretches under the pointer and settles back with damped physics.',
+    description: 'Turns text or any logo into a puffy inflated shape you can press, poke and stretch like jelly.',
     category: 'Animations',
     name: 'ElasticMesh',
     docsUrl: 'https://reactbits.dev/animations/elastic-mesh',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt as inflated, squishy type and logos that dent, stretch and snap back with a jiggle.'
+      }
+    ]
   },
   'Animations/RippleDistortion': {
     videoUrl: '/assets/video/rippledistortion.webm',
@@ -1187,12 +1205,18 @@ export const componentMetadata = {
   },
   'Animations/HalftoneReveal': {
     videoUrl: '/assets/video/halftonereveal.webm',
-    description: 'Print-style halftone dot matrix that resolves into sharp content around the cursor.',
+    description: 'An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.',
     category: 'Animations',
     name: 'HalftoneReveal',
     docsUrl: 'https://reactbits.dev/animations/halftone-reveal',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt as a print on the page in mono, duotone or full color, with dots that swell into the photo.'
+      }
+    ]
   },
   'Animations/ScrollExpand': {
     videoUrl: '/assets/video/scrollexpand.webm',
@@ -1321,7 +1345,13 @@ export const componentMetadata = {
     name: 'GhostFibers',
     docsUrl: 'https://reactbits.dev/backgrounds/ghost-fibers',
     tags: [],
-    added: '2026-08-29'
+    added: '2026-08-29',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Sharper fibers with crisp cores and a cleaner glow, plus a light mode that matches the dark one.'
+      }
+    ]
   },
   'Backgrounds/Aurora': {
     videoUrl: '/assets/video/aurora.webm',
@@ -1505,21 +1535,33 @@ export const componentMetadata = {
   },
   'Backgrounds/SlicedWaves': {
     videoUrl: '/assets/video/slicedwaves.webm',
-    description: 'A grid of soft glowing bars rippling like a slatted equalizer.',
+    description: 'Waves of colored light sliced into glowing bars, seen in depth with a focus that follows the cursor.',
     category: 'Backgrounds',
     name: 'SlicedWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/sliced-waves',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Rebuilt as waves of light sliced into glowing bars, seen in depth with a focus that follows the cursor.'
+      }
+    ]
   },
   'Backgrounds/AcidSquares': {
     videoUrl: '/assets/video/acidsquares.webm',
-    description: 'A crystalline corridor of stacked squares receding into depth.',
+    description: 'A crystalline corridor of stacked squares with rings of light travelling toward you.',
     category: 'Backgrounds',
     name: 'AcidSquares',
     docsUrl: 'https://reactbits.dev/backgrounds/acid-squares',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-09',
+        note: 'Crisp glass edges, travelling rings of light and twinkling squares, plus a clean light mode.'
+      }
+    ]
   },
   'Backgrounds/Scanner': {
     videoUrl: '/assets/video/scanner.webm',

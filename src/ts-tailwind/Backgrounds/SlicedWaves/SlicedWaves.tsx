@@ -1,398 +1,698 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { Renderer, Program, Mesh, Triangle } from 'ogl';
+import { useEffect, useRef, type HTMLAttributes } from 'react';
 
-export type SlicedWavesOrientation = 'horizontal' | 'vertical';
-
-export interface SlicedWavesProps {
+export interface SlicedWavesProps extends HTMLAttributes<HTMLDivElement> {
   color1?: string;
   color2?: string;
   color3?: string;
-  columns?: number;
-  rows?: number;
-  barThickness?: number;
+  ribbons?: number;
+  spacing?: number;
+  barWidth?: number;
+  ribbonHeight?: number;
+  spread?: number;
+  amplitude?: number;
+  frequency?: number;
   speed?: number;
-  travel?: number;
-  waveSpread?: number;
-  rowOffset?: number;
-  softness?: number;
+  perspective?: number;
+  curve?: number;
+  blur?: number;
   glow?: number;
   brightness?: number;
-  contrast?: number;
-  opacity?: number;
-  orientation?: SlicedWavesOrientation;
-  alternate?: boolean;
+  position?: number;
+  rotation?: number;
+  slices?: number;
+  grain?: number;
   mouseInteraction?: boolean;
-  mouseStrength?: number;
-  mouseRadius?: number;
-  grain?: boolean;
-  grainIntensity?: number;
+  intro?: boolean;
+  fade?: number;
+  opacity?: number;
   lightMode?: boolean;
-  className?: string;
+  paused?: boolean;
+  dpr?: number;
 }
 
-const hexToRgb = (hex: string): [number, number, number] => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return [1, 1, 1];
-  return [parseInt(result[1], 16) / 255, parseInt(result[2], 16) / 255, parseInt(result[3], 16) / 255];
+type Settings = {
+  color1: string;
+  color2: string;
+  color3: string;
+  ribbons: number;
+  spacing: number;
+  barWidth: number;
+  ribbonHeight: number;
+  spread: number;
+  amplitude: number;
+  frequency: number;
+  speed: number;
+  perspective: number;
+  curve: number;
+  blur: number;
+  glow: number;
+  brightness: number;
+  position: number;
+  rotation: number;
+  slices: number;
+  grain: number;
+  mouseInteraction: boolean;
+  intro: boolean;
+  fade: number;
+  opacity: number;
+  lightMode: boolean;
+  paused: boolean;
+  dpr?: number;
 };
 
-const vertex = `#version 300 es
-in vec2 position;
-void main() {
-  gl_Position = vec4(position, 0.0, 1.0);
-}
-`;
+type Bar = { i: number; x: number; Z: number; sx: number; scale: number };
 
-const fragment = `#version 300 es
+type View = { bars: Bar[]; halfBar: number; centerScale: number };
+
+const BAR_VERTEX = `#version 300 es
+in vec2 aCorner;
+in vec4 aShape;
+in vec4 aTop;
+in vec4 aBottom;
+uniform vec2 uView;
+uniform float uAngle;
+out vec2 vLocal;
+out vec4 vShape;
+out vec4 vTop;
+out vec4 vBottom;
+void main() {
+  float halo = aShape.z + 5.0;
+  float reachX = aShape.z + max(aTop.w * 2.5, halo * 2.0);
+  float reachY = aShape.w + max(aTop.w * 2.5, halo * 2.0);
+  vec2 local = aCorner * vec2(reachX, reachY);
+  vLocal = local;
+  vShape = aShape;
+  vTop = aTop;
+  vBottom = aBottom;
+  float c = cos(uAngle);
+  float s = sin(uAngle);
+  vec2 p = aShape.xy + local - uView * 0.5;
+  p = vec2(c * p.x - s * p.y, s * p.x + c * p.y) + uView * 0.5;
+  gl_Position = vec4(p.x / uView.x * 2.0 - 1.0, 1.0 - p.y / uView.y * 2.0, 0.0, 1.0);
+}`;
+
+const BAR_FRAGMENT = `#version 300 es
 precision highp float;
-uniform vec2 iResolution;
-uniform float iTime;
-uniform float uColumns;
-uniform float uRows;
-uniform float uThickness;
-uniform float uSpeed;
-uniform float uTravel;
-uniform float uWaveSpread;
-uniform float uRowOffset;
-uniform float uSoftness;
+in vec2 vLocal;
+in vec4 vShape;
+in vec4 vTop;
+in vec4 vBottom;
 uniform float uGlow;
-uniform float uBrightness;
-uniform float uContrast;
-uniform float uOpacity;
-uniform float uVertical;
-uniform float uAlternate;
-uniform vec2 uMouse;
-uniform float uMouseStrength;
-uniform float uMouseRadius;
-uniform float uEnableMouse;
-uniform float uMouseActive;
-uniform float uGrain;
-uniform float uGrainIntensity;
-uniform float uLightMode;
-uniform vec3 uColor1;
-uniform vec3 uColor2;
-uniform vec3 uColor3;
-out vec4 fragColor;
+uniform float uSlices;
+uniform float uBase;
+uniform float uHalfBar;
+uniform float uScale;
+out vec4 outColor;
+
+float erfApprox(float x) {
+  float a = x * x;
+  float t = 1.0 - exp(-a * (1.2732395 + 0.147 * a) / (1.0 + 0.147 * a));
+  return sign(x) * sqrt(max(t, 0.0));
+}
+
+float box(float d, float h, float s) {
+  float k = 0.70710678 / max(s, 0.3);
+  return 0.5 * (erfApprox((h - d) * k) + erfApprox((h + d) * k));
+}
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / iResolution.xy;
-  vec2 grid = vec2(max(uColumns, 1.0), max(uRows, 1.0));
-  vec2 p = uv * grid;
-  vec2 gv = fract(p) - 0.5;
-  vec2 id = floor(p);
-
-  float barCoord, waveId, offId, along;
-  if (uVertical > 0.5) {
-    barCoord = gv.x; waveId = id.y; offId = id.x; along = uv.y;
-  } else {
-    barCoord = gv.y; waveId = id.x; offId = id.y; along = uv.x;
+  float blur = vTop.w;
+  float body = box(vLocal.x, vShape.z, blur) * box(vLocal.y, vShape.w, blur * 1.15);
+  float halo = vShape.z + 5.0;
+  float glow = box(vLocal.x, vShape.z, halo) * box(vLocal.y, vShape.w, halo);
+  float t = clamp(vLocal.y / max(vShape.w, 0.001) * 0.5 + 0.5, 0.0, 1.0);
+  vec3 color = mix(vTop.rgb, vBottom.rgb, t);
+  float v = clamp(vLocal.y / max(vShape.w, 0.001), -1.0, 1.0);
+  float core = exp(-pow(vLocal.x / max(vShape.z + blur * 0.5, 0.5), 2.0) * 1.5);
+  body *= (1.0 + 0.35 * core) * (1.0 - 0.35 * v * v * v * v);
+  if (uSlices > 0.0) {
+    float cell = vShape.z / max(uHalfBar, 0.00001) / uSlices;
+    float y = (uBase - vShape.y - vLocal.y) / max(cell, 0.001);
+    float f = 1.0 - abs(fract(y) - 0.5) * 2.0;
+    float soft = clamp(blur / max(cell, 0.001) * 1.6, 0.04, 1.0);
+    body *= smoothstep(0.28 - soft, 0.28 + soft, f);
   }
+  vec3 tint = color * color / max(max(color.r, max(color.g, color.b)), 0.05);
+  outColor = vec4((color * body + tint * uGlow * glow * 0.16) * vBottom.w * uScale, 1.0);
+}`;
 
-  float dir = 1.0;
-  if (uAlternate > 0.5 && mod(offId, 2.0) >= 1.0) dir = -1.0;
+const QUAD_VERTEX = `#version 300 es
+in vec2 aCorner;
+void main() {
+  gl_Position = vec4(aCorner, 0.0, 1.0);
+}`;
 
-  float phase = iTime * uSpeed + waveId * uWaveSpread + cos(offId * uRowOffset);
-  float mv = sin(phase) * 0.5 + 0.5;
-  if (dir < 0.0) mv = 1.0 - mv;
+const COMPOSITE = `#version 300 es
+precision highp float;
+uniform sampler2D uLight;
+uniform vec2 uResolution;
+uniform float uScale;
+uniform float uExposure;
+uniform float uGrain;
+uniform float uTime;
+uniform float uFade;
+uniform float uOpacity;
+uniform float uLightMode;
+out vec4 outColor;
 
-  float infl = 0.0;
-  if (uEnableMouse > 0.5) {
-    float md = distance(uv, uMouse);
-    infl = smoothstep(uMouseRadius, 0.0, md) * uMouseStrength * uMouseActive;
-  }
-
-  float thick = clamp(uThickness + infl * 0.25, 0.0, 1.0);
-  float startPos = (0.5 - thick * 0.5) * uTravel;
-  float endPos = (-0.5 + thick * 0.5) * uTravel;
-  float pos = mix(startPos, endPos, mv);
-
-  float aa = max(uSoftness, 0.0005);
-  float d = abs(barCoord + pos) - thick * 0.5;
-  float aaWidth = fwidth(uVertical > 0.5 ? p.x : p.y);
-  float edge = max(aa, aaWidth);
-  float mask = smoothstep(edge, -edge, d);
-  float glow = exp(-max(d, 0.0) * (7.0 / (uGlow + 0.001))) * clamp(uGlow, 0.0, 1.0);
-  float intensity = clamp(mask + glow * (1.0 - mask), 0.0, 1.0);
-
-  if (uGrain > 0.5) {
-    float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233)) + iTime) * 43758.5453);
-    intensity = clamp(intensity + (g - 0.5) * uGrainIntensity, 0.0, 1.0);
-  }
-
-  float tint = mv;
-  vec3 grad = mix(uColor2, uColor1, tint);
-  grad = mix(grad, uColor3, clamp(along, 0.0, 1.0) * 0.45);
-
-  vec3 col = grad * uBrightness * (1.0 + infl * 0.6);
-  col = (col - 0.5) * uContrast + 0.5;
-  col = clamp(col, 0.0, 1.0);
-
-  float a = intensity * uOpacity;
-  if (uLightMode > 0.5) {
-    float peak = max(col.r, max(col.g, col.b));
-    vec3 chroma = pow(clamp(col / max(peak, 0.0001), 0.0, 1.0), vec3(1.16));
-    fragColor = vec4(mix(vec3(1.0), chroma, a * 0.94), 1.0);
-  } else {
-    fragColor = vec4(col * a, a);
-  }
+float hash(vec2 p) {
+  p = fract(p * vec2(123.34, 456.21));
+  p += dot(p, p + 45.32);
+  return fract(p.x * p.y);
 }
-`;
 
-type SlicedWavesCtx = {
-  renderer: InstanceType<typeof Renderer>;
-  program: InstanceType<typeof Program>;
-  mesh: InstanceType<typeof Mesh>;
+float smootherstep(float edge, float x) {
+  float t = clamp(x / max(edge, 0.0001), 0.0, 1.0);
+  return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+}
+
+void main() {
+  vec3 hdr = texelFetch(uLight, ivec2(gl_FragCoord.xy), 0).rgb / uScale * uExposure;
+  vec2 uv = gl_FragCoord.xy / uResolution;
+  float edge = uFade * 0.5;
+  float mask = smootherstep(edge, uv.x) * smootherstep(edge, 1.0 - uv.x) * smootherstep(edge, uv.y) * smootherstep(edge, 1.0 - uv.y);
+  mask *= uOpacity;
+  float grain = (hash(gl_FragCoord.xy + fract(uTime * 7.31) * 113.0) - 0.5) * uGrain;
+  float peak = max(hdr.r, max(hdr.g, hdr.b));
+  if (uLightMode > 0.5) {
+    vec3 hue = hdr / max(peak, 0.0001);
+    float tone = dot(hue, vec3(0.2126, 0.7152, 0.0722));
+    vec3 color = pow(clamp(hue * min(1.0, 0.66 / max(tone, 0.001)), 0.0, 1.0), vec3(1.0 / 2.2));
+    float alpha = clamp((1.0 - exp(-peak * 1.1)) * 0.85 * (1.0 + grain), 0.0, 1.0) * mask;
+    outColor = vec4(color * alpha, alpha);
+  } else {
+    vec3 mapped = 1.0 - exp(-hdr);
+    mapped = mix(mapped, vec3(1.0), smoothstep(1.1, 3.2, peak) * 0.75);
+    float level = max(mapped.r, max(mapped.g, mapped.b));
+    mapped = clamp(mapped + grain * (0.25 + level), 0.0, 1.0) * mask;
+    outColor = vec4(mapped, max(mapped.r, max(mapped.g, mapped.b)));
+  }
+}`;
+
+const TAU = Math.PI * 2;
+const MAX_RIBBONS = 6;
+const FOCAL = 1.1;
+const DISTANCE = 2.6;
+const INTRO_SECONDS = 1.5;
+const MAX_RENDER_DIM = 2560;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const hash = (n: number) => {
+  const v = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return v - Math.floor(v);
 };
-const ctxMap = new WeakMap<HTMLDivElement, SlicedWavesCtx>();
 
-const SlicedWaves: React.FC<SlicedWavesProps> = ({
-  color1 = '#FF9FFC',
-  color2 = '#5227FF',
-  color3 = '#B497CF',
-  columns = 14,
-  rows = 8,
-  barThickness = 0.1,
-  speed = 0.35,
-  travel = 0.7,
-  waveSpread = 0.9,
-  rowOffset = 1.0,
-  softness = 0.05,
-  glow = 0,
-  brightness = 1.0,
-  contrast = 1.0,
-  opacity = 0.5,
-  orientation = 'horizontal',
-  alternate = false,
+const noise = (x: number) => {
+  const i = Math.floor(x);
+  const f = x - i;
+  const u = f * f * (3 - 2 * f);
+  return hash(i) * (1 - u) + hash(i + 1) * u;
+};
+
+const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
+  gl.deleteShader(shader);
+  return null;
+};
+
+const link = (gl: WebGL2RenderingContext, vertexSource: string, fragmentSource: string, attributes: string[]) => {
+  const vertex = compile(gl, gl.VERTEX_SHADER, vertexSource);
+  const fragment = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
+  const program = gl.createProgram();
+  if (!vertex || !fragment || !program) return null;
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  attributes.forEach((name, index) => gl.bindAttribLocation(program, index, name));
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(fragment);
+  if (gl.getProgramParameter(program, gl.LINK_STATUS)) return program;
+  gl.deleteProgram(program);
+  return null;
+};
+
+const locate = (gl: WebGL2RenderingContext, program: WebGLProgram, names: string[]) => {
+  const result: Record<string, WebGLUniformLocation | null> = {};
+  for (const name of names) result[name] = gl.getUniformLocation(program, name);
+  return result;
+};
+
+const SlicedWaves = ({
+  color1 = '#ffd9a8',
+  color2 = '#ff5fa2',
+  color3 = '#5b8cff',
+  ribbons = 3,
+  spacing = 28,
+  barWidth = 0.5,
+  ribbonHeight = 0.26,
+  spread = 0.1,
+  amplitude = 0.1,
+  frequency = 1,
+  speed = 1,
+  perspective = 0.45,
+  curve = 0.5,
+  blur = 0.6,
+  glow = 1,
+  brightness = 1.25,
+  position = 0.78,
+  rotation = 0,
+  slices = 0,
+  grain = 0.08,
   mouseInteraction = true,
-  mouseStrength = 1,
-  mouseRadius = 0.3,
-  grain = true,
-  grainIntensity = 0.05,
+  intro = true,
+  fade = 0,
+  opacity = 1,
   lightMode = false,
-  className = ''
-}) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  paused = false,
+  dpr,
+  className = '',
+  ...rest
+}: SlicedWavesProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const wakeRef = useRef<(() => void) | null>(null);
+  const settings: Settings = {
+    color1: String(color1),
+    color2: String(color2),
+    color3: String(color3),
+    ribbons: Math.round(clamp(ribbons, 1, MAX_RIBBONS)),
+    spacing: clamp(spacing, 4, 200),
+    barWidth: clamp(barWidth, 0.05, 1),
+    ribbonHeight: Math.max(0, ribbonHeight),
+    spread: Math.max(0, spread),
+    amplitude: Math.max(0, amplitude),
+    frequency: Math.max(0, frequency),
+    speed,
+    perspective: clamp(perspective, 0, 1),
+    curve: clamp(curve, 0, 1),
+    blur: clamp(blur, 0, 2),
+    glow: Math.max(0, glow),
+    brightness: Math.max(0, brightness),
+    position: clamp(position, 0, 1),
+    rotation,
+    slices: Math.max(0, Math.round(slices)),
+    grain: Math.max(0, grain),
+    mouseInteraction,
+    intro,
+    fade: clamp(fade, 0, 1),
+    opacity: clamp(opacity, 0, 1),
+    lightMode,
+    paused,
+    dpr
+  };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
-
-    const renderer = new Renderer({
-      webgl: 2,
+    const canvas = canvasRef.current;
+    const gl = canvas?.getContext('webgl2', {
       alpha: true,
       premultipliedAlpha: true,
       antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
+      depth: false,
+      stencil: false
     });
+    if (!container || !canvas || !gl) return undefined;
 
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 0);
-    const canvas = gl.canvas as HTMLCanvasElement;
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.display = 'block';
-    container.appendChild(canvas);
+    const floatTarget = !!gl.getExtension('EXT_color_buffer_float');
+    const lightScale = floatTarget ? 1 : 0.25;
+    const barProgram = link(gl, BAR_VERTEX, BAR_FRAGMENT, ['aCorner', 'aShape', 'aTop', 'aBottom']);
+    const compositeProgram = link(gl, QUAD_VERTEX, COMPOSITE, ['aCorner']);
+    if (!barProgram || !compositeProgram) return undefined;
+    const bar = locate(gl, barProgram, ['uView', 'uAngle', 'uGlow', 'uSlices', 'uBase', 'uHalfBar', 'uScale']);
+    const composite = locate(gl, compositeProgram, [
+      'uLight',
+      'uResolution',
+      'uScale',
+      'uExposure',
+      'uGrain',
+      'uTime',
+      'uFade',
+      'uOpacity',
+      'uLightMode'
+    ]);
 
-    const geometry = new Triangle(gl);
-    const program = new Program(gl, {
-      vertex,
-      fragment,
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new Float32Array([1, 1]) },
-        uColumns: { value: 14 },
-        uRows: { value: 8 },
-        uThickness: { value: 0.1 },
-        uSpeed: { value: 0.35 },
-        uTravel: { value: 0.7 },
-        uWaveSpread: { value: 0.9 },
-        uRowOffset: { value: 1.0 },
-        uSoftness: { value: 0.05 },
-        uGlow: { value: 0 },
-        uBrightness: { value: 1.0 },
-        uContrast: { value: 1.0 },
-        uOpacity: { value: 0.5 },
-        uVertical: { value: 0.0 },
-        uAlternate: { value: 0.0 },
-        uMouse: { value: new Float32Array([0.5, 0.5]) },
-        uMouseStrength: { value: 1 },
-        uMouseRadius: { value: 0.3 },
-        uEnableMouse: { value: 1.0 },
-        uMouseActive: { value: 0.0 },
-        uGrain: { value: 1.0 },
-        uGrainIntensity: { value: 0.05 },
-        uLightMode: { value: 0.0 },
-        uColor1: { value: new Float32Array([1, 1, 1]) },
-        uColor2: { value: new Float32Array([1, 1, 1]) },
-        uColor3: { value: new Float32Array([1, 1, 1]) }
-      }
-    });
+    const cornerBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, cornerBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const instanceBuffer = gl.createBuffer();
+    const barVao = gl.createVertexArray();
+    gl.bindVertexArray(barVao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, cornerBuffer);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+    for (let attribute = 1; attribute <= 3; attribute++) {
+      gl.enableVertexAttribArray(attribute);
+      gl.vertexAttribPointer(attribute, 4, gl.FLOAT, false, 48, (attribute - 1) * 16);
+      gl.vertexAttribDivisor(attribute, 1);
+    }
+    const quadBuffer = gl.createBuffer();
+    const quadVao = gl.createVertexArray();
+    gl.bindVertexArray(quadVao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.bindVertexArray(null);
 
-    const mesh = new Mesh(gl, { geometry, program });
-    ctxMap.set(container, { renderer, program, mesh });
+    const lightTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, lightTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    const framebuffer = gl.createFramebuffer();
 
-    const setSize = () => {
-      const rect = container.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
-      renderer.setSize(w, h);
-      const res = program.uniforms.iResolution.value as Float32Array;
-      res[0] = gl.drawingBufferWidth;
-      res[1] = gl.drawingBufferHeight;
-      renderer.render({ scene: mesh });
+    const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const colorCache = new Map<string, number[]>();
+    let instances = new Float32Array(0);
+    const pointer = { x: 0, y: 0, inside: false };
+    const state = {
+      width: 1,
+      height: 1,
+      targetWidth: 0,
+      targetHeight: 0,
+      time: 0,
+      intro: settingsRef.current.intro && !reduce ? 0 : 1,
+      focus: DISTANCE,
+      focusVelocity: 0,
+      lift: 0,
+      liftX: 0
     };
-
-    const ro = new ResizeObserver(setSize);
-    ro.observe(container);
-    setSize();
-
-    let currentMouse: [number, number] = [0.5, 0.5];
-    let targetMouse: [number, number] = [0.5, 0.5];
-    let currentActive = 0;
-    let targetActive = 0;
-
-    const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      targetMouse = [(e.clientX - rect.left) / rect.width, 1.0 - (e.clientY - rect.top) / rect.height];
-      targetActive = 1;
-    };
-    const onMouseLeave = () => {
-      targetActive = 0;
-    };
-    canvas.addEventListener('mousemove', onMouseMove);
-    canvas.addEventListener('mouseleave', onMouseLeave);
-
     let raf = 0;
-    let isVisible = true;
-    let isPageVisible = !document.hidden;
-    const t0 = performance.now();
+    let last = 0;
+    let visible = true;
+    let alive = true;
 
-    const loop = (t: number) => {
-      program.uniforms.iTime.value = (t - t0) * 0.001;
-      currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
-      currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
-      const m = program.uniforms.uMouse.value as Float32Array;
-      m[0] = currentMouse[0];
-      m[1] = currentMouse[1];
-      currentActive += 0.05 * (targetActive - currentActive);
-      program.uniforms.uMouseActive.value = currentActive;
-      renderer.render({ scene: mesh });
-      raf = requestAnimationFrame(loop);
-    };
-
-    const tryStart = () => {
-      if (isVisible && isPageVisible && raf === 0) raf = requestAnimationFrame(loop);
-    };
-    const tryStop = () => {
-      if (raf !== 0) {
-        cancelAnimationFrame(raf);
-        raf = 0;
+    const toLinear = (value: string): number[] => {
+      const cached = colorCache.get(value);
+      if (cached) return cached;
+      let rgb = [1, 1, 1];
+      if (probe && value) {
+        probe.clearRect(0, 0, 1, 1);
+        probe.fillStyle = '#000000';
+        probe.fillStyle = /^[0-9a-f]{3,8}$/i.test(value) ? `#${value}` : value;
+        probe.fillRect(0, 0, 1, 1);
+        const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+        rgb = [r, g, b].map(v => Math.pow(v / 255, 2.2));
       }
+      colorCache.set(value, rgb);
+      return rgb;
     };
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-        isVisible ? tryStart() : tryStop();
-      },
-      { threshold: 0 }
-    );
-    io.observe(container);
+    const writePalette = (palette: number[][], x: number, offset: number) => {
+      const n = palette.length;
+      const f = ((x % n) + n) % n;
+      const i = Math.floor(f);
+      let m = f - i;
+      m = m * m * (3 - 2 * m);
+      const a = palette[i];
+      const b = palette[(i + 1) % n];
+      for (let c = 0; c < 3; c++) instances[offset + c] = a[c] + (b[c] - a[c]) * m;
+    };
+
+    const ensureTarget = () => {
+      if (state.targetWidth === canvas.width && state.targetHeight === canvas.height) return;
+      state.targetWidth = canvas.width;
+      state.targetHeight = canvas.height;
+      gl.bindTexture(gl.TEXTURE_2D, lightTexture);
+      if (floatTarget) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, canvas.width, canvas.height, 0, gl.RGBA, gl.HALF_FLOAT, null);
+      } else {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, canvas.width, canvas.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, lightTexture, 0);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    };
+
+    const layout = (s: Settings): View => {
+      const { width: w, height: h } = state;
+      const F = h * FOCAL;
+      const centerScale = F / DISTANCE;
+      const pitch = s.spacing / centerScale;
+      const halfBar = pitch * s.barWidth * 0.5;
+      const yaw = s.perspective * 0.66;
+      const cosYaw = Math.cos(yaw);
+      const sinYaw = Math.sin(yaw);
+      const bend = s.curve * 0.6;
+      const angle = (s.rotation * Math.PI) / 180;
+      const span = Math.abs(Math.cos(angle)) * w * 0.5 + Math.abs(Math.sin(angle)) * h * 0.5;
+      const reach = Math.ceil(((Math.max(w, h) / F) * DISTANCE * 2.4) / pitch);
+      const bars: Bar[] = [];
+      for (let i = -reach; i <= reach; i++) {
+        const x = i * pitch;
+        const local = bend * Math.sin(x * 0.9 + 0.8);
+        const X = x * cosYaw - local * sinYaw;
+        const Z = x * sinYaw + local * cosYaw + DISTANCE;
+        if (Z < 0.45) continue;
+        const scale = F / Z;
+        const sx = w * 0.5 + X * scale;
+        if (Math.abs(sx - w * 0.5) > span + halfBar * scale + 80) continue;
+        bars.push({ i, x, Z, sx, scale });
+      }
+      return { bars, halfBar, centerScale };
+    };
+
+    const build = (s: Settings, view: View) => {
+      const { width: w, height: h } = state;
+      const { bars, halfBar, centerScale } = view;
+      const palette = [s.color1, s.color2, s.color3].map(toLinear);
+      const t = state.time;
+      const thickness = (s.ribbonHeight * h * 0.5) / centerScale;
+      const separation = (s.spread * h) / centerScale;
+      const amplitude = (s.amplitude * h) / centerScale;
+      const frequency = 0.22 * s.frequency;
+      const base = h * s.position;
+      const focus = state.focus;
+      const blurScale = s.blur * 16;
+      const sweep = 1.6 + 0.04 * (s.ribbons - 1);
+      const needed = bars.length * s.ribbons * 12;
+      if (needed > instances.length) instances = new Float32Array(needed + 1200);
+      let count = 0;
+      for (const b of bars) {
+        const hw = halfBar * b.scale;
+        const across = b.sx / Math.max(w, 1);
+        const lift = state.lift * Math.exp(-Math.pow((b.sx - state.liftX) / Math.max(w * 0.12, 60), 2));
+        const blurPx = (0.5 + s.blur * 0.6 + blurScale * Math.abs(focus / b.Z - 1)) * (s.lightMode ? 0.55 : 1);
+        for (let r = 0; r < s.ribbons; r++) {
+          const offset = (r - (s.ribbons - 1) / 2) * separation;
+          const wave =
+            0.62 * Math.sin(TAU * frequency * b.x - t * 1.6 + r * 2.1) +
+            0.38 * Math.sin(TAU * frequency * 1.9 * b.x + t * 2.25 + r * 1.3);
+          const yc = offset + wave * amplitude;
+          const swell = 0.5 + 0.5 * Math.sin(TAU * frequency * 0.7 * b.x + t * 1.1 + r * 2.7);
+          const grow = clamp((state.intro * sweep - across - r * 0.04) / 0.6, 0, 1);
+          const eased = grow * grow * (3 - 2 * grow);
+          const th = thickness * (0.6 + 0.4 * swell) * eased;
+          const hh = th * b.scale;
+          if (hh < 0.4) continue;
+          const tone = r * 1.15 + b.x * 0.3 + t * 0.12;
+          const o = count * 12;
+          instances[o] = b.sx;
+          instances[o + 1] = base - yc * b.scale;
+          instances[o + 2] = hw;
+          instances[o + 3] = hh;
+          writePalette(palette, tone - 0.22, o + 4);
+          instances[o + 7] = blurPx;
+          writePalette(palette, tone + 0.22, o + 8);
+          instances[o + 11] =
+            (0.75 + 0.25 * noise(b.i * 0.9 + r * 7.7 - t * 1.2)) * (1 + lift * 0.6) * (0.4 + 0.6 * eased);
+          count++;
+        }
+      }
+      return { count, halfBar, base };
+    };
+
+    const render = (s: Settings, view: View = layout(s)) => {
+      ensureTarget();
+      const { count, halfBar, base } = build(s, view);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      if (count > 0) {
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE);
+        gl.useProgram(barProgram);
+        gl.uniform2f(bar.uView, state.width, state.height);
+        gl.uniform1f(bar.uAngle, (s.rotation * Math.PI) / 180);
+        gl.uniform1f(bar.uGlow, s.lightMode ? s.glow * 0.4 : s.glow);
+        gl.uniform1f(bar.uSlices, s.slices);
+        gl.uniform1f(bar.uBase, base);
+        gl.uniform1f(bar.uHalfBar, halfBar);
+        gl.uniform1f(bar.uScale, lightScale);
+        gl.bindVertexArray(barVao);
+        gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, instances.subarray(0, count * 12), gl.DYNAMIC_DRAW);
+        gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, count);
+        gl.disable(gl.BLEND);
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.useProgram(compositeProgram);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, lightTexture);
+      gl.uniform1i(composite.uLight, 0);
+      gl.uniform2f(composite.uResolution, canvas.width, canvas.height);
+      gl.uniform1f(composite.uScale, lightScale);
+      gl.uniform1f(composite.uExposure, 1.6 * s.brightness);
+      gl.uniform1f(composite.uGrain, s.grain);
+      gl.uniform1f(composite.uTime, state.time % 1000);
+      gl.uniform1f(composite.uFade, s.fade);
+      gl.uniform1f(composite.uOpacity, s.opacity);
+      gl.uniform1f(composite.uLightMode, s.lightMode ? 1 : 0);
+      gl.bindVertexArray(quadVao);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.bindVertexArray(null);
+    };
+
+    const focusTarget = (view: View, x: number) => {
+      let best: Bar | null = null;
+      for (const b of view.bars) {
+        if (!best || Math.abs(b.sx - x) < Math.abs(best.sx - x)) best = b;
+      }
+      return best ? best.Z : DISTANCE;
+    };
+
+    const frame = (now: number) => {
+      raf = 0;
+      if (!alive || !visible || document.hidden) return;
+      const s = settingsRef.current;
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+      last = now;
+      const moving = !s.paused && !reduce;
+      if (moving) state.time += dt * s.speed;
+      if (!s.intro || reduce) state.intro = 1;
+      else if (state.intro < 1) state.intro = Math.min(1, state.intro + dt / INTRO_SECONDS);
+
+      const engaged = s.mouseInteraction && pointer.inside && !reduce;
+      const angle = (s.rotation * Math.PI) / 180;
+      const localX =
+        Math.cos(angle) * (pointer.x - state.width * 0.5) +
+        Math.sin(angle) * (pointer.y - state.height * 0.5) +
+        state.width * 0.5;
+      const view = layout(s);
+      const target = engaged ? focusTarget(view, localX) : DISTANCE;
+      state.focusVelocity += (36 * (target - state.focus) - 11 * state.focusVelocity) * dt;
+      state.focus += state.focusVelocity * dt;
+      state.lift += ((engaged ? 1 : 0) - state.lift) * (1 - Math.exp(-dt / (engaged ? 0.25 : 0.6)));
+      state.liftX += (localX - state.liftX) * (1 - Math.exp(-dt / 0.12));
+
+      render(s, view);
+      const settling =
+        state.intro < 1 ||
+        Math.abs(target - state.focus) > 0.001 ||
+        Math.abs(state.focusVelocity) > 0.001 ||
+        state.lift > 0.002 ||
+        engaged;
+      if (moving || settling) raf = requestAnimationFrame(frame);
+      else last = 0;
+    };
+
+    const wake = () => {
+      if (!raf && alive && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    };
+
+    const resize = () => {
+      const s = settingsRef.current;
+      const width = Math.max(1, container.clientWidth);
+      const height = Math.max(1, container.clientHeight);
+      const base = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      const longest = Math.max(width, height) * base;
+      const ratio = longest > MAX_RENDER_DIM ? (base * MAX_RENDER_DIM) / longest : base;
+      state.width = width;
+      state.height = height;
+      canvas.width = Math.max(1, Math.round(width * ratio));
+      canvas.height = Math.max(1, Math.round(height * ratio));
+      if (!raf) render(s);
+      wake();
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = container.getBoundingClientRect();
+      pointer.x = event.clientX - rect.left;
+      pointer.y = event.clientY - rect.top;
+      pointer.inside = pointer.x >= 0 && pointer.y >= 0 && pointer.x <= rect.width && pointer.y <= rect.height;
+      wake();
+    };
+
+    const onPointerLeave = () => {
+      pointer.inside = false;
+      wake();
+    };
 
     const onVisibility = () => {
-      isPageVisible = !document.hidden;
-      isPageVisible ? tryStart() : tryStop();
+      last = 0;
+      wake();
     };
-    document.addEventListener('visibilitychange', onVisibility);
 
-    tryStart();
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
+    const intersection = new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) {
+        last = 0;
+        wake();
+      }
+    });
+    intersection.observe(container);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onPointerLeave);
+    document.addEventListener('visibilitychange', onVisibility);
+    resize();
+
+    wakeRef.current = () => {
+      if (!raf) render(settingsRef.current);
+      wake();
+    };
 
     return () => {
-      tryStop();
-      ro.disconnect();
-      io.disconnect();
+      alive = false;
+      cancelAnimationFrame(raf);
+      wakeRef.current = null;
+      resizeObserver.disconnect();
+      intersection.disconnect();
+      window.removeEventListener('pointermove', onPointerMove);
+      document.documentElement.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
-      canvas.removeEventListener('mousemove', onMouseMove);
-      canvas.removeEventListener('mouseleave', onMouseLeave);
-      ctxMap.delete(container);
-      try {
-        container.removeChild(canvas);
-      } catch {}
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      gl.deleteFramebuffer(framebuffer);
+      gl.deleteTexture(lightTexture);
+      gl.deleteBuffer(cornerBuffer);
+      gl.deleteBuffer(instanceBuffer);
+      gl.deleteBuffer(quadBuffer);
+      gl.deleteVertexArray(barVao);
+      gl.deleteVertexArray(quadVao);
+      gl.deleteProgram(barProgram);
+      gl.deleteProgram(compositeProgram);
     };
   }, []);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const ctx = ctxMap.get(container);
-    if (!ctx) return;
-    const u = ctx.program.uniforms;
+    wakeRef.current?.();
+  });
 
-    u.uColumns.value = Math.max(1, Math.round(columns));
-    u.uRows.value = Math.max(1, Math.round(rows));
-    u.uThickness.value = barThickness;
-    u.uSpeed.value = speed;
-    u.uTravel.value = travel;
-    u.uWaveSpread.value = waveSpread;
-    u.uRowOffset.value = rowOffset;
-    u.uSoftness.value = softness;
-    u.uGlow.value = glow;
-    u.uBrightness.value = brightness;
-    u.uContrast.value = contrast;
-    u.uOpacity.value = opacity;
-    u.uVertical.value = orientation === 'vertical' ? 1.0 : 0.0;
-    u.uAlternate.value = alternate ? 1.0 : 0.0;
-    u.uMouseStrength.value = mouseStrength;
-    u.uMouseRadius.value = mouseRadius;
-    u.uEnableMouse.value = mouseInteraction ? 1.0 : 0.0;
-    u.uGrain.value = grain ? 1.0 : 0.0;
-    u.uGrainIntensity.value = grainIntensity;
-    u.uLightMode.value = lightMode ? 1.0 : 0.0;
-    const c1 = hexToRgb(color1);
-    const a1 = u.uColor1.value as Float32Array;
-    a1[0] = c1[0];
-    a1[1] = c1[1];
-    a1[2] = c1[2];
-    const c2 = hexToRgb(color2);
-    const a2 = u.uColor2.value as Float32Array;
-    a2[0] = c2[0];
-    a2[1] = c2[1];
-    a2[2] = c2[2];
-    const c3 = hexToRgb(color3);
-    const a3 = u.uColor3.value as Float32Array;
-    a3[0] = c3[0];
-    a3[1] = c3[1];
-    a3[2] = c3[2];
-  }, [
-    color1,
-    color2,
-    color3,
-    columns,
-    rows,
-    barThickness,
-    speed,
-    travel,
-    waveSpread,
-    rowOffset,
-    softness,
-    glow,
-    brightness,
-    contrast,
-    opacity,
-    orientation,
-    alternate,
-    mouseInteraction,
-    mouseStrength,
-    mouseRadius,
-    grain,
-    grainIntensity,
-    lightMode
-  ]);
-
-  return <div ref={containerRef} className={`relative h-full w-full overflow-hidden ${className}`.trim()} />;
+  return (
+    <div
+      ref={containerRef}
+      className={['relative h-full w-full overflow-hidden', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" aria-hidden="true" />
+    </div>
+  );
 };
 
 export default SlicedWaves;

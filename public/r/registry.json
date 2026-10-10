@@ -814,11 +814,9 @@
 		{
 			"name": "GlowCursor-JS-CSS",
 			"title": "GlowCursor",
-			"description": "Shader-powered light trail that smoothly follows the pointer with customizable glow, color, taper and pulse.",
+			"description": "Light that pours from the cursor, drifts softly through the air and cools as it fades.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -835,11 +833,9 @@
 		{
 			"name": "GlowCursor-JS-TW",
 			"title": "GlowCursor",
-			"description": "Shader-powered light trail that smoothly follows the pointer with customizable glow, color, taper and pulse.",
+			"description": "Light that pours from the cursor, drifts softly through the air and cools as it fades.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -851,11 +847,9 @@
 		{
 			"name": "GlowCursor-TS-CSS",
 			"title": "GlowCursor",
-			"description": "Shader-powered light trail that smoothly follows the pointer with customizable glow, color, taper and pulse.",
+			"description": "Light that pours from the cursor, drifts softly through the air and cools as it fades.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -872,11 +866,9 @@
 		{
 			"name": "GlowCursor-TS-TW",
 			"title": "GlowCursor",
-			"description": "Shader-powered light trail that smoothly follows the pointer with customizable glow, color, taper and pulse.",
+			"description": "Light that pours from the cursor, drifts softly through the air and cools as it fades.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7608,11 +7600,9 @@
 		{
 			"name": "SpecularButton-JS-CSS",
 			"title": "SpecularButton",
-			"description": "Glass button with a shader-driven specular rim light that sweeps around the edge and follows the cursor.",
+			"description": "Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7629,11 +7619,9 @@
 		{
 			"name": "SpecularButton-JS-TW",
 			"title": "SpecularButton",
-			"description": "Glass button with a shader-driven specular rim light that sweeps around the edge and follows the cursor.",
+			"description": "Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7645,11 +7633,9 @@
 		{
 			"name": "SpecularButton-TS-CSS",
 			"title": "SpecularButton",
-			"description": "Glass button with a shader-driven specular rim light that sweeps around the edge and follows the cursor.",
+			"description": "Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7666,11 +7652,9 @@
 		{
 			"name": "SpecularButton-TS-TW",
 			"title": "SpecularButton",
-			"description": "Glass button with a shader-driven specular rim light that sweeps around the edge and follows the cursor.",
+			"description": "Glass button whose edge catches the light, with a crisp highlight that glides to the part nearest the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7682,11 +7666,9 @@
 		{
 			"name": "ElasticMesh-JS-CSS",
 			"title": "ElasticMesh",
-			"description": "Spring-mesh surface that stretches under the pointer and settles back with damped physics.",
+			"description": "Turns text or any logo into a puffy inflated shape you can press, poke and stretch like jelly.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7703,11 +7685,9 @@
 		{
 			"name": "ElasticMesh-JS-TW",
 			"title": "ElasticMesh",
-			"description": "Spring-mesh surface that stretches under the pointer and settles back with damped physics.",
+			"description": "Turns text or any logo into a puffy inflated shape you can press, poke and stretch like jelly.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7719,11 +7699,9 @@
 		{
 			"name": "ElasticMesh-TS-CSS",
 			"title": "ElasticMesh",
-			"description": "Spring-mesh surface that stretches under the pointer and settles back with damped physics.",
+			"description": "Turns text or any logo into a puffy inflated shape you can press, poke and stretch like jelly.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7740,11 +7718,9 @@
 		{
 			"name": "ElasticMesh-TS-TW",
 			"title": "ElasticMesh",
-			"description": "Spring-mesh surface that stretches under the pointer and settles back with damped physics.",
+			"description": "Turns text or any logo into a puffy inflated shape you can press, poke and stretch like jelly.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7904,11 +7880,9 @@
 		{
 			"name": "HalftoneReveal-JS-CSS",
 			"title": "HalftoneReveal",
-			"description": "Print-style halftone dot matrix that resolves into sharp content around the cursor.",
+			"description": "An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7925,11 +7899,9 @@
 		{
 			"name": "HalftoneReveal-JS-TW",
 			"title": "HalftoneReveal",
-			"description": "Print-style halftone dot matrix that resolves into sharp content around the cursor.",
+			"description": "An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7941,11 +7913,9 @@
 		{
 			"name": "HalftoneReveal-TS-CSS",
 			"title": "HalftoneReveal",
-			"description": "Print-style halftone dot matrix that resolves into sharp content around the cursor.",
+			"description": "An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7962,11 +7932,9 @@
 		{
 			"name": "HalftoneReveal-TS-TW",
 			"title": "HalftoneReveal",
-			"description": "Print-style halftone dot matrix that resolves into sharp content around the cursor.",
+			"description": "An image printed onto the page as a halftone screen, whose dots swell into the real photo under the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8844,9 +8812,7 @@
 			"title": "GhostFibers",
 			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8865,9 +8831,7 @@
 			"title": "GhostFibers",
 			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8881,9 +8845,7 @@
 			"title": "GhostFibers",
 			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8902,9 +8864,7 @@
 			"title": "GhostFibers",
 			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10400,11 +10360,9 @@
 		{
 			"name": "SlicedWaves-JS-CSS",
 			"title": "SlicedWaves",
-			"description": "A grid of soft glowing bars rippling like a slatted equalizer.",
+			"description": "Waves of colored light sliced into glowing bars, seen in depth with a focus that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10421,11 +10379,9 @@
 		{
 			"name": "SlicedWaves-JS-TW",
 			"title": "SlicedWaves",
-			"description": "A grid of soft glowing bars rippling like a slatted equalizer.",
+			"description": "Waves of colored light sliced into glowing bars, seen in depth with a focus that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10437,11 +10393,9 @@
 		{
 			"name": "SlicedWaves-TS-CSS",
 			"title": "SlicedWaves",
-			"description": "A grid of soft glowing bars rippling like a slatted equalizer.",
+			"description": "Waves of colored light sliced into glowing bars, seen in depth with a focus that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10458,11 +10412,9 @@
 		{
 			"name": "SlicedWaves-TS-TW",
 			"title": "SlicedWaves",
-			"description": "A grid of soft glowing bars rippling like a slatted equalizer.",
+			"description": "Waves of colored light sliced into glowing bars, seen in depth with a focus that follows the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10474,11 +10426,9 @@
 		{
 			"name": "AcidSquares-JS-CSS",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares receding into depth.",
+			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10495,11 +10445,9 @@
 		{
 			"name": "AcidSquares-JS-TW",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares receding into depth.",
+			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10511,11 +10459,9 @@
 		{
 			"name": "AcidSquares-TS-CSS",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares receding into depth.",
+			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10532,11 +10478,9 @@
 		{
 			"name": "AcidSquares-TS-TW",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares receding into depth.",
+			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
