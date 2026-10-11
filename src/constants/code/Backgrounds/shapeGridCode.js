@@ -6,16 +6,22 @@ import tsTailwind from '@ts-tailwind/Backgrounds/ShapeGrid/ShapeGrid.tsx?raw';
 
 export const shapeGrid = {
   usage: `import ShapeGrid from './ShapeGrid';
-  
-<ShapeGrid 
-speed={0.5} 
-squareSize={40}
-direction='diagonal' // up, down, left, right, diagonal
-borderColor='#fff'
-hoverFillColor='#222'
-shape='square' // square, hexagon, circle, triangle
-hoverTrailAmount={5} // number of trailing hovered shapes (0 = no trail)
-/>`,
+
+<div style={{ width: '100%', height: '600px', position: 'relative' }}>
+  <ShapeGrid
+    shape="square"
+    direction="diagonal"
+    lineColor="#2a2734"
+    hoverColor="#ffffff"
+    hoverFillColor="#ffffff"
+    fillOpacity={0.15}
+    cellSize={40}
+    speed={0.5}
+    tiltX={0}
+    tiltY={0}
+    rainbow={false}
+  />
+</div>`,
   code,
   css,
   tailwind,

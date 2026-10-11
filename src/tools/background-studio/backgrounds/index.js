@@ -88,7 +88,7 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/ShapeWaves/ShapeWaves.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/shape-waves"',
     props: [
-      { name: 'text', type: 'text', default: 'React Bits', label: 'Text' },
+      { name: 'text', type: 'text', default: '</>', label: 'Text' },
       { name: 'color', type: 'color', default: '#929292', label: 'Color' },
       { name: 'hoverColor', type: 'color', default: '#ffffff', label: 'Splash Color' },
       { name: 'backgroundColor', type: 'color', default: '#000000', label: 'Background' },
@@ -683,11 +683,31 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Silk/Silk.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/silk"',
     props: [
+      { name: 'color', type: 'color', default: '#5227FF', label: 'Color' },
+      { name: 'sheenColor', type: 'color', default: '#ffffff', label: 'Sheen Color' },
+      { name: 'sheen', type: 'number', default: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Sheen' },
+      { name: 'depth', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Depth' },
+      { name: 'glow', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Glow' },
+      { name: 'noiseIntensity', type: 'number', default: 1.5, min: 0, max: 5, step: 0.1, label: 'Grain' },
       { name: 'speed', type: 'number', default: 5, min: 0, max: 20, step: 0.1, label: 'Speed' },
-      { name: 'scale', type: 'number', default: 1, min: 0.1, max: 5, step: 0.1, label: 'Scale' },
-      { name: 'color', type: 'color', default: '#7B7481', label: 'Color' },
-      { name: 'noiseIntensity', type: 'number', default: 1.5, min: 0, max: 5, step: 0.1, label: 'Noise Intensity' },
-      { name: 'rotation', type: 'number', default: 0, min: 0, max: 6.28, step: 0.1, label: 'Rotation' }
+      { name: 'scale', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'rotation', type: 'number', default: 0, min: 0, max: 6.28, step: 0.01, label: 'Rotation' },
+      { name: 'ripple', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Ripple' },
+      { name: 'wave', type: 'number', default: 1, min: 0, max: 4, step: 0.05, label: 'Wave' },
+      { name: 'variation', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Variation' },
+      {
+        name: 'interactionStrength',
+        type: 'number',
+        default: 1,
+        min: 0,
+        max: 2,
+        step: 0.05,
+        label: 'Interaction Strength'
+      },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'clickRipple', type: 'boolean', default: true, label: 'Click Ripple' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -704,8 +724,19 @@ export const BACKGROUNDS = [
         minItems: 2,
         maxItems: 5
       },
-      { name: 'amplitude', type: 'number', default: 1.0, min: 0, max: 3, step: 0.1, label: 'Amplitude' },
-      { name: 'blend', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Blend' }
+      { name: 'direction', type: 'select', default: 'top', options: ['top', 'bottom'], label: 'Direction' },
+      { name: 'height', type: 'number', default: 0.45, min: 0.1, max: 0.9, step: 0.01, label: 'Height' },
+      { name: 'amplitude', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Amplitude' },
+      { name: 'blend', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Blend' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'scale', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'layers', type: 'number', default: 1, min: 1, max: 3, step: 1, label: 'Layers' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -714,9 +745,6 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Particles/Particles.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/particles"',
     props: [
-      { name: 'particleCount', type: 'number', default: 200, min: 10, max: 1000, step: 10, label: 'Particle Count' },
-      { name: 'particleSpread', type: 'number', default: 10, min: 1, max: 50, step: 1, label: 'Spread' },
-      { name: 'speed', type: 'number', default: 0.1, min: 0, max: 2, step: 0.01, label: 'Speed' },
       {
         name: 'particleColors',
         type: 'colorArray',
@@ -725,13 +753,51 @@ export const BACKGROUNDS = [
         minItems: 1,
         maxItems: 5
       },
-      { name: 'moveParticlesOnHover', type: 'boolean', default: false, label: 'Move on Hover' },
-      { name: 'particleHoverFactor', type: 'number', default: 1, min: 0.1, max: 5, step: 0.1, label: 'Hover Factor' },
-      { name: 'alphaParticles', type: 'boolean', default: false, label: 'Alpha Particles' },
-      { name: 'particleBaseSize', type: 'number', default: 100, min: 10, max: 500, step: 10, label: 'Base Size' },
-      { name: 'sizeRandomness', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Size Randomness' },
-      { name: 'cameraDistance', type: 'number', default: 20, min: 5, max: 100, step: 1, label: 'Camera Distance' },
-      { name: 'disableRotation', type: 'boolean', default: false, label: 'Disable Rotation' }
+      {
+        name: 'shape',
+        type: 'select',
+        default: 'circle',
+        options: ['circle', 'square', 'ring', 'sparkle'],
+        label: 'Shape'
+      },
+      { name: 'particleCount', type: 'number', default: 200, min: 10, max: 4000, step: 10, label: 'Count' },
+      { name: 'particleSpread', type: 'number', default: 10, min: 2, max: 30, step: 0.5, label: 'Spread' },
+      { name: 'particleBaseSize', type: 'number', default: 100, min: 20, max: 400, step: 5, label: 'Size' },
+      { name: 'sizeRandomness', type: 'number', default: 1, min: 0.1, max: 2, step: 0.05, label: 'Size Randomness' },
+      { name: 'speed', type: 'number', default: 0.1, min: 0, max: 1, step: 0.01, label: 'Speed' },
+      { name: 'glow', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'twinkle', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Twinkle' },
+      { name: 'depthOfField', type: 'number', default: 0, min: 0, max: 1.5, step: 0.05, label: 'Depth Of Field' },
+      { name: 'drift', type: 'select', default: 'none', options: ['none', 'up', 'down', 'forward'], label: 'Drift' },
+      { name: 'driftSpeed', type: 'number', default: 1, min: 0, max: 4, step: 0.05, label: 'Drift Speed' },
+      { name: 'connections', type: 'boolean', default: false, label: 'Connections' },
+      {
+        name: 'connectionDistance',
+        type: 'number',
+        default: 110,
+        min: 40,
+        max: 240,
+        step: 5,
+        label: 'Connection Distance'
+      },
+      { name: 'moveParticlesOnHover', type: 'boolean', default: true, label: 'Move on Hover' },
+      {
+        name: 'hoverEffect',
+        type: 'select',
+        default: 'parallax',
+        options: ['parallax', 'repel', 'attract'],
+        label: 'Hover Effect'
+      },
+      { name: 'particleHoverFactor', type: 'number', default: 1, min: 0, max: 4, step: 0.05, label: 'Hover Factor' },
+      { name: 'hoverRadius', type: 'number', default: 140, min: 40, max: 400, step: 5, label: 'Hover Radius' },
+      { name: 'clickBurst', type: 'boolean', default: true, label: 'Click Burst' },
+      { name: 'alphaParticles', type: 'boolean', default: false, label: 'Soft Particles' },
+      { name: 'cameraDistance', type: 'number', default: 20, min: 6, max: 60, step: 1, label: 'Camera Distance' },
+      { name: 'disableRotation', type: 'boolean', default: false, label: 'Disable Rotation' },
+      { name: 'variation', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Variation' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -740,25 +806,37 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/ShapeGrid/ShapeGrid.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/shape-grid"',
     props: [
-      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Speed' },
-      { name: 'squareSize', type: 'number', default: 40, min: 10, max: 100, step: 5, label: 'Square Size' },
-      {
-        name: 'direction',
-        type: 'select',
-        default: 'diagonal',
-        options: ['up', 'down', 'left', 'right', 'diagonal'],
-        label: 'Direction'
-      },
-      { name: 'borderColor', type: 'color', default: '#999', label: 'Border Color' },
-      { name: 'hoverFillColor', type: 'color', default: '#222', label: 'Hover Fill Color' },
       {
         name: 'shape',
         type: 'select',
         default: 'square',
-        options: ['square', 'hexagon', 'circle', 'triangle'],
+        options: ['square', 'tile', 'hexagon', 'triangle', 'diamond', 'circle', 'cross', 'dot'],
         label: 'Shape'
       },
-      { name: 'hoverTrailAmount', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Hover Trail' }
+      {
+        name: 'direction',
+        type: 'select',
+        default: 'diagonal',
+        options: ['diagonal', 'up', 'down', 'left', 'right', 'none'],
+        label: 'Direction'
+      },
+      { name: 'lineColor', type: 'color', default: '#2a2734', label: 'Line Color' },
+      { name: 'hoverColor', type: 'color', default: '#ffffff', label: 'Hover Border' },
+      { name: 'hoverFillColor', type: 'color', default: '#ffffff', label: 'Hover Fill' },
+      { name: 'rainbow', type: 'boolean', default: false, label: 'Rainbow' },
+      { name: 'cellSize', type: 'number', default: 40, min: 14, max: 100, step: 1, label: 'Cell Size' },
+      { name: 'lineWidth', type: 'number', default: 1, min: 0.5, max: 3, step: 0.25, label: 'Line Width' },
+      { name: 'fillOpacity', type: 'number', default: 0.15, min: 0, max: 1, step: 0.05, label: 'Fill Opacity' },
+      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Speed' },
+      { name: 'tiltX', type: 'number', default: 0, min: -60, max: 60, step: 1, label: 'Tilt X' },
+      { name: 'tiltY', type: 'number', default: 0, min: -60, max: 60, step: 1, label: 'Tilt Y' },
+      { name: 'radius', type: 'number', default: 1.5, min: 0, max: 5, step: 0.1, label: 'Radius' },
+      { name: 'trail', type: 'number', default: 0.6, min: 0.1, max: 3, step: 0.05, label: 'Trail' },
+      { name: 'glow', type: 'number', default: 0.35, min: 0, max: 1, step: 0.05, label: 'Glow' },
+      { name: 'twinkle', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Twinkle' },
+      { name: 'fade', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'clickCascade', type: 'boolean', default: true, label: 'Click Cascade' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -767,17 +845,28 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Waves/Waves.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/waves"',
     props: [
-      { name: 'lineColor', type: 'color', default: '#5227FF', label: 'Line Color' },
+      { name: 'lineColor', type: 'color', default: '#ffffff', label: 'Line Color' },
+      { name: 'accentColor', type: 'color', default: '#ffffff', label: 'Accent Color' },
       { name: 'backgroundColor', type: 'color', default: 'transparent', label: 'Background Color' },
-      { name: 'waveSpeedX', type: 'number', default: 0.02, min: 0, max: 0.1, step: 0.005, label: 'Wave Speed X' },
-      { name: 'waveSpeedY', type: 'number', default: 0.01, min: 0, max: 0.1, step: 0.005, label: 'Wave Speed Y' },
-      { name: 'waveAmpX', type: 'number', default: 40, min: 0, max: 100, step: 5, label: 'Wave Amplitude X' },
-      { name: 'waveAmpY', type: 'number', default: 20, min: 0, max: 100, step: 5, label: 'Wave Amplitude Y' },
-      { name: 'friction', type: 'number', default: 0.9, min: 0.5, max: 1, step: 0.01, label: 'Friction' },
-      { name: 'tension', type: 'number', default: 0.01, min: 0, max: 0.1, step: 0.005, label: 'Tension' },
-      { name: 'maxCursorMove', type: 'number', default: 120, min: 10, max: 300, step: 10, label: 'Max Cursor Move' },
-      { name: 'xGap', type: 'number', default: 12, min: 4, max: 30, step: 2, label: 'X Gap' },
-      { name: 'yGap', type: 'number', default: 36, min: 10, max: 80, step: 4, label: 'Y Gap' }
+      { name: 'lineStyle', type: 'select', default: 'solid', options: ['solid', 'dashed'], label: 'Line Style' },
+      { name: 'spacing', type: 'number', default: 10, min: 4, max: 28, step: 1, label: 'Spacing' },
+      { name: 'lineWidth', type: 'number', default: 1, min: 0.5, max: 3, step: 0.25, label: 'Line Width' },
+      { name: 'rotation', type: 'number', default: 0, min: 0, max: 180, step: 1, label: 'Rotation' },
+      { name: 'amplitude', type: 'number', default: 32, min: 0, max: 80, step: 1, label: 'Amplitude' },
+      { name: 'scale', type: 'number', default: 1, min: 0.4, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'twist', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Twist' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 4, step: 0.05, label: 'Speed' },
+      { name: 'variation', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Variation' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'mouseRadius', type: 'number', default: 175, min: 60, max: 400, step: 5, label: 'Mouse Radius' },
+      { name: 'mouseStrength', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Mouse Strength' },
+      { name: 'bounce', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Bounce' },
+      { name: 'returnDuration', type: 'number', default: 1.4, min: 0.3, max: 4, step: 0.1, label: 'Return Duration' },
+      { name: 'clickRipple', type: 'boolean', default: true, label: 'Click Ripple' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Opacity' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -972,10 +1061,31 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Orb/Orb.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/orb"',
     props: [
-      { name: 'hue', type: 'number', default: 0, min: 0, max: 360, step: 1, label: 'Hue' },
-      { name: 'hoverIntensity', type: 'number', default: 0.5, min: 0, max: 2, step: 0.1, label: 'Hover Intensity' },
+      {
+        name: 'colors',
+        type: 'colorArray',
+        default: ['#9c43fe', '#4cc2e9', '#101499'],
+        label: 'Colors',
+        minItems: 3,
+        maxItems: 3
+      },
+      { name: 'hue', type: 'number', default: 0, min: 0, max: 360, step: 1, label: 'Hue Shift' },
+      { name: 'backgroundColor', type: 'color', default: '#000000', label: 'Background Color' },
+      { name: 'size', type: 'number', default: 1, min: 0.4, max: 1.6, step: 0.01, label: 'Size' },
+      { name: 'glow', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Glow' },
+      { name: 'bleed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Bleed' },
+      { name: 'wobble', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Wobble' },
+      { name: 'highlight', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Highlight' },
+      { name: 'trail', type: 'number', default: 1, min: 0, max: 4, step: 0.05, label: 'Trail' },
+      { name: 'tiltX', type: 'number', default: 0, min: -70, max: 70, step: 1, label: 'Tilt X' },
+      { name: 'tiltY', type: 'number', default: 0, min: -70, max: 70, step: 1, label: 'Tilt Y' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'hoverIntensity', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Hover Intensity' },
       { name: 'rotateOnHover', type: 'boolean', default: true, label: 'Rotate on Hover' },
-      { name: 'forceHoverState', type: 'boolean', default: false, label: 'Force Hover State' }
+      { name: 'forceHoverState', type: 'boolean', default: false, label: 'Force Hover State' },
+      { name: 'followCursor', type: 'boolean', default: true, label: 'Follow Cursor' },
+      { name: 'clickPulse', type: 'boolean', default: true, label: 'Click Pulse' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1060,15 +1170,37 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Dither/Dither.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/dither"',
     props: [
-      { name: 'waveColor', type: 'rgbArray', default: [0.32, 0.15, 1.0], label: 'Color' },
-      { name: 'disableAnimation', type: 'boolean', default: false, label: 'Disable Animation' },
-      { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
-      { name: 'mouseRadius', type: 'number', default: 1, min: 0, max: 2, step: 0.1, label: 'Mouse Radius' },
-      { name: 'colorNum', type: 'number', default: 4, min: 2, max: 16, step: 1, label: 'Color Num' },
+      { name: 'waveColor', type: 'color', default: '#bcbcbc', label: 'Wave Color' },
+      { name: 'backgroundColor', type: 'color', default: '#120f17', label: 'Background' },
+      {
+        name: 'ditherMode',
+        type: 'select',
+        default: 'bayer',
+        options: ['bayer', 'bayer4', 'bayer2', 'halftone', 'lines', 'crosshatch', 'noise', 'none'],
+        label: 'Dither Mode'
+      },
       { name: 'pixelSize', type: 'number', default: 2, min: 1, max: 8, step: 1, label: 'Pixel Size' },
-      { name: 'waveAmplitude', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Wave Amplitude' },
-      { name: 'waveFrequency', type: 'number', default: 3, min: 1, max: 10, step: 0.5, label: 'Wave Frequency' },
-      { name: 'waveSpeed', type: 'number', default: 0.05, min: 0, max: 0.2, step: 0.01, label: 'Wave Speed' }
+      { name: 'colorNum', type: 'number', default: 4, min: 2, max: 16, step: 1, label: 'Colors' },
+      { name: 'scale', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'waveSpeed', type: 'number', default: 0.05, min: 0, max: 0.2, step: 0.005, label: 'Wave Speed' },
+      { name: 'waveFrequency', type: 'number', default: 3, min: 1, max: 8, step: 0.1, label: 'Wave Frequency' },
+      { name: 'waveAmplitude', type: 'number', default: 0.3, min: 0, max: 1, step: 0.01, label: 'Wave Amplitude' },
+      { name: 'contrast', type: 'number', default: 1, min: 0.5, max: 2.5, step: 0.05, label: 'Contrast' },
+      { name: 'brightness', type: 'number', default: 0, min: -0.5, max: 0.5, step: 0.01, label: 'Brightness' },
+      { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      {
+        name: 'mouseEffect',
+        type: 'select',
+        default: 'erase',
+        options: ['erase', 'reveal', 'ripple'],
+        label: 'Mouse Effect'
+      },
+      { name: 'mouseRadius', type: 'number', default: 0.3, min: 0.05, max: 1, step: 0.01, label: 'Mouse Radius' },
+      { name: 'mouseStrength', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Mouse Strength' },
+      { name: 'trail', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Trail' },
+      { name: 'clickRipple', type: 'boolean', default: true, label: 'Click Ripple' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'disableAnimation', type: 'boolean', default: false, label: 'Disable Animation' }
     ]
   },
   {
@@ -1210,25 +1342,32 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Galaxy/Galaxy.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/galaxy"',
     props: [
-      { name: 'starSpeed', type: 'number', default: 0.5, min: 0, max: 3, step: 0.1, label: 'Star Speed' },
-      { name: 'density', type: 'number', default: 1, min: 0.1, max: 3, step: 0.1, label: 'Density' },
-      { name: 'hueShift', type: 'number', default: 140, min: 0, max: 360, step: 5, label: 'Hue Shift' },
-      { name: 'speed', type: 'number', default: 1, min: 0, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'glowIntensity', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Glow Intensity' },
-      { name: 'saturation', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Saturation' },
-      { name: 'mouseRepulsion', type: 'boolean', default: true, label: 'Mouse Repulsion' },
-      { name: 'repulsionStrength', type: 'number', default: 2, min: 0, max: 5, step: 0.5, label: 'Repulsion Strength' },
+      { name: 'starColors', type: 'colorArray', default: [], label: 'Star Colors', minItems: 0, maxItems: 4 },
+      { name: 'hueShift', type: 'number', default: 140, min: 0, max: 360, step: 1, label: 'Hue Shift' },
+      { name: 'saturation', type: 'number', default: 0, min: 0, max: 1, step: 0.01, label: 'Saturation' },
+      { name: 'density', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Density' },
+      { name: 'glowIntensity', type: 'number', default: 0.3, min: 0, max: 1, step: 0.01, label: 'Glow' },
+      { name: 'starSize', type: 'number', default: 1, min: 0.3, max: 3, step: 0.05, label: 'Star Size' },
+      { name: 'flareIntensity', type: 'number', default: 1, min: 0, max: 4, step: 0.05, label: 'Flares' },
+      { name: 'twinkleIntensity', type: 'number', default: 0.3, min: 0, max: 1, step: 0.01, label: 'Twinkle' },
+      { name: 'starSpeed', type: 'number', default: 0.5, min: 0, max: 4, step: 0.05, label: 'Star Speed' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'rotationSpeed', type: 'number', default: 0.1, min: 0, max: 0.5, step: 0.01, label: 'Rotation Speed' },
+      { name: 'layers', type: 'number', default: 4, min: 2, max: 8, step: 1, label: 'Layers' },
       {
-        name: 'twinkleIntensity',
-        type: 'number',
-        default: 0.3,
-        min: 0,
-        max: 1,
-        step: 0.05,
-        label: 'Twinkle Intensity'
+        name: 'direction',
+        type: 'select',
+        default: 'forward',
+        options: ['forward', 'backward'],
+        label: 'Direction'
       },
-      { name: 'rotationSpeed', type: 'number', default: 0.1, min: 0, max: 1, step: 0.05, label: 'Rotation Speed' },
-      { name: 'transparent', type: 'boolean', default: true, label: 'Transparent' }
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'mouseRepulsion', type: 'boolean', default: true, label: 'Mouse Repulsion' },
+      { name: 'repulsionStrength', type: 'number', default: 2, min: 0, max: 5, step: 0.1, label: 'Repulsion Strength' },
+      { name: 'clickWarp', type: 'boolean', default: true, label: 'Click Warp' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'transparent', type: 'boolean', default: true, label: 'Transparent' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -1654,14 +1793,21 @@ export const BACKGROUNDS = [
     props: [
       { name: 'topColor', type: 'color', default: '#5227FF', label: 'Top Color' },
       { name: 'bottomColor', type: 'color', default: '#FF9FFC', label: 'Bottom Color' },
-      { name: 'intensity', type: 'number', default: 1, min: 0.1, max: 3, step: 0.1, label: 'Intensity' },
-      { name: 'rotationSpeed', type: 'number', default: 0.3, min: 0, max: 2, step: 0.1, label: 'Rotation Speed' },
-      { name: 'interactive', type: 'boolean', default: false, label: 'Interactive' },
-      { name: 'glowAmount', type: 'number', default: 0.005, min: 0, max: 0.02, step: 0.001, label: 'Glow Amount' },
-      { name: 'pillarWidth', type: 'number', default: 3, min: 0.5, max: 10, step: 0.5, label: 'Pillar Width' },
-      { name: 'pillarHeight', type: 'number', default: 0.4, min: 0.1, max: 1, step: 0.05, label: 'Pillar Height' },
-      { name: 'noiseIntensity', type: 'number', default: 0.5, min: 0, max: 2, step: 0.1, label: 'Noise Intensity' },
-      { name: 'pillarRotation', type: 'number', default: 0, min: 0, max: 360, step: 5, label: 'Pillar Rotation' }
+      { name: 'intensity', type: 'number', default: 1, min: 0.1, max: 3, step: 0.05, label: 'Intensity' },
+      { name: 'glowAmount', type: 'number', default: 0.002, min: 0.0005, max: 0.01, step: 0.0005, label: 'Glow' },
+      { name: 'bloom', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Bloom' },
+      { name: 'pillarWidth', type: 'number', default: 3, min: 0.5, max: 8, step: 0.1, label: 'Pillar Width' },
+      { name: 'pillarHeight', type: 'number', default: 0.4, min: 0.1, max: 1.5, step: 0.05, label: 'Pillar Height' },
+      { name: 'pillarRotation', type: 'number', default: 25, min: -90, max: 90, step: 1, label: 'Pillar Rotation' },
+      { name: 'twist', type: 'number', default: 0.4, min: 0, max: 1.6, step: 0.05, label: 'Twist' },
+      { name: 'detail', type: 'number', default: 4, min: 1, max: 6, step: 1, label: 'Detail' },
+      { name: 'rotationSpeed', type: 'number', default: 0.3, min: 0, max: 2, step: 0.05, label: 'Rotation Speed' },
+      { name: 'flow', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Flow' },
+      { name: 'noiseIntensity', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Grain' },
+      { name: 'fade', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Fade' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'clickPulse', type: 'boolean', default: true, label: 'Click Pulse' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1727,6 +1873,7 @@ export const BACKGROUNDS = [
   {
     id: 'evil-eye',
     label: 'Evil Eye',
+    hidden: true,
     component: () => import('../../../content/Backgrounds/EvilEye/EvilEye.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/evil-eye"',
     props: [

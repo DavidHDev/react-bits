@@ -16,7 +16,7 @@ const STUDIO_LIGHT_PROPS = {
   'laser-flow': { theme: 'light' }
 };
 
-const ORDERED_BACKGROUNDS = [...BACKGROUNDS].sort((a, b) => a.label.localeCompare(b.label));
+const ORDERED_BACKGROUNDS = BACKGROUNDS.filter(bg => !bg.hidden).sort((a, b) => a.label.localeCompare(b.label));
 
 const LoadingFallback = () => (
   <Flex w="100%" h="100%" align="center" justify="center" bg="var(--bg-body)">

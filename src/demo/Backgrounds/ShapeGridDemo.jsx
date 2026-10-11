@@ -1,182 +1,475 @@
 import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
 
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
+import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
+import PropTable from '../../components/common/Preview/PropTable';
+import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
+
+import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import useThemedProps from '../../hooks/useThemedProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
-import Customize from '../../components/common/Preview/Customize';
-import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import PreviewSelect from '../../components/common/Preview/PreviewSelect';
-import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
-import PropTable from '../../components/common/Preview/PropTable';
-import BackgroundContent from '../../components/common/Preview/BackgroundContent';
-
 import ShapeGrid from '../../content/Backgrounds/ShapeGrid/ShapeGrid';
 import { shapeGrid } from '../../constants/code/Backgrounds/shapeGridCode';
 
-const DEFAULT_PROPS = {
-  direction: 'diagonal',
-  borderColor: '#2F293A',
-  hoverColor: '#222222',
-  size: 40,
-  speed: 0.5,
+const LOOK = {
   shape: 'square',
-  hoverTrailAmount: 0
+  direction: 'diagonal',
+  lineColor: '#2a2734',
+  hoverColor: '#ffffff',
+  hoverFillColor: '#ffffff',
+  fillOpacity: 0.15,
+  rainbow: false,
+  cellSize: 40,
+  lineWidth: 1,
+  speed: 0.5,
+  tiltX: 0,
+  tiltY: 0,
+  radius: 1.5,
+  trail: 0.6,
+  glow: 0.35,
+  twinkle: 0,
+  fade: 1,
+  clickCascade: true,
+  intro: true
 };
 
-const LIGHT_PROPS = {
-  borderColor: '#d4d4d8',
-  hoverColor: '#27272a'
+const DEFAULT_PROPS = { preset: 'classic', ...LOOK };
+
+const PRESETS = {
+  classic: { look: LOOK, light: { lineColor: '#e4e4e7', hoverColor: '#18181b', hoverFillColor: '#18181b' } },
+  tiles: {
+    look: {
+      ...LOOK,
+      shape: 'tile',
+      direction: 'up',
+      speed: 0.3,
+      hoverColor: '#7c8cff',
+      hoverFillColor: '#7c8cff',
+      twinkle: 0.6,
+      trail: 0.9
+    },
+    light: { lineColor: '#e4e4e7', hoverColor: '#3847ff', hoverFillColor: '#3847ff' }
+  },
+  hive: {
+    look: {
+      ...LOOK,
+      shape: 'hexagon',
+      direction: 'up',
+      speed: 0.35,
+      hoverColor: '#2dd4bf',
+      hoverFillColor: '#2dd4bf',
+      radius: 2,
+      trail: 0.9
+    },
+    light: { lineColor: '#e4e4e7', hoverColor: '#0d9488', hoverFillColor: '#0d9488' }
+  },
+  shards: {
+    look: { ...LOOK, shape: 'triangle', direction: 'left', speed: 0.4, cellSize: 46, radius: 1.8 },
+    light: { lineColor: '#e4e4e7', hoverColor: '#18181b', hoverFillColor: '#18181b' }
+  },
+  lattice: {
+    look: {
+      ...LOOK,
+      shape: 'diamond',
+      direction: 'right',
+      speed: 0.4,
+      hoverColor: '#f5a524',
+      hoverFillColor: '#f5a524',
+      glow: 0.5
+    },
+    light: { lineColor: '#e4e4e7', hoverColor: '#c2410c', hoverFillColor: '#c2410c' }
+  },
+  rings: {
+    look: {
+      ...LOOK,
+      shape: 'circle',
+      direction: 'down',
+      speed: 0.3,
+      cellSize: 36,
+      hoverColor: '#ff7ab6',
+      hoverFillColor: '#ff7ab6',
+      radius: 1.8
+    },
+    light: { lineColor: '#e4e4e7', hoverColor: '#db2777', hoverFillColor: '#db2777' }
+  },
+  markers: {
+    look: {
+      ...LOOK,
+      shape: 'cross',
+      direction: 'none',
+      lineColor: '#3b3747',
+      cellSize: 34,
+      radius: 3,
+      trail: 1.2,
+      glow: 0.2
+    },
+    light: { lineColor: '#d4d4d8', hoverColor: '#18181b', hoverFillColor: '#18181b' }
+  },
+  dots: {
+    look: {
+      ...LOOK,
+      shape: 'dot',
+      speed: 0.25,
+      lineColor: '#3b3747',
+      cellSize: 26,
+      radius: 3.2,
+      trail: 1,
+      glow: 0.5,
+      twinkle: 0.3
+    },
+    light: { lineColor: '#c9c9d1', hoverColor: '#18181b', hoverFillColor: '#18181b' }
+  },
+  horizon: {
+    look: {
+      ...LOOK,
+      direction: 'down',
+      speed: 0.6,
+      tiltX: 58,
+      cellSize: 44,
+      radius: 2,
+      trail: 0.9,
+      glow: 0.45
+    },
+    light: { lineColor: '#e4e4e7', hoverColor: '#18181b', hoverFillColor: '#18181b' }
+  },
+  prism: {
+    look: {
+      ...LOOK,
+      shape: 'tile',
+      direction: 'up',
+      speed: 0.3,
+      rainbow: true,
+      tiltX: 28,
+      tiltY: -22,
+      radius: 2.2,
+      trail: 1.2,
+      glow: 0.5
+    },
+    light: { lineColor: '#e4e4e7', hoverColor: '#18181b', hoverFillColor: '#18181b' }
+  }
 };
+
+const PRESET_OPTIONS = [
+  { value: 'classic', label: 'Classic' },
+  { value: 'tiles', label: 'Tiles' },
+  { value: 'hive', label: 'Hive' },
+  { value: 'shards', label: 'Shards' },
+  { value: 'lattice', label: 'Lattice' },
+  { value: 'rings', label: 'Rings' },
+  { value: 'markers', label: 'Markers' },
+  { value: 'dots', label: 'Dots' },
+  { value: 'horizon', label: 'Horizon' },
+  { value: 'prism', label: 'Prism' }
+];
+
+const SHAPE_OPTIONS = [
+  { value: 'square', label: 'Square' },
+  { value: 'tile', label: 'Tile' },
+  { value: 'hexagon', label: 'Hexagon' },
+  { value: 'triangle', label: 'Triangle' },
+  { value: 'diamond', label: 'Diamond' },
+  { value: 'circle', label: 'Circle' },
+  { value: 'cross', label: 'Cross' },
+  { value: 'dot', label: 'Dot' }
+];
+
+const DIRECTION_OPTIONS = [
+  { value: 'diagonal', label: 'Diagonal' },
+  { value: 'up', label: 'Up' },
+  { value: 'down', label: 'Down' },
+  { value: 'left', label: 'Left' },
+  { value: 'right', label: 'Right' },
+  { value: 'none', label: 'None' }
+];
+
+const propData = [
+  {
+    name: 'shape',
+    type: "'square' | 'tile' | 'hexagon' | 'triangle' | 'diamond' | 'circle' | 'cross' | 'dot'",
+    default: "'square'",
+    description: 'Shape of the cells. Cross and dot draw markers where the grid lines would meet.'
+  },
+  { name: 'cellSize', type: 'number', default: '40', description: 'Size of each cell, in px.' },
+  { name: 'lineWidth', type: 'number', default: '1', description: 'Thickness of the grid lines, in px.' },
+  {
+    name: 'direction',
+    type: "'diagonal' | 'up' | 'down' | 'left' | 'right' | 'none'",
+    default: "'diagonal'",
+    description: 'Which way the grid drifts. None holds it still.'
+  },
+  { name: 'speed', type: 'number', default: '0.5', description: 'How fast the grid drifts.' },
+  { name: 'lineColor', type: 'string', default: "'#2a2734'", description: 'Color of the grid lines.' },
+  {
+    name: 'hoverColor',
+    type: 'string',
+    default: "'#ffffff'",
+    description: 'Color the cell borders light up in under the cursor.'
+  },
+  {
+    name: 'hoverFillColor',
+    type: 'string',
+    default: 'hoverColor',
+    description: 'Color that fills the inside of lit cells. Follows hoverColor when not set.'
+  },
+  {
+    name: 'fillOpacity',
+    type: 'number',
+    default: '0.15',
+    description: 'How solid the inside of lit cells gets, from 0 for outlines only to 1 for solid cells.'
+  },
+  {
+    name: 'rainbow',
+    type: 'boolean',
+    default: 'false',
+    description: 'Lights cells in shifting rainbow colors instead of the hover color.'
+  },
+  {
+    name: 'tiltX',
+    type: 'number',
+    default: '0',
+    description: 'Tilts the grid back in perspective, in degrees. Positive values push the top away.'
+  },
+  {
+    name: 'tiltY',
+    type: 'number',
+    default: '0',
+    description: 'Turns the grid sideways in perspective, in degrees. Positive values push the right side away.'
+  },
+  {
+    name: 'radius',
+    type: 'number',
+    default: '1.5',
+    description: 'Size of the light around the cursor, in cells. 0 lights only the cell under it.'
+  },
+  {
+    name: 'trail',
+    type: 'number',
+    default: '0.6',
+    description: 'How long lit cells take to fade after the cursor moves on, in seconds.'
+  },
+  { name: 'glow', type: 'number', default: '0.35', description: 'Soft glow around lit cells, from 0 to 1.' },
+  {
+    name: 'twinkle',
+    type: 'number',
+    default: '0',
+    description: 'Lets random cells light up on their own now and then, from 0 to 1.'
+  },
+  { name: 'fade', type: 'number', default: '1', description: 'Fades the grid out toward the edges, from 0 to 1.' },
+  {
+    name: 'clickCascade',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a ring of lit cells rolling out across the grid.'
+  },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'Draws the grid in from the middle when it first appears.'
+  },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole grid.' },
+  {
+    name: 'backgroundColor',
+    type: 'string',
+    default: "'transparent'",
+    description: 'Color behind the grid. By default the canvas is transparent.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the drift and the lights.' },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
 
 const ShapeGridDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const themedProps = useThemedProps(props, DEFAULT_PROPS, LIGHT_PROPS);
-  const { direction, borderColor, hoverColor, size, speed, shape, hoverTrailAmount } = themedProps;
-
-  const propData = useMemo(
-    () => [
-      {
-        name: 'direction',
-        type: 'string',
-        default: "'right'",
-        description: "Direction of square animation. Options: 'diagonal', 'up', 'right', 'down', 'left'."
-      },
-      { name: 'speed', type: 'number', default: '1', description: 'Animation speed multiplier.' },
-      { name: 'borderColor', type: 'string', default: "'#999'", description: 'Color of the square borders.' },
-      { name: 'squareSize', type: 'number', default: '40', description: 'Size of individual squares in pixels.' },
-      {
-        name: 'hoverFillColor',
-        type: 'string',
-        default: "'#222'",
-        description: 'Fill color when hovering over squares.'
-      },
-      {
-        name: 'shape',
-        type: 'string',
-        default: "'square'",
-        description: "Shape of the grid tiles. Options: 'square', 'hexagon', 'circle', 'triangle'."
-      },
-      {
-        name: 'hoverTrailAmount',
-        type: 'number',
-        default: '0',
-        description: 'Number of previously hovered shapes to keep visible as a fading trail. 0 disables the trail.'
-      }
-    ],
-    []
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const current = PRESETS[props.preset] ?? PRESETS.classic;
+  const darkColors = useMemo(
+    () => ({
+      lineColor: current.look.lineColor,
+      hoverColor: current.look.hoverColor,
+      hoverFillColor: current.look.hoverFillColor
+    }),
+    [current]
   );
+  const themedProps = useThemedProps(props, darkColors, current.light);
+  const { preset, ...settings } = themedProps;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value].look, preset: value });
+    forceRerender();
+  };
 
   return (
-    <ComponentPropsProvider props={themedProps} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={themedProps}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" h={500} className="demo-container" overflow="hidden" p={0}>
-            <ShapeGrid
-              squareSize={size}
-              speed={speed}
-              direction={direction}
-              borderColor={borderColor}
-              hoverFillColor={hoverColor}
-              shape={shape}
-              hoverTrailAmount={hoverTrailAmount}
-            />
-
-            {/* For Demo Purposes Only */}
-            <BackgroundContent pillText="New Background" headline="Customizable squares moving around smoothly" />
+          <Box position="relative" className="demo-container" h={{ base: 420, md: 520 }} p={0} overflow="hidden">
+            <ShapeGrid key={key} {...settings} />
+            <BackgroundContent pillText="New Background" headline="A living grid that lights up wherever you go" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="shape-grid"
-              currentProps={{
-                speed,
-                squareSize: size,
-                direction,
-                borderColor,
-                hoverFillColor: hoverColor,
-                shape,
-                hoverTrailAmount
-              }}
-              defaultProps={{
-                speed: 0.5,
-                squareSize: 40,
-                direction: 'diagonal',
-                borderColor: '#999',
-                hoverFillColor: '#222',
-                shape: 'square',
-                hoverTrailAmount: 0
-              }}
-            />
+            <OpenInStudioButton backgroundId="shape-grid" currentProps={settings} defaultProps={LOOK} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom
-              title="Border Color"
-              color={borderColor}
-              onChange={val => updateProp('borderColor', val)}
-            />
-
-            <PreviewColorPickerCustom
-              title="Hover Color"
-              color={hoverColor}
-              onChange={val => updateProp('hoverColor', val)}
-            />
-
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewSelect
               title="Shape"
-              options={[
-                { value: 'square', label: 'Square' },
-                { value: 'hexagon', label: 'Hexagon' },
-                { value: 'circle', label: 'Circle' },
-                { value: 'triangle', label: 'Triangle' }
-              ]}
-              value={shape}
-              onChange={val => updateProp('shape', val)}
+              options={SHAPE_OPTIONS}
+              value={settings.shape}
+              onChange={value => updateProp('shape', value)}
             />
-
             <PreviewSelect
               title="Direction"
-              options={[
-                { value: 'diagonal', label: 'Diagonal' },
-                { value: 'up', label: 'Up' },
-                { value: 'right', label: 'Right' },
-                { value: 'down', label: 'Down' },
-                { value: 'left', label: 'Left' }
-              ]}
-              value={direction}
-              onChange={val => updateProp('direction', val)}
+              options={DIRECTION_OPTIONS}
+              value={settings.direction}
+              onChange={value => updateProp('direction', value)}
             />
-
+            <PreviewColorPickerCustom
+              title="Line Color"
+              color={settings.lineColor}
+              onChange={value => updateProp('lineColor', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Hover Border"
+              color={settings.hoverColor}
+              onChange={value => updateProp('hoverColor', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Hover Fill"
+              color={settings.hoverFillColor}
+              onChange={value => updateProp('hoverFillColor', value)}
+            />
+            <PreviewSwitch
+              title="Rainbow"
+              isChecked={settings.rainbow}
+              onChange={value => updateProp('rainbow', value)}
+            />
             <PreviewSlider
-              min={10}
+              title="Cell Size"
+              min={14}
               max={100}
               step={1}
-              value={size}
-              title="Shape Size"
-              onChange={val => updateProp('size', val)}
+              value={settings.cellSize}
+              valueUnit="px"
+              onChange={value => updateProp('cellSize', value)}
             />
-
             <PreviewSlider
-              min={0.1}
-              max={2}
-              step={0.01}
-              value={speed}
-              title="Animation Speed"
-              onChange={val => updateProp('speed', val)}
+              title="Line Width"
+              min={0.5}
+              max={3}
+              step={0.25}
+              value={settings.lineWidth}
+              valueUnit="px"
+              onChange={value => updateProp('lineWidth', value)}
             />
-
             <PreviewSlider
+              title="Fill Opacity"
               min={0}
-              max={20}
+              max={1}
+              step={0.05}
+              value={settings.fillOpacity}
+              onChange={value => updateProp('fillOpacity', value)}
+            />
+            <PreviewSlider
+              title="Speed"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
+            />
+            <PreviewSlider
+              title="Tilt X"
+              min={-60}
+              max={60}
               step={1}
-              value={hoverTrailAmount}
-              title="Hover Trail"
-              onChange={val => updateProp('hoverTrailAmount', val)}
+              value={settings.tiltX}
+              valueUnit="°"
+              onChange={value => updateProp('tiltX', value)}
+            />
+            <PreviewSlider
+              title="Tilt Y"
+              min={-60}
+              max={60}
+              step={1}
+              value={settings.tiltY}
+              valueUnit="°"
+              onChange={value => updateProp('tiltY', value)}
+            />
+            <PreviewSlider
+              title="Radius"
+              min={0}
+              max={5}
+              step={0.1}
+              value={settings.radius}
+              onChange={value => updateProp('radius', value)}
+            />
+            <PreviewSlider
+              title="Trail"
+              min={0.1}
+              max={3}
+              step={0.05}
+              value={settings.trail}
+              valueUnit="s"
+              onChange={value => updateProp('trail', value)}
+            />
+            <PreviewSlider
+              title="Glow"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
+            />
+            <PreviewSlider
+              title="Twinkle"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.twinkle}
+              onChange={value => updateProp('twinkle', value)}
+            />
+            <PreviewSlider
+              title="Fade"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.fade}
+              onChange={value => updateProp('fade', value)}
+            />
+            <PreviewSwitch
+              title="Click Cascade"
+              isChecked={settings.clickCascade}
+              onChange={value => updateProp('clickCascade', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
             />
           </Customize>
 

@@ -1,187 +1,226 @@
-import { useState } from 'react';
-import { Box, Text } from '@chakra-ui/react';
-import { TbMenu } from 'react-icons/tb';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Tooltip } from '@chakra-ui/react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowRight01Icon, Menu01Icon } from '@hugeicons/core-free-icons';
 
-import PreviewSwitch from './PreviewSwitch';
+import PreviewStageContext from './PreviewStageContext';
+import { DEMO_NARROW_WIDTH, demoModesFor, demoView } from './demoModes';
 import logo from '../../../assets/logos/react-bits-logo.svg';
-import { useColorModeValue } from '../../setup/color-mode';
+import mark from '../../../assets/logos/react-bits-logo-small.svg';
+import './BackgroundContent.css';
 
-const BackgroundContent = ({
-  headline = 'Build interfaces that feel alive'
-}) => {
-  const [showContent, setShowContent] = useState(true);
-  const glassBackground = useColorModeValue('rgba(255, 255, 255, 0.68)', 'rgba(255, 255, 255, 0.03)');
-  const glassBorder = useColorModeValue('rgba(24, 24, 27, 0.1)', 'rgba(255, 255, 255, 0.08)');
-  const primaryText = useColorModeValue('#18181b', '#ffffff');
-  const secondaryText = useColorModeValue('rgba(24, 24, 27, 0.58)', 'rgba(255,255,255,0.5)');
-  const solidBackground = useColorModeValue('#18181b', '#ffffff');
-  const solidText = useColorModeValue('#ffffff', '#09090b');
-  const tagBackground = useColorModeValue('rgba(255, 255, 255, 0.78)', 'rgba(18, 15, 23, 0.5)');
-  const logoFilter = useColorModeValue('brightness(0)', 'none');
-  const headlineShadow = useColorModeValue('0 2px 20px rgba(255,255,255,0.75)', '0 4px 24px rgba(0,0,0,0.5)');
+const DESCRIPTION = 'React Bits brings motion and character to your interface, one copy-paste component at a time.';
+
+const LINKS = ['Docs', 'Showcase', 'Pricing'];
+
+const FADE_MS = 200;
+const MORPH_MS = 440;
+
+let rememberedMode = 'none';
+
+const Copy = ({ headline }) => (
+  <div className="bgc-copy">
+    <p className="bgc-title">{headline}</p>
+    <p className="bgc-text">{DESCRIPTION}</p>
+    <div className="bgc-cta">
+      <span className="bgc-button bgc-button--primary">
+        Start building
+        <HugeiconsIcon icon={ArrowRight01Icon} size={15} strokeWidth={1.8} />
+      </span>
+      <span className="bgc-button bgc-button--ghost">Browse components</span>
+    </div>
+  </div>
+);
+
+const Landing = ({ headline, active }) => (
+  <div className="bgc-window" aria-hidden="true" data-active={active ? '' : undefined}>
+    <div className="bgc-window-bar">
+      <span className="bgc-window-dots">
+        <i />
+        <i />
+        <i />
+      </span>
+      <span className="bgc-window-url">reactbits.dev</span>
+    </div>
+    <div className="bgc-site">
+      <div className="bgc-nav">
+        <img className="bgc-logo" src={logo} alt="" draggable={false} />
+        <div className="bgc-links">
+          {LINKS.map(link => (
+            <span key={link}>{link}</span>
+          ))}
+        </div>
+        <span className="bgc-button bgc-button--primary bgc-button--small">Get started</span>
+      </div>
+      <Copy headline={headline} />
+    </div>
+  </div>
+);
+
+const Phone = ({ headline, active }) => (
+  <div className="bgc-phone" aria-hidden="true" data-active={active ? '' : undefined}>
+    <div className="bgc-phone-screen">
+      <div className="bgc-phone-status">
+        <span>9:41</span>
+        <span className="bgc-phone-island" />
+        <span className="bgc-phone-battery">
+          <i />
+        </span>
+      </div>
+      <div className="bgc-nav">
+        <img className="bgc-logo" src={logo} alt="" draggable={false} />
+        <span className="bgc-menu">
+          <HugeiconsIcon icon={Menu01Icon} size={22} strokeWidth={1.6} />
+        </span>
+      </div>
+      <Copy headline={headline} />
+      <span className="bgc-phone-home" />
+    </div>
+  </div>
+);
+
+const Card = ({ headline, active }) => (
+  <div className="bgc-card" aria-hidden="true" data-active={active ? '' : undefined}>
+    <div className="bgc-card-fade" />
+    <span className="bgc-card-badge">
+      <img src={mark} alt="" draggable={false} />
+    </span>
+    <div className="bgc-card-body">
+      <p className="bgc-card-title">{headline}</p>
+      <p className="bgc-card-text">{DESCRIPTION}</p>
+      <div className="bgc-card-actions">
+        <span className="bgc-button bgc-button--primary bgc-button--small">Get started</span>
+        <span className="bgc-card-link">
+          Learn more
+          <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={1.8} />
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+const ModeSwitch = ({ modes, mode, onChange }) => {
+  const index = Math.max(
+    0,
+    modes.findIndex(item => item.value === mode)
+  );
 
   return (
-    <Box userSelect="none" className="background-demo-content">
-      {/* Toggle */}
-      <Box
-        position="absolute"
-        bottom={3}
-        right={3}
-        w="180px"
-        zIndex={10}
-        opacity={0.5}
-        _hover={{ opacity: 1 }}
-        transition="opacity 0.3s ease"
-        userSelect="none"
-      >
-        <PreviewSwitch title="Demo Content" isChecked={showContent} onChange={setShowContent} />
-      </Box>
-
-      {showContent && (
-        <>
-          {/* Nav */}
-          <Box position="absolute" top={0} left={0} w="100%" zIndex={2} pointerEvents="none">
-            <Box
-              mx="auto"
-              mt={5}
-              w={{ base: '92%', md: '70%' }}
-              h="48px"
-              borderRadius="14px"
-              p="0px 8px 0px 14px"
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              bg={glassBackground}
-              border={`1px solid ${glassBorder}`}
-              backdropFilter="blur(18px) saturate(140%)"
-              className="bg-content-glass"
+    <div className="bgc-switch" role="group" aria-label="Demo content" style={{ '--bgc-index': index }}>
+      <span className="bgc-switch-pill" aria-hidden="true" />
+      {modes.map(item => (
+        <Tooltip.Root key={item.value} openDelay={300} closeDelay={80} positioning={{ placement: 'bottom', gutter: 8 }}>
+          <Tooltip.Trigger asChild>
+            <button
+              type="button"
+              className="bgc-switch-button"
+              aria-label={item.label}
+              aria-pressed={mode === item.value}
+              onClick={() => onChange(item.value)}
             >
-              <Box display="flex" alignItems="center" gap={2}>
-                <img src={logo} alt="Logo" style={{ height: '20px', borderRadius: '50px', filter: logoFilter }} />
-              </Box>
+              <HugeiconsIcon icon={item.icon} size={16} strokeWidth={1.6} aria-hidden="true" />
+            </button>
+          </Tooltip.Trigger>
+          <Tooltip.Positioner>
+            <Tooltip.Content className="docs-tooltip">{item.label}</Tooltip.Content>
+          </Tooltip.Positioner>
+        </Tooltip.Root>
+      ))}
+    </div>
+  );
+};
 
-              <Box display={{ base: 'flex', md: 'none' }} alignItems="center" color={secondaryText}>
-                <TbMenu size={18} />
-              </Box>
+const BackgroundContent = ({ headline = 'Build interfaces that feel alive' }) => {
+  const stage = useContext(PreviewStageContext);
+  const demo = stage?.demo ?? null;
+  const rootRef = useRef(null);
+  const [localMode, setLocalMode] = useState(rememberedMode);
+  const target = demo ? demo.mode : localMode;
+  const [narrow, setNarrow] = useState(false);
+  const view = demoView(target, narrow);
+  const setDemoNarrow = demo?.setNarrow;
+  const setDemoPresent = demo?.setPresent;
+  const [shape, setShape] = useState(view);
+  const [clip, setClip] = useState(view);
+  const [shown, setShown] = useState(view);
+  const [hidden, setHidden] = useState(false);
+  const current = useRef(view);
+  const animate = useRef(false);
+  const timers = useRef([]);
 
-              <Box display={{ base: 'none', md: 'flex' }} alignItems="center" gap={5}>
-                {['Features', 'About'].map(item => (
-                  <Text key={item} color={secondaryText} fontSize="13px" fontWeight={500}>{item}</Text>
-                ))}
-                <Box
-                  h="30px"
-                  px={4}
-                  borderRadius="8px"
-                  bg={solidBackground}
-                  color={solidText}
-                  fontSize="12px"
-                  fontWeight={600}
-                  display="flex"
-                  alignItems="center"
-                >
-                  Sign up
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return undefined;
+    const measure = () => setNarrow(root.clientWidth < DEMO_NARROW_WIDTH);
+    measure();
+    const frame = requestAnimationFrame(() => {
+      animate.current = true;
+    });
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, []);
 
-          {/* Hero */}
-          <Box
-            position="absolute"
-            inset={0}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-            zIndex={1}
-            pointerEvents="none"
-            px={6}
-          >
-            {/* Tag */}
-            <Box
-              display="flex"
-              alignItems="center"
-              gap={2}
-              px="14px"
-              py="5px"
-              pl="5px"
-              borderRadius="50px"
-              border={`1px solid ${glassBorder}`}
-              bg={tagBackground}
-              backdropFilter="blur(18px) saturate(140%)"
-              className="bg-content-glass"
-            >
-              <Box
-                px="10px"
-                py="3px"
-                borderRadius="50px"
-                bg={solidBackground}
-                fontSize="11px"
-                fontWeight={600}
-                color={solidText}
-                textTransform="uppercase"
-                letterSpacing="0.02em"
-              >
-                New
-              </Box>
-              <Text fontSize="12px" fontWeight={500} color={secondaryText}>
-                Creative Components
-              </Text>
-            </Box>
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
-            {/* Headline */}
-            <Text
-              mt={6}
-              color={primaryText}
-              fontSize="clamp(1.6rem, 4vw, 2.4rem)"
-              lineHeight={1.1}
-              textAlign="center"
-              letterSpacing="-0.03em"
-              fontWeight={600}
-              maxW="20ch"
-              textShadow={headlineShadow}
-            >
-              {headline}
-            </Text>
+  useEffect(() => {
+    setDemoNarrow?.(narrow);
+  }, [setDemoNarrow, narrow]);
 
-            {/* Buttons */}
-            <Box display="flex" gap={3} mt={7} alignItems="center" pointerEvents="none">
-              <Box
-                as="span"
-                h="40px"
-                px={5}
-                bg={solidBackground}
-                color={solidText}
-                borderRadius="10px"
-                fontSize="13px"
-                fontWeight={600}
-                display="flex"
-                alignItems="center"
-              >
-                Get started
-              </Box>
-              <Box
-                as="span"
-                h="40px"
-                px={5}
-                borderRadius="10px"
-                fontSize="13px"
-                fontWeight={500}
-                color={secondaryText}
-                border={`1px solid ${glassBorder}`}
-                bg={glassBackground}
-                backdropFilter="blur(18px) saturate(140%)"
-                display="flex"
-                alignItems="center"
-                className="bg-content-glass"
-              >
-                Learn more
-              </Box>
-            </Box>
-          </Box>
-        </>
-      )}
-    </Box>
+  useEffect(() => {
+    if (!setDemoPresent) return undefined;
+    setDemoPresent(true);
+    return () => setDemoPresent(false);
+  }, [setDemoPresent]);
+
+  useLayoutEffect(() => {
+    if (view === current.current) return;
+    current.current = view;
+    timers.current.forEach(clearTimeout);
+    setShape(view);
+    if (!animate.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      setClip(view);
+      setShown(view);
+      setHidden(false);
+      return;
+    }
+    setHidden(true);
+    setShown(null);
+    timers.current = [
+      setTimeout(() => setClip(view), FADE_MS),
+      setTimeout(() => {
+        setShown(view);
+        setHidden(false);
+      }, MORPH_MS)
+    ];
+  }, [view]);
+
+  const select = next => {
+    if (demo) {
+      demo.setMode(next);
+      return;
+    }
+    rememberedMode = next;
+    setLocalMode(next);
+  };
+
+  const controls = <ModeSwitch modes={demoModesFor(narrow)} mode={view} onChange={select} />;
+  let switcher = controls;
+  if (stage?.hasControls) switcher = stage.controls ? createPortal(controls, stage.controls) : null;
+
+  return (
+    <div ref={rootRef} className="bgc" data-mode={shape} data-clip={clip} data-hidden={hidden ? '' : undefined}>
+      <span className="bgc-veil" />
+      <Landing headline={headline} active={shown === 'landing'} />
+      <Phone headline={headline} active={shown === 'mobile'} />
+      <Card headline={headline} active={shown === 'card'} />
+      <span className="bgc-shell" />
+      {switcher}
+    </div>
   );
 };
 

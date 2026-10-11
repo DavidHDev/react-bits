@@ -507,12 +507,18 @@ export const componentMetadata = {
   },
   'TextAnimations/FallingText': {
     videoUrl: '/assets/video/fallingtext.webm',
-    description: 'Characters fall with gravity + bounce creating a playful entrance.',
+    description: 'Text that breaks apart and tumbles into a pile you can drag, throw and swipe, then flies back into place.',
     category: 'TextAnimations',
     name: 'FallingText',
     docsUrl: 'https://reactbits.dev/text-animations/falling-text',
     tags: [],
-    added: '2025-01-22'
+    added: '2025-01-22',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with smoother physics. Words or single letters knock each other loose as they fall, can be thrown and swept around, and fly back into place, with a new tiles style and light mode.'
+      }
+    ]
   },
   'TextAnimations/FuzzyText': {
     videoUrl: '/assets/video/fuzzytext.webm',
@@ -1166,12 +1172,18 @@ export const componentMetadata = {
   },
   'Components/PixelCard': {
     videoUrl: '/assets/video/pixelcard.webm',
-    description: 'Card content revealed through pixel expansion transition.',
+    description: 'A card that fills with twinkling pixels on hover, rippling out from the center or the cursor.',
     category: 'Components',
     name: 'PixelCard',
     docsUrl: 'https://reactbits.dev/components/pixel-card',
     tags: [],
-    added: '2025-01-20'
+    added: '2025-01-20',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with crisp pixels and a glowing reveal wave that can start from the cursor. It can run on hover, click or always on, with an edge fade that keeps card content readable.'
+      }
+    ]
   },
   'Components/ProfileCard': {
     videoUrl: '/assets/video/profilecard.webm',
@@ -1448,12 +1460,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Aurora': {
     videoUrl: '/assets/video/aurora.webm',
-    description: 'Flowing aurora gradient background.',
+    description: 'A soft, calm aurora that flows across the top of the page and drifts toward the cursor.',
     category: 'Backgrounds',
     name: 'Aurora',
     docsUrl: 'https://reactbits.dev/backgrounds/aurora',
     tags: [],
-    added: '2025-02-05'
+    added: '2025-02-05',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with smoother, richer color blending and a softer edge that never bands. It reaches gently toward the cursor, fades in on load, and can rise from the bottom or stack extra layers.'
+      }
+    ]
   },
   'Backgrounds/Balatro': {
     videoUrl: '/assets/video/balatro.webm',
@@ -1523,12 +1541,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Dither': {
     videoUrl: '/assets/video/dither.webm',
-    description: 'Retro dithered noise shader background.',
+    description: 'Retro dithered waves with Bayer, halftone, line and noise patterns, palettes and cursor trails.',
     category: 'Backgrounds',
     name: 'Dither',
     docsUrl: 'https://reactbits.dev/backgrounds/dither',
     tags: [],
-    added: '2025-02-19'
+    added: '2025-02-19',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt on the same waves with crisp pixels and no extra dependencies. New dither patterns, retro palettes, cursor trails and click ripples, and an intro that sharpens into place.'
+      }
+    ]
   },
   'Backgrounds/DotField': {
     videoUrl: '/assets/video/dotfield.webm',
@@ -1565,12 +1589,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Galaxy': {
     videoUrl: '/assets/video/galaxy.webm',
-    description: 'Parallax realistic starfield with pointer interactions.',
+    description: 'Endless flight through a twinkling starfield with warp jumps, cursor repulsion and star palettes.',
     category: 'Backgrounds',
     name: 'Galaxy',
     docsUrl: 'https://reactbits.dev/backgrounds/galaxy',
     tags: [],
-    added: '2025-07-20'
+    added: '2025-07-20',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with no extra dependencies. Stars now glide away from the cursor, a click jumps to warp speed and it arrives from hyperspace. New star colors, flares, depth and a cleaner light mode.'
+      }
+    ]
   },
   'Backgrounds/GradientBlinds': {
     videoUrl: '/assets/video/gradientblinds.webm',
@@ -1810,7 +1840,8 @@ export const componentMetadata = {
     name: 'EvilEye',
     docsUrl: 'https://reactbits.dev/backgrounds/evil-eye',
     tags: [],
-    added: '2026-03-17'
+    added: '2026-03-17',
+    hidden: true
   },
   'Backgrounds/Radar': {
     videoUrl: '/assets/video/radar.webm',
@@ -1847,21 +1878,33 @@ export const componentMetadata = {
   },
   'Backgrounds/Orb': {
     videoUrl: '/assets/video/orb.webm',
-    description: 'Floating energy orb with customizable hover effect.',
+    description: 'A glowing ring of swirling color that breathes, trails an orbiting light and reaches toward the cursor.',
     category: 'Backgrounds',
     name: 'Orb',
     docsUrl: 'https://reactbits.dev/backgrounds/orb',
     tags: [],
-    added: '2025-02-07'
+    added: '2025-02-07',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with a crisper, more luminous ring that reaches toward the cursor and lights up where you hover. It pulses on click, powers on with an intro, and can tilt in 3D with custom colors, size and glow.'
+      }
+    ]
   },
   'Backgrounds/Particles': {
     videoUrl: '/assets/video/particles.webm',
-    description: 'Configurable particle system.',
+    description: 'A drifting 3D field of particles with glow, twinkle, constellation lines and cursor interaction.',
     category: 'Backgrounds',
     name: 'Particles',
     docsUrl: 'https://reactbits.dev/backgrounds/particles',
     tags: [],
-    added: '2025-02-10'
+    added: '2025-02-10',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with the same floating motion, now crisp and far faster with thousands of particles. New shapes, glow, twinkle, bokeh, constellation lines, drifting and cursor effects.'
+      }
+    ]
   },
   'Backgrounds/PixelBlast': {
     videoUrl: '/assets/video/pixelblast.webm',
@@ -1937,12 +1980,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Silk': {
     videoUrl: '/assets/video/silk.webm',
-    description: 'Smooth waves background with soft lighting.',
+    description: 'Flowing satin folds with glossy highlights that turn toward the cursor and ripple on click.',
     category: 'Backgrounds',
     name: 'Silk',
     docsUrl: 'https://reactbits.dev/backgrounds/silk',
     tags: [],
-    added: '2025-05-22'
+    added: '2025-05-22',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt on the same folds with deeper shading, glossy satin highlights and a soft glow. The light follows the cursor, clicks ripple through the fabric, and the folds rise in on load.'
+      }
+    ]
   },
   'Backgrounds/SideRays': {
     videoUrl: '/assets/video/siderays.webm',
@@ -1955,12 +2004,18 @@ export const componentMetadata = {
   },
   'Backgrounds/ShapeGrid': {
     videoUrl: '/assets/video/squares.webm',
-    description: 'Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization.',
+    description: 'A drifting grid of shapes that lights up under the cursor, with perspective tilt and rainbow trails.',
     category: 'Backgrounds',
     name: 'ShapeGrid',
     docsUrl: 'https://reactbits.dev/backgrounds/shape-grid',
     tags: [],
-    added: '2026-03-15'
+    added: '2026-03-15',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with eight cell shapes, a glowing cursor trail and click ripples. The grid can now tilt into perspective and light up in rainbow colors.'
+      }
+    ]
   },
   'Backgrounds/Threads': {
     videoUrl: '/assets/video/threads.webm',
@@ -1979,12 +2034,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Waves': {
     videoUrl: '/assets/video/waves.webm',
-    description: 'Layered lines that form smooth wave patterns with animation.',
+    description: 'Dense flowing lines that sway like silk, bend around the cursor and spring back into place.',
     category: 'Backgrounds',
     name: 'Waves',
     docsUrl: 'https://reactbits.dev/backgrounds/waves',
     tags: [],
-    added: '2025-01-03'
+    added: '2025-01-03',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with perfectly smooth, crisp lines. They bend around the cursor and spring back, part in a soft ripple on click, and now come dashed, rotated or in light mode, with an intro.'
+      }
+    ]
   },
   'Backgrounds/LiquidEther': {
     videoUrl: '/assets/video/liquidether.webm',
@@ -2007,12 +2068,18 @@ export const componentMetadata = {
   },
   'Backgrounds/LightPillar': {
     videoUrl: '/assets/video/lightpillar.webm',
-    description: 'Vertical pillar of light with glow effects.',
+    description: 'A swirling pillar of light that ignites on load, leans toward the cursor and surges on click.',
     category: 'Backgrounds',
     name: 'LightPillar',
     docsUrl: 'https://reactbits.dev/backgrounds/light-pillar',
     tags: [],
-    added: '2025-12-03'
+    added: '2025-12-03',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt to run about four times faster with the same look. It now ignites on load, follows the cursor, surges on click and has a soft glow, presets and more controls.'
+      }
+    ]
   },
   'Backgrounds/PixelSnow': {
     videoUrl: '/assets/video/pixelsnow.webm',

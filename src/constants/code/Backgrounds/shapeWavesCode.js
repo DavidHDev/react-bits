@@ -10,7 +10,7 @@ export const shapeWaves = {
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <ShapeWaves
-    text="React Bits"
+    text="</>"
     fontFamily='Geist, "Geist Sans", system-ui, sans-serif'
     fontWeight={500}
     textSize={0.6}

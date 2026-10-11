@@ -3,14 +3,14 @@ export const BACKGROUND_LIGHT_PROPS = {
     backgroundColor: '#ffffff'
   },
   'acid-squares': { lightMode: true, color: '#ffffff', accentColor: '#8fd61f' },
-  aurora: { lightMode: true, color1: '#6d28d9', color2: '#ec4899', color3: '#06b6d4', blend: 0.5 },
+  aurora: { lightMode: true },
   balatro: { color1: '#dc2626', color2: '#1d4ed8', color3: '#e4e4e7' },
   ballpit: { colors: [0x7c3aed, 0x18181b, 0xa1a1aa] },
   beams: { lightMode: true },
   'crt-warp': { color: '#7c3aed', backgroundColor: '#ffffff', bloom: 0.75, noise: 0.055, brightness: 0.72 },
   'color-bends': { lightMode: true, color: '#6d28d9', intensity: 1.2, noise: 0.08 },
   'dark-veil': { lightMode: true },
-  dither: { waveColor: [0.32, 0.3, 0.36], backgroundColor: [1, 1, 1] },
+  dither: { waveColor: '#9e9e9e', backgroundColor: '#ffffff' },
   'dot-field': { gradientFrom: '#7c3aed', gradientTo: '#18181b', glowColor: '#ffffff' },
   'dot-grid': { baseColor: '#d4d4d8', activeColor: '#18181b', glow: 0.25 },
   'evil-eye': { lightMode: true, eyeColor: '#c2410c', backgroundColor: '#ffffff', glowIntensity: 0.22 },
@@ -23,7 +23,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     gradientEnd: '#06b6d4',
     backgroundColor: '#ffffff'
   },
-  galaxy: { lightMode: true, saturation: 0.3, hueShift: 265, glowIntensity: 0.18, backgroundColor: '#ffffff' },
+  galaxy: { lightMode: true },
   'gradient-blinds': { lightMode: true, color1: '#be185d', color2: '#5b21b6', noise: 0.28 },
   'gradient-waves': { horizonColor: '#5b21b6', waveColor: '#be185d', crestColor: '#18181b', grainIntensity: 0.025 },
   'ghost-fibers': { lightMode: true },
@@ -100,8 +100,8 @@ export const BACKGROUND_LIGHT_PROPS = {
     blackPoint: 0.025,
     brightness: 1.2
   },
-  orb: { backgroundColor: '#ffffff', hue: 275, hoverIntensity: 1.5 },
-  particles: { colors: '#52525b' },
+  orb: { backgroundColor: '#ffffff', hue: 275 },
+  particles: { lightMode: true },
   'pixel-blast': { color: '#6d28d9', edgeFade: 0.4 },
   'pixel-snow': { lightMode: true, color: '#7f9cc4' },
   plasma: { lightMode: true },
@@ -118,7 +118,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     vignette: 0.1,
     grainIntensity: 0.025
   },
-  'shape-grid': { borderColor: '#d4d4d8', hoverColor: '#27272a' },
+  'shape-grid': { lineColor: '#e4e4e7', hoverColor: '#18181b', hoverFillColor: '#18181b' },
   'side-rays': { rayColor1: '#a16207', rayColor2: '#1d4ed8', intensity: 1.15, saturation: 1.1, blend: 0.55 },
   silk: { lightMode: true, color: '#5227FF', noiseIntensity: 1.35 },
   'sliced-waves': { lightMode: true, color1: '#ff9d4d', color2: '#ff2d78', color3: '#3060ff' },
@@ -132,7 +132,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     glow: 0.16,
     grainIntensity: 0.018
   },
-  waves: { lineColor: '#52525b' },
+  waves: { lightMode: true, accentColor: '#18181b' },
   'web-threads': {
     lightMode: true,
     backgroundColor: '#ffffff',

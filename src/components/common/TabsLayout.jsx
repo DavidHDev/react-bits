@@ -32,6 +32,8 @@ import FluidMenuContent from './FluidMenuContent';
 import { useAIExportActions } from '../../hooks/useAIExportActions';
 import ComponentPager from './ComponentPager';
 import CustomizeActionsContext from './Preview/CustomizeContext';
+import PreviewStageContext from './Preview/PreviewStageContext';
+import { demoModesFor, demoView } from './Preview/demoModes';
 import PreviewResizer, { PreviewStage } from './Preview/PreviewResizer';
 import { usePreviewFrame } from '../../hooks/usePreviewFrame';
 import { RelatedComponents } from './DocsOverview';
@@ -102,6 +104,8 @@ const WIDTH_PRESETS = [
   { label: `Tablet · ${TABLET_WIDTH}px`, icon: Tablet01Icon, width: TABLET_WIDTH },
   { label: `Mobile · ${MOBILE_WIDTH}px`, icon: SmartPhone01Icon, width: MOBILE_WIDTH }
 ];
+
+let rememberedDemoMode = 'none';
 
 const MenuIcon = ({ icon, saved }) => (
   <span className="docs-menu-icon" data-saved={saved ? '' : undefined}>
@@ -351,6 +355,26 @@ const TabsLayout = ({ children, className }) => {
   const isPreview = activeTab === 'preview';
   const canResize = category !== 'get-started' && isPreview;
   const frame = usePreviewFrame(previewRef, canResize);
+  const [controlsSlot, setControlsSlot] = useState(null);
+  const isBackgrounds = category === 'backgrounds';
+  const hasStageControls = isBackgrounds && canResize;
+  const [demoMode, setDemoModeState] = useState(rememberedDemoMode);
+  const [demoNarrow, setDemoNarrow] = useState(false);
+  const [demoPresent, setDemoPresent] = useState(false);
+  const setDemoMode = useCallback(value => {
+    rememberedDemoMode = value;
+    setDemoModeState(value);
+  }, []);
+  const previewStage = useMemo(
+    () => ({
+      controls: hasStageControls ? controlsSlot : null,
+      hasControls: hasStageControls,
+      demo: isBackgrounds
+        ? { mode: demoMode, setMode: setDemoMode, setNarrow: setDemoNarrow, setPresent: setDemoPresent }
+        : null
+    }),
+    [hasStageControls, controlsSlot, isBackgrounds, demoMode, setDemoMode]
+  );
 
   useEffect(() => {
     if (frame && previewWidth !== null && previewWidth >= frame.fullWidth) setPreviewWidth(null);
@@ -368,8 +392,14 @@ const TabsLayout = ({ children, className }) => {
   const hasOverflowActions = showFavorite || Boolean(codeExampleProps) || Boolean(studioButtonProps) || showFullscreen;
   const widthPresets =
     canResize && frame ? WIDTH_PRESETS.filter(preset => preset.width === null || preset.width < frame.fullWidth) : [];
-  const showWidthPresets = widthPresets.length > 1;
-  const sizePill = usePill(sizeTrackRef, `${previewWidth}-${widthPresets.length}-${showFullscreen}`);
+  const showDemoModes = isBackgrounds && isPreview && demoPresent;
+  const demoOptions = demoModesFor(demoNarrow);
+  const demoSelected = demoView(demoMode, demoNarrow);
+  const showWidthPresets = !showDemoModes && widthPresets.length > 1;
+  const sizePill = usePill(
+    sizeTrackRef,
+    `${previewWidth}-${widthPresets.length}-${showFullscreen}-${showDemoModes ? `${demoSelected}-${demoOptions.length}` : ''}`
+  );
   const favoriteLabel = isSaved ? 'Remove from favorites' : 'Add to favorites';
 
   return (
@@ -395,9 +425,29 @@ const TabsLayout = ({ children, className }) => {
         </div>
 
         <div className="docs-toolbar-actions">
-          {(showWidthPresets || showFullscreen) && (
-            <div className="docs-track" role="group" aria-label="Preview size" ref={sizeTrackRef} data-pill="">
+          {(showDemoModes || showWidthPresets || showFullscreen) && (
+            <div
+              className="docs-track"
+              role="group"
+              aria-label={showDemoModes ? 'Demo content' : 'Preview size'}
+              ref={sizeTrackRef}
+              data-pill=""
+            >
               <Pill pill={sizePill} />
+              {showDemoModes &&
+                demoOptions.map(item => (
+                  <ToolTip key={item.value} label={item.label}>
+                    <button
+                      type="button"
+                      className="docs-segment docs-segment--icon"
+                      aria-label={item.label}
+                      aria-pressed={demoSelected === item.value}
+                      onClick={() => setDemoMode(item.value)}
+                    >
+                      <ToolIcon icon={item.icon} />
+                    </button>
+                  </ToolTip>
+                ))}
               {showWidthPresets &&
                 widthPresets.map(preset => (
                   <ToolTip key={preset.label} label={preset.label}>
@@ -534,8 +584,17 @@ const TabsLayout = ({ children, className }) => {
             canReset: hasChanges
           }}
         >
-          {insertCategoryPro(contentMap.PreviewTab, category)}
+          <PreviewStageContext.Provider value={previewStage}>
+            {insertCategoryPro(contentMap.PreviewTab, category)}
+          </PreviewStageContext.Provider>
         </CustomizeActionsContext.Provider>
+        {hasStageControls && frame && (
+          <div
+            className="preview-controls"
+            ref={setControlsSlot}
+            style={{ top: frame.top, left: frame.left, width: frame.fullWidth }}
+          />
+        )}
         {canResize && (
           <PreviewResizer
             frame={frame}

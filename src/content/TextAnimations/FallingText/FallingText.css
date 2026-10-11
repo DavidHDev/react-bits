@@ -1,31 +1,83 @@
-.falling-text-container {
+.falling-text {
   position: relative;
-  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  cursor: pointer;
-  text-align: center;
-  padding-top: 2em;
-}
-
-.falling-text-target {
-  display: inline-block;
-}
-
-.word {
-  display: inline-block;
-  margin: 0 2px;
+  overflow: hidden;
+  box-sizing: border-box;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.highlighted {
-  color: cyan;
-  font-weight: bold;
+.falling-text[data-trigger='click']:not([data-phase]) {
+  cursor: pointer;
 }
 
-.falling-text-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
+.falling-text__text {
+  max-width: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.falling-text__group {
+  white-space: nowrap;
+}
+
+.falling-text__piece {
+  display: inline-block;
+  white-space: pre;
+}
+
+.falling-text__piece[data-highlight] {
+  color: var(--falling-text-accent);
+  font-weight: 600;
+}
+
+.falling-text__piece--tile {
+  margin: 0.14em 0.06em;
+  padding: 0.24em 0.56em;
+  border-radius: 0.42em;
+  background: var(--falling-text-tile);
+  box-shadow:
+    inset 0 0 0 1px var(--falling-text-tile-edge),
+    inset 0 1px 0 var(--falling-text-tile-highlight),
+    var(--falling-text-tile-shadow);
+  color: var(--falling-text-tile-ink);
+  line-height: 1.2;
+}
+
+.falling-text__piece--tile[data-highlight] {
+  background: var(--falling-text-accent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    var(--falling-text-tile-shadow);
+  color: var(--falling-text-accent-ink);
+}
+
+.falling-text[data-phase] .falling-text__piece {
+  will-change: transform;
+}
+
+.falling-text[data-draggable][data-phase='falling'] .falling-text__piece {
+  touch-action: none;
+}
+
+.falling-text[data-draggable][data-phase='falling']:not([data-dragging]) .falling-text__piece {
+  cursor: grab;
+}
+
+.falling-text[data-dragging],
+.falling-text[data-dragging] .falling-text__piece {
+  cursor: grabbing;
+}
+
+.falling-text--wireframes .falling-text__piece {
+  outline: 1px solid currentColor;
+  outline-offset: -1px;
 }

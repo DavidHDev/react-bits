@@ -1,37 +1,68 @@
-.pixel-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
 .pixel-card {
-  height: 400px;
-  width: 300px;
+  --pixel-card-surface: linear-gradient(180deg, #17151c 0%, #0f0e13 100%);
+  --pixel-card-edge: rgba(255, 255, 255, 0.08);
+  --pixel-card-edge-active: rgba(255, 255, 255, 0.16);
+  --pixel-card-highlight: rgba(255, 255, 255, 0.06);
+  --pixel-card-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.85), 0 8px 18px -10px rgba(0, 0, 0, 0.6);
   position: relative;
-  overflow: hidden;
   display: grid;
   place-items: center;
-  aspect-ratio: 4 / 5;
-  border: 1px solid var(--pixel-card-border, #27272a);
-  background: var(--pixel-card-background, transparent);
-  border-radius: 25px;
+  width: 300px;
+  height: 400px;
+  overflow: hidden;
+  border-radius: var(--pixel-card-radius, 24px);
+  background: var(--pixel-card-surface);
+  box-shadow: var(--pixel-card-shadow);
   isolation: isolate;
-  transition: border-color 200ms cubic-bezier(0.5, 1, 0.89, 1);
+  outline: none;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.pixel-card::before {
+.pixel-card[data-theme='light'] {
+  --pixel-card-surface: linear-gradient(180deg, #ffffff 0%, #f6f6f8 100%);
+  --pixel-card-edge: rgba(24, 24, 27, 0.08);
+  --pixel-card-edge-active: rgba(24, 24, 27, 0.16);
+  --pixel-card-highlight: rgba(255, 255, 255, 1);
+  --pixel-card-shadow: 0 24px 48px -26px rgba(24, 24, 27, 0.32), 0 8px 18px -12px rgba(24, 24, 27, 0.18);
+}
+
+.pixel-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  margin: auto;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, var(--pixel-card-active-color, #09090b), transparent 85%);
-  opacity: 0;
-  transition: opacity 800ms cubic-bezier(0.5, 1, 0.89, 1);
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px var(--pixel-card-edge),
+    inset 0 1px 0 var(--pixel-card-highlight);
+  pointer-events: none;
+  transition: box-shadow 260ms ease;
 }
 
-.pixel-card:hover::before,
-.pixel-card:focus-within::before {
-  opacity: 1;
+.pixel-card[data-active]::after {
+  box-shadow:
+    inset 0 0 0 1px var(--pixel-card-edge-active),
+    inset 0 1px 0 var(--pixel-card-highlight);
+}
+
+.pixel-card:focus-visible {
+  box-shadow:
+    var(--pixel-card-shadow),
+    0 0 0 3px rgba(127, 127, 140, 0.45);
+}
+
+.pixel-card-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.pixel-card > :not(.pixel-card-canvas) {
+  position: relative;
+  z-index: 1;
 }

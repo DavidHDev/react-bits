@@ -5,15 +5,18 @@ import tsCode from '@ts-default/Backgrounds/Aurora/Aurora.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/Aurora/Aurora.tsx?raw';
 
 export const aurora = {
-  dependencies: `ogl`,
   usage: `import Aurora from './Aurora';
-  
-<Aurora
-  colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
-  blend={0.5}
-  amplitude={1.0}
-  speed={0.5}
-/>`,
+
+<div style={{ width: '100%', height: '600px', position: 'relative' }}>
+  <Aurora
+    colorStops={['#5227FF', '#7cff67', '#5227FF']}
+    amplitude={1}
+    blend={0.5}
+    height={0.45}
+    speed={1}
+    glow={0.6}
+  />
+</div>`,
   code,
   css,
   tailwind,

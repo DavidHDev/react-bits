@@ -1,28 +1,12 @@
 .waves {
   position: absolute;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   overflow: hidden;
 }
 
-.waves::before {
-  content: '';
+.waves__canvas {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 0.5rem;
-  height: 0.5rem;
-  background: #160000;
-  border-radius: 50%;
-  transform: translate3d(calc(var(-0.5rem) - 50%), calc(var(50%) - 50%), 0);
-  will-change: transform;
-}
-
-.waves-canvas {
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;

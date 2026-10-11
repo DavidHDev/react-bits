@@ -2530,6 +2530,30 @@
   height: 16px;
 }
 
+.preview-controls {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px;
+  pointer-events: none;
+}
+
+.preview-controls > * {
+  pointer-events: auto;
+}
+
+.preview-controls .docs-refresh {
+  position: relative;
+  top: auto;
+  right: auto;
+  order: 1;
+  margin-left: auto;
+  border-radius: 8px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .docs-pill[data-ready] {
     transition: none;

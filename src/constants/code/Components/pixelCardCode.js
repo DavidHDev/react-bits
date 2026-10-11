@@ -7,10 +7,27 @@ import tsTailwind from '@ts-tailwind/Components/PixelCard/PixelCard.tsx?raw';
 export const pixelCard = {
   usage: `import PixelCard from './PixelCard';
 
-<PixelCard variant="pink">
-  // your card content (use position: absolute)
-</PixelCard>
-`,
+<PixelCard
+  colors={['#f8fafc', '#f1f5f9', '#cbd5e1']}
+  glowColor="#cbd5e1"
+  shape="square"
+  origin="center"
+  gap={5}
+  pixelSize={2}
+  speed={35}
+  revealDuration={600}
+  spotlight={0.5}
+  glow={0.5}
+  opacity={0.35}
+  fade={0.7}
+  trigger="hover"
+  radius={24}
+  clickPulse
+  intro
+  theme="dark"
+>
+  <YourIcon />
+</PixelCard>`,
   code,
   css,
   tailwind,

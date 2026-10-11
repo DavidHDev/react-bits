@@ -2750,7 +2750,7 @@
 		{
 			"name": "FallingText-JS-CSS",
 			"title": "FallingText",
-			"description": "Characters fall with gravity + bounce creating a playful entrance.",
+			"description": "Text that breaks apart and tumbles into a pile you can drag, throw and swipe, then flies back into place.",
 			"type": "registry:component",
 			"dependencies": [
 				"matter-js@^0.20.0"
@@ -2771,7 +2771,7 @@
 		{
 			"name": "FallingText-JS-TW",
 			"title": "FallingText",
-			"description": "Characters fall with gravity + bounce creating a playful entrance.",
+			"description": "Text that breaks apart and tumbles into a pile you can drag, throw and swipe, then flies back into place.",
 			"type": "registry:component",
 			"dependencies": [
 				"matter-js@^0.20.0"
@@ -2787,7 +2787,7 @@
 		{
 			"name": "FallingText-TS-CSS",
 			"title": "FallingText",
-			"description": "Characters fall with gravity + bounce creating a playful entrance.",
+			"description": "Text that breaks apart and tumbles into a pile you can drag, throw and swipe, then flies back into place.",
 			"type": "registry:component",
 			"dependencies": [
 				"matter-js@^0.20.0"
@@ -2808,7 +2808,7 @@
 		{
 			"name": "FallingText-TS-TW",
 			"title": "FallingText",
-			"description": "Characters fall with gravity + bounce creating a playful entrance.",
+			"description": "Text that breaks apart and tumbles into a pile you can drag, throw and swipe, then flies back into place.",
 			"type": "registry:component",
 			"dependencies": [
 				"matter-js@^0.20.0"
@@ -7078,7 +7078,7 @@
 		{
 			"name": "PixelCard-JS-CSS",
 			"title": "PixelCard",
-			"description": "Card content revealed through pixel expansion transition.",
+			"description": "A card that fills with twinkling pixels on hover, rippling out from the center or the cursor.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7097,7 +7097,7 @@
 		{
 			"name": "PixelCard-JS-TW",
 			"title": "PixelCard",
-			"description": "Card content revealed through pixel expansion transition.",
+			"description": "A card that fills with twinkling pixels on hover, rippling out from the center or the cursor.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7111,7 +7111,7 @@
 		{
 			"name": "PixelCard-TS-CSS",
 			"title": "PixelCard",
-			"description": "Card content revealed through pixel expansion transition.",
+			"description": "A card that fills with twinkling pixels on hover, rippling out from the center or the cursor.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7130,7 +7130,7 @@
 		{
 			"name": "PixelCard-TS-TW",
 			"title": "PixelCard",
-			"description": "Card content revealed through pixel expansion transition.",
+			"description": "A card that fills with twinkling pixels on hover, rippling out from the center or the cursor.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -8832,11 +8832,9 @@
 		{
 			"name": "Aurora-JS-CSS",
 			"title": "Aurora",
-			"description": "Flowing aurora gradient background.",
+			"description": "A soft, calm aurora that flows across the top of the page and drifts toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8853,11 +8851,9 @@
 		{
 			"name": "Aurora-JS-TW",
 			"title": "Aurora",
-			"description": "Flowing aurora gradient background.",
+			"description": "A soft, calm aurora that flows across the top of the page and drifts toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8869,11 +8865,9 @@
 		{
 			"name": "Aurora-TS-CSS",
 			"title": "Aurora",
-			"description": "Flowing aurora gradient background.",
+			"description": "A soft, calm aurora that flows across the top of the page and drifts toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8890,11 +8884,9 @@
 		{
 			"name": "Aurora-TS-TW",
 			"title": "Aurora",
-			"description": "Flowing aurora gradient background.",
+			"description": "A soft, calm aurora that flows across the top of the page and drifts toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9326,14 +9318,9 @@
 		{
 			"name": "Dither-JS-CSS",
 			"title": "Dither",
-			"description": "Retro dithered noise shader background.",
+			"description": "Retro dithered waves with Bayer, halftone, line and noise patterns, palettes and cursor trails.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"@react-three/postprocessing@^3.0.4",
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9350,14 +9337,9 @@
 		{
 			"name": "Dither-JS-TW",
 			"title": "Dither",
-			"description": "Retro dithered noise shader background.",
+			"description": "Retro dithered waves with Bayer, halftone, line and noise patterns, palettes and cursor trails.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"@react-three/postprocessing@^3.0.4",
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9369,14 +9351,9 @@
 		{
 			"name": "Dither-TS-CSS",
 			"title": "Dither",
-			"description": "Retro dithered noise shader background.",
+			"description": "Retro dithered waves with Bayer, halftone, line and noise patterns, palettes and cursor trails.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"@react-three/postprocessing@^3.0.4",
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9393,14 +9370,9 @@
 		{
 			"name": "Dither-TS-TW",
 			"title": "Dither",
-			"description": "Retro dithered noise shader background.",
+			"description": "Retro dithered waves with Bayer, halftone, line and noise patterns, palettes and cursor trails.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"@react-three/postprocessing@^3.0.4",
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9618,11 +9590,9 @@
 		{
 			"name": "Galaxy-JS-CSS",
 			"title": "Galaxy",
-			"description": "Parallax realistic starfield with pointer interactions.",
+			"description": "Endless flight through a twinkling starfield with warp jumps, cursor repulsion and star palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9639,11 +9609,9 @@
 		{
 			"name": "Galaxy-JS-TW",
 			"title": "Galaxy",
-			"description": "Parallax realistic starfield with pointer interactions.",
+			"description": "Endless flight through a twinkling starfield with warp jumps, cursor repulsion and star palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9655,11 +9623,9 @@
 		{
 			"name": "Galaxy-TS-CSS",
 			"title": "Galaxy",
-			"description": "Parallax realistic starfield with pointer interactions.",
+			"description": "Endless flight through a twinkling starfield with warp jumps, cursor repulsion and star palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9676,11 +9642,9 @@
 		{
 			"name": "Galaxy-TS-TW",
 			"title": "Galaxy",
-			"description": "Parallax realistic starfield with pointer interactions.",
+			"description": "Endless flight through a twinkling starfield with warp jumps, cursor repulsion and star palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11476,11 +11440,9 @@
 		{
 			"name": "Orb-JS-CSS",
 			"title": "Orb",
-			"description": "Floating energy orb with customizable hover effect.",
+			"description": "A glowing ring of swirling color that breathes, trails an orbiting light and reaches toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11497,11 +11459,9 @@
 		{
 			"name": "Orb-JS-TW",
 			"title": "Orb",
-			"description": "Floating energy orb with customizable hover effect.",
+			"description": "A glowing ring of swirling color that breathes, trails an orbiting light and reaches toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11513,11 +11473,9 @@
 		{
 			"name": "Orb-TS-CSS",
 			"title": "Orb",
-			"description": "Floating energy orb with customizable hover effect.",
+			"description": "A glowing ring of swirling color that breathes, trails an orbiting light and reaches toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11534,11 +11492,9 @@
 		{
 			"name": "Orb-TS-TW",
 			"title": "Orb",
-			"description": "Floating energy orb with customizable hover effect.",
+			"description": "A glowing ring of swirling color that breathes, trails an orbiting light and reaches toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11550,11 +11506,9 @@
 		{
 			"name": "Particles-JS-CSS",
 			"title": "Particles",
-			"description": "Configurable particle system.",
+			"description": "A drifting 3D field of particles with glow, twinkle, constellation lines and cursor interaction.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11571,11 +11525,9 @@
 		{
 			"name": "Particles-JS-TW",
 			"title": "Particles",
-			"description": "Configurable particle system.",
+			"description": "A drifting 3D field of particles with glow, twinkle, constellation lines and cursor interaction.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11587,11 +11539,9 @@
 		{
 			"name": "Particles-TS-CSS",
 			"title": "Particles",
-			"description": "Configurable particle system.",
+			"description": "A drifting 3D field of particles with glow, twinkle, constellation lines and cursor interaction.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11608,11 +11558,9 @@
 		{
 			"name": "Particles-TS-TW",
 			"title": "Particles",
-			"description": "Configurable particle system.",
+			"description": "A drifting 3D field of particles with glow, twinkle, constellation lines and cursor interaction.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12048,29 +11996,28 @@
 		{
 			"name": "Silk-JS-CSS",
 			"title": "Silk",
-			"description": "Smooth waves background with soft lighting.",
+			"description": "Flowing satin folds with glossy highlights that turn toward the cursor and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "Silk.css",
+					"target": "@components/Silk.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "Silk/Silk.jsx"
+					"path": "Silk.jsx"
 				}
 			]
 		},
 		{
 			"name": "Silk-JS-TW",
 			"title": "Silk",
-			"description": "Smooth waves background with soft lighting.",
+			"description": "Flowing satin folds with glossy highlights that turn toward the cursor and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12082,29 +12029,28 @@
 		{
 			"name": "Silk-TS-CSS",
 			"title": "Silk",
-			"description": "Smooth waves background with soft lighting.",
+			"description": "Flowing satin folds with glossy highlights that turn toward the cursor and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "Silk.css",
+					"target": "@components/Silk.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "Silk/Silk.tsx"
+					"path": "Silk.tsx"
 				}
 			]
 		},
 		{
 			"name": "Silk-TS-TW",
 			"title": "Silk",
-			"description": "Smooth waves background with soft lighting.",
+			"description": "Flowing satin folds with glossy highlights that turn toward the cursor and ripple on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12190,7 +12136,7 @@
 		{
 			"name": "ShapeGrid-JS-CSS",
 			"title": "ShapeGrid",
-			"description": "Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization.",
+			"description": "A drifting grid of shapes that lights up under the cursor, with perspective tilt and rainbow trails.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12209,7 +12155,7 @@
 		{
 			"name": "ShapeGrid-JS-TW",
 			"title": "ShapeGrid",
-			"description": "Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization.",
+			"description": "A drifting grid of shapes that lights up under the cursor, with perspective tilt and rainbow trails.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12223,7 +12169,7 @@
 		{
 			"name": "ShapeGrid-TS-CSS",
 			"title": "ShapeGrid",
-			"description": "Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization.",
+			"description": "A drifting grid of shapes that lights up under the cursor, with perspective tilt and rainbow trails.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12242,7 +12188,7 @@
 		{
 			"name": "ShapeGrid-TS-TW",
 			"title": "ShapeGrid",
-			"description": "Animated grid with shape variants (square, hexagon, circle, triangle) + direction customization.",
+			"description": "A drifting grid of shapes that lights up under the cursor, with perspective tilt and rainbow trails.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12322,7 +12268,7 @@
 		{
 			"name": "Waves-JS-CSS",
 			"title": "Waves",
-			"description": "Layered lines that form smooth wave patterns with animation.",
+			"description": "Dense flowing lines that sway like silk, bend around the cursor and spring back into place.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12341,7 +12287,7 @@
 		{
 			"name": "Waves-JS-TW",
 			"title": "Waves",
-			"description": "Layered lines that form smooth wave patterns with animation.",
+			"description": "Dense flowing lines that sway like silk, bend around the cursor and spring back into place.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12355,7 +12301,7 @@
 		{
 			"name": "Waves-TS-CSS",
 			"title": "Waves",
-			"description": "Layered lines that form smooth wave patterns with animation.",
+			"description": "Dense flowing lines that sway like silk, bend around the cursor and spring back into place.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12374,7 +12320,7 @@
 		{
 			"name": "Waves-TS-TW",
 			"title": "Waves",
-			"description": "Layered lines that form smooth wave patterns with animation.",
+			"description": "Dense flowing lines that sway like silk, bend around the cursor and spring back into place.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -12536,11 +12482,9 @@
 		{
 			"name": "LightPillar-JS-CSS",
 			"title": "LightPillar",
-			"description": "Vertical pillar of light with glow effects.",
+			"description": "A swirling pillar of light that ignites on load, leans toward the cursor and surges on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12557,11 +12501,9 @@
 		{
 			"name": "LightPillar-JS-TW",
 			"title": "LightPillar",
-			"description": "Vertical pillar of light with glow effects.",
+			"description": "A swirling pillar of light that ignites on load, leans toward the cursor and surges on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12573,11 +12515,9 @@
 		{
 			"name": "LightPillar-TS-CSS",
 			"title": "LightPillar",
-			"description": "Vertical pillar of light with glow effects.",
+			"description": "A swirling pillar of light that ignites on load, leans toward the cursor and surges on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12594,11 +12534,9 @@
 		{
 			"name": "LightPillar-TS-TW",
 			"title": "LightPillar",
-			"description": "Vertical pillar of light with glow effects.",
+			"description": "A swirling pillar of light that ignites on load, leans toward the cursor and surges on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

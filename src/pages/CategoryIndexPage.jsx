@@ -20,7 +20,8 @@ const CategoryIndexPage = () => {
   const key = CATEGORY_KEYS[category];
   const seo = CATEGORY_SEO[category];
   const list = useMemo(
-    () => Object.fromEntries(Object.entries(componentMetadata).filter(([, meta]) => meta.category === key)),
+    () =>
+      Object.fromEntries(Object.entries(componentMetadata).filter(([, meta]) => meta.category === key && !meta.hidden)),
     [key]
   );
   const newSinceLastVisit = useNewSinceLastVisit(Object.keys(list));

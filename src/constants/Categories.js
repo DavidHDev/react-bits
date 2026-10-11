@@ -175,7 +175,6 @@ export const CATEGORIES = [
       'Light Rays',
       'Pixel Blast',
       'Color Bends',
-      'Evil Eye',
       'Line Waves',
       'Radar',
       'Soft Aurora',

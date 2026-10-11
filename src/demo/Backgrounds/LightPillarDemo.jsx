@@ -1,296 +1,414 @@
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
-import { useMemo } from 'react';
+
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
+import Customize from '../../components/common/Preview/Customize';
+import CodeExample from '../../components/code/CodeExample';
+import PropTable from '../../components/common/Preview/PropTable';
+import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
-import Customize from '../../components/common/Preview/Customize';
-import CodeExample from '../../components/code/CodeExample';
-import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
-import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
-import PreviewSelect from '../../components/common/Preview/PreviewSelect';
-import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
-import BackgroundContent from '@/components/common/Preview/BackgroundContent';
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
-
-import LightPillar from '@/content/Backgrounds/LightPillar/LightPillar';
+import LightPillar from '../../content/Backgrounds/LightPillar/LightPillar';
 import { lightPillar } from '../../constants/code/Backgrounds/lightPillarCode';
 
-const DEFAULT_PROPS = {
+const LOOK = {
   topColor: '#5227FF',
   bottomColor: '#FF9FFC',
-  intensity: 1.0,
-  rotationSpeed: 0.3,
-  interactive: false,
+  intensity: 1,
   glowAmount: 0.002,
-  pillarWidth: 3.0,
+  bloom: 0.5,
+  pillarWidth: 3,
   pillarHeight: 0.4,
-  noiseIntensity: 0.5,
-  mixBlendMode: 'screen',
   pillarRotation: 25,
-  quality: 'high'
+  twist: 0.4,
+  detail: 4,
+  rotationSpeed: 0.3,
+  flow: 1,
+  noiseIntensity: 0.5
 };
 
+const DEFAULT_PROPS = {
+  preset: 'aurora',
+  ...LOOK,
+  interactive: true,
+  clickPulse: true,
+  intro: true,
+  fade: 0,
+  quality: 'high',
+  mixBlendMode: 'screen',
+  lightMode: false
+};
+
+const PRESETS = {
+  aurora: LOOK,
+  ice: {
+    ...LOOK,
+    topColor: '#22d3ee',
+    bottomColor: '#e0f2fe',
+    pillarWidth: 2.5,
+    pillarRotation: -15,
+    twist: 0.6,
+    bloom: 0.6
+  },
+  ember: {
+    ...LOOK,
+    topColor: '#ff4d1a',
+    bottomColor: '#ffd166',
+    pillarRotation: 10,
+    flow: 1.6,
+    intensity: 1.1
+  },
+  spectre: {
+    ...LOOK,
+    topColor: '#c9c9d6',
+    bottomColor: '#ffffff',
+    pillarWidth: 2,
+    pillarRotation: 0,
+    glowAmount: 0.0018,
+    bloom: 0.35
+  },
+  twister: {
+    ...LOOK,
+    topColor: '#10b981',
+    bottomColor: '#d9f99d',
+    pillarHeight: 0.8,
+    twist: 1.05,
+    rotationSpeed: 0.55,
+    pillarRotation: -30
+  },
+  beam: {
+    ...LOOK,
+    topColor: '#3b5bff',
+    bottomColor: '#e0e7ff',
+    pillarWidth: 1.4,
+    pillarRotation: 0,
+    glowAmount: 0.0011,
+    intensity: 1.15,
+    detail: 3,
+    bloom: 0.7
+  }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'aurora', label: 'Aurora' },
+  { value: 'ice', label: 'Ice' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'spectre', label: 'Spectre' },
+  { value: 'twister', label: 'Twister' },
+  { value: 'beam', label: 'Beam' }
+];
+
+const QUALITY_OPTIONS = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' }
+];
+
+const BLEND_OPTIONS = [
+  { value: 'screen', label: 'Screen' },
+  { value: 'normal', label: 'Normal' },
+  { value: 'lighten', label: 'Lighten' },
+  { value: 'color-dodge', label: 'Color Dodge' },
+  { value: 'luminosity', label: 'Luminosity' }
+];
+
+const propData = [
+  {
+    name: 'topColor',
+    type: 'string',
+    default: "'#5227FF'",
+    description: 'Color of the lower, denser part of the pillar.'
+  },
+  {
+    name: 'bottomColor',
+    type: 'string',
+    default: "'#FF9FFC'",
+    description: 'Color the light fades into toward the top.'
+  },
+  { name: 'intensity', type: 'number', default: '1', description: 'Overall brightness.' },
+  {
+    name: 'glowAmount',
+    type: 'number',
+    default: '0.002',
+    description: 'How much light the strands gather. Higher values burn brighter and whiter.'
+  },
+  {
+    name: 'bloom',
+    type: 'number',
+    default: '0.5',
+    description: 'Soft halo around the brightest strands, from 0 to 1.'
+  },
+  { name: 'pillarWidth', type: 'number', default: '3', description: 'Width of the pillar.' },
+  {
+    name: 'pillarHeight',
+    type: 'number',
+    default: '0.4',
+    description: 'Vertical stretch of the strands. Higher values pack them tighter.'
+  },
+  {
+    name: 'pillarRotation',
+    type: 'number',
+    default: '25',
+    description: 'Tilts the pillar, in degrees.'
+  },
+  {
+    name: 'twist',
+    type: 'number',
+    default: '0.4',
+    description: 'How much the strands swirl around each other.'
+  },
+  {
+    name: 'detail',
+    type: 'number',
+    default: '4',
+    description: 'Layers of turbulence in the strands, from 1 to 6. Fewer layers are smoother and faster.'
+  },
+  {
+    name: 'rotationSpeed',
+    type: 'number',
+    default: '0.3',
+    description: 'How fast the pillar turns. Also drives the overall animation speed.'
+  },
+  {
+    name: 'flow',
+    type: 'number',
+    default: '1',
+    description: 'How fast the light streams along the pillar, relative to the rotation.'
+  },
+  { name: 'noiseIntensity', type: 'number', default: '0.5', description: 'Strength of the film grain.' },
+  {
+    name: 'interactive',
+    type: 'boolean',
+    default: 'true',
+    description: 'The pillar leans, drifts and turns toward the cursor.'
+  },
+  {
+    name: 'clickPulse',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a surge of light racing up the pillar.'
+  },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'The pillar ignites from the bottom and widens when it first appears.'
+  },
+  { name: 'fade', type: 'number', default: '0', description: 'Fades the edges into the page, from 0 to 1.' },
+  {
+    name: 'quality',
+    type: "'low' | 'medium' | 'high'",
+    default: "'high'",
+    description: 'Render resolution of the light. The pillar is soft, so lower settings look almost the same.'
+  },
+  {
+    name: 'resolution',
+    type: 'number',
+    default: '-',
+    description: 'Exact render scale relative to the element size, from 0.25 to 2. Overrides quality.'
+  },
+  {
+    name: 'mixBlendMode',
+    type: 'string',
+    default: "'screen'",
+    description: 'CSS blend mode for the canvas. Screen lets the page show through the dark areas.'
+  },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the pillar as colored light on a white background.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the animation.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
 const LightPillarDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    topColor,
-    bottomColor,
-    intensity,
-    rotationSpeed,
-    interactive,
-    glowAmount,
-    pillarWidth,
-    pillarHeight,
-    noiseIntensity,
-    mixBlendMode,
-    pillarRotation,
-    quality,
-    lightMode
-  } = props;
-
   const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
 
-  const blendModeOptions = [
-    { value: 'normal', label: 'Normal' },
-    { value: 'screen', label: 'Screen' },
-    { value: 'darken', label: 'Darken' },
-    { value: 'lighten', label: 'Lighten' },
-    { value: 'color-dodge', label: 'Color Dodge' },
-    { value: 'luminosity', label: 'Luminosity' }
-  ];
-
-  const qualityOptions = [
-    { value: 'low', label: 'Low' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'high', label: 'High' }
-  ];
-
-  const propData = useMemo(
-    () => [
-      {
-        name: 'topColor',
-        type: 'string',
-        default: "'#5227FF'",
-        description: 'Hex color string for the top gradient color of the light pillar.'
-      },
-      {
-        name: 'bottomColor',
-        type: 'string',
-        default: "'#FF9FFC'",
-        description: 'Hex color string for the bottom gradient color of the light pillar.'
-      },
-      {
-        name: 'intensity',
-        type: 'number',
-        default: '1.0',
-        description: 'Controls the overall brightness and intensity of the effect.'
-      },
-      {
-        name: 'rotationSpeed',
-        type: 'number',
-        default: '0.3',
-        description: 'Speed multiplier for the pillar rotation animation.'
-      },
-      {
-        name: 'interactive',
-        type: 'boolean',
-        default: 'false',
-        description: 'Enable mouse interaction to control the pillar rotation.'
-      },
-      {
-        name: 'glowAmount',
-        type: 'number',
-        default: '0.005',
-        description: 'Controls the glow intensity and spread of the light effect.'
-      },
-      {
-        name: 'pillarWidth',
-        type: 'number',
-        default: '3.0',
-        description: 'Width/radius of the light pillar.'
-      },
-      {
-        name: 'pillarHeight',
-        type: 'number',
-        default: '0.4',
-        description: 'Height scaling factor for the pillar distortion.'
-      },
-      {
-        name: 'noiseIntensity',
-        type: 'number',
-        default: '0.5',
-        description: 'Intensity of the film grain noise postprocessing effect.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Additional CSS class names to apply to the container element.'
-      },
-      {
-        name: 'mixBlendMode',
-        type: 'string',
-        default: "'screen'",
-        description: 'CSS mix-blend-mode property to control how the component blends with its background.'
-      },
-      {
-        name: 'pillarRotation',
-        type: 'number',
-        default: '0',
-        description: 'Rotation angle of the pillar in degrees (0-360).'
-      },
-      {
-        name: 'quality',
-        type: "'low' | 'medium' | 'high'",
-        default: "'high'",
-        description:
-          'Rendering quality level. Lower settings improve performance on mobile devices. Mobile devices automatically downgrade from high to medium.'
-      }
-    ],
-    []
-  );
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <LightPillar
-              key={key}
-              topColor={topColor}
-              bottomColor={bottomColor}
-              intensity={intensity}
-              rotationSpeed={rotationSpeed}
-              interactive={interactive}
-              glowAmount={glowAmount}
-              pillarWidth={pillarWidth}
-              pillarHeight={pillarHeight}
-              noiseIntensity={noiseIntensity}
-              mixBlendMode={mixBlendMode}
-              pillarRotation={pillarRotation}
-              quality={quality}
-              lightMode={lightMode}
-            />
-            <BackgroundContent pillText="New Background" headline="Ethereal light pillar for your hero sections." />
+          <Box position="relative" className="demo-container" h={500} overflow="hidden" p={0}>
+            <LightPillar key={key} {...settings} />
+            <BackgroundContent headline="Ethereal light pillar for your hero sections." />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="light-pillar"
-              currentProps={{
-                topColor,
-                bottomColor,
-                intensity,
-                rotationSpeed,
-                interactive,
-                glowAmount,
-                pillarWidth,
-                pillarHeight,
-                noiseIntensity,
-                pillarRotation
-              }}
-              defaultProps={{
-                topColor: '#5227FF',
-                bottomColor: '#FF9FFC',
-                intensity: 1,
-                rotationSpeed: 0.3,
-                interactive: false,
-                glowAmount: 0.005,
-                pillarWidth: 3,
-                pillarHeight: 0.4,
-                noiseIntensity: 0.5,
-                pillarRotation: 0
-              }}
-            />
+            <OpenInStudioButton backgroundId="light-pillar" currentProps={settings} defaultProps={LOOK} />
           </Flex>
 
-          <Customize forceRerender={forceRerender}>
-            <PreviewColorPickerCustom title="Top Color" color={topColor} onChange={val => updateProp('topColor', val)} />
-            <PreviewColorPickerCustom title="Bottom Color" color={bottomColor} onChange={val => updateProp('bottomColor', val)} />
+          <Customize>
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewColorPickerCustom
+              title="Top Color"
+              color={settings.topColor}
+              onChange={value => updateProp('topColor', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Bottom Color"
+              color={settings.bottomColor}
+              onChange={value => updateProp('bottomColor', value)}
+            />
             <PreviewSlider
               title="Intensity"
               min={0.1}
               max={3}
+              step={0.05}
+              value={settings.intensity}
+              onChange={value => updateProp('intensity', value)}
+            />
+            <PreviewSlider
+              title="Glow"
+              min={0.0005}
+              max={0.01}
+              step={0.0005}
+              value={settings.glowAmount}
+              onChange={value => updateProp('glowAmount', value)}
+            />
+            <PreviewSlider
+              title="Bloom"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.bloom}
+              onChange={value => updateProp('bloom', value)}
+            />
+            <PreviewSlider
+              title="Pillar Width"
+              min={0.5}
+              max={8}
               step={0.1}
-              value={intensity}
-              onChange={v => updateProp('intensity', v)}
+              value={settings.pillarWidth}
+              onChange={value => updateProp('pillarWidth', value)}
+            />
+            <PreviewSlider
+              title="Pillar Height"
+              min={0.1}
+              max={1.5}
+              step={0.05}
+              value={settings.pillarHeight}
+              onChange={value => updateProp('pillarHeight', value)}
+            />
+            <PreviewSlider
+              title="Pillar Rotation"
+              min={-90}
+              max={90}
+              step={1}
+              value={settings.pillarRotation}
+              valueUnit="°"
+              onChange={value => updateProp('pillarRotation', value)}
+            />
+            <PreviewSlider
+              title="Twist"
+              min={0}
+              max={1.6}
+              step={0.05}
+              value={settings.twist}
+              onChange={value => updateProp('twist', value)}
+            />
+            <PreviewSlider
+              title="Detail"
+              min={1}
+              max={6}
+              step={1}
+              value={settings.detail}
+              onChange={value => updateProp('detail', value)}
             />
             <PreviewSlider
               title="Rotation Speed"
               min={0}
               max={2}
-              step={0.1}
-              value={rotationSpeed}
-              onChange={v => updateProp('rotationSpeed', v)}
+              step={0.05}
+              value={settings.rotationSpeed}
+              onChange={value => updateProp('rotationSpeed', value)}
             />
             <PreviewSlider
-              title="Glow Amount"
-              min={0.001}
-              max={0.02}
-              step={0.001}
-              value={glowAmount}
-              onChange={v => updateProp('glowAmount', v)}
+              title="Flow"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.flow}
+              onChange={value => updateProp('flow', value)}
             />
             <PreviewSlider
-              title="Pillar Width"
-              min={1}
-              max={10}
-              step={0.1}
-              value={pillarWidth}
-              onChange={v => updateProp('pillarWidth', v)}
-            />
-            <PreviewSlider
-              title="Pillar Height"
-              min={0.1}
-              max={2}
-              step={0.1}
-              value={pillarHeight}
-              onChange={v => updateProp('pillarHeight', v)}
-            />
-            <PreviewSlider
-              title="Noise Intensity"
+              title="Grain"
               min={0}
               max={2}
-              step={0.1}
-              value={noiseIntensity}
-              onChange={v => updateProp('noiseIntensity', v)}
+              step={0.05}
+              value={settings.noiseIntensity}
+              onChange={value => updateProp('noiseIntensity', value)}
             />
             <PreviewSlider
-              title="Pillar Rotation"
+              title="Fade"
               min={0}
-              max={360}
-              step={1}
-              value={pillarRotation}
-              onChange={v => updateProp('pillarRotation', v)}
-            />
-            <PreviewSwitch
-              title="Interactive"
-              isChecked={interactive}
-              onChange={() => updateProp('interactive', !interactive)}
-            />
-            <PreviewSelect
-              title="Mix Blend Mode"
-              options={blendModeOptions}
-              value={mixBlendMode}
-              onChange={v => updateProp('mixBlendMode', v)}
-              width={150}
+              max={1}
+              step={0.05}
+              value={settings.fade}
+              onChange={value => updateProp('fade', value)}
             />
             <PreviewSelect
               title="Quality"
-              options={qualityOptions}
-              value={quality}
-              onChange={v => updateProp('quality', v)}
-              width={150}
+              options={QUALITY_OPTIONS}
+              value={settings.quality}
+              onChange={value => updateProp('quality', value)}
+            />
+            <PreviewSelect
+              title="Blend Mode"
+              options={BLEND_OPTIONS}
+              value={settings.mixBlendMode}
+              onChange={value => updateProp('mixBlendMode', value)}
+            />
+            <PreviewSwitch
+              title="Interactive"
+              isChecked={settings.interactive}
+              onChange={value => updateProp('interactive', value)}
+            />
+            <PreviewSwitch
+              title="Click Pulse"
+              isChecked={settings.clickPulse}
+              onChange={value => updateProp('clickPulse', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
+            />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['three']} />
         </PreviewTab>
 
         <CodeTab>

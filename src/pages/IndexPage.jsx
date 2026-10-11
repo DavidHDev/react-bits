@@ -7,7 +7,9 @@ import usePageSEO from '../hooks/usePageSEO';
 import { INDEX_SEO } from '../utils/seo';
 
 const IndexPage = () => {
-  const newSinceLastVisit = useNewSinceLastVisit(Object.keys(componentMetadata));
+  const newSinceLastVisit = useNewSinceLastVisit(
+    Object.keys(componentMetadata).filter(key => !componentMetadata[key].hidden)
+  );
   usePageSEO(INDEX_SEO);
 
   return (

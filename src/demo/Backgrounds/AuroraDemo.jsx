@@ -1,67 +1,160 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
 
-import CodeExample from '../../components/code/CodeExample';
-
-import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
-import useForceRerender from '../../hooks/useForceRerender';
-import useComponentProps from '../../hooks/useComponentProps';
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
+import CodeExample from '../../components/code/CodeExample';
+import PropTable from '../../components/common/Preview/PropTable';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
+
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
 import Aurora from '../../content/Backgrounds/Aurora/Aurora';
 import { aurora } from '../../constants/code/Backgrounds/auroraCode';
 
-// Default prop values for this component
-const DEFAULT_PROPS = {
-  color1: '#7cff67',
-  color2: '#B497CF',
-  color3: '#5227FF',
+const LOOK = {
+  colorStops: ['#5227FF', '#7cff67', '#5227FF'],
+  amplitude: 1,
+  blend: 0.5,
+  height: 0.45,
   speed: 1,
-  blend: 0.5
+  scale: 1,
+  glow: 0.6,
+  brightness: 1,
+  layers: 1,
+  direction: 'top'
 };
 
+const DEFAULT_PROPS = {
+  preset: 'classic',
+  ...LOOK,
+  opacity: 1,
+  mouseInteraction: true,
+  intro: true,
+  lightMode: false
+};
+
+const PRESETS = {
+  classic: { ...LOOK },
+  borealis: { ...LOOK, colorStops: ['#1effa0', '#14c8b4', '#3a7bff'] },
+  dusk: { ...LOOK, colorStops: ['#ff8a5c', '#ff5c8a', '#8a5cff'] },
+  arctic: { ...LOOK, colorStops: ['#8fe3ff', '#e8f6ff', '#6f9bff'], amplitude: 0.7, speed: 0.7 },
+  mono: { ...LOOK, colorStops: ['#ffffff', '#9aa0ad', '#ffffff'], brightness: 0.8 },
+  horizon: { ...LOOK, colorStops: ['#5c7cff', '#ff6b9a', '#ffb35c'], direction: 'bottom', height: 0.5 },
+  veil: {
+    ...LOOK,
+    colorStops: ['#7cff67', '#22d3c5', '#8f5cff'],
+    layers: 3,
+    glow: 1.2,
+    speed: 0.6,
+    amplitude: 1.4
+  }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'classic', label: 'Classic' },
+  { value: 'borealis', label: 'Borealis' },
+  { value: 'dusk', label: 'Dusk' },
+  { value: 'arctic', label: 'Arctic' },
+  { value: 'mono', label: 'Mono' },
+  { value: 'horizon', label: 'Horizon' },
+  { value: 'veil', label: 'Veil' }
+];
+
+const DIRECTION_OPTIONS = [
+  { value: 'top', label: 'Top' },
+  { value: 'bottom', label: 'Bottom' }
+];
+
+const propData = [
+  {
+    name: 'colorStops',
+    type: 'string[]',
+    default: "['#5227FF', '#7cff67', '#5227FF']",
+    description: 'Two to five colors that blend across the aurora from left to right.'
+  },
+  { name: 'amplitude', type: 'number', default: '1', description: 'How tall the waves along the edge are.' },
+  { name: 'blend', type: 'number', default: '0.5', description: 'How softly the edge fades out, from 0 to 1.' },
+  {
+    name: 'height',
+    type: 'number',
+    default: '0.45',
+    description: 'How far the aurora reaches into the container, from 0 to 1.'
+  },
+  { name: 'speed', type: 'number', default: '1', description: 'Speed of the flowing motion.' },
+  {
+    name: 'scale',
+    type: 'number',
+    default: '1',
+    description: 'Size of the waves. Lower values make broader, calmer shapes.'
+  },
+  {
+    name: 'glow',
+    type: 'number',
+    default: '0.6',
+    description: 'How far the light spills softly past the edge.'
+  },
+  { name: 'brightness', type: 'number', default: '1', description: 'Overall brightness of the light.' },
+  {
+    name: 'layers',
+    type: 'number',
+    default: '1',
+    description: 'Number of curtains, from 1 to 3. Extra ones glow fainter behind for depth.'
+  },
+  {
+    name: 'direction',
+    type: "'top' | 'bottom'",
+    default: "'top'",
+    description: 'Whether the aurora hangs from the top or rises from the bottom.'
+  },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The light gently reaches toward the cursor.'
+  },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'Fades the aurora in as it unfurls on mount.' },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the aurora as soft pastel light for white backgrounds.'
+  },
+  {
+    name: 'time',
+    type: 'number',
+    default: '-',
+    description: 'Drives the animation from your own clock, for example scroll progress, instead of real time.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the animation.' },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
 const AuroraDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const { color1, color2, color3, speed, blend, lightMode } = props;
-
   const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'colorStops',
-        type: '[string, string, string]',
-        default: '["#3A29FF", "#FF94B4", "#FF3232"]',
-        description: 'An array of three hex colors defining the aurora gradient.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '1.0',
-        description: 'Controls the animation speed. Higher values make the aurora move faster.'
-      },
-      {
-        name: 'blend',
-        type: 'number',
-        default: '0.5',
-        description: 'Controls the blending of the aurora effect with the background.'
-      },
-      {
-        name: 'amplitude',
-        type: 'number',
-        default: '1.0',
-        description: 'Controls the height intensity of the aurora effect.'
-      }
-    ],
-    []
-  );
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
+
+  const setColor = (index, value) => {
+    const next = [...settings.colorStops];
+    next[index] = value;
+    updateProp('colorStops', next);
+  };
 
   return (
     <ComponentPropsProvider
@@ -69,58 +162,122 @@ const AuroraDemo = () => {
       defaultProps={DEFAULT_PROPS}
       resetProps={resetProps}
       hasChanges={hasChanges}
-      demoOnlyProps={['color1', 'color2', 'color3']}
-      computedProps={{ colorStops: [color1, color2, color3] }}
+      demoOnlyProps={['preset']}
     >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <Aurora key={key} blend={blend} speed={speed} colorStops={[color1, color2, color3]} lightMode={lightMode} />
-
-            {/* For Demo Purposes Only */}
-            <BackgroundContent pillText="New Background" headline="Bring the Arctic to you, with one line of code" />
+            <Aurora key={key} {...settings} />
+            <BackgroundContent headline="Bring the Arctic to you, with one line of code" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="aurora"
-              currentProps={{ colorStops: [color1, color2, color3], speed, blend }}
-              defaultProps={{ colorStops: ['#5227FF', '#7cff67', '#5227FF'], speed: 1, blend: 0.5 }}
-            />
+            <OpenInStudioButton backgroundId="aurora" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => { updateProp('color1', val); forceRerender(); }} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => { updateProp('color2', val); forceRerender(); }} />
-            <PreviewColorPickerCustom title="Color 3" color={color3} onChange={val => { updateProp('color3', val); forceRerender(); }} />
-
-            <PreviewSlider
-              title="Speed"
-              min={0}
-              max={2}
-              step={0.1}
-              value={speed}
-              onChange={val => {
-                updateProp('speed', val);
-                forceRerender();
-              }}
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            {['Color 1', 'Color 2', 'Color 3'].map((title, index) => (
+              <PreviewColorPickerCustom
+                key={title}
+                title={title}
+                color={settings.colorStops[index] ?? settings.colorStops[0]}
+                onChange={value => setColor(index, value)}
+              />
+            ))}
+            <PreviewSelect
+              title="Direction"
+              options={DIRECTION_OPTIONS}
+              value={settings.direction}
+              onChange={value => updateProp('direction', value)}
             />
-
+            <PreviewSlider
+              title="Height"
+              min={0.1}
+              max={0.9}
+              step={0.01}
+              value={settings.height}
+              onChange={value => updateProp('height', value)}
+            />
+            <PreviewSlider
+              title="Amplitude"
+              min={0}
+              max={2.5}
+              step={0.05}
+              value={settings.amplitude}
+              onChange={value => updateProp('amplitude', value)}
+            />
             <PreviewSlider
               title="Blend"
               min={0}
               max={1}
               step={0.01}
-              value={blend}
-              onChange={val => {
-                updateProp('blend', val);
-                forceRerender();
-              }}
+              value={settings.blend}
+              onChange={value => updateProp('blend', value)}
+            />
+            <PreviewSlider
+              title="Glow"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
+            />
+            <PreviewSlider
+              title="Scale"
+              min={0.3}
+              max={3}
+              step={0.05}
+              value={settings.scale}
+              onChange={value => updateProp('scale', value)}
+            />
+            <PreviewSlider
+              title="Speed"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
+            />
+            <PreviewSlider
+              title="Brightness"
+              min={0.2}
+              max={2}
+              step={0.05}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
+            />
+            <PreviewSlider
+              title="Layers"
+              min={1}
+              max={3}
+              step={1}
+              value={settings.layers}
+              onChange={value => updateProp('layers', value)}
+            />
+            <PreviewSlider
+              title="Opacity"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.opacity}
+              onChange={value => updateProp('opacity', value)}
+            />
+            <PreviewSwitch
+              title="Mouse Interaction"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

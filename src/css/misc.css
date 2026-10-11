@@ -611,13 +611,6 @@
   }
 }
 
-/* Background content glass effect */
-.bg-content-glass {
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  backdrop-filter: blur(20px) saturate(1.4);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-}
-
 [data-scope='menu'][data-part='trigger']:focus-visible {
   outline: none;
 }

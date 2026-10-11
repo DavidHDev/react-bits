@@ -25,6 +25,13 @@ for (const page of routes) {
   );
   assert.equal((html.match(/<h1>/g) ?? []).length, 1, `${page.path}: H1`);
   assert.ok(html.includes('data-prerendered="true"'), `${page.path}: body`);
+  assert.ok(html.includes('id="rb-boot-script"'), `${page.path}: first-paint boot script`);
+  assert.ok(html.includes('id="rb-boot-style"'), `${page.path}: first-paint boot styles`);
+  assert.ok(
+    html.indexOf('id="rb-boot-loader"') >= 0 &&
+      html.indexOf('id="rb-boot-loader"') < html.indexOf('<!--rb-app-start-->'),
+    `${page.path}: boot loader must survive root replacement`
+  );
   assert.ok(html.includes(`content="${page.robots || 'index, follow'}"`), `${page.path}: robots`);
   for (const [, href] of html.matchAll(/<a\b[^>]*href="(\/[^"?#]*)/g)) {
     assert.ok(validPaths.has(href), `${page.path}: broken internal link ${href}`);

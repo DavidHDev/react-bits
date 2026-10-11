@@ -27,7 +27,7 @@ const LIVE_SETTLE_MS = 2200;
 const LIVE_TABS = 3;
 const LIVE_INSET = 2;
 const LIVE_STYLE = [
-  'button[aria-label="Refresh animation"], .background-demo-content { display: none !important; }',
+  'button[aria-label="Refresh animation"], .background-demo-content, .bgc { display: none !important; }',
   '.demo-container { border: 0 !important; border-radius: 0 !important; }'
 ].join(' ');
 

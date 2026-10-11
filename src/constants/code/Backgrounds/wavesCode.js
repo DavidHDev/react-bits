@@ -7,19 +7,17 @@ import tsTailwind from '@ts-tailwind/Backgrounds/Waves/Waves.tsx?raw';
 export const waves = {
   usage: `import Waves from './Waves';
 
-<Waves
-  lineColor="#fff"
-  backgroundColor="rgba(255, 255, 255, 0.2)"
-  waveSpeedX={0.02}
-  waveSpeedY={0.01}
-  waveAmpX={40}
-  waveAmpY={20}
-  friction={0.9}
-  tension={0.01}
-  maxCursorMove={120}
-  xGap={12}
-  yGap={36}
-/>`,
+<div style={{ position: 'relative', width: '100%', height: '600px' }}>
+  <Waves
+    lineColor="#ffffff"
+    spacing={10}
+    amplitude={32}
+    twist={1}
+    speed={1}
+    mouseRadius={175}
+    mouseStrength={1}
+  />
+</div>`,
   code,
   css,
   tailwind,

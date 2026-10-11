@@ -2,6 +2,11 @@
    Landing Loader
    ══════════════════════════════════════════════ */
 
+html[data-rb-landing-loading],
+html[data-rb-landing-loading] body {
+  overflow: hidden;
+}
+
 .ln-loader {
   position: fixed;
   inset: 0;
@@ -78,6 +83,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ln-loader,
+  .landing-wrapper > header,
+  .landing-wrapper > .ln-hero {
+    transition: none;
+  }
+
   .ln-loader-logo {
     animation: none;
     opacity: 0.6;

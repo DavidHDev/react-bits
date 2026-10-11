@@ -10,6 +10,7 @@ import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import RefreshButton from '../../components/common/Preview/RefreshButton';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import PropTable from '../../components/common/Preview/PropTable';
 import CodeExample from '../../components/code/CodeExample';
 import Dependencies from '../../components/code/Dependencies';
@@ -21,7 +22,7 @@ import ShapeWaves from '../../content/Backgrounds/ShapeWaves/ShapeWaves';
 import { shapeWaves } from '../../constants/code/Backgrounds/shapeWavesCode';
 
 const DEFAULT_PROPS = {
-  text: 'React Bits',
+  text: '</>',
   textSize: 0.6,
   shapes: 'mixed',
   cellSize: 10,
@@ -216,6 +217,7 @@ const ShapeWavesDemo = () => {
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
             <RefreshButton onClick={() => setIntroKey(key => key + 1)} />
             <ShapeWaves {...themedProps} introKey={introKey} onError={error => console.error('[ShapeWaves]', error)} />
+            <BackgroundContent headline="Shapes that ripple in waves around your words." />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>

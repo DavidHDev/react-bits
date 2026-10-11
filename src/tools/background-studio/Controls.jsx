@@ -38,11 +38,13 @@ const BackgroundSelector = ({ selectedId, onSelect }) => {
   const selected = BACKGROUNDS.find(bg => bg.id === selectedId) || BACKGROUNDS[0];
 
   const filteredBackgrounds = useMemo(() => {
-    const sorted = [...BACKGROUNDS].sort((a, b) => a.label.localeCompare(b.label));
+    const sorted = BACKGROUNDS.filter(bg => !bg.hidden || bg.id === selectedId).sort((a, b) =>
+      a.label.localeCompare(b.label)
+    );
     if (!searchQuery.trim()) return sorted;
     const query = searchQuery.toLowerCase();
     return sorted.filter(bg => bg.label.toLowerCase().includes(query));
-  }, [searchQuery]);
+  }, [searchQuery, selectedId]);
 
   return (
     <Box position="relative" ref={dropdownRef} mb={4}>

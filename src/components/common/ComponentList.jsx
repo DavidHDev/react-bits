@@ -117,6 +117,13 @@ const fromPascal = str =>
     .replace(/_/g, ' ')
     .trim();
 
+const squash = value => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+const revealsHidden = (item, term) => {
+  const query = squash(term);
+  return query.length >= 4 && squash(item.title).startsWith(query);
+};
+
 const ComponentList = ({
   list,
   hasDeleteButton = false,
@@ -179,6 +186,7 @@ const ComponentList = ({
         docsUrl: meta?.docsUrl,
         isNew: NEW_KEYS.has(fullKey),
         added: meta?.added ?? '',
+        hidden: Boolean(meta?.hidden),
         isNewSinceLastVisit: newSinceLastVisit.has(fullKey)
       };
     };
@@ -240,6 +248,7 @@ const ComponentList = ({
     const term = search.trim();
     const all = !showCategoryFilter || selectedCategory === 'All Components';
     return items
+      .filter(item => !item.hidden || revealsHidden(item, term))
       .filter(item => (all || item.categoryLabel === selectedCategory) && (!newOnly || item.isNewSinceLastVisit))
       .map(item => ({ item, match: term ? rankComponentSearch(item, term) : { score: 1 } }))
       .filter(({ match }) => Boolean(match))
@@ -248,7 +257,10 @@ const ComponentList = ({
   }, [items, newOnly, selectedCategory, search, showCategoryFilter]);
   const controlsDisabled = items.length === 0;
   const hasCategoryFilter = showCategoryFilter && selectedCategory !== categories.items[0];
-  const newSinceLastVisitCount = useMemo(() => items.filter(item => item.isNewSinceLastVisit).length, [items]);
+  const newSinceLastVisitCount = useMemo(
+    () => items.filter(item => !item.hidden && item.isNewSinceLastVisit).length,
+    [items]
+  );
   const hasActiveFilters = hasCategoryFilter || newOnly || search.trim().length > 0;
   const showNewStatus = newSinceLastVisitCount > 0 && (!hasActiveFilters || newOnly);
 

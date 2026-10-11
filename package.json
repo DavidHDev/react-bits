@@ -13,6 +13,7 @@
     "og:images": "node ./scripts/generateOgImages.js",
     "og:routes": "node ./scripts/generateRouteMeta.js",
     "test:seo": "node --test scripts/seo.test.js",
+    "test:boot": "node --test scripts/boot.test.js",
     "verify:seo": "node scripts/verifySeo.js",
     "verify:seo:http": "node scripts/verifySeoHttp.js",
     "registry:build": "jsrepo build",

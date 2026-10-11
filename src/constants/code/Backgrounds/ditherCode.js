@@ -5,19 +5,20 @@ import tsCode from '@ts-default/Backgrounds/Dither/Dither.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/Dither/Dither.tsx?raw';
 
 export const dither = {
-  dependencies: 'three postprocessing @react-three/fiber @react-three/postprocessing',
   usage: `import Dither from './Dither';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <Dither
-    waveColor={[0.5, 0.5, 0.5]}
-    disableAnimation={false}
-    enableMouseInteraction={true}
-    mouseRadius={0.3}
+    waveColor="#bcbcbc"
+    backgroundColor="#120f17"
+    ditherMode="bayer"
     colorNum={4}
-    waveAmplitude={0.3}
-    waveFrequency={3}
+    pixelSize={2}
     waveSpeed={0.05}
+    waveFrequency={3}
+    waveAmplitude={0.3}
+    mouseEffect="erase"
+    mouseRadius={0.3}
   />
 </div>`,
   code,

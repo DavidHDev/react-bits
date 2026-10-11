@@ -3,6 +3,7 @@ import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLay
 import { Box, Flex } from '@chakra-ui/react';
 
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import CodeExample from '../../components/code/CodeExample';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
@@ -127,6 +128,7 @@ const BalatroDemo = () => {
               mouseInteraction={mouseInteraction}
               pixelFilter={pixelFilter}
             />
+            <BackgroundContent headline="Swirling psychedelic colors, dealt straight from the deck." />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
