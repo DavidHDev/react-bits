@@ -170,6 +170,13 @@ const ASCIITextDemo = () => {
           </Box>
 
           <Customize>
+            <PreviewColorList
+              title="Colors"
+              colors={props.colors}
+              min={1}
+              max={3}
+              onChange={value => updateProp('colors', value)}
+            />
             <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewInput
               title="Text"
@@ -186,13 +193,6 @@ const ASCIITextDemo = () => {
               width={200}
               maxLength={80}
               onChange={value => updateProp('charset', value)}
-            />
-            <PreviewColorList
-              title="Colors"
-              colors={props.colors}
-              min={1}
-              max={3}
-              onChange={value => updateProp('colors', value)}
             />
             <PreviewSlider
               title="Cell Size"

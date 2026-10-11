@@ -640,11 +640,7 @@ const Silk = ({
   });
 
   return (
-    <div
-      ref={containerRef}
-      className={`relative w-full h-full overflow-hidden${className ? ` ${className}` : ''}`}
-      style={style}
-    >
+    <div ref={containerRef} className={`relative w-full h-full overflow-hidden ${className}`} style={style}>
       <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" aria-hidden="true" />
     </div>
   );

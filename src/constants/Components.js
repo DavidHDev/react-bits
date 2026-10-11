@@ -225,6 +225,7 @@ const backgrounds = {
   'side-rays': () => import('../demo/Backgrounds/SideRaysDemo'),
   'lightfall': () => import('../demo/Backgrounds/LightfallDemo.jsx'),
   'ferrofluid': () => import('../demo/Backgrounds/FerrofluidDemo.jsx'),
+  'flux-lines': () => import('../demo/Backgrounds/FluxLinesDemo.jsx'),
   'molten-metal': () => import('../demo/Backgrounds/MoltenMetalDemo.jsx'),
   'gradient-waves': () => import('../demo/Backgrounds/GradientWavesDemo.jsx'),
   'web-threads': () => import('../demo/Backgrounds/WebThreadsDemo.jsx'),

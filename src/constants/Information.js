@@ -1613,21 +1613,42 @@ export const componentMetadata = {
   },
   'Backgrounds/Lightfall': {
     videoUrl: '/assets/video/lightfall.webm',
-    description: 'Colorful light streaks raining down a glowing tunnel with a cursor light.',
+    description: 'Streaks of light falling down a curved tunnel, bending around the cursor and stretching into warp trails on hold.',
     category: 'Backgrounds',
     name: 'Lightfall',
     docsUrl: 'https://reactbits.dev/backgrounds/lightfall',
     tags: [],
-    added: '2026-06-02'
+    added: '2026-06-02',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt with crisp, steady streaks and round glowing heads. The light now warps in on load, bends around the cursor and stretches into warp trails while you hold.'
+      }
+    ]
+  },
+  'Backgrounds/FluxLines': {
+    videoUrl: '/assets/video/fluxlines.webm',
+    description: 'Glowing flux lines tracing a churning magnetic fluid. The cursor magnet reveals and curls them.',
+    category: 'Backgrounds',
+    name: 'FluxLines',
+    docsUrl: 'https://reactbits.dev/backgrounds/flux-lines',
+    tags: ['webgl', 'lines', 'flow', 'glow', 'magnetic', 'interactive'],
+    added: '2026-10-11'
   },
   'Backgrounds/Ferrofluid': {
     videoUrl: '/assets/video/ferrofluid.webm',
-    description: 'A churning magnetic fluid traced by glowing contour lines, with a cursor magnet.',
+    description: 'A glossy sea of magnetic fluid where swells of spikes roll in and the cursor raises a crown.',
     category: 'Backgrounds',
     name: 'Ferrofluid',
     docsUrl: 'https://reactbits.dev/backgrounds/ferrofluid',
     tags: [],
-    added: '2026-06-02'
+    added: '2026-06-02',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Rebuilt as a glossy ferrofluid sea with no extra dependencies. Swells of spikes roll across it, the cursor raises a crown and clicks send out a ring of spikes.'
+      }
+    ]
   },
   'Backgrounds/MoltenMetal': {
     videoUrl: '/assets/video/moltenmetal.webm',

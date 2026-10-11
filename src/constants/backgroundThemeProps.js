@@ -15,7 +15,8 @@ export const BACKGROUND_LIGHT_PROPS = {
   'dot-grid': { baseColor: '#d4d4d8', activeColor: '#18181b', glow: 0.25 },
   'evil-eye': { lightMode: true, eyeColor: '#c2410c', backgroundColor: '#ffffff', glowIntensity: 0.22 },
   'faulty-terminal': { lightMode: true, tint: '#3f6212', brightness: 0.45, scanlineIntensity: 0.28 },
-  ferrofluid: { color1: '#18181b', color2: '#52525b', color3: '#a1a1aa', glow: 1.1 },
+  ferrofluid: { lightMode: true },
+  'flux-lines': { lightMode: true },
   'floating-lines': {
     lightMode: true,
     gradientStart: '#6d28d9',
@@ -69,17 +70,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     brightness: 0.9,
     glow: 0.42
   },
-  lightfall: {
-    lightMode: true,
-    color1: '#1d4ed8',
-    color2: '#6d28d9',
-    color3: '#be185d',
-    backgroundColor: '#ffffff',
-    backgroundGlow: 0,
-    glow: 1.15,
-    streakCount: 4,
-    streakWidth: 1.15
-  },
+  lightfall: { lightMode: true, colors: ['#52525b'], backgroundColor: '#ffffff', backgroundGlow: 0 },
   lightning: { lightMode: true },
   'line-waves': { lightMode: true, color1: '#6d28d9', color2: '#ec4899', color3: '#06b6d4', brightness: 0.8 },
   'liquid-chrome': { baseColor: [0.72, 0.72, 0.75], amplitude: 0.22 },

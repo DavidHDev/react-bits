@@ -1,346 +1,418 @@
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
-import { useMemo } from 'react';
 
-import useComponentProps from '../../hooks/useComponentProps';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorList from '../../components/common/Preview/PreviewColorList';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+
+import Lightfall from '../../content/Backgrounds/Lightfall/Lightfall';
 import { lightfall } from '../../constants/code/Backgrounds/lightfallCode';
-import Lightfall from '../../ts-default/Backgrounds/Lightfall/Lightfall';
 
-const DEFAULT_PROPS = {
-  color1: '#A6C8FF',
-  color2: '#5227FF',
-  color3: '#FF9FFC',
-  backgroundColor: '#0A29FF',
-  speed: 0.5,
+const LOOK = {
+  colors: ['#ffffff'],
+  backgroundColor: '#94a3b8',
+  speed: 0.3,
   streakCount: 2,
-  streakWidth: 1,
+  streakWidth: 0.8,
   streakLength: 1,
-  glow: 1,
   density: 0.6,
-  twinkle: 1,
-  zoom: 3,
-  backgroundGlow: 0.5,
-  mouseInteraction: true,
-  mouseStrength: 0.5,
-  mouseRadius: 1
+  twinkle: 0.3,
+  glow: 1,
+  backgroundGlow: 0.1,
+  headGlow: 0.6,
+  depth: 0.5,
+  bloom: 0.35,
+  zoom: 3
 };
 
+const DEFAULT_PROPS = {
+  preset: 'snow',
+  ...LOOK,
+  mouseInteraction: true,
+  mouseStrength: 0.4,
+  mouseRadius: 0.45,
+  lens: 0.5,
+  holdToWarp: true,
+  intro: true,
+  fade: 0,
+  lightMode: false
+};
+
+const STARFALL = {
+  ...LOOK,
+  colors: ['#ffffff', '#c4d0ff', '#8b7bff'],
+  backgroundColor: '#4630ff',
+  backgroundGlow: 0.18,
+  speed: 0.5,
+  streakWidth: 1,
+  twinkle: 1,
+  bloom: 0.5
+};
+
+const PRESETS = {
+  snow: LOOK,
+  starfall: STARFALL,
+  classic: {
+    ...STARFALL,
+    colors: ['#A6C8FF', '#5227FF', '#FF9FFC'],
+    backgroundColor: '#0A29FF',
+    backgroundGlow: 0.35,
+    headGlow: 0,
+    depth: 0,
+    bloom: 0
+  },
+  aurora: {
+    ...STARFALL,
+    colors: ['#ecfdf5', '#6ee7b7', '#22d3ee'],
+    backgroundColor: '#0f9f8a',
+    backgroundGlow: 0.2,
+    speed: 0.4
+  },
+  ember: {
+    ...STARFALL,
+    colors: ['#fff4e6', '#ffb067', '#ff5a36'],
+    backgroundColor: '#ff4d1a',
+    backgroundGlow: 0.1,
+    speed: 0.35,
+    twinkle: 0.6
+  },
+  hyperspace: {
+    ...STARFALL,
+    colors: ['#ffffff', '#bfdbfe', '#60a5fa'],
+    backgroundColor: '#1d4ed8',
+    backgroundGlow: 0.22,
+    speed: 1.2,
+    streakLength: 2.2,
+    streakWidth: 0.8,
+    zoom: 2.4
+  }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'snow', label: 'Snow' },
+  { value: 'starfall', label: 'Starfall' },
+  { value: 'classic', label: 'Classic' },
+  { value: 'aurora', label: 'Aurora' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'hyperspace', label: 'Hyperspace' }
+];
+
+const propData = [
+  {
+    name: 'colors',
+    type: 'string[]',
+    default: "['#ffffff']",
+    description: 'Colors of the falling streaks, up to 8. Each streak picks one.'
+  },
+  {
+    name: 'backgroundColor',
+    type: 'string',
+    default: "'#94a3b8'",
+    description: 'Color of the soft light glowing at the top, where the streaks come from.'
+  },
+  { name: 'speed', type: 'number', default: '0.3', description: 'How fast the streaks fall.' },
+  {
+    name: 'streakCount',
+    type: 'number',
+    default: '2',
+    description: 'Layers of streaks, from 1 to 16. More layers fill the tunnel.'
+  },
+  { name: 'streakWidth', type: 'number', default: '0.8', description: 'Thickness of the streaks.' },
+  { name: 'streakLength', type: 'number', default: '1', description: 'Length of the glowing tails.' },
+  {
+    name: 'density',
+    type: 'number',
+    default: '0.6',
+    description: 'How closely the streaks follow each other down the tunnel.'
+  },
+  { name: 'twinkle', type: 'number', default: '0.3', description: 'How much the streaks flicker, from 0 to 1.' },
+  { name: 'glow', type: 'number', default: '1', description: 'Overall brightness.' },
+  {
+    name: 'backgroundGlow',
+    type: 'number',
+    default: '0.1',
+    description: 'Brightness of the soft light at the top. 0 turns it off.'
+  },
+  {
+    name: 'headGlow',
+    type: 'number',
+    default: '0.6',
+    description: 'How white-hot the leading tips burn, from 0 to 1.'
+  },
+  {
+    name: 'depth',
+    type: 'number',
+    default: '0.5',
+    description: 'Dims streaks deep in the tunnel so the near ones stand out.'
+  },
+  { name: 'bloom', type: 'number', default: '0.35', description: 'Soft glow around the brightest tips.' },
+  {
+    name: 'zoom',
+    type: 'number',
+    default: '3',
+    description: 'Field of view into the tunnel. Higher values zoom further in.'
+  },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The cursor bends the falling light like a lens and brightens the streaks near it.'
+  },
+  {
+    name: 'mouseStrength',
+    type: 'number',
+    default: '0.4',
+    description: 'How much the cursor brightens nearby streaks.'
+  },
+  { name: 'mouseRadius', type: 'number', default: '0.45', description: 'Reach of the cursor light.' },
+  {
+    name: 'mouseDampening',
+    type: 'number',
+    default: '0.15',
+    description: 'How long the cursor light takes to catch up, in seconds. 0 follows instantly.'
+  },
+  { name: 'lens', type: 'number', default: '0.5', description: 'How strongly the cursor bends the streaks.' },
+  {
+    name: 'holdToWarp',
+    type: 'boolean',
+    default: 'true',
+    description: 'Holding the pointer down speeds the streaks up into warp trails.'
+  },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'The light arrives at warp speed and slows to a steady fall.'
+  },
+  { name: 'fade', type: 'number', default: '0', description: 'Fades the edges into the page, from 0 to 1.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the streaks as colored light on a white background.'
+  },
+  {
+    name: 'mixBlendMode',
+    type: 'string',
+    default: 'undefined',
+    description: 'CSS blend mode for the canvas, such as screen or lighten.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the animation.' },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
 const LightfallDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    color1,
-    color2,
-    color3,
-    backgroundColor,
-    speed,
-    streakCount,
-    streakWidth,
-    streakLength,
-    glow,
-    density,
-    twinkle,
-    zoom,
-    backgroundGlow,
-    mouseInteraction,
-    mouseStrength,
-    mouseRadius,
-    lightMode
-  } = props;
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
 
-  const colors = [color1, color2, color3];
-
-  const propData = useMemo(
-    () => [
-      {
-        name: 'colors',
-        type: 'string[]',
-        default: "['#A6C8FF', '#5227FF', '#FF9FFC']",
-        description:
-          'Array of hex colors (up to 8) used to tint the falling light streaks. Each streak is randomly but evenly assigned one of the colors; a single color makes the whole effect uniform.'
-      },
-      {
-        name: 'backgroundColor',
-        type: 'string',
-        default: "'#0A29FF'",
-        description: 'Hex color of the soft ambient glow behind the streaks.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '0.5',
-        description: 'Multiplier for how fast the light streaks fall.'
-      },
-      {
-        name: 'streakCount',
-        type: 'number',
-        default: '2',
-        description: 'Number of streak layers rendered per cell (1–16). Higher = busier.'
-      },
-      {
-        name: 'streakWidth',
-        type: 'number',
-        default: '1',
-        description: 'Thickness of each light streak.'
-      },
-      {
-        name: 'streakLength',
-        type: 'number',
-        default: '1',
-        description: 'Length of the glowing tail trailing each streak.'
-      },
-      {
-        name: 'glow',
-        type: 'number',
-        default: '1',
-        description: 'Overall brightness multiplier applied before tone mapping.'
-      },
-      {
-        name: 'density',
-        type: 'number',
-        default: '0.6',
-        description: 'Vertical frequency of streaks. Higher values pack more streaks into view.'
-      },
-      {
-        name: 'twinkle',
-        type: 'number',
-        default: '1',
-        description: 'Amount of per‑streak brightness flicker. 0 = constant brightness.'
-      },
-      {
-        name: 'zoom',
-        type: 'number',
-        default: '3',
-        description: 'Field of view into the tunnel. Higher values zoom further in.'
-      },
-      {
-        name: 'backgroundGlow',
-        type: 'number',
-        default: '0.5',
-        description: 'Intensity of the ambient background glow.'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '1',
-        description: 'Overall alpha of the rendered canvas.'
-      },
-      {
-        name: 'mouseInteraction',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enables a soft light that follows the cursor and flares nearby streaks (no warping).'
-      },
-      {
-        name: 'mouseStrength',
-        type: 'number',
-        default: '0.5',
-        description: 'Intensity of the cursor light.'
-      },
-      {
-        name: 'mouseRadius',
-        type: 'number',
-        default: '1',
-        description: 'Falloff radius of the cursor light.'
-      },
-      {
-        name: 'mouseDampening',
-        type: 'number',
-        default: '0.15',
-        description: 'Easing time constant (seconds) for the cursor light to follow the pointer. 0 = immediate.'
-      },
-      {
-        name: 'mixBlendMode',
-        type: 'string',
-        default: 'undefined',
-        description: "CSS mix-blend-mode applied to the canvas (e.g. 'screen', 'lighten')."
-      },
-      {
-        name: 'paused',
-        type: 'boolean',
-        default: 'false',
-        description: 'If true, stops rendering updates (freezing the current frame).'
-      },
-      {
-        name: 'dpr',
-        type: 'number',
-        default: 'window.devicePixelRatio',
-        description: 'Overrides device pixel ratio; lower for performance, higher for sharpness.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: '',
-        description: 'Additional class names for the root container.'
-      }
-    ],
-    []
-  );
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} hasChanges={hasChanges} resetProps={resetProps}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden" bg={backgroundColor}>
-            <Lightfall
-              colors={colors}
-              backgroundColor={backgroundColor}
-              speed={speed}
-              streakCount={streakCount}
-              streakWidth={streakWidth}
-              streakLength={streakLength}
-              glow={glow}
-              density={density}
-              twinkle={twinkle}
-              zoom={zoom}
-              backgroundGlow={backgroundGlow}
-              mouseInteraction={mouseInteraction}
-              mouseStrength={mouseStrength}
-              mouseRadius={mouseRadius}
-              lightMode={lightMode}
-            />
-
-            <BackgroundContent pillText="New Background" headline="Let the light rain down" />
+          <Box position="relative" className="demo-container" h={500} overflow="hidden" p={0}>
+            <Lightfall key={key} {...settings} />
+            <BackgroundContent headline="Let the light rain down" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="lightfall"
-              currentProps={{
-                colors,
-                backgroundColor,
-                speed,
-                streakCount,
-                streakWidth,
-                streakLength,
-                glow,
-                density,
-                twinkle,
-                zoom,
-                backgroundGlow,
-                mouseInteraction,
-                mouseStrength,
-                mouseRadius
-              }}
-              defaultProps={{
-                colors: ['#A6C8FF', '#5227FF', '#FF9FFC'],
-                backgroundColor: '#0A29FF',
-                speed: 1,
-                streakCount: 8,
-                streakWidth: 1,
-                streakLength: 1,
-                glow: 1,
-                density: 1,
-                twinkle: 1,
-                zoom: 2,
-                backgroundGlow: 1,
-                opacity: 1,
-                mouseInteraction: true,
-                mouseStrength: 1,
-                mouseRadius: 0.6
-              }}
-            />
+            <OpenInStudioButton backgroundId="lightfall" currentProps={settings} defaultProps={LOOK} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => updateProp('color2', val)} />
-            <PreviewColorPickerCustom title="Color 3" color={color3} onChange={val => updateProp('color3', val)} />
+            <PreviewColorList
+              title="Colors"
+              colors={settings.colors}
+              min={1}
+              onChange={value => updateProp('colors', value)}
+            />
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewColorPickerCustom
               title="Background"
-              color={backgroundColor}
-              onChange={val => updateProp('backgroundColor', val)}
+              color={settings.backgroundColor}
+              onChange={value => updateProp('backgroundColor', value)}
             />
-
-            <PreviewSwitch
-              title="Cursor Light"
-              isChecked={mouseInteraction}
-              onChange={val => updateProp('mouseInteraction', val)}
+            <PreviewSlider
+              title="Speed"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
             />
-
-            <PreviewSlider title="Speed" min={0} max={4} step={0.1} value={speed} onChange={v => updateProp('speed', v)} />
             <PreviewSlider
               title="Streak Count"
               min={1}
               max={16}
               step={1}
-              value={streakCount}
-              onChange={v => updateProp('streakCount', v)}
+              value={settings.streakCount}
+              onChange={value => updateProp('streakCount', value)}
             />
             <PreviewSlider
               title="Streak Width"
               min={0.2}
               max={4}
               step={0.1}
-              value={streakWidth}
-              onChange={v => updateProp('streakWidth', v)}
+              value={settings.streakWidth}
+              onChange={value => updateProp('streakWidth', value)}
             />
             <PreviewSlider
               title="Streak Length"
               min={0.3}
               max={3}
               step={0.1}
-              value={streakLength}
-              onChange={v => updateProp('streakLength', v)}
+              value={settings.streakLength}
+              onChange={value => updateProp('streakLength', value)}
             />
             <PreviewSlider
               title="Density"
               min={0.3}
               max={3}
               step={0.1}
-              value={density}
-              onChange={v => updateProp('density', v)}
+              value={settings.density}
+              onChange={value => updateProp('density', value)}
             />
             <PreviewSlider
               title="Twinkle"
               min={0}
               max={1}
               step={0.05}
-              value={twinkle}
-              onChange={v => updateProp('twinkle', v)}
+              value={settings.twinkle}
+              onChange={value => updateProp('twinkle', value)}
             />
-            <PreviewSlider title="Glow" min={0.2} max={3} step={0.1} value={glow} onChange={v => updateProp('glow', v)} />
+            <PreviewSlider
+              title="Glow"
+              min={0.2}
+              max={3}
+              step={0.05}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
+            />
             <PreviewSlider
               title="Background Glow"
               min={0}
-              max={3}
-              step={0.1}
-              value={backgroundGlow}
-              onChange={v => updateProp('backgroundGlow', v)}
+              max={1.5}
+              step={0.02}
+              value={settings.backgroundGlow}
+              onChange={value => updateProp('backgroundGlow', value)}
             />
-            <PreviewSlider title="Zoom" min={1} max={5} step={0.1} value={zoom} onChange={v => updateProp('zoom', v)} />
+            <PreviewSlider
+              title="Head Glow"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.headGlow}
+              onChange={value => updateProp('headGlow', value)}
+            />
+            <PreviewSlider
+              title="Depth"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.depth}
+              onChange={value => updateProp('depth', value)}
+            />
+            <PreviewSlider
+              title="Bloom"
+              min={0}
+              max={1.5}
+              step={0.05}
+              value={settings.bloom}
+              onChange={value => updateProp('bloom', value)}
+            />
+            <PreviewSlider
+              title="Zoom"
+              min={1}
+              max={5}
+              step={0.1}
+              value={settings.zoom}
+              onChange={value => updateProp('zoom', value)}
+            />
             <PreviewSlider
               title="Cursor Strength"
               min={0}
-              max={3}
-              step={0.1}
-              value={mouseStrength}
-              onChange={v => updateProp('mouseStrength', v)}
+              max={2}
+              step={0.05}
+              value={settings.mouseStrength}
+              onChange={value => updateProp('mouseStrength', value)}
             />
             <PreviewSlider
               title="Cursor Radius"
               min={0.1}
-              max={2}
+              max={1.5}
               step={0.05}
-              value={mouseRadius}
-              onChange={v => updateProp('mouseRadius', v)}
+              value={settings.mouseRadius}
+              onChange={value => updateProp('mouseRadius', value)}
+            />
+            <PreviewSlider
+              title="Lens"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.lens}
+              onChange={value => updateProp('lens', value)}
+            />
+            <PreviewSlider
+              title="Fade"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.fade}
+              onChange={value => updateProp('fade', value)}
+            />
+            <PreviewSwitch
+              title="Cursor"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch
+              title="Hold To Warp"
+              isChecked={settings.holdToWarp}
+              onChange={value => updateProp('holdToWarp', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
+            />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

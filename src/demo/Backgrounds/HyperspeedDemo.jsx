@@ -291,8 +291,6 @@ const HyperspeedDemo = () => {
           </Flex>
 
           <Customize>
-            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
-
             <PreviewColorList
               title="Tail Lights"
               colors={props.tailColors}
@@ -313,6 +311,8 @@ const HyperspeedDemo = () => {
               min={1}
               onChange={value => updateProp('poleColors', value)}
             />
+
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
 
             <PreviewColorPickerCustom
               title="Road Color"

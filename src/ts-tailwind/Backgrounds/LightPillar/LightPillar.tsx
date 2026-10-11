@@ -662,7 +662,7 @@ const LightPillar = ({
   return (
     <div
       ref={containerRef}
-      className={`absolute top-0 left-0 w-full h-full overflow-hidden${className ? ` ${className}` : ''}`}
+      className={`absolute top-0 left-0 w-full h-full overflow-hidden ${className}`}
       style={{ mixBlendMode, ...style }}
     >
       <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" aria-hidden="true" />

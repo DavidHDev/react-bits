@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { Renderer, Program, Mesh, Triangle } from 'ogl';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+
 import './Lightfall.css';
 
+const MAX_COLORS = 8;
+const BLOOM_LEVELS = 4;
+
 export interface LightfallProps {
-  className?: string;
-  dpr?: number;
-  paused?: boolean;
   colors?: string[];
   backgroundColor?: string;
   speed?: number;
@@ -19,388 +19,805 @@ export interface LightfallProps {
   twinkle?: number;
   zoom?: number;
   backgroundGlow?: number;
+  headGlow?: number;
+  depth?: number;
+  bloom?: number;
   opacity?: number;
   mouseInteraction?: boolean;
   mouseStrength?: number;
   mouseRadius?: number;
   mouseDampening?: number;
+  lens?: number;
+  holdToWarp?: boolean;
+  intro?: boolean;
+  fade?: number;
   lightMode?: boolean;
-  mixBlendMode?: string;
+  mixBlendMode?: CSSProperties['mixBlendMode'];
+  paused?: boolean;
+  dpr?: number;
+  className?: string;
+  style?: CSSProperties;
 }
 
-type RGB = [number, number, number];
+interface Settings {
+  colors: string[];
+  backgroundColor: string;
+  speed: number;
+  streakCount: number;
+  streakWidth: number;
+  streakLength: number;
+  glow: number;
+  density: number;
+  twinkle: number;
+  zoom: number;
+  backgroundGlow: number;
+  headGlow: number;
+  depth: number;
+  bloom: number;
+  opacity: number;
+  mouseInteraction: boolean;
+  mouseStrength: number;
+  mouseRadius: number;
+  mouseDampening: number;
+  lens: number;
+  holdToWarp: boolean;
+  intro: boolean;
+  fade: number;
+  lightMode: boolean;
+  paused: boolean;
+  dpr?: number;
+}
 
-const MAX_COLORS = 8;
+type Uniforms = Record<string, WebGLUniformLocation | null>;
 
-const hexToRGB = (hex: string): RGB => {
-  const c = hex.replace('#', '').padEnd(6, '0');
-  const r = parseInt(c.slice(0, 2), 16) / 255;
-  const g = parseInt(c.slice(2, 4), 16) / 255;
-  const b = parseInt(c.slice(4, 6), 16) / 255;
-  return [r, g, b];
-};
+interface Program {
+  program: WebGLProgram;
+  uniforms: Uniforms;
+}
 
-const prepColors = (input?: string[]) => {
-  const base = (input && input.length ? input : ['#A6C8FF', '#5227FF', '#FF9FFC']).slice(0, MAX_COLORS);
-  const count = base.length;
-  const arr: RGB[] = [];
-  for (let i = 0; i < MAX_COLORS; i++) arr.push(hexToRGB(base[Math.min(i, base.length - 1)]));
-  const avg: RGB = [0, 0, 0];
-  for (let i = 0; i < count; i++) {
-    avg[0] += arr[i][0];
-    avg[1] += arr[i][1];
-    avg[2] += arr[i][2];
-  }
-  avg[0] /= count;
-  avg[1] /= count;
-  avg[2] /= count;
-  return { arr, count, avg };
-};
+interface Target {
+  texture: WebGLTexture | null;
+  framebuffer: WebGLFramebuffer | null;
+  width: number;
+  height: number;
+}
 
-const vertex = `
-attribute vec2 position;
-attribute vec2 uv;
-varying vec2 vUv;
+const VERTEX = `#version 300 es
+in vec2 aPosition;
 void main() {
-  vUv = uv;
-  gl_Position = vec4(position, 0.0, 1.0);
-}
-`;
+  gl_Position = vec4(aPosition, 0.0, 1.0);
+}`;
 
-const fragment = `
+const STREAKS = `#version 300 es
 precision highp float;
-
-uniform vec3  iResolution;
-uniform vec2  iMouse;
-uniform float iTime;
-
-uniform vec3  uColor0;
-uniform vec3  uColor1;
-uniform vec3  uColor2;
-uniform vec3  uColor3;
-uniform vec3  uColor4;
-uniform vec3  uColor5;
-uniform vec3  uColor6;
-uniform vec3  uColor7;
-uniform int   uColorCount;
-
-uniform vec3  uBgColor;
-uniform vec3  uMouseColor;
-uniform float uSpeed;
-uniform int   uStreakCount;
-uniform float uStreakWidth;
-uniform float uStreakLength;
-uniform float uGlow;
-uniform float uDensity;
-uniform float uTwinkle;
+uniform vec2 uView;
 uniform float uZoom;
-uniform float uBgGlow;
-uniform float uOpacity;
-uniform float uMouseEnabled;
-uniform float uMouseStrength;
-uniform float uMouseRadius;
+uniform float uPhase;
+uniform float uTwinkleClock;
+uniform float uRings;
+uniform vec3 uColors[8];
+uniform int uColorCount;
+uniform int uStreakCount;
+uniform int uColumns;
+uniform float uWidth;
+uniform float uTail;
+uniform float uTwinkle;
+uniform float uHead;
+uniform float uDepth;
+uniform vec4 uMouse;
+uniform vec3 uLens;
 uniform float uLightMode;
+uniform float uEncode;
+out vec4 outColor;
 
-varying vec2 vUv;
+const vec3 CAMERA = vec3(0.0, -0.8888889, -0.2222222);
+const float TAU = 6.28318530718;
+const float SPACING = 0.005;
+const float REACH = 0.32;
 
-vec3 palette(float h) {
-  int count = uColorCount;
-  if (count < 1) count = 1;
-  int idx = int(floor(clamp(h, 0.0, 0.999999) * float(count)));
-  if (idx <= 0) return uColor0;
-  if (idx == 1) return uColor1;
-  if (idx == 2) return uColor2;
-  if (idx == 3) return uColor3;
-  if (idx == 4) return uColor4;
-  if (idx == 5) return uColor5;
-  if (idx == 6) return uColor6;
-  return uColor7;
+uint scramble(uint x) {
+  x ^= x >> 16;
+  x *= 0x7feb352du;
+  x ^= x >> 15;
+  x *= 0x846ca68bu;
+  x ^= x >> 16;
+  return x;
 }
 
-vec3 tanhv(vec3 x) {
-  vec3 e = exp(-2.0 * x);
-  return (1.0 - e) / (1.0 + e);
+float unit(uint x) {
+  return float(x & 0xffffu) / 65535.0;
 }
 
-vec2 sceneC(vec2 frag, vec2 r) {
-  vec2 P = (frag + frag - r) / r.x;
-  float z = 0.0;
-  float d = 1e3;
-  vec4 O = vec4(0.0);
-  for (int k = 0; k < 39; k++) {
-    if (d <= 1e-4) break;
-    O = z * normalize(vec4(P, uZoom, 0.0)) - vec4(0.0, 4.0, 1.0, 0.0) / 4.5;
-    d = 1.0 - sqrt(length(O * O));
-    z += d;
-  }
-  return vec2(O.x, atan(O.z, O.y));
+float stroke(float d, float w) {
+  float s = max(0.75 * w, 0.55);
+  return 0.75 * w / s * exp(-0.5 * d * d / (s * s));
 }
 
-void mainImage(out vec4 o, vec2 C) {
-  vec2 r = iResolution.xy;
-  vec2 uv0 = (C + C - r) / r.x;
-  float T = 0.1 * iTime * uSpeed + 9.0;
-  float angRings = max(1.0, floor(6.28318530718 * max(uDensity, 0.05) + 0.5));
-  vec2 Y = vec2(5e-3, 6.28318530718 / angRings);
-
-  vec2 c0 = sceneC(C, r);
-  vec2 cdx = sceneC(C + vec2(1.0, 0.0), r);
-  vec2 cdy = sceneC(C + vec2(0.0, 1.0), r);
-  vec2 dCx = cdx - c0;
-  vec2 dCy = cdy - c0;
-  dCx.y -= 6.28318530718 * floor(dCx.y / 6.28318530718 + 0.5);
-  dCy.y -= 6.28318530718 * floor(dCy.y / 6.28318530718 + 0.5);
-  vec2 fw = abs(dCx) + abs(dCy);
-  C = c0;
-
-  vec2 P = vec2(2.0, 1.0) * uv0 - (r / r.x) * vec2(0.0, 1.0);
-  vec4 O = uLightMode > 0.5
-    ? vec4(0.0)
-    : vec4(uBgColor * 90.0 * uBgGlow / (1e3 * dot(P, P) + 6.0), 0.0);
-
-  float mGlow = 0.0;
-  if (uMouseEnabled > 0.5) {
-    vec2 mN = (iMouse + iMouse - r) / r.x;
-    float md = length(uv0 - mN);
-    mGlow = exp(-md * md / max(uMouseRadius * uMouseRadius, 1e-4)) * uMouseStrength;
-    O.rgb += uMouseColor * mGlow * 0.25;
-  }
-
-  float zr = 5e-4 * uStreakWidth;
-  vec2 rr = vec2(max(length(fw), 1e-5));
-  float tail = 19.0 / max(uStreakLength, 0.05);
-
-  for (int m = 0; m < 16; m++) {
-    if (m >= uStreakCount) break;
-    float jf = float(m) + 1.0;
-    float ic = fract(sin(dot(vec2(jf, floor(C.x / Y.x + 0.5)), vec2(7.0, 11.0)) * 73.0));
-    vec2 Pp = C - (T + T * ic) * vec2(0.0, 1.0);
-    Pp -= floor(Pp / Y + 0.5) * Y;
-    float h = fract(8663.0 * ic);
-    vec3 col = palette(h);
-    float weight = mix(1.5, 1.0 + sin(T + 7.0 * h + 4.0), uTwinkle);
-    weight *= (1.0 + mGlow * 2.0);
-    vec2 inner = vec2(length(max(Pp, vec2(-1.0, 0.0))), length(Pp) - zr) - zr;
-    vec2 sm = vec2(1.0) - smoothstep(-rr, rr, inner);
-    O.rgb += dot(sm, vec2(exp(tail * Pp.y), 3.0)) * col * weight;
-    C.x += Y.x / 8.0;
-  }
-
-  vec3 colr = sqrt(tanhv(max(O.rgb * uGlow - vec3(0.04, 0.08, 0.02), 0.0)));
-if (uLightMode > 0.5) {
-  float peak = max(colr.r, max(colr.g, colr.b));
-  float coverage = smoothstep(0.035, 0.58, peak) * uOpacity;
-  vec3 chroma = clamp(colr / max(peak, 1e-4), 0.0, 1.0);
-  chroma = pow(chroma, vec3(1.35));
-  float chromaPeak = max(chroma.r, max(chroma.g, chroma.b));
-  chroma /= max(chromaPeak, 1e-4);
-  o = vec4(mix(vec3(1.0), chroma, coverage * 0.94), 1.0);
-} else {
-    o = vec4(colr, uOpacity);
-  }
+float orb(float d, float r) {
+  float s = max(0.6 * r, 0.7);
+  float e = 0.6 * r / s;
+  return e * e * exp(-0.5 * d * d / (s * s));
 }
 
 void main() {
-  vec4 color;
-  mainImage(color, vUv * iResolution.xy);
-  gl_FragColor = color;
-}
-`;
+  vec2 frag = gl_FragCoord.xy;
+  vec2 screen = (2.0 * frag - uView) / uView.x;
+  vec2 p = screen;
+  mat2 warp = mat2(1.0);
+  if (uLens.z > 0.0) {
+    vec2 o = p - uLens.xy;
+    float e = uLens.z * exp(-dot(o, o) / (REACH * REACH));
+    p -= o * e;
+    warp = mat2(1.0 - e) + outerProduct(o, o) * (2.0 * e / (REACH * REACH));
+  }
 
-const Lightfall: React.FC<LightfallProps> = ({
-  className,
-  dpr,
-  paused = false,
-  colors = ['#A6C8FF', '#5227FF', '#FF9FFC'],
-  backgroundColor = '#0A29FF',
-  speed = 0.5,
+  vec3 dir = vec3(p, uZoom);
+  vec3 exits = (1.0 - CAMERA * sign(dir)) / max(abs(dir), vec3(1e-6));
+  float u = min(exits.x, min(exits.y, exits.z));
+  for (int i = 0; i < 5; i++) {
+    vec3 h = CAMERA + u * dir;
+    vec3 h2 = h * h;
+    u -= (dot(h2, h2) - 1.0) / (4.0 * dot(dir, h2 * h));
+  }
+  vec3 hit = CAMERA + u * dir;
+  vec3 normal = hit * hit * hit;
+  float facing = dot(normal, dir);
+  vec3 stepX = u * (vec3(1.0, 0.0, 0.0) - dir * (normal.x / facing));
+  vec3 stepY = u * (vec3(0.0, 1.0, 0.0) - dir * (normal.y / facing));
+  float ring = hit.y * hit.y + hit.z * hit.z;
+  float theta = atan(hit.z, hit.y);
+  mat2 jacobian = mat2(
+    stepX.x,
+    (hit.y * stepX.z - hit.z * stepX.y) / ring,
+    stepY.x,
+    (hit.y * stepY.z - hit.z * stepY.y) / ring
+  ) * warp * (2.0 / uView.x);
+
+  vec2 gradX = vec2(jacobian[0][0], jacobian[1][0]);
+  vec2 gradTheta = vec2(jacobian[0][1], jacobian[1][1]);
+  float scale = max(length(gradX), 1e-8);
+  float det = max(abs(gradX.x * gradTheta.y - gradX.y * gradTheta.x), 1e-12);
+  float along = scale / det;
+  float skew = dot(gradX, gradTheta) / det;
+  float spacing = SPACING / scale;
+  float detail = smoothstep(1.6, 3.2, spacing);
+  if (detail <= 0.0) {
+    outColor = vec4(0.0, 0.0, 0.0, 1.0);
+    return;
+  }
+  float halfWidth = min(uWidth / scale, 0.2 * spacing);
+  float headRadius = min(2.0 * uWidth / scale, 0.35 * spacing);
+  float headReach = 4.0 * max(0.6 * headRadius, 0.7);
+  float edge = uColumns > 1 ? 1.0 : 0.5;
+  float period = TAU / uRings;
+  float fog = exp(-max(u * length(dir) - 0.6, 0.0) * 1.6 * uDepth);
+
+  float boost = 1.0;
+  if (uMouse.z > 0.0) {
+    vec2 m = screen - uMouse.xy;
+    boost += 2.0 * uMouse.z * exp(-dot(m, m) / max(uMouse.w * uMouse.w, 1e-4));
+  }
+
+  int count = max(uColorCount, 1);
+  vec3 total = vec3(0.0);
+  for (int layer = 0; layer < 16; layer++) {
+    if (layer >= uStreakCount) break;
+    float x = hit.x + float(layer) * SPACING / 8.0;
+    float nearest = floor(x / SPACING + 0.5);
+    float side = x >= nearest * SPACING ? 1.0 : -1.0;
+    for (int k = 0; k < 2; k++) {
+      if (k >= uColumns) break;
+      float column = nearest + side * float(k);
+      float across = (x - column * SPACING) / scale;
+      uint seed = scramble(uint(int(column) + 65536) + uint(layer) * 0x9e3779b9u);
+      uint next = scramble(seed);
+      float hue = unit(seed >> 16);
+      float delta = theta - uPhase * (1.0 + floor(unit(seed) * 16.0) / 16.0) - unit(next) * period;
+      delta -= period * floor(delta / period + 0.5);
+      float ahead = delta * along - across * skew;
+      if (abs(ahead) > headReach && (delta > 0.0 || -delta * uTail > 3.2)) continue;
+      float behind = max(-delta, 0.0);
+      float fall = exp(-uTail * behind) * (1.0 - smoothstep(0.5, 0.95, behind / (0.5 * period)));
+      fall *= 1.0 - smoothstep(1.2, 3.2, uTail * behind);
+      float reach = length(vec2(across, ahead));
+      float trail = stroke(ahead > 0.0 ? reach : abs(across), halfWidth * mix(0.4, 1.0, fall)) * fall;
+      float glint = orb(reach, headRadius) * mix(3.0, 1.8, uLightMode);
+      float weight = mix(1.5, 1.0 + sin(uTwinkleClock + 7.0 * hue + 4.0), uTwinkle);
+      weight *= 1.0 - smoothstep(0.72 * edge, edge, abs(across) / spacing);
+      vec3 color = uColors[min(int(hue * float(count)), count - 1)];
+      vec3 hot = mix(color, vec3(1.0), uHead * (1.0 - uLightMode));
+      total += (trail * color + glint * hot) * weight;
+    }
+  }
+
+  outColor = vec4(total * fog * boost * detail * uEncode, 1.0);
+}`;
+
+const DOWNSAMPLE = `#version 300 es
+precision highp float;
+uniform sampler2D uSource;
+uniform vec2 uTarget;
+uniform vec2 uTexel;
+uniform float uLimit;
+out vec4 outColor;
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / uTarget;
+  vec3 color = texture(uSource, uv - uTexel).rgb;
+  color += texture(uSource, uv + uTexel).rgb;
+  color += texture(uSource, uv + vec2(uTexel.x, -uTexel.y)).rgb;
+  color += texture(uSource, uv + vec2(-uTexel.x, uTexel.y)).rgb;
+  outColor = vec4(min(color * 0.25, vec3(uLimit)), 1.0);
+}`;
+
+const BLUR = `#version 300 es
+precision highp float;
+uniform sampler2D uSource;
+uniform vec2 uTarget;
+uniform vec2 uStep;
+out vec4 outColor;
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / uTarget;
+  vec3 color = texture(uSource, uv).rgb * 0.181862;
+  color += (texture(uSource, uv + uStep * 1.423135).rgb + texture(uSource, uv - uStep * 1.423135).rgb) * 0.284316;
+  color += (texture(uSource, uv + uStep * 3.326702).rgb + texture(uSource, uv - uStep * 3.326702).rgb) * 0.106598;
+  color += (texture(uSource, uv + uStep * 5.242989).rgb + texture(uSource, uv - uStep * 5.242989).rgb) * 0.018156;
+  outColor = vec4(color, 1.0);
+}`;
+
+const COMPOSITE = `#version 300 es
+precision highp float;
+uniform sampler2D uScene;
+uniform sampler2D uBloom0;
+uniform sampler2D uBloom1;
+uniform sampler2D uBloom2;
+uniform sampler2D uBloom3;
+uniform vec2 uView;
+uniform float uDecode;
+uniform float uGlow;
+uniform float uBloom;
+uniform float uPresence;
+uniform float uOpacity;
+uniform float uFade;
+uniform float uLightMode;
+uniform vec3 uTopColor;
+uniform float uTopGlow;
+out vec4 outColor;
+
+float smootherstep01(float t) {
+  t = clamp(t, 0.0, 1.0);
+  return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
+}
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / uView;
+  vec3 light = texelFetch(uScene, ivec2(gl_FragCoord.xy), 0).rgb;
+  if (uBloom > 0.0) {
+    vec3 halo = texture(uBloom0, uv).rgb * 0.42;
+    halo += texture(uBloom1, uv).rgb * 0.3;
+    halo += texture(uBloom2, uv).rgb * 0.18;
+    halo += texture(uBloom3, uv).rgb * 0.1;
+    light += halo * uBloom * (uLightMode > 0.5 ? 0.2 : 1.0);
+  }
+  light *= uDecode * uGlow * uPresence;
+
+  if (uLightMode < 0.5 && uTopGlow > 0.0) {
+    float aspect = uView.x / uView.y;
+    vec2 q = vec2((uv.x - 0.5) * aspect, 1.04 - uv.y);
+    float spread = 0.34 * max(aspect, 0.75);
+    float core = exp(-q.x * q.x / (spread * spread) - q.y * q.y / 0.06);
+    float halo = exp(-q.x * q.x / (3.6 * spread * spread) - q.y * q.y / 0.18);
+    light += uTopColor * uTopGlow * (core * 0.85 + halo * 0.3) * uPresence;
+  }
+
+  vec3 lit = max(light, 0.0);
+  vec3 mapped = sqrt(1.0 - exp(-1.3 * lit * lit / (lit + 0.025)));
+  float peak = max(mapped.r, max(mapped.g, mapped.b));
+
+  float mask = uOpacity;
+  float edge = uFade * 0.5;
+  if (edge > 0.0) {
+    mask *= smootherstep01(uv.x / edge) * smootherstep01((1.0 - uv.x) / edge);
+    mask *= smootherstep01(uv.y / edge) * smootherstep01((1.0 - uv.y) / edge);
+  }
+  float grain = (fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) - 0.5) / 255.0;
+
+  if (uLightMode > 0.5) {
+    float coverage = clamp(smoothstep(0.0, 0.5, peak) * mask * 0.94 + grain, 0.0, 1.0);
+    vec3 chroma = sqrt(clamp(lit / max(max(lit.r, max(lit.g, lit.b)), 1e-6), 0.0, 1.0));
+    chroma = pow(chroma, vec3(1.35));
+    chroma /= max(max(chroma.r, max(chroma.g, chroma.b)), 1e-4);
+    float saturation = 1.0 - min(chroma.r, min(chroma.g, chroma.b));
+    chroma = mix(vec3(0.3), chroma, smoothstep(0.08, 0.35, saturation));
+    outColor = vec4(chroma * coverage, coverage);
+  } else {
+    vec3 color = clamp(mapped + grain, 0.0, 1.0) * mask;
+    outColor = vec4(color, max(color.r, max(color.g, color.b)));
+  }
+}`;
+
+const INTRO_SECONDS = 2.6;
+const WARP_SPEED = 9;
+const TAU = Math.PI * 2;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
+  gl.deleteShader(shader);
+  return null;
+};
+
+const link = (gl: WebGL2RenderingContext, fragmentSource: string): Program | null => {
+  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+  const fragment = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
+  const program = gl.createProgram();
+  if (!vertex || !fragment || !program) return null;
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.bindAttribLocation(program, 0, 'aPosition');
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(fragment);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    gl.deleteProgram(program);
+    return null;
+  }
+  const uniforms: Uniforms = {};
+  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < count; i++) {
+    const info = gl.getActiveUniform(program, i);
+    if (info) uniforms[info.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(program, info.name);
+  }
+  return { program, uniforms };
+};
+
+const Lightfall = ({
+  colors = ['#ffffff'],
+  backgroundColor = '#94a3b8',
+  speed = 0.3,
   streakCount = 2,
-  streakWidth = 1,
+  streakWidth = 0.8,
   streakLength = 1,
   glow = 1,
   density = 0.6,
-  twinkle = 1,
+  twinkle = 0.3,
   zoom = 3,
-  backgroundGlow = 0.5,
+  backgroundGlow = 0.1,
+  headGlow = 0.6,
+  depth = 0.5,
+  bloom = 0.35,
   opacity = 1,
   mouseInteraction = true,
-  mouseStrength = 0.5,
-  mouseRadius = 1,
+  mouseStrength = 0.4,
+  mouseRadius = 0.45,
   mouseDampening = 0.15,
+  lens = 0.5,
+  holdToWarp = true,
+  intro = true,
+  fade = 0,
   lightMode = false,
-  mixBlendMode
-}) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const programRef = useRef<Program | null>(null);
-  const meshRef = useRef<Mesh | null>(null);
-  const geometryRef = useRef<Triangle | null>(null);
-  const rendererRef = useRef<Renderer | null>(null);
-  const mouseTargetRef = useRef<[number, number]>([0, 0]);
-  const lastTimeRef = useRef(0);
+  mixBlendMode,
+  paused = false,
+  dpr,
+  className = '',
+  style
+}: LightfallProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const wakeRef = useRef<(() => void) | null>(null);
+  const settingsRef = useRef<Settings>(null as unknown as Settings);
+  const [generation, setGeneration] = useState(0);
+  settingsRef.current = {
+    colors: (Array.isArray(colors) && colors.length ? colors : ['#ffffff']).slice(0, MAX_COLORS).map(String),
+    backgroundColor: String(backgroundColor),
+    speed,
+    streakCount: Math.round(clamp(streakCount, 1, 16)),
+    streakWidth: Math.max(0.05, streakWidth),
+    streakLength: Math.max(0.05, streakLength),
+    glow: Math.max(0, glow),
+    density,
+    twinkle: clamp(twinkle, 0, 1),
+    zoom: Math.max(0.1, zoom),
+    backgroundGlow: Math.max(0, backgroundGlow),
+    headGlow: clamp(headGlow, 0, 1),
+    depth: Math.max(0, depth),
+    bloom: Math.max(0, bloom),
+    opacity: clamp(opacity, 0, 1),
+    mouseInteraction,
+    mouseStrength: Math.max(0, mouseStrength),
+    mouseRadius: Math.max(0.01, mouseRadius),
+    mouseDampening: Math.max(0, mouseDampening),
+    lens: clamp(lens, 0, 1),
+    holdToWarp,
+    intro,
+    fade: clamp(fade, 0, 1),
+    lightMode,
+    paused,
+    dpr
+  };
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
-
-    const renderer = new Renderer({
-      dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
+    const canvas = canvasRef.current;
+    const gl = canvas?.getContext('webgl2', {
       alpha: true,
-      antialias: true
+      premultipliedAlpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      powerPreference: 'high-performance'
     });
-    rendererRef.current = renderer;
-    const gl = renderer.gl;
-    const canvas = gl.canvas as HTMLCanvasElement;
+    if (!container || !canvas || !gl) return undefined;
 
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.display = 'block';
-    container.appendChild(canvas);
+    const floatTargets = !!gl.getExtension('EXT_color_buffer_float');
+    const streakProgram = link(gl, STREAKS);
+    const downProgram = link(gl, DOWNSAMPLE);
+    const blurProgram = link(gl, BLUR);
+    const compositeProgram = link(gl, COMPOSITE);
+    if (!streakProgram || !downProgram || !blurProgram || !compositeProgram) return undefined;
 
-    const { arr, count, avg } = prepColors(colors);
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+    };
+    const onContextRestored = () => setGeneration(value => value + 1);
+    canvas.addEventListener('webglcontextlost', onContextLost);
+    canvas.addEventListener('webglcontextrestored', onContextRestored);
 
-    const uniforms = {
-      iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
-      iMouse: { value: [0, 0] },
-      iTime: { value: 0 },
-      uColor0: { value: arr[0] },
-      uColor1: { value: arr[1] },
-      uColor2: { value: arr[2] },
-      uColor3: { value: arr[3] },
-      uColor4: { value: arr[4] },
-      uColor5: { value: arr[5] },
-      uColor6: { value: arr[6] },
-      uColor7: { value: arr[7] },
-      uColorCount: { value: count },
-      uBgColor: { value: hexToRGB(backgroundColor) },
-      uMouseColor: { value: avg },
-      uSpeed: { value: speed },
-      uStreakCount: { value: Math.max(1, Math.min(16, Math.round(streakCount))) },
-      uStreakWidth: { value: streakWidth },
-      uStreakLength: { value: streakLength },
-      uGlow: { value: glow },
-      uDensity: { value: density },
-      uTwinkle: { value: twinkle },
-      uZoom: { value: zoom },
-      uBgGlow: { value: backgroundGlow },
-      uOpacity: { value: opacity },
-      uMouseEnabled: { value: mouseInteraction ? 1 : 0 },
-      uMouseStrength: { value: mouseStrength },
-      uMouseRadius: { value: mouseRadius },
-      uLightMode: { value: lightMode ? 1 : 0 }
+    const buffer = gl.createBuffer();
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+    const format = floatTargets ? gl.RGBA16F : gl.RGBA8;
+    const encode = floatTargets ? 1 : 0.25;
+    const createTarget = (): Target => ({ texture: null, framebuffer: gl.createFramebuffer(), width: 0, height: 0 });
+    const scene = createTarget();
+    const levels = Array.from({ length: BLOOM_LEVELS }, () => [createTarget(), createTarget()]);
+
+    const allocate = (target: Target, width: number, height: number) => {
+      if (target.texture && target.width === width && target.height === height) return;
+      if (target.texture) gl.deleteTexture(target.texture);
+      target.texture = gl.createTexture();
+      target.width = width;
+      target.height = height;
+      gl.bindTexture(gl.TEXTURE_2D, target.texture);
+      gl.texStorage2D(gl.TEXTURE_2D, 1, format, width, height);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, target.framebuffer);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, target.texture, 0);
     };
 
-    const program = new Program(gl, { vertex, fragment, uniforms });
-    programRef.current = program;
+    const pass = (target: Target | null, program: Program) => {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, target ? target.framebuffer : null);
+      gl.viewport(0, 0, target ? target.width : canvas.width, target ? target.height : canvas.height);
+      gl.useProgram(program.program);
+      return program.uniforms;
+    };
 
-    const geometry = new Triangle(gl);
-    geometryRef.current = geometry;
-    const mesh = new Mesh(gl, { geometry, program });
-    meshRef.current = mesh;
+    const bind = (unit: number, texture: WebGLTexture | null) => {
+      gl.activeTexture(gl.TEXTURE0 + unit);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+    };
+
+    const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+    const colorCache = new Map<string, number[]>();
+    const toRgb = (value: string): number[] => {
+      if (colorCache.has(value)) return colorCache.get(value) as number[];
+      let rgb = [1, 1, 1];
+      if (probe) {
+        probe.clearRect(0, 0, 1, 1);
+        probe.fillStyle = '#ffffff';
+        probe.fillStyle = value;
+        probe.fillRect(0, 0, 1, 1);
+        const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+        rgb = [r / 255, g / 255, b / 255];
+      }
+      colorCache.set(value, rgb);
+      return rgb;
+    };
+    const toLinear = (value: string) => toRgb(value).map(channel => channel * channel);
+
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const palette = new Float32Array(MAX_COLORS * 3);
+    const pointer = { x: 0, y: 0, inside: false, held: false };
+    const state = {
+      travel: 0,
+      intro: settingsRef.current.intro && !reduce ? 0 : 1,
+      mouseX: 0,
+      mouseY: 0,
+      lensX: 0,
+      lensY: 0,
+      touch: 0,
+      warp: 0
+    };
+    let raf = 0;
+    let last = 0;
+    let visible = true;
+
+    const render = () => {
+      const s = settingsRef.current;
+      const width = canvas.width;
+      const height = canvas.height;
+      const cssWidth = Math.max(1, container.clientWidth);
+      const cssHeight = Math.max(1, container.clientHeight);
+      gl.bindVertexArray(vao);
+      allocate(scene, width, height);
+      levels.forEach((pair, index) => {
+        const levelWidth = Math.max(1, Math.round(cssWidth / 2 ** (index + 1)));
+        const levelHeight = Math.max(1, Math.round(cssHeight / 2 ** (index + 1)));
+        allocate(pair[0], levelWidth, levelHeight);
+        allocate(pair[1], levelWidth, levelHeight);
+      });
+
+      const intro = state.intro;
+      const presence = Math.min(1, intro * 2.2);
+      const stretch = 1 + 5 * Math.pow(1 - intro, 2) + 2.5 * state.warp;
+      const rings = Math.max(1, Math.floor(TAU * Math.max(s.density, 0.05) + 0.5));
+      const period = TAU / rings;
+      const clock = 9 + state.travel;
+
+      const list = s.colors.map(toLinear);
+      palette.fill(0);
+      for (let i = 0; i < MAX_COLORS; i++) palette.set(list[Math.min(i, list.length - 1)], i * 3);
+
+      const toScreenX = (value: number) => (2 * value - width) / width;
+      const toScreenY = (value: number) => (2 * value - height) / width;
+
+      const r = pass(scene, streakProgram);
+      gl.uniform2f(r.uView, width, height);
+      gl.uniform1f(r.uZoom, s.zoom);
+      gl.uniform1f(r.uPhase, clock % (16 * period));
+      gl.uniform1f(r.uTwinkleClock, clock % TAU);
+      gl.uniform1f(r.uRings, rings);
+      gl.uniform3fv(r.uColors, palette);
+      gl.uniform1i(r.uColorCount, list.length);
+      gl.uniform1i(r.uStreakCount, s.streakCount);
+      gl.uniform1i(r.uColumns, s.streakWidth > 1 ? 2 : 1);
+      gl.uniform1f(r.uWidth, 5e-4 * s.streakWidth);
+      gl.uniform1f(r.uTail, 19 / (s.streakLength * stretch));
+      gl.uniform1f(r.uTwinkle, s.twinkle);
+      gl.uniform1f(r.uHead, s.headGlow);
+      gl.uniform1f(r.uDepth, s.depth);
+      gl.uniform4f(
+        r.uMouse,
+        toScreenX(state.mouseX),
+        toScreenY(state.mouseY),
+        s.mouseInteraction ? s.mouseStrength * state.touch : 0,
+        s.mouseRadius
+      );
+      gl.uniform3f(
+        r.uLens,
+        toScreenX(state.lensX),
+        toScreenY(state.lensY),
+        s.mouseInteraction ? 0.5 * s.lens * state.touch : 0
+      );
+      gl.uniform1f(r.uLightMode, s.lightMode ? 1 : 0);
+      gl.uniform1f(r.uEncode, encode);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      if (s.bloom > 0) {
+        let source = scene;
+        levels.forEach(([front, back]) => {
+          const d = pass(front, downProgram);
+          bind(0, source.texture);
+          gl.uniform1i(d.uSource, 0);
+          gl.uniform2f(d.uTarget, front.width, front.height);
+          gl.uniform2f(d.uTexel, 1 / source.width, 1 / source.height);
+          gl.uniform1f(d.uLimit, 4 * encode);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+          let b = pass(back, blurProgram);
+          bind(0, front.texture);
+          gl.uniform1i(b.uSource, 0);
+          gl.uniform2f(b.uTarget, back.width, back.height);
+          gl.uniform2f(b.uStep, 1 / front.width, 0);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+          b = pass(front, blurProgram);
+          bind(0, back.texture);
+          gl.uniform1i(b.uSource, 0);
+          gl.uniform2f(b.uTarget, front.width, front.height);
+          gl.uniform2f(b.uStep, 0, 1 / back.height);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+          source = front;
+        });
+      }
+
+      const c = pass(null, compositeProgram);
+      bind(0, scene.texture);
+      gl.uniform1i(c.uScene, 0);
+      levels.forEach(([front], index) => {
+        bind(index + 1, front.texture);
+        gl.uniform1i(c[`uBloom${index}`], index + 1);
+      });
+      gl.uniform2f(c.uView, width, height);
+      gl.uniform1f(c.uDecode, 1 / encode);
+      gl.uniform1f(c.uGlow, s.glow);
+      gl.uniform1f(c.uBloom, s.bloom);
+      gl.uniform1f(c.uPresence, presence);
+      gl.uniform1f(c.uOpacity, s.opacity);
+      gl.uniform1f(c.uFade, s.fade);
+      gl.uniform1f(c.uLightMode, s.lightMode ? 1 : 0);
+      gl.uniform3fv(c.uTopColor, toLinear(s.backgroundColor));
+      gl.uniform1f(c.uTopGlow, s.backgroundGlow);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      for (let unit = BLOOM_LEVELS; unit >= 0; unit--) bind(unit, null);
+    };
+
+    const frame = (now: number) => {
+      raf = 0;
+      if (!visible || document.hidden) return;
+      const s = settingsRef.current;
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+      last = now;
+      if (!s.intro || reduce) state.intro = 1;
+      else if (state.intro < 1) state.intro = Math.min(1, state.intro + dt / INTRO_SECONDS);
+
+      const holding = s.holdToWarp && pointer.held && pointer.inside && !reduce;
+      state.warp += ((holding ? 1 : 0) - state.warp) * (1 - Math.exp(-dt * (holding ? 2.2 : 1.6)));
+      const rush = WARP_SPEED * Math.pow(1 - state.intro, 2) + 6 * state.warp;
+      const running = !s.paused && !reduce;
+      if (running) state.travel += dt * 0.1 * s.speed * (1 + rush);
+
+      const ratio = canvas.width / Math.max(1, container.clientWidth);
+      const targetX = pointer.x * ratio;
+      const targetY = (container.clientHeight - pointer.y) * ratio;
+      const engaged = s.mouseInteraction && pointer.inside && !reduce;
+      if (engaged && state.touch < 0.01) {
+        state.mouseX = targetX;
+        state.mouseY = targetY;
+        state.lensX = targetX;
+        state.lensY = targetY;
+      }
+      const follow = s.mouseDampening > 0 ? 1 - Math.exp(-dt / s.mouseDampening) : 1;
+      state.mouseX += (targetX - state.mouseX) * follow;
+      state.mouseY += (targetY - state.mouseY) * follow;
+      const lensFollow = 1 - Math.exp(-dt * 6);
+      state.lensX += (targetX - state.lensX) * lensFollow;
+      state.lensY += (targetY - state.lensY) * lensFollow;
+      state.touch += ((engaged ? 1 : 0) - state.touch) * (1 - Math.exp(-dt * (engaged ? 4 : 2)));
+
+      render();
+
+      const settling = state.intro < 1 || state.warp > 0.001 || Math.abs((engaged ? 1 : 0) - state.touch) > 0.002;
+      if ((running && s.speed !== 0) || settling) raf = requestAnimationFrame(frame);
+      else last = 0;
+    };
+
+    const wake = () => {
+      if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    };
 
     const resize = () => {
+      const s = settingsRef.current;
+      const width = Math.max(1, container.clientWidth);
+      const height = Math.max(1, container.clientHeight);
+      const ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(width * ratio));
+      canvas.height = Math.max(1, Math.round(height * ratio));
+      if (!raf) render();
+      wake();
+    };
+
+    const locate = (event: PointerEvent) => {
       const rect = container.getBoundingClientRect();
-      renderer.setSize(rect.width, rect.height);
-      uniforms.iResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight, 1];
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      return { x, y, inside: x >= 0 && y >= 0 && x <= rect.width && y <= rect.height };
     };
 
+    const onPointerMove = (event: PointerEvent) => {
+      const point = locate(event);
+      pointer.x = point.x;
+      pointer.y = point.y;
+      pointer.inside = point.inside;
+      wake();
+    };
+
+    const onPointerDown = (event: PointerEvent) => {
+      const point = locate(event);
+      if (!point.inside) return;
+      pointer.x = point.x;
+      pointer.y = point.y;
+      pointer.inside = true;
+      pointer.held = true;
+      wake();
+    };
+
+    const onPointerUp = () => {
+      pointer.held = false;
+      wake();
+    };
+
+    const onPointerLeave = () => {
+      pointer.inside = false;
+      pointer.held = false;
+      wake();
+    };
+
+    const onVisibility = () => {
+      last = 0;
+      wake();
+    };
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
+    const intersection = new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) {
+        last = 0;
+        wake();
+      }
+    });
+    intersection.observe(container);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
+    window.addEventListener('pointerup', onPointerUp, { passive: true });
+    window.addEventListener('pointercancel', onPointerUp, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onPointerLeave);
+    document.addEventListener('visibilitychange', onVisibility);
     resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(container);
 
-    const onPointerMove = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const scale = renderer.dpr || 1;
-      const x = (e.clientX - rect.left) * scale;
-      const y = (rect.height - (e.clientY - rect.top)) * scale;
-      mouseTargetRef.current = [x, y];
-      if (mouseDampening <= 0) {
-        uniforms.iMouse.value = [x, y];
+    let lastDpr = settingsRef.current.dpr;
+    wakeRef.current = () => {
+      const s = settingsRef.current;
+      if (s.dpr !== lastDpr) {
+        lastDpr = s.dpr;
+        resize();
+        return;
       }
+      if (!raf) render();
+      wake();
     };
-    if (mouseInteraction) {
-      canvas.addEventListener('pointermove', onPointerMove);
-    }
-
-    const loop = (t: number) => {
-      rafRef.current = requestAnimationFrame(loop);
-      uniforms.iTime.value = t * 0.001;
-      if (mouseDampening > 0) {
-        if (!lastTimeRef.current) lastTimeRef.current = t;
-        const dt = (t - lastTimeRef.current) / 1000;
-        lastTimeRef.current = t;
-        const tau = Math.max(1e-4, mouseDampening);
-        let factor = 1 - Math.exp(-dt / tau);
-        if (factor > 1) factor = 1;
-        const target = mouseTargetRef.current;
-        const cur = uniforms.iMouse.value as number[];
-        cur[0] += (target[0] - cur[0]) * factor;
-        cur[1] += (target[1] - cur[1]) * factor;
-      } else {
-        lastTimeRef.current = t;
-      }
-      if (!paused && programRef.current && meshRef.current) {
-        try {
-          renderer.render({ scene: meshRef.current });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    };
-    rafRef.current = requestAnimationFrame(loop);
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (mouseInteraction) canvas.removeEventListener('pointermove', onPointerMove);
-      ro.disconnect();
-      if (canvas.parentElement === container) {
-        container.removeChild(canvas);
-      }
-      const callIfFn = (obj: unknown, key: string) => {
-        const fn = obj && (obj as Record<string, unknown>)[key];
-        if (typeof fn === 'function') {
-          (fn as () => void).call(obj);
-        }
-      };
-      callIfFn(programRef.current, 'remove');
-      callIfFn(geometryRef.current, 'remove');
-      callIfFn(meshRef.current, 'remove');
-      callIfFn(rendererRef.current, 'destroy');
-      programRef.current = null;
-      geometryRef.current = null;
-      meshRef.current = null;
-      rendererRef.current = null;
+      cancelAnimationFrame(raf);
+      wakeRef.current = null;
+      canvas.removeEventListener('webglcontextlost', onContextLost);
+      canvas.removeEventListener('webglcontextrestored', onContextRestored);
+      resizeObserver.disconnect();
+      intersection.disconnect();
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+      document.documentElement.removeEventListener('pointerleave', onPointerLeave);
+      document.removeEventListener('visibilitychange', onVisibility);
+      [scene, ...levels.flat()].forEach(target => {
+        if (target.texture) gl.deleteTexture(target.texture);
+        gl.deleteFramebuffer(target.framebuffer);
+      });
+      [streakProgram, downProgram, blurProgram, compositeProgram].forEach(item => gl.deleteProgram(item.program));
+      gl.deleteBuffer(buffer);
+      gl.deleteVertexArray(vao);
+      if (!gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [
-    dpr,
-    paused,
-    colors,
-    backgroundColor,
-    speed,
-    streakCount,
-    streakWidth,
-    streakLength,
-    glow,
-    density,
-    twinkle,
-    zoom,
-    backgroundGlow,
-    opacity,
-    mouseInteraction,
-    mouseStrength,
-    mouseRadius,
-    mouseDampening,
-    lightMode
-  ]);
+  }, [generation]);
+
+  useEffect(() => {
+    wakeRef.current?.();
+  });
 
   return (
     <div
       ref={containerRef}
-      className={`lightfall-container ${className ?? ''}`}
-      style={{
-        ...(mixBlendMode && { mixBlendMode: mixBlendMode as React.CSSProperties['mixBlendMode'] })
-      }}
-    />
+      className={`lightfall-container${className ? ` ${className}` : ''}`}
+      style={{ ...(mixBlendMode ? { mixBlendMode } : null), ...style }}
+    >
+      <canvas ref={canvasRef} className="lightfall-canvas" aria-hidden="true" />
+    </div>
   );
 };
 

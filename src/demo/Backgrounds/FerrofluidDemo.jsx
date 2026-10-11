@@ -1,359 +1,365 @@
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
-import { useMemo } from 'react';
 
-import useComponentProps from '../../hooks/useComponentProps';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+
+import Ferrofluid from '../../content/Backgrounds/Ferrofluid/Ferrofluid';
 import { ferrofluid } from '../../constants/code/Backgrounds/ferrofluidCode';
-import Ferrofluid from '../../ts-default/Backgrounds/Ferrofluid/Ferrofluid';
 
-const DEFAULT_PROPS = {
-  color1: '#ffffff',
-  color2: '#ffffff',
-  color3: '#ffffff',
-  speed: 0.5,
+const LOOK = {
+  colors: ['#ffffff', '#ffffff', '#ffffff'],
+  brightness: 1,
   scale: 1.6,
-  turbulence: 1,
-  fluidity: 0.1,
-  rimWidth: 0.2,
+  spikeHeight: 1,
   sharpness: 2.5,
-  shimmer: 1.5,
-  glow: 2,
+  tilt: 48,
+  turbulence: 1,
+  fluidity: 0.5,
+  speed: 0.5,
+  magnetism: 1,
+  variation: 0,
   flowDirection: 'down',
-  mouseInteraction: true,
   mouseStrength: 1,
-  mouseRadius: 0.35
+  mouseRadius: 0.22
 };
 
+const DEFAULT_PROPS = {
+  preset: 'studio',
+  ...LOOK,
+  mouseInteraction: true,
+  clickPulse: true,
+  intro: true,
+  lightMode: false
+};
+
+const PRESETS = {
+  studio: { ...LOOK },
+  ember: { ...LOOK, colors: ['#ffd2a1', '#ff8a4c', '#ff6a3d'], brightness: 1.1 },
+  frost: { ...LOOK, colors: ['#dff1ff', '#6cb6ff', '#8fb0ff'] },
+  calm: { ...LOOK, magnetism: 0.8, speed: 0.3, spikeHeight: 0.85 },
+  storm: { ...LOOK, magnetism: 1.5, speed: 0.9, turbulence: 1.6, spikeHeight: 1.15 },
+  peaks: { ...LOOK, sharpness: 4, spikeHeight: 1.4, fluidity: 0.85 },
+  horizon: { ...LOOK, tilt: 64, spikeHeight: 1.1 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'studio', label: 'Studio' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'frost', label: 'Frost' },
+  { value: 'calm', label: 'Calm' },
+  { value: 'storm', label: 'Storm' },
+  { value: 'peaks', label: 'Peaks' },
+  { value: 'horizon', label: 'Horizon' }
+];
+
+const FLOW_OPTIONS = [
+  { value: 'down', label: 'Down' },
+  { value: 'up', label: 'Up' },
+  { value: 'left', label: 'Left' },
+  { value: 'right', label: 'Right' },
+  { value: 'none', label: 'None' }
+];
+
+const propData = [
+  {
+    name: 'colors',
+    type: 'string[]',
+    default: "['#ffffff', '#ffffff', '#ffffff']",
+    description: 'Colors of the studio lights reflected in the fluid: key light, side lights and fill light.'
+  },
+  { name: 'brightness', type: 'number', default: '1', description: 'Strength of the reflections.' },
+  {
+    name: 'scale',
+    type: 'number',
+    default: '1.6',
+    description: 'Zoom of the fluid. Higher values show bigger, fewer spikes.'
+  },
+  { name: 'spikeHeight', type: 'number', default: '1', description: 'How tall the spikes grow in a strong field.' },
+  {
+    name: 'sharpness',
+    type: 'number',
+    default: '2.5',
+    description:
+      'How peaked the spikes are. Low values give soft mounds, high values taller cones. Tips always stay rounded.'
+  },
+  {
+    name: 'tilt',
+    type: 'number',
+    default: '48',
+    description: 'Viewing angle in degrees. Low values look down from above, high values look across the fluid.'
+  },
+  {
+    name: 'turbulence',
+    type: 'number',
+    default: '1',
+    description: 'How much the spike pattern sways and drifts out of its regular grid.'
+  },
+  {
+    name: 'fluidity',
+    type: 'number',
+    default: '0.5',
+    description: 'How loosely the spikes respond, from 0 (thick and slow) to 1 (bouncy).'
+  },
+  { name: 'speed', type: 'number', default: '0.5', description: 'How fast the swells roll across the surface.' },
+  {
+    name: 'magnetism',
+    type: 'number',
+    default: '1',
+    description: 'Strength of the magnetic field that raises swells of spikes across the surface.'
+  },
+  {
+    name: 'variation',
+    type: 'number',
+    default: '0',
+    description: 'Picks a different arrangement of swells.'
+  },
+  {
+    name: 'flowDirection',
+    type: "'down' | 'up' | 'left' | 'right' | 'none'",
+    default: "'down'",
+    description: 'Direction the swells roll. None keeps them morphing in place.'
+  },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'Turns the cursor into a magnet that raises a crown of spikes.'
+  },
+  { name: 'mouseStrength', type: 'number', default: '1', description: 'Strength of the cursor magnet.' },
+  {
+    name: 'mouseRadius',
+    type: 'number',
+    default: '0.22',
+    description: 'Reach of the cursor magnet, as a fraction of the height.'
+  },
+  {
+    name: 'mouseDampening',
+    type: 'number',
+    default: '0.15',
+    description: 'Time in seconds the crown takes to catch up with the cursor. 0 follows instantly.'
+  },
+  {
+    name: 'clickPulse',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a magnetic pulse through the fluid.'
+  },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'Raises the spikes when the field switches on.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Renders the fluid as glossy white liquid for light backgrounds.'
+  },
+  {
+    name: 'transparent',
+    type: 'boolean',
+    default: 'true',
+    description: 'Lets the page show through. When off, the fluid sits on the color below.'
+  },
+  {
+    name: 'color',
+    type: 'string',
+    default: "'#120f17'",
+    description: 'Background color when transparent is off. Defaults to white in light mode.'
+  },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the fluid.' },
+  { name: 'mixBlendMode', type: 'string', default: '-', description: 'CSS mix-blend-mode applied to the container.' },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const LIGHTS = [
+  { title: 'Key Light', index: 0 },
+  { title: 'Side Lights', index: 1 },
+  { title: 'Fill Light', index: 2 }
+];
+
 const FerrofluidDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    color1,
-    color2,
-    color3,
-    speed,
-    scale,
-    turbulence,
-    fluidity,
-    rimWidth,
-    sharpness,
-    shimmer,
-    glow,
-    flowDirection,
-    mouseInteraction,
-    mouseStrength,
-    mouseRadius
-  } = props;
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
 
-  const colors = [color1, color2, color3];
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'colors',
-        type: 'string[]',
-        default: "['#4F46E5', '#06B6D4', '#E0F2FE']",
-        description:
-          'Array of hex colors (up to 8) used to tint the fluid rim. Colors are spread across the surface by height; a single color makes the whole effect uniform.'
-      },
-      {
-        name: 'backgroundColor',
-        type: 'string',
-        default: "'#03010A'",
-        description: 'Hex color of the background behind the fluid.'
-      },
-      {
-        name: 'backgroundColor',
-        type: 'string',
-        default: "'#03010A'",
-        description: 'Hex color of the background behind the fluid.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '0.5',
-        description: 'Multiplier for how fast the fluid churns and flows.'
-      },
-      {
-        name: 'scale',
-        type: 'number',
-        default: '1.6',
-        description: 'Overall feature size. Higher values zoom in for larger, fewer blobs.'
-      },
-      {
-        name: 'turbulence',
-        type: 'number',
-        default: '1',
-        description: 'Amount of domain distortion. Higher values create more chaotic, swirling motion.'
-      },
-      {
-        name: 'fluidity',
-        type: 'number',
-        default: '0.1',
-        description: 'Smoothness of the merge between the two fluid layers. Higher = softer, more liquid blending.'
-      },
-      {
-        name: 'rimWidth',
-        type: 'number',
-        default: '0.2',
-        description: 'Thickness of the glowing contour lines tracing the fluid surface.'
-      },
-      {
-        name: 'sharpness',
-        type: 'number',
-        default: '2.5',
-        description: 'Contrast of the rim highlights. Higher values give crisper, thinner edges.'
-      },
-      {
-        name: 'shimmer',
-        type: 'number',
-        default: '1.5',
-        description: 'Amount of fine grainy break-up applied to the rim. 0 = smooth lines.'
-      },
-      {
-        name: 'glow',
-        type: 'number',
-        default: '2',
-        description: 'Overall brightness multiplier of the rim highlights.'
-      },
-      {
-        name: 'flowDirection',
-        type: "'up' | 'down' | 'left' | 'right'",
-        default: "'down'",
-        description: 'Primary direction the fluid surface drifts.'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '1',
-        description: 'Overall alpha of the rendered canvas.'
-      },
-      {
-        name: 'mouseInteraction',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enables a magnetic spike that rises and glows under the cursor.'
-      },
-      {
-        name: 'mouseStrength',
-        type: 'number',
-        default: '1',
-        description: 'Intensity of the magnetic cursor spike.'
-      },
-      {
-        name: 'mouseRadius',
-        type: 'number',
-        default: '0.35',
-        description: 'Falloff radius of the magnetic cursor spike.'
-      },
-      {
-        name: 'mouseDampening',
-        type: 'number',
-        default: '0.15',
-        description: 'Easing time constant (seconds) for the cursor to follow the pointer. 0 = immediate.'
-      },
-      {
-        name: 'mixBlendMode',
-        type: 'string',
-        default: 'undefined',
-        description: "CSS mix-blend-mode applied to the canvas (e.g. 'screen', 'lighten')."
-      },
-      {
-        name: 'paused',
-        type: 'boolean',
-        default: 'false',
-        description: 'If true, stops rendering updates (freezing the current frame).'
-      },
-      {
-        name: 'dpr',
-        type: 'number',
-        default: 'window.devicePixelRatio',
-        description: 'Overrides device pixel ratio; lower for performance, higher for sharpness.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: '',
-        description: 'Additional class names for the root container.'
-      }
-    ],
-    []
-  );
+  const setLight = (index, value) => {
+    const next = [0, 1, 2].map(i => settings.colors?.[i] ?? settings.colors?.[0] ?? '#ffffff');
+    next[index] = value;
+    updateProp('colors', next);
+  };
 
   return (
     <ComponentPropsProvider
       props={props}
       defaultProps={DEFAULT_PROPS}
-      hasChanges={hasChanges}
       resetProps={resetProps}
-      demoOnlyProps={['color1', 'color2', 'color3']}
-      computedProps={{ colors }}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
     >
       <TabsLayout>
         <PreviewTab>
-          <Box
-            position="relative"
-            className="demo-container"
-            h={500}
-            p={0}
-            overflow="hidden"
-            bgGradient="linear(to-br, #0a0a1a, #1a0a2e, #0a0a1a)"
-          >
-            <Ferrofluid
-              colors={colors}
-              speed={speed}
-              scale={scale}
-              turbulence={turbulence}
-              fluidity={fluidity}
-              rimWidth={rimWidth}
-              sharpness={sharpness}
-              shimmer={shimmer}
-              glow={glow}
-              flowDirection={flowDirection}
-              mouseInteraction={mouseInteraction}
-              mouseStrength={mouseStrength}
-              mouseRadius={mouseRadius}
-            />
-
-            <BackgroundContent pillText="New Background" headline="Bend the magnetic fluid" />
+          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
+            <Ferrofluid key={key} {...settings} />
+            <BackgroundContent headline="Bend the magnetic fluid" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="ferrofluid"
-              currentProps={{
-                colors,
-                speed,
-                scale,
-                turbulence,
-                fluidity,
-                rimWidth,
-                sharpness,
-                shimmer,
-                glow,
-                flowDirection,
-                mouseInteraction,
-                mouseStrength,
-                mouseRadius
-              }}
-              defaultProps={{
-                colors: ['#4F46E5', '#06B6D4', '#E0F2FE'],
-                speed: 0.5,
-                scale: 1,
-                turbulence: 1,
-                fluidity: 0.1,
-                rimWidth: 0.2,
-                sharpness: 3,
-                shimmer: 1,
-                glow: 2,
-                flowDirection: 'down',
-                opacity: 1,
-                mouseInteraction: true,
-                mouseStrength: 1,
-                mouseRadius: 0.3
-              }}
-            />
+            <OpenInStudioButton backgroundId="ferrofluid" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => updateProp('color2', val)} />
-            <PreviewColorPickerCustom title="Color 3" color={color3} onChange={val => updateProp('color3', val)} />
-
-            <PreviewSwitch
-              title="Cursor Magnet"
-              isChecked={mouseInteraction}
-              onChange={val => updateProp('mouseInteraction', val)}
-            />
-
-            <PreviewSelect
-              title="Flow Direction"
-              options={[
-                { value: 'down', label: 'Down' },
-                { value: 'up', label: 'Up' },
-                { value: 'left', label: 'Left' },
-                { value: 'right', label: 'Right' }
-              ]}
-              value={flowDirection}
-              onChange={val => updateProp('flowDirection', val)}
-            />
-
-            <PreviewSlider title="Speed" min={0} max={3} step={0.1} value={speed} onChange={v => updateProp('speed', v)} />
-            <PreviewSlider title="Scale" min={0.3} max={3} step={0.1} value={scale} onChange={v => updateProp('scale', v)} />
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            {LIGHTS.map(light => (
+              <PreviewColorPickerCustom
+                key={light.title}
+                title={light.title}
+                color={settings.colors?.[light.index] ?? settings.colors?.[0] ?? '#ffffff'}
+                onChange={value => setLight(light.index, value)}
+              />
+            ))}
             <PreviewSlider
-              title="Turbulence"
-              min={0}
+              title="Brightness"
+              min={0.2}
               max={2}
               step={0.05}
-              value={turbulence}
-              onChange={v => updateProp('turbulence', v)}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
             />
             <PreviewSlider
-              title="Fluidity"
-              min={0.02}
-              max={0.5}
-              step={0.01}
-              value={fluidity}
-              onChange={v => updateProp('fluidity', v)}
+              title="Scale"
+              min={0.8}
+              max={3}
+              step={0.05}
+              value={settings.scale}
+              onChange={value => updateProp('scale', value)}
             />
             <PreviewSlider
-              title="Rim Width"
-              min={0.05}
-              max={0.5}
-              step={0.01}
-              value={rimWidth}
-              onChange={v => updateProp('rimWidth', v)}
+              title="Spike Height"
+              min={0.2}
+              max={2}
+              step={0.05}
+              value={settings.spikeHeight}
+              onChange={value => updateProp('spikeHeight', value)}
             />
             <PreviewSlider
               title="Sharpness"
               min={1}
-              max={6}
+              max={5}
               step={0.1}
-              value={sharpness}
-              onChange={v => updateProp('sharpness', v)}
+              value={settings.sharpness}
+              onChange={value => updateProp('sharpness', value)}
             />
             <PreviewSlider
-              title="Shimmer"
+              title="Tilt"
+              min={25}
+              max={65}
+              step={1}
+              value={settings.tilt}
+              valueUnit="°"
+              onChange={value => updateProp('tilt', value)}
+            />
+            <PreviewSlider
+              title="Turbulence"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.turbulence}
+              onChange={value => updateProp('turbulence', value)}
+            />
+            <PreviewSlider
+              title="Fluidity"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.fluidity}
+              onChange={value => updateProp('fluidity', value)}
+            />
+            <PreviewSlider
+              title="Speed"
               min={0}
               max={2}
               step={0.05}
-              value={shimmer}
-              onChange={v => updateProp('shimmer', v)}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
             />
-            <PreviewSlider title="Glow" min={0.5} max={5} step={0.1} value={glow} onChange={v => updateProp('glow', v)} />
+            <PreviewSlider
+              title="Magnetism"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.magnetism}
+              onChange={value => updateProp('magnetism', value)}
+            />
+            <PreviewSlider
+              title="Variation"
+              min={0}
+              max={10}
+              step={1}
+              value={settings.variation}
+              onChange={value => updateProp('variation', value)}
+            />
+            <PreviewSelect
+              title="Flow Direction"
+              options={FLOW_OPTIONS}
+              value={settings.flowDirection}
+              onChange={value => updateProp('flowDirection', value)}
+            />
             <PreviewSlider
               title="Cursor Strength"
               min={0}
-              max={3}
-              step={0.1}
-              value={mouseStrength}
-              onChange={v => updateProp('mouseStrength', v)}
+              max={2}
+              step={0.05}
+              value={settings.mouseStrength}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseStrength', value)}
             />
             <PreviewSlider
               title="Cursor Radius"
-              min={0.05}
-              max={1}
-              step={0.05}
-              value={mouseRadius}
-              onChange={v => updateProp('mouseRadius', v)}
+              min={0.08}
+              max={0.45}
+              step={0.01}
+              value={settings.mouseRadius}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseRadius', value)}
+            />
+            <PreviewSwitch
+              title="Cursor Magnet"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch
+              title="Click Pulse"
+              isChecked={settings.clickPulse}
+              onChange={value => updateProp('clickPulse', value)}
+            />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>
