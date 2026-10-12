@@ -1,320 +1,286 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
+
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
+import Customize from '../../components/common/Preview/Customize';
+import CodeExample from '../../components/code/CodeExample';
+import PropTable from '../../components/common/Preview/PropTable';
+import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorList from '../../components/common/Preview/PreviewColorList';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
-import Customize from '../../components/common/Preview/Customize';
-import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
-import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
-import CodeExample from '../../components/code/CodeExample';
-import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
+import LiquidEther from '../../content/Backgrounds/LiquidEther/LiquidEther';
+import { liquidEther } from '../../constants/code/Backgrounds/liquidEtherCode';
 
-import LiquidEther from '@/content/Backgrounds/LiquidEther/LiquidEther';
-import { liquidEther } from '@/constants/code/Backgrounds/liquidEtherCode';
-import BackgroundContent from '@/components/common/Preview/BackgroundContent';
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
-
-const DEFAULT_PROPS = {
-  color0: '#5227FF',
-  color1: '#FF9FFC',
-  color2: '#B497CF',
+const LOOK = {
+  colors: ['#5227FF', '#FF9FFC', '#B497CF'],
+  intensity: 1,
   mouseForce: 20,
   cursorSize: 100,
-  resolution: 0.5,
-  isViscous: true,
-  viscous: 30,
-  iterationsViscous: 32,
-  iterationsPoisson: 32,
-  isBounce: false,
-  autoDemo: true,
-  autoSpeed: 0.5,
-  autoIntensity: 2.2
+  persistence: 0.75,
+  viscosity: 0
 };
 
-const LiquidEtherDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    color0,
-    color1,
-    color2,
-    mouseForce,
-    cursorSize,
-    resolution,
-    isViscous,
-    viscous,
-    iterationsViscous,
-    iterationsPoisson,
-    isBounce,
-    autoDemo,
-    autoSpeed,
-    autoIntensity,
-    backgroundColor,
-    lightMode
-  } = props;
-  const userColors = [color0, color1, color2].filter(Boolean);
-  const [key] = useForceRerender();
+const DEFAULT_PROPS = {
+  preset: 'ether',
+  ...LOOK,
+  resolution: 0.5,
+  autoDemo: true,
+  autoSpeed: 0.5,
+  autoIntensity: 2.2,
+  clickBurst: true,
+  bounceEdges: false,
+  intro: true,
+  lightMode: false
+};
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'colors',
-        type: 'string[]',
-        default: `["#5227FF", "#FF9FFC", "#B497CF"]`,
-        description: 'Array of hex color stops used to build the velocity-to-color palette.'
-      },
-      {
-        name: 'mouseForce',
-        type: 'number',
-        default: '20',
-        description: 'Strength multiplier applied to mouse / touch movement when injecting velocity.'
-      },
-      {
-        name: 'cursorSize',
-        type: 'number',
-        default: '100',
-        description: 'Radius (in pixels at base resolution) of the force brush.'
-      },
-      {
-        name: 'resolution',
-        type: 'number',
-        default: '0.5',
-        description: 'Simulation texture scale relative to canvas size (lower = better performance, more blur).'
-      },
-      {
-        name: 'dt',
-        type: 'number',
-        default: '0.014',
-        description: 'Fixed simulation timestep used inside the advection / diffusion passes.'
-      },
-      {
-        name: 'BFECC',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enable BFECC advection (error-compensated) for crisper flow; disable for slight performance gain.'
-      },
-      {
-        name: 'isViscous',
-        type: 'boolean',
-        default: 'false',
-        description: 'Toggle iterative viscosity solve (smoother, thicker motion when enabled).'
-      },
-      {
-        name: 'viscous',
-        type: 'number',
-        default: '30',
-        description: 'Viscosity coefficient used when isViscous is true.'
-      },
-      {
-        name: 'iterationsViscous',
-        type: 'number',
-        default: '32',
-        description: 'Number of Gauss-Seidel iterations for viscosity (higher = smoother, slower).'
-      },
-      {
-        name: 'iterationsPoisson',
-        type: 'number',
-        default: '32',
-        description: 'Number of pressure Poisson iterations to enforce incompressibility.'
-      },
-      {
-        name: 'isBounce',
-        type: 'boolean',
-        default: 'false',
-        description: 'If true, shows bounce boundaries (velocity clamped at edges).'
-      },
-      {
-        name: 'autoDemo',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enable idle auto-driving of the pointer when no user interaction.'
-      },
-      {
-        name: 'autoSpeed',
-        type: 'number',
-        default: '0.5',
-        description: 'Speed (normalized units/sec) for auto pointer motion.'
-      },
-      {
-        name: 'autoIntensity',
-        type: 'number',
-        default: '2.2',
-        description: 'Multiplier applied to velocity delta while in auto mode.'
-      },
-      {
-        name: 'takeoverDuration',
-        type: 'number',
-        default: '0.25',
-        description: 'Seconds to interpolate from auto pointer to real cursor when user moves mouse.'
-      },
-      {
-        name: 'autoResumeDelay',
-        type: 'number',
-        default: '1000',
-        description: 'Milliseconds of inactivity before auto mode resumes.'
-      },
-      {
-        name: 'autoRampDuration',
-        type: 'number',
-        default: '0.6',
-        description: 'Seconds to ramp auto movement speed from 0 to full after activation.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Optional class for the root container.'
-      },
-      {
-        name: 'style',
-        type: 'React.CSSProperties',
-        default: '{}',
-        description: 'Inline styles applied to the root container.'
-      }
-    ],
-    []
-  );
+const PRESETS = {
+  ether: {},
+  lagoon: { colors: ['#0e7490', '#2dd4bf', '#ccfbf1'] },
+  ember: { colors: ['#9a3412', '#f97316', '#fde68a'] },
+  smoke: { colors: ['#3f3f46', '#a1a1aa', '#ffffff'] },
+  ocean: { colors: ['#1e3a8a', '#3b82f6', '#bae6fd'] },
+  syrup: { viscosity: 0.8, persistence: 0.9, cursorSize: 140, intensity: 1.2 }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'ether', label: 'Ether' },
+  { value: 'lagoon', label: 'Lagoon' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'smoke', label: 'Smoke' },
+  { value: 'ocean', label: 'Ocean' },
+  { value: 'syrup', label: 'Syrup' }
+];
+
+const propData = [
+  {
+    name: 'colors',
+    type: 'string[]',
+    default: "['#5227FF', '#FF9FFC', '#B497CF']",
+    description: 'Colors from slow to fast flow. Calm areas take the first color, the fastest currents the last.'
+  },
+  { name: 'intensity', type: 'number', default: '1', description: 'Brightness of the flow.' },
+  {
+    name: 'mouseForce',
+    type: 'number',
+    default: '20',
+    description: 'How strongly the cursor pushes the liquid.'
+  },
+  { name: 'cursorSize', type: 'number', default: '100', description: 'Size of the area the cursor stirs, in px.' },
+  {
+    name: 'persistence',
+    type: 'number',
+    default: '0.75',
+    description: 'How long the motion lingers before it settles, from 0 to 1.'
+  },
+  {
+    name: 'viscosity',
+    type: 'number',
+    default: '0',
+    description: 'How thick the liquid is, from 0 to 1. Thicker liquid moves in broad, slow swirls.'
+  },
+  {
+    name: 'resolution',
+    type: 'number',
+    default: '0.5',
+    description: 'Detail of the simulation, from 0.1 to 1. Lower values are faster and softer.'
+  },
+  {
+    name: 'autoDemo',
+    type: 'boolean',
+    default: 'true',
+    description: 'Stirs the liquid on its own while the cursor is away.'
+  },
+  { name: 'autoSpeed', type: 'number', default: '0.5', description: 'Speed of the automatic stirring.' },
+  {
+    name: 'autoIntensity',
+    type: 'number',
+    default: '2.2',
+    description: 'Strength of the automatic stirring compared with the cursor.'
+  },
+  {
+    name: 'autoResumeDelay',
+    type: 'number',
+    default: '1000',
+    description: 'Milliseconds without input before the automatic stirring resumes.'
+  },
+  {
+    name: 'clickBurst',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking shoots a puff of liquid in the direction the cursor was moving.'
+  },
+  {
+    name: 'bounceEdges',
+    type: 'boolean',
+    default: 'false',
+    description: 'The liquid bounces off the edges instead of flowing out of view.'
+  },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'A swirl sweeps out from the center on mount.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Renders the flow as soft ink for light backgrounds.'
+  },
+  {
+    name: 'backgroundColor',
+    type: 'string',
+    default: "'transparent'",
+    description: 'Solid color behind the flow. Leave transparent to show the page through.'
+  },
+  {
+    name: 'maxDevicePixelRatio',
+    type: 'number',
+    default: '2',
+    description: 'Highest pixel ratio the canvas renders at.'
+  },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const LiquidEtherDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <LiquidEther
-              key={key}
-              colors={userColors}
-              mouseForce={mouseForce}
-              cursorSize={cursorSize}
-              resolution={resolution}
-              isViscous={isViscous}
-              viscous={viscous}
-              iterationsViscous={iterationsViscous}
-              iterationsPoisson={iterationsPoisson}
-              isBounce={isBounce}
-              autoDemo={autoDemo}
-              autoSpeed={autoSpeed}
-              autoIntensity={autoIntensity}
-              backgroundColor={backgroundColor}
-              lightMode={lightMode}
-              autoResumeDelay={500}
-            />
-
-            <BackgroundContent pillText="New Background" headline="The web, made fluid at your fingertips." />
+            <LiquidEther key={key} {...settings} />
+            <BackgroundContent headline="The web, made fluid at your fingertips." />
+            <RefreshButton onClick={forceRerender} />
           </Box>
-          <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="liquid-ether"
-              currentProps={{
-                colors: userColors,
-                mouseForce,
-                cursorSize,
-                isViscous,
-                viscous,
-                autoDemo,
-                autoSpeed,
-                autoIntensity,
-                isBounce,
-                resolution
-              }}
-              defaultProps={{
-                mouseForce: 20,
-                cursorSize: 100,
-                isViscous: false,
-                viscous: 30,
-                colors: ['#5227FF', '#FF9FFC', '#B497CF'],
-                autoDemo: true,
-                autoSpeed: 0.5,
-                autoIntensity: 2.2,
-                isBounce: false,
-                resolution: 0.5
-              }}
-            />
-          </Flex>
-          <Customize className="preview-options">
-            <PreviewColorPickerCustom title="Color 1" color={color0} onChange={val => updateProp('color0', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 3" color={color2} onChange={val => updateProp('color2', val)} />
 
+          <Flex justify="flex-end" mt={2} mb={-2}>
+            <OpenInStudioButton backgroundId="liquid-ether" currentProps={settings} defaultProps={DEFAULT_PROPS} />
+          </Flex>
+
+          <Customize>
+            <PreviewColorList
+              title="Colors"
+              colors={settings.colors}
+              min={1}
+              max={6}
+              onChange={value => updateProp('colors', value)}
+            />
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewSlider
+              title="Intensity"
+              min={0.3}
+              max={2}
+              step={0.05}
+              value={settings.intensity}
+              onChange={value => updateProp('intensity', value)}
+            />
             <PreviewSlider
               title="Mouse Force"
               min={0}
               max={60}
               step={1}
-              value={mouseForce}
-              onChange={val => updateProp('mouseForce', val)}
+              value={settings.mouseForce}
+              onChange={value => updateProp('mouseForce', value)}
             />
             <PreviewSlider
               title="Cursor Size"
-              min={10}
+              min={20}
               max={300}
               step={5}
-              value={cursorSize}
-              onChange={val => updateProp('cursorSize', val)}
+              value={settings.cursorSize}
+              valueUnit="px"
+              onChange={value => updateProp('cursorSize', value)}
+            />
+            <PreviewSlider
+              title="Persistence"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.persistence}
+              onChange={value => updateProp('persistence', value)}
+            />
+            <PreviewSlider
+              title="Viscosity"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.viscosity}
+              onChange={value => updateProp('viscosity', value)}
             />
             <PreviewSlider
               title="Resolution"
-              min={0.2}
-              max={0.5}
+              min={0.1}
+              max={1}
               step={0.05}
-              value={resolution}
-              onChange={val => updateProp('resolution', val)}
+              value={settings.resolution}
+              onChange={value => updateProp('resolution', value)}
             />
             <PreviewSlider
               title="Auto Speed"
               min={0}
-              max={1}
+              max={1.5}
               step={0.05}
-              value={autoSpeed}
-              onChange={val => updateProp('autoSpeed', val)}
+              value={settings.autoSpeed}
+              onChange={value => updateProp('autoSpeed', value)}
             />
             <PreviewSlider
               title="Auto Intensity"
               min={0}
               max={4}
               step={0.1}
-              value={autoIntensity}
-              onChange={val => updateProp('autoIntensity', val)}
+              value={settings.autoIntensity}
+              onChange={value => updateProp('autoIntensity', value)}
             />
-            <PreviewSlider
-              title="Pressure"
-              min={1}
-              max={64}
-              step={1}
-              value={iterationsPoisson}
-              onChange={val => updateProp('iterationsPoisson', val)}
+            <PreviewSwitch
+              title="Auto Demo"
+              isChecked={settings.autoDemo}
+              onChange={value => updateProp('autoDemo', value)}
             />
-
-            <PreviewSwitch title="Bounce Edges" isChecked={isBounce} onChange={val => updateProp('isBounce', val)} />
-            <PreviewSwitch title="Auto Animate" isChecked={autoDemo} onChange={val => updateProp('autoDemo', val)} />
-            <PreviewSwitch title="Viscous" isChecked={isViscous} onChange={val => updateProp('isViscous', val)} />
-            {isViscous && (
-              <>
-                <PreviewSlider
-                  title="Viscous Coef"
-                  min={1}
-                  max={100}
-                  step={1}
-                  value={viscous}
-                  onChange={val => updateProp('viscous', val)}
-                />
-                <PreviewSlider
-                  title="Viscous Iterations"
-                  min={1}
-                  max={64}
-                  step={1}
-                  value={iterationsViscous}
-                  onChange={val => updateProp('iterationsViscous', val)}
-                />
-              </>
-            )}
+            <PreviewSwitch
+              title="Click Burst"
+              isChecked={settings.clickBurst}
+              onChange={value => updateProp('clickBurst', value)}
+            />
+            <PreviewSwitch
+              title="Bounce Edges"
+              isChecked={settings.bounceEdges}
+              onChange={value => updateProp('bounceEdges', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
+            />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
+            />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['three']} />
         </PreviewTab>
 
         <CodeTab>

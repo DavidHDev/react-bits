@@ -61,12 +61,18 @@ export const componentMetadata = {
   },
   'Animations/ClickSpark': {
     videoUrl: '/assets/video/clickspark.webm',
-    description: 'Creates particle spark bursts at click position.',
+    description: 'Bursts of sparks at every click, as dashes, comets, dots or stars, that can spill around buttons.',
     category: 'Animations',
     name: 'ClickSpark',
     docsUrl: 'https://reactbits.dev/animations/click-spark',
     tags: [],
-    added: '2025-01-16'
+    added: '2025-01-16',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Sharper sparks with new shapes, colors, gravity and glow. Bursts can now spill past small buttons, appear behind your content, and fire from code.'
+      }
+    ]
   },
   'Animations/Crosshair': {
     videoUrl: '/assets/video/crosshair.webm',
@@ -100,12 +106,18 @@ export const componentMetadata = {
   },
   'Animations/ElectricBorder': {
     videoUrl: '/assets/video/electricborder.webm',
-    description: 'Jittery electric energy border with animated arcs, glow and adjustable intensity.',
+    description: 'Wraps any element in crackling strands of current that surge near the cursor and leap off in sparks.',
     category: 'Animations',
     name: 'ElectricBorder',
     docsUrl: 'https://reactbits.dev/animations/electric-border',
     tags: [],
-    added: '2025-08-21'
+    added: '2025-08-21',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with layered lightning strands, sparks and a soft glow. The current races around the edge as it powers on, surges near the cursor and jolts around on click, and now works in light mode.'
+      }
+    ]
   },
   'Animations/FadeContent': {
     videoUrl: '/assets/video/fadecontent.webm',
@@ -185,12 +197,18 @@ export const componentMetadata = {
   },
   'Animations/GhostCursor': {
     videoUrl: '/assets/video/ghostcursor.webm',
-    description: 'Semi-transparent ghost cursor that smoothly follows the real cursor with a trailing effect.',
+    description: 'A ghost of glowing smoke that floats after the cursor and curls away as it rises.',
     category: 'Animations',
     name: 'GhostCursor',
     docsUrl: 'https://reactbits.dev/animations/ghost-cursor',
     tags: [],
-    added: '2025-10-27'
+    added: '2025-10-27',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as real drifting smoke that stays sharp on any screen, many times faster and with no extra dependencies. Clicks release a puff, and it works on light pages too.'
+      }
+    ]
   },
   'Animations/ImageTrail': {
     videoUrl: '/assets/video/imagetrail.webm',
@@ -217,16 +235,13 @@ export const componentMetadata = {
     name: 'Magnet',
     docsUrl: 'https://reactbits.dev/animations/magnet',
     tags: [],
-    added: '2024-08-08'
-  },
-  'Animations/MagnetLines': {
-    videoUrl: '/assets/video/magnetlines.webm',
-    description: 'Animated field lines bend toward the cursor.',
-    category: 'Animations',
-    name: 'MagnetLines',
-    docsUrl: 'https://reactbits.dev/animations/magnet-lines',
-    tags: [],
-    added: '2025-01-03'
+    added: '2024-08-08',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Now moves on a real spring with a smooth pull at the edge of its range, and only the nearest magnet reacts when several overlap. Adds tilt, scale, axis locking and a movement cap.'
+      }
+    ]
   },
   'Animations/MetaBalls': {
     videoUrl: '/assets/video/metaballs.webm',
@@ -438,15 +453,6 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/animations/orbit-images',
     tags: [],
     added: '2026-02-12'
-  },
-  'Animations/MagicRings': {
-    videoUrl: '/assets/video/magicrings.webm',
-    description: 'Interactive magic rings effect with customizable parameters.',
-    category: 'Animations',
-    name: 'MagicRings',
-    docsUrl: 'https://reactbits.dev/animations/magic-rings',
-    tags: [],
-    added: '2026-03-11'
   },
 
   //! Text Animations -------------------------------------------------------------------------------------------------------------------------------
@@ -1316,12 +1322,18 @@ export const componentMetadata = {
   },
   'Animations/SwarmCursor': {
     videoUrl: '/assets/video/swarmcursor.webm',
-    description: 'Flocking particle swarm that chases the pointer, jostles for space and drifts apart at rest.',
+    description: 'A liquid swarm of particles that flows after the cursor, curls into eddies and pours around hovered buttons.',
     category: 'Animations',
     name: 'SwarmCursor',
     docsUrl: 'https://reactbits.dev/animations/swarm-cursor',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as a liquid swarm that flows after the cursor, curls into eddies when you stop, pours around hovered buttons and splashes on click. No extra dependencies.'
+      }
+    ]
   },
   'Animations/HalftoneReveal': {
     videoUrl: '/assets/video/halftonereveal.webm',
@@ -1604,12 +1616,18 @@ export const componentMetadata = {
   },
   'Backgrounds/FaultyTerminal': {
     videoUrl: '/assets/video/faultyterminal.webm',
-    description: 'Terminal CRT scanline squares effect with flicker + noise.',
+    description: 'A flickering CRT terminal of glowing glyphs, with phosphor trails under the cursor and glitches on click.',
     category: 'Backgrounds',
     name: 'FaultyTerminal',
     docsUrl: 'https://reactbits.dev/backgrounds/faulty-terminal',
     tags: [],
-    added: '2025-07-23'
+    added: '2025-07-23',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Same terminal, now with phosphor glow, trails under the cursor, glitches on click, a cleaner light mode and new dot and character glyphs. Around 4x faster.'
+      }
+    ]
   },
   'Backgrounds/Galaxy': {
     videoUrl: '/assets/video/galaxy.webm',
@@ -1628,12 +1646,18 @@ export const componentMetadata = {
   },
   'Backgrounds/GradientBlinds': {
     videoUrl: '/assets/video/gradientblinds.webm',
-    description: 'Layered gradient blinds with spotlight and noise distortion.',
+    description: 'Satin gradient blinds lit by a spotlight that follows the cursor, swaying and turning toward the light.',
     category: 'Backgrounds',
     name: 'GradientBlinds',
     docsUrl: 'https://reactbits.dev/backgrounds/gradient-blinds',
     tags: [],
-    added: '2025-08-23'
+    added: '2025-08-23',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Same blinds with satin shading that turns with the light, a soft glow, a gentle sway and a cleaner light mode. A click sends a wave of light through them, with no extra dependencies.'
+      }
+    ]
   },
   'Backgrounds/Lightfall': {
     videoUrl: '/assets/video/lightfall.webm',
@@ -1766,21 +1790,33 @@ export const componentMetadata = {
   },
   'Backgrounds/Grainient': {
     videoUrl: '/assets/video/grainient.webm',
-    description: 'Grainy gradient swirls with soft wave distortion.',
+    description: 'Flowing grainy gradients you can stir with the cursor.',
     category: 'Backgrounds',
     name: 'Grainient',
     docsUrl: 'https://reactbits.dev/backgrounds/grainient',
     tags: [],
-    added: '2026-02-03'
+    added: '2026-02-03',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with richer colors, flowing waves and no extra dependencies. Drag the colors around or click to swirl them, and try stripes, rings, crisp poster edges or a satin sheen.'
+      }
+    ]
   },
   'Backgrounds/GridScan': {
     videoUrl: '/assets/video/gridscan.webm',
-    description: 'Animated grid room 3D scan effect and cool interactions.',
+    description: 'A 3D grid room swept by a scanning light that follows your view.',
     category: 'Backgrounds',
     name: 'GridScan',
     docsUrl: 'https://reactbits.dev/backgrounds/grid-scan',
     tags: [],
-    added: '2025-11-03'
+    added: '2025-11-03',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as a lit 3D room with crisp lines, a glossy floor and sparkling scan points, with no extra dependencies. The view shifts like a window as you move, and clicks send a ping across the walls.'
+      }
+    ]
   },
   'Backgrounds/GridDistortion': {
     videoUrl: '/assets/video/griddistortion.webm',
@@ -1924,14 +1960,35 @@ export const componentMetadata = {
     tags: [],
     added: '2026-03-17'
   },
+  'Backgrounds/MagicRings': {
+    videoUrl: '/assets/video/magicrings.webm',
+    description: 'Glowing rings that pulse outward in a wave, swell toward the cursor and flare on click.',
+    category: 'Backgrounds',
+    name: 'MagicRings',
+    docsUrl: 'https://reactbits.dev/backgrounds/magic-rings',
+    tags: [],
+    added: '2026-03-11',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt from scratch and moved to Backgrounds, lighter and about three times faster, with crisper lines and glow. Rings can now ripple, breathe, spin or lean in 3D, react to hover and clicks, split into prism fringes, and work in light mode.'
+      }
+    ]
+  },
   'Backgrounds/LiquidChrome': {
     videoUrl: '/assets/video/liquidchrome.webm',
-    description: 'Liquid metallic chrome shader with flowing reflective surface.',
+    description: 'Soft ribbons of liquid chrome that swirl through a dark pool, ripple under the cursor and catch the light as it moves.',
     category: 'Backgrounds',
     name: 'LiquidChrome',
     docsUrl: 'https://reactbits.dev/backgrounds/liquid-chrome',
     tags: [],
-    added: '2025-02-07'
+    added: '2025-02-07',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as soft, glossy liquid chrome whose reflections follow the cursor, with a liquid wake and ripples on click. Adds presets, a light mode and a faster renderer.'
+      }
+    ]
   },
   'Backgrounds/Orb': {
     videoUrl: '/assets/video/orb.webm',
@@ -2004,12 +2061,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Prism': {
     videoUrl: '/assets/video/prism.webm',
-    description: 'Rotating prism with configurable intensity, size, and colors.',
+    description: 'Rotating prism of glowing spectral light with configurable shape, colors and motion.',
     category: 'Backgrounds',
     name: 'Prism',
     docsUrl: 'https://reactbits.dev/backgrounds/prism',
     tags: [],
-    added: '2025-08-20'
+    added: '2025-08-20',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Same glowing prism, now several times faster with no extra dependencies. It tilts toward the cursor, fades in, takes custom colors, and has a cleaner light mode and a working 3D rotation.'
+      }
+    ]
   },
   'Backgrounds/PrismaticBurst': {
     videoUrl: '/assets/video/prismaticburst.webm',
@@ -2110,15 +2173,35 @@ export const componentMetadata = {
       }
     ]
   },
+  'Backgrounds/MagnetLines': {
+    videoUrl: '/assets/video/magnetlines.webm',
+    description: 'A field of magnetic lines that swing toward the cursor, ripple outward and spin with every click.',
+    category: 'Backgrounds',
+    name: 'MagnetLines',
+    docsUrl: 'https://reactbits.dev/backgrounds/magnet-lines',
+    tags: [],
+    added: '2025-01-03',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Now a background that fills its container, with the square still available. Lines swing on springs, ripple out from the cursor and spin with each click, with new field modes, arrow and compass shapes, and a 3D tilt.'
+      }
+    ]
+  },
   'Backgrounds/LiquidEther': {
     videoUrl: '/assets/video/liquidether.webm',
-    description:
-      'Interactive liquid shader with flowing distortion and customizable colors.',
+    description: 'A glowing liquid that swirls under the cursor, colored by how fast it flows.',
     category: 'Backgrounds',
     name: 'LiquidEther',
     docsUrl: 'https://reactbits.dev/backgrounds/liquid-ether',
     tags: [],
-    added: '2025-09-05'
+    added: '2025-09-05',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with smoother, glowing swirls, a sweeping intro and puffs on click. Runs several times faster and adds presets and a light mode.'
+      }
+    ]
   },
   'Backgrounds/FloatingLines': {
     videoUrl: '/assets/video/floatinglines.webm',

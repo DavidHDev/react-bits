@@ -1,274 +1,356 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+
+import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
-
-import GhostCursor from '@/content/Animations/GhostCursor/GhostCursor';
-import { ghostCursor } from '@/constants/code/Animations/ghostCursorCode';
 import { useColorModeValue } from '../../components/setup/color-mode';
 
-const DEFAULT_PROPS = {
+import GhostCursor from '../../content/Animations/GhostCursor/GhostCursor';
+import { ghostCursor } from '../../constants/code/Animations/ghostCursorCode';
+
+const LOOK = {
+  color: '#b497cf',
+  size: 80,
   trailLength: 50,
   inertia: 0.5,
-  grainIntensity: 0.05,
-  bloomStrength: 0.1,
-  bloomRadius: 1.0,
-  bloomThreshold: 0.025,
-  brightness: 2,
-  color: '#B497CF',
-  fadeDelayMs: 1000,
-  fadeDurationMs: 1500
+  turbulence: 0.5,
+  drift: 0.3,
+  detail: 1,
+  brightness: 1,
+  bloomStrength: 0.6,
+  bloomRadius: 1,
+  grainIntensity: 0.05
 };
 
-const GhostCursorDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    trailLength,
-    inertia,
-    grainIntensity,
-    bloomStrength,
-    bloomRadius,
-    bloomThreshold,
-    brightness,
-    color,
-    fadeDelayMs,
-    fadeDurationMs
-  } = props;
-  const demoTextColor = useColorModeValue('#27272a', '#ffffff');
+const DEFAULT_PROPS = {
+  preset: 'phantom',
+  ...LOOK,
+  edgeIntensity: 0,
+  fadeDelayMs: 1000,
+  fadeDurationMs: 1500,
+  clickPuff: true,
+  intro: true
+};
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Additional CSS class names for the container.'
-      },
-      {
-        name: 'style',
-        type: 'React.CSSProperties',
-        default: '{}',
-        description: 'Inline styles for the container element.'
-      },
-      {
-        name: 'trailLength',
-        type: 'number',
-        default: '50',
-        description: 'Number of points stored for the cursor trail (longer = longer smear).'
-      },
-      {
-        name: 'inertia',
-        type: 'number',
-        default: '0.5',
-        description: 'Velocity retention when the pointer stops. Higher values make the cursor glide longer.'
-      },
-      {
-        name: 'grainIntensity',
-        type: 'number',
-        default: '0.05',
-        description: 'Strength of the film grain post-processing pass.'
-      },
-      { name: 'bloomStrength', type: 'number', default: '0.1', description: 'UnrealBloom effect strength.' },
-      {
-        name: 'bloomRadius',
-        type: 'number',
-        default: '1.0',
-        description: 'UnrealBloom radius controlling spread of glow.'
-      },
-      {
-        name: 'bloomThreshold',
-        type: 'number',
-        default: '0.025',
-        description: 'UnrealBloom threshold; lower includes more pixels in bloom.'
-      },
-      {
-        name: 'brightness',
-        type: 'number',
-        default: '1',
-        description: 'Final brightness multiplier applied to the effect color.'
-      },
-      { name: 'color', type: 'string', default: "'#B497CF'", description: 'Base color of the ghost cursor effect.' },
-      {
-        name: 'mixBlendMode',
-        type: 'CSS mix-blend-mode',
-        default: "'screen'",
-        description: 'Blend mode used when compositing with page content.'
-      },
-      {
-        name: 'edgeIntensity',
-        type: 'number',
-        default: '0',
-        description: 'Darkening near edges of the canvas. 0 = none, 1 = strongest.'
-      },
-      {
-        name: 'maxDevicePixelRatio',
-        type: 'number',
-        default: '0.5',
-        description: 'Upper cap for devicePixelRatio to control render cost on high-DPR displays.'
-      },
-      {
-        name: 'targetPixels',
-        type: 'number',
-        default: 'auto (~1.3e6 desktop, ~0.9e6 touch)',
-        description: 'Pixel budget. Resolution is dynamically scaled to keep total pixel count under this budget.'
-      },
-      {
-        name: 'fadeDelayMs',
-        type: 'number',
-        default: 'auto (1000 desktop, 500 touch)',
-        description: 'Idle delay before the trail starts to fade after pointer leaves/stops.'
-      },
-      {
-        name: 'fadeDurationMs',
-        type: 'number',
-        default: 'auto (1500 desktop, 1000 touch)',
-        description: 'Duration of the trail fade-out once the delay has elapsed.'
-      },
-      {
-        name: 'zIndex',
-        type: 'number',
-        default: '10',
-        description: 'z-index applied to the canvas for layering above/below content.'
-      }
-    ],
-    []
-  );
+const PRESETS = {
+  phantom: {},
+  wraith: { color: '#7aa2ff', trailLength: 80, turbulence: 0.8, drift: 0.2, bloomStrength: 0.8 },
+  ember: { color: '#ff8a3d', drift: 0.7, turbulence: 0.7, brightness: 1.2, bloomStrength: 0.9, size: 70 },
+  mist: {
+    color: '#e4e4e7',
+    size: 110,
+    trailLength: 90,
+    inertia: 0.7,
+    drift: 0.15,
+    brightness: 0.75,
+    bloomStrength: 0.3,
+    grainIntensity: 0.08
+  },
+  ecto: { color: '#6ee7b7', turbulence: 1, size: 70, bloomStrength: 0.8 },
+  wisp: { size: 45, trailLength: 30, inertia: 0.25, brightness: 1.3, bloomStrength: 0.8, detail: 0.8 }
+};
+
+const LIGHT_SWAP = {
+  '#b497cf': '#8b6fb3',
+  '#7aa2ff': '#3b5bdb',
+  '#ff8a3d': '#ea580c',
+  '#e4e4e7': '#52525b',
+  '#6ee7b7': '#059669'
+};
+
+const DARK_SWAP = Object.fromEntries(Object.entries(LIGHT_SWAP).map(([dark, light]) => [light, dark]));
+
+const PRESET_OPTIONS = [
+  { value: 'phantom', label: 'Phantom' },
+  { value: 'wraith', label: 'Wraith' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'mist', label: 'Mist' },
+  { value: 'ecto', label: 'Ecto' },
+  { value: 'wisp', label: 'Wisp' }
+];
+
+const propData = [
+  { name: 'color', type: 'string', default: "'#B497CF'", description: 'Color of the smoke. Dense parts glow lighter.' },
+  { name: 'size', type: 'number', default: '80', description: 'Size of the ghost, in px.' },
+  {
+    name: 'trailLength',
+    type: 'number',
+    default: '50',
+    description: 'How long the smoke lingers behind the cursor, from 1 to 200.'
+  },
+  {
+    name: 'inertia',
+    type: 'number',
+    default: '0.5',
+    description: 'How far the ghost floats behind the cursor and glides on when the cursor leaves, from 0 to 0.99.'
+  },
+  {
+    name: 'turbulence',
+    type: 'number',
+    default: '0.5',
+    description: 'How much the smoke swirls and curls as it drifts, from 0 to 2.'
+  },
+  {
+    name: 'drift',
+    type: 'number',
+    default: '0.3',
+    description: 'How fast the smoke rises. Negative values let it sink.'
+  },
+  {
+    name: 'detail',
+    type: 'number',
+    default: '1',
+    description: 'How wispy the smoke is, from 0 for a soft glow to 1 for billowing wisps.'
+  },
+  { name: 'brightness', type: 'number', default: '1', description: 'Brightness of the smoke.' },
+  { name: 'bloomStrength', type: 'number', default: '0.6', description: 'Strength of the soft glow around the smoke.' },
+  { name: 'bloomRadius', type: 'number', default: '1', description: 'How far the glow spreads, from 0 to 3.' },
+  {
+    name: 'bloomThreshold',
+    type: 'number',
+    default: '0.025',
+    description: 'How bright smoke has to be before it glows. Higher values keep the glow on the core.'
+  },
+  { name: 'grainIntensity', type: 'number', default: '0.05', description: 'Film grain over the smoke, from 0 to 1.' },
+  {
+    name: 'edgeIntensity',
+    type: 'number',
+    default: '0',
+    description: 'Fades the smoke out toward the edges of the area, from 0 to 1.'
+  },
+  { name: 'clickPuff', type: 'boolean', default: 'true', description: 'Clicking releases a puff of smoke.' },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'The ghost floats across once when it first appears, before the cursor arrives.'
+  },
+  {
+    name: 'theme',
+    type: "'dark' | 'light'",
+    default: "'dark'",
+    description: 'Glowing smoke for dark pages, or soft ink smoke for light ones.'
+  },
+  {
+    name: 'mixBlendMode',
+    type: 'string',
+    default: "'screen' (dark), 'normal' (light)",
+    description: 'CSS blend mode for the canvas.'
+  },
+  {
+    name: 'fadeDelayMs',
+    type: 'number',
+    default: '1000 (500 on touch)',
+    description: 'Time after the cursor stops before the ghost starts to fade, in ms.'
+  },
+  {
+    name: 'fadeDurationMs',
+    type: 'number',
+    default: '1500 (1000 on touch)',
+    description: 'How long the fade takes, in ms.'
+  },
+  {
+    name: 'maxDevicePixelRatio',
+    type: 'number',
+    default: '2',
+    description: 'Highest pixel ratio the canvas renders at.'
+  },
+  {
+    name: 'targetPixels',
+    type: 'number',
+    default: '600000 (300000 on touch)',
+    description: 'Pixel budget for the smoke. Large areas render it at a lower resolution to stay fast.'
+  },
+  { name: 'zIndex', type: 'number', default: '10', description: 'Stacking order of the effect over your content.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const GhostCursorDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, color, ...settings } = props;
+  const theme = useColorModeValue('light', 'dark');
+  const picked = `#${String(color || LOOK.color)
+    .replace(/^#/, '')
+    .toLowerCase()}`;
+  const swap = theme === 'light' ? LIGHT_SWAP : DARK_SWAP;
+  const shown = swap[picked] ?? picked;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+    forceRerender();
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset', 'color']}
+      computedProps={{ color: shown, ...(theme === 'light' ? { theme: 'light' } : {}) }}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" h={500} overflow="hidden">
-            <GhostCursor
-              trailLength={trailLength}
-              inertia={inertia}
-              grainIntensity={grainIntensity}
-              bloomStrength={bloomStrength}
-              bloomRadius={bloomRadius}
-              bloomThreshold={bloomThreshold}
-              brightness={brightness}
-              color={color}
-              fadeDelayMs={fadeDelayMs}
-              fadeDurationMs={fadeDurationMs}
-            />
-
-            <Text
-              position="absolute"
-              userSelect="none"
-              fontSize="clamp(3rem, 8vw, 8rem)"
-              zIndex={11}
-              fontWeight={600}
-              color={demoTextColor}
-            >
-              Boo!
-            </Text>
+          <Box
+            position="relative"
+            className="demo-container"
+            h={500}
+            p={0}
+            overflow="hidden"
+            style={{ cursor: 'crosshair' }}
+          >
+            <GhostCursor key={key} theme={theme} color={shown} {...settings} />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
             <OpenInStudioButton
               backgroundId="ghost-cursor"
-              currentProps={{
-                trailLength,
-                inertia,
-                grainIntensity,
-                bloomStrength,
-                bloomRadius,
-                brightness,
-                color
-              }}
-              defaultProps={DEFAULT_PROPS}
+              currentProps={{ ...settings, color: shown }}
+              defaultProps={{ ...LOOK, color: '#B497CF' }}
             />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Color" color={color} onChange={val => updateProp('color', val)} />
-
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewColorPickerCustom title="Color" color={shown} onChange={value => updateProp('color', value)} />
+            <PreviewSlider
+              title="Size"
+              min={30}
+              max={180}
+              step={1}
+              value={settings.size}
+              valueUnit="px"
+              onChange={value => updateProp('size', value)}
+            />
             <PreviewSlider
               title="Trail Length"
-              min={10}
-              max={50}
-              step={5}
-              value={trailLength}
-              onChange={v => updateProp('trailLength', v)}
+              min={5}
+              max={150}
+              step={1}
+              value={settings.trailLength}
+              onChange={value => updateProp('trailLength', value)}
             />
             <PreviewSlider
               title="Inertia"
               min={0}
-              max={0.99}
+              max={0.95}
               step={0.01}
-              value={inertia}
-              onChange={v => updateProp('inertia', v)}
+              value={settings.inertia}
+              onChange={value => updateProp('inertia', value)}
             />
             <PreviewSlider
-              title="Grain Intensity"
+              title="Turbulence"
               min={0}
-              max={0.5}
-              step={0.01}
-              value={grainIntensity}
-              onChange={v => updateProp('grainIntensity', v)}
-            />
-            <PreviewSlider
-              title="Bloom Strength"
-              min={0}
-              max={10}
+              max={2}
               step={0.05}
-              value={bloomStrength}
-              onChange={v => updateProp('bloomStrength', v)}
+              value={settings.turbulence}
+              onChange={value => updateProp('turbulence', value)}
             />
             <PreviewSlider
-              title="Bloom Radius"
-              min={0}
-              max={10}
+              title="Drift"
+              min={-1}
+              max={1.5}
               step={0.05}
-              value={bloomRadius}
-              onChange={v => updateProp('bloomRadius', v)}
+              value={settings.drift}
+              onChange={value => updateProp('drift', value)}
             />
             <PreviewSlider
-              title="Bloom Threshold"
+              title="Detail"
               min={0}
               max={1}
-              step={0.01}
-              value={bloomThreshold}
-              onChange={v => updateProp('bloomThreshold', v)}
+              step={0.05}
+              value={settings.detail}
+              onChange={value => updateProp('detail', value)}
             />
             <PreviewSlider
               title="Brightness"
-              min={0}
-              max={10}
-              step={0.1}
-              value={brightness}
-              onChange={v => updateProp('brightness', v)}
+              min={0.2}
+              max={2.5}
+              step={0.05}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
             />
             <PreviewSlider
-              title="Fade Delay (ms)"
+              title="Glow"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.bloomStrength}
+              onChange={value => updateProp('bloomStrength', value)}
+            />
+            <PreviewSlider
+              title="Glow Size"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.bloomRadius}
+              onChange={value => updateProp('bloomRadius', value)}
+            />
+            <PreviewSlider
+              title="Grain"
+              min={0}
+              max={0.4}
+              step={0.01}
+              value={settings.grainIntensity}
+              onChange={value => updateProp('grainIntensity', value)}
+            />
+            <PreviewSlider
+              title="Edge Fade"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.edgeIntensity}
+              onChange={value => updateProp('edgeIntensity', value)}
+            />
+            <PreviewSlider
+              title="Fade Delay"
               min={0}
               max={3000}
               step={100}
-              value={fadeDelayMs}
-              onChange={v => updateProp('fadeDelayMs', v)}
+              value={settings.fadeDelayMs}
+              valueUnit="ms"
+              onChange={value => updateProp('fadeDelayMs', value)}
             />
             <PreviewSlider
-              title="Fade Duration (ms)"
+              title="Fade Duration"
               min={100}
-              max={5000}
+              max={4000}
               step={100}
-              value={fadeDurationMs}
-              onChange={v => updateProp('fadeDurationMs', v)}
+              value={settings.fadeDurationMs}
+              valueUnit="ms"
+              onChange={value => updateProp('fadeDurationMs', value)}
+            />
+            <PreviewSwitch
+              title="Click Puff"
+              isChecked={settings.clickPuff}
+              onChange={value => updateProp('clickPuff', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['three']} />
         </PreviewTab>
 
         <CodeTab>

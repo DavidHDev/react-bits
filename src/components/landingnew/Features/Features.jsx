@@ -31,11 +31,11 @@ const ROW_A = [
   { name: 'Line Waves', cat: 'backgrounds' },
   { name: 'Blob Cursor', cat: 'animations' },
   { name: 'Soft Aurora', cat: 'backgrounds' },
-  { name: 'Magnet Lines', cat: 'animations' },
+  { name: 'Magnet Lines', cat: 'backgrounds' },
   { name: 'Antigravity', cat: 'animations' },
   { name: 'Ballpit', cat: 'backgrounds' },
   { name: 'Pixel Trail', cat: 'animations' },
-  { name: 'Magic Rings', cat: 'animations' }
+  { name: 'Magic Rings', cat: 'backgrounds' }
 ];
 
 const ROW_B = [

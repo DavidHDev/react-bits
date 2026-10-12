@@ -5,7 +5,6 @@ import tsCode from '@ts-default/Backgrounds/Prism/Prism.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/Prism/Prism.tsx?raw';
 
 export const prism = {
-  dependencies: `ogl`,
   usage: `import Prism from './Prism';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
@@ -17,7 +16,6 @@ export const prism = {
     scale={3.6}
     hueShift={0}
     colorFrequency={1}
-    noise={0.5}
     glow={1}
   />
 </div>`,

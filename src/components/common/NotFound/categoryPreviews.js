@@ -2,7 +2,7 @@ import { componentMetadata } from '../../../constants/Information';
 
 const CURATED = {
   'Text Animations': ['SplitText', 'DecryptedText', 'Shuffle', 'BlurText', 'TextType'],
-  Animations: ['ElectricLogo', 'MetallicPaint', 'Ribbons', 'MagicRings', 'OrbitImages'],
+  Animations: ['ElectricLogo', 'MetallicPaint', 'Ribbons', 'LaserFlow', 'OrbitImages'],
   Components: ['MagicBento', 'TiltedCard', 'DomeGallery', 'CardSwap', 'GlassIcons'],
   Backgrounds: ['Grainient', 'Aurora', 'LiquidEther', 'Galaxy', 'LightRays'],
   Micro: ['SquishSwitch', 'HoldButton', 'SpringCheck', 'PulseHeart', 'VoicePill']

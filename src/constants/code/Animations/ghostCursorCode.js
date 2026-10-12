@@ -5,29 +5,18 @@ import tsCode from '@ts-default/Animations/GhostCursor/GhostCursor.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/GhostCursor/GhostCursor.tsx?raw';
 
 export const ghostCursor = {
-  dependencies: `three`,
-  usage: `import GhostCursor from './GhostCursor'
+  usage: `import GhostCursor from './GhostCursor';
 
 <div style={{ height: 600, position: 'relative' }}>
   <GhostCursor
-    // Visuals
     color="#B497CF"
-    brightness={1}
-    edgeIntensity={0}
-
-    // Trail and motion
+    size={80}
     trailLength={50}
     inertia={0.5}
-
-    // Post-processing
+    turbulence={0.5}
+    drift={0.3}
+    bloomStrength={0.6}
     grainIntensity={0.05}
-    bloomStrength={0.1}
-    bloomRadius={1.0}
-    bloomThreshold={0.025}
-
-    // Fade-out behavior
-    fadeDelayMs={1000}
-    fadeDurationMs={1500}
   />
 </div>`,
   code,

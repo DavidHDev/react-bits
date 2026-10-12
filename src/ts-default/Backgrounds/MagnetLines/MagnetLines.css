@@ -1,0 +1,28 @@
+.magnet-lines {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.magnet-lines--square {
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+}
+
+.magnet-lines__canvas {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.magnet-lines__probe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0;
+  visibility: hidden;
+  pointer-events: none;
+}

@@ -5,28 +5,23 @@ import tsCode from '@ts-default/Backgrounds/FaultyTerminal/FaultyTerminal.tsx?ra
 import tsTailwind from '@ts-tailwind/Backgrounds/FaultyTerminal/FaultyTerminal.tsx?raw';
 
 export const faultyTerminal = {
-  dependencies: `ogl`,
   usage: `import FaultyTerminal from './FaultyTerminal';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <FaultyTerminal
+    tint="#A7EF9E"
+    glyphs="blocks"
     scale={1.5}
-    gridMul={[2, 1]}
     digitSize={1.2}
-    timeScale={1}
-    pause={false}
-    scanlineIntensity={1}
-    glitchAmount={1}
-    flickerAmount={1}
-    noiseAmp={1}
-    chromaticAberration={0}
-    dither={0}
-    curvature={0}
-    tint="#ffffff"
-    mouseReact={true}
+    timeScale={0.5}
+    brightness={0.75}
+    glow={0.5}
+    persistence={0.5}
     mouseStrength={0.5}
-    pageLoadAnimation={false}
-    brightness={1}
+    mouseGlow={0.6}
+    curvature={0.1}
+    vignette={0.25}
+    clickEffect="glitch"
   />
 </div>`,
   code,

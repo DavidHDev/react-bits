@@ -5,23 +5,22 @@ import tsCode from '@ts-default/Backgrounds/GradientBlinds/GradientBlinds.tsx?ra
 import tsTailwind from '@ts-tailwind/Backgrounds/GradientBlinds/GradientBlinds.tsx?raw';
 
 export const gradientBlinds = {
-  dependencies: `ogl`,
   usage: `import GradientBlinds from './GradientBlinds';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <GradientBlinds
     gradientColors={['#FF9FFC', '#5227FF']}
-    angle={0}
-    noise={0.3}
-    blindCount={12}
-    blindMinWidth={50}
+    angle={20}
+    blindCount={16}
+    blindMinWidth={60}
     spotlightRadius={0.5}
-    spotlightSoftness={1}
-    spotlightOpacity={1}
-    mouseDampening={0.15}
-    distortAmount={0}
-    shineDirection="left"
-    mixBlendMode="lighten"
+    shine={0.4}
+    relief={0.5}
+    glow={0.4}
+    sway={0.35}
+    hoverTilt={0.6}
+    clickEffect="ripple"
+    noise={0.3}
   />
 </div>`,
   code,

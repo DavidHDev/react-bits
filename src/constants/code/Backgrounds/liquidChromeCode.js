@@ -5,14 +5,15 @@ import tsCode from '@ts-default/Backgrounds/LiquidChrome/LiquidChrome.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/LiquidChrome/LiquidChrome.tsx?raw';
 
 export const liquidChrome = {
-  dependencies: `ogl`,
   usage: `import LiquidChrome from './LiquidChrome';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <LiquidChrome
-    baseColor={[0.1, 0.1, 0.1]}
-    speed={1}
-    amplitude={0.6}
+    color="#ffffff"
+    speed={0.2}
+    amplitude={0.3}
+    detail={4}
+    thickness={1}
     interactive={true}
   />
 </div>`,

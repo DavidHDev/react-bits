@@ -13,7 +13,8 @@ const STUDIO_BACKGROUNDS = {
 };
 
 const STUDIO_LIGHT_PROPS = {
-  'laser-flow': { theme: 'light' }
+  'laser-flow': { theme: 'light' },
+  'magnet-lines': { accentColor: '#18181b' }
 };
 
 const ORDERED_BACKGROUNDS = BACKGROUNDS.filter(bg => !bg.hidden).sort((a, b) => a.label.localeCompare(b.label));

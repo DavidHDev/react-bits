@@ -5,23 +5,19 @@ import tsCode from '@ts-default/Animations/ElectricBorder/ElectricBorder.tsx?raw
 import tsTailwind from '@ts-tailwind/Animations/ElectricBorder/ElectricBorder.tsx?raw';
 
 export const electricBorder = {
-  usage: `// CREDIT
-// Component inspired by @BalintFerenczy on X
-// https://codepen.io/BalintFerenczy/pen/KwdoyEN
-  
-import ElectricBorder from './ElectricBorder'
+  usage: `import ElectricBorder from './ElectricBorder';
 
 <ElectricBorder
   color="#7df9ff"
   speed={1}
   chaos={0.5}
-  thickness={2}
-  style={{ borderRadius: 16 }}
+  spread={0.6}
+  strands={3}
+  thickness={1.5}
+  borderRadius={24}
 >
-  <div>
-    <p style={{ margin: '6px 0 0', opacity: 0.8 }}>
-      A glowing, animated border wrapper.
-    </p>
+  <div style={{ width: 300, height: 360, borderRadius: 24 }}>
+    Your content
   </div>
 </ElectricBorder>`,
   code,
