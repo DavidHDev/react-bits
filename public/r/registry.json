@@ -1932,11 +1932,9 @@
 		{
 			"name": "StickerPeel-JS-CSS",
 			"title": "StickerPeel",
-			"description": "Sticker corner lift + peel interaction using 3D transform and shadow depth.",
+			"description": "A die-cut sticker you can peel at any edge, drag, throw and swing, in gloss, matte or holographic finishes.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1953,11 +1951,9 @@
 		{
 			"name": "StickerPeel-JS-TW",
 			"title": "StickerPeel",
-			"description": "Sticker corner lift + peel interaction using 3D transform and shadow depth.",
+			"description": "A die-cut sticker you can peel at any edge, drag, throw and swing, in gloss, matte or holographic finishes.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1969,11 +1965,9 @@
 		{
 			"name": "StickerPeel-TS-CSS",
 			"title": "StickerPeel",
-			"description": "Sticker corner lift + peel interaction using 3D transform and shadow depth.",
+			"description": "A die-cut sticker you can peel at any edge, drag, throw and swing, in gloss, matte or holographic finishes.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1990,11 +1984,9 @@
 		{
 			"name": "StickerPeel-TS-TW",
 			"title": "StickerPeel",
-			"description": "Sticker corner lift + peel interaction using 3D transform and shadow depth.",
+			"description": "A die-cut sticker you can peel at any edge, drag, throw and swing, in gloss, matte or holographic finishes.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5654,11 +5646,9 @@
 		{
 			"name": "CircularGallery-JS-CSS",
 			"title": "CircularGallery",
-			"description": "Circular orbit gallery rotating images.",
+			"description": "A curved image gallery you can drag, scroll or tab through, with cards that open to the full image.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5675,11 +5665,9 @@
 		{
 			"name": "CircularGallery-JS-TW",
 			"title": "CircularGallery",
-			"description": "Circular orbit gallery rotating images.",
+			"description": "A curved image gallery you can drag, scroll or tab through, with cards that open to the full image.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5691,11 +5679,9 @@
 		{
 			"name": "CircularGallery-TS-CSS",
 			"title": "CircularGallery",
-			"description": "Circular orbit gallery rotating images.",
+			"description": "A curved image gallery you can drag, scroll or tab through, with cards that open to the full image.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5712,11 +5698,9 @@
 		{
 			"name": "CircularGallery-TS-TW",
 			"title": "CircularGallery",
-			"description": "Circular orbit gallery rotating images.",
+			"description": "A curved image gallery you can drag, scroll or tab through, with cards that open to the full image.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6780,10 +6764,11 @@
 		{
 			"name": "MagicBento-JS-CSS",
 			"title": "MagicBento",
-			"description": "Interactive bento grid tiles expand + animate with various options.",
+			"description": "A bento grid of feature cards with live artwork, edge light that follows the cursor and a click wave.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6801,10 +6786,11 @@
 		{
 			"name": "MagicBento-JS-TW",
 			"title": "MagicBento",
-			"description": "Interactive bento grid tiles expand + animate with various options.",
+			"description": "A bento grid of feature cards with live artwork, edge light that follows the cursor and a click wave.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6817,10 +6803,11 @@
 		{
 			"name": "MagicBento-TS-CSS",
 			"title": "MagicBento",
-			"description": "Interactive bento grid tiles expand + animate with various options.",
+			"description": "A bento grid of feature cards with live artwork, edge light that follows the cursor and a click wave.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6838,10 +6825,11 @@
 		{
 			"name": "MagicBento-TS-TW",
 			"title": "MagicBento",
-			"description": "Interactive bento grid tiles expand + animate with various options.",
+			"description": "A bento grid of feature cards with live artwork, edge light that follows the cursor and a click wave.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -8396,10 +8384,11 @@
 		{
 			"name": "ReflectiveCard-JS-CSS",
 			"title": "ReflectiveCard",
-			"description": "Card with dynamic webcam reflection and glare effects that respond to cursor movement.",
+			"description": "A metal ID card that reflects your camera or a looping video and catches the light as it tilts.",
 			"type": "registry:component",
 			"dependencies": [
-				"lucide-react@^0.542.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -8417,10 +8406,11 @@
 		{
 			"name": "ReflectiveCard-JS-TW",
 			"title": "ReflectiveCard",
-			"description": "Card with dynamic webcam reflection and glare effects that respond to cursor movement.",
+			"description": "A metal ID card that reflects your camera or a looping video and catches the light as it tilts.",
 			"type": "registry:component",
 			"dependencies": [
-				"lucide-react@^0.542.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -8433,10 +8423,11 @@
 		{
 			"name": "ReflectiveCard-TS-CSS",
 			"title": "ReflectiveCard",
-			"description": "Card with dynamic webcam reflection and glare effects that respond to cursor movement.",
+			"description": "A metal ID card that reflects your camera or a looping video and catches the light as it tilts.",
 			"type": "registry:component",
 			"dependencies": [
-				"lucide-react@^0.542.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -8454,10 +8445,11 @@
 		{
 			"name": "ReflectiveCard-TS-TW",
 			"title": "ReflectiveCard",
-			"description": "Card with dynamic webcam reflection and glare effects that respond to cursor movement.",
+			"description": "A metal ID card that reflects your camera or a looping video and catches the light as it tilts.",
 			"type": "registry:component",
 			"dependencies": [
-				"lucide-react@^0.542.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -10224,11 +10216,9 @@
 		{
 			"name": "LightTunnel-JS-CSS",
 			"title": "LightTunnel",
-			"description": "A radial fibre-optic tunnel with light pulses racing into depth.",
+			"description": "A swirling fibre-optic tunnel where comets of light race into depth, steered by the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10245,11 +10235,9 @@
 		{
 			"name": "LightTunnel-JS-TW",
 			"title": "LightTunnel",
-			"description": "A radial fibre-optic tunnel with light pulses racing into depth.",
+			"description": "A swirling fibre-optic tunnel where comets of light race into depth, steered by the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10261,11 +10249,9 @@
 		{
 			"name": "LightTunnel-TS-CSS",
 			"title": "LightTunnel",
-			"description": "A radial fibre-optic tunnel with light pulses racing into depth.",
+			"description": "A swirling fibre-optic tunnel where comets of light race into depth, steered by the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10282,11 +10268,9 @@
 		{
 			"name": "LightTunnel-TS-TW",
 			"title": "LightTunnel",
-			"description": "A radial fibre-optic tunnel with light pulses racing into depth.",
+			"description": "A swirling fibre-optic tunnel where comets of light race into depth, steered by the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10932,21 +10916,26 @@
 		{
 			"name": "LetterGlitch-JS-CSS",
 			"title": "LetterGlitch",
-			"description": "Matrix style letter animation.",
+			"description": "A calm field of letters that flicker, scramble and glitch in color, stirred by the cursor and torn by clicks.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "LetterGlitch.css",
+					"target": "@components/LetterGlitch.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "LetterGlitch/LetterGlitch.jsx"
+					"path": "LetterGlitch.jsx"
 				}
 			]
 		},
 		{
 			"name": "LetterGlitch-JS-TW",
 			"title": "LetterGlitch",
-			"description": "Matrix style letter animation.",
+			"description": "A calm field of letters that flicker, scramble and glitch in color, stirred by the cursor and torn by clicks.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -10960,21 +10949,26 @@
 		{
 			"name": "LetterGlitch-TS-CSS",
 			"title": "LetterGlitch",
-			"description": "Matrix style letter animation.",
+			"description": "A calm field of letters that flicker, scramble and glitch in color, stirred by the cursor and torn by clicks.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "LetterGlitch.css",
+					"target": "@components/LetterGlitch.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "LetterGlitch/LetterGlitch.tsx"
+					"path": "LetterGlitch.tsx"
 				}
 			]
 		},
 		{
 			"name": "LetterGlitch-TS-TW",
 			"title": "LetterGlitch",
-			"description": "Matrix style letter animation.",
+			"description": "A calm field of letters that flicker, scramble and glitch in color, stirred by the cursor and torn by clicks.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -11906,11 +11900,9 @@
 		{
 			"name": "PrismaticBurst-JS-CSS",
 			"title": "PrismaticBurst",
-			"description": "Burst of light rays with controllable color, distortion, amount.",
+			"description": "A burst of prismatic light rays that leans toward the cursor and sends a wave of light outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11927,11 +11919,9 @@
 		{
 			"name": "PrismaticBurst-JS-TW",
 			"title": "PrismaticBurst",
-			"description": "Burst of light rays with controllable color, distortion, amount.",
+			"description": "A burst of prismatic light rays that leans toward the cursor and sends a wave of light outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11943,11 +11933,9 @@
 		{
 			"name": "PrismaticBurst-TS-CSS",
 			"title": "PrismaticBurst",
-			"description": "Burst of light rays with controllable color, distortion, amount.",
+			"description": "A burst of prismatic light rays that leans toward the cursor and sends a wave of light outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11964,11 +11952,9 @@
 		{
 			"name": "PrismaticBurst-TS-TW",
 			"title": "PrismaticBurst",
-			"description": "Burst of light rays with controllable color, distortion, amount.",
+			"description": "A burst of prismatic light rays that leans toward the cursor and sends a wave of light outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12458,11 +12444,9 @@
 		{
 			"name": "FloatingLines-JS-CSS",
 			"title": "FloatingLines",
-			"description": "3D floating lines that react to cursor movement.",
+			"description": "Ribbons of fine glowing lines that drift in waves, part around the cursor and curl when clicked.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12479,11 +12463,9 @@
 		{
 			"name": "FloatingLines-JS-TW",
 			"title": "FloatingLines",
-			"description": "3D floating lines that react to cursor movement.",
+			"description": "Ribbons of fine glowing lines that drift in waves, part around the cursor and curl when clicked.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12495,11 +12477,9 @@
 		{
 			"name": "FloatingLines-TS-CSS",
 			"title": "FloatingLines",
-			"description": "3D floating lines that react to cursor movement.",
+			"description": "Ribbons of fine glowing lines that drift in waves, part around the cursor and curl when clicked.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12516,11 +12496,9 @@
 		{
 			"name": "FloatingLines-TS-TW",
 			"title": "FloatingLines",
-			"description": "3D floating lines that react to cursor movement.",
+			"description": "Ribbons of fine glowing lines that drift in waves, part around the cursor and curl when clicked.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

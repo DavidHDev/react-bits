@@ -378,12 +378,18 @@ export const componentMetadata = {
   },
   'Animations/StickerPeel': {
     videoUrl: '/assets/video/stickerpeel.webm',
-    description: 'Sticker corner lift + peel interaction using 3D transform and shadow depth.',
+    description: 'A die-cut sticker you can peel at any edge, drag, throw and swing, in gloss, matte or holographic finishes.',
     category: 'Animations',
     name: 'StickerPeel',
     docsUrl: 'https://reactbits.dev/animations/sticker-peel',
     tags: [],
-    added: '2025-07-21'
+    added: '2025-07-21',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with a real curl, soft shadows and no extra dependencies. The edge nearest the cursor lifts, thrown stickers swing, slide and bounce, and there are gloss, matte and holographic finishes.'
+      }
+    ]
   },
   'Animations/TargetCursor': {
     videoUrl: '/assets/video/targetcursor.webm',
@@ -932,12 +938,18 @@ export const componentMetadata = {
   },
   'Components/CircularGallery': {
     videoUrl: '/assets/video/circulargallery.webm',
-    description: 'Circular orbit gallery rotating images.',
+    description: 'A curved image gallery you can drag, scroll or tab through, with cards that open to the full image.',
     category: 'Components',
     name: 'CircularGallery',
     docsUrl: 'https://reactbits.dev/components/circular-gallery',
     tags: [],
-    added: '2025-02-03'
+    added: '2025-02-03',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with crisp, smooth edges and no extra dependencies. Cards now open to the full image, respond to hover and the keyboard, and the gallery can drift, snap, fade and change shape.'
+      }
+    ]
   },
   'Components/Counter': {
     videoUrl: '/assets/video/counter.webm',
@@ -1130,12 +1142,18 @@ export const componentMetadata = {
   },
   'Components/MagicBento': {
     videoUrl: '/assets/video/magicbento.webm',
-    description: 'Interactive bento grid tiles expand + animate with various options.',
+    description: 'A bento grid of feature cards with live artwork, edge light that follows the cursor and a click wave.',
     category: 'Components',
     name: 'MagicBento',
     docsUrl: 'https://reactbits.dev/components/magic-bento',
     tags: [],
-    added: '2025-07-13'
+    added: '2025-07-13',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Redesigned with animated artwork in every card, smoother cursor light and a click wave across the grid. Cards now take your own content, photos and links, with dark and light themes.'
+      }
+    ]
   },
   'Components/Masonry': {
     videoUrl: '/assets/video/masonry.webm',
@@ -1397,12 +1415,18 @@ export const componentMetadata = {
   },
   'Components/ReflectiveCard': {
     videoUrl: '/assets/video/reflectivecard.webm',
-    description: 'Card with dynamic webcam reflection and glare effects that respond to cursor movement.',
+    description: 'A metal ID card that reflects your camera or a looping video and catches the light as it tilts.',
     category: 'Components',
     name: 'ReflectiveCard',
     docsUrl: 'https://reactbits.dev/components/reflective-card',
     tags: [],
-    added: '2025-12-11'
+    added: '2025-12-11',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as a satin metal card that reflects a looping video until you turn the camera on. It tilts toward the cursor, catches a sweeping light and comes in dark and light themes.'
+      }
+    ]
   },
 
   //! Backgrounds -------------------------------------------------------------------------------------------------------------------------------
@@ -1688,12 +1712,18 @@ export const componentMetadata = {
   },
   'Backgrounds/LightTunnel': {
     videoUrl: '/assets/video/lighttunnel.webm',
-    description: 'A radial fibre-optic tunnel with light pulses racing into depth.',
+    description: 'A swirling fibre-optic tunnel where comets of light race into depth, steered by the cursor.',
     category: 'Backgrounds',
     name: 'LightTunnel',
     docsUrl: 'https://reactbits.dev/backgrounds/light-tunnel',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Redesigned with fine glowing fibres and comet-like pulses, and no extra dependencies. The cursor steers the tunnel, a click sends a ring of light down it, and light mode draws it in ink.'
+      }
+    ]
   },
   'Backgrounds/SlicedWaves': {
     videoUrl: '/assets/video/slicedwaves.webm',
@@ -1814,12 +1844,18 @@ export const componentMetadata = {
   },
   'Backgrounds/LetterGlitch': {
     videoUrl: '/assets/video/letterglitch.webm',
-    description: 'Matrix style letter animation.',
+    description: 'A calm field of letters that flicker, scramble and glitch in color, stirred by the cursor and torn by clicks.',
     category: 'Backgrounds',
     name: 'LetterGlitch',
     docsUrl: 'https://reactbits.dev/backgrounds/letter-glitch',
     tags: [],
-    added: '2025-01-24'
+    added: '2025-01-24',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Redesigned as a crisp, calm field of letters that glitch in color, now much lighter to run. The cursor scrambles nearby letters, a click tears through the rows, and fonts, spacing and character sets are all adjustable.'
+      }
+    ]
   },
   'Backgrounds/LightRays': {
     videoUrl: '/assets/video/lightrays.webm',
@@ -1977,12 +2013,18 @@ export const componentMetadata = {
   },
   'Backgrounds/PrismaticBurst': {
     videoUrl: '/assets/video/prismaticburst.webm',
-    description: 'Burst of light rays with controllable color, distortion, amount.',
+    description: 'A burst of prismatic light rays that leans toward the cursor and sends a wave of light outward on click.',
     category: 'Backgrounds',
     name: 'PrismaticBurst',
     docsUrl: 'https://reactbits.dev/backgrounds/prismatic-burst',
     tags: [],
-    added: '2025-08-26'
+    added: '2025-08-26',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Runs up to four times faster with the same look, and adds spirals, flowing color and finer control over the rays. The burst now ignites on load, leans toward the cursor and sends a wave of light outward on click.'
+      }
+    ]
   },
   'Backgrounds/RippleGrid': {
     videoUrl: '/assets/video/ripplegrid.webm',
@@ -2080,12 +2122,18 @@ export const componentMetadata = {
   },
   'Backgrounds/FloatingLines': {
     videoUrl: '/assets/video/floatinglines.webm',
-    description: '3D floating lines that react to cursor movement.',
+    description: 'Ribbons of fine glowing lines that drift in waves, part around the cursor and curl when clicked.',
     category: 'Backgrounds',
     name: 'FloatingLines',
     docsUrl: 'https://reactbits.dev/backgrounds/floating-lines',
     tags: [],
-    added: '2025-11-14'
+    added: '2025-11-14',
+    updates: [
+      {
+        date: '2026-10-11',
+        note: 'Redrawn with crisp, finely glowing lines and no extra dependencies. The lines part smoothly around the cursor, curl when clicked, and come in dotted and dashed styles with a clean ink light mode.'
+      }
+    ]
   },
   'Backgrounds/LightPillar': {
     videoUrl: '/assets/video/lightpillar.webm',

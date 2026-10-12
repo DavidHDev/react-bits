@@ -1,610 +1,431 @@
-import { useMemo } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
-import LightTunnel from '@/content/Backgrounds/LightTunnel/LightTunnel';
+import LightTunnel from '../../content/Backgrounds/LightTunnel/LightTunnel';
 import { lightTunnel } from '../../constants/code/Backgrounds/lightTunnelCode';
 
-const DEFAULT_PROPS = {
-  cableColor: '#A855F7',
-  pulseColor: '#A855F7',
-  tunnelColor: '#5227FF',
+const LOOK = {
+  cableColor: '#ffffff',
+  pulseColor: '#ffffff',
+  tunnelColor: '#ffffff',
   tunnelOpacity: 0,
   speed: 0.1,
-  flowDirection: 'outward',
+  flowDirection: 'inward',
   pulseSpeed: 2,
   pulseLength: 0.28,
-  pulseBlend: 1,
+  pulseBlend: 0.6,
   pulseWidth: 1,
-  cableCount: 20,
+  pulseDensity: 0.5,
+  cableCount: 56,
   thickness: 0.35,
   rimWidth: 0.15,
   waviness: 0.3,
   sway: 0.5,
-  size: 1.0,
-  centerX: 0.0,
-  centerY: 0.0,
-  glow: 1.0,
-  fadeNear: 0.5,
-  fadeFar: 2,
-  brightness: 1.0,
-  colorVariance: true,
-  grain: true,
-  grainIntensity: 0.05,
-  opacity: 1.0,
-  mouseInteraction: true,
-  mouseStrength: 0.1
+  bend: 0.4,
+  glow: 1
 };
 
-const LightTunnelDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    cableColor,
-    pulseColor,
-    tunnelColor,
-    tunnelOpacity,
-    speed,
-    flowDirection,
-    pulseSpeed,
-    pulseLength,
-    pulseBlend,
-    pulseWidth,
-    cableCount,
-    thickness,
-    rimWidth,
-    waviness,
-    sway,
-    size,
-    centerX,
-    centerY,
-    glow,
-    fadeNear,
-    fadeFar,
-    brightness,
-    colorVariance,
-    grain,
-    grainIntensity,
-    opacity,
-    mouseInteraction,
-    mouseStrength
-  } = props;
-  const [key, forceRerender] = useForceRerender();
+const DEFAULT_PROPS = {
+  preset: 'studio',
+  ...LOOK,
+  size: 1,
+  fadeNear: 0.5,
+  fadeFar: 2,
+  brightness: 1,
+  colorVariance: true,
+  grain: false,
+  mouseInteraction: true,
+  mouseStrength: 0.1,
+  clickSurge: true,
+  intro: true,
+  lightMode: false
+};
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'cableColor',
-        type: 'string',
-        default: "'#A855F7'",
-        description: 'Base color of the fibre-optic cables.'
-      },
-      {
-        name: 'pulseColor',
-        type: 'string',
-        default: "'#A855F7'",
-        description: 'Color of the light pulses travelling along each cable.'
-      },
-      {
-        name: 'tunnelColor',
-        type: 'string',
-        default: "'#5227FF'",
-        description: 'Tint color of the cable body fill (visible when tunnelOpacity is above 0).'
-      },
-      {
-        name: 'tunnelOpacity',
-        type: 'number',
-        default: '0',
-        description: 'Opacity of the cable body fill. 0 leaves the tunnel see-through so only rims and pulses show.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '0.1',
-        description: 'Overall scroll speed of the pulses down the tunnel.'
-      },
-      {
-        name: 'flowDirection',
-        type: "'inward' | 'outward'",
-        default: "'outward'",
-        description: 'Whether the light travels toward or away from the vanishing point.'
-      },
-      {
-        name: 'pulseSpeed',
-        type: 'number',
-        default: '2',
-        description: 'Speed multiplier for the individual light pulses.'
-      },
-      {
-        name: 'pulseLength',
-        type: 'number',
-        default: '0.28',
-        description: 'Length of the glowing pulse along each cable.'
-      },
-      {
-        name: 'pulseBlend',
-        type: 'number',
-        default: '1',
-        description: 'How softly the pulse fades out at its edges — low is a crisp packet, high is a long smooth trail.'
-      },
-      {
-        name: 'pulseWidth',
-        type: 'number',
-        default: '1',
-        description:
-          'How much of the cable cross-section the pulse lights up — 1 fills the cable, lower narrows it to a filament.'
-      },
-      {
-        name: 'cableCount',
-        type: 'number',
-        default: '20',
-        description: 'Number of cables radiating around the tunnel.'
-      },
-      {
-        name: 'thickness',
-        type: 'number',
-        default: '0.35',
-        description: 'Thickness of each cable core.'
-      },
-      {
-        name: 'rimWidth',
-        type: 'number',
-        default: '0.15',
-        description: 'Width of the soft outline glow around each cable.'
-      },
-      {
-        name: 'waviness',
-        type: 'number',
-        default: '0.3',
-        description: 'Amount of wavy distortion applied along the tunnel depth.'
-      },
-      {
-        name: 'sway',
-        type: 'number',
-        default: '0.5',
-        description: 'Strength of the gentle rotational sway of the tunnel.'
-      },
-      {
-        name: 'size',
-        type: 'number',
-        default: '1.0',
-        description: 'Zoom / scale of the tunnel field.'
-      },
-      {
-        name: 'centerX',
-        type: 'number',
-        default: '0.0',
-        description: 'Horizontal offset of the vanishing point.'
-      },
-      {
-        name: 'centerY',
-        type: 'number',
-        default: '0.0',
-        description: 'Vertical offset of the vanishing point.'
-      },
-      {
-        name: 'glow',
-        type: 'number',
-        default: '1.0',
-        description: 'Intensity of the cable rim glow.'
-      },
-      {
-        name: 'fadeNear',
-        type: 'number',
-        default: '0.5',
-        description: 'Radius over which the tunnel fades in near the center.'
-      },
-      {
-        name: 'fadeFar',
-        type: 'number',
-        default: '2',
-        description: 'Radius at which the tunnel fades out toward the edges.'
-      },
-      {
-        name: 'brightness',
-        type: 'number',
-        default: '1.0',
-        description: 'Overall brightness multiplier of the effect.'
-      },
-      {
-        name: 'colorVariance',
-        type: 'boolean',
-        default: 'true',
-        description: 'Adds subtle per-cable color variation so cables are not uniform.'
-      },
-      {
-        name: 'grain',
-        type: 'boolean',
-        default: 'true',
-        description: 'Adds a whisper-subtle animated film grain to break up banding in the gradients.'
-      },
-      {
-        name: 'grainIntensity',
-        type: 'number',
-        default: '0.05',
-        description: 'Amplitude of the grain overlay. 0 disables it entirely.'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '1.0',
-        description: 'Global opacity of the rendered tunnel.'
-      },
-      {
-        name: 'mouseInteraction',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enables gentle parallax of the vanishing point toward the pointer.'
-      },
-      {
-        name: 'mouseStrength',
-        type: 'number',
-        default: '0.1',
-        description: 'Magnitude of the cursor parallax drift.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Additional CSS classes applied to the container.'
-      }
-    ],
-    []
-  );
+const PRESETS = {
+  studio: { ...LOOK },
+  ember: { ...LOOK, pulseColor: '#ffb070', cableColor: '#ffd2a8' },
+  glacier: { ...LOOK, pulseColor: '#8fc8ff', cableColor: '#cfe6ff' },
+  warp: {
+    ...LOOK,
+    flowDirection: 'outward',
+    pulseSpeed: 3,
+    pulseLength: 0.45,
+    pulseDensity: 0.65,
+    waviness: 0.05,
+    sway: 0.2,
+    bend: 0.2
+  },
+  calm: { ...LOOK, speed: 0.06, pulseDensity: 0.3, pulseLength: 0.4, sway: 0.8 },
+  dense: { ...LOOK, cableCount: 110, thickness: 0.2, pulseDensity: 0.6, pulseWidth: 0.8 },
+  halo: { ...LOOK, tunnelOpacity: 0.35, tunnelColor: '#9ab8ff', pulseColor: '#cfe0ff', cableColor: '#cfe0ff' }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'studio', label: 'Studio' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'glacier', label: 'Glacier' },
+  { value: 'warp', label: 'Warp' },
+  { value: 'calm', label: 'Calm' },
+  { value: 'dense', label: 'Dense' },
+  { value: 'halo', label: 'Halo' }
+];
+
+const FLOW_OPTIONS = [
+  { value: 'inward', label: 'Inward' },
+  { value: 'outward', label: 'Outward' }
+];
+
+const propData = [
+  { name: 'cableColor', type: 'string', default: "'#ffffff'", description: 'Color of the fibres.' },
+  { name: 'pulseColor', type: 'string', default: "'#ffffff'", description: 'Color of the light pulses.' },
+  {
+    name: 'tunnelColor',
+    type: 'string',
+    default: "'#ffffff'",
+    description: 'Color of the soft glow around the fibres, shown when tunnelOpacity is above 0.'
+  },
+  {
+    name: 'tunnelOpacity',
+    type: 'number',
+    default: '0',
+    description: 'Strength of the soft glow around the fibres that tints the tunnel walls.'
+  },
+  { name: 'speed', type: 'number', default: '0.1', description: 'Overall speed of the tunnel.' },
+  {
+    name: 'flowDirection',
+    type: "'inward' | 'outward'",
+    default: "'inward'",
+    description: 'Whether the pulses race into the tunnel or rush out toward you.'
+  },
+  { name: 'pulseSpeed', type: 'number', default: '2', description: 'How fast the pulses travel.' },
+  { name: 'pulseLength', type: 'number', default: '0.28', description: 'Length of each pulse and its tail.' },
+  {
+    name: 'pulseBlend',
+    type: 'number',
+    default: '0.6',
+    description: 'Softness of the pulses, from crisp sparks (0) to long soft streaks (1).'
+  },
+  { name: 'pulseWidth', type: 'number', default: '1', description: 'Width of the pulses relative to the fibres.' },
+  {
+    name: 'pulseDensity',
+    type: 'number',
+    default: '0.5',
+    description: 'How many pulses are travelling at once, from 0 to 1.'
+  },
+  { name: 'cableCount', type: 'number', default: '56', description: 'Number of fibres around the tunnel.' },
+  { name: 'thickness', type: 'number', default: '0.35', description: 'Thickness of the fibres.' },
+  { name: 'rimWidth', type: 'number', default: '0.15', description: 'How far the glow spreads around each pulse.' },
+  { name: 'waviness', type: 'number', default: '0.3', description: 'How much the fibres swirl along the tunnel.' },
+  { name: 'sway', type: 'number', default: '0.5', description: 'How much the tunnel slowly rocks back and forth.' },
+  {
+    name: 'bend',
+    type: 'number',
+    default: '0.4',
+    description: 'How much the far end of the tunnel drifts and curves.'
+  },
+  { name: 'size', type: 'number', default: '1', description: 'Scale of the tunnel.' },
+  { name: 'centerX', type: 'number', default: '0', description: 'Horizontal offset of the tunnel center.' },
+  { name: 'centerY', type: 'number', default: '0', description: 'Vertical offset of the tunnel center.' },
+  { name: 'glow', type: 'number', default: '1', description: 'Strength of the glow around the pulses.' },
+  {
+    name: 'fadeNear',
+    type: 'number',
+    default: '0.5',
+    description: 'How far from the center the tunnel fades in. Higher values keep the middle clear.'
+  },
+  {
+    name: 'fadeFar',
+    type: 'number',
+    default: '2',
+    description: 'Distance at which the tunnel fades out at the edges.'
+  },
+  { name: 'brightness', type: 'number', default: '1', description: 'Overall brightness.' },
+  {
+    name: 'colorVariance',
+    type: 'boolean',
+    default: 'true',
+    description: 'Gives every fibre a slightly different brightness.'
+  },
+  { name: 'grain', type: 'boolean', default: 'false', description: 'Adds a fine film grain to the light.' },
+  { name: 'grainIntensity', type: 'number', default: '0.05', description: 'Strength of the grain.' },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'Steers the far end of the tunnel toward the cursor.'
+  },
+  { name: 'mouseStrength', type: 'number', default: '0.1', description: 'How far the cursor steers the tunnel.' },
+  {
+    name: 'clickSurge',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a ring of light down the tunnel.'
+  },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'Grows the tunnel out from the center on mount.' },
+  {
+    name: 'variation',
+    type: 'number',
+    default: '0',
+    description: 'Picks a different arrangement of fibres and pulses.'
+  },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the tunnel as ink for light backgrounds.'
+  },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const LightTunnelDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <LightTunnel
-              key={key}
-              cableColor={cableColor}
-              pulseColor={pulseColor}
-              tunnelColor={tunnelColor}
-              tunnelOpacity={tunnelOpacity}
-              speed={speed}
-              flowDirection={flowDirection}
-              pulseSpeed={pulseSpeed}
-              pulseLength={pulseLength}
-              pulseBlend={pulseBlend}
-              pulseWidth={pulseWidth}
-              cableCount={cableCount}
-              thickness={thickness}
-              rimWidth={rimWidth}
-              waviness={waviness}
-              sway={sway}
-              size={size}
-              centerX={centerX}
-              centerY={centerY}
-              glow={glow}
-              fadeNear={fadeNear}
-              fadeFar={fadeFar}
-              brightness={brightness}
-              colorVariance={colorVariance}
-              grain={grain}
-              grainIntensity={grainIntensity}
-              opacity={opacity}
-              mouseInteraction={mouseInteraction}
-              mouseStrength={mouseStrength}
-            />
-            <BackgroundContent pillText="New Background" headline="A fibre-optic tunnel of travelling light." />
+            <LightTunnel key={key} {...settings} />
+            <BackgroundContent headline="A fibre-optic tunnel of travelling light." />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="light-tunnel"
-              currentProps={{
-                cableColor,
-                pulseColor,
-                tunnelColor,
-                tunnelOpacity,
-                speed,
-                flowDirection,
-                pulseSpeed,
-                pulseLength,
-                pulseBlend,
-                pulseWidth,
-                cableCount,
-                thickness,
-                rimWidth,
-                waviness,
-                sway,
-                size,
-                centerX,
-                centerY,
-                glow,
-                fadeNear,
-                fadeFar,
-                brightness,
-                colorVariance,
-                grain,
-                grainIntensity,
-                opacity,
-                mouseInteraction,
-                mouseStrength
-              }}
-              defaultProps={{
-                cableColor: '#A855F7',
-                pulseColor: '#A855F7',
-                tunnelColor: '#5227FF',
-                tunnelOpacity: 0,
-                speed: 0.1,
-                flowDirection: 'outward',
-                pulseSpeed: 2,
-                pulseLength: 0.28,
-                pulseBlend: 1,
-                pulseWidth: 1,
-                cableCount: 20,
-                thickness: 0.35,
-                rimWidth: 0.15,
-                waviness: 0.3,
-                sway: 0.5,
-                size: 1.0,
-                centerX: 0.0,
-                centerY: 0.0,
-                glow: 1.0,
-                fadeNear: 0.5,
-                fadeFar: 2,
-                brightness: 1.0,
-                colorVariance: true,
-                grain: true,
-                grainIntensity: 0.05,
-                opacity: 1.0,
-                mouseInteraction: true,
-                mouseStrength: 0.1
-              }}
-            />
+            <OpenInStudioButton backgroundId="light-tunnel" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
-          <Customize forceRerender={forceRerender}>
+          <Customize>
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewColorPickerCustom
-              title="Cable Color"
-              color={cableColor}
-              onChange={val => updateProp('cableColor', val)}
+              title="Fibre Color"
+              color={settings.cableColor}
+              onChange={value => updateProp('cableColor', value)}
             />
             <PreviewColorPickerCustom
               title="Pulse Color"
-              color={pulseColor}
-              onChange={val => updateProp('pulseColor', val)}
+              color={settings.pulseColor}
+              onChange={value => updateProp('pulseColor', value)}
             />
             <PreviewColorPickerCustom
               title="Tunnel Color"
-              color={tunnelColor}
-              onChange={val => updateProp('tunnelColor', val)}
+              color={settings.tunnelColor}
+              onChange={value => updateProp('tunnelColor', value)}
             />
             <PreviewSlider
               title="Tunnel Opacity"
               min={0}
               max={1}
               step={0.01}
-              value={tunnelOpacity}
-              onChange={val => updateProp('tunnelOpacity', val)}
+              value={settings.tunnelOpacity}
+              onChange={value => updateProp('tunnelOpacity', value)}
             />
-
+            <PreviewSlider
+              title="Brightness"
+              min={0.2}
+              max={2.5}
+              step={0.05}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
+            />
             <PreviewSlider
               title="Speed"
               min={0}
-              max={2}
-              step={0.05}
-              value={speed}
-              onChange={val => updateProp('speed', val)}
+              max={0.5}
+              step={0.01}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
             />
-
             <PreviewSelect
               title="Flow Direction"
-              name="light-tunnel-flow"
-              width={140}
-              value={flowDirection}
-              options={[
-                { label: 'Inward', value: 'inward' },
-                { label: 'Outward', value: 'outward' }
-              ]}
-              onChange={val => updateProp('flowDirection', val)}
+              options={FLOW_OPTIONS}
+              value={settings.flowDirection}
+              onChange={value => updateProp('flowDirection', value)}
             />
-
             <PreviewSlider
               title="Pulse Speed"
               min={0}
-              max={3}
+              max={5}
               step={0.05}
-              value={pulseSpeed}
-              onChange={val => updateProp('pulseSpeed', val)}
+              value={settings.pulseSpeed}
+              onChange={value => updateProp('pulseSpeed', value)}
             />
-
             <PreviewSlider
               title="Pulse Length"
-              min={0.02}
-              max={0.5}
+              min={0.05}
+              max={0.8}
               step={0.01}
-              value={pulseLength}
-              onChange={val => updateProp('pulseLength', val)}
+              value={settings.pulseLength}
+              onChange={value => updateProp('pulseLength', value)}
             />
-
             <PreviewSlider
               title="Pulse Blend"
               min={0}
               max={1}
               step={0.01}
-              value={pulseBlend}
-              onChange={val => updateProp('pulseBlend', val)}
+              value={settings.pulseBlend}
+              onChange={value => updateProp('pulseBlend', value)}
             />
-
             <PreviewSlider
               title="Pulse Width"
-              min={0.1}
+              min={0.2}
+              max={2.5}
+              step={0.05}
+              value={settings.pulseWidth}
+              onChange={value => updateProp('pulseWidth', value)}
+            />
+            <PreviewSlider
+              title="Pulse Density"
+              min={0}
               max={1}
               step={0.01}
-              value={pulseWidth}
-              onChange={val => updateProp('pulseWidth', val)}
+              value={settings.pulseDensity}
+              onChange={value => updateProp('pulseDensity', value)}
             />
-
             <PreviewSlider
-              title="Cable Count"
-              min={10}
-              max={80}
+              title="Fibres"
+              min={12}
+              max={140}
               step={1}
-              value={cableCount}
-              onChange={val => updateProp('cableCount', val)}
+              value={settings.cableCount}
+              onChange={value => updateProp('cableCount', value)}
             />
-
             <PreviewSlider
               title="Thickness"
-              min={0.1}
-              max={1}
+              min={0.05}
+              max={1.2}
               step={0.01}
-              value={thickness}
-              onChange={val => updateProp('thickness', val)}
+              value={settings.thickness}
+              onChange={value => updateProp('thickness', value)}
             />
-
-            <PreviewSlider
-              title="Rim Width"
-              min={0}
-              max={1}
-              step={0.01}
-              value={rimWidth}
-              onChange={val => updateProp('rimWidth', val)}
-            />
-
-            <PreviewSlider
-              title="Waviness"
-              min={0}
-              max={1}
-              step={0.01}
-              value={waviness}
-              onChange={val => updateProp('waviness', val)}
-            />
-
-            <PreviewSlider
-              title="Sway"
-              min={0}
-              max={1}
-              step={0.01}
-              value={sway}
-              onChange={val => updateProp('sway', val)}
-            />
-
-            <PreviewSlider
-              title="Size"
-              min={0.3}
-              max={3}
-              step={0.05}
-              value={size}
-              onChange={val => updateProp('size', val)}
-            />
-
-            <PreviewSlider
-              title="Center Offset X"
-              min={-1}
-              max={1}
-              step={0.01}
-              value={centerX}
-              onChange={val => updateProp('centerX', val)}
-            />
-
-            <PreviewSlider
-              title="Center Offset Y"
-              min={-1}
-              max={1}
-              step={0.01}
-              value={centerY}
-              onChange={val => updateProp('centerY', val)}
-            />
-
             <PreviewSlider
               title="Glow"
               min={0}
               max={3}
               step={0.05}
-              value={glow}
-              onChange={val => updateProp('glow', val)}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
             />
-
             <PreviewSlider
-              title="Fade Near"
-              min={0.01}
-              max={0.6}
-              step={0.01}
-              value={fadeNear}
-              onChange={val => updateProp('fadeNear', val)}
-            />
-
-            <PreviewSlider
-              title="Fade Far"
-              min={0.9}
-              max={2.5}
-              step={0.05}
-              value={fadeFar}
-              onChange={val => updateProp('fadeFar', val)}
-            />
-
-            <PreviewSlider
-              title="Brightness"
-              min={0}
-              max={2.5}
-              step={0.05}
-              value={brightness}
-              onChange={val => updateProp('brightness', val)}
-            />
-
-            <PreviewSwitch
-              title="Color Variance"
-              isChecked={colorVariance}
-              onChange={val => updateProp('colorVariance', val)}
-            />
-
-            <PreviewSwitch title="Grain" isChecked={grain} onChange={val => updateProp('grain', val)} />
-
-            <PreviewSlider
-              title="Grain Intensity"
-              min={0}
-              max={0.3}
-              step={0.01}
-              value={grainIntensity}
-              onChange={val => updateProp('grainIntensity', val)}
-            />
-
-            <PreviewSlider
-              title="Opacity"
+              title="Rim Width"
               min={0}
               max={1}
               step={0.01}
-              value={opacity}
-              onChange={val => updateProp('opacity', val)}
+              value={settings.rimWidth}
+              onChange={value => updateProp('rimWidth', value)}
             />
-
-            <PreviewSwitch
-              title="Cursor Parallax"
-              isChecked={mouseInteraction}
-              onChange={val => updateProp('mouseInteraction', val)}
+            <PreviewSlider
+              title="Waviness"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.waviness}
+              onChange={value => updateProp('waviness', value)}
             />
-
+            <PreviewSlider
+              title="Sway"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.sway}
+              onChange={value => updateProp('sway', value)}
+            />
+            <PreviewSlider
+              title="Bend"
+              min={0}
+              max={1.5}
+              step={0.01}
+              value={settings.bend}
+              onChange={value => updateProp('bend', value)}
+            />
+            <PreviewSlider
+              title="Size"
+              min={0.3}
+              max={3}
+              step={0.05}
+              value={settings.size}
+              onChange={value => updateProp('size', value)}
+            />
+            <PreviewSlider
+              title="Fade Near"
+              min={0.01}
+              max={0.8}
+              step={0.01}
+              value={settings.fadeNear}
+              onChange={value => updateProp('fadeNear', value)}
+            />
+            <PreviewSlider
+              title="Fade Far"
+              min={0.6}
+              max={3}
+              step={0.05}
+              value={settings.fadeFar}
+              onChange={value => updateProp('fadeFar', value)}
+            />
             <PreviewSlider
               title="Cursor Strength"
               min={0}
               max={0.4}
               step={0.01}
-              value={mouseStrength}
-              onChange={val => updateProp('mouseStrength', val)}
+              value={settings.mouseStrength}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseStrength', value)}
+            />
+            <PreviewSwitch
+              title="Cursor Steer"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch
+              title="Click Surge"
+              isChecked={settings.clickSurge}
+              onChange={value => updateProp('clickSurge', value)}
+            />
+            <PreviewSwitch
+              title="Color Variance"
+              isChecked={settings.colorVariance}
+              onChange={value => updateProp('colorVariance', value)}
+            />
+            <PreviewSwitch title="Grain" isChecked={settings.grain} onChange={value => updateProp('grain', value)} />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

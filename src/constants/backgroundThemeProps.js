@@ -17,13 +17,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   'faulty-terminal': { lightMode: true, tint: '#3f6212', brightness: 0.45, scanlineIntensity: 0.28 },
   ferrofluid: { lightMode: true },
   'flux-lines': { lightMode: true },
-  'floating-lines': {
-    lightMode: true,
-    gradientStart: '#6d28d9',
-    gradientMid: '#ec4899',
-    gradientEnd: '#06b6d4',
-    backgroundColor: '#ffffff'
-  },
+  'floating-lines': { lightMode: true },
   galaxy: { lightMode: true },
   'gradient-blinds': { lightMode: true, color1: '#be185d', color2: '#5b21b6', noise: 0.28 },
   'gradient-waves': { horizonColor: '#5b21b6', waveColor: '#be185d', crestColor: '#18181b', grainIntensity: 0.025 },
@@ -47,13 +41,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   },
   hyperspeed: { theme: 'light', roadColor: '#efeff2', lineColor: '#d0d0d7' },
   iridescence: { color: '#ffffff' },
-  'letter-glitch': {
-    lightMode: true,
-    colors: ['#3f6212', '#047857', '#0369a1'],
-    backgroundColor: '#ffffff',
-    showCenterVignette: false,
-    showOuterVignette: false
-  },
+  'letter-glitch': { lightMode: true, glitchColors: ['#18181b', '#0f9f6e'], baseColor: '#18181b' },
   'light-pillar': {
     lightMode: true,
     topColor: '#6d28d9',
@@ -62,14 +50,7 @@ export const BACKGROUND_LIGHT_PROPS = {
     mixBlendMode: 'normal'
   },
   'light-rays': { lightMode: true, raysColor: '#6d28d9', saturation: 0.75, lightSpread: 0.38 },
-  'light-tunnel': {
-    lightMode: true,
-    cableColor: '#6d28d9',
-    pulseColor: '#ec4899',
-    tunnelColor: '#06b6d4',
-    brightness: 0.9,
-    glow: 0.42
-  },
+  'light-tunnel': { lightMode: true },
   lightfall: { lightMode: true, colors: ['#52525b'], backgroundColor: '#ffffff', backgroundGlow: 0 },
   lightning: { lightMode: true },
   'line-waves': { lightMode: true, color1: '#6d28d9', color2: '#ec4899', color3: '#06b6d4', brightness: 0.8 },
@@ -98,7 +79,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   plasma: { lightMode: true },
   'plasma-wave': { lightMode: true, colors: ['#8B2CFF', '#00CFF5'] },
   prism: { lightMode: true, glow: 0.72, noise: 0.025 },
-  'prismatic-burst': { lightMode: true, intensity: 1.15, color0: '#7c3aed', color1: '#4338ca', color2: '#0e7490' },
+  'prismatic-burst': { lightMode: true, intensity: 1.15, colors: ['#7c3aed', '#4338ca', '#0e7490'] },
   radar: { lightMode: true, color: '#0a9f5f' },
   'ripple-grid': { lightMode: true },
   scanner: {

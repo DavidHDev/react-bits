@@ -5,20 +5,18 @@ import tsCode from '@ts-default/Animations/StickerPeel/StickerPeel.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/StickerPeel/StickerPeel.tsx?raw';
 
 export const stickerPeel = {
-  installation: 'npm install gsap',
   usage: `import StickerPeel from './StickerPeel'
 import logo from './assets/sticker.png'
-  
-<StickerPeel
-  imageSrc={logo}
-  width={200}
-  rotate={30}
-  peelBackHoverPct={20}
-  peelBackActivePct={40}
-  shadowIntensity={0.6}
-  lightingIntensity={0.1}
-  initialPosition={{ x: -100, y: 100 }}
-/>`,
+
+<div style={{ position: 'relative', width: '100%', height: '400px' }}>
+  <StickerPeel
+    imageSrc={logo}
+    width={200}
+    finish="gloss"
+    peelBackHoverPct={25}
+    peelBackActivePct={40}
+  />
+</div>`,
   code,
   css,
   tailwind,

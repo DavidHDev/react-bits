@@ -1,157 +1,26 @@
-:root {
-  --sticker-rotate: 30deg;
-  --sticker-p: 10px;
-  --sticker-peelback-hover: 30%;
-  --sticker-peelback-active: 40%;
-  --sticker-peel-easing: power3.out;
-  --sticker-peel-hover-easing: power2.out;
-  --sticker-start: calc(-1 * var(--sticker-p));
-  --sticker-end: calc(100% + var(--sticker-p));
-  --sticker-shadow-opacity: 0.6;
-  --sticker-lighting-constant: 0.1;
-  --peel-direction: 0deg;
-}
-
-.sticker-container {
-  position: relative;
-  transform: rotate(var(--peel-direction));
-  transform-origin: center;
-}
-
-.sticker-container * {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.sticker-main {
-  clip-path: polygon(
-    var(--sticker-start) var(--sticker-start),
-    var(--sticker-end) var(--sticker-start),
-    var(--sticker-end) var(--sticker-end),
-    var(--sticker-start) var(--sticker-end)
-  );
-  transition: clip-path 0.6s ease-out;
-  filter: url(#dropShadow);
-}
-
-.sticker-main > * {
-  transform: rotate(calc(-1 * var(--peel-direction)));
-}
-
-.sticker-lighting {
-  filter: url(#pointLight);
-}
-
-.sticker-container:hover .sticker-main,
-.sticker-container.touch-active .sticker-main {
-  clip-path: polygon(
-    var(--sticker-start) var(--sticker-peelback-hover),
-    var(--sticker-end) var(--sticker-peelback-hover),
-    var(--sticker-end) var(--sticker-end),
-    var(--sticker-start) var(--sticker-end)
-  );
-}
-
-.sticker-container:active .sticker-main {
-  clip-path: polygon(
-    var(--sticker-start) var(--sticker-peelback-active),
-    var(--sticker-end) var(--sticker-peelback-active),
-    var(--sticker-end) var(--sticker-end),
-    var(--sticker-start) var(--sticker-end)
-  );
-}
-
-.sticker-image {
-  transform: rotate(var(--sticker-rotate));
-}
-
-.flap {
+.sticker-peel {
   position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.sticker-peel-canvas {
+  display: block;
   width: 100%;
   height: 100%;
-  left: 0;
-  top: calc(-100% - var(--sticker-p) - var(--sticker-p));
-  clip-path: polygon(
-    var(--sticker-start) var(--sticker-start),
-    var(--sticker-end) var(--sticker-start),
-    var(--sticker-end) var(--sticker-start),
-    var(--sticker-start) var(--sticker-start)
-  );
-  transform: scaleY(-1);
-  transition: all 0.6s ease-out;
-}
-
-.flap > * {
-  transform: rotate(calc(-1 * var(--peel-direction)));
-}
-
-.sticker-container:hover .flap,
-.sticker-container.touch-active .flap {
-  clip-path: polygon(
-    var(--sticker-start) var(--sticker-start),
-    var(--sticker-end) var(--sticker-start),
-    var(--sticker-end) var(--sticker-peelback-hover),
-    var(--sticker-start) var(--sticker-peelback-hover)
-  );
-  top: calc(-100% + 2 * var(--sticker-peelback-hover) - 1px);
-}
-
-.sticker-container:active .flap {
-  clip-path: polygon(
-    var(--sticker-start) var(--sticker-start),
-    var(--sticker-end) var(--sticker-start),
-    var(--sticker-end) var(--sticker-peelback-active),
-    var(--sticker-start) var(--sticker-peelback-active)
-  );
-  top: calc(-100% + 2 * var(--sticker-peelback-active) - 1px);
-}
-
-.flap-lighting {
-  filter: url(#pointLightFlipped);
-}
-
-.flap-image {
-  transform: rotate(var(--sticker-rotate));
-  filter: url(#expandAndFill);
-}
-
-.draggable {
-  position: absolute;
-  cursor: grab;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-.draggable:active {
-  cursor: grabbing;
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .draggable {
-    cursor: default;
-  }
-
-  .sticker-container {
-    touch-action: none;
-  }
-}
-
-.sticker-image,
-.flap-image {
-  width: var(--sticker-width, 200px);
-}
-
-.sticker-main,
-.flap {
-  will-change: clip-path, transform;
-}
-
-.sticker-ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
   pointer-events: none;
-  z-index: 10;
+}
+
+.sticker-peel-hit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }

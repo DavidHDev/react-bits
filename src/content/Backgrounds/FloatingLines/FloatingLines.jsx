@@ -1,513 +1,595 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import {
-  Clock,
-  Mesh,
-  OrthographicCamera,
-  PlaneGeometry,
-  Scene,
-  ShaderMaterial,
-  Vector2,
-  Vector3,
-  WebGLRenderer
-} from 'three';
-
 import './FloatingLines.css';
 
-const vertexShader = `
+const MAX_LINES = 24;
+const MAX_STOPS = 8;
+const MAX_CLICKS = 3;
+const INTRO_SECONDS = 1.8;
+const WAVES = ['top', 'middle', 'bottom'];
+const WAVE_DEFAULTS = {
+  top: { x: 10, y: 0.5, rotate: -0.4 },
+  middle: { x: 5, y: 0, rotate: 0.2 },
+  bottom: { x: 2, y: -0.7, rotate: -1 }
+};
+const WAVE_SHAPE = {
+  top: { offset: 1, step: 0.2, light: 0.2, flip: 1, depth: 1, drift: 0.6 },
+  middle: { offset: 2, step: 0.15, light: 1, flip: 0, depth: 0, drift: 1 },
+  bottom: { offset: 1.5, step: 0.2, light: 0.32, flip: 0, depth: 0.6, drift: 1.4 }
+};
+
+const VERTEX = `#version 300 es
+in vec2 aPosition;
+void main() {
+  gl_Position = vec4(aPosition, 0.0, 1.0);
+}`;
+
+const FRAGMENT = `#version 300 es
 precision highp float;
+precision highp int;
+uniform vec2 uResolution;
+uniform float uRatio;
+uniform vec4 uWave[3];
+uniform vec4 uShape[3];
+uniform vec4 uParallax[3];
+uniform int uCount[3];
+uniform vec4 uLine[${MAX_LINES * 3}];
+uniform vec3 uLineColor[${MAX_LINES * 3}];
+uniform vec2 uMouseWarp[3];
+uniform float uHaloReach;
+uniform float uWidth;
+uniform float uGlow;
+uniform float uBrightness;
+uniform float uFocus;
+uniform float uEdgeFade;
+uniform vec4 uMouse;
+uniform float uBendRadius;
+uniform float uBendStrength;
+uniform vec4 uClicks[${MAX_CLICKS}];
+uniform float uLight;
+uniform float uOpaque;
+uniform vec3 uBackground;
+uniform float uOpacity;
+uniform float uStyle;
+uniform float uSpacing;
+out vec4 outColor;
+
+vec3 toSrgb(vec3 c) {
+  return pow(max(c, 0.0), vec3(1.0 / 2.2));
+}
+
+vec3 inkOf(vec3 color) {
+  float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
+  return color * min(1.0, 0.16 / max(luma, 0.001));
+}
+
+vec2 warp(vec2 p, float rotate, float flip) {
+  float angle = rotate * log(length(p) + 1.0);
+  vec2 r = p * mat2(cos(angle), sin(angle), -sin(angle), cos(angle));
+  if (flip > 0.5) r.x = -r.x;
+  return r;
+}
 
 void main() {
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-}
-`;
+  vec2 screen = (2.0 * gl_FragCoord.xy - uResolution) / uResolution.y;
+  screen.y = -screen.y;
+  for (int k = 0; k < ${MAX_CLICKS}; k++) {
+    vec4 click = uClicks[k];
+    if (click.w == 0.0) continue;
+    float age = click.z;
+    float turn = 1.9 * smoothstep(0.0, 0.23, age) * exp(-max(age - 0.23, 0.0) * 1.1) * click.w;
+    float spread = 0.3 * (1.0 + age * 0.55);
+    vec2 offset = screen - click.xy;
+    float angle = turn * exp(-dot(offset, offset) / (spread * spread));
+    screen = click.xy + mat2(cos(angle), sin(angle), -sin(angle), cos(angle)) * offset;
+  }
+  vec3 light = vec3(0.0);
+  vec3 bloom = vec3(0.0);
+  vec3 inkColor = vec3(0.0);
+  float inkAlpha = 0.0;
+  float aa = 0.75 * uRatio;
+  float invSigma = 1.0 / max(uBendRadius * uBendRadius, 1e-4);
+  float tight = 1.0 / (2.6 * uRatio);
+  float wide = 1.0 / (11.0 * uRatio);
 
-const fragmentShader = `
-precision highp float;
+  for (int w = 0; w < 3; w++) {
+    int count = uCount[w];
+    if (count <= 0) continue;
+    vec4 wave = uWave[w];
+    vec4 shape = uShape[w];
+    vec2 r = warp(screen + uParallax[w].xy, wave.z, shape.w);
+    vec2 rm = uMouseWarp[w];
+    float blur = uFocus * uParallax[w].z;
+    float width = uWidth * (1.0 + blur * 2.5);
+    float soft = aa * (1.0 + blur * 7.0);
+    float energy = (uWidth + aa) / (width + soft) * shape.z;
+    float cut = uHaloReach + width * 2.0 + soft;
+    float sx = sin(r.x);
+    float cx = cos(r.x);
+    float along = r.x - rm.x;
+    float pull = uMouse.z * exp(-along * along * invSigma);
+    float level = r.y + wave.y;
+    int first = w * ${MAX_LINES};
 
-uniform float iTime;
-uniform vec3  iResolution;
-uniform float animationSpeed;
-
-uniform bool enableTop;
-uniform bool enableMiddle;
-uniform bool enableBottom;
-
-uniform int topLineCount;
-uniform int middleLineCount;
-uniform int bottomLineCount;
-
-uniform float topLineDistance;
-uniform float middleLineDistance;
-uniform float bottomLineDistance;
-
-uniform vec3 topWavePosition;
-uniform vec3 middleWavePosition;
-uniform vec3 bottomWavePosition;
-
-uniform vec2 iMouse;
-uniform bool interactive;
-uniform float bendRadius;
-uniform float bendStrength;
-uniform float bendInfluence;
-
-uniform bool parallax;
-uniform float parallaxStrength;
-uniform vec2 parallaxOffset;
-
-uniform vec3 lineGradient[8];
-uniform int lineGradientCount;
-uniform vec3 backgroundColor;
-uniform bool lightMode;
-
-const vec3 BLACK = vec3(0.0);
-const vec3 PINK  = vec3(233.0, 71.0, 245.0) / 255.0;
-const vec3 BLUE  = vec3(47.0,  75.0, 162.0) / 255.0;
-
-mat2 rotate(float r) {
-  return mat2(cos(r), sin(r), -sin(r), cos(r));
-}
-
-vec3 background_color(vec2 uv) {
-  vec3 col = vec3(0.0);
-
-  float y = sin(uv.x - 0.2) * 0.3 - 0.1;
-  float m = uv.y - y;
-
-  col += mix(BLUE, BLACK, smoothstep(0.0, 1.0, abs(m)));
-  col += mix(PINK, BLACK, smoothstep(0.0, 1.0, abs(m - 0.8)));
-  return col * 0.5;
-}
-
-vec3 getLineColor(float t, vec3 baseColor) {
-  if (lineGradientCount <= 0) {
-    return baseColor;
+    for (int i = 0; i < ${MAX_LINES}; i++) {
+      if (i >= count) break;
+      vec4 line = uLine[first + i];
+      float y = (sx * line.x + cx * line.y) * line.z;
+      float near = 0.0;
+      if (pull > 0.002) {
+        float across = (y - wave.y) - rm.y;
+        near = exp(-across * across * invSigma) * pull;
+        float push = uBendStrength * near;
+        y += across * (uBendStrength < 0.0 ? min(-push, 2.5) : -min(push, 0.9));
+      }
+      float m = level - y;
+      float slope = length(vec2(dFdx(m), dFdy(m)));
+      float d = abs(m) / max(slope, 1e-5);
+      if (d < cut) {
+        float gap = d;
+        float size = width;
+        if (uStyle > 0.5) {
+          float period = uSpacing / (uResolution.y * 0.5);
+          float cell = (fract((r.x + line.w) / period + float(i) * 0.37) - 0.5) * uSpacing;
+          float span = uStyle > 1.5 ? max(uSpacing * 0.32 - width, 0.0) : 0.0;
+          gap = length(vec2(max(abs(cell) - span, 0.0), d));
+          size = uStyle > 1.5 ? width : width * 1.6;
+        }
+        float core = smoothstep(size + soft, size - soft, gap);
+        float fall = 1.0 - d / cut;
+        float halo = (exp(-gap * tight) * 0.3 + exp(-d * wide) * 0.02 * fall * fall) * uGlow;
+        vec3 color = uLineColor[first + i];
+        float lift = 1.0 + near * 0.8;
+        light += color * core * energy * lift;
+        bloom += color * halo * shape.z * lift;
+        float a = clamp(clamp(core * energy * 1.15 + halo * shape.z * 0.12, 0.0, 1.0) * lift, 0.0, 1.0);
+        inkColor = inkOf(color) * a + inkColor * (1.0 - a);
+        inkAlpha = a + inkAlpha * (1.0 - a);
+      }
+    }
   }
 
-  vec3 gradientColor;
-  
-  if (lineGradientCount == 1) {
-    gradientColor = lineGradient[0];
+  float edge = 1.0;
+  if (uEdgeFade > 0.0) {
+    float u = gl_FragCoord.x / uResolution.x;
+    float fade = uEdgeFade * 0.45;
+    float left = smoothstep(0.0, fade, u);
+    float right = smoothstep(0.0, fade, 1.0 - u);
+    edge = left * left * (3.0 - 2.0 * left) * right * right * (3.0 - 2.0 * right);
+  }
+
+  if (uLight > 0.5) {
+    float alpha = inkAlpha * edge * uOpacity;
+    vec3 ink = toSrgb(inkColor / max(inkAlpha, 1e-4));
+    if (uOpaque > 0.5) {
+      outColor = vec4(mix(uBackground, ink, alpha), 1.0);
+    } else {
+      outColor = vec4(ink * alpha, alpha);
+    }
+    return;
+  }
+
+  vec3 capped = 0.28 * (1.0 - exp(-bloom / 0.28));
+  vec3 glow = toSrgb(1.0 - exp(-(light + capped) * uBrightness * 1.2)) * edge * uOpacity;
+  if (uOpaque > 0.5) {
+    outColor = vec4(uBackground + glow * (1.0 - uBackground), 1.0);
   } else {
-    float clampedT = clamp(t, 0.0, 0.9999);
-    float scaled = clampedT * float(lineGradientCount - 1);
-    int idx = int(floor(scaled));
-    float f = fract(scaled);
-    int idx2 = min(idx + 1, lineGradientCount - 1);
-
-    vec3 c1 = lineGradient[idx];
-    vec3 c2 = lineGradient[idx2];
-    
-    gradientColor = mix(c1, c2, f);
+    outColor = vec4(glow, max(glow.r, max(glow.g, glow.b)));
   }
-  
-  return gradientColor * 0.5;
-}
+}`;
 
-  float wave(vec2 uv, float offset, vec2 screenUv, vec2 mouseUv, bool shouldBend) {
-  float time = iTime * animationSpeed;
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-  float x_offset   = offset;
-  float x_movement = time * 0.1;
-  float amp        = sin(offset + time * 0.2) * 0.3;
-  float y          = sin(uv.x + x_offset + x_movement) * amp;
+const warp = (x, y, rotate, flip) => {
+  const angle = rotate * Math.log(Math.hypot(x, y) + 1);
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  const rx = x * cos + y * sin;
+  return [flip > 0.5 ? -rx : rx, y * cos - x * sin];
+};
 
-  if (shouldBend) {
-    vec2 d = screenUv - mouseUv;
-    float influence = exp(-dot(d, d) * bendRadius); // radial falloff around cursor
-    float bendOffset = (mouseUv.y - screenUv.y) * influence * bendStrength * bendInfluence;
-    y += bendOffset;
+const compile = (gl, type, source) => {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
+  gl.deleteShader(shader);
+  return null;
+};
+
+const link = gl => {
+  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+  const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
+  const program = gl.createProgram();
+  if (!vertex || !fragment || !program) return null;
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.bindAttribLocation(program, 0, 'aPosition');
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(fragment);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    gl.deleteProgram(program);
+    return null;
   }
-
-  float m = uv.y - y;
-  return 0.0175 / max(abs(m) + 0.01, 1e-3) + 0.01;
-}
-
-void mainImage(out vec4 fragColor, in vec2 fragCoord) {
-  vec2 baseUv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
-  baseUv.y *= -1.0;
-  
-  if (parallax) {
-    baseUv += parallaxOffset;
+  const uniforms = {};
+  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < count; i++) {
+    const info = gl.getActiveUniform(program, i);
+    if (info) uniforms[info.name.replace('[0]', '')] = gl.getUniformLocation(program, info.name);
   }
+  return { program, uniforms };
+};
 
-  vec3 col = vec3(0.0);
+const perWave = (value, waves, wave, fallback) => {
+  if (typeof value === 'number') return value;
+  if (!Array.isArray(value) || value.length === 0) return fallback;
+  const index = waves.indexOf(wave);
+  return value[index] ?? value[value.length - 1] ?? fallback;
+};
 
-  vec3 b = lineGradientCount > 0 ? vec3(0.0) : background_color(baseUv);
-
-  vec2 mouseUv = vec2(0.0);
-  if (interactive) {
-    mouseUv = (2.0 * iMouse - iResolution.xy) / iResolution.y;
-    mouseUv.y *= -1.0;
-  }
-  
-  if (enableBottom) {
-    for (int i = 0; i < bottomLineCount; ++i) {
-      float fi = float(i);
-      float t = fi / max(float(bottomLineCount - 1), 1.0);
-      vec3 lineCol = getLineColor(t, b);
-      
-      float angle = bottomWavePosition.z * log(length(baseUv) + 1.0);
-      vec2 ruv = baseUv * rotate(angle);
-      col += lineCol * wave(
-        ruv + vec2(bottomLineDistance * fi + bottomWavePosition.x, bottomWavePosition.y),
-        1.5 + 0.2 * fi,
-        baseUv,
-        mouseUv,
-        interactive
-      ) * 0.2;
-    }
-  }
-
-  if (enableMiddle) {
-    for (int i = 0; i < middleLineCount; ++i) {
-      float fi = float(i);
-      float t = fi / max(float(middleLineCount - 1), 1.0);
-      vec3 lineCol = getLineColor(t, b);
-      
-      float angle = middleWavePosition.z * log(length(baseUv) + 1.0);
-      vec2 ruv = baseUv * rotate(angle);
-      col += lineCol * wave(
-        ruv + vec2(middleLineDistance * fi + middleWavePosition.x, middleWavePosition.y),
-        2.0 + 0.15 * fi,
-        baseUv,
-        mouseUv,
-        interactive
-      );
-    }
-  }
-
-  if (enableTop) {
-    for (int i = 0; i < topLineCount; ++i) {
-      float fi = float(i);
-      float t = fi / max(float(topLineCount - 1), 1.0);
-      vec3 lineCol = getLineColor(t, b);
-      
-      float angle = topWavePosition.z * log(length(baseUv) + 1.0);
-      vec2 ruv = baseUv * rotate(angle);
-      ruv.x *= -1.0;
-      col += lineCol * wave(
-        ruv + vec2(topLineDistance * fi + topWavePosition.x, topWavePosition.y),
-        1.0 + 0.2 * fi,
-        baseUv,
-        mouseUv,
-        interactive
-      ) * 0.1;
-    }
-  }
-
-if (lightMode) {
-  vec3 energy = max(col, vec3(0.0));
-  float peak = max(energy.r, max(energy.g, energy.b));
-  float coverage = smoothstep(0.018, 0.5, peak);
-  vec3 chroma = clamp(energy / max(peak, 0.0001), 0.0, 1.0);
-  chroma = pow(chroma, vec3(1.35));
-  float chromaPeak = max(chroma.r, max(chroma.g, chroma.b));
-  chroma /= max(chromaPeak, 0.0001);
-  vec3 ink = mix(chroma, clamp(chroma * 0.82, 0.0, 1.0), smoothstep(0.5, 1.0, coverage));
-  fragColor = vec4(mix(vec3(1.0), ink, coverage * 0.94), 1.0);
-} else {
-    fragColor = vec4(col, 1.0);
-  }
-}
-
-void main() {
-  vec4 color = vec4(0.0);
-  mainImage(color, gl_FragCoord.xy);
-  gl_FragColor = color;
-}
-`;
-
-const MAX_GRADIENT_STOPS = 8;
-
-function hexToVec3(hex) {
-  let value = hex.trim();
-
-  if (value.startsWith('#')) {
-    value = value.slice(1);
-  }
-
-  let r = 255;
-  let g = 255;
-  let b = 255;
-
-  if (value.length === 3) {
-    r = parseInt(value[0] + value[0], 16);
-    g = parseInt(value[1] + value[1], 16);
-    b = parseInt(value[2] + value[2], 16);
-  } else if (value.length === 6) {
-    r = parseInt(value.slice(0, 2), 16);
-    g = parseInt(value.slice(2, 4), 16);
-    b = parseInt(value.slice(4, 6), 16);
-  }
-
-  return new Vector3(r / 255, g / 255, b / 255);
-}
-
-export default function FloatingLines({
-  linesGradient,
+const FloatingLines = ({
+  linesGradient = ['#e945f5', '#ffffff'],
   enabledWaves = ['top', 'middle', 'bottom'],
-  lineCount = [6],
-  lineDistance = [5],
+  lineCount = 10,
+  lineDistance = 6,
   topWavePosition,
   middleWavePosition,
-  bottomWavePosition = { x: 2.0, y: -0.7, rotate: -1 },
+  bottomWavePosition,
   animationSpeed = 1,
+  amplitude = 1,
+  lineWidth = 1,
+  lineStyle = 'solid',
+  glow = 1,
+  brightness = 1,
+  depthOfField = 0.5,
+  edgeFade = 0,
   interactive = true,
-  bendRadius = 5.0,
+  bendRadius = 5,
   bendStrength = -0.5,
   mouseDamping = 0.05,
   parallax = true,
   parallaxStrength = 0.2,
+  clickSwirl = true,
+  intro = true,
   mixBlendMode = 'screen',
-  backgroundColor = '#000000',
-  lightMode = false
-}) {
+  backgroundColor,
+  lightMode = false,
+  opacity = 1,
+  dpr,
+  className = '',
+  style,
+  ...rest
+}) => {
   const containerRef = useRef(null);
-  const targetMouseRef = useRef(new Vector2(-1000, -1000));
-  const currentMouseRef = useRef(new Vector2(-1000, -1000));
-  const targetInfluenceRef = useRef(0);
-  const currentInfluenceRef = useRef(0);
-  const targetParallaxRef = useRef(new Vector2(0, 0));
-  const currentParallaxRef = useRef(new Vector2(0, 0));
-
-  const getLineCount = waveType => {
-    if (typeof lineCount === 'number') return lineCount;
-    if (!enabledWaves.includes(waveType)) return 0;
-    const index = enabledWaves.indexOf(waveType);
-    return lineCount[index] ?? 6;
+  const canvasRef = useRef(null);
+  const wakeRef = useRef(null);
+  const waves = Array.isArray(enabledWaves) ? enabledWaves.filter(wave => WAVES.includes(wave)) : WAVES;
+  const settings = {
+    stops: Array.isArray(linesGradient) && linesGradient.length ? linesGradient.slice(0, MAX_STOPS) : ['#ffffff'],
+    waves: WAVES.map(wave => {
+      const on = waves.includes(wave);
+      const position = {
+        ...WAVE_DEFAULTS[wave],
+        ...(wave === 'top' ? topWavePosition : wave === 'middle' ? middleWavePosition : bottomWavePosition)
+      };
+      return {
+        count: on ? clamp(Math.round(perWave(lineCount, waves, wave, 10)), 0, MAX_LINES) : 0,
+        distance: perWave(lineDistance, waves, wave, 6) * 0.01,
+        position
+      };
+    }),
+    animationSpeed: Math.max(0, animationSpeed),
+    amplitude: Math.max(0, amplitude),
+    lineWidth: Math.max(0.1, lineWidth),
+    style: lineStyle === 'dashed' ? 2 : lineStyle === 'dotted' ? 1 : 0,
+    glow: Math.max(0, glow),
+    brightness: Math.max(0, brightness),
+    depthOfField: clamp(depthOfField, 0, 1),
+    edgeFade: clamp(edgeFade, 0, 1),
+    interactive,
+    bendRadius: Math.max(0.1, bendRadius),
+    bendStrength,
+    mouseDamping: clamp(mouseDamping, 0, 1),
+    parallax,
+    parallaxStrength: Math.max(0, parallaxStrength),
+    clickSwirl,
+    intro,
+    backgroundColor,
+    lightMode,
+    opacity: clamp(opacity, 0, 1),
+    dpr
   };
-
-  const getLineDistance = waveType => {
-    if (typeof lineDistance === 'number') return lineDistance;
-    if (!enabledWaves.includes(waveType)) return 0.1;
-    const index = enabledWaves.indexOf(waveType);
-    return lineDistance[index] ?? 0.1;
-  };
-
-  const topLineCount = enabledWaves.includes('top') ? getLineCount('top') : 0;
-  const middleLineCount = enabledWaves.includes('middle') ? getLineCount('middle') : 0;
-  const bottomLineCount = enabledWaves.includes('bottom') ? getLineCount('bottom') : 0;
-
-  const topLineDistance = enabledWaves.includes('top') ? getLineDistance('top') * 0.01 : 0.01;
-  const middleLineDistance = enabledWaves.includes('middle') ? getLineDistance('middle') * 0.01 : 0.01;
-  const bottomLineDistance = enabledWaves.includes('bottom') ? getLineDistance('bottom') * 0.01 : 0.01;
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
-
-    let active = true;
-
-    const scene = new Scene();
-
-    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    camera.position.z = 1;
-
-    const renderer = new WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.domElement.style.width = '100%';
-    renderer.domElement.style.height = '100%';
-    container.appendChild(renderer.domElement);
-
-    const uniforms = {
-      iTime: { value: 0 },
-      iResolution: { value: new Vector3(1, 1, 1) },
-      animationSpeed: { value: animationSpeed },
-
-      enableTop: { value: enabledWaves.includes('top') },
-      enableMiddle: { value: enabledWaves.includes('middle') },
-      enableBottom: { value: enabledWaves.includes('bottom') },
-
-      topLineCount: { value: topLineCount },
-      middleLineCount: { value: middleLineCount },
-      bottomLineCount: { value: bottomLineCount },
-
-      topLineDistance: { value: topLineDistance },
-      middleLineDistance: { value: middleLineDistance },
-      bottomLineDistance: { value: bottomLineDistance },
-
-      topWavePosition: {
-        value: new Vector3(topWavePosition?.x ?? 10.0, topWavePosition?.y ?? 0.5, topWavePosition?.rotate ?? -0.4)
-      },
-      middleWavePosition: {
-        value: new Vector3(
-          middleWavePosition?.x ?? 5.0,
-          middleWavePosition?.y ?? 0.0,
-          middleWavePosition?.rotate ?? 0.2
-        )
-      },
-      bottomWavePosition: {
-        value: new Vector3(
-          bottomWavePosition?.x ?? 2.0,
-          bottomWavePosition?.y ?? -0.7,
-          bottomWavePosition?.rotate ?? 0.4
-        )
-      },
-
-      iMouse: { value: new Vector2(-1000, -1000) },
-      interactive: { value: interactive },
-      bendRadius: { value: bendRadius },
-      bendStrength: { value: bendStrength },
-      bendInfluence: { value: 0 },
-
-      parallax: { value: parallax },
-      parallaxStrength: { value: parallaxStrength },
-      parallaxOffset: { value: new Vector2(0, 0) },
-
-      lineGradient: {
-        value: Array.from({ length: MAX_GRADIENT_STOPS }, () => new Vector3(1, 1, 1))
-      },
-      lineGradientCount: { value: 0 },
-      backgroundColor: { value: hexToVec3(backgroundColor) },
-      lightMode: { value: lightMode }
-    };
-
-    if (linesGradient && linesGradient.length > 0) {
-      const stops = linesGradient.slice(0, MAX_GRADIENT_STOPS);
-      uniforms.lineGradientCount.value = stops.length;
-
-      stops.forEach((hex, i) => {
-        const color = hexToVec3(hex);
-        uniforms.lineGradient.value[i].set(color.x, color.y, color.z);
-      });
-    }
-
-    const material = new ShaderMaterial({
-      uniforms,
-      vertexShader,
-      fragmentShader
+    const canvas = canvasRef.current;
+    const gl = canvas?.getContext('webgl2', {
+      alpha: true,
+      premultipliedAlpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false
     });
+    if (!container || !canvas || !gl) return undefined;
 
-    const geometry = new PlaneGeometry(2, 2);
-    const mesh = new Mesh(geometry, material);
-    scene.add(mesh);
+    const program = link(gl);
+    if (!program) return undefined;
+    const u = program.uniforms;
 
-    const clock = new Clock();
+    const buffer = gl.createBuffer();
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
-    const setSize = () => {
-      if (!active) return;
-      const width = container.clientWidth || 1;
-      const height = container.clientHeight || 1;
-
-      renderer.setSize(width, height, false);
-
-      const canvasWidth = renderer.domElement.width;
-      const canvasHeight = renderer.domElement.height;
-      uniforms.iResolution.value.set(canvasWidth, canvasHeight, 1);
+    const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+    const cache = new Map();
+    const parse = (value, fallback) => {
+      if (!value) return fallback;
+      const key = String(value);
+      if (cache.has(key)) return cache.get(key);
+      let rgb = fallback;
+      if (probe) {
+        probe.clearRect(0, 0, 1, 1);
+        probe.fillStyle = '#000000';
+        probe.fillStyle = key;
+        probe.fillRect(0, 0, 1, 1);
+        const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+        rgb = [r / 255, g / 255, b / 255];
+      }
+      cache.set(key, rgb);
+      return rgb;
     };
 
-    setSize();
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const pointer = { x: 0, y: 0, nx: 0, ny: 0, vx: 0, inside: false };
+    const mouse = { x: 0, y: 0, influence: 0, px: 0, py: 0 };
+    const clicks = [];
+    const waveData = new Float32Array(12);
+    const shapeData = new Float32Array(12);
+    const parallaxData = new Float32Array(12);
+    const countData = new Int32Array(3);
+    const lineData = new Float32Array(MAX_LINES * 3 * 4);
+    const colorData = new Float32Array(MAX_LINES * 3 * 3);
+    const mouseData = new Float32Array(6);
+    const clickData = new Float32Array(MAX_CLICKS * 4);
+    let time = 0;
+    let reveal = settingsRef.current.intro && !reduce ? 0 : 1;
+    let raf = 0;
+    let last = 0;
+    let visible = true;
 
-    const ro =
-      typeof ResizeObserver !== 'undefined'
-        ? new ResizeObserver(() => {
-            if (!active) return;
-            setSize();
-          })
-        : null;
+    const render = () => {
+      const s = settingsRef.current;
+      const width = canvas.width;
+      const height = canvas.height;
+      const eased = reveal * reveal * (3 - 2 * reveal);
+      const ratio = width / Math.max(1, container.clientWidth);
+      const stops = s.stops.map(value => parse(value, [1, 1, 1]).map(channel => Math.pow(channel, 2.2)));
+      const mouseX = (2 * mouse.x - width) / height;
+      const mouseY = -(2 * mouse.y - height) / height;
+      s.waves.forEach((wave, index) => {
+        const shape = WAVE_SHAPE[WAVES[index]];
+        const { x: shift, y: lift, rotate } = wave.position;
+        const px = mouse.px * shape.drift;
+        const py = -mouse.py * shape.drift;
+        waveData.set([shift, lift, rotate, 0], index * 4);
+        shapeData.set([shape.offset, shape.step, shape.light, shape.flip], index * 4);
+        parallaxData.set([px, py, shape.depth, 0], index * 4);
+        mouseData.set(warp(mouseX + px, mouseY + py, rotate, shape.flip), index * 2);
+        countData[index] = wave.count;
+        for (let line = 0; line < wave.count; line++) {
+          const offset = shape.offset + shape.step * line;
+          const along = wave.distance * line + shift;
+          const phase = along + offset + time * 0.1;
+          const amp = Math.sin(offset + time * 0.2) * 0.3 * s.amplitude * eased;
+          const slot = index * MAX_LINES + line;
+          lineData.set([Math.cos(phase), Math.sin(phase), amp, along], slot * 4);
+          const t = wave.count > 1 ? line / (wave.count - 1) : 0;
+          const scaled = t * Math.max(stops.length - 1, 0);
+          const from = Math.min(Math.floor(scaled), Math.max(stops.length - 2, 0));
+          const to = Math.min(from + 1, stops.length - 1);
+          const f = clamp(scaled - from, 0, 1);
+          const e = f * f * (3 - 2 * f);
+          for (let c = 0; c < 3; c++) colorData[slot * 3 + c] = stops[from][c] + (stops[to][c] - stops[from][c]) * e;
+        }
+      });
+      clickData.fill(0);
+      clicks.forEach((click, index) => clickData.set([click.x, click.y, click.age, click.spin], index * 4));
 
-    if (ro) ro.observe(container);
+      gl.viewport(0, 0, width, height);
+      gl.useProgram(program.program);
+      gl.bindVertexArray(vao);
+      gl.uniform2f(u.uResolution, width, height);
+      gl.uniform1f(u.uRatio, ratio);
+      gl.uniform4fv(u.uWave, waveData);
+      gl.uniform4fv(u.uShape, shapeData);
+      gl.uniform4fv(u.uParallax, parallaxData);
+      gl.uniform1iv(u.uCount, countData);
+      gl.uniform4fv(u.uLine, lineData);
+      gl.uniform3fv(u.uLineColor, colorData);
+      gl.uniform2fv(u.uMouseWarp, mouseData);
+      gl.uniform1f(u.uHaloReach, 11 * ratio * Math.log(160 * s.glow + 1));
+      gl.uniform1f(u.uWidth, s.lineWidth * 0.5 * ratio);
+      gl.uniform1f(u.uGlow, s.glow);
+      gl.uniform1f(u.uBrightness, s.brightness * eased);
+      gl.uniform1f(u.uFocus, s.depthOfField);
+      gl.uniform1f(u.uEdgeFade, s.edgeFade);
+      gl.uniform4f(u.uMouse, mouse.x, mouse.y, mouse.influence, 0);
+      gl.uniform1f(u.uBendRadius, s.bendRadius * 0.09);
+      gl.uniform1f(u.uBendStrength, s.bendStrength * 2.5);
+      gl.uniform4fv(u.uClicks, clickData);
+      gl.uniform1f(u.uLight, s.lightMode ? 1 : 0);
+      gl.uniform1f(u.uOpaque, s.backgroundColor ? 1 : 0);
+      gl.uniform3fv(u.uBackground, parse(s.backgroundColor, s.lightMode ? [1, 1, 1] : [0, 0, 0]));
+      gl.uniform1f(u.uOpacity, s.opacity * eased);
+      gl.uniform1f(u.uStyle, s.style);
+      gl.uniform1f(u.uSpacing, (s.style === 2 ? 22 : 9) * ratio);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
 
-    const handlePointerMove = event => {
-      const rect = renderer.domElement.getBoundingClientRect();
+    const frame = now => {
+      raf = 0;
+      if (!visible || document.hidden) return;
+      const s = settingsRef.current;
+      const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
+      last = now;
+      const motion = reduce ? 0 : 1;
+      time += dt * s.animationSpeed * motion;
+      if (s.intro && !reduce && reveal < 1) reveal = Math.min(1, reveal + dt / INTRO_SECONDS);
+      else if (!s.intro || reduce) reveal = 1;
+
+      const follow = 1 - Math.pow(1 - s.mouseDamping, dt * 60);
+      const engaged = s.interactive && pointer.inside && !reduce;
+      if (engaged) {
+        mouse.x += (pointer.x - mouse.x) * follow;
+        mouse.y += (pointer.y - mouse.y) * follow;
+      }
+      mouse.influence += ((engaged ? 1 : 0) - mouse.influence) * follow;
+      const tx = s.parallax && engaged ? pointer.nx * s.parallaxStrength : 0;
+      const ty = s.parallax && engaged ? pointer.ny * s.parallaxStrength : 0;
+      mouse.px += (tx - mouse.px) * follow;
+      mouse.py += (ty - mouse.py) * follow;
+      for (let i = clicks.length - 1; i >= 0; i--) {
+        clicks[i].age += dt;
+        if (clicks[i].age > 4) clicks.splice(i, 1);
+      }
+
+      render();
+      raf = requestAnimationFrame(frame);
+    };
+
+    const wake = () => {
+      if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    };
+
+    const resize = () => {
+      const s = settingsRef.current;
+      const width = Math.max(1, container.clientWidth);
+      const height = Math.max(1, container.clientHeight);
+      const ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(width * ratio));
+      canvas.height = Math.max(1, Math.round(height * ratio));
+      render();
+      wake();
+    };
+
+    const locate = event => {
+      const rect = container.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      const dpr = renderer.getPixelRatio();
-
-      targetMouseRef.current.set(x * dpr, (rect.height - y) * dpr);
-      targetInfluenceRef.current = 1.0;
-
-      if (parallax) {
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const offsetX = (x - centerX) / rect.width;
-        const offsetY = -(y - centerY) / rect.height;
-        targetParallaxRef.current.set(offsetX * parallaxStrength, offsetY * parallaxStrength);
-      }
+      const ratio = canvas.width / Math.max(1, rect.width);
+      pointer.inside = x >= 0 && y >= 0 && x <= rect.width && y <= rect.height;
+      const nextX = x * ratio;
+      if (Math.abs(nextX - pointer.x) > 0.5) pointer.vx = nextX - pointer.x;
+      pointer.x = nextX;
+      pointer.y = (rect.height - y) * ratio;
+      pointer.nx = x / Math.max(1, rect.width) - 0.5;
+      pointer.ny = 0.5 - y / Math.max(1, rect.height);
     };
 
-    const handlePointerLeave = () => {
-      targetInfluenceRef.current = 0.0;
+    const onPointerMove = event => {
+      const wasInside = pointer.inside;
+      locate(event);
+      if (pointer.inside && !wasInside && mouse.influence < 0.05) {
+        mouse.x = pointer.x;
+        mouse.y = pointer.y;
+      }
+      wake();
     };
 
-    if (interactive) {
-      renderer.domElement.addEventListener('pointermove', handlePointerMove);
-      renderer.domElement.addEventListener('pointerleave', handlePointerLeave);
-    }
-
-    let raf = 0;
-    const renderLoop = () => {
-      if (!active) return;
-
-      uniforms.iTime.value = clock.getElapsedTime();
-
-      if (interactive) {
-        currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
-        uniforms.iMouse.value.copy(currentMouseRef.current);
-
-        currentInfluenceRef.current += (targetInfluenceRef.current - currentInfluenceRef.current) * mouseDamping;
-        uniforms.bendInfluence.value = currentInfluenceRef.current;
-      }
-
-      if (parallax) {
-        currentParallaxRef.current.lerp(targetParallaxRef.current, mouseDamping);
-        uniforms.parallaxOffset.value.copy(currentParallaxRef.current);
-      }
-
-      renderer.render(scene, camera);
-      raf = requestAnimationFrame(renderLoop);
+    const onPointerDown = event => {
+      locate(event);
+      if (!pointer.inside || !settingsRef.current.clickSwirl || reduce) return;
+      const x = (2 * pointer.x - canvas.width) / canvas.height;
+      const y = -(2 * pointer.y - canvas.height) / canvas.height;
+      clicks.unshift({ x, y, age: 0, spin: pointer.vx < 0 ? -1 : 1 });
+      if (clicks.length > MAX_CLICKS) clicks.pop();
+      wake();
     };
-    renderLoop();
+
+    const onPointerUp = event => {
+      if (event.pointerType !== 'mouse') pointer.inside = false;
+    };
+
+    const onPointerLeave = () => {
+      pointer.inside = false;
+    };
+
+    const onVisibility = () => {
+      last = 0;
+      wake();
+    };
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
+    const intersection = new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) {
+        last = 0;
+        wake();
+      }
+    });
+    intersection.observe(container);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
+    window.addEventListener('pointerup', onPointerUp, { passive: true });
+    window.addEventListener('pointercancel', onPointerUp, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onPointerLeave);
+    document.addEventListener('visibilitychange', onVisibility);
+    resize();
+
+    let lastDpr = settingsRef.current.dpr;
+    wakeRef.current = () => {
+      const s = settingsRef.current;
+      if (s.dpr !== lastDpr) {
+        lastDpr = s.dpr;
+        resize();
+        return;
+      }
+      if (!raf) render();
+      wake();
+    };
 
     return () => {
-      active = false;
-
       cancelAnimationFrame(raf);
-
-      if (ro) ro.disconnect();
-
-      if (interactive) {
-        renderer.domElement.removeEventListener('pointermove', handlePointerMove);
-        renderer.domElement.removeEventListener('pointerleave', handlePointerLeave);
-      }
-
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-      if (renderer.domElement.parentElement) {
-        renderer.domElement.parentElement.removeChild(renderer.domElement);
-      }
+      wakeRef.current = null;
+      resizeObserver.disconnect();
+      intersection.disconnect();
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+      document.documentElement.removeEventListener('pointerleave', onPointerLeave);
+      document.removeEventListener('visibilitychange', onVisibility);
+      gl.deleteProgram(program.program);
+      gl.deleteBuffer(buffer);
+      gl.deleteVertexArray(vao);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    linesGradient,
-    enabledWaves,
-    lineCount,
-    lineDistance,
-    topWavePosition,
-    middleWavePosition,
-    bottomWavePosition,
-    animationSpeed,
-    interactive,
-    bendRadius,
-    bendStrength,
-    mouseDamping,
-    parallax,
-    parallaxStrength,
-    backgroundColor,
-    lightMode
-  ]);
+  }, []);
+
+  useEffect(() => {
+    wakeRef.current?.();
+  });
 
   return (
     <div
       ref={containerRef}
-      className="floating-lines-container"
-      style={{
-        mixBlendMode: lightMode ? 'normal' : mixBlendMode
-      }}
-    />
+      className={`floating-lines-container${className ? ` ${className}` : ''}`}
+      style={{ ...style, mixBlendMode: lightMode || backgroundColor ? 'normal' : mixBlendMode }}
+      {...rest}
+    >
+      <canvas ref={canvasRef} className="floating-lines-canvas" aria-hidden="true" />
+    </div>
   );
-}
+};
+
+export default FloatingLines;

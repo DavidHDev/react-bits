@@ -1,15 +1,102 @@
 .circular-gallery {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
   cursor: grab;
 }
 
-.circular-gallery:active {
+.circular-gallery[data-pointer] {
+  cursor: pointer;
+}
+
+.circular-gallery[data-dragging] {
   cursor: grabbing;
 }
 
-.circular-gallery:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 4px;
+.circular-gallery-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.circular-gallery-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.circular-gallery-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.circular-gallery-caption {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(90%, 36rem);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.circular-gallery-caption-text {
+  margin: 0;
+  line-height: 1.5;
+  opacity: 0.65;
+}
+
+.circular-gallery-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.circular-gallery-close[data-visible] {
+  opacity: 0.8;
+  pointer-events: auto;
+}
+
+.circular-gallery-close:hover {
+  opacity: 1;
+}
+
+.circular-gallery-close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.circular-gallery-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

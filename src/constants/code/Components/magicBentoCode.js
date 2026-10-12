@@ -5,20 +5,18 @@ import tsCode from '@ts-default/Components/MagicBento/MagicBento.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/MagicBento/MagicBento.tsx?raw';
 
 export const magicBento = {
-  dependencies: `gsap`,
-  usage: `import MagicBento from './MagicBento'
+  dependencies: `@hugeicons/react @hugeicons/core-free-icons`,
+  usage: `import MagicBento from './MagicBento';
 
-<MagicBento 
-  textAutoHide={true}
-  enableStars={true}
-  enableSpotlight={true}
+<MagicBento
+  columns={4}
+  rowHeight={200}
+  gap={12}
+  radius={20}
   enableBorderGlow={true}
-  enableTilt={true}
-  enableMagnetism={true}
-  clickEffect={true}
+  enableSpotlight={true}
   spotlightRadius={300}
-  particleCount={12}
-  glowColor="132, 0, 255"
+  clickEffect={true}
 />`,
   code,
   css,

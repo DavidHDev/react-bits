@@ -5,23 +5,21 @@ import tsCode from '@ts-default/Components/ReflectiveCard/ReflectiveCard.tsx?raw
 import tsTailwind from '@ts-tailwind/Components/ReflectiveCard/ReflectiveCard.tsx?raw';
 
 export const reflectiveCard = {
-  dependencies: `lucide-react`,
+  dependencies: `@hugeicons/react @hugeicons/core-free-icons`,
   usage: `import ReflectiveCard from './ReflectiveCard';
 
-<div style={{ height: '600px', position: 'relative' }}>
-  <ReflectiveCard
-    overlayColor="rgba(0, 0, 0, 0.2)"
-    blurStrength={10}
-    glassDistortion={15}
-    metalness={0.8}
-    roughness={0.5}
-    displacementStrength={25}
-    noiseScale={1.5}
-    specularConstant={2.0}
-    grayscale={0.5}
-    color="#ffffff"
-  />
-</div>
+<ReflectiveCard
+  name="Alexander Doe"
+  role="Senior Developer"
+  videoSrc="/videos/reflection.mp4"
+  webcam={false}
+  tint="#ffffff"
+  metalness={1}
+  roughness={0.3}
+  blurStrength={6}
+  shine={1}
+  glare={0.5}
+/>
 `,
   code,
   css,
