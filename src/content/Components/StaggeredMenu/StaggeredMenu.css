@@ -338,6 +338,10 @@
     right: 0;
   }
 
+  .sm-prelayers {
+    width: 100%;
+  }
+
   .staggered-menu-wrapper[data-open] .sm-logo-img {
     filter: invert(100%);
   }
