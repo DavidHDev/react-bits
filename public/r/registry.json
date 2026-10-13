@@ -6,7 +6,7 @@
 		{
 			"name": "AnimatedContent-JS-CSS",
 			"title": "AnimatedContent",
-			"description": "Wrapper that animates its children in on scroll or mount, from any direction.",
+			"description": "Wrapper that reveals its content on scroll with slides, blur, 3D tilts, soft wipes and staggered children.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -22,7 +22,7 @@
 		{
 			"name": "AnimatedContent-JS-TW",
 			"title": "AnimatedContent",
-			"description": "Wrapper that animates its children in on scroll or mount, from any direction.",
+			"description": "Wrapper that reveals its content on scroll with slides, blur, 3D tilts, soft wipes and staggered children.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -38,7 +38,7 @@
 		{
 			"name": "AnimatedContent-TS-CSS",
 			"title": "AnimatedContent",
-			"description": "Wrapper that animates its children in on scroll or mount, from any direction.",
+			"description": "Wrapper that reveals its content on scroll with slides, blur, 3D tilts, soft wipes and staggered children.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -54,7 +54,7 @@
 		{
 			"name": "AnimatedContent-TS-TW",
 			"title": "AnimatedContent",
-			"description": "Wrapper that animates its children in on scroll or mount, from any direction.",
+			"description": "Wrapper that reveals its content on scroll with slides, blur, 3D tilts, soft wipes and staggered children.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -388,7 +388,7 @@
 		{
 			"name": "FadeContent-JS-CSS",
 			"title": "FadeContent",
-			"description": "Simple directional fade / slide entrance / exit wrapper with threshold-based activation.",
+			"description": "Wrapper that fades content in on scroll, plain or out of focus, from washed-out gray, or through grain, mist and pixel blocks.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -404,7 +404,7 @@
 		{
 			"name": "FadeContent-JS-TW",
 			"title": "FadeContent",
-			"description": "Simple directional fade / slide entrance / exit wrapper with threshold-based activation.",
+			"description": "Wrapper that fades content in on scroll, plain or out of focus, from washed-out gray, or through grain, mist and pixel blocks.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -420,7 +420,7 @@
 		{
 			"name": "FadeContent-TS-CSS",
 			"title": "FadeContent",
-			"description": "Simple directional fade / slide entrance / exit wrapper with threshold-based activation.",
+			"description": "Wrapper that fades content in on scroll, plain or out of focus, from washed-out gray, or through grain, mist and pixel blocks.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -436,7 +436,7 @@
 		{
 			"name": "FadeContent-TS-TW",
 			"title": "FadeContent",
-			"description": "Simple directional fade / slide entrance / exit wrapper with threshold-based activation.",
+			"description": "Wrapper that fades content in on scroll, plain or out of focus, from washed-out gray, or through grain, mist and pixel blocks.",
 			"type": "registry:component",
 			"dependencies": [
 				"gsap@^3.13.0"
@@ -518,7 +518,7 @@
 		{
 			"name": "GradualBlur-JS-CSS",
 			"title": "GradualBlur",
-			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
+			"description": "Progressive edge blur for headers, footers, captions and carousels, with an optional fade to color that hides at the ends of a scroll.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -537,7 +537,7 @@
 		{
 			"name": "GradualBlur-JS-TW",
 			"title": "GradualBlur",
-			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
+			"description": "Progressive edge blur for headers, footers, captions and carousels, with an optional fade to color that hides at the ends of a scroll.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -551,7 +551,7 @@
 		{
 			"name": "GradualBlur-TS-CSS",
 			"title": "GradualBlur",
-			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
+			"description": "Progressive edge blur for headers, footers, captions and carousels, with an optional fade to color that hides at the ends of a scroll.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -570,7 +570,7 @@
 		{
 			"name": "GradualBlur-TS-TW",
 			"title": "GradualBlur",
-			"description": "Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.",
+			"description": "Progressive edge blur for headers, footers, captions and carousels, with an optional fade to color that hides at the ends of a scroll.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1538,7 +1538,7 @@
 		{
 			"name": "PixelSwap-JS-CSS",
 			"title": "PixelSwap",
-			"description": "Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.",
+			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1557,7 +1557,7 @@
 		{
 			"name": "PixelSwap-JS-TW",
 			"title": "PixelSwap",
-			"description": "Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.",
+			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1571,7 +1571,7 @@
 		{
 			"name": "PixelSwap-TS-CSS",
 			"title": "PixelSwap",
-			"description": "Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.",
+			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1590,7 +1590,7 @@
 		{
 			"name": "PixelSwap-TS-TW",
 			"title": "PixelSwap",
-			"description": "Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.",
+			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -2064,29 +2064,28 @@
 		{
 			"name": "Antigravity-JS-CSS",
 			"title": "Antigravity",
-			"description": "3D antigravity particle field that repels from the cursor with smooth motion.",
+			"description": "A field of particles that lifts into a glowing ring around the cursor and bursts outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "Antigravity.css",
+					"target": "@components/Antigravity.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "Antigravity/Antigravity.jsx"
+					"path": "Antigravity.jsx"
 				}
 			]
 		},
 		{
 			"name": "Antigravity-JS-TW",
 			"title": "Antigravity",
-			"description": "3D antigravity particle field that repels from the cursor with smooth motion.",
+			"description": "A field of particles that lifts into a glowing ring around the cursor and bursts outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2098,29 +2097,28 @@
 		{
 			"name": "Antigravity-TS-CSS",
 			"title": "Antigravity",
-			"description": "3D antigravity particle field that repels from the cursor with smooth motion.",
+			"description": "A field of particles that lifts into a glowing ring around the cursor and bursts outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "Antigravity.css",
+					"target": "@components/Antigravity.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "Antigravity/Antigravity.tsx"
+					"path": "Antigravity.tsx"
 				}
 			]
 		},
 		{
 			"name": "Antigravity-TS-TW",
 			"title": "Antigravity",
-			"description": "3D antigravity particle field that repels from the cursor with smooth motion.",
+			"description": "A field of particles that lifts into a glowing ring around the cursor and bursts outward on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"@react-three/fiber@^9.3.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2134,9 +2132,7 @@
 			"title": "OrbitImages",
 			"description": "SVG Path customizable orbiting images effect",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2155,9 +2151,7 @@
 			"title": "OrbitImages",
 			"description": "SVG Path customizable orbiting images effect",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2171,9 +2165,7 @@
 			"title": "OrbitImages",
 			"description": "SVG Path customizable orbiting images effect",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -2192,9 +2184,7 @@
 			"title": "OrbitImages",
 			"description": "SVG Path customizable orbiting images effect",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -4700,11 +4690,11 @@
 		{
 			"name": "CardNav-JS-CSS",
 			"title": "CardNav",
-			"description": "Expandable navigation bar with card panels revealing nested links.",
+			"description": "A navigation bar that springs open into a row of cards, each with its own links.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -4722,11 +4712,11 @@
 		{
 			"name": "CardNav-JS-TW",
 			"title": "CardNav",
-			"description": "Expandable navigation bar with card panels revealing nested links.",
+			"description": "A navigation bar that springs open into a row of cards, each with its own links.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -4739,11 +4729,11 @@
 		{
 			"name": "CardNav-TS-CSS",
 			"title": "CardNav",
-			"description": "Expandable navigation bar with card panels revealing nested links.",
+			"description": "A navigation bar that springs open into a row of cards, each with its own links.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -4761,11 +4751,11 @@
 		{
 			"name": "CardNav-TS-TW",
 			"title": "CardNav",
-			"description": "Expandable navigation bar with card panels revealing nested links.",
+			"description": "A navigation bar that springs open into a row of cards, each with its own links.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6004,33 +5994,28 @@
 		{
 			"name": "FluidGlass-JS-CSS",
 			"title": "FluidGlass",
-			"description": "Glassmorphism container with animated liquid distortion refraction.",
+			"description": "A 3D glass object that refracts your headline, image or video, follows the cursor and melts between shapes.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4",
-				"maath@^0.10.8"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "FluidGlass.css",
+					"target": "@components/FluidGlass.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "FluidGlass/FluidGlass.jsx"
+					"path": "FluidGlass.jsx"
 				}
 			]
 		},
 		{
 			"name": "FluidGlass-JS-TW",
 			"title": "FluidGlass",
-			"description": "Glassmorphism container with animated liquid distortion refraction.",
+			"description": "A 3D glass object that refracts your headline, image or video, follows the cursor and melts between shapes.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4",
-				"maath@^0.10.8"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6042,33 +6027,28 @@
 		{
 			"name": "FluidGlass-TS-CSS",
 			"title": "FluidGlass",
-			"description": "Glassmorphism container with animated liquid distortion refraction.",
+			"description": "A 3D glass object that refracts your headline, image or video, follows the cursor and melts between shapes.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4",
-				"maath@^0.10.8"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "FluidGlass.css",
+					"target": "@components/FluidGlass.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "FluidGlass/FluidGlass.tsx"
+					"path": "FluidGlass.tsx"
 				}
 			]
 		},
 		{
 			"name": "FluidGlass-TS-TW",
 			"title": "FluidGlass",
-			"description": "Glassmorphism container with animated liquid distortion refraction.",
+			"description": "A 3D glass object that refracts your headline, image or video, follows the cursor and melts between shapes.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0",
-				"@react-three/fiber@^9.3.0",
-				"@react-three/drei@^10.7.4",
-				"maath@^0.10.8"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6840,12 +6820,9 @@
 		{
 			"name": "PillNav-JS-CSS",
 			"title": "PillNav",
-			"description": "Minimal pill nav with sliding active highlight + smooth easing.",
+			"description": "A pill navigation bar where a fill rises through each link as its label rolls over, with a sliding active dot.",
 			"type": "registry:component",
-			"dependencies": [
-				"react-router-dom@^6.30.1",
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6862,12 +6839,9 @@
 		{
 			"name": "PillNav-JS-TW",
 			"title": "PillNav",
-			"description": "Minimal pill nav with sliding active highlight + smooth easing.",
+			"description": "A pill navigation bar where a fill rises through each link as its label rolls over, with a sliding active dot.",
 			"type": "registry:component",
-			"dependencies": [
-				"react-router-dom@^6.30.1",
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6879,12 +6853,9 @@
 		{
 			"name": "PillNav-TS-CSS",
 			"title": "PillNav",
-			"description": "Minimal pill nav with sliding active highlight + smooth easing.",
+			"description": "A pill navigation bar where a fill rises through each link as its label rolls over, with a sliding active dot.",
 			"type": "registry:component",
-			"dependencies": [
-				"react-router-dom@^6.30.1",
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -6901,12 +6872,9 @@
 		{
 			"name": "PillNav-TS-TW",
 			"title": "PillNav",
-			"description": "Minimal pill nav with sliding active highlight + smooth easing.",
+			"description": "A pill navigation bar where a fill rises through each link as its label rolls over, with a sliding active dot.",
 			"type": "registry:component",
-			"dependencies": [
-				"react-router-dom@^6.30.1",
-				"gsap@^3.13.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -7796,7 +7764,7 @@
 		{
 			"name": "CursorGrid-JS-CSS",
 			"title": "CursorGrid",
-			"description": "Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses.",
+			"description": "A crisp grid whose cells light up and fade behind the cursor, with grid styles, tiles and click pulses.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7815,7 +7783,7 @@
 		{
 			"name": "CursorGrid-JS-TW",
 			"title": "CursorGrid",
-			"description": "Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses.",
+			"description": "A crisp grid whose cells light up and fade behind the cursor, with grid styles, tiles and click pulses.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7829,7 +7797,7 @@
 		{
 			"name": "CursorGrid-TS-CSS",
 			"title": "CursorGrid",
-			"description": "Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses.",
+			"description": "A crisp grid whose cells light up and fade behind the cursor, with grid styles, tiles and click pulses.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -7848,7 +7816,7 @@
 		{
 			"name": "CursorGrid-TS-TW",
 			"title": "CursorGrid",
-			"description": "Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses.",
+			"description": "A crisp grid whose cells light up and fade behind the cursor, with grid styles, tiles and click pulses.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -8080,11 +8048,9 @@
 		{
 			"name": "TiltedCard-JS-CSS",
 			"title": "TiltedCard",
-			"description": "3D perspective tilt card reacting to pointer.",
+			"description": "A 3D card that tilts toward the cursor, with glare, a soft shadow, floating layers and a flip side.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8101,11 +8067,9 @@
 		{
 			"name": "TiltedCard-JS-TW",
 			"title": "TiltedCard",
-			"description": "3D perspective tilt card reacting to pointer.",
+			"description": "A 3D card that tilts toward the cursor, with glare, a soft shadow, floating layers and a flip side.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8117,11 +8081,9 @@
 		{
 			"name": "TiltedCard-TS-CSS",
 			"title": "TiltedCard",
-			"description": "3D perspective tilt card reacting to pointer.",
+			"description": "A 3D card that tilts toward the cursor, with glare, a soft shadow, floating layers and a flip side.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8138,11 +8100,9 @@
 		{
 			"name": "TiltedCard-TS-TW",
 			"title": "TiltedCard",
-			"description": "3D perspective tilt card reacting to pointer.",
+			"description": "A 3D card that tilts toward the cursor, with glare, a soft shadow, floating layers and a flip side.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8734,11 +8694,9 @@
 		{
 			"name": "Balatro-JS-CSS",
 			"title": "Balatro",
-			"description": "The balatro shader, fully customizalbe and interactive.",
+			"description": "The swirling Balatro paint shader, with crisp pixels, a cursor that stirs the paint and click whirlpools.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8755,11 +8713,9 @@
 		{
 			"name": "Balatro-JS-TW",
 			"title": "Balatro",
-			"description": "The balatro shader, fully customizalbe and interactive.",
+			"description": "The swirling Balatro paint shader, with crisp pixels, a cursor that stirs the paint and click whirlpools.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8771,11 +8727,9 @@
 		{
 			"name": "Balatro-TS-CSS",
 			"title": "Balatro",
-			"description": "The balatro shader, fully customizalbe and interactive.",
+			"description": "The swirling Balatro paint shader, with crisp pixels, a cursor that stirs the paint and click whirlpools.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8792,11 +8746,9 @@
 		{
 			"name": "Balatro-TS-TW",
 			"title": "Balatro",
-			"description": "The balatro shader, fully customizalbe and interactive.",
+			"description": "The swirling Balatro paint shader, with crisp pixels, a cursor that stirs the paint and click whirlpools.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8808,11 +8760,9 @@
 		{
 			"name": "Ballpit-JS-CSS",
 			"title": "Ballpit",
-			"description": "Physics ball pit simulation with bouncing colorful spheres.",
+			"description": "A soft-lit pit of physics balls you can shove with the cursor, grab, throw and blast apart.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8824,11 +8774,9 @@
 		{
 			"name": "Ballpit-JS-TW",
 			"title": "Ballpit",
-			"description": "Physics ball pit simulation with bouncing colorful spheres.",
+			"description": "A soft-lit pit of physics balls you can shove with the cursor, grab, throw and blast apart.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8840,12 +8788,9 @@
 		{
 			"name": "Ballpit-TS-CSS",
 			"title": "Ballpit",
-			"description": "Physics ball pit simulation with bouncing colorful spheres.",
+			"description": "A soft-lit pit of physics balls you can shove with the cursor, grab, throw and blast apart.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8857,12 +8802,9 @@
 		{
 			"name": "Ballpit-TS-TW",
 			"title": "Ballpit",
-			"description": "Physics ball pit simulation with bouncing colorful spheres.",
+			"description": "A soft-lit pit of physics balls you can shove with the cursor, grab, throw and blast apart.",
 			"type": "registry:component",
-			"dependencies": [
-				"gsap@^3.13.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9220,7 +9162,7 @@
 		{
 			"name": "DotField-JS-CSS",
 			"title": "DotField",
-			"description": "Interactive dot grid with cursor bulge, glow, sparkle, and wave effects.",
+			"description": "A gradient dot field seen through a lens that follows the cursor, magnifying, pinching or swirling the dots.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -9239,7 +9181,7 @@
 		{
 			"name": "DotField-JS-TW",
 			"title": "DotField",
-			"description": "Interactive dot grid with cursor bulge, glow, sparkle, and wave effects.",
+			"description": "A gradient dot field seen through a lens that follows the cursor, magnifying, pinching or swirling the dots.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -9253,7 +9195,7 @@
 		{
 			"name": "DotField-TS-CSS",
 			"title": "DotField",
-			"description": "Interactive dot grid with cursor bulge, glow, sparkle, and wave effects.",
+			"description": "A gradient dot field seen through a lens that follows the cursor, magnifying, pinching or swirling the dots.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -9272,7 +9214,7 @@
 		{
 			"name": "DotField-TS-TW",
 			"title": "DotField",
-			"description": "Interactive dot grid with cursor bulge, glow, sparkle, and wave effects.",
+			"description": "A gradient dot field seen through a lens that follows the cursor, magnifying, pinching or swirling the dots.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -9970,11 +9912,9 @@
 		{
 			"name": "Topography-JS-CSS",
 			"title": "Topography",
-			"description": "A living contour map with glowing, elevation-tinted lines.",
+			"description": "A 3D landscape drawn in glowing contour lines that rises under the cursor, with light pulses on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9991,11 +9931,9 @@
 		{
 			"name": "Topography-JS-TW",
 			"title": "Topography",
-			"description": "A living contour map with glowing, elevation-tinted lines.",
+			"description": "A 3D landscape drawn in glowing contour lines that rises under the cursor, with light pulses on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10007,11 +9945,9 @@
 		{
 			"name": "Topography-TS-CSS",
 			"title": "Topography",
-			"description": "A living contour map with glowing, elevation-tinted lines.",
+			"description": "A 3D landscape drawn in glowing contour lines that rises under the cursor, with light pulses on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10028,11 +9964,9 @@
 		{
 			"name": "Topography-TS-TW",
 			"title": "Topography",
-			"description": "A living contour map with glowing, elevation-tinted lines.",
+			"description": "A 3D landscape drawn in glowing contour lines that rises under the cursor, with light pulses on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10242,11 +10176,9 @@
 		{
 			"name": "Scanner-JS-CSS",
 			"title": "Scanner",
-			"description": "Calm interference bands sweeping across the screen like an oscilloscope.",
+			"description": "Glowing interference lines swept by a scan beam, with a CRT finish, cursor lensing and click pings.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10263,11 +10195,9 @@
 		{
 			"name": "Scanner-JS-TW",
 			"title": "Scanner",
-			"description": "Calm interference bands sweeping across the screen like an oscilloscope.",
+			"description": "Glowing interference lines swept by a scan beam, with a CRT finish, cursor lensing and click pings.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10279,11 +10209,9 @@
 		{
 			"name": "Scanner-TS-CSS",
 			"title": "Scanner",
-			"description": "Calm interference bands sweeping across the screen like an oscilloscope.",
+			"description": "Glowing interference lines swept by a scan beam, with a CRT finish, cursor lensing and click pings.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10300,11 +10228,9 @@
 		{
 			"name": "Scanner-TS-TW",
 			"title": "Scanner",
-			"description": "Calm interference bands sweeping across the screen like an oscilloscope.",
+			"description": "Glowing interference lines swept by a scan beam, with a CRT finish, cursor lensing and click pings.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10786,11 +10712,9 @@
 		{
 			"name": "LightRays-JS-CSS",
 			"title": "LightRays",
-			"description": "Volumetric light rays/beams with customizable direction.",
+			"description": "Volumetric light rays from any edge, with source glow and haze. The cursor steers the beam and casts a shadow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10807,11 +10731,9 @@
 		{
 			"name": "LightRays-JS-TW",
 			"title": "LightRays",
-			"description": "Volumetric light rays/beams with customizable direction.",
+			"description": "Volumetric light rays from any edge, with source glow and haze. The cursor steers the beam and casts a shadow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10823,11 +10745,9 @@
 		{
 			"name": "LightRays-TS-CSS",
 			"title": "LightRays",
-			"description": "Volumetric light rays/beams with customizable direction.",
+			"description": "Volumetric light rays from any edge, with source glow and haze. The cursor steers the beam and casts a shadow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10844,11 +10764,9 @@
 		{
 			"name": "LightRays-TS-TW",
 			"title": "LightRays",
-			"description": "Volumetric light rays/beams with customizable direction.",
+			"description": "Volumetric light rays from any edge, with source glow and haze. The cursor steers the beam and casts a shadow.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10926,11 +10844,9 @@
 		{
 			"name": "LineWaves-JS-CSS",
 			"title": "LineWaves",
-			"description": "Animated line wave pattern with colorful warped distortion.",
+			"description": "Fine lines that flow in silky waves while a band of light drifts through them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10947,11 +10863,9 @@
 		{
 			"name": "LineWaves-JS-TW",
 			"title": "LineWaves",
-			"description": "Animated line wave pattern with colorful warped distortion.",
+			"description": "Fine lines that flow in silky waves while a band of light drifts through them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10963,11 +10877,9 @@
 		{
 			"name": "LineWaves-TS-CSS",
 			"title": "LineWaves",
-			"description": "Animated line wave pattern with colorful warped distortion.",
+			"description": "Fine lines that flow in silky waves while a band of light drifts through them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10984,11 +10896,9 @@
 		{
 			"name": "LineWaves-TS-TW",
 			"title": "LineWaves",
-			"description": "Animated line wave pattern with colorful warped distortion.",
+			"description": "Fine lines that flow in silky waves while a band of light drifts through them.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11142,9 +11052,7 @@
 			"title": "SoftAurora",
 			"description": "Soft aurora borealis shader with 3D Perlin noise and cosine gradient palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11163,9 +11071,7 @@
 			"title": "SoftAurora",
 			"description": "Soft aurora borealis shader with 3D Perlin noise and cosine gradient palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11179,9 +11085,7 @@
 			"title": "SoftAurora",
 			"description": "Soft aurora borealis shader with 3D Perlin noise and cosine gradient palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11200,9 +11104,7 @@
 			"title": "SoftAurora",
 			"description": "Soft aurora borealis shader with 3D Perlin noise and cosine gradient palettes.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11478,12 +11380,9 @@
 		{
 			"name": "PixelBlast-JS-CSS",
 			"title": "PixelBlast",
-			"description": "Exploding pixel particle bursts with optional liquid postprocessing.",
+			"description": "Dithered pixel clouds that drift, shimmer and light up under the cursor, with ripples, shapes and a perspective floor.",
 			"type": "registry:component",
-			"dependencies": [
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11500,12 +11399,9 @@
 		{
 			"name": "PixelBlast-JS-TW",
 			"title": "PixelBlast",
-			"description": "Exploding pixel particle bursts with optional liquid postprocessing.",
+			"description": "Dithered pixel clouds that drift, shimmer and light up under the cursor, with ripples, shapes and a perspective floor.",
 			"type": "registry:component",
-			"dependencies": [
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11517,12 +11413,9 @@
 		{
 			"name": "PixelBlast-TS-CSS",
 			"title": "PixelBlast",
-			"description": "Exploding pixel particle bursts with optional liquid postprocessing.",
+			"description": "Dithered pixel clouds that drift, shimmer and light up under the cursor, with ripples, shapes and a perspective floor.",
 			"type": "registry:component",
-			"dependencies": [
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11539,12 +11432,9 @@
 		{
 			"name": "PixelBlast-TS-TW",
 			"title": "PixelBlast",
-			"description": "Exploding pixel particle bursts with optional liquid postprocessing.",
+			"description": "Dithered pixel clouds that drift, shimmer and light up under the cursor, with ripples, shapes and a perspective floor.",
 			"type": "registry:component",
-			"dependencies": [
-				"postprocessing@^6.36.0",
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11952,11 +11842,9 @@
 		{
 			"name": "SideRays-JS-CSS",
 			"title": "SideRays",
-			"description": "Animated light rays emanating from the side with customizable colors and speed.",
+			"description": "Shafts of light that fan in from a corner or side, shimmer slowly and lean toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11973,11 +11861,9 @@
 		{
 			"name": "SideRays-JS-TW",
 			"title": "SideRays",
-			"description": "Animated light rays emanating from the side with customizable colors and speed.",
+			"description": "Shafts of light that fan in from a corner or side, shimmer slowly and lean toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -11989,11 +11875,9 @@
 		{
 			"name": "SideRays-TS-CSS",
 			"title": "SideRays",
-			"description": "Animated light rays emanating from the side with customizable colors and speed.",
+			"description": "Shafts of light that fan in from a corner or side, shimmer slowly and lean toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -12010,11 +11894,9 @@
 		{
 			"name": "SideRays-TS-TW",
 			"title": "SideRays",
-			"description": "Animated light rays emanating from the side with customizable colors and speed.",
+			"description": "Shafts of light that fan in from a corner or side, shimmer slowly and lean toward the cursor.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{

@@ -1,122 +1,332 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
 
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
-import CodeExample from '../../components/code/CodeExample';
-import useComponentProps from '../../hooks/useComponentProps';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-
-import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
+import CodeExample from '../../components/code/CodeExample';
+import PropTable from '../../components/common/Preview/PropTable';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { useColorMode } from '../../components/setup/color-mode';
 
 import SoftAurora from '../../content/Backgrounds/SoftAurora/SoftAurora';
 import { softAurora } from '../../constants/code/Backgrounds/softAuroraCode';
 
-const DEFAULT_PROPS = {
-  speed: 0.6,
-  scale: 1.5,
-  brightness: 1.0,
+const LOOK = {
   color1: '#f7f7f7',
   color2: '#e100ff',
+  spectrum: 1,
+  speed: 0.6,
+  colorSpeed: 1,
+  scale: 1.5,
+  brightness: 1,
   noiseFrequency: 2.5,
-  noiseAmplitude: 1.0,
+  noiseAmplitude: 1,
   bandHeight: 0.5,
-  bandSpread: 1.0,
+  bandSpread: 1,
+  tilt: 0,
   octaveDecay: 0.1,
-  layerOffset: 0,
-  colorSpeed: 1.0,
-  enableMouseInteraction: true,
-  mouseInfluence: 0.25
+  layerOffset: 0
 };
 
-const SoftAuroraDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    speed, scale, brightness, color1, color2,
-    noiseFrequency, noiseAmplitude, bandHeight, bandSpread,
-    octaveDecay, layerOffset, colorSpeed,
-    enableMouseInteraction, mouseInfluence
-  } = props;
+const DEFAULT_PROPS = {
+  preset: 'classic',
+  ...LOOK,
+  enableMouseInteraction: true,
+  mouseInfluence: 0.25,
+  clickPulse: true,
+  intro: true,
+  lightMode: false
+};
 
-  const propData = useMemo(
-    () => [
-      { name: 'speed', type: 'number', default: '0.6', description: 'Overall animation speed multiplier.' },
-      { name: 'scale', type: 'number', default: '1.5', description: 'Scale of the noise pattern.' },
-      { name: 'brightness', type: 'number', default: '1.0', description: 'Overall brightness multiplier.' },
-      { name: 'color1', type: 'string', default: '"#f7f7f7"', description: 'Tint color for the first aurora layer.' },
-      { name: 'color2', type: 'string', default: '"#e100ff"', description: 'Tint color for the second aurora layer.' },
-      { name: 'noiseFrequency', type: 'number', default: '2.5', description: 'Base frequency of the Perlin noise.' },
-      { name: 'noiseAmplitude', type: 'number', default: '1.0', description: 'Base amplitude of the Perlin noise.' },
-      { name: 'bandHeight', type: 'number', default: '0.5', description: 'Vertical position of the aurora band (0-1).' },
-      { name: 'bandSpread', type: 'number', default: '1.0', description: 'Vertical spread of the aurora glow.' },
-      { name: 'octaveDecay', type: 'number', default: '0.1', description: 'Amplitude decay per noise octave.' },
-      { name: 'layerOffset', type: 'number', default: '0', description: 'Time offset between the two aurora layers.' },
-      { name: 'colorSpeed', type: 'number', default: '1.0', description: 'Speed of palette color shifting.' },
-      { name: 'enableMouseInteraction', type: 'boolean', default: 'true', description: 'Enable cursor-reactive aurora offset.' },
-      { name: 'mouseInfluence', type: 'number', default: '0.25', description: 'Strength of the mouse offset effect.' }
-    ],
-    []
-  );
+const PRESETS = {
+  classic: {},
+  borealis: {
+    color1: '#3EE59A',
+    color2: '#22B8D3',
+    spectrum: 0.2,
+    bandHeight: 0.55,
+    noiseAmplitude: 1.6,
+    brightness: 0.8
+  },
+  dusk: { color1: '#FFB86B', color2: '#FF5C8A', spectrum: 0.35, bandHeight: 0.38 },
+  mono: { color1: '#E4E4E7', color2: '#71717A', spectrum: 0, brightness: 0.7 },
+  ribbon: { tilt: -14, noiseAmplitude: 2.2, bandSpread: 1.3, scale: 1.2 },
+  halo: { bandSpread: 0.55, brightness: 1.2, noiseFrequency: 1.5 },
+  calm: { speed: 0.25, colorSpeed: 0.4, noiseAmplitude: 0.6 }
+};
+
+const LIGHT_SWAP = {
+  mono: { color1: '#52525B', color2: '#A1A1AA' }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'classic', label: 'Classic' },
+  { value: 'borealis', label: 'Borealis' },
+  { value: 'dusk', label: 'Dusk' },
+  { value: 'mono', label: 'Mono' },
+  { value: 'ribbon', label: 'Ribbon' },
+  { value: 'halo', label: 'Halo' },
+  { value: 'calm', label: 'Calm' }
+];
+
+const propData = [
+  { name: 'color1', type: 'string', default: "'#f7f7f7'", description: 'Tint of the first aurora layer.' },
+  { name: 'color2', type: 'string', default: "'#e100ff'", description: 'Tint of the second aurora layer.' },
+  {
+    name: 'spectrum',
+    type: 'number',
+    default: '1',
+    description:
+      'How much of the shifting rainbow shows through the tints, from 0 to 1. 0 uses the two colors as they are.'
+  },
+  { name: 'speed', type: 'number', default: '0.6', description: 'Overall animation speed.' },
+  { name: 'colorSpeed', type: 'number', default: '1', description: 'How fast the colors drift along the band.' },
+  { name: 'scale', type: 'number', default: '1.5', description: 'Scale of the noise that shapes the band.' },
+  { name: 'brightness', type: 'number', default: '1', description: 'Overall brightness.' },
+  { name: 'noiseFrequency', type: 'number', default: '2.5', description: 'How tightly the band ripples.' },
+  { name: 'noiseAmplitude', type: 'number', default: '1', description: 'How far the band waves up and down.' },
+  {
+    name: 'bandHeight',
+    type: 'number',
+    default: '0.5',
+    description: 'Vertical position of the band, from 0 at the bottom to 1 at the top.'
+  },
+  {
+    name: 'bandSpread',
+    type: 'number',
+    default: '1',
+    description: 'How tight and bright the band is. Lower values spread it into a wide, soft glow.'
+  },
+  { name: 'tilt', type: 'number', default: '0', description: 'Tilts the band by this many degrees.' },
+  {
+    name: 'octaveDecay',
+    type: 'number',
+    default: '0.1',
+    description: 'How much fine ripple sits on top of the large waves.'
+  },
+  {
+    name: 'layerOffset',
+    type: 'number',
+    default: '0',
+    description: 'Shifts the second layer in time so the two separate.'
+  },
+  {
+    name: 'enableMouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The aurora drifts with the cursor and reaches toward it when it comes close.'
+  },
+  { name: 'mouseInfluence', type: 'number', default: '0.25', description: 'Strength of the cursor drift and reach.' },
+  {
+    name: 'clickPulse',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a soft pulse of light along the band.'
+  },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'The band starts as a thin line and blooms in on mount.'
+  },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Prints the aurora as soft colored ink so it sits on light pages.'
+  },
+  { name: 'opacity', type: 'number', default: '1', description: 'Overall opacity, from 0 to 1.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const SoftAuroraDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { colorMode } = useColorMode();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({
+      ...base,
+      ...PRESETS[value],
+      ...(colorMode === 'light' ? LIGHT_SWAP[value] : null),
+      preset: value
+    });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" h={500} overflow="hidden" p={0}>
-            <SoftAurora
-              speed={speed} scale={scale} brightness={brightness}
-              color1={color1} color2={color2}
-              noiseFrequency={noiseFrequency} noiseAmplitude={noiseAmplitude}
-              bandHeight={bandHeight} bandSpread={bandSpread}
-              octaveDecay={octaveDecay} layerOffset={layerOffset}
-              colorSpeed={colorSpeed}
-              enableMouseInteraction={enableMouseInteraction} mouseInfluence={mouseInfluence}
-            />
-
+          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
+            <SoftAurora key={key} {...settings} />
             <BackgroundContent pillText="New Background" headline="A gentle glow to light your way!" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="soft-aurora"
-              currentProps={{
-                speed, scale, brightness, color1, color2,
-                noiseFrequency, noiseAmplitude, bandHeight, bandSpread,
-                octaveDecay, layerOffset, colorSpeed,
-                enableMouseInteraction, mouseInfluence
-              }}
-              defaultProps={DEFAULT_PROPS}
-            />
+            <OpenInStudioButton backgroundId="soft-aurora" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => updateProp('color2', val)} />
-
-            <PreviewSlider min={0.1} max={5} step={0.1} title="Speed" value={speed} onChange={val => updateProp('speed', val)} />
-            <PreviewSlider min={0.1} max={3} step={0.1} title="Scale" value={scale} onChange={val => updateProp('scale', val)} />
-            <PreviewSlider min={0.1} max={3} step={0.1} title="Brightness" value={brightness} onChange={val => updateProp('brightness', val)} />
-            <PreviewSlider min={0.5} max={10} step={0.5} title="Noise Frequency" value={noiseFrequency} onChange={val => updateProp('noiseFrequency', val)} />
-            <PreviewSlider min={0.5} max={10} step={0.5} title="Noise Amplitude" value={noiseAmplitude} onChange={val => updateProp('noiseAmplitude', val)} />
-            <PreviewSlider min={0} max={1} step={0.05} title="Band Height" value={bandHeight} onChange={val => updateProp('bandHeight', val)} />
-            <PreviewSlider min={0.1} max={3} step={0.1} title="Band Spread" value={bandSpread} onChange={val => updateProp('bandSpread', val)} />
-            <PreviewSlider min={0.01} max={0.5} step={0.01} title="Octave Decay" value={octaveDecay} onChange={val => updateProp('octaveDecay', val)} />
-            <PreviewSlider min={0} max={1} step={0.05} title="Layer Offset" value={layerOffset} onChange={val => updateProp('layerOffset', val)} />
-            <PreviewSlider min={0.1} max={5} step={0.1} title="Color Speed" value={colorSpeed} onChange={val => updateProp('colorSpeed', val)} />
-
-            <PreviewSwitch title="Mouse Interaction" value={enableMouseInteraction} onChange={val => updateProp('enableMouseInteraction', val)} />
-            {enableMouseInteraction && (
-              <PreviewSlider min={0.1} max={1} step={0.05} title="Mouse Influence" value={mouseInfluence} onChange={val => updateProp('mouseInfluence', val)} />
-            )}
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewColorPickerCustom
+              title="Color 1"
+              color={settings.color1}
+              onChange={value => updateProp('color1', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Color 2"
+              color={settings.color2}
+              onChange={value => updateProp('color2', value)}
+            />
+            <PreviewSlider
+              title="Spectrum"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.spectrum}
+              onChange={value => updateProp('spectrum', value)}
+            />
+            <PreviewSlider
+              title="Speed"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
+            />
+            <PreviewSlider
+              title="Color Speed"
+              min={0}
+              max={5}
+              step={0.1}
+              value={settings.colorSpeed}
+              onChange={value => updateProp('colorSpeed', value)}
+            />
+            <PreviewSlider
+              title="Scale"
+              min={0.1}
+              max={3}
+              step={0.1}
+              value={settings.scale}
+              onChange={value => updateProp('scale', value)}
+            />
+            <PreviewSlider
+              title="Brightness"
+              min={0.1}
+              max={3}
+              step={0.05}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
+            />
+            <PreviewSlider
+              title="Noise Frequency"
+              min={0.5}
+              max={10}
+              step={0.5}
+              value={settings.noiseFrequency}
+              onChange={value => updateProp('noiseFrequency', value)}
+            />
+            <PreviewSlider
+              title="Noise Amplitude"
+              min={0}
+              max={5}
+              step={0.1}
+              value={settings.noiseAmplitude}
+              onChange={value => updateProp('noiseAmplitude', value)}
+            />
+            <PreviewSlider
+              title="Band Height"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.bandHeight}
+              onChange={value => updateProp('bandHeight', value)}
+            />
+            <PreviewSlider
+              title="Band Spread"
+              min={0.1}
+              max={3}
+              step={0.05}
+              value={settings.bandSpread}
+              onChange={value => updateProp('bandSpread', value)}
+            />
+            <PreviewSlider
+              title="Tilt"
+              min={-45}
+              max={45}
+              step={1}
+              value={settings.tilt}
+              onChange={value => updateProp('tilt', value)}
+            />
+            <PreviewSlider
+              title="Octave Decay"
+              min={0}
+              max={0.5}
+              step={0.01}
+              value={settings.octaveDecay}
+              onChange={value => updateProp('octaveDecay', value)}
+            />
+            <PreviewSlider
+              title="Layer Offset"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.layerOffset}
+              onChange={value => updateProp('layerOffset', value)}
+            />
+            <PreviewSlider
+              title="Mouse Influence"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.mouseInfluence}
+              onChange={value => updateProp('mouseInfluence', value)}
+            />
+            <PreviewSwitch
+              title="Mouse Interaction"
+              isChecked={settings.enableMouseInteraction}
+              onChange={value => updateProp('enableMouseInteraction', value)}
+            />
+            <PreviewSwitch
+              title="Click Pulse"
+              isChecked={settings.clickPulse}
+              onChange={value => updateProp('clickPulse', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
+            />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
+            />
           </Customize>
+
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

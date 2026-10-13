@@ -4,10 +4,18 @@ import tsCode from '@ts-default/Animations/FadeContent/FadeContent.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/FadeContent/FadeContent.tsx?raw';
 
 export const fadeContent = {
+  dependencies: `gsap`,
   usage: `import FadeContent from './FadeContent'
-  
-<FadeContent blur={true} duration={1000} easing="ease-out" initialOpacity={0}>
-  {/* Anything placed inside this container will be fade into view */}
+
+<FadeContent
+  effect="mist"
+  duration={1.8}
+  ease="power2.out"
+  stagger={0.1}
+  threshold={0.1}
+>
+  <h2>Slow light over the bay</h2>
+  <p>Every child fades in turn.</p>
 </FadeContent>`,
   code,
   tailwind,

@@ -5,25 +5,24 @@ import tsCode from '@ts-default/Animations/GradualBlur/GradualBlur.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/GradualBlur/GradualBlur.tsx?raw';
 
 export const gradualBlur = {
-  dependencies: `mathjs`,
   usage: `// Component added by Ansh - github.com/ansh-dhanani
 
 import GradualBlur from './GradualBlur';
 
-<section style={{position: 'relative',height: 500,overflow: 'hidden'}}>
-  <div style={{ height: '100%',overflowY: 'auto',padding: '6rem 2rem' }}>
-    <!-- Content Here - such as an image or text -->
+<section style={{ position: 'relative', height: 500, overflow: 'hidden' }}>
+  <div style={{ height: '100%', overflowY: 'auto' }}>
+    {/* Scrolling content */}
   </div>
 
   <GradualBlur
-    target="parent"
     position="bottom"
     height="6rem"
     strength={2}
-    divCount={5}
-    curve="bezier"
-    exponential={true}
-    opacity={1}
+    layers={8}
+    curve="linear"
+    exponential
+    tint="rgba(18, 15, 23, 0.6)"
+    autoHide
   />
 </section>`,
   code,

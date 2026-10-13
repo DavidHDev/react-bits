@@ -1,276 +1,641 @@
 'use client';
 
-import { useEffect, useRef, memo } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
 import './DotField.css';
 
-const TWO_PI = Math.PI * 2;
+const PIXEL_BUDGET = 9e6;
+const MAX_DOTS = 120000;
+const PATTERNS = { grid: 0, hex: 1, spiral: 2, scatter: 3 };
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
-const DotField = memo(({
+const VERTEX = `#version 300 es
+precision highp float;
+layout(location = 0) in vec4 aDot;
+uniform vec2 uSize;
+uniform float uPixel;
+uniform float uRadius;
+uniform float uCell;
+uniform vec4 uLens;
+uniform vec2 uWarp;
+uniform vec3 uGlow;
+uniform vec3 uFrom;
+uniform vec3 uTo;
+uniform vec4 uGlowColor;
+uniform vec3 uGradient;
+uniform float uTime;
+uniform float uWave;
+uniform float uSparkle;
+uniform float uFocus;
+uniform float uBase;
+uniform float uLight;
+out vec2 vLocal;
+out float vRadius;
+out float vBlur;
+out float vHalo;
+out float vHaloWidth;
+out vec3 vColor;
+out float vAlpha;
+
+vec3 toRgb(vec3 lab) {
+  float l = lab.x + 0.3963377774 * lab.y + 0.2158037573 * lab.z;
+  float m = lab.x - 0.1055613458 * lab.y - 0.0638541728 * lab.z;
+  float s = lab.x - 0.0894841775 * lab.y - 1.291485548 * lab.z;
+  vec3 lms = vec3(l * l * l, m * m * m, s * s * s);
+  vec3 lin = clamp(vec3(
+    4.0767416621 * lms.x - 3.3077115913 * lms.y + 0.2309699292 * lms.z,
+    -1.2684380046 * lms.x + 2.6097574011 * lms.y - 0.3413193965 * lms.z,
+    -0.0041960863 * lms.x - 0.7034186147 * lms.y + 1.707614701 * lms.z
+  ), 0.0, 1.0);
+  return mix(lin * 12.92, 1.055 * pow(lin, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, lin));
+}
+
+vec3 blend(vec3 a, vec3 b, float t) {
+  vec2 ab = mix(a.yz, b.yz, t);
+  float chroma = mix(length(a.yz), length(b.yz), t);
+  float len = length(ab);
+  return vec3(mix(a.x, b.x, t), len > 1e-5 ? ab * (chroma / len) : ab);
+}
+
+vec3 wave(vec2 p, float t) {
+  float ay = p.x * 0.018 + t + 1.1 * sin(p.y * 0.016 - t * 0.4);
+  float ax = p.y * 0.021 + t * 0.7 + 1.3 * sin(p.x * 0.013 + t * 0.3);
+  float spread = cos(ay) * 0.0176 * cos(p.y * 0.016 - t * 0.4) + 0.5 * cos(ax) * 0.0169 * cos(p.x * 0.013 + t * 0.3);
+  return uWave * vec3(0.5 * sin(ax), sin(ay), spread);
+}
+
+void main() {
+  vec2 corner = vec2(float(gl_VertexID & 1), float(gl_VertexID >> 1)) * 2.0 - 1.0;
+  vec2 center = uSize * 0.5;
+  vec3 swell = wave(aDot.xy, uTime);
+  vec2 source = center + (aDot.xy - center) * mix(1.12, 1.0, uFocus) + swell.xy;
+
+  vec2 rel = source - uLens.xy;
+  float x = length(rel) / uLens.z;
+  float y = clamp(1.0 - x * x, 0.0, 1.0);
+  float w = y * y * y;
+  float k = uWarp.x * uLens.w;
+  float grow = 1.0 + k * w;
+  float spread = 1.0 + k * (w - 6.0 * x * x * y * y);
+  float theta = uWarp.y * uLens.w * w;
+  vec2 turn = vec2(cos(theta), sin(theta));
+  vec2 display = uLens.xy + vec2(turn.x * rel.x - turn.y * rel.y, turn.y * rel.x + turn.x * rel.y) * grow;
+  float scale = sqrt(max(grow * spread, 0.02));
+
+  float spark = 0.0;
+  if (uSparkle > 0.0) {
+    float phase = 0.5 + 0.5 * sin(uTime * (0.55 + aDot.w * 0.9) + aDot.z * 6.2831853);
+    spark = pow(phase, 48.0) * step(0.72, fract(aDot.z * 7.31 + aDot.w * 3.17)) * uSparkle;
+  }
+
+  float pool = 0.0;
+  if (uGlow.x > 0.0) {
+    float g = length(display - uLens.xy) / uGlow.x;
+    float q = clamp(1.0 - g * g, 0.0, 1.0);
+    pool = q * q * uGlow.y * uLens.w;
+  }
+
+  float radius = uRadius * (1.0 + 0.7 * spark);
+  float device = radius * scale * uPixel;
+  float fade = 1.0;
+  if (device < 0.75) {
+    fade = device * device / 0.5625;
+    radius = 0.75 / (scale * uPixel);
+  }
+  float blur = (1.0 - uFocus) * uCell * 0.42;
+  float energy = pow(radius / (radius + blur), 1.15);
+  float halo = pool * uGlow.z;
+  float haloWidth = 2.0 + radius * 1.5;
+  float pad = radius + blur * 1.2 + 1.5 / (scale * uPixel) + (halo > 0.0 ? haloWidth * 2.5 : 0.0);
+
+  float t = clamp(dot(aDot.xy - center, uGradient.xy) / uGradient.z + 0.5, 0.0, 1.0);
+  vec3 tone = blend(uFrom, uTo, t);
+  vec3 deep = vec3(tone.x * 0.72, tone.yz * 1.3);
+  vec3 base = toRgb(tone);
+  vec3 lit = toRgb(mix(deep, uGlowColor.xyz, uGlowColor.w));
+  vec3 color = mix(base, lit, clamp(pool, 0.0, 1.0) * 0.8);
+  color = mix(color, uLight > 0.5 ? color * 0.6 : vec3(1.0), spark * 0.55);
+
+  vLocal = corner * pad;
+  vRadius = radius + blur;
+  vBlur = blur * 0.7;
+  vHalo = halo;
+  vHaloWidth = haloWidth;
+  vColor = color;
+  float shade = clamp(1.0 - swell.z * 2.5, 0.4, 1.6);
+  vAlpha = mix(min(uBase * shade, 1.0), 1.0, clamp(max(pool, spark), 0.0, 1.0)) * fade * energy * smoothstep(0.0, 0.25, uFocus + 0.08);
+  vec2 point = display + corner * pad * scale;
+  gl_Position = vec4(point.x / uSize.x * 2.0 - 1.0, 1.0 - point.y / uSize.y * 2.0, 0.0, 1.0);
+}`;
+
+const FRAGMENT = `#version 300 es
+precision highp float;
+uniform float uOpacity;
+in vec2 vLocal;
+in float vRadius;
+in float vBlur;
+in float vHalo;
+in float vHaloWidth;
+in vec3 vColor;
+in float vAlpha;
+out vec4 fragColor;
+
+void main() {
+  float dist = length(vLocal);
+  float d = dist - vRadius;
+  float edge = max(fwidth(dist), 1e-4) + vBlur;
+  float cover = 1.0 - smoothstep(-0.5 * edge, 0.5 * edge, d);
+  float glow = vHalo * exp(-max(d, 0.0) / vHaloWidth) * 0.5;
+  float alpha = min(cover + glow, 1.0) * vAlpha * uOpacity;
+  if (alpha < 0.002) discard;
+  fragColor = vec4(vColor * alpha, alpha);
+}`;
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const parseColor = value => {
+  const text = String(value || '').trim();
+  const hex = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(text);
+  if (hex) {
+    const full = hex[1].length === 3 ? hex[1].replace(/./g, digit => digit + digit) : hex[1];
+    return [0, 2, 4].map(index => parseInt(full.slice(index, index + 2), 16) / 255);
+  }
+  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/i.exec(text);
+  if (rgb) return [rgb[1], rgb[2], rgb[3]].map(channel => clamp(parseFloat(channel) / 255, 0, 1));
+  return null;
+};
+
+const toLinear = channel => (channel <= 0.04045 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4));
+
+const toOklab = color => {
+  const [r, g, b] = color.map(toLinear);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
+  ];
+};
+
+const toInk = (value, fallback, light) => {
+  const lab = toOklab(parseColor(value) || fallback);
+  if (!light) return lab;
+  const hue = (Math.atan2(lab[2], lab[1]) * 180) / Math.PI;
+  const warmth = clamp(1 - Math.abs(hue - 85) / 40, 0, 1);
+  const ceiling = 0.6 + 0.16 * warmth * warmth * (3 - 2 * warmth);
+  if (lab[0] <= ceiling) return lab;
+  const boost = 1 + (lab[0] - ceiling) * 1.6;
+  return [ceiling, lab[1] * boost, lab[2] * boost];
+};
+
+const chroma = value => {
+  const lab = toOklab(parseColor(value) || [1, 1, 1]);
+  return Math.hypot(lab[1], lab[2]);
+};
+
+const hash = (a, b, c) => {
+  let h = (Math.imul(a, 374761393) + Math.imul(b, 668265263) + Math.imul(c, 1274126177)) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  h ^= h >>> 16;
+  return (h >>> 0) / 4294967296;
+};
+
+const lensReach = (radius, strength, twist) => {
+  let peak = 0;
+  for (let index = 1; index < 48; index++) {
+    const x = index / 48;
+    const w = (1 - x * x) ** 3;
+    const sigma = x * radius;
+    const grow = 1 + strength * w;
+    const theta = twist * w;
+    peak = Math.max(peak, Math.hypot(sigma * (grow * Math.cos(theta) - 1), sigma * grow * Math.sin(theta)));
+  }
+  return peak;
+};
+
+const buildDots = (width, height, step, pattern, margin) => {
+  const cx = width / 2;
+  const cy = height / 2;
+  const minX = -margin;
+  const maxX = width + margin;
+  const minY = -margin;
+  const maxY = height + margin;
+  const out = [];
+  const push = (x, y, a, b) => {
+    if (x >= minX && x <= maxX && y >= minY && y <= maxY) out.push(x, y, a, b);
+  };
+  if (pattern === PATTERNS.spiral) {
+    const spacing = step / Math.sqrt(Math.PI);
+    const reach = Math.hypot(width / 2 + margin, height / 2 + margin);
+    const count = Math.ceil((reach / spacing) ** 2);
+    for (let index = 0; index < count; index++) {
+      const r = spacing * Math.sqrt(index + 0.5);
+      const angle = index * GOLDEN_ANGLE;
+      push(cx + r * Math.cos(angle), cy + r * Math.sin(angle), hash(index, 0, 3), hash(index, 0, 4));
+    }
+  } else {
+    const rowStep = pattern === PATTERNS.hex ? (step * Math.sqrt(3)) / 2 : step;
+    const cols = Math.ceil((width / 2 + margin) / step) + 1;
+    const rows = Math.ceil((height / 2 + margin) / rowStep) + 1;
+    for (let row = -rows; row <= rows; row++) {
+      for (let col = -cols; col <= cols; col++) {
+        let x = cx + col * step + (pattern === PATTERNS.hex && row & 1 ? step / 2 : 0);
+        let y = cy + row * rowStep;
+        if (pattern === PATTERNS.scatter) {
+          x += (hash(col, row, 1) - 0.5) * step * 0.8;
+          y += (hash(col, row, 2) - 0.5) * step * 0.8;
+        }
+        push(x, y, hash(col, row, 3), hash(col, row, 4));
+      }
+    }
+  }
+  return new Float32Array(out);
+};
+
+const compile = (gl, type, source) => {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(shader));
+    gl.deleteShader(shader);
+    return null;
+  }
+  return shader;
+};
+
+const link = gl => {
+  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+  const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
+  const program = vertex && fragment ? gl.createProgram() : null;
+  if (!vertex || !fragment || !program) {
+    if (vertex) gl.deleteShader(vertex);
+    if (fragment) gl.deleteShader(fragment);
+    return null;
+  }
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(fragment);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error(gl.getProgramInfoLog(program));
+    gl.deleteProgram(program);
+    return null;
+  }
+  const uniforms = {};
+  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  for (let index = 0; index < count; index++) {
+    const info = gl.getActiveUniform(program, index);
+    if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
+  }
+  return { program, uniforms };
+};
+
+const DotField = ({
   dotRadius = 1.5,
   dotSpacing = 14,
-  cursorRadius = 500,
-  cursorForce = 0.1,
-  bulgeOnly = true,
-  bulgeStrength = 67,
+  pattern = 'grid',
+  gradientFrom = '#5227FF',
+  gradientTo = '#FF9FFC',
+  gradientAngle = 135,
+  cursorRadius = 240,
+  bulgeStrength = 0.6,
+  twist = 0,
+  glowColor = '#ffffff',
   glowRadius = 160,
-  sparkle = false,
+  glowIntensity = 0.8,
+  baseOpacity = 0.55,
   waveAmplitude = 0,
-  gradientFrom = 'rgba(168, 85, 247, 0.35)',
-  gradientTo = 'rgba(180, 151, 207, 0.25)',
-  glowColor = '#120F17',
-  ...rest
+  sparkle = false,
+  speed = 1,
+  interactive = true,
+  holdToZoom = true,
+  intro = true,
+  lightMode = false,
+  opacity = 1,
+  maxDevicePixelRatio = 2,
+  className = '',
+  style
 }) => {
+  const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const svgRef = useRef(null);
-  const glowRef = useRef(null);
-  const dotsRef = useRef([]);
-  const mouseRef = useRef({ x: -9999, y: -9999, prevX: -9999, prevY: -9999, speed: 0 });
-  const rafRef = useRef(null);
-  const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
-  const glowOpacity = useRef(0);
-  const engagement = useRef(0);
-  const propsRef = useRef({});
-  propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo };
-  const rebuildRef = useRef(null);
-  const glowIdRef = useRef(`dot-field-glow-${Math.random().toString(36).slice(2, 9)}`);
+  const wakeRef = useRef(null);
+  const [generation, setGeneration] = useState(0);
+
+  const radius = clamp(dotRadius, 0.25, 12);
+  const step = radius * 2 + clamp(dotSpacing, 1, 200);
+  const angle = (gradientAngle * Math.PI) / 180;
+  const settings = {
+    radius,
+    step,
+    pattern: PATTERNS[pattern] ?? PATTERNS.grid,
+    from: toInk(gradientFrom, [0.32, 0.15, 1], lightMode),
+    to: toInk(gradientTo, [1, 0.62, 0.99], lightMode),
+    glowColor: toInk(glowColor, [1, 1, 1], lightMode),
+    glowWeight: lightMode ? clamp((chroma(glowColor) - 0.02) / 0.06, 0, 1) : 1,
+    direction: [Math.sin(angle), -Math.cos(angle)],
+    lensRadius: clamp(cursorRadius, 20, 2000),
+    strength: clamp(bulgeStrength, -1, 1),
+    twist: (clamp(twist, -360, 360) * Math.PI) / 180,
+    glowRadius: Math.max(0, glowRadius),
+    glowIntensity: clamp(glowIntensity, 0, 2),
+    base: clamp(baseOpacity, 0, 1),
+    wave: clamp(waveAmplitude, 0, 60),
+    sparkle: sparkle ? 1 : 0,
+    speed: Math.max(0, speed),
+    interactive,
+    holdToZoom,
+    intro,
+    light: lightMode,
+    opacity: clamp(opacity, 0, 1),
+    maxRatio: clamp(maxDevicePixelRatio, 0.5, 3)
+  };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
+    wakeRef.current?.();
+  });
+
+  useEffect(() => {
+    const container = containerRef.current;
     const canvas = canvasRef.current;
-    const glowEl = glowRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let resizeTimer;
+    if (!container || !canvas) return;
 
-    function resize() {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(doResize, 100);
-    }
+    const gl = canvas.getContext('webgl2', {
+      alpha: true,
+      premultipliedAlpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      powerPreference: 'high-performance'
+    });
+    const shader = gl ? link(gl) : null;
+    if (!gl || !shader) return;
 
-    function doResize() {
-      const rect = canvas.parentElement.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const vao = gl.createVertexArray();
+    const buffer = gl.createBuffer();
+    gl.bindVertexArray(vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 16, 0);
+    gl.vertexAttribDivisor(0, 1);
+    gl.bindVertexArray(null);
 
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const size = { width: 1, height: 1, ratio: 1 };
+    const pointer = { x: 0, y: 0, inside: false, down: false };
+    const lens = { x: 0, y: 0, vx: 0, vy: 0, presence: 0, zoom: 0, ready: false };
+    let layoutKey = '';
+    let count = 0;
+    let time = Math.random() * 100;
+    let focus = settingsRef.current.intro && !reduced && generation === 0 ? 0 : 1;
+    let raf = 0;
+    let last = 0;
+    let visible = true;
+    let pageVisible = document.visibilityState !== 'hidden';
+    let lost = false;
 
-      sizeRef.current = {
-        w,
-        h,
-        offsetX: rect.left + window.scrollX,
-        offsetY: rect.top + window.scrollY,
-      };
-
-      buildDots(w, h);
-    }
-
-    function buildDots(w, h) {
-      const p = propsRef.current;
-      const step = p.dotRadius + p.dotSpacing;
-      const cols = Math.floor(w / step);
-      const rows = Math.floor(h / step);
-      const padX = (w % step) / 2;
-      const padY = (h % step) / 2;
-      const dots = new Array(rows * cols);
-      let idx = 0;
-
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          const ax = padX + col * step + step / 2;
-          const ay = padY + row * step + step / 2;
-          dots[idx++] = { ax, ay, sx: ax, sy: ay, vx: 0, vy: 0, x: ax, y: ay };
-        }
-      }
-      dotsRef.current = dots;
-    }
-
-    function onMouseMove(e) {
-      const s = sizeRef.current;
-      mouseRef.current.x = e.pageX - s.offsetX;
-      mouseRef.current.y = e.pageY - s.offsetY;
-    }
-
-    function updateMouseSpeed() {
-      const m = mouseRef.current;
-      const dx = m.prevX - m.x;
-      const dy = m.prevY - m.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      m.speed += (dist - m.speed) * 0.5;
-      if (m.speed < 0.001) m.speed = 0;
-      m.prevX = m.x;
-      m.prevY = m.y;
-    }
-
-    const speedInterval = setInterval(updateMouseSpeed, 20);
-
-    let frameCount = 0;
-
-    function tick() {
-      frameCount++;
-      const dots = dotsRef.current;
-      const m = mouseRef.current;
-      const { w, h } = sizeRef.current;
-      const p = propsRef.current;
-      const len = dots.length;
-      const t = frameCount * 0.02;
-
-      const targetEngagement = Math.min(m.speed / 5, 1);
-      engagement.current += (targetEngagement - engagement.current) * 0.06;
-      if (engagement.current < 0.001) engagement.current = 0;
-      const eng = engagement.current;
-
-      glowOpacity.current += (eng - glowOpacity.current) * 0.08;
-
-      if (glowEl) {
-        glowEl.setAttribute('cx', m.x);
-        glowEl.setAttribute('cy', m.y);
-        glowEl.style.opacity = glowOpacity.current;
-      }
-
-      ctx.clearRect(0, 0, w, h);
-
-      const grad = ctx.createLinearGradient(0, 0, w, h);
-      grad.addColorStop(0, p.gradientFrom);
-      grad.addColorStop(1, p.gradientTo);
-      ctx.fillStyle = grad;
-
-      const cr = p.cursorRadius;
-      const crSq = cr * cr;
-      const rad = p.dotRadius / 2;
-      const isBulge = p.bulgeOnly;
-
-      ctx.beginPath();
-
-      for (let i = 0; i < len; i++) {
-        const d = dots[i];
-        const dx = m.x - d.ax;
-        const dy = m.y - d.ay;
-        const distSq = dx * dx + dy * dy;
-
-        if (distSq < crSq && eng > 0.01) {
-          const dist = Math.sqrt(distSq);
-          if (isBulge) {
-            const t = 1 - dist / cr;
-            const push = t * t * p.bulgeStrength * eng;
-            const angle = Math.atan2(dy, dx);
-            d.sx += (d.ax - Math.cos(angle) * push - d.sx) * 0.15;
-            d.sy += (d.ay - Math.sin(angle) * push - d.sy) * 0.15;
-          } else {
-            const angle = Math.atan2(dy, dx);
-            const move = (500 / dist) * (m.speed * p.cursorForce);
-            d.vx += Math.cos(angle) * -move;
-            d.vy += Math.sin(angle) * -move;
-          }
-        } else if (isBulge) {
-          d.sx += (d.ax - d.sx) * 0.1;
-          d.sy += (d.ay - d.sy) * 0.1;
-        }
-
-        if (!isBulge) {
-          d.vx *= 0.9;
-          d.vy *= 0.9;
-          d.x = d.ax + d.vx;
-          d.y = d.ay + d.vy;
-          d.sx += (d.x - d.sx) * 0.1;
-          d.sy += (d.y - d.sy) * 0.1;
-        }
-
-        let drawX = d.sx;
-        let drawY = d.sy;
-        if (p.waveAmplitude > 0) {
-          drawY += Math.sin(d.ax * 0.03 + t) * p.waveAmplitude;
-          drawX += Math.cos(d.ay * 0.03 + t * 0.7) * p.waveAmplitude * 0.5;
-        }
-
-        if (p.sparkle) {
-          const hash = ((i * 2654435761) ^ (frameCount >> 3)) >>> 0;
-          if ((hash % 100) < 3) {
-            ctx.moveTo(drawX + rad * 1.8, drawY);
-            ctx.arc(drawX, drawY, rad * 1.8, 0, TWO_PI);
-          } else {
-            ctx.moveTo(drawX + rad, drawY);
-            ctx.arc(drawX, drawY, rad, 0, TWO_PI);
-          }
-        } else {
-          ctx.moveTo(drawX + rad, drawY);
-          ctx.arc(drawX, drawY, rad, 0, TWO_PI);
-        }
-      }
-
-      ctx.fill();
-
-      rafRef.current = requestAnimationFrame(tick);
-    }
-
-    doResize();
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
-    rafRef.current = requestAnimationFrame(tick);
-
-    rebuildRef.current = () => {
-      const { w, h } = sizeRef.current;
-      if (w > 0 && h > 0) buildDots(w, h);
+    const strengthOf = (s, zoom) => {
+      const base = s.strength >= 0 ? s.strength * 1.2 : s.strength * 0.7;
+      return clamp(base * (1 + zoom * 0.6), -0.85, 1.45);
     };
+
+    const layout = () => {
+      const s = settingsRef.current;
+      const reach = lensReach(s.lensRadius, strengthOf(s, s.holdToZoom ? 1 : 0), s.twist * (s.holdToZoom ? 1.6 : 1));
+      const margin = Math.ceil(reach + s.wave + s.step * 2);
+      const area = (size.width + margin * 2) * (size.height + margin * 2);
+      const step = Math.max(s.step, Math.sqrt(area / MAX_DOTS));
+      const key = `${size.width}|${size.height}|${step}|${s.pattern}|${margin}`;
+      if (key === layoutKey) return;
+      layoutKey = key;
+      const data = buildDots(size.width, size.height, step, s.pattern, margin);
+      count = data.length / 4;
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    };
+
+    const resize = () => {
+      const s = settingsRef.current;
+      const rect = container.getBoundingClientRect();
+      const cssWidth = Math.max(1, rect.width);
+      const cssHeight = Math.max(1, rect.height);
+      const ratio = Math.min(
+        window.devicePixelRatio || 1,
+        s.maxRatio,
+        Math.sqrt(PIXEL_BUDGET / (cssWidth * cssHeight))
+      );
+      const width = Math.max(1, Math.round(cssWidth * ratio));
+      const height = Math.max(1, Math.round(cssHeight * ratio));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      size.width = cssWidth;
+      size.height = cssHeight;
+      size.ratio = width / cssWidth;
+      layout();
+    };
+
+    const frame = now => {
+      raf = 0;
+      if (lost) return;
+      const s = settingsRef.current;
+      const dt = clamp((now - last) / 1000 || 0, 0, 0.05);
+      last = Math.max(last, now);
+      if (!reduced) time += dt * s.speed;
+      if (focus < 1) focus = Math.min(1, focus + dt / 1.8);
+
+      const tracking = s.interactive && pointer.inside;
+      if (tracking && (!lens.ready || lens.presence < 0.01)) {
+        lens.x = pointer.x;
+        lens.y = pointer.y;
+        lens.vx = 0;
+        lens.vy = 0;
+        lens.ready = true;
+      }
+      if (lens.ready) {
+        const omega = 18;
+        const f = 1 + 2 * dt * omega;
+        const oo = omega * omega;
+        const hoo = dt * oo;
+        const hhoo = dt * hoo;
+        const inv = 1 / (f + hhoo);
+        const nx = (f * lens.x + dt * lens.vx + hhoo * pointer.x) * inv;
+        const ny = (f * lens.y + dt * lens.vy + hhoo * pointer.y) * inv;
+        lens.vx = (lens.vx + hoo * (pointer.x - lens.x)) * inv;
+        lens.vy = (lens.vy + hoo * (pointer.y - lens.y)) * inv;
+        lens.x = nx;
+        lens.y = ny;
+      }
+      const presenceTarget = tracking ? 1 : 0;
+      lens.presence += (presenceTarget - lens.presence) * (1 - Math.exp(-dt / (tracking ? 0.18 : 0.4)));
+      const zoomTarget = tracking && pointer.down && s.holdToZoom ? 1 : 0;
+      lens.zoom += (zoomTarget - lens.zoom) * (1 - Math.exp(-dt / 0.14));
+
+      const eased = focus < 0.5 ? 4 * focus * focus * focus : 1 - Math.pow(-2 * focus + 2, 3) / 2;
+      const presence = lens.presence * lens.presence * (3 - 2 * lens.presence);
+      const extent = Math.abs(size.width * s.direction[0]) + Math.abs(size.height * s.direction[1]);
+
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.useProgram(shader.program);
+      gl.bindVertexArray(vao);
+      const u = shader.uniforms;
+      gl.uniform2f(u.uSize, size.width, size.height);
+      gl.uniform1f(u.uPixel, size.ratio);
+      gl.uniform1f(u.uRadius, s.radius);
+      gl.uniform1f(u.uCell, s.step);
+      gl.uniform4f(u.uLens, lens.x, lens.y, s.lensRadius * (1 + lens.zoom * 0.12), presence);
+      gl.uniform2f(u.uWarp, strengthOf(s, lens.zoom), s.twist * (1 + lens.zoom * 0.6));
+      gl.uniform3f(
+        u.uGlow,
+        s.glowRadius * (1 + lens.zoom * 0.1),
+        s.glowIntensity * (1 + lens.zoom * 0.25),
+        s.light ? 0 : 1
+      );
+      gl.uniform3f(u.uFrom, s.from[0], s.from[1], s.from[2]);
+      gl.uniform3f(u.uTo, s.to[0], s.to[1], s.to[2]);
+      gl.uniform4f(u.uGlowColor, s.glowColor[0], s.glowColor[1], s.glowColor[2], s.glowWeight);
+      gl.uniform3f(u.uGradient, s.direction[0], s.direction[1], Math.max(extent, 1));
+      gl.uniform1f(u.uTime, time);
+      gl.uniform1f(u.uWave, s.wave);
+      gl.uniform1f(u.uSparkle, s.sparkle);
+      gl.uniform1f(u.uFocus, eased);
+      gl.uniform1f(u.uBase, s.light ? Math.min(1, s.base * 1.3) : s.base);
+      gl.uniform1f(u.uLight, s.light ? 1 : 0);
+      gl.uniform1f(u.uOpacity, s.opacity);
+      if (count) gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, count);
+
+      const moving =
+        Math.abs(pointer.x - lens.x) + Math.abs(pointer.y - lens.y) > 0.05 || Math.hypot(lens.vx, lens.vy) > 0.5;
+      const settling =
+        Math.abs(presenceTarget - lens.presence) > 0.002 ||
+        Math.abs(zoomTarget - lens.zoom) > 0.002 ||
+        (lens.presence > 0.002 && moving);
+      const animated = !reduced && s.speed > 0 && (s.wave > 0 || s.sparkle > 0);
+      const busy = focus < 1 || settling || animated;
+      if (busy && visible && pageVisible) raf = requestAnimationFrame(frame);
+    };
+
+    const wake = () => {
+      if (raf || lost || !visible || !pageVisible) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+    wakeRef.current = () => {
+      resize();
+      wake();
+    };
+
+    const locate = event => {
+      const rect = container.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+        inside:
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom
+      };
+    };
+
+    const onPointerMove = event => {
+      const spot = locate(event);
+      pointer.x = spot.x;
+      pointer.y = spot.y;
+      pointer.inside = spot.inside;
+      wake();
+    };
+    const onPointerDown = event => {
+      const spot = locate(event);
+      pointer.x = spot.x;
+      pointer.y = spot.y;
+      pointer.inside = spot.inside;
+      pointer.down = spot.inside;
+      wake();
+    };
+    const onLeave = () => {
+      pointer.inside = false;
+      pointer.down = false;
+      wake();
+    };
+    const onPointerUp = event => {
+      pointer.down = false;
+      if (event.pointerType !== 'mouse') pointer.inside = false;
+      wake();
+    };
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
+    window.addEventListener('pointerup', onPointerUp, { passive: true });
+    window.addEventListener('pointercancel', onPointerUp, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onLeave);
+
+    const onLost = event => {
+      event.preventDefault();
+      lost = true;
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+    const onRestored = () => setGeneration(value => value + 1);
+    canvas.addEventListener('webglcontextlost', onLost);
+    canvas.addEventListener('webglcontextrestored', onRestored);
+
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+      wake();
+    });
+    resizeObserver.observe(container);
+
+    const intersection = new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      wake();
+    });
+    intersection.observe(container);
+
+    const onVisibility = () => {
+      pageVisible = document.visibilityState !== 'hidden';
+      wake();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    resize();
+    wake();
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
-      clearInterval(speedInterval);
-      clearTimeout(resizeTimer);
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', onMouseMove);
+      cancelAnimationFrame(raf);
+      wakeRef.current = null;
+      resizeObserver.disconnect();
+      intersection.disconnect();
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+      document.documentElement.removeEventListener('pointerleave', onLeave);
+      document.removeEventListener('visibilitychange', onVisibility);
+      canvas.removeEventListener('webglcontextlost', onLost);
+      canvas.removeEventListener('webglcontextrestored', onRestored);
+      if (!gl.isContextLost()) {
+        gl.deleteBuffer(buffer);
+        gl.deleteVertexArray(vao);
+        gl.deleteProgram(shader.program);
+      }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    rebuildRef.current?.();
-  }, [dotRadius, dotSpacing]);
+  }, [generation]);
 
   return (
-    <div className="dot-field-container" {...rest}>
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-        }}
-      />
-      <svg
-        ref={svgRef}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
-      >
-        <defs>
-          <radialGradient id={glowIdRef.current}>
-            <stop offset="0%" stopColor={glowColor} />
-            <stop offset="100%" stopColor="transparent" />
-          </radialGradient>
-        </defs>
-        <circle
-          ref={glowRef}
-          cx="-9999"
-          cy="-9999"
-          r={glowRadius}
-          fill={`url(#${glowIdRef.current})`}
-          style={{ opacity: 0, willChange: 'opacity' }}
-        />
-      </svg>
+    <div ref={containerRef} className={`dot-field${className ? ` ${className}` : ''}`} style={style}>
+      <canvas ref={canvasRef} className="dot-field__canvas" aria-hidden="true" />
     </div>
   );
-});
-
-DotField.displayName = 'DotField';
+};
 
 export default DotField;

@@ -438,33 +438,52 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Topography/Topography.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/topography"',
     props: [
-      { name: 'lowColor', type: 'color', default: '#5227FF', label: 'Low Color' },
-      { name: 'midColor', type: 'color', default: '#FF9FFC', label: 'Mid Color' },
-      { name: 'highColor', type: 'color', default: '#FFFFFF', label: 'High Color' },
-      { name: 'speed', type: 'number', default: 0.35, min: 0, max: 2, step: 0.05, label: 'Speed' },
-      { name: 'morphAmount', type: 'number', default: 3.0, min: 0.5, max: 6, step: 0.1, label: 'Morph Amount' },
-      { name: 'morphSpeed', type: 'number', default: 0.05, min: 0.01, max: 0.2, step: 0.01, label: 'Morph Speed' },
-      { name: 'bands', type: 'number', default: 2.0, min: 1, max: 12, step: 0.5, label: 'Bands' },
-      { name: 'thickness', type: 'number', default: 0.01, min: 0.01, max: 0.25, step: 0.01, label: 'Thickness' },
-      { name: 'scale', type: 'number', default: 1.0, min: 0.3, max: 3, step: 0.05, label: 'Scale' },
-      { name: 'pixelSize', type: 'number', default: 1.0, min: 1, max: 40, step: 1, label: 'Pixel Size' },
-      { name: 'glow', type: 'number', default: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Glow' },
+      { name: 'color', type: 'color', default: '#4f7cff', label: 'Color' },
+      { name: 'lineCount', type: 'number', default: 22, min: 6, max: 60, step: 1, label: 'Lines' },
+      { name: 'lineWidth', type: 'number', default: 1.2, min: 0.5, max: 3, step: 0.1, label: 'Line Width' },
+      { name: 'majorLines', type: 'boolean', default: true, label: 'Major Lines' },
+      { name: 'elevation', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Elevation' },
+      { name: 'foreground', type: 'number', default: 0.2, min: 0, max: 1, step: 0.01, label: 'Foreground' },
+      { name: 'scale', type: 'number', default: 1, min: 0.4, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'detail', type: 'number', default: 0.35, min: 0, max: 1, step: 0.01, label: 'Detail' },
+      { name: 'tilt', type: 'number', default: 32, min: 15, max: 90, step: 1, label: 'Tilt' },
+      { name: 'speed', type: 'number', default: 0.25, min: 0, max: 1.5, step: 0.01, label: 'Speed' },
       {
-        name: 'colorMode',
+        name: 'direction',
         type: 'select',
-        default: 'elevation',
-        options: ['elevation', 'uniform', 'alternating'],
-        label: 'Color Mode'
+        default: 'forward',
+        options: ['forward', 'backward', 'left', 'right'],
+        label: 'Direction'
       },
-      { name: 'contrast', type: 'number', default: 3.0, min: 0.2, max: 3, step: 0.05, label: 'Contrast' },
-      { name: 'brightness', type: 'number', default: 1.0, min: 0, max: 2, step: 0.05, label: 'Brightness' },
-      { name: 'fillBands', type: 'boolean', default: false, label: 'Fill Bands' },
-      { name: 'opacity', type: 'number', default: 1.0, min: 0, max: 1, step: 0.05, label: 'Opacity' },
-      { name: 'grain', type: 'boolean', default: true, label: 'Grain' },
-      { name: 'grainIntensity', type: 'number', default: 0.05, min: 0, max: 0.3, step: 0.01, label: 'Grain Intensity' },
-      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Cursor Elevation' },
-      { name: 'mouseRadius', type: 'number', default: 0.3, min: 0.05, max: 1, step: 0.01, label: 'Cursor Radius' },
-      { name: 'mouseStrength', type: 'number', default: 0.4, min: 0, max: 1.5, step: 0.05, label: 'Cursor Strength' }
+      { name: 'morph', type: 'number', default: 0.2, min: 0, max: 1, step: 0.01, label: 'Morph' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 1.5, step: 0.05, label: 'Glow' },
+      { name: 'depthOfField', type: 'number', default: 0.4, min: 0, max: 1, step: 0.01, label: 'Depth of Field' },
+      { name: 'fog', type: 'number', default: 0.35, min: 0, max: 1, step: 0.01, label: 'Fog' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      {
+        name: 'hoverEffect',
+        type: 'select',
+        default: 'lift',
+        options: ['lift', 'trace', 'light'],
+        label: 'Hover Effect'
+      },
+      { name: 'mouseRadius', type: 'number', default: 1, min: 0.3, max: 2.5, step: 0.05, label: 'Mouse Radius' },
+      { name: 'mouseStrength', type: 'number', default: 0.6, min: 0, max: 1.5, step: 0.05, label: 'Mouse Strength' },
+      { name: 'trail', type: 'number', default: 0.3, min: 0, max: 1, step: 0.01, label: 'Trail' },
+      { name: 'parallax', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Parallax' },
+      {
+        name: 'clickEffect',
+        type: 'select',
+        default: 'pulse',
+        options: ['pulse', 'peak', 'none'],
+        label: 'Click Effect'
+      },
+      { name: 'markers', type: 'select', default: 'none', options: ['none', 'plus', 'dots'], label: 'Markers' },
+      { name: 'glitch', type: 'number', default: 0, min: 0, max: 1, step: 0.01, label: 'Glitch' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -583,38 +602,66 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Scanner/Scanner.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/scanner"',
     props: [
-      { name: 'color1', type: 'color', default: '#5227FF', label: 'Color 1' },
-      { name: 'color2', type: 'color', default: '#FF9FFC', label: 'Color 2' },
-      { name: 'color3', type: 'color', default: '#FFFFFF', label: 'Color 3' },
-      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Speed' },
-      { name: 'sweepSpeed', type: 'number', default: 0.25, min: 0, max: 2, step: 0.05, label: 'Sweep Speed' },
-      { name: 'sweepWidth', type: 'number', default: 1.6, min: 0.2, max: 4, step: 0.05, label: 'Sweep Width' },
-      { name: 'sweepFalloff', type: 'number', default: 6.0, min: 0.5, max: 8, step: 0.1, label: 'Sweep Falloff' },
-      { name: 'scale', type: 'number', default: 1.5, min: 0.4, max: 3, step: 0.05, label: 'Scale' },
-      { name: 'frequency', type: 'number', default: 2.0, min: 0.2, max: 4, step: 0.05, label: 'Frequency' },
-      { name: 'ripple', type: 'number', default: 0.22, min: 0, max: 1.5, step: 0.05, label: 'Ripple' },
-      { name: 'bandDensity', type: 'number', default: 11.0, min: 1, max: 14, step: 0.5, label: 'Band Density' },
-      { name: 'lineSharpness', type: 'number', default: 5.5, min: 0.5, max: 6, step: 0.1, label: 'Line Sharpness' },
-      { name: 'glow', type: 'number', default: 0.22, min: 0, max: 1, step: 0.02, label: 'Glow' },
+      { name: 'color1', type: 'color', default: '#5227FF', label: 'Lines' },
+      { name: 'color2', type: 'color', default: '#FF9FFC', label: 'Lit Lines' },
+      { name: 'color3', type: 'color', default: '#FFFFFF', label: 'Scan Head' },
       {
         name: 'scanDirection',
         type: 'select',
         default: 'vertical',
         options: ['vertical', 'horizontal', 'diagonal'],
-        label: 'Scan Direction'
+        label: 'Direction'
       },
-      { name: 'colorSpread', type: 'number', default: 0.7, min: 0, max: 1, step: 0.01, label: 'Color Spread' },
-      { name: 'brightness', type: 'number', default: 1.0, min: 0, max: 2, step: 0.05, label: 'Brightness' },
-      { name: 'contrast', type: 'number', default: 1.15, min: 0.4, max: 3, step: 0.05, label: 'Contrast' },
-      { name: 'softness', type: 'number', default: 1.4, min: 0, max: 5, step: 0.05, label: 'Softness' },
-      { name: 'vignette', type: 'number', default: 0.45, min: 0, max: 1, step: 0.01, label: 'Vignette' },
-      { name: 'scanline', type: 'boolean', default: true, label: 'Scanline' },
+      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Speed' },
+      { name: 'sweepSpeed', type: 'number', default: 0.25, min: 0, max: 1.5, step: 0.01, label: 'Sweep Speed' },
+      { name: 'sweepWidth', type: 'number', default: 1.6, min: 0.4, max: 4, step: 0.05, label: 'Sweep Width' },
+      { name: 'trail', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Trail' },
+      { name: 'scale', type: 'number', default: 1.5, min: 0.5, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'frequency', type: 'number', default: 2, min: 0.2, max: 4, step: 0.05, label: 'Frequency' },
+      { name: 'ripple', type: 'number', default: 0.22, min: 0, max: 1, step: 0.01, label: 'Ripple' },
+      { name: 'bandDensity', type: 'number', default: 11, min: 3, max: 40, step: 0.5, label: 'Band Density' },
+      { name: 'lineWidth', type: 'number', default: 1.2, min: 0.4, max: 4, step: 0.1, label: 'Line Width' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 1.5, step: 0.05, label: 'Glow' },
+      { name: 'colorSpread', type: 'number', default: 0.7, min: 0, max: 1, step: 0.05, label: 'Color Spread' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'vignette', type: 'number', default: 0.3, min: 0, max: 1, step: 0.05, label: 'Vignette' },
+      { name: 'grainIntensity', type: 'number', default: 0.04, min: 0, max: 0.2, step: 0.01, label: 'Grain' },
+      {
+        name: 'scanlineIntensity',
+        type: 'number',
+        default: 0.5,
+        min: 0,
+        max: 1,
+        step: 0.05,
+        label: 'Scanlines'
+      },
+      { name: 'mouseRadius', type: 'number', default: 0.5, min: 0.1, max: 1.5, step: 0.05, label: 'Mouse Radius' },
+      { name: 'mouseStrength', type: 'number', default: 0.7, min: 0, max: 1.5, step: 0.05, label: 'Mouse Strength' },
+      {
+        name: 'mouseMode',
+        type: 'select',
+        default: 'repel',
+        options: [
+          { value: 'repel', label: 'Repel' },
+          { value: 'attract', label: 'Attract' }
+        ],
+        label: 'Mouse Mode'
+      },
+      {
+        name: 'clickEffect',
+        type: 'select',
+        default: 'ping',
+        options: [
+          { value: 'ping', label: 'Ping' },
+          { value: 'none', label: 'None' }
+        ],
+        label: 'Click Effect'
+      },
+      { name: 'reverse', type: 'boolean', default: false, label: 'Reverse' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
       { name: 'grain', type: 'boolean', default: true, label: 'Grain' },
-      { name: 'grainIntensity', type: 'number', default: 0.05, min: 0, max: 0.3, step: 0.01, label: 'Grain Intensity' },
-      { name: 'opacity', type: 'number', default: 1.0, min: 0, max: 1, step: 0.01, label: 'Opacity' },
-      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Cursor Focus' },
-      { name: 'mouseRadius', type: 'number', default: 0.5, min: 0.1, max: 1.5, step: 0.01, label: 'Cursor Radius' },
-      { name: 'mouseStrength', type: 'number', default: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Cursor Strength' }
+      { name: 'scanline', type: 'boolean', default: true, label: 'Scanline' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -973,19 +1020,54 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Ballpit/Ballpit.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/ballpit"',
     props: [
-      { name: 'count', type: 'number', default: 100, min: 10, max: 500, step: 10, label: 'Ball Count' },
-      { name: 'gravity', type: 'number', default: 0.5, min: 0, max: 2, step: 0.1, label: 'Gravity' },
-      { name: 'friction', type: 'number', default: 0.9975, min: 0.9, max: 1, step: 0.001, label: 'Friction' },
-      { name: 'wallBounce', type: 'number', default: 0.95, min: 0.5, max: 1, step: 0.01, label: 'Wall Bounce' },
-      { name: 'followCursor', type: 'boolean', default: true, label: 'Follow Cursor' },
       {
         name: 'colors',
         type: 'colorArray',
-        default: ['#5227FF', '#7cff67', '#ff6b6b'],
+        default: ['#ffffff'],
         label: 'Colors',
         minItems: 1,
         maxItems: 6
-      }
+      },
+      {
+        name: 'material',
+        type: 'select',
+        default: 'satin',
+        label: 'Material',
+        options: [
+          { value: 'satin', label: 'Satin' },
+          { value: 'matte', label: 'Matte' },
+          { value: 'gloss', label: 'Gloss' },
+          { value: 'frosted', label: 'Frosted' },
+          { value: 'metal', label: 'Metal' }
+        ]
+      },
+      { name: 'count', type: 'number', default: 200, min: 10, max: 1000, step: 10, label: 'Count' },
+      { name: 'minSize', type: 'number', default: 0.5, min: 0.1, max: 2, step: 0.05, label: 'Min Size' },
+      { name: 'maxSize', type: 'number', default: 1, min: 0.1, max: 2, step: 0.05, label: 'Max Size' },
+      { name: 'gravity', type: 'number', default: 0, min: 0, max: 2, step: 0.01, label: 'Gravity' },
+      { name: 'friction', type: 'number', default: 0.9975, min: 0.95, max: 1, step: 0.0005, label: 'Friction' },
+      { name: 'wallBounce', type: 'number', default: 0.95, min: 0, max: 1, step: 0.05, label: 'Wall Bounce' },
+      { name: 'bounce', type: 'number', default: 0.85, min: 0, max: 1, step: 0.05, label: 'Bounce' },
+      { name: 'depth', type: 'number', default: 2, min: 0, max: 6, step: 0.25, label: 'Depth' },
+      { name: 'drift', type: 'number', default: 0.4, min: 0, max: 2, step: 0.05, label: 'Drift' },
+      { name: 'cursorSize', type: 'number', default: 1, min: 0.2, max: 3, step: 0.1, label: 'Cursor Size' },
+      { name: 'lightColor', type: 'color', default: '#ffffff', label: 'Light Color' },
+      { name: 'lightIntensity', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Light Intensity' },
+      { name: 'exposure', type: 'number', default: 1, min: 0.3, max: 2, step: 0.05, label: 'Exposure' },
+      { name: 'shadows', type: 'number', default: 0.6, min: 0, max: 1, step: 0.05, label: 'Shadows' },
+      {
+        name: 'clickEffect',
+        type: 'select',
+        default: 'burst',
+        label: 'Click Effect',
+        options: [
+          { value: 'burst', label: 'Burst' },
+          { value: 'none', label: 'None' }
+        ]
+      },
+      { name: 'followCursor', type: 'boolean', default: true, label: 'Follow Cursor' },
+      { name: 'grab', type: 'boolean', default: true, label: 'Grab' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' }
     ]
   },
   {
@@ -1260,15 +1342,24 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/Balatro/Balatro.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/balatro"',
     props: [
-      { name: 'spinRotation', type: 'number', default: -2.0, min: -10, max: 10, step: 0.5, label: 'Spin Rotation' },
-      { name: 'spinSpeed', type: 'number', default: 7.0, min: 0, max: 20, step: 0.5, label: 'Spin Speed' },
       { name: 'color1', type: 'color', default: '#DE443B', label: 'Color 1' },
       { name: 'color2', type: 'color', default: '#006BB4', label: 'Color 2' },
       { name: 'color3', type: 'color', default: '#162325', label: 'Color 3' },
-      { name: 'contrast', type: 'number', default: 3.5, min: 1, max: 10, step: 0.5, label: 'Contrast' },
-      { name: 'lighting', type: 'number', default: 0.4, min: 0, max: 1, step: 0.05, label: 'Lighting' },
-      { name: 'spinAmount', type: 'number', default: 0.25, min: 0, max: 1, step: 0.05, label: 'Spin Amount' },
-      { name: 'pixelFilter', type: 'number', default: 700, min: 100, max: 2000, step: 50, label: 'Pixel Filter' }
+      { name: 'contrast', type: 'number', default: 3.5, min: 1, max: 8, step: 0.1, label: 'Contrast' },
+      { name: 'lighting', type: 'number', default: 0.4, min: 0, max: 1.2, step: 0.05, label: 'Lighting' },
+      { name: 'swirl', type: 'number', default: 0.25, min: 0, max: 1, step: 0.01, label: 'Swirl' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'rotationSpeed', type: 'number', default: 0, min: -5, max: 5, step: 0.1, label: 'Rotation Speed' },
+      { name: 'scale', type: 'number', default: 1, min: 0.4, max: 3, step: 0.05, label: 'Scale' },
+      { name: 'detail', type: 'number', default: 5, min: 1, max: 8, step: 1, label: 'Detail' },
+      { name: 'pixelSize', type: 'number', default: 1.5, min: 0, max: 12, step: 0.5, label: 'Pixel Size' },
+      { name: 'crt', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'CRT' },
+      { name: 'mouseStrength', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Mouse Strength' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'clickSwirl', type: 'boolean', default: true, label: 'Click Swirl' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -1526,16 +1617,28 @@ export const BACKGROUNDS = [
         label: 'Rays Origin'
       },
       { name: 'raysColor', type: 'color', default: '#ffffff', label: 'Rays Color' },
-      { name: 'raysSpeed', type: 'number', default: 1, min: 0, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'lightSpread', type: 'number', default: 1, min: 0.1, max: 3, step: 0.1, label: 'Light Spread' },
-      { name: 'rayLength', type: 'number', default: 2, min: 0.5, max: 5, step: 0.1, label: 'Ray Length' },
-      { name: 'pulsating', type: 'boolean', default: false, label: 'Pulsating' },
-      { name: 'fadeDistance', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Fade Distance' },
-      { name: 'saturation', type: 'number', default: 1, min: 0, max: 2, step: 0.1, label: 'Saturation' },
-      { name: 'followMouse', type: 'boolean', default: true, label: 'Follow Mouse' },
+      { name: 'raysSpeed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'lightSpread', type: 'number', default: 0.5, min: 0.1, max: 2, step: 0.01, label: 'Light Spread' },
+      { name: 'rayLength', type: 'number', default: 3, min: 0.5, max: 4, step: 0.1, label: 'Ray Length' },
+      { name: 'rayDensity', type: 'number', default: 1, min: 0.3, max: 4, step: 0.1, label: 'Ray Density' },
+      { name: 'tilt', type: 'number', default: 0, min: -60, max: 60, step: 1, label: 'Tilt' },
+      { name: 'raySharpness', type: 'number', default: 0.35, min: 0, max: 1, step: 0.05, label: 'Ray Sharpness' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'haze', type: 'number', default: 0.25, min: 0, max: 1, step: 0.05, label: 'Haze' },
+      { name: 'atmosphere', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Atmosphere' },
+      { name: 'intensity', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Intensity' },
+      { name: 'fadeDistance', type: 'number', default: 1, min: 0.3, max: 2, step: 0.05, label: 'Fade Distance' },
+      { name: 'saturation', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Saturation' },
       { name: 'mouseInfluence', type: 'number', default: 0.1, min: 0, max: 1, step: 0.05, label: 'Mouse Influence' },
-      { name: 'noiseAmount', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Noise Amount' },
-      { name: 'distortion', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Distortion' }
+      { name: 'noiseAmount', type: 'number', default: 0, min: 0, max: 0.5, step: 0.01, label: 'Noise Amount' },
+      { name: 'distortion', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Distortion' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
+      { name: 'pulsating', type: 'boolean', default: false, label: 'Pulsating' },
+      { name: 'followMouse', type: 'boolean', default: true, label: 'Follow Mouse' },
+      { name: 'cursorShadow', type: 'boolean', default: true, label: 'Cursor Shadow' },
+      { name: 'clickPulse', type: 'boolean', default: true, label: 'Click Pulse' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -1857,40 +1960,69 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/PixelBlast/PixelBlast.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/pixel-blast"',
     props: [
+      { name: 'color', type: 'color', default: '#B497CF', label: 'Color' },
+      { name: 'accentColor', type: 'color', default: '#B497CF', label: 'Accent Color' },
       {
         name: 'variant',
         type: 'select',
         default: 'square',
-        options: ['square', 'circle', 'triangle', 'diamond'],
+        options: ['square', 'circle', 'triangle', 'diamond', 'cross', 'ring'],
         label: 'Variant'
       },
-      { name: 'pixelSize', type: 'number', default: 3, min: 1, max: 10, step: 1, label: 'Pixel Size' },
-      { name: 'color', type: 'color', default: '#B497CF', label: 'Color' },
-      { name: 'patternScale', type: 'number', default: 2, min: 0.5, max: 5, step: 0.5, label: 'Pattern Scale' },
-      { name: 'patternDensity', type: 'number', default: 1, min: 0.1, max: 2, step: 0.1, label: 'Pattern Density' },
-      { name: 'enableRipples', type: 'boolean', default: true, label: 'Enable Ripples' },
-      { name: 'rippleSpeed', type: 'number', default: 0.3, min: 0.05, max: 1, step: 0.05, label: 'Ripple Speed' },
+      {
+        name: 'hoverEffect',
+        type: 'select',
+        default: 'reveal',
+        options: ['reveal', 'grow', 'none'],
+        label: 'Hover Effect'
+      },
+      { name: 'pixelSize', type: 'number', default: 3, min: 1, max: 12, step: 0.5, label: 'Pixel Size' },
+      { name: 'patternScale', type: 'number', default: 2, min: 0.5, max: 5, step: 0.1, label: 'Pattern Scale' },
+      {
+        name: 'patternDensity',
+        type: 'number',
+        default: 1,
+        min: 0.5,
+        max: 2,
+        step: 0.01,
+        label: 'Pattern Density'
+      },
+      { name: 'pixelSizeJitter', type: 'number', default: 0, min: 0, max: 1, step: 0.01, label: 'Pixel Jitter' },
+      { name: 'softness', type: 'number', default: 0.6, min: 0, max: 1, step: 0.01, label: 'Softness' },
+      { name: 'smoothing', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Smoothing' },
+      { name: 'glow', type: 'number', default: 0.4, min: 0, max: 1.5, step: 0.01, label: 'Glow' },
+      { name: 'twinkle', type: 'number', default: 0.25, min: 0, max: 1, step: 0.01, label: 'Twinkle' },
+      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.05, label: 'Speed' },
+      { name: 'drift', type: 'number', default: 0.2, min: 0, max: 2, step: 0.05, label: 'Drift' },
+      { name: 'driftAngle', type: 'number', default: 30, min: 0, max: 360, step: 1, label: 'Drift Angle' },
+      { name: 'hoverRadius', type: 'number', default: 140, min: 40, max: 400, step: 10, label: 'Hover Radius' },
+      { name: 'rippleSpeed', type: 'number', default: 0.3, min: 0.05, max: 1, step: 0.01, label: 'Ripple Speed' },
       {
         name: 'rippleThickness',
         type: 'number',
         default: 0.1,
-        min: 0.01,
-        max: 0.5,
-        step: 0.02,
+        min: 0.02,
+        max: 0.4,
+        step: 0.01,
         label: 'Ripple Thickness'
       },
       {
         name: 'rippleIntensityScale',
         type: 'number',
         default: 1,
-        min: 0.1,
+        min: 0.2,
         max: 3,
-        step: 0.1,
+        step: 0.05,
         label: 'Ripple Intensity'
       },
-      { name: 'speed', type: 'number', default: 0.5, min: 0, max: 2, step: 0.1, label: 'Speed' },
+      { name: 'autoRipple', type: 'number', default: 0, min: 0, max: 6, step: 0.1, label: 'Auto Ripple' },
+      { name: 'tiltX', type: 'number', default: 0, min: -70, max: 70, step: 1, label: 'Tilt X' },
+      { name: 'tiltY', type: 'number', default: 0, min: -70, max: 70, step: 1, label: 'Tilt Y' },
+      { name: 'edgeFade', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Edge Fade' },
+      { name: 'enableRipples', type: 'boolean', default: true, label: 'Ripples' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
       { name: 'transparent', type: 'boolean', default: true, label: 'Transparent' },
-      { name: 'edgeFade', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Edge Fade' }
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -2110,27 +2242,43 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/LineWaves/LineWaves.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/line-waves"',
     props: [
-      { name: 'speed', type: 'number', default: 0.3, min: 0.1, max: 3, step: 0.1, label: 'Speed' },
-      { name: 'innerLineCount', type: 'number', default: 32, min: 2, max: 40, step: 1, label: 'Inner Line Count' },
-      { name: 'outerLineCount', type: 'number', default: 36, min: 2, max: 40, step: 1, label: 'Outer Line Count' },
-      { name: 'warpIntensity', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.1, label: 'Warp Intensity' },
-      { name: 'rotation', type: 'number', default: -45, min: -180, max: 180, step: 1, label: 'Rotation' },
-      { name: 'edgeFadeWidth', type: 'number', default: 0.0, min: 0, max: 1, step: 0.05, label: 'Edge Fade Width' },
+      { name: 'color1', type: 'color', default: '#ffffff', label: 'Color 1' },
+      { name: 'color2', type: 'color', default: '#ffffff', label: 'Color 2' },
+      { name: 'color3', type: 'color', default: '#ffffff', label: 'Color 3' },
       {
         name: 'colorCycleSpeed',
         type: 'number',
-        default: 1.0,
-        min: 0.1,
+        default: 1,
+        min: 0,
         max: 5,
         step: 0.1,
         label: 'Color Cycle Speed'
       },
-      { name: 'brightness', type: 'number', default: 0.2, min: 0.1, max: 3, step: 0.1, label: 'Brightness' },
-      { name: 'color1', type: 'color', default: '#ffffff', label: 'Color 1' },
-      { name: 'color2', type: 'color', default: '#ffffff', label: 'Color 2' },
-      { name: 'color3', type: 'color', default: '#ffffff', label: 'Color 3' },
+      { name: 'speed', type: 'number', default: 0.3, min: 0, max: 1.5, step: 0.01, label: 'Speed' },
+      { name: 'lineCount', type: 'number', default: 72, min: 12, max: 160, step: 1, label: 'Line Count' },
+      { name: 'lineWidth', type: 'number', default: 1.3, min: 0.5, max: 4, step: 0.05, label: 'Line Width' },
+      { name: 'glow', type: 'number', default: 0.6, min: 0, max: 2, step: 0.05, label: 'Glow' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'highlight', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Highlight' },
+      {
+        name: 'highlightWidth',
+        type: 'number',
+        default: 1,
+        min: 0.4,
+        max: 3,
+        step: 0.05,
+        label: 'Highlight Width'
+      },
+      { name: 'warpIntensity', type: 'number', default: 1, min: 0, max: 2.5, step: 0.05, label: 'Warp Intensity' },
+      { name: 'warpScale', type: 'number', default: 1, min: 0.4, max: 2.5, step: 0.05, label: 'Warp Scale' },
+      { name: 'rotation', type: 'number', default: -33, min: -180, max: 180, step: 1, label: 'Rotation' },
+      { name: 'edgeFade', type: 'number', default: 0, min: 0, max: 1, step: 0.01, label: 'Edge Fade' },
+      { name: 'mouseInfluence', type: 'number', default: 2, min: 0, max: 3, step: 0.05, label: 'Mouse Influence' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
       { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
-      { name: 'mouseInfluence', type: 'number', default: 2.0, min: 0.1, max: 2, step: 0.1, label: 'Mouse Influence' }
+      { name: 'clickRipple', type: 'boolean', default: true, label: 'Click Ripple' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -2188,41 +2336,49 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/SoftAurora/SoftAurora.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/soft-aurora"',
     props: [
-      { name: 'speed', type: 'number', default: 0.6, min: 0.1, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'scale', type: 'number', default: 1.5, min: 0.1, max: 3, step: 0.1, label: 'Scale' },
-      { name: 'brightness', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.1, label: 'Brightness' },
       { name: 'color1', type: 'color', default: '#f7f7f7', label: 'Color 1' },
       { name: 'color2', type: 'color', default: '#e100ff', label: 'Color 2' },
+      { name: 'spectrum', type: 'number', default: 1, min: 0, max: 1, step: 0.05, label: 'Spectrum' },
+      { name: 'speed', type: 'number', default: 0.6, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'colorSpeed', type: 'number', default: 1.0, min: 0, max: 5, step: 0.1, label: 'Color Speed' },
+      { name: 'scale', type: 'number', default: 1.5, min: 0.1, max: 3, step: 0.1, label: 'Scale' },
+      { name: 'brightness', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.05, label: 'Brightness' },
       { name: 'noiseFrequency', type: 'number', default: 2.5, min: 0.5, max: 10, step: 0.5, label: 'Noise Frequency' },
-      { name: 'noiseAmplitude', type: 'number', default: 1.0, min: 0.5, max: 10, step: 0.5, label: 'Noise Amplitude' },
-      { name: 'bandHeight', type: 'number', default: 0.5, min: 0, max: 1, step: 0.05, label: 'Band Height' },
-      { name: 'bandSpread', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.1, label: 'Band Spread' },
-      { name: 'octaveDecay', type: 'number', default: 0.1, min: 0.01, max: 0.5, step: 0.01, label: 'Octave Decay' },
+      { name: 'noiseAmplitude', type: 'number', default: 1.0, min: 0, max: 5, step: 0.1, label: 'Noise Amplitude' },
+      { name: 'bandHeight', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Band Height' },
+      { name: 'bandSpread', type: 'number', default: 1.0, min: 0.1, max: 3, step: 0.05, label: 'Band Spread' },
+      { name: 'tilt', type: 'number', default: 0, min: -45, max: 45, step: 1, label: 'Tilt' },
+      { name: 'octaveDecay', type: 'number', default: 0.1, min: 0, max: 0.5, step: 0.01, label: 'Octave Decay' },
       { name: 'layerOffset', type: 'number', default: 0, min: 0, max: 1, step: 0.05, label: 'Layer Offset' },
-      { name: 'colorSpeed', type: 'number', default: 1.0, min: 0.1, max: 5, step: 0.1, label: 'Color Speed' },
+      { name: 'mouseInfluence', type: 'number', default: 0.25, min: 0, max: 1, step: 0.05, label: 'Mouse Influence' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
       { name: 'enableMouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
-      { name: 'mouseInfluence', type: 'number', default: 0.25, min: 0.1, max: 1, step: 0.05, label: 'Mouse Influence' }
+      { name: 'clickPulse', type: 'boolean', default: true, label: 'Click Pulse' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
     id: 'antigravity',
     label: 'Antigravity',
-    component: () => import('../../../content/Animations/Antigravity/Antigravity.jsx'),
-    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/animations/antigravity"',
+    component: () => import('../../../content/Backgrounds/Antigravity/Antigravity.jsx'),
+    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/antigravity"',
     props: [
-      { name: 'count', type: 'number', default: 300, min: 50, max: 1000, step: 10, label: 'Particle Count' },
-      { name: 'magnetRadius', type: 'number', default: 10, min: 1, max: 30, step: 1, label: 'Magnet Radius' },
-      { name: 'ringRadius', type: 'number', default: 10, min: 1, max: 30, step: 1, label: 'Ring Radius' },
-      { name: 'waveSpeed', type: 'number', default: 0.4, min: 0, max: 2, step: 0.1, label: 'Wave Speed' },
-      { name: 'waveAmplitude', type: 'number', default: 1, min: 0, max: 5, step: 0.1, label: 'Wave Amplitude' },
-      { name: 'particleSize', type: 'number', default: 2, min: 0.5, max: 10, step: 0.5, label: 'Particle Size' },
-      { name: 'lerpSpeed', type: 'number', default: 0.1, min: 0.01, max: 0.5, step: 0.01, label: 'Lerp Speed' },
-      { name: 'color', type: 'color', default: '#FF9FFC', label: 'Color' },
-      { name: 'autoAnimate', type: 'boolean', default: false, label: 'Auto Animate' },
-      { name: 'particleVariance', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Particle Variance' },
-      { name: 'rotationSpeed', type: 'number', default: 0, min: 0, max: 2, step: 0.1, label: 'Rotation Speed' },
-      { name: 'depthFactor', type: 'number', default: 1, min: 0, max: 3, step: 0.1, label: 'Depth Factor' },
-      { name: 'pulseSpeed', type: 'number', default: 3, min: 0, max: 10, step: 0.5, label: 'Pulse Speed' },
+      {
+        name: 'colors',
+        type: 'colorArray',
+        default: ['#5227FF', '#FF9FFC', '#B497CF'],
+        label: 'Colors',
+        minItems: 1,
+        maxItems: 6
+      },
+      {
+        name: 'colorMode',
+        type: 'select',
+        default: 'conic',
+        options: ['conic', 'radial', 'random'],
+        label: 'Color Mode'
+      },
       {
         name: 'particleShape',
         type: 'select',
@@ -2230,7 +2386,34 @@ export const BACKGROUNDS = [
         options: ['capsule', 'sphere', 'box', 'tetrahedron'],
         label: 'Particle Shape'
       },
-      { name: 'fieldStrength', type: 'number', default: 10, min: 0, max: 30, step: 1, label: 'Field Strength' }
+      { name: 'colorSpeed', type: 'number', default: 0.05, min: 0, max: 0.5, step: 0.01, label: 'Color Speed' },
+      { name: 'count', type: 'number', default: 1500, min: 100, max: 5000, step: 50, label: 'Count' },
+      { name: 'particleSize', type: 'number', default: 0.9, min: 0.3, max: 3, step: 0.05, label: 'Particle Size' },
+      {
+        name: 'particleVariance',
+        type: 'number',
+        default: 1,
+        min: 0,
+        max: 1,
+        step: 0.05,
+        label: 'Particle Variance'
+      },
+      { name: 'magnetRadius', type: 'number', default: 9, min: 2, max: 20, step: 0.5, label: 'Magnet Radius' },
+      { name: 'ringRadius', type: 'number', default: 7, min: 0, max: 16, step: 0.5, label: 'Ring Radius' },
+      { name: 'fieldStrength', type: 'number', default: 10, min: 1, max: 40, step: 0.5, label: 'Field Strength' },
+      { name: 'waveAmplitude', type: 'number', default: 1, min: 0, max: 8, step: 0.1, label: 'Wave Amplitude' },
+      { name: 'waveCount', type: 'number', default: 3, min: 0, max: 12, step: 1, label: 'Wave Count' },
+      { name: 'waveSpeed', type: 'number', default: 0.4, min: 0, max: 3, step: 0.05, label: 'Wave Speed' },
+      { name: 'rotationSpeed', type: 'number', default: 0, min: -3, max: 3, step: 0.05, label: 'Rotation Speed' },
+      { name: 'pulseSpeed', type: 'number', default: 3, min: 0, max: 10, step: 0.1, label: 'Pulse Speed' },
+      { name: 'depthFactor', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Depth Factor' },
+      { name: 'ambient', type: 'number', default: 0.25, min: 0, max: 1, step: 0.01, label: 'Ambient' },
+      { name: 'lerpSpeed', type: 'number', default: 0.05, min: 0.01, max: 0.3, step: 0.01, label: 'Lerp Speed' },
+      { name: 'autoAnimate', type: 'boolean', default: true, label: 'Auto Animate' },
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'clickBurst', type: 'boolean', default: true, label: 'Click Burst' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -2502,18 +2685,33 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/DotField/DotField.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/dot-field"',
     props: [
-      { name: 'dotRadius', type: 'number', default: 1.5, min: 0.5, max: 5, step: 0.5, label: 'Dot Radius' },
-      { name: 'dotSpacing', type: 'number', default: 14, min: 5, max: 30, step: 1, label: 'Dot Spacing' },
-      { name: 'cursorRadius', type: 'number', default: 500, min: 100, max: 1000, step: 50, label: 'Cursor Radius' },
-      { name: 'cursorForce', type: 'number', default: 0.1, min: 0, max: 1, step: 0.01, label: 'Cursor Force' },
-      { name: 'bulgeOnly', type: 'boolean', default: true, label: 'Bulge Only' },
-      { name: 'bulgeStrength', type: 'number', default: 67, min: 0, max: 150, step: 1, label: 'Bulge Strength' },
-      { name: 'glowRadius', type: 'number', default: 160, min: 50, max: 400, step: 10, label: 'Glow Radius' },
+      {
+        name: 'pattern',
+        type: 'select',
+        default: 'grid',
+        options: ['grid', 'hex', 'spiral', 'scatter'],
+        label: 'Pattern'
+      },
+      { name: 'gradientFrom', type: 'color', default: '#5227FF', label: 'Gradient From' },
+      { name: 'gradientTo', type: 'color', default: '#FF9FFC', label: 'Gradient To' },
+      { name: 'glowColor', type: 'color', default: '#ffffff', label: 'Glow Color' },
+      { name: 'gradientAngle', type: 'number', default: 135, min: 0, max: 360, step: 1, label: 'Gradient Angle' },
+      { name: 'dotRadius', type: 'number', default: 1.5, min: 0.5, max: 5, step: 0.1, label: 'Dot Radius' },
+      { name: 'dotSpacing', type: 'number', default: 14, min: 4, max: 40, step: 1, label: 'Dot Spacing' },
+      { name: 'cursorRadius', type: 'number', default: 240, min: 60, max: 600, step: 10, label: 'Cursor Radius' },
+      { name: 'bulgeStrength', type: 'number', default: 0.6, min: -1, max: 1, step: 0.05, label: 'Bulge Strength' },
+      { name: 'twist', type: 'number', default: 0, min: -360, max: 360, step: 5, label: 'Twist' },
+      { name: 'glowRadius', type: 'number', default: 160, min: 0, max: 500, step: 10, label: 'Glow Radius' },
+      { name: 'glowIntensity', type: 'number', default: 0.8, min: 0, max: 2, step: 0.05, label: 'Glow Intensity' },
+      { name: 'baseOpacity', type: 'number', default: 0.55, min: 0, max: 1, step: 0.05, label: 'Base Opacity' },
+      { name: 'waveAmplitude', type: 'number', default: 0, min: 0, max: 20, step: 0.5, label: 'Wave Amplitude' },
+      { name: 'speed', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Speed' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
       { name: 'sparkle', type: 'boolean', default: false, label: 'Sparkle' },
-      { name: 'waveAmplitude', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Wave Amplitude' },
-      { name: 'gradientFrom', type: 'color', default: 'rgba(168, 85, 247, 0.35)', label: 'Gradient From' },
-      { name: 'gradientTo', type: 'color', default: 'rgba(180, 151, 207, 0.25)', label: 'Gradient To' },
-      { name: 'glowColor', type: 'color', default: '#120F17', label: 'Glow Color' }
+      { name: 'interactive', type: 'boolean', default: true, label: 'Interactive' },
+      { name: 'holdToZoom', type: 'boolean', default: true, label: 'Hold To Zoom' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   },
   {
@@ -2522,23 +2720,31 @@ export const BACKGROUNDS = [
     component: () => import('../../../content/Backgrounds/SideRays/SideRays.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/side-rays"',
     props: [
-      { name: 'rayColor1', type: 'color', default: '#EAB308', label: 'Ray Color 1' },
+      { name: 'rayColor1', type: 'color', default: '#FFC46B', label: 'Ray Color 1' },
       { name: 'rayColor2', type: 'color', default: '#96c8ff', label: 'Ray Color 2' },
+      { name: 'blend', type: 'number', default: 0.6, min: 0, max: 1, step: 0.01, label: 'Blend' },
       {
         name: 'origin',
         type: 'select',
         default: 'top-right',
-        options: ['top-right', 'top-left', 'bottom-right', 'bottom-left'],
+        options: ['top-right', 'top-left', 'bottom-right', 'bottom-left', 'right', 'left'],
         label: 'Origin'
       },
-      { name: 'speed', type: 'number', default: 2.5, min: 0.1, max: 5, step: 0.1, label: 'Speed' },
-      { name: 'intensity', type: 'number', default: 2, min: 0.1, max: 3, step: 0.1, label: 'Intensity' },
-      { name: 'spread', type: 'number', default: 2, min: 0.1, max: 3, step: 0.1, label: 'Spread' },
+      { name: 'speed', type: 'number', default: 2.5, min: 0, max: 6, step: 0.1, label: 'Speed' },
+      { name: 'intensity', type: 'number', default: 2, min: 0.2, max: 4, step: 0.05, label: 'Intensity' },
+      { name: 'spread', type: 'number', default: 2, min: 0.3, max: 4, step: 0.05, label: 'Spread' },
+      { name: 'density', type: 'number', default: 5, min: 1, max: 20, step: 0.5, label: 'Density' },
+      { name: 'sharpness', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Sharpness' },
       { name: 'tilt', type: 'number', default: 0, min: -60, max: 60, step: 1, label: 'Tilt' },
-      { name: 'saturation', type: 'number', default: 1.5, min: 0, max: 2, step: 0.05, label: 'Saturation' },
-      { name: 'blend', type: 'number', default: 0.75, min: 0, max: 1, step: 0.01, label: 'Blend' },
-      { name: 'falloff', type: 'number', default: 1.6, min: 0.5, max: 4, step: 0.1, label: 'Falloff' },
-      { name: 'opacity', type: 'number', default: 1.0, min: 0, max: 1, step: 0.05, label: 'Opacity' }
+      { name: 'falloff', type: 'number', default: 1.6, min: 0.5, max: 4, step: 0.05, label: 'Falloff' },
+      { name: 'glow', type: 'number', default: 1, min: 0, max: 3, step: 0.05, label: 'Glow' },
+      { name: 'saturation', type: 'number', default: 1, min: 0, max: 2, step: 0.05, label: 'Saturation' },
+      { name: 'dust', type: 'number', default: 0, min: 0, max: 1, step: 0.01, label: 'Dust' },
+      { name: 'mouseInfluence', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Mouse Influence' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
+      { name: 'followMouse', type: 'boolean', default: true, label: 'Follow Mouse' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
     ]
   }
 ];
@@ -2552,16 +2758,7 @@ export const getDefaultProps = background => {
   }, {});
 };
 
-const ANIMATION_IDS = [
-  'antigravity',
-  'click-spark',
-  'ghost-cursor',
-  'image-trail',
-  'laser-flow',
-  'noise',
-  'ribbons',
-  'splash-cursor'
-];
+const ANIMATION_IDS = ['click-spark', 'ghost-cursor', 'image-trail', 'laser-flow', 'noise', 'ribbons', 'splash-cursor'];
 
 export const getDocsPath = background => {
   if (!background?.id) return '/';

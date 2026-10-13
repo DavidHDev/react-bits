@@ -6,6 +6,11 @@
   outline: none;
 }
 
+.pixel-swap:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
 .pixel-swap__layer {
   position: absolute;
   inset: 0;
@@ -13,24 +18,40 @@
   height: 100%;
 }
 
-.pixel-swap__layer[data-visible='false'] {
+.pixel-swap__layer[data-visible='false'],
+.pixel-swap[data-swapping] .pixel-swap__layer {
   visibility: hidden;
 }
 
-.pixel-swap__grid {
+.pixel-swap__wall {
   position: absolute;
   inset: 0;
   z-index: 3;
   pointer-events: none;
 }
 
-.pixel-swap__pixel {
+.pixel-swap__tile {
   position: absolute;
-  overflow: hidden;
-  opacity: 0;
-  contain: paint;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
-.pixel-swap__pixel-content {
+.pixel-swap__face {
   position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.pixel-swap__piece {
+  position: absolute;
+}
+
+.pixel-swap__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
 }

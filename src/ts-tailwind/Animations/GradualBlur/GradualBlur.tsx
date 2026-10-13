@@ -1,298 +1,273 @@
 'use client';
 
-import React, { type CSSProperties, useEffect, useRef, useState, useMemo, type PropsWithChildren } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, type CSSProperties, type RefObject } from 'react';
 
-type GradualBlurProps = PropsWithChildren<{
-  position?: 'top' | 'bottom' | 'left' | 'right';
-  strength?: number;
-  height?: string;
-  width?: string;
-  divCount?: number;
-  exponential?: boolean;
-  zIndex?: number;
-  animated?: boolean | 'scroll';
-  duration?: string;
-  easing?: string;
-  opacity?: number;
-  curve?: 'linear' | 'bezier' | 'ease-in' | 'ease-out' | 'ease-in-out';
-  responsive?: boolean;
-  mobileHeight?: string;
-  tabletHeight?: string;
-  desktopHeight?: string;
-  mobileWidth?: string;
-  tabletWidth?: string;
-  desktopWidth?: string;
+export type GradualBlurPosition = 'top' | 'bottom' | 'left' | 'right';
+export type GradualBlurCurve = 'linear' | 'bezier' | 'ease-in' | 'ease-out' | 'ease-in-out';
 
-  preset?:
-    | 'top'
-    | 'bottom'
-    | 'left'
-    | 'right'
-    | 'subtle'
-    | 'intense'
-    | 'smooth'
-    | 'sharp'
-    | 'header'
-    | 'footer'
-    | 'sidebar'
-    | 'page-header'
-    | 'page-footer';
-  gpuOptimized?: boolean;
-  hoverIntensity?: number;
+export interface GradualBlurProps {
+  position?: GradualBlurPosition;
   target?: 'parent' | 'page';
-
-  onAnimationComplete?: () => void;
+  height?: string | number;
+  width?: string | number;
+  strength?: number;
+  layers?: number;
+  curve?: GradualBlurCurve;
+  exponential?: boolean;
+  opacity?: number;
+  saturation?: number;
+  tint?: string;
+  autoHide?: boolean;
+  container?: Element | string | RefObject<Element | null> | null;
+  hoverIntensity?: number;
+  duration?: number | string;
+  easing?: string;
+  zIndex?: number;
   className?: string;
   style?: CSSProperties;
-}>;
+}
 
-const DEFAULT_CONFIG: Partial<GradualBlurProps> = {
-  position: 'bottom',
-  strength: 2,
-  height: '6rem',
-  divCount: 5,
-  exponential: false,
-  zIndex: 1000,
-  animated: false,
-  duration: '0.3s',
-  easing: 'ease-out',
-  opacity: 1,
-  curve: 'linear',
-  responsive: false,
-  target: 'parent',
-  className: '',
-  style: {}
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+const CURVES: Record<string, (t: number) => number> = {
+  linear: t => t,
+  bezier: t => t * t * (3 - 2 * t),
+  'ease-in': t => t * t,
+  'ease-out': t => 1 - (1 - t) * (1 - t),
+  'ease-in-out': t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 };
 
-const PRESETS: Record<string, Partial<GradualBlurProps>> = {
-  top: { position: 'top', height: '6rem' },
-  bottom: { position: 'bottom', height: '6rem' },
-  left: { position: 'left', height: '6rem' },
-  right: { position: 'right', height: '6rem' },
+const DIRECTIONS: Record<string, string> = { top: 'to top', bottom: 'to bottom', left: 'to left', right: 'to right' };
 
-  subtle: { height: '4rem', strength: 1, opacity: 0.8, divCount: 3 },
-  intense: { height: '10rem', strength: 4, divCount: 8, exponential: true },
+const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
 
-  smooth: { height: '8rem', curve: 'bezier', divCount: 10 },
-  sharp: { height: '5rem', curve: 'linear', divCount: 4 },
+const toLength = (value: string | number) => (typeof value === 'number' ? `${value}px` : value);
 
-  header: { position: 'top', height: '8rem', curve: 'ease-out' },
-  footer: { position: 'bottom', height: '8rem', curve: 'ease-out' },
-  sidebar: { position: 'left', height: '6rem', strength: 2.5 },
+const toTime = (value: string | number) => (typeof value === 'number' ? `${value}s` : value);
 
-  'page-header': {
-    position: 'top',
-    height: '10rem',
-    target: 'page',
-    strength: 3
-  },
-  'page-footer': {
-    position: 'bottom',
-    height: '10rem',
-    target: 'page',
-    strength: 3
+const findScroller = (
+  container: GradualBlurProps['container'],
+  root: HTMLElement,
+  target: string,
+  vertical: boolean
+): Element | Window | null => {
+  if (container) {
+    if (typeof container === 'string') return document.querySelector(container);
+    return 'current' in container ? container.current : container;
   }
-};
-
-const CURVE_FUNCTIONS: Record<string, (p: number) => number> = {
-  linear: p => p,
-  bezier: p => p * p * (3 - 2 * p),
-  'ease-in': p => p * p,
-  'ease-out': p => 1 - Math.pow(1 - p, 2),
-  'ease-in-out': p => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2)
-};
-
-const mergeConfigs = (...configs: Partial<GradualBlurProps>[]): Partial<GradualBlurProps> => {
-  return configs.reduce((acc, config) => ({ ...acc, ...config }), {});
-};
-
-const getGradientDirection = (position: string): string => {
-  const directions: Record<string, string> = {
-    top: 'to top',
-    bottom: 'to bottom',
-    left: 'to left',
-    right: 'to right'
+  if (target === 'page') return window;
+  const parent = root.parentElement;
+  if (!parent) return null;
+  const scrolls = (node: Element) => {
+    const style = getComputedStyle(node);
+    return /(auto|scroll|overlay)/.test(vertical ? style.overflowY : style.overflowX);
   };
-  return directions[position] || 'to bottom';
+  const sibling = Array.from(parent.children).find(child => child !== root && scrolls(child));
+  return sibling || (scrolls(parent) ? parent : null);
 };
 
-const debounce = <T extends (...a: any[]) => void>(fn: T, wait: number) => {
-  let t: ReturnType<typeof setTimeout>;
-  return (...a: Parameters<T>) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...a), wait);
-  };
-};
-const useResponsiveDimension = (
-  responsive: boolean | undefined,
-  config: Partial<GradualBlurProps>,
-  key: keyof GradualBlurProps
-) => {
-  const [val, setVal] = useState<any>(config[key]);
-  useEffect(() => {
-    if (!responsive) return;
-    const calc = () => {
-      const w = window.innerWidth;
-      let v: any = config[key];
-      const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-      const k = cap(key as string);
-      if (w <= 480 && (config as any)['mobile' + k]) v = (config as any)['mobile' + k];
-      else if (w <= 768 && (config as any)['tablet' + k]) v = (config as any)['tablet' + k];
-      else if (w <= 1024 && (config as any)['desktop' + k]) v = (config as any)['desktop' + k];
-      setVal(v);
+const GradualBlur = ({
+  position = 'bottom',
+  target = 'parent',
+  height = '6rem',
+  width,
+  strength = 2,
+  layers = 8,
+  curve = 'linear',
+  exponential = true,
+  opacity = 1,
+  saturation = 1,
+  tint = 'transparent',
+  autoHide = false,
+  container,
+  hoverIntensity = 1,
+  duration = 0.3,
+  easing = 'ease-out',
+  zIndex = 1000,
+  className = '',
+  style
+}: GradualBlurProps) => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const edge = DIRECTIONS[position] ? position : 'bottom';
+  const vertical = edge === 'top' || edge === 'bottom';
+
+  const stack = useMemo(() => {
+    const count = Math.min(Math.max(Math.round(layers) || 1, 1), 16);
+    const shape = CURVES[curve] || CURVES.linear;
+    const maxBlur = Math.max(strength, 0) * 12;
+    const level = (u: number) => {
+      const t = shape(clamp01(u));
+      return maxBlur * (exponential ? (Math.pow(2, 4 * t) - 1) / 15 : t);
     };
-    const deb = debounce(calc, 100);
-    calc();
-    window.addEventListener('resize', deb);
-    return () => window.removeEventListener('resize', deb);
-  }, [responsive, config, key]);
-  return responsive ? val : (config as any)[key];
-};
-
-const useIntersectionObserver = (ref: React.RefObject<HTMLDivElement>, shouldObserve: boolean = false) => {
-  const [isVisible, setIsVisible] = useState(!shouldObserve);
-
-  useEffect(() => {
-    if (!shouldObserve || !ref.current) return;
-
-    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.1 });
-
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [ref, shouldObserve]);
-
-  return isVisible;
-};
-
-const GradualBlur: React.FC<GradualBlurProps> = props => {
-  const containerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
-  const [isHovered, setIsHovered] = useState(false);
-
-  const config = useMemo(() => {
-    const presetConfig = props.preset && PRESETS[props.preset] ? PRESETS[props.preset] : {};
-    return mergeConfigs(DEFAULT_CONFIG, presetConfig, props) as Required<GradualBlurProps>;
-  }, [props]);
-
-  const responsiveHeight = useResponsiveDimension(config.responsive, config, 'height');
-  const responsiveWidth = useResponsiveDimension(config.responsive, config, 'width');
-
-  const isVisible = useIntersectionObserver(containerRef, config.animated === 'scroll');
-
-  const blurDivs = useMemo(() => {
-    const divs: React.ReactNode[] = [];
-    const increment = 100 / config.divCount;
-    const currentStrength =
-      isHovered && config.hoverIntensity ? config.strength * config.hoverIntensity : config.strength;
-
-    const curveFunc = CURVE_FUNCTIONS[config.curve] || CURVE_FUNCTIONS.linear;
-
-    for (let i = 1; i <= config.divCount; i++) {
-      let progress = i / config.divCount;
-      progress = curveFunc(progress);
-
-      let blurValue: number;
-      if (config.exponential) {
-        blurValue = Number(Math.pow(2, progress * 4)) * 0.0625 * currentStrength;
-      } else {
-        blurValue = 0.0625 * (progress * config.divCount + 1) * currentStrength;
-      }
-
-      const p1 = Math.round((increment * i - increment) * 10) / 10;
-      const p2 = Math.round(increment * i * 10) / 10;
-      const p3 = Math.round((increment * i + increment) * 10) / 10;
-      const p4 = Math.round((increment * i + increment * 2) * 10) / 10;
-
-      let gradient = `transparent ${p1}%, black ${p2}%`;
-      if (p3 <= 100) gradient += `, black ${p3}%`;
-      if (p4 <= 100) gradient += `, transparent ${p4}%`;
-
-      const direction = getGradientDirection(config.position);
-
-      const divStyle: CSSProperties = {
-        maskImage: `linear-gradient(${direction}, ${gradient})`,
-        WebkitMaskImage: `linear-gradient(${direction}, ${gradient})`,
-        backdropFilter: `blur(${blurValue.toFixed(3)}rem)`,
-        opacity: config.opacity,
-        transition:
-          config.animated && config.animated !== 'scroll'
-            ? `backdrop-filter ${config.duration} ${config.easing}`
-            : undefined
-      };
-
-      divs.push(<div key={i} className="absolute inset-0" style={divStyle} />);
+    const boost = Math.pow(Math.max(saturation, 0), 1 / count);
+    const fade = `${toTime(duration)} ${easing}`;
+    const direction = DIRECTIONS[edge];
+    const steps: CSSProperties[] = [];
+    for (let i = 0; i < count; i++) {
+      const from = level(i / count);
+      const to = level((i + 1) / count);
+      const radius = Math.sqrt(Math.max(to * to - from * from, 0));
+      const filter = [
+        `blur(calc(${radius.toFixed(3)}px * var(--gradual-blur-reveal, 1) * var(--gradual-blur-hover, 1)))`,
+        boost !== 1 ? `saturate(calc(1 + ${(boost - 1).toFixed(4)} * var(--gradual-blur-reveal, 1)))` : ''
+      ]
+        .filter(Boolean)
+        .join(' ');
+      const mask = `linear-gradient(${direction}, transparent ${((i / count) * 100).toFixed(2)}%, #000 ${(((i + 1) / count) * 100).toFixed(2)}%)`;
+      steps.push({
+        position: 'absolute',
+        inset: 0,
+        borderRadius: 'inherit',
+        backdropFilter: filter,
+        WebkitBackdropFilter: filter,
+        maskImage: mask,
+        WebkitMaskImage: mask,
+        opacity,
+        transition: `backdrop-filter ${fade}, -webkit-backdrop-filter ${fade}`
+      });
     }
+    const stops = Array.from({ length: 9 }, (_, k) => {
+      const u = k / 8;
+      const t = shape(u);
+      const alpha = t * t * t * (t * (t * 6 - 15) + 10);
+      return `rgba(0, 0, 0, ${alpha.toFixed(3)}) ${(u * 100).toFixed(1)}%`;
+    }).join(', ');
+    const tintMask = `linear-gradient(${direction}, ${stops})`;
+    const wash: CSSProperties | null =
+      tint && tint !== 'transparent'
+        ? {
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            background: tint,
+            maskImage: tintMask,
+            WebkitMaskImage: tintMask,
+            opacity: 'calc(var(--gradual-blur-reveal, 1) * min(var(--gradual-blur-hover, 1), 1))',
+            transition: `opacity ${fade}`
+          }
+        : null;
+    return { steps, wash };
+  }, [layers, curve, strength, exponential, saturation, duration, easing, edge, opacity, tint]);
 
-    return divs;
-  }, [config, isHovered]);
+  useIsomorphicLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return undefined;
+    if (!autoHide) {
+      root.style.removeProperty('--gradual-blur-reveal');
+      return undefined;
+    }
+    const scroller = findScroller(container, root, target, vertical);
+    if (!scroller) return undefined;
+    const element = scroller instanceof Element ? scroller : null;
+    const start = edge === 'top' || edge === 'left';
 
-  const containerStyle: CSSProperties = useMemo(() => {
-    const isVertical = ['top', 'bottom'].includes(config.position);
-    const isHorizontal = ['left', 'right'].includes(config.position);
-    const isPageTarget = config.target === 'page';
-
-    const baseStyle: CSSProperties = {
-      position: isPageTarget ? 'fixed' : 'absolute',
-      pointerEvents: config.hoverIntensity ? 'auto' : 'none',
-      opacity: isVisible ? 1 : 0,
-      transition: config.animated ? `opacity ${config.duration} ${config.easing}` : undefined,
-      zIndex: isPageTarget ? config.zIndex + 100 : config.zIndex,
-      ...config.style
+    const update = () => {
+      const page = document.documentElement;
+      const offset = element
+        ? vertical
+          ? element.scrollTop
+          : element.scrollLeft
+        : vertical
+          ? window.scrollY
+          : window.scrollX;
+      const limit = element
+        ? vertical
+          ? element.scrollHeight - element.clientHeight
+          : element.scrollWidth - element.clientWidth
+        : vertical
+          ? page.scrollHeight - window.innerHeight
+          : page.scrollWidth - window.innerWidth;
+      const box = root.getBoundingClientRect();
+      const reach = Math.max(vertical ? box.height : box.width, 1);
+      const room = start ? offset : limit - offset;
+      root.style.setProperty('--gradual-blur-reveal', clamp01(room / reach).toFixed(3));
     };
 
-    if (isVertical) {
-      baseStyle.height = responsiveHeight;
-      baseStyle.width = responsiveWidth || '100%';
-      baseStyle[config.position] = 0;
-      baseStyle.left = 0;
-      baseStyle.right = 0;
-    } else if (isHorizontal) {
-      baseStyle.width = responsiveWidth || responsiveHeight;
-      baseStyle.height = '100%';
-      baseStyle[config.position] = 0;
-      baseStyle.top = 0;
-      baseStyle.bottom = 0;
+    update();
+    const source = element ?? window;
+    source.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    const observer = element && typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    if (observer && element) {
+      observer.observe(element);
+      if (element.firstElementChild) observer.observe(element.firstElementChild);
     }
+    return () => {
+      source.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+      observer?.disconnect();
+    };
+  }, [autoHide, container, target, edge, vertical]);
 
-    return baseStyle;
-  }, [config, responsiveHeight, responsiveWidth, isVisible]);
-
-  const { hoverIntensity, animated, onAnimationComplete, duration } = config as any;
   useEffect(() => {
-    if (isVisible && animated === 'scroll' && onAnimationComplete) {
-      const t = setTimeout(() => onAnimationComplete(), parseFloat(duration) * 1000);
-      return () => clearTimeout(t);
-    }
-  }, [isVisible, animated, onAnimationComplete, duration]);
+    const root = rootRef.current;
+    if (!root || hoverIntensity === 1) return undefined;
+    let frame = 0;
+    let inside = false;
+    let point: { x: number; y: number } | null = null;
+
+    const check = () => {
+      frame = 0;
+      if (!point) return;
+      const box = root.getBoundingClientRect();
+      const now = point.x >= box.left && point.x <= box.right && point.y >= box.top && point.y <= box.bottom;
+      if (now === inside) return;
+      inside = now;
+      root.style.setProperty('--gradual-blur-hover', inside ? String(Math.max(hoverIntensity, 0)) : '1');
+    };
+
+    const onMove = (event: PointerEvent) => {
+      point = { x: event.clientX, y: event.clientY };
+      if (!frame) frame = requestAnimationFrame(check);
+    };
+
+    const onLeave = () => {
+      point = null;
+      inside = false;
+      root.style.setProperty('--gradual-blur-hover', '1');
+    };
+
+    window.addEventListener('pointermove', onMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onLeave);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('pointermove', onMove);
+      document.documentElement.removeEventListener('pointerleave', onLeave);
+      root.style.removeProperty('--gradual-blur-hover');
+    };
+  }, [hoverIntensity]);
+
+  const depth = toLength(vertical ? height : (width ?? height));
+  const span = vertical && width != null ? toLength(width) : null;
+
+  const rounded = target !== 'page' && !span;
+  const corner = (a: string, b: string) => (rounded && (edge === a || edge === b) ? 'inherit' : undefined);
+
+  const rootStyle: CSSProperties = {
+    position: target === 'page' ? 'fixed' : 'absolute',
+    zIndex,
+    borderTopLeftRadius: corner('top', 'left'),
+    borderTopRightRadius: corner('top', 'right'),
+    borderBottomLeftRadius: corner('bottom', 'left'),
+    borderBottomRightRadius: corner('bottom', 'right'),
+    top: edge === 'bottom' ? undefined : 0,
+    bottom: edge === 'top' ? undefined : 0,
+    left: edge === 'right' ? undefined : 0,
+    right: edge === 'left' ? undefined : 0,
+    height: vertical ? depth : undefined,
+    width: vertical ? (span ?? undefined) : depth,
+    marginInline: span ? 'auto' : undefined,
+    ...style
+  };
 
   return (
-    <div
-      ref={containerRef}
-      className={`gradual-blur relative isolate ${config.target === 'page' ? 'gradual-blur-page' : 'gradual-blur-parent'} ${config.className}`}
-      style={containerStyle}
-      onMouseEnter={hoverIntensity ? () => setIsHovered(true) : undefined}
-      onMouseLeave={hoverIntensity ? () => setIsHovered(false) : undefined}
-    >
-      <div className="relative w-full h-full">{blurDivs}</div>
-      {props.children && <div className="relative">{props.children}</div>}
+    <div ref={rootRef} className={`pointer-events-none ${className}`.trim()} style={rootStyle} aria-hidden="true">
+      {stack.steps.map((layer, index) => (
+        <div key={index} style={layer} />
+      ))}
+      {stack.wash && <div style={stack.wash} />}
     </div>
   );
 };
 
-const GradualBlurMemo = React.memo(GradualBlur);
-GradualBlurMemo.displayName = 'GradualBlur';
-(GradualBlurMemo as any).PRESETS = PRESETS;
-(GradualBlurMemo as any).CURVE_FUNCTIONS = CURVE_FUNCTIONS;
-export default GradualBlurMemo;
-
-const injectStyles = () => {
-  if (typeof document === 'undefined') return;
-  const id = 'gradual-blur-styles';
-  if (document.getElementById(id)) return;
-  const el = document.createElement('style');
-  el.id = id;
-  el.textContent = `.gradual-blur{pointer-events:none;transition:opacity .3s ease-out}.gradual-blur-inner{pointer-events:none}`;
-  document.head.appendChild(el);
-};
-if (typeof document !== 'undefined') {
-  injectStyles();
-}
+export default GradualBlur;

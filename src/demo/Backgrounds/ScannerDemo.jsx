@@ -1,555 +1,457 @@
-import { useMemo } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { useColorMode } from '../../components/setup/color-mode';
 
-import Scanner from '@/content/Backgrounds/Scanner/Scanner';
+import Scanner from '../../content/Backgrounds/Scanner/Scanner';
 import { scanner } from '../../constants/code/Backgrounds/scannerCode';
 
-const DEFAULT_PROPS = {
+const LOOK = {
   color1: '#5227FF',
   color2: '#FF9FFC',
   color3: '#FFFFFF',
   speed: 0.5,
   sweepSpeed: 0.25,
   sweepWidth: 1.6,
-  sweepFalloff: 6,
+  trail: 0.5,
+  reverse: false,
   scale: 1.5,
   frequency: 2,
   ripple: 0.22,
   bandDensity: 11,
-  lineSharpness: 5.5,
-  glow: 0.22,
+  lineWidth: 1.2,
+  glow: 0.6,
   scanDirection: 'vertical',
   colorSpread: 0.7,
-  brightness: 1.0,
-  contrast: 1.15,
-  softness: 1.4,
-  vignette: 0.45,
-  scanline: true,
-  grain: true,
-  grainIntensity: 0.05,
-  opacity: 1.0,
-  mouseInteraction: true,
-  mouseRadius: 0.5,
-  mouseStrength: 0.5
+  brightness: 1,
+  vignette: 0.3
 };
 
-const ScannerDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    color1,
-    color2,
-    color3,
-    speed,
-    sweepSpeed,
-    sweepWidth,
-    sweepFalloff,
-    scale,
-    frequency,
-    ripple,
-    bandDensity,
-    lineSharpness,
-    glow,
-    scanDirection,
-    colorSpread,
-    brightness,
-    contrast,
-    softness,
-    vignette,
-    scanline,
-    grain,
-    grainIntensity,
-    opacity,
-    mouseInteraction,
-    mouseRadius,
-    mouseStrength
-  } = props;
-  const [key, forceRerender] = useForceRerender();
+const DEFAULT_PROPS = {
+  preset: 'scanner',
+  ...LOOK,
+  scanline: true,
+  scanlineIntensity: 0.5,
+  grain: true,
+  grainIntensity: 0.04,
+  opacity: 1,
+  mouseInteraction: true,
+  mouseMode: 'repel',
+  mouseRadius: 0.5,
+  mouseStrength: 0.7,
+  clickEffect: 'ping',
+  intro: true,
+  lightMode: false
+};
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'color1',
-        type: 'string',
-        default: "'#5227FF'",
-        description: 'Deep violet base color of the scanning field.'
-      },
-      {
-        name: 'color2',
-        type: 'string',
-        default: "'#FF9FFC'",
-        description: 'Pink color of the interference bands.'
-      },
-      {
-        name: 'color3',
-        type: 'string',
-        default: "'#FFFFFF'",
-        description: 'White color used for the brightest signal peaks.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '0.5',
-        description: 'Overall animation speed of the signal.'
-      },
-      {
-        name: 'sweepSpeed',
-        type: 'number',
-        default: '0.25',
-        description: 'Rate of the scan band travelling across the field.'
-      },
-      {
-        name: 'sweepWidth',
-        type: 'number',
-        default: '1.6',
-        description: 'Spacing between successive scan bands.'
-      },
-      {
-        name: 'sweepFalloff',
-        type: 'number',
-        default: '6',
-        description: 'How tightly the sweep concentrates; higher values give a narrower band.'
-      },
-      {
-        name: 'scale',
-        type: 'number',
-        default: '1.5',
-        description: 'Zoom level of the signal field.'
-      },
-      {
-        name: 'frequency',
-        type: 'number',
-        default: '2',
-        description: 'Spatial frequency of the underlying signal that bends the scan lines.'
-      },
-      {
-        name: 'ripple',
-        type: 'number',
-        default: '0.22',
-        description: 'How strongly the signal bends the scan lines out of straight.'
-      },
-      {
-        name: 'bandDensity',
-        type: 'number',
-        default: '11',
-        description: 'Number of scan lines packed across the field.'
-      },
-      {
-        name: 'lineSharpness',
-        type: 'number',
-        default: '5.5',
-        description: 'Thins the scan lines into a crisp trace; lower values give a soft glow.'
-      },
-      {
-        name: 'glow',
-        type: 'number',
-        default: '0.22',
-        description: 'Soft fill between the lines, giving the band volume.'
-      },
-      {
-        name: 'scanDirection',
-        type: 'string',
-        default: "'vertical'",
-        description: "Direction of the scan: 'vertical', 'horizontal', or 'diagonal'."
-      },
-      {
-        name: 'colorSpread',
-        type: 'number',
-        default: '0.7',
-        description: 'Amount of chromatic separation between the violet and pink channels.'
-      },
-      {
-        name: 'brightness',
-        type: 'number',
-        default: '1.0',
-        description: 'Overall brightness of the field.'
-      },
-      {
-        name: 'contrast',
-        type: 'number',
-        default: '1.15',
-        description: 'Contrast between the base tone and the bright peaks.'
-      },
-      {
-        name: 'softness',
-        type: 'number',
-        default: '1.4',
-        description: 'Anti-alias rolloff; higher values calm high-frequency shimmer.'
-      },
-      {
-        name: 'vignette',
-        type: 'number',
-        default: '0.45',
-        description: 'Strength of the edge fade around the field.'
-      },
-      {
-        name: 'scanline',
-        type: 'boolean',
-        default: 'true',
-        description: 'Overlays fine CRT raster lines across the field.'
-      },
-      {
-        name: 'grain',
-        type: 'boolean',
-        default: 'true',
-        description: 'Adds a subtle animated grain.'
-      },
-      {
-        name: 'grainIntensity',
-        type: 'number',
-        default: '0.05',
-        description: 'Amplitude of the grain overlay. 0 disables it entirely.'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '1.0',
-        description: 'Overall opacity of the effect.'
-      },
-      {
-        name: 'mouseInteraction',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enables the soft scan focus that follows the pointer.'
-      },
-      {
-        name: 'mouseRadius',
-        type: 'number',
-        default: '0.5',
-        description: 'Radius of the pointer focus region.'
-      },
-      {
-        name: 'mouseStrength',
-        type: 'number',
-        default: '0.5',
-        description: 'Strength of the pointer focus brightening.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Additional CSS classes applied to the container.'
-      }
-    ],
-    []
-  );
+const PRESETS = {
+  scanner: {},
+  phosphor: { color1: '#14532d', color2: '#4ade80', color3: '#ecfccb', trail: 0.9, ripple: 0.14, colorSpread: 0.2 },
+  ember: { color1: '#7c2d12', color2: '#fb923c', color3: '#fff7ed', speed: 0.7, ripple: 0.32 },
+  ice: { color1: '#1e3a8a', color2: '#60a5fa', color3: '#ffffff', scanDirection: 'diagonal', sweepSpeed: 0.3 },
+  mono: { color1: '#3f3f46', color2: '#d4d4d8', color3: '#ffffff', colorSpread: 0 },
+  dense: { bandDensity: 26, lineWidth: 0.8, glow: 0.4, ripple: 0.14, frequency: 1.6 },
+  storm: { ripple: 0.6, frequency: 3, speed: 1.2, sweepSpeed: 0.6, sweepWidth: 1, colorSpread: 0.9 },
+  calm: { speed: 0.22, sweepSpeed: 0.12, ripple: 0.12, trail: 0.95, glow: 0.8 }
+};
+
+const LIGHT_SWAP = {
+  scanner: { color1: '#5b21b6', color2: '#be185d', color3: '#18181b' },
+  phosphor: { color1: '#166534', color2: '#16a34a', color3: '#052e16' },
+  ember: { color1: '#9a3412', color2: '#ea580c', color3: '#431407' },
+  ice: { color1: '#1e40af', color2: '#2563eb', color3: '#172554' },
+  mono: { color1: '#a1a1aa', color2: '#52525b', color3: '#18181b' },
+  dense: { color1: '#5b21b6', color2: '#be185d', color3: '#18181b' },
+  storm: { color1: '#5b21b6', color2: '#be185d', color3: '#18181b' },
+  calm: { color1: '#5b21b6', color2: '#be185d', color3: '#18181b' }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'scanner', label: 'Scanner' },
+  { value: 'phosphor', label: 'Phosphor' },
+  { value: 'ember', label: 'Ember' },
+  { value: 'ice', label: 'Ice' },
+  { value: 'mono', label: 'Mono' },
+  { value: 'dense', label: 'Dense' },
+  { value: 'storm', label: 'Storm' },
+  { value: 'calm', label: 'Calm' }
+];
+
+const DIRECTION_OPTIONS = [
+  { value: 'vertical', label: 'Vertical' },
+  { value: 'horizontal', label: 'Horizontal' },
+  { value: 'diagonal', label: 'Diagonal' }
+];
+
+const MOUSE_OPTIONS = [
+  { value: 'repel', label: 'Repel' },
+  { value: 'attract', label: 'Attract' }
+];
+
+const CLICK_OPTIONS = [
+  { value: 'ping', label: 'Ping' },
+  { value: 'none', label: 'None' }
+];
+
+const propData = [
+  { name: 'color1', type: 'string', default: "'#5227FF'", description: 'Color of the resting lines.' },
+  {
+    name: 'color2',
+    type: 'string',
+    default: "'#FF9FFC'",
+    description: 'Color the lines take as the scan lights them.'
+  },
+  { name: 'color3', type: 'string', default: "'#FFFFFF'", description: 'Color of the hot scan head itself.' },
+  { name: 'speed', type: 'number', default: '0.5', description: 'How fast the wave moves through the lines.' },
+  { name: 'sweepSpeed', type: 'number', default: '0.25', description: 'How fast the scan travels across.' },
+  {
+    name: 'sweepWidth',
+    type: 'number',
+    default: '1.6',
+    description: 'Distance between one scan and the next. Larger values leave longer dark gaps.'
+  },
+  {
+    name: 'trail',
+    type: 'number',
+    default: '0.5',
+    description: 'Length of the afterglow the scan leaves behind, from 0 to 1.'
+  },
+  { name: 'reverse', type: 'boolean', default: 'false', description: 'Runs the scan in the opposite direction.' },
+  { name: 'scale', type: 'number', default: '1.5', description: 'Zooms the whole pattern in or out.' },
+  { name: 'frequency', type: 'number', default: '2', description: 'How many waves fit across the field.' },
+  {
+    name: 'ripple',
+    type: 'number',
+    default: '0.22',
+    description: 'How tall the waves are. 0 keeps the lines straight.'
+  },
+  { name: 'bandDensity', type: 'number', default: '11', description: 'How many lines fill the field.' },
+  {
+    name: 'lineWidth',
+    type: 'number',
+    default: '1.2',
+    description: 'Width of the resting lines, in px. Lit lines get thicker.'
+  },
+  { name: 'glow', type: 'number', default: '0.6', description: 'Soft glow around the lit lines.' },
+  {
+    name: 'scanDirection',
+    type: "'vertical' | 'horizontal' | 'diagonal'",
+    default: "'vertical'",
+    description: 'Direction the scan travels in. The lines run across it.'
+  },
+  {
+    name: 'colorSpread',
+    type: 'number',
+    default: '0.7',
+    description: 'Fine color fringes on the edges of lit lines, from 0 to 1.'
+  },
+  { name: 'brightness', type: 'number', default: '1', description: 'Overall brightness of the lines.' },
+  {
+    name: 'vignette',
+    type: 'number',
+    default: '0.3',
+    description: 'Fades the lines out toward the edges, from 0 to 1.'
+  },
+  {
+    name: 'scanline',
+    type: 'boolean',
+    default: 'true',
+    description: 'Turns on the CRT look: fine horizontal scanlines across the field.'
+  },
+  {
+    name: 'scanlineIntensity',
+    type: 'number',
+    default: '0.5',
+    description: 'How dark the scanlines are, from 0 to 1.'
+  },
+  { name: 'grain', type: 'boolean', default: 'true', description: 'Adds a little film grain.' },
+  { name: 'grainIntensity', type: 'number', default: '0.04', description: 'Strength of the grain.' },
+  { name: 'opacity', type: 'number', default: '1', description: 'Overall opacity of the effect.' },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The lines bend around the cursor and light up near it.'
+  },
+  {
+    name: 'mouseMode',
+    type: "'repel' | 'attract'",
+    default: "'repel'",
+    description: 'Lines part around the cursor, or pinch in toward it.'
+  },
+  { name: 'mouseRadius', type: 'number', default: '0.5', description: 'Size of the area around the cursor.' },
+  { name: 'mouseStrength', type: 'number', default: '0.7', description: 'How strongly the cursor bends the lines.' },
+  {
+    name: 'clickEffect',
+    type: "'ping' | 'none'",
+    default: "'ping'",
+    description: 'Clicking sends a ring of light rippling out through the lines.'
+  },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'The lines power on with a first scan on mount.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the lines as crisp ink for light backgrounds instead of glowing light.'
+  },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const ScannerDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { colorMode } = useColorMode();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({
+      ...base,
+      ...PRESETS[value],
+      ...(colorMode === 'light' ? LIGHT_SWAP[value] : null),
+      preset: value
+    });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <Scanner
-              key={key}
-              color1={color1}
-              color2={color2}
-              color3={color3}
-              speed={speed}
-              sweepSpeed={sweepSpeed}
-              sweepWidth={sweepWidth}
-              sweepFalloff={sweepFalloff}
-              scale={scale}
-              frequency={frequency}
-              ripple={ripple}
-              bandDensity={bandDensity}
-              lineSharpness={lineSharpness}
-              glow={glow}
-              scanDirection={scanDirection}
-              colorSpread={colorSpread}
-              brightness={brightness}
-              contrast={contrast}
-              softness={softness}
-              vignette={vignette}
-              scanline={scanline}
-              grain={grain}
-              grainIntensity={grainIntensity}
-              opacity={opacity}
-              mouseInteraction={mouseInteraction}
-              mouseRadius={mouseRadius}
-              mouseStrength={mouseStrength}
-            />
-            <BackgroundContent pillText="New Background" headline="A calm scanning signal field." />
+            <Scanner key={key} {...settings} />
+            <BackgroundContent headline="Signals, sweeping quietly across the screen." />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="scanner"
-              currentProps={{
-                color1,
-                color2,
-                color3,
-                speed,
-                sweepSpeed,
-                sweepWidth,
-                sweepFalloff,
-                scale,
-                frequency,
-                ripple,
-                bandDensity,
-                lineSharpness,
-                glow,
-                scanDirection,
-                colorSpread,
-                brightness,
-                contrast,
-                softness,
-                vignette,
-                scanline,
-                grain,
-                grainIntensity,
-                opacity,
-                mouseInteraction,
-                mouseRadius,
-                mouseStrength
-              }}
-              defaultProps={{
-                color1: '#5227FF',
-                color2: '#FF9FFC',
-                color3: '#FFFFFF',
-                speed: 0.5,
-                sweepSpeed: 0.25,
-                sweepWidth: 1.6,
-                sweepFalloff: 6,
-                scale: 1.5,
-                frequency: 2,
-                ripple: 0.22,
-                bandDensity: 11,
-                lineSharpness: 5.5,
-                glow: 0.22,
-                scanDirection: 'vertical',
-                colorSpread: 0.7,
-                brightness: 1.0,
-                contrast: 1.15,
-                softness: 1.4,
-                vignette: 0.45,
-                scanline: true,
-                grain: true,
-                grainIntensity: 0.05,
-                opacity: 1.0,
-                mouseInteraction: true,
-                mouseRadius: 0.5,
-                mouseStrength: 0.5
-              }}
-            />
+            <OpenInStudioButton backgroundId="scanner" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
-          <Customize forceRerender={forceRerender}>
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => updateProp('color2', val)} />
-            <PreviewColorPickerCustom title="Color 3" color={color3} onChange={val => updateProp('color3', val)} />
-
+          <Customize>
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewColorPickerCustom
+              title="Lines"
+              color={settings.color1}
+              onChange={value => updateProp('color1', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Lit Lines"
+              color={settings.color2}
+              onChange={value => updateProp('color2', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Scan Head"
+              color={settings.color3}
+              onChange={value => updateProp('color3', value)}
+            />
+            <PreviewSelect
+              title="Direction"
+              options={DIRECTION_OPTIONS}
+              value={settings.scanDirection}
+              onChange={value => updateProp('scanDirection', value)}
+            />
+            <PreviewSelect
+              title="Mouse Mode"
+              options={MOUSE_OPTIONS}
+              value={settings.mouseMode}
+              onChange={value => updateProp('mouseMode', value)}
+            />
+            <PreviewSelect
+              title="Click Effect"
+              options={CLICK_OPTIONS}
+              value={settings.clickEffect}
+              onChange={value => updateProp('clickEffect', value)}
+            />
             <PreviewSlider
               title="Speed"
               min={0}
               max={2}
               step={0.05}
-              value={speed}
-              onChange={val => updateProp('speed', val)}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
             />
-
             <PreviewSlider
               title="Sweep Speed"
               min={0}
-              max={2}
-              step={0.05}
-              value={sweepSpeed}
-              onChange={val => updateProp('sweepSpeed', val)}
+              max={1.5}
+              step={0.01}
+              value={settings.sweepSpeed}
+              onChange={value => updateProp('sweepSpeed', value)}
             />
-
             <PreviewSlider
               title="Sweep Width"
-              min={0.2}
+              min={0.4}
               max={4}
               step={0.05}
-              value={sweepWidth}
-              onChange={val => updateProp('sweepWidth', val)}
+              value={settings.sweepWidth}
+              onChange={value => updateProp('sweepWidth', value)}
             />
-
             <PreviewSlider
-              title="Sweep Falloff"
-              min={0.5}
-              max={8}
-              step={0.1}
-              value={sweepFalloff}
-              onChange={val => updateProp('sweepFalloff', val)}
+              title="Trail"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.trail}
+              onChange={value => updateProp('trail', value)}
             />
-
-            <PreviewSelect
-              title="Scan Direction"
-              name="scanner-direction"
-              width={140}
-              value={scanDirection}
-              options={[
-                { label: 'Vertical', value: 'vertical' },
-                { label: 'Horizontal', value: 'horizontal' },
-                { label: 'Diagonal', value: 'diagonal' }
-              ]}
-              onChange={val => updateProp('scanDirection', val)}
-            />
-
             <PreviewSlider
               title="Scale"
-              min={0.4}
+              min={0.5}
               max={3}
               step={0.05}
-              value={scale}
-              onChange={val => updateProp('scale', val)}
+              value={settings.scale}
+              onChange={value => updateProp('scale', value)}
             />
-
             <PreviewSlider
               title="Frequency"
               min={0.2}
               max={4}
               step={0.05}
-              value={frequency}
-              onChange={val => updateProp('frequency', val)}
+              value={settings.frequency}
+              onChange={value => updateProp('frequency', value)}
             />
-
             <PreviewSlider
               title="Ripple"
               min={0}
-              max={1.5}
-              step={0.05}
-              value={ripple}
-              onChange={val => updateProp('ripple', val)}
+              max={1}
+              step={0.01}
+              value={settings.ripple}
+              onChange={value => updateProp('ripple', value)}
             />
-
             <PreviewSlider
               title="Band Density"
-              min={1}
-              max={14}
+              min={3}
+              max={40}
               step={0.5}
-              value={bandDensity}
-              onChange={val => updateProp('bandDensity', val)}
+              value={settings.bandDensity}
+              onChange={value => updateProp('bandDensity', value)}
             />
-
             <PreviewSlider
-              title="Line Sharpness"
-              min={0.5}
-              max={6}
+              title="Line Width"
+              min={0.4}
+              max={4}
               step={0.1}
-              value={lineSharpness}
-              onChange={val => updateProp('lineSharpness', val)}
+              value={settings.lineWidth}
+              valueUnit="px"
+              onChange={value => updateProp('lineWidth', value)}
             />
-
             <PreviewSlider
               title="Glow"
               min={0}
-              max={1}
-              step={0.02}
-              value={glow}
-              onChange={val => updateProp('glow', val)}
+              max={1.5}
+              step={0.05}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
             />
-
             <PreviewSlider
               title="Color Spread"
               min={0}
               max={1}
-              step={0.01}
-              value={colorSpread}
-              onChange={val => updateProp('colorSpread', val)}
+              step={0.05}
+              value={settings.colorSpread}
+              onChange={value => updateProp('colorSpread', value)}
             />
-
             <PreviewSlider
               title="Brightness"
-              min={0}
+              min={0.2}
               max={2}
               step={0.05}
-              value={brightness}
-              onChange={val => updateProp('brightness', val)}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
             />
-
-            <PreviewSlider
-              title="Contrast"
-              min={0.4}
-              max={3}
-              step={0.05}
-              value={contrast}
-              onChange={val => updateProp('contrast', val)}
-            />
-
-            <PreviewSlider
-              title="Softness"
-              min={0}
-              max={5}
-              step={0.05}
-              value={softness}
-              onChange={val => updateProp('softness', val)}
-            />
-
             <PreviewSlider
               title="Vignette"
               min={0}
               max={1}
-              step={0.01}
-              value={vignette}
-              onChange={val => updateProp('vignette', val)}
+              step={0.05}
+              value={settings.vignette}
+              onChange={value => updateProp('vignette', value)}
             />
-
-            <PreviewSwitch title="Scanline" isChecked={scanline} onChange={val => updateProp('scanline', val)} />
-
-            <PreviewSwitch title="Grain" isChecked={grain} onChange={val => updateProp('grain', val)} />
-
             <PreviewSlider
-              title="Grain Intensity"
+              title="Grain"
               min={0}
-              max={0.3}
+              max={0.2}
               step={0.01}
-              value={grainIntensity}
-              onChange={val => updateProp('grainIntensity', val)}
+              value={settings.grainIntensity}
+              isDisabled={!settings.grain}
+              onChange={value => updateProp('grainIntensity', value)}
             />
-
             <PreviewSlider
-              title="Opacity"
+              title="Scanlines"
               min={0}
               max={1}
-              step={0.01}
-              value={opacity}
-              onChange={val => updateProp('opacity', val)}
+              step={0.05}
+              value={settings.scanlineIntensity}
+              isDisabled={!settings.scanline}
+              onChange={value => updateProp('scanlineIntensity', value)}
             />
-
-            <PreviewSwitch
-              title="Cursor Focus"
-              isChecked={mouseInteraction}
-              onChange={val => updateProp('mouseInteraction', val)}
-            />
-
             <PreviewSlider
-              title="Cursor Radius"
+              title="Mouse Radius"
               min={0.1}
               max={1.5}
-              step={0.01}
-              value={mouseRadius}
-              onChange={val => updateProp('mouseRadius', val)}
+              step={0.05}
+              value={settings.mouseRadius}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseRadius', value)}
             />
-
             <PreviewSlider
-              title="Cursor Strength"
+              title="Mouse Strength"
               min={0}
               max={1.5}
               step={0.05}
-              value={mouseStrength}
-              onChange={val => updateProp('mouseStrength', val)}
+              value={settings.mouseStrength}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseStrength', value)}
+            />
+            <PreviewSwitch
+              title="Reverse"
+              isChecked={settings.reverse}
+              onChange={value => updateProp('reverse', value)}
+            />
+            <PreviewSwitch
+              title="Mouse Interaction"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch title="Grain" isChecked={settings.grain} onChange={value => updateProp('grain', value)} />
+            <PreviewSwitch
+              title="Scanline"
+              isChecked={settings.scanline}
+              onChange={value => updateProp('scanline', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

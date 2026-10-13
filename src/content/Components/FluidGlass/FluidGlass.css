@@ -1,0 +1,61 @@
+.fluid-glass {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fluid-glass__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fluid-glass__handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.fluid-glass[data-interaction='drag'] .fluid-glass__handle {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.fluid-glass[data-grabbing] .fluid-glass__handle {
+  cursor: grabbing;
+}
+
+.fluid-glass[data-interaction='static'][data-clickable] .fluid-glass__handle {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.fluid-glass__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: pre-line;
+}
+
+.fluid-glass__content {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fluid-glass__content > * {
+  pointer-events: auto;
+}

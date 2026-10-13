@@ -5,26 +5,22 @@ import tsCode from '@ts-default/Components/PillNav/PillNav.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/PillNav/PillNav.tsx?raw';
 
 export const pillNav = {
-  dependencies: `gsap`,
   usage: `import PillNav from './PillNav';
-import logo from '/path/to/logo.svg';
+import logo from './logo.svg';
 
 <PillNav
   logo={logo}
-  logoAlt="Company Logo"
+  logoAlt="Company"
   items={[
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/about' },
-    { label: 'Services', href: '/services' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Journal', href: '/journal' },
+    { label: 'Photos', href: '/photos' },
+    { label: 'About', href: '/about' }
   ]}
   activeHref="/"
-  className="custom-nav"
-  ease="power2.easeOut"
-  baseColor="#000000"
-  pillColor="#ffffff"
-  hoveredPillTextColor="#ffffff"
-  pillTextColor="#000000"
+  itemStyle="pill"
+  hoverEffect="fill"
+  indicator="dot"
 />`,
   code,
   css,

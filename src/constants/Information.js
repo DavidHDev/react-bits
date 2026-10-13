@@ -37,12 +37,18 @@ export const componentMetadata = {
 
   'Animations/AnimatedContent': {
     videoUrl: '/assets/video/animatedcontent.webm',
-    description: 'Wrapper that animates its children in on scroll or mount, from any direction.',
+    description: 'Wrapper that reveals its content on scroll with slides, blur, 3D tilts, soft wipes and staggered children.',
     category: 'Animations',
     name: 'AnimatedContent',
     docsUrl: 'https://reactbits.dev/animations/animated-content',
     tags: [],
-    added: '2025-01-05'
+    added: '2025-01-05',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Now with blur-in, rotate, 3D tilt and soft wipe reveals, staggered children for lists and grids, scroll-linked progress, replay on scroll and a mount trigger.'
+      }
+    ]
   },
   'Animations/BlobCursor': {
     videoUrl: '/assets/video/blobcursor.webm',
@@ -121,12 +127,19 @@ export const componentMetadata = {
   },
   'Animations/FadeContent': {
     videoUrl: '/assets/video/fadecontent.webm',
-    description: 'Simple directional fade / slide entrance / exit wrapper with threshold-based activation.',
+    description:
+      'Wrapper that fades content in on scroll, plain or out of focus, from washed-out gray, or through grain, mist and pixel blocks.',
     category: 'Animations',
     name: 'FadeContent',
     docsUrl: 'https://reactbits.dev/animations/fade-content',
     tags: [],
-    added: '2024-08-07'
+    added: '2024-08-07',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Now fades in out of focus, from washed-out gray, or through grain, mist and pixel blocks, with staggered children and scroll-linked fades in and out.'
+      }
+    ]
   },
   'Animations/GlareHover': {
     videoUrl: '/assets/video/glarehover.webm',
@@ -145,12 +158,19 @@ export const componentMetadata = {
   },
   'Animations/GradualBlur': {
     videoUrl: '/assets/video/gradualblur.webm',
-    description: 'Progressively un-blurs content based on scroll or trigger creating a cinematic reveal.',
+    description:
+      'Progressive edge blur for headers, footers, captions and carousels, with an optional fade to color that hides at the ends of a scroll.',
     category: 'Animations',
     name: 'GradualBlur',
     docsUrl: 'https://reactbits.dev/animations/gradual-blur',
     tags: [],
-    added: '2025-08-26'
+    added: '2025-08-26',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Smoother blur with no visible steps, plus a fade to any color, a color boost, hover to clear, and a blur that hides itself at the ends of a scroll.'
+      }
+    ]
   },
   'Animations/CrystalizedBall': {
     videoUrl: '/assets/video/crystalizedball.webm',
@@ -226,7 +246,13 @@ export const componentMetadata = {
     name: 'LogoLoop',
     docsUrl: 'https://reactbits.dev/animations/logo-loop',
     tags: [],
-    added: '2025-08-18'
+    added: '2025-08-18',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Now draggable with a soft fade that works on any background and an intro. Adds wave, arc and 3D orbit paths, a center lens, dock-style magnify, stepping, labels and perspective tilt.'
+      }
+    ]
   },
   'Animations/Magnet': {
     videoUrl: '/assets/video/magnet.webm',
@@ -329,12 +355,18 @@ export const componentMetadata = {
   },
   'Animations/PixelSwap': {
     videoUrl: '/assets/video/pixelswap.webm',
-    description: 'Pixel fragments assemble into a cover, swap the content underneath, then dissolve away.',
+    description: 'A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.',
     category: 'Animations',
     name: 'PixelSwap',
     docsUrl: 'https://reactbits.dev/animations/pixel-swap',
     tags: [],
-    added: '2026-08-12'
+    added: '2026-08-12',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt as a wall of 3D tiles that flip over in a wave from the cursor and turn back the way they came. New assemble and grow styles, depth and shading.'
+      }
+    ]
   },
   'Animations/Ribbons': {
     videoUrl: '/assets/video/ribbons.webm',
@@ -436,14 +468,20 @@ export const componentMetadata = {
       }
     ]
   },
-  'Animations/Antigravity': {
+  'Backgrounds/Antigravity': {
     videoUrl: '/assets/video/antigravity.webm',
-    description: '3D antigravity particle field that repels from the cursor with smooth motion.',
-    category: 'Animations',
+    description: 'A field of particles that lifts into a glowing ring around the cursor and bursts outward on click.',
+    category: 'Backgrounds',
     name: 'Antigravity',
-    docsUrl: 'https://reactbits.dev/animations/antigravity',
+    docsUrl: 'https://reactbits.dev/backgrounds/antigravity',
     tags: [],
-    added: '2025-12-08'
+    added: '2025-12-08',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with crisp, colorful particles that swirl into a ring with springy motion and streak when they move fast. Hold to charge and release to burst, plus presets, a liftoff intro and a light mode.'
+      }
+    ]
   },
   'Animations/OrbitImages': {
     videoUrl: '/assets/video/orbitimages.webm',
@@ -452,7 +490,13 @@ export const componentMetadata = {
     name: 'OrbitImages',
     docsUrl: 'https://reactbits.dev/animations/orbit-images',
     tags: [],
-    added: '2026-02-12'
+    added: '2026-02-12',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt with real depth, so photos pass behind and in front of whatever sits in the middle, and it now fits any container. Drag to spin it, click a photo to bring it forward, and style the tiles, shadows and path.'
+      }
+    ]
   },
 
   //! Text Animations -------------------------------------------------------------------------------------------------------------------------------
@@ -827,12 +871,18 @@ export const componentMetadata = {
   },
   'Components/CardNav': {
     videoUrl: '/assets/video/cardnav.webm',
-    description: 'Expandable navigation bar with card panels revealing nested links.',
+    description: 'A navigation bar that springs open into a row of cards, each with its own links.',
     category: 'Components',
     name: 'CardNav',
     docsUrl: 'https://reactbits.dev/components/card-nav',
     tags: [],
-    added: '2025-08-16'
+    added: '2025-08-16',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt with a springy open, cards that rise, unfold or fade in, sliding link arrows, open on hover, a stacked layout for small screens and a light mode.'
+      }
+    ]
   },
   'Components/CardSwap': {
     videoUrl: '/assets/video/cardswap.webm',
@@ -1025,12 +1075,18 @@ export const componentMetadata = {
   },
   'Components/FluidGlass': {
     videoUrl: '/assets/video/fluidglass.webm',
-    description: 'Glassmorphism container with animated liquid distortion refraction.',
+    description: 'A 3D glass object that refracts your headline, image or video, follows the cursor and melts between shapes.',
     category: 'Components',
     name: 'FluidGlass',
     docsUrl: 'https://reactbits.dev/components/fluid-glass',
     tags: [],
-    added: '2025-06-15'
+    added: '2025-06-15',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as a real glass object that bends your own text, image or video, with no 3D models or extra dependencies. Seven shapes that melt into each other on click, plus frost, tint, dispersion and shadows.'
+      }
+    ]
   },
   'Components/FlyingPosters': {
     videoUrl: '/assets/video/flyingposters.webm',
@@ -1187,12 +1243,18 @@ export const componentMetadata = {
   },
   'Components/PillNav': {
     videoUrl: '/assets/video/pillnav.webm',
-    description: 'Minimal pill nav with sliding active highlight + smooth easing.',
+    description: 'A pill navigation bar where a fill rises through each link as its label rolls over, with a sliding active dot.',
     category: 'Components',
     name: 'PillNav',
     docsUrl: 'https://reactbits.dev/components/pill-nav',
     tags: [],
-    added: '2025-08-13'
+    added: '2025-08-13',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt with a smoother rising fill and rolling labels, a sliding active dot, a gliding pill option, a menu that folds in on small screens, and a light mode.'
+      }
+    ]
   },
   'Components/PixelCard': {
     videoUrl: '/assets/video/pixelcard.webm',
@@ -1361,12 +1423,18 @@ export const componentMetadata = {
   },
   'Animations/CursorGrid': {
     videoUrl: '/assets/video/cursorgrid.webm',
-    description: 'Canvas grid whose cells light up around the cursor with configurable radius, falloff and click pulses.',
+    description: 'A crisp grid whose cells light up and fade behind the cursor, with grid styles, tiles and click pulses.',
     category: 'Animations',
     name: 'CursorGrid',
     docsUrl: 'https://reactbits.dev/animations/cursor-grid',
     tags: [],
-    added: '2026-07-14'
+    added: '2026-07-14',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as a crisp, minimal grid with a soft spotlight, single cell or area highlights, tiles, dashed, dot and mark styles, clean click rings, an intro and a light mode.'
+      }
+    ]
   },
   'Components/CurvedInput': {
     videoUrl: '/assets/video/curvedinput.webm',
@@ -1409,12 +1477,18 @@ export const componentMetadata = {
   },
   'Components/TiltedCard': {
     videoUrl: '/assets/video/tiltedcard.webm',
-    description: '3D perspective tilt card reacting to pointer.',
+    description: 'A 3D card that tilts toward the cursor, with glare, a soft shadow, floating layers and a flip side.',
     category: 'Components',
     name: 'TiltedCard',
     docsUrl: 'https://reactbits.dev/components/tilted-card',
     tags: [],
-    added: '2025-01-22'
+    added: '2025-01-22',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with springy motion, glare, a soft shadow and floating depth layers, and no extra dependencies. Cards now flip to a back side, work with touch and phone tilt, and come with album, gallery and ticket demos.'
+      }
+    ]
   },
   'Components/StaggeredMenu': {
     videoUrl: '/assets/video/staggeredmenu.webm',
@@ -1511,21 +1585,33 @@ export const componentMetadata = {
   },
   'Backgrounds/Balatro': {
     videoUrl: '/assets/video/balatro.webm',
-    description: 'The balatro shader, fully customizalbe and interactive.',
+    description: 'The swirling Balatro paint shader, with crisp pixels, a cursor that stirs the paint and click whirlpools.',
     category: 'Backgrounds',
     name: 'Balatro',
     docsUrl: 'https://reactbits.dev/backgrounds/balatro',
     tags: [],
-    added: '2025-02-16'
+    added: '2025-02-16',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt on the same swirl with crisp pixels and no extra dependencies. The cursor now stirs the paint, clicks spin up whirlpools, and an intro spins it into place.'
+      }
+    ]
   },
   'Backgrounds/Ballpit': {
     videoUrl: '/assets/video/ballpit.webm',
-    description: 'Physics ball pit simulation with bouncing colorful spheres.',
+    description: 'A soft-lit pit of physics balls you can shove with the cursor, grab, throw and blast apart.',
     category: 'Backgrounds',
     name: 'Ballpit',
     docsUrl: 'https://reactbits.dev/backgrounds/ballpit',
     tags: [],
-    added: '2025-01-07'
+    added: '2025-01-07',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt for smooth physics that handles thousands of balls, with soft modern finishes, and you can now grab, throw and blast them apart.'
+      }
+    ]
   },
   'Backgrounds/Beams': {
     videoUrl: '/assets/video/beams.webm',
@@ -1592,12 +1678,18 @@ export const componentMetadata = {
   },
   'Backgrounds/DotField': {
     videoUrl: '/assets/video/dotfield.webm',
-    description: 'Interactive dot grid with cursor bulge, glow, sparkle, and wave effects.',
+    description: 'A gradient dot field seen through a lens that follows the cursor, magnifying, pinching or swirling the dots.',
     category: 'Backgrounds',
     name: 'DotField',
     docsUrl: 'https://reactbits.dev/backgrounds/dot-field',
     tags: [],
-    added: '2026-04-14'
+    added: '2026-04-14',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt around a smooth magnifying lens that stays under the cursor and zooms closer while you hold. New dot layouts, swirl and pinch lenses, and an intro that pulls into focus.'
+      }
+    ]
   },
   'Backgrounds/DotGrid': {
     videoUrl: '/assets/video/dotgrid.webm',
@@ -1727,12 +1819,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Topography': {
     videoUrl: '/assets/video/topography.webm',
-    description: 'A living contour map with glowing, elevation-tinted lines.',
+    description: 'A 3D landscape drawn in glowing contour lines that rises under the cursor, with light pulses on click.',
     category: 'Backgrounds',
     name: 'Topography',
     docsUrl: 'https://reactbits.dev/backgrounds/topography',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt as a 3D landscape of glowing contour lines that rises from a flat map, with land that lifts under the cursor, click pulses, optional survey markers and glitches, and a light mode.'
+      }
+    ]
   },
   'Backgrounds/LightTunnel': {
     videoUrl: '/assets/video/lighttunnel.webm',
@@ -1781,12 +1879,18 @@ export const componentMetadata = {
   },
   'Backgrounds/Scanner': {
     videoUrl: '/assets/video/scanner.webm',
-    description: 'Calm interference bands sweeping across the screen like an oscilloscope.',
+    description: 'Glowing interference lines swept by a scan beam, with a CRT finish, cursor lensing and click pings.',
     category: 'Backgrounds',
     name: 'Scanner',
     docsUrl: 'https://reactbits.dev/backgrounds/scanner',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Crisper glowing lines and a scan head with an afterglow trail, plus lines that part around the cursor, click pings, a power-on intro and a light mode.'
+      }
+    ]
   },
   'Backgrounds/Grainient': {
     videoUrl: '/assets/video/grainient.webm',
@@ -1895,12 +1999,18 @@ export const componentMetadata = {
   },
   'Backgrounds/LightRays': {
     videoUrl: '/assets/video/lightrays.webm',
-    description: 'Volumetric light rays/beams with customizable direction.',
+    description: 'Volumetric light rays from any edge, with source glow and haze. The cursor steers the beam and casts a shadow.',
     category: 'Backgrounds',
     name: 'LightRays',
     docsUrl: 'https://reactbits.dev/backgrounds/light-rays',
     tags: [],
-    added: '2025-07-21'
+    added: '2025-07-21',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt on the same rays with a glowing source, drifting haze and crisper shafts, at a fraction of the cost. The cursor now casts a soft shadow and clicks send a wave of light down the beam.'
+      }
+    ]
   },
   'Backgrounds/Lightning': {
     videoUrl: '/assets/video/lightning.webm',
@@ -1919,12 +2029,18 @@ export const componentMetadata = {
   },
   'Backgrounds/LineWaves': {
     videoUrl: '/assets/video/linewaves.webm',
-    description: 'Animated line wave pattern with colorful warped distortion.',
+    description: 'Fine lines that flow in silky waves while a band of light drifts through them.',
     category: 'Backgrounds',
     name: 'LineWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/line-waves',
     tags: [],
-    added: '2026-03-17'
+    added: '2026-03-17',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with crisp, smoothly flowing lines and a soft band of light that drifts through them. Adds presets, a cursor spotlight, click ripples and a light mode.'
+      }
+    ]
   },
   'Backgrounds/EvilEye': {
     videoUrl: '/assets/video/evileye.webm',
@@ -1958,7 +2074,13 @@ export const componentMetadata = {
     name: 'SoftAurora',
     docsUrl: 'https://reactbits.dev/backgrounds/soft-aurora',
     tags: [],
-    added: '2026-03-17'
+    added: '2026-03-17',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'The band now reaches toward a nearby cursor, clicks send a pulse of light along it, and it blooms in from a thin line. New presets, a tilt and a cleaner light mode, with no extra dependencies.'
+      }
+    ]
   },
   'Backgrounds/MagicRings': {
     videoUrl: '/assets/video/magicrings.webm',
@@ -2022,12 +2144,18 @@ export const componentMetadata = {
   },
   'Backgrounds/PixelBlast': {
     videoUrl: '/assets/video/pixelblast.webm',
-    description: 'Exploding pixel particle bursts with optional liquid postprocessing.',
+    description: 'Dithered pixel clouds that drift, shimmer and light up under the cursor, with ripples, shapes and a perspective floor.',
     category: 'Backgrounds',
     name: 'PixelBlast',
     docsUrl: 'https://reactbits.dev/backgrounds/pixel-blast',
     tags: [],
-    added: '2025-08-31'
+    added: '2025-08-31',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Same pixel clouds, now smoother and softer, with drift, shimmer, glow, an accent color, a blast intro and a cursor that lights pixels up. New shapes and a perspective floor, much faster, no dependencies.'
+      }
+    ]
   },
   'Backgrounds/Plasma': {
     videoUrl: '/assets/video/plasma.webm',
@@ -2121,12 +2249,18 @@ export const componentMetadata = {
   },
   'Backgrounds/SideRays': {
     videoUrl: '/assets/video/siderays.webm',
-    description: 'Animated light rays emanating from the side with customizable colors and speed.',
+    description: 'Shafts of light that fan in from a corner or side, shimmer slowly and lean toward the cursor.',
     category: 'Backgrounds',
     name: 'SideRays',
     docsUrl: 'https://reactbits.dev/backgrounds/side-rays',
     tags: [],
-    added: '2026-06-02'
+    added: '2026-06-02',
+    updates: [
+      {
+        date: '2026-10-12',
+        note: 'Rebuilt with soft, shimmering light shafts that grow in from the corner and lean toward the cursor. Adds presets, side origins, drifting dust and a light mode.'
+      }
+    ]
   },
   'Backgrounds/ShapeGrid': {
     videoUrl: '/assets/video/squares.webm',

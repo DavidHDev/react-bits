@@ -1,329 +1,412 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
 
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-
 import PropTable from '../../components/common/Preview/PropTable';
-import BackgroundContent from '../../components/common/Preview/BackgroundContent';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
-import { lightRays } from '../../constants/code/Backgrounds/lightRaysCode';
 import LightRays from '../../content/Backgrounds/LightRays/LightRays';
+import { lightRays } from '../../constants/code/Backgrounds/lightRaysCode';
 
-const DEFAULT_PROPS = {
+const LOOK = {
   raysOrigin: 'top-center',
   raysColor: '#ffffff',
   raysSpeed: 1,
   lightSpread: 0.5,
-  rayLength: 3.0,
-  pulsating: false,
-  fadeDistance: 1.0,
-  saturation: 1.0,
+  rayLength: 3,
+  rayDensity: 1,
+  tilt: 0,
+  raySharpness: 0.35,
+  glow: 0.6,
+  haze: 0.25,
+  atmosphere: 1,
+  intensity: 1,
+  fadeDistance: 1,
+  saturation: 1,
   mouseInfluence: 0.1,
-  noiseAmount: 0.0,
-  distortion: 0.0
+  noiseAmount: 0,
+  distortion: 0,
+  pulsating: false
 };
+
+const DEFAULT_PROPS = {
+  preset: 'spotlight',
+  ...LOOK,
+  followMouse: true,
+  cursorShadow: true,
+  clickPulse: true,
+  intro: true,
+  lightMode: false
+};
+
+const PRESETS = {
+  spotlight: {},
+  sunbeam: {
+    raysOrigin: 'top-left',
+    tilt: -32,
+    raysColor: '#FFD39A',
+    lightSpread: 1,
+    rayDensity: 1.3,
+    glow: 0.9,
+    haze: 0.45,
+    atmosphere: 0,
+    intensity: 1.3
+  },
+  stage: { lightSpread: 0.22, rayLength: 2.2, raySharpness: 0.15, glow: 1.1, haze: 0.6 },
+  searchlight: { lightSpread: 0.16, raySharpness: 0.2, glow: 0.5, haze: 0.5, intensity: 1.2, mouseInfluence: 0.6 },
+  cathedral: {
+    raysOrigin: 'top-right',
+    tilt: 25,
+    lightSpread: 0.7,
+    rayDensity: 1.8,
+    raySharpness: 0.75,
+    glow: 0.4,
+    haze: 0.5,
+    intensity: 1.2
+  },
+  underwater: {
+    raysColor: '#7FE3FF',
+    raysSpeed: 0.5,
+    lightSpread: 1,
+    rayDensity: 1.6,
+    raySharpness: 0.5,
+    haze: 0.5,
+    atmosphere: 0.7,
+    distortion: 0.12
+  },
+  horizon: {
+    raysOrigin: 'bottom-center',
+    raysColor: '#FFB070',
+    lightSpread: 1.4,
+    rayLength: 2,
+    glow: 1,
+    haze: 0.2,
+    atmosphere: 0
+  }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'spotlight', label: 'Spotlight' },
+  { value: 'sunbeam', label: 'Sunbeam' },
+  { value: 'stage', label: 'Stage' },
+  { value: 'searchlight', label: 'Searchlight' },
+  { value: 'cathedral', label: 'Cathedral' },
+  { value: 'underwater', label: 'Underwater' },
+  { value: 'horizon', label: 'Horizon' }
+];
+
+const ORIGIN_OPTIONS = [
+  { value: 'top-center', label: 'Top' },
+  { value: 'top-left', label: 'Top Left' },
+  { value: 'top-right', label: 'Top Right' },
+  { value: 'left', label: 'Left' },
+  { value: 'right', label: 'Right' },
+  { value: 'bottom-center', label: 'Bottom' },
+  { value: 'bottom-left', label: 'Bottom Left' },
+  { value: 'bottom-right', label: 'Bottom Right' }
+];
+
+const propData = [
+  {
+    name: 'raysOrigin',
+    type: 'RaysOrigin',
+    default: "'top-center'",
+    description:
+      "Where the light comes from: 'top-center', 'top-left', 'top-right', 'left', 'right', 'bottom-center', 'bottom-left' or 'bottom-right'."
+  },
+  { name: 'raysColor', type: 'string', default: "'#ffffff'", description: 'Color of the light.' },
+  { name: 'raysSpeed', type: 'number', default: '1', description: 'Animation speed. 0 freezes the rays.' },
+  {
+    name: 'lightSpread',
+    type: 'number',
+    default: '0.5',
+    description: 'How wide the beam opens. Lower values give a tight spotlight.'
+  },
+  { name: 'rayLength', type: 'number', default: '3', description: 'How far the rays reach, in container widths.' },
+  { name: 'rayDensity', type: 'number', default: '1', description: 'How many separate shafts the beam splits into.' },
+  { name: 'tilt', type: 'number', default: '0', description: 'Turns the beam by this many degrees.' },
+  {
+    name: 'raySharpness',
+    type: 'number',
+    default: '0.35',
+    description: 'How crisp the edges of the shafts are, from 0 to 1.'
+  },
+  { name: 'glow', type: 'number', default: '0.6', description: 'Brightness of the glow around the light source.' },
+  {
+    name: 'haze',
+    type: 'number',
+    default: '0.25',
+    description: 'Drifting haze that breaks the shafts up, like dust in the air, from 0 to 1.'
+  },
+  {
+    name: 'atmosphere',
+    type: 'number',
+    default: '1',
+    description: 'How much the light cools toward blue as it travels away from the source, from 0 to 1.'
+  },
+  { name: 'intensity', type: 'number', default: '1', description: 'Overall brightness of the light.' },
+  { name: 'pulsating', type: 'boolean', default: 'false', description: 'The rays slowly breathe brighter and dimmer.' },
+  {
+    name: 'fadeDistance',
+    type: 'number',
+    default: '1',
+    description: 'How far the rays travel before they dim, in container widths.'
+  },
+  { name: 'saturation', type: 'number', default: '1', description: 'Color saturation of the light.' },
+  {
+    name: 'followMouse',
+    type: 'boolean',
+    default: 'true',
+    description: 'The beam turns toward the cursor.'
+  },
+  {
+    name: 'mouseInfluence',
+    type: 'number',
+    default: '0.1',
+    description: 'How far the beam turns toward the cursor, from 0 to 1.'
+  },
+  {
+    name: 'cursorShadow',
+    type: 'boolean',
+    default: 'true',
+    description: 'The cursor blocks the light and casts a soft shadow down the rays.'
+  },
+  {
+    name: 'clickPulse',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a wave of light down the rays.'
+  },
+  { name: 'noiseAmount', type: 'number', default: '0', description: 'Film grain over the rays, from 0 to 1.' },
+  { name: 'distortion', type: 'number', default: '0', description: 'Makes the rays waver as if seen through heat.' },
+  { name: 'intro', type: 'boolean', default: 'true', description: 'The rays grow out from the source on mount.' },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Prints the light as soft colored ink so it sits on light pages.'
+  },
+  { name: 'opacity', type: 'number', default: '1', description: 'Overall opacity, from 0 to 1.' },
+  {
+    name: 'maxDevicePixelRatio',
+    type: 'number',
+    default: '2',
+    description: 'Highest pixel ratio the canvas renders at.'
+  },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
 
 const LightRaysDemo = () => {
   const [key, forceRerender] = useForceRerender();
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    raysOrigin,
-    raysColor,
-    raysSpeed,
-    lightSpread,
-    rayLength,
-    pulsating,
-    fadeDistance,
-    saturation,
-    mouseInfluence,
-    noiseAmount,
-    distortion,
-    lightMode
-  } = props;
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
 
-  const raysOriginOptions = [
-    { value: 'top-center', label: 'Top' },
-    { value: 'right', label: 'Right' },
-    { value: 'left', label: 'Left' },
-    { value: 'bottom-center', label: 'Bottom' }
-  ];
-
-  const propData = useMemo(
-    () => [
-      {
-        name: 'raysOrigin',
-        type: 'RaysOrigin',
-        default: '"top-center"',
-        description:
-          "Origin position of the light rays. Options: 'top-center', 'top-left', 'top-right', 'right', 'left', 'bottom-center', 'bottom-right', 'bottom-left'"
-      },
-      {
-        name: 'raysColor',
-        type: 'string',
-        default: '"#ffffff"',
-        description: 'Color of the light rays in hex format'
-      },
-      {
-        name: 'raysSpeed',
-        type: 'number',
-        default: '1',
-        description: 'Animation speed of the rays'
-      },
-      {
-        name: 'lightSpread',
-        type: 'number',
-        default: '1',
-        description: 'How wide the light rays spread. Lower values = tighter rays, higher values = wider spread'
-      },
-      {
-        name: 'rayLength',
-        type: 'number',
-        default: '2',
-        description: 'Maximum length/reach of the rays'
-      },
-      {
-        name: 'pulsating',
-        type: 'boolean',
-        default: 'false',
-        description: 'Enable pulsing animation effect'
-      },
-      {
-        name: 'fadeDistance',
-        type: 'number',
-        default: '1.0',
-        description: 'How far rays fade out from origin'
-      },
-      {
-        name: 'saturation',
-        type: 'number',
-        default: '1.0',
-        description: 'Color saturation level (0-1)'
-      },
-      {
-        name: 'followMouse',
-        type: 'boolean',
-        default: 'true',
-        description: 'Make rays rotate towards the mouse cursor'
-      },
-      {
-        name: 'mouseInfluence',
-        type: 'number',
-        default: '0.1',
-        description: 'How much mouse affects rays (0-1)'
-      },
-      {
-        name: 'noiseAmount',
-        type: 'number',
-        default: '0.0',
-        description: 'Add noise/grain to rays (0-1)'
-      },
-      {
-        name: 'distortion',
-        type: 'number',
-        default: '0.0',
-        description: 'Apply wave distortion to rays'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: '""',
-        description: 'Additional CSS classes to apply to the container'
-      }
-    ],
-    []
-  );
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({ ...base, ...PRESETS[value], preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <LightRays
-              key={key}
-              raysOrigin={raysOrigin}
-              raysColor={raysColor}
-              raysSpeed={raysSpeed}
-              lightSpread={lightSpread}
-              rayLength={rayLength}
-              pulsating={pulsating}
-              fadeDistance={fadeDistance}
-              saturation={saturation}
-              mouseInfluence={mouseInfluence}
-              noiseAmount={noiseAmount}
-              distortion={distortion}
-              lightMode={lightMode}
-            />
-
+            <LightRays key={key} {...settings} />
             <BackgroundContent pillText="New Background" headline="May these lights guide you on your path" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="light-rays"
-              currentProps={{
-                raysOrigin,
-                raysColor,
-                raysSpeed,
-                lightSpread,
-                rayLength,
-                pulsating,
-                fadeDistance,
-                saturation,
-                followMouse: true,
-                mouseInfluence,
-                noiseAmount,
-                distortion
-              }}
-              defaultProps={{
-                raysOrigin: 'top-center',
-                raysColor: '#ffffff',
-                raysSpeed: 1,
-                lightSpread: 1,
-                rayLength: 2,
-                pulsating: false,
-                fadeDistance: 1,
-                saturation: 1,
-                followMouse: true,
-                mouseInfluence: 0.1,
-                noiseAmount: 0,
-                distortion: 0
-              }}
-            />
+            <OpenInStudioButton backgroundId="light-rays" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
-            <PreviewColorPickerCustom title="Rays Color" color={raysColor} onChange={val => { updateProp('raysColor', val); forceRerender(); }} />
-
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewSelect
               title="Rays Origin"
-              value={raysOrigin}
-              onChange={value => {
-                updateProp('raysOrigin', value);
-                forceRerender();
-              }}
-              width={160}
-              options={raysOriginOptions}
+              options={ORIGIN_OPTIONS}
+              value={settings.raysOrigin}
+              onChange={value => updateProp('raysOrigin', value)}
             />
-
+            <PreviewColorPickerCustom
+              title="Rays Color"
+              color={settings.raysColor}
+              onChange={value => updateProp('raysColor', value)}
+            />
             <PreviewSlider
               title="Rays Speed"
-              min={0.1}
+              min={0}
               max={3}
-              step={0.1}
-              value={raysSpeed}
-              onChange={value => {
-                updateProp('raysSpeed', value);
-                forceRerender();
-              }}
+              step={0.05}
+              value={settings.raysSpeed}
+              onChange={value => updateProp('raysSpeed', value)}
             />
-
             <PreviewSlider
               title="Light Spread"
               min={0.1}
               max={2}
-              step={0.1}
-              value={lightSpread}
-              onChange={value => {
-                updateProp('lightSpread', value);
-                forceRerender();
-              }}
+              step={0.01}
+              value={settings.lightSpread}
+              onChange={value => updateProp('lightSpread', value)}
             />
-
             <PreviewSlider
               title="Ray Length"
               min={0.5}
-              max={3}
+              max={4}
               step={0.1}
-              value={rayLength}
-              onChange={value => {
-                updateProp('rayLength', value);
-                forceRerender();
-              }}
+              value={settings.rayLength}
+              onChange={value => updateProp('rayLength', value)}
             />
-
+            <PreviewSlider
+              title="Ray Density"
+              min={0.3}
+              max={4}
+              step={0.1}
+              value={settings.rayDensity}
+              onChange={value => updateProp('rayDensity', value)}
+            />
+            <PreviewSlider
+              title="Tilt"
+              min={-60}
+              max={60}
+              step={1}
+              value={settings.tilt}
+              onChange={value => updateProp('tilt', value)}
+            />
+            <PreviewSlider
+              title="Ray Sharpness"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.raySharpness}
+              onChange={value => updateProp('raySharpness', value)}
+            />
+            <PreviewSlider
+              title="Glow"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
+            />
+            <PreviewSlider
+              title="Haze"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.haze}
+              onChange={value => updateProp('haze', value)}
+            />
+            <PreviewSlider
+              title="Atmosphere"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.atmosphere}
+              onChange={value => updateProp('atmosphere', value)}
+            />
+            <PreviewSlider
+              title="Intensity"
+              min={0.2}
+              max={2}
+              step={0.05}
+              value={settings.intensity}
+              onChange={value => updateProp('intensity', value)}
+            />
             <PreviewSlider
               title="Fade Distance"
-              min={0.5}
+              min={0.3}
               max={2}
-              step={0.1}
-              value={fadeDistance}
-              onChange={value => {
-                updateProp('fadeDistance', value);
-                forceRerender();
-              }}
+              step={0.05}
+              value={settings.fadeDistance}
+              onChange={value => updateProp('fadeDistance', value)}
             />
-
             <PreviewSlider
               title="Saturation"
               min={0}
               max={2}
-              step={0.1}
-              value={saturation}
-              onChange={value => {
-                updateProp('saturation', value);
-                forceRerender();
-              }}
+              step={0.05}
+              value={settings.saturation}
+              onChange={value => updateProp('saturation', value)}
             />
-
             <PreviewSlider
               title="Mouse Influence"
               min={0}
               max={1}
-              step={0.1}
-              value={mouseInfluence}
-              onChange={value => {
-                updateProp('mouseInfluence', value);
-                forceRerender();
-              }}
+              step={0.05}
+              value={settings.mouseInfluence}
+              onChange={value => updateProp('mouseInfluence', value)}
             />
-
             <PreviewSlider
               title="Noise Amount"
               min={0}
               max={0.5}
               step={0.01}
-              value={noiseAmount}
-              onChange={value => {
-                updateProp('noiseAmount', value);
-                forceRerender();
-              }}
+              value={settings.noiseAmount}
+              onChange={value => updateProp('noiseAmount', value)}
             />
-
             <PreviewSlider
               title="Distortion"
               min={0}
               max={1}
-              step={0.1}
-              value={distortion}
+              step={0.05}
+              value={settings.distortion}
+              onChange={value => updateProp('distortion', value)}
+            />
+            <PreviewSwitch
+              title="Pulsating"
+              isChecked={settings.pulsating}
+              onChange={value => updateProp('pulsating', value)}
+            />
+            <PreviewSwitch
+              title="Follow Mouse"
+              isChecked={settings.followMouse}
+              onChange={value => updateProp('followMouse', value)}
+            />
+            <PreviewSwitch
+              title="Cursor Shadow"
+              isChecked={settings.cursorShadow}
+              onChange={value => updateProp('cursorShadow', value)}
+            />
+            <PreviewSwitch
+              title="Click Pulse"
+              isChecked={settings.clickPulse}
+              onChange={value => updateProp('clickPulse', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
               onChange={value => {
-                updateProp('distortion', value);
+                updateProp('intro', value);
                 forceRerender();
               }}
             />
-
             <PreviewSwitch
-              title="Pulsating"
-              isChecked={pulsating}
-              onChange={value => {
-                updateProp('pulsating', value);
-                forceRerender();
-              }}
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

@@ -10,12 +10,13 @@ export const dotField = {
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <DotField
+    gradientFrom="#5227FF"
+    gradientTo="#FF9FFC"
     dotRadius={1.5}
     dotSpacing={14}
-    bulgeStrength={67}
+    cursorRadius={240}
+    bulgeStrength={0.6}
     glowRadius={160}
-    sparkle={false}
-    waveAmplitude={0}
   />
 </div>`,
   code,

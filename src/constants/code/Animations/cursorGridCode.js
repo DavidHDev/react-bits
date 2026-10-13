@@ -9,20 +9,20 @@ export const cursorGrid = {
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <CursorGrid
-    cellSize={70}
-    color="#D946EF"
+    cellSize={60}
+    color="#ffffff"
+    highlight="area"
+    gridStyle="lines"
     radius={140}
-    falloff="smooth"
     holdTime={400}
     fadeDuration={800}
-    lineWidth={1.2}
-    maxOpacity={1}
-    fillOpacity={0}
-    gridOpacity={0}
-    cellRadius={0}
+    fillOpacity={0.06}
+    gridOpacity={0.08}
+    spotlight={0.6}
     clickPulse
-    pulseSpeed={600}
-  />
+  >
+    {/* Your content here */}
+  </CursorGrid>
 </div>`,
   code,
   css,

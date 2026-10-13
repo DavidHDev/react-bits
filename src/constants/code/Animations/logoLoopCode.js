@@ -9,13 +9,12 @@ export const logoLoop = {
 import { SiReact, SiNextdotjs, SiTypescript, SiTailwindcss } from 'react-icons/si';
 
 const techLogos = [
-  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiReact />, title: "React", href: "https://react.dev", hoverColor: "#61dafb" },
   { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
-  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
-  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org", hoverColor: "#3178c6" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com", hoverColor: "#38bdf8" },
 ];
 
-// Alternative with image sources
 const imageLogos = [
   { src: "/logos/company1.png", alt: "Company 1", href: "https://company1.com" },
   { src: "/logos/company2.png", alt: "Company 2", href: "https://company2.com" },
@@ -24,31 +23,28 @@ const imageLogos = [
 
 function App() {
   return (
-    <div style={{ height: '200px', position: 'relative', overflow: 'hidden'}}>
-      {/* Basic horizontal loop */}
+    <div style={{ height: '200px', position: 'relative', overflow: 'hidden' }}>
       <LogoLoop
         logos={techLogos}
-        speed={120}
+        speed={100}
         direction="left"
         logoHeight={48}
-        gap={40}
+        gap={56}
         hoverSpeed={0}
         scaleOnHover
-        fadeOut
-        fadeOutColor="#ffffff"
         ariaLabel="Technology partners"
       />
-      
-      {/* Vertical loop with deceleration on hover */}
+
       <LogoLoop
         logos={techLogos}
-        speed={80}
-        direction="up"
-        logoHeight={48}
-        gap={40}
-        hoverSpeed={20}
-        fadeOut
+        layout="orbit"
+        bend={0.6}
+        magnify={0.6}
+        labels="hover"
+        muted={0.5}
       />
+
+      <LogoLoop logos={imageLogos} direction="up" focus={0.5} step />
     </div>
   );
 }`,

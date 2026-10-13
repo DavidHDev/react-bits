@@ -1,245 +1,381 @@
-import { useMemo } from 'react';
-import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import { Box, Flex } from '@chakra-ui/react';
+import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
-import RefreshButton from '../../components/common/Preview/RefreshButton';
+import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
-import Dependencies from '../../components/code/Dependencies';
-import useForceRerender from '../../hooks/useForceRerender';
 import PropTable from '../../components/common/Preview/PropTable';
-
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
-import Customize from '../../components/common/Preview/Customize';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorList from '../../components/common/Preview/PreviewColorList';
+import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
+
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { useColorMode } from '../../components/setup/color-mode';
 
 import Ballpit from '../../content/Backgrounds/Ballpit/Ballpit';
 import { ballpit } from '../../constants/code/Backgrounds/ballpitCode';
 
-import useComponentProps from '../../hooks/useComponentProps';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-
-const DEFAULT_PROPS = {
-  count: 100,
-  gravity: 0.01,
+const LOOK = {
+  colors: ['#ffffff'],
+  material: 'satin',
+  count: 200,
+  minSize: 0.5,
+  maxSize: 1,
+  gravity: 0,
   friction: 0.9975,
   wallBounce: 0.95,
-  followCursor: false
+  bounce: 0.85,
+  depth: 2,
+  drift: 0.4,
+  cursorSize: 1,
+  lightColor: '#ffffff',
+  lightIntensity: 1,
+  exposure: 1,
+  shadows: 0.6
 };
 
+const DEFAULT_PROPS = {
+  preset: 'float',
+  ...LOOK,
+  followCursor: true,
+  grab: true,
+  clickEffect: 'burst',
+  intro: true
+};
+
+const PRESETS = {
+  float: {},
+  pit: { colors: ['#5227ff'], gravity: 0.6, drift: 0, count: 260 },
+  clay: { material: 'matte', colors: ['#e8b4a0'], gravity: 0.6, drift: 0, shadows: 0.75 },
+  gloss: { material: 'gloss', colors: ['#18181b', '#ff5b2e'] },
+  frosted: { material: 'frosted', colors: ['#c7d2fe'], gravity: 0, drift: 0.5, count: 150 },
+  metal: { material: 'metal', colors: ['#d4d4d8'], gravity: 0.6, drift: 0 },
+  sprinkles: { colors: ['#ffffff', '#5227ff'], count: 900, minSize: 0.26, maxSize: 0.46, gravity: 0.6, drift: 0 },
+  zero: { colors: ['#ff5b2e'], gravity: 0, drift: 0, friction: 1, bounce: 1, wallBounce: 1 }
+};
+
+const LIGHT_SWAP = {
+  float: { colors: ['#18181b'] },
+  frosted: { colors: ['#a5b4fc'] },
+  sprinkles: { colors: ['#18181b', '#5227ff'] }
+};
+
+const PRESET_OPTIONS = [
+  { value: 'float', label: 'Float' },
+  { value: 'pit', label: 'Pit' },
+  { value: 'clay', label: 'Clay' },
+  { value: 'gloss', label: 'Gloss' },
+  { value: 'frosted', label: 'Frosted' },
+  { value: 'metal', label: 'Metal' },
+  { value: 'sprinkles', label: 'Sprinkles' },
+  { value: 'zero', label: 'Zero G' }
+];
+
+const MATERIAL_OPTIONS = [
+  { value: 'satin', label: 'Satin' },
+  { value: 'matte', label: 'Matte' },
+  { value: 'gloss', label: 'Gloss' },
+  { value: 'frosted', label: 'Frosted' },
+  { value: 'metal', label: 'Metal' }
+];
+
+const CLICK_OPTIONS = [
+  { value: 'burst', label: 'Burst' },
+  { value: 'none', label: 'None' }
+];
+
+const propData = [
+  { name: 'count', type: 'number', default: '200', description: 'Number of balls in the pit.' },
+  {
+    name: 'colors',
+    type: 'Array<string | number>',
+    default: "['#ffffff']",
+    description: 'Ball colors, handed out in turn. Hex strings or numbers such as 0x5227ff.'
+  },
+  {
+    name: 'material',
+    type: "'satin' | 'matte' | 'gloss' | 'frosted' | 'metal'",
+    default: "'satin'",
+    description: 'Surface finish: soft satin, chalky matte, polished gloss, see-through frosted or brushed metal.'
+  },
+  {
+    name: 'minSize',
+    type: 'number',
+    default: '0.5',
+    description: 'Smallest ball radius. The view is about 18 units tall.'
+  },
+  { name: 'maxSize', type: 'number', default: '1', description: 'Largest ball radius.' },
+  {
+    name: 'gravity',
+    type: 'number',
+    default: '0.5',
+    description: 'Pull toward the floor. 0 lets the balls float, around 0.5 piles them up.'
+  },
+  {
+    name: 'friction',
+    type: 'number',
+    default: '0.9975',
+    description: 'How much speed the balls keep each frame. 1 never slows them down.'
+  },
+  {
+    name: 'wallBounce',
+    type: 'number',
+    default: '0.95',
+    description: 'How much speed the balls keep when they hit the edges, from 0 to 1.'
+  },
+  {
+    name: 'bounce',
+    type: 'number',
+    default: '0.85',
+    description: 'How bouncy the balls are against each other, from 0 to 1.'
+  },
+  {
+    name: 'depth',
+    type: 'number',
+    default: '2',
+    description: 'How deep the pit is, so balls can sit in front of and behind each other.'
+  },
+  {
+    name: 'drift',
+    type: 'number',
+    default: '0',
+    description: 'Gentle wandering that keeps floating balls moving on their own.'
+  },
+  {
+    name: 'followCursor',
+    type: 'boolean',
+    default: 'true',
+    description: 'A ball follows the cursor and shoves the others out of the way.'
+  },
+  { name: 'cursorSize', type: 'number', default: '1', description: 'Radius of the cursor ball.' },
+  {
+    name: 'grab',
+    type: 'boolean',
+    default: 'true',
+    description: 'Press on a ball to pick it up, drag it around and throw it.'
+  },
+  {
+    name: 'clickEffect',
+    type: "'burst' | 'none'",
+    default: "'burst'",
+    description: 'Clicking an empty spot blasts the nearby balls away with a flash of light.'
+  },
+  {
+    name: 'lightColor',
+    type: 'string',
+    default: "'#ffffff'",
+    description: 'Color of the light that follows the cursor and lights up the balls around it.'
+  },
+  { name: 'lightIntensity', type: 'number', default: '1', description: 'Brightness of the cursor light.' },
+  { name: 'exposure', type: 'number', default: '1', description: 'Overall brightness of the balls.' },
+  {
+    name: 'shadows',
+    type: 'number',
+    default: '0.6',
+    description: 'Strength of the soft shadows where balls touch each other and the floor.'
+  },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'Balls pour in from the top on mount, or burst out from the center when gravity is near zero.'
+  },
+  { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
 const BallpitDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const { count, gravity, friction, wallBounce, followCursor } = props;
-  const colors = [0xffffff, 0x000000, 0x5227ff];
-
   const [key, forceRerender] = useForceRerender();
+  const { colorMode } = useColorMode();
+  const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'count',
-        type: 'number',
-        default: '200',
-        description: 'Sets the number of balls in the ballpit.'
-      },
-      {
-        name: 'gravity',
-        type: 'number',
-        default: '0.5',
-        description: 'Controls the gravity affecting the balls.'
-      },
-      {
-        name: 'friction',
-        type: 'number',
-        default: '0.9975',
-        description: 'Sets the friction applied to the ball movement.'
-      },
-      {
-        name: 'wallBounce',
-        type: 'number',
-        default: '0.95',
-        description: 'Determines how much balls bounce off walls.'
-      },
-      {
-        name: 'followCursor',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enables or disables the sphere following the cursor.'
-      },
-      {
-        name: 'colors',
-        type: 'array',
-        default: '[0, 0, 0]',
-        description: 'Defines the colors of the balls.'
-      },
-      {
-        name: 'ambientColor',
-        type: 'number',
-        default: '16777215',
-        description: 'Sets the ambient light color.'
-      },
-      {
-        name: 'ambientIntensity',
-        type: 'number',
-        default: '1',
-        description: 'Controls the intensity of ambient light.'
-      },
-      {
-        name: 'lightIntensity',
-        type: 'number',
-        default: '200',
-        description: 'Sets the intensity of the main light source.'
-      },
-      {
-        name: 'minSize',
-        type: 'number',
-        default: '0.5',
-        description: 'Specifies the minimum size of the balls.'
-      },
-      {
-        name: 'maxSize',
-        type: 'number',
-        default: '1',
-        description: 'Specifies the maximum size of the balls.'
-      },
-      {
-        name: 'size0',
-        type: 'number',
-        default: '1',
-        description: 'Initial size value for the cursor ball.'
-      },
-      {
-        name: 'maxVelocity',
-        type: 'number',
-        default: '0.15',
-        description: 'Limits the maximum velocity of the balls.'
-      },
-      {
-        name: 'maxX',
-        type: 'number',
-        default: '5',
-        description: 'Defines the maximum X-coordinate boundary.'
-      },
-      {
-        name: 'maxY',
-        type: 'number',
-        default: '5',
-        description: 'Defines the maximum Y-coordinate boundary.'
-      },
-      {
-        name: 'maxZ',
-        type: 'number',
-        default: '2',
-        description: 'Defines the maximum Z-coordinate boundary.'
-      }
-    ],
-    []
-  );
+  const applyPreset = value => {
+    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
+    updateProps({
+      ...base,
+      ...PRESETS[value],
+      ...(colorMode === 'light' ? LIGHT_SWAP[value] : null),
+      preset: value
+    });
+    forceRerender();
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
-          <Box position="relative" className="demo-container" minH={500} maxH={500} overflow="hidden">
+          <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
+            <Ballpit key={key} {...settings} />
+            <BackgroundContent headline="Balls! What's not to like about them?" />
             <RefreshButton onClick={forceRerender} />
-            <Ballpit
-              className="ballpit-demo"
-              key={key}
-              count={count}
-              gravity={gravity}
-              friction={friction}
-              wallBounce={wallBounce}
-              followCursor={followCursor}
-              colors={colors}
-            />
-
-            {/* For Demo Purposes Only */}
-            <BackgroundContent pillText="New Background" headline="Balls! What's not to like about them?" />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="ballpit"
-              currentProps={{
-                count,
-                gravity,
-                friction,
-                wallBounce,
-                followCursor
-              }}
-              defaultProps={{
-                count: 100,
-                gravity: 0.5,
-                friction: 0.9975,
-                wallBounce: 0.95,
-                followCursor: true,
-                colors: ['#5227FF', '#7cff67', '#ff6b6b']
-              }}
-            />
+            <OpenInStudioButton backgroundId="ballpit" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
-            <PreviewSwitch
-              title="Display Cursor"
-              isChecked={followCursor}
-              onChange={checked => {
-                updateProp('followCursor', checked);
-                forceRerender();
-              }}
+            <PreviewColorList
+              title="Colors"
+              colors={settings.colors}
+              min={1}
+              max={6}
+              onChange={value => updateProp('colors', value)}
             />
-
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewSelect
+              title="Material"
+              options={MATERIAL_OPTIONS}
+              value={settings.material}
+              onChange={value => updateProp('material', value)}
+            />
+            <PreviewSelect
+              title="Click Effect"
+              options={CLICK_OPTIONS}
+              value={settings.clickEffect}
+              onChange={value => updateProp('clickEffect', value)}
+            />
+            <PreviewColorPickerCustom
+              title="Light Color"
+              color={settings.lightColor}
+              onChange={value => updateProp('lightColor', value)}
+            />
             <PreviewSlider
-              title="Ball Count"
-              min={50}
-              max={500}
+              title="Count"
+              min={10}
+              max={1000}
               step={10}
-              value={count}
-              onChange={val => {
-                updateProp('count', val);
-                forceRerender();
-              }}
+              value={settings.count}
+              onChange={value => updateProp('count', value)}
             />
-
+            <PreviewSlider
+              title="Min Size"
+              min={0.1}
+              max={2}
+              step={0.05}
+              value={settings.minSize}
+              onChange={value => updateProp('minSize', value)}
+            />
+            <PreviewSlider
+              title="Max Size"
+              min={0.1}
+              max={2}
+              step={0.05}
+              value={settings.maxSize}
+              onChange={value => updateProp('maxSize', value)}
+            />
             <PreviewSlider
               title="Gravity"
               min={0}
-              max={1}
-              step={0.1}
-              value={gravity}
-              onChange={val => {
-                updateProp('gravity', val);
-                forceRerender();
-              }}
+              max={2}
+              step={0.01}
+              value={settings.gravity}
+              onChange={value => updateProp('gravity', value)}
             />
-
             <PreviewSlider
               title="Friction"
-              min={0.9}
+              min={0.95}
               max={1}
-              step={0.001}
-              value={friction}
-              onChange={val => {
-                updateProp('friction', val);
-                forceRerender();
-              }}
+              step={0.0005}
+              value={settings.friction}
+              onChange={value => updateProp('friction', value)}
             />
-
             <PreviewSlider
               title="Wall Bounce"
-              min={0.5}
+              min={0}
               max={1}
               step={0.05}
-              value={wallBounce}
-              onChange={val => {
-                updateProp('wallBounce', val);
+              value={settings.wallBounce}
+              onChange={value => updateProp('wallBounce', value)}
+            />
+            <PreviewSlider
+              title="Bounce"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.bounce}
+              onChange={value => updateProp('bounce', value)}
+            />
+            <PreviewSlider
+              title="Depth"
+              min={0}
+              max={6}
+              step={0.25}
+              value={settings.depth}
+              onChange={value => updateProp('depth', value)}
+            />
+            <PreviewSlider
+              title="Drift"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.drift}
+              onChange={value => updateProp('drift', value)}
+            />
+            <PreviewSlider
+              title="Cursor Size"
+              min={0.2}
+              max={3}
+              step={0.1}
+              value={settings.cursorSize}
+              isDisabled={!settings.followCursor}
+              onChange={value => updateProp('cursorSize', value)}
+            />
+            <PreviewSlider
+              title="Light Intensity"
+              min={0}
+              max={3}
+              step={0.05}
+              value={settings.lightIntensity}
+              onChange={value => updateProp('lightIntensity', value)}
+            />
+            <PreviewSlider
+              title="Exposure"
+              min={0.3}
+              max={2}
+              step={0.05}
+              value={settings.exposure}
+              onChange={value => updateProp('exposure', value)}
+            />
+            <PreviewSlider
+              title="Shadows"
+              min={0}
+              max={1}
+              step={0.05}
+              value={settings.shadows}
+              onChange={value => updateProp('shadows', value)}
+            />
+            <PreviewSwitch
+              title="Follow Cursor"
+              isChecked={settings.followCursor}
+              onChange={value => updateProp('followCursor', value)}
+            />
+            <PreviewSwitch title="Grab" isChecked={settings.grab} onChange={value => updateProp('grab', value)} />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
                 forceRerender();
               }}
             />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['three']} />
         </PreviewTab>
 
         <CodeTab>

@@ -1,159 +1,126 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './PixelSwap.css';
 
-// Every pixel is a window onto its own copy of the incoming content, so the
-// grid stays bounded no matter how small the requested pixel size is.
-const MAX_PIXELS = 220;
-const KEYFRAME_STEPS = 14;
+const MAX_TILES = 196;
+const EFFECTS = ['flip', 'assemble', 'grow'];
+const ORIGINS = ['pointer', 'center', 'edges', 'left', 'right', 'top', 'bottom', 'diagonal', 'random'];
+const AXES = ['auto', 'x', 'y'];
 
-const PATTERNS = {
-  random: () => null,
-  center: (x, y) => Math.hypot(x - 0.5, y - 0.5) / Math.SQRT1_2,
-  edges: (x, y) => Math.min(x, 1 - x, y, 1 - y) * 2,
-  'left-to-right': x => x,
-  'right-to-left': x => 1 - x,
-  'top-to-bottom': (_x, y) => y,
-  'bottom-to-top': (_x, y) => 1 - y,
-  diagonal: (x, y) => (x + y) / 2,
-  spiral: (x, y) => {
-    const angle = (Math.atan2(y - 0.5, x - 0.5) + Math.PI) / (Math.PI * 2);
-    const radius = Math.hypot(x - 0.5, y - 0.5) / Math.SQRT1_2;
-    return (angle + radius) % 1;
-  }
+const ROOT = 'pixel-swap';
+const LAYER = 'pixel-swap__layer';
+const WALL = 'pixel-swap__wall';
+const TILE = 'pixel-swap__tile';
+const FACE = 'pixel-swap__face';
+const PIECE = 'pixel-swap__piece';
+const SHADE = 'pixel-swap__shade';
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const hash = index => {
+  let h = Math.imul(index + 1, 0x27d4eb2d);
+  h = Math.imul(h ^ (h >>> 15), 0x85ebca6b);
+  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 };
 
-const EASINGS = {
-  linear: [0, 0, 1, 1],
-  ease: [0.25, 0.1, 0.25, 1],
-  'ease-in': [0.42, 0, 1, 1],
-  'ease-out': [0, 0, 0.58, 1],
-  'ease-in-out': [0.42, 0, 0.58, 1]
-};
-
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-const noise = seed => {
-  const value = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
-  return value - Math.floor(value);
-};
-
-const makeEasing = value => {
-  const match = /cubic-bezier\(([^)]+)\)/.exec(value);
-  const points = match ? match[1].split(',').map(Number) : EASINGS[value];
-  if (!points || points.length !== 4 || points.some(Number.isNaN)) return makeEasing('ease');
-
-  const [x1, y1, x2, y2] = points;
-  if (x1 === y1 && x2 === y2) return progress => progress;
-
-  const cx = 3 * x1;
-  const bx = 3 * (x2 - x1) - cx;
-  const ax = 1 - cx - bx;
-  const cy = 3 * y1;
-  const by = 3 * (y2 - y1) - cy;
-  const ay = 1 - cy - by;
-
-  return progress => {
-    let t = progress;
-    for (let i = 0; i < 5; i += 1) {
-      const slope = (3 * ax * t + 2 * bx) * t + cx;
-      if (!slope) break;
-      t -= (((ax * t + bx) * t + cx) * t - progress) / slope;
-    }
-    t = clamp(t, 0, 1);
-    return ((ay * t + by) * t + cy) * t;
-  };
-};
-
-// Pixels grow slightly past their own box so gaps and rounded corners close
-// completely by the end. Overlap is invisible because every pixel shows the
-// same content locked to the same origin.
-const coverScale = (size, gap, radius) => {
-  const p = clamp(radius, 0, 50) / 100;
-  const corner = Math.SQRT1_2 / (Math.SQRT2 * (0.5 - p) + p);
-  return ((size + gap) / size) * Math.max(1, corner);
-};
-
-const buildGrid = ({ width, height, pixelSize, gap, pattern, randomness }) => {
+const buildGrid = (width, height, pixelSize, gap) => {
   let size = pixelSize;
   let columns = Math.max(1, Math.ceil((width + gap) / (size + gap)));
   let rows = Math.max(1, Math.ceil((height + gap) / (size + gap)));
-
-  if (columns * rows > MAX_PIXELS) {
-    size = Math.ceil(size * Math.sqrt((columns * rows) / MAX_PIXELS));
+  if (columns * rows > MAX_TILES) {
+    size = Math.ceil(size * Math.sqrt((columns * rows) / MAX_TILES));
     columns = Math.max(1, Math.ceil((width + gap) / (size + gap)));
     rows = Math.max(1, Math.ceil((height + gap) / (size + gap)));
   }
-
-  // Overhang the box so edge pixels stay square instead of being cut short.
   const stride = size + gap;
-  const originX = (width - (columns * stride - gap)) / 2;
-  const originY = (height - (rows * stride - gap)) / 2;
-  const order = PATTERNS[pattern] ?? PATTERNS.random;
-  const mix = clamp(randomness, 0, 1);
-  const pixels = [];
-
-  for (let row = 0; row < rows; row += 1) {
-    for (let column = 0; column < columns; column += 1) {
-      const index = row * columns + column;
-      const x = columns <= 1 ? 0.5 : column / (columns - 1);
-      const y = rows <= 1 ? 0.5 : row / (rows - 1);
-      const base = order(x, y);
-      const random = noise(index + 1);
-
-      pixels.push({
-        id: index,
-        left: originX + column * stride,
-        top: originY + row * stride,
-        offset: base === null ? random : base * (1 - mix) + random * mix
+  const startX = (width - (columns * stride - gap)) / 2;
+  const startY = (height - (rows * stride - gap)) / 2;
+  const tiles = [];
+  for (let row = 0; row < rows; row++) {
+    for (let column = 0; column < columns; column++) {
+      tiles.push({
+        index: row * columns + column,
+        left: startX + column * stride,
+        top: startY + row * stride,
+        x: columns > 1 ? column / (columns - 1) : 0.5,
+        y: rows > 1 ? row / (rows - 1) : 0.5
       });
     }
   }
-
-  return { pixels, size, gap, width, height };
+  return { tiles, size, width, height };
 };
 
-// One shared pair of keyframe lists for the whole grid: the window transform
-// and its exact inverse, so revealed content never drifts or scales.
-const buildKeyframes = ({ ease, startScale, endScale, spin, fade }) => {
-  const window = [];
-  const content = [];
-
-  for (let step = 0; step <= KEYFRAME_STEPS; step += 1) {
-    const progress = step / KEYFRAME_STEPS;
-    const eased = ease(progress);
-    const scale = startScale + (endScale - startScale) * eased;
-    const angle = spin * (1 - eased);
-
-    window.push({
-      offset: progress,
-      opacity: fade ? Math.min(1, eased * 1.6) : 1,
-      transform: `rotate(${angle}deg) scale(${scale})`
-    });
-    content.push({
-      offset: progress,
-      transform: `scale(${1 / scale}) rotate(${-angle}deg)`
-    });
+const routeOf = (tile, grid, origin, point) => {
+  const cx = tile.left + grid.size / 2;
+  const cy = tile.top + grid.size / 2;
+  if (origin === 'pointer' || origin === 'center' || origin === 'random') {
+    const px = origin === 'pointer' && point ? point.x : grid.width / 2;
+    const py = origin === 'pointer' && point ? point.y : grid.height / 2;
+    const reach = Math.max(
+      Math.hypot(px, py),
+      Math.hypot(grid.width - px, py),
+      Math.hypot(px, grid.height - py),
+      Math.hypot(grid.width - px, grid.height - py),
+      1
+    );
+    const length = Math.hypot(cx - px, cy - py);
+    const order = origin === 'random' ? hash(tile.index + 7) : length / reach;
+    return { order, dx: length ? (cx - px) / length : 0, dy: length ? (cy - py) / length : 1 };
   }
+  if (origin === 'left') return { order: tile.x, dx: 1, dy: 0 };
+  if (origin === 'right') return { order: 1 - tile.x, dx: -1, dy: 0 };
+  if (origin === 'top') return { order: tile.y, dx: 0, dy: 1 };
+  if (origin === 'bottom') return { order: 1 - tile.y, dx: 0, dy: -1 };
+  if (origin === 'diagonal') return { order: (tile.x + tile.y) / 2, dx: Math.SQRT1_2, dy: Math.SQRT1_2 };
+  const edge = Math.min(tile.x, 1 - tile.x, tile.y, 1 - tile.y);
+  if (edge === tile.x) return { order: edge * 2, dx: 1, dy: 0 };
+  if (edge === 1 - tile.x) return { order: edge * 2, dx: -1, dy: 0 };
+  if (edge === tile.y) return { order: edge * 2, dx: 0, dy: 1 };
+  return { order: edge * 2, dx: 0, dy: -1 };
+};
 
-  return { window, content };
+const makeFace = (layer, tile, grid, cover) => {
+  const face = document.createElement('div');
+  face.className = FACE;
+  const piece = document.createElement('div');
+  piece.className = PIECE;
+  piece.style.left = `${-tile.left}px`;
+  piece.style.top = `${-tile.top}px`;
+  piece.style.width = `${grid.width}px`;
+  piece.style.height = `${grid.height}px`;
+  piece.style.transformOrigin = `${tile.left + grid.size / 2}px ${tile.top + grid.size / 2}px`;
+  piece.style.transform = `scale(${1 / cover})`;
+  const clone = layer.cloneNode(true);
+  clone.removeAttribute('class');
+  clone.removeAttribute('data-visible');
+  clone.removeAttribute('aria-hidden');
+  clone.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;visibility:visible;';
+  piece.appendChild(clone);
+  const shade = document.createElement('div');
+  shade.className = SHADE;
+  face.append(piece, shade);
+  face.style.transform = `scale(${cover})`;
+  return { face, piece, shade };
 };
 
 function PixelSwap({
   firstContent,
   secondContent,
-  pixelSize = 64,
+  effect = 'flip',
+  pixelSize = 72,
   gap = 0,
   pixelRadius = 0,
-  pixelSpin = 0,
-  pixelScale = 0.35,
-  fade = true,
-  duration = 1400,
-  pixelDuration = 450,
-  pattern = 'random',
-  randomness = 0,
-  easing = 'cubic-bezier(0.22, 1, 0.36, 1)',
+  origin = 'pointer',
+  axis = 'auto',
+  duration = 1100,
+  pixelDuration = 700,
+  depth = 0.5,
+  shading = 0.5,
+  bounce = 0.3,
+  randomness = 0.15,
+  backdropColor = 'transparent',
   trigger = 'hover',
   initialActive = false,
   active,
@@ -163,226 +130,319 @@ function PixelSwap({
   className = '',
   style
 }) {
-  const [internalActive, setInternalActive] = useState(initialActive);
-  const [shownActive, setShownActive] = useState(active ?? initialActive);
-  const [transition, setTransition] = useState(null);
-  const [box, setBox] = useState({ width: 0, height: 0 });
-
-  const containerRef = useRef(null);
+  const controlled = active !== undefined;
+  const [shown, setShown] = useState(controlled ? active : initialActive);
+  const rootRef = useRef(null);
+  const wallRef = useRef(null);
   const layerRefs = useRef([]);
-  const pixelRefs = useRef([]);
-  const animationsRef = useRef([]);
-  const timerRef = useRef(0);
+  const shownRef = useRef(shown);
+  const desiredRef = useRef(shown);
+  const pointRef = useRef(null);
+  const engineRef = useRef({ running: false, to: false, animations: [], token: 0 });
 
-  const desiredActive = active ?? internalActive;
-  const incomingIndex = transition?.to ? 1 : 0;
+  const settings = {
+    effect: EFFECTS.includes(effect) ? effect : 'flip',
+    pixelSize: Math.max(12, Math.round(pixelSize)),
+    gap: Math.max(0, Math.round(gap)),
+    pixelRadius: clamp(pixelRadius, 0, 50),
+    origin: ORIGINS.includes(origin) ? origin : 'pointer',
+    axis: AXES.includes(axis) ? axis : 'auto',
+    duration: Math.max(200, duration),
+    pixelDuration: Math.max(80, pixelDuration),
+    depth: clamp(depth, 0, 1),
+    shading: clamp(shading, 0, 1),
+    bounce: clamp(bounce, 0, 1),
+    randomness: clamp(randomness, 0, 1),
+    backdropColor,
+    onComplete
+  };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
-  const grid = useMemo(
-    () =>
-      buildGrid({
-        width: box.width,
-        height: box.height,
-        pixelSize: Math.max(8, Math.round(pixelSize)),
-        gap: Math.max(0, Math.round(gap)),
-        pattern,
-        randomness
-      }),
-    [box.width, box.height, pixelSize, gap, pattern, randomness]
-  );
+  const commit = target => {
+    const root = rootRef.current;
+    const engine = engineRef.current;
+    engine.running = false;
+    engine.animations.forEach(animation => animation.cancel());
+    engine.animations = [];
+    layerRefs.current.forEach((layer, index) =>
+      layer?.setAttribute('data-visible', String(index === (target ? 1 : 0)))
+    );
+    root?.removeAttribute('data-swapping');
+    wallRef.current?.replaceChildren();
+    shownRef.current = target;
+    setShown(target);
+    settingsRef.current.onComplete?.(target);
+  };
 
-  // Snapshot the animation inputs so a transition already in flight is never
-  // rebuilt halfway through by an unrelated prop change.
-  const config = { duration, pixelDuration, pixelSpin, pixelScale, pixelRadius, fade, easing, onComplete };
-  const configRef = useRef(config);
-  const gridRef = useRef(grid);
-  configRef.current = config;
-  gridRef.current = grid;
+  const watch = () => {
+    const engine = engineRef.current;
+    engine.token += 1;
+    const token = engine.token;
+    Promise.all(engine.animations.map(animation => animation.finished))
+      .then(() => {
+        if (token === engine.token && engine.running) commit(engine.to);
+      })
+      .catch(() => {});
+  };
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Measure the padding box, which is the coordinate space the absolutely
-    // positioned layers and pixel grid actually live in.
-    const measure = () => {
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-      if (!width || !height) return;
-      setBox(current => (current.width === width && current.height === height ? current : { width, height }));
-    };
-
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
-
-  const stopAnimations = useCallback(() => {
-    animationsRef.current.forEach(animation => animation.cancel());
-    animationsRef.current = [];
-    pixelRefs.current.forEach(pixel => pixel?.replaceChildren());
-    if (timerRef.current) window.clearTimeout(timerRef.current);
-    timerRef.current = 0;
-  }, []);
-
-  useEffect(() => stopAnimations, [stopAnimations]);
-
-  useEffect(() => {
-    if (transition || desiredActive === shownActive) return;
-    setTransition({ to: desiredActive, grid: gridRef.current });
-  }, [desiredActive, shownActive, transition]);
-
-  useEffect(() => {
-    if (!transition) return;
-    const settings = configRef.current;
-    const { grid: frozenGrid, to } = transition;
-
-    const finish = () => {
-      stopAnimations();
-      setShownActive(to);
-      setTransition(null);
-      settings.onComplete?.(to);
-    };
-
-    const source = layerRefs.current[to ? 1 : 0];
-    if (!source || !frozenGrid.pixels.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      finish();
+  const start = (to, point) => {
+    const root = rootRef.current;
+    const wall = wallRef.current;
+    const engine = engineRef.current;
+    const s = settingsRef.current;
+    const from = layerRefs.current[shownRef.current ? 1 : 0];
+    const target = layerRefs.current[to ? 1 : 0];
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const width = root?.clientWidth ?? 0;
+    const height = root?.clientHeight ?? 0;
+    if (!root || !wall || !from || !target || reduce || !width || !height) {
+      commit(to);
       return;
     }
 
-    const total = Math.max(200, settings.duration);
-    const pixelMs = clamp(settings.pixelDuration, 60, total);
-    const spread = Math.max(0, total - pixelMs);
-    const endScale = coverScale(frozenGrid.size, frozenGrid.gap, settings.pixelRadius);
-    const keyframes = buildKeyframes({
-      ease: makeEasing(settings.easing),
-      startScale: clamp(settings.pixelScale, 0.05, 1) * endScale,
-      endScale,
-      spin: settings.pixelSpin,
-      fade: settings.fade
+    const grid = buildGrid(width, height, s.pixelSize, s.gap);
+    const cover = (grid.size + s.gap + 1.5) / grid.size;
+    const lift = grid.size * (0.15 + 0.65 * s.depth);
+    const spread = Math.max(0, s.duration - s.pixelDuration);
+    const tileMs = Math.min(s.pixelDuration, s.duration);
+    const overshoot = 1 + 0.6 * s.bounce;
+    const radius = `${s.pixelRadius}%`;
+    const animations = [];
+    const fragment = document.createDocumentFragment();
+
+    wall.style.perspective = `${Math.max(width, height) * (2.6 - 1.8 * s.depth)}px`;
+    wall.style.background = s.backdropColor;
+
+    grid.tiles.forEach(tile => {
+      const route = routeOf(tile, grid, s.origin, point);
+      const order = route.order * (1 - s.randomness) + hash(tile.index) * s.randomness;
+      const delay = order * spread;
+      const element = document.createElement('div');
+      element.className = TILE;
+      element.style.left = `${tile.left}px`;
+      element.style.top = `${tile.top}px`;
+      element.style.width = `${grid.size}px`;
+      element.style.height = `${grid.size}px`;
+      const old = makeFace(from, tile, grid, cover);
+      const next = makeFace(target, tile, grid, cover);
+      const seal = [{ borderRadius: '0%' }, { borderRadius: radius, offset: 0.5 }, { borderRadius: '0%' }];
+      const pieceSeal = [
+        { transform: `scale(${1 / cover})` },
+        { transform: 'scale(1)', offset: 0.5 },
+        { transform: `scale(${1 / cover})` }
+      ];
+
+      if (s.effect === 'flip') {
+        let ax = -route.dy;
+        let ay = route.dx;
+        let sign = 1;
+        if (s.axis === 'x') {
+          ax = 1;
+          ay = 0;
+          sign = route.dy >= 0 ? -1 : 1;
+        } else if (s.axis === 'y') {
+          ax = 0;
+          ay = 1;
+          sign = route.dx >= 0 ? 1 : -1;
+        }
+        const turn = angle => `rotate3d(${ax}, ${ay}, 0, ${angle * sign}deg)`;
+        old.face.style.transform = '';
+        next.face.style.transform = turn(180);
+        element.append(old.face, next.face);
+        const timing = {
+          duration: tileMs,
+          delay,
+          easing: `cubic-bezier(0.6, 0, 0.3, ${overshoot})`,
+          fill: 'both'
+        };
+        animations.push(
+          element.animate(
+            [
+              { transform: `translateZ(0px) ${turn(0)} scale(${cover})` },
+              { transform: `translateZ(${lift}px) ${turn(90)} scale(1)`, offset: 0.5 },
+              { transform: `translateZ(0px) ${turn(180)} scale(${cover})` }
+            ],
+            timing
+          ),
+          old.piece.animate(pieceSeal, timing),
+          next.piece.animate(pieceSeal, timing),
+          old.shade.animate([{ opacity: 0 }, { opacity: s.shading * 0.85, offset: 0.5 }, { opacity: 0 }], timing),
+          next.shade.animate([{ opacity: 0 }, { opacity: s.shading * 0.85, offset: 0.5 }, { opacity: 0 }], timing)
+        );
+        if (s.pixelRadius > 0) {
+          animations.push(old.face.animate(seal, timing), next.face.animate(seal, timing));
+        }
+      } else if (s.effect === 'assemble') {
+        const fall = grid.size * (0.5 + 0.9 * s.depth);
+        const tilt = (hash(tile.index + 3) - 0.5) * 2;
+        element.append(next.face, old.face);
+        const out = { duration: tileMs * 0.8, delay, easing: 'cubic-bezier(0.5, 0, 0.75, 0)', fill: 'both' };
+        const into = {
+          duration: tileMs * 0.85,
+          delay: delay + tileMs * 0.3,
+          easing: `cubic-bezier(0.2, 0.8, 0.3, ${overshoot})`,
+          fill: 'both'
+        };
+        animations.push(
+          old.face.animate(
+            [
+              { transform: `translate3d(0px, 0px, 0px) rotateX(0deg) rotateZ(0deg) scale(${cover})`, opacity: 1 },
+              {
+                transform: `translate3d(${route.dx * fall * 0.6}px, ${route.dy * fall * 0.6 + fall}px, ${-lift}px) rotateX(${-50 - 30 * Math.abs(tilt)}deg) rotateZ(${tilt * 35}deg) scale(${cover * 0.85})`,
+                opacity: 0
+              }
+            ],
+            out
+          ),
+          old.shade.animate([{ opacity: 0 }, { opacity: s.shading * 0.7 }], out),
+          next.face.animate(
+            [
+              {
+                transform: `translate3d(0px, 0px, ${-lift * 2.2}px) rotateX(${20 * tilt}deg) scale(${cover * 0.6})`,
+                opacity: 0,
+                borderRadius: radius
+              },
+              { transform: `translate3d(0px, 0px, 0px) rotateX(0deg) scale(${cover})`, opacity: 1, borderRadius: '0%' }
+            ],
+            into
+          ),
+          next.shade.animate([{ opacity: s.shading * 0.8 }, { opacity: 0 }], into)
+        );
+      } else {
+        element.append(old.face, next.face);
+        const initial = 0.25;
+        const timing = {
+          duration: tileMs,
+          delay,
+          easing: `cubic-bezier(0.2, 0.8, 0.3, ${overshoot})`,
+          fill: 'both'
+        };
+        animations.push(
+          next.face.animate(
+            [
+              { transform: `scale(${cover * initial})`, opacity: 0, borderRadius: radius },
+              { transform: `scale(${cover})`, opacity: 1, borderRadius: '0%' }
+            ],
+            timing
+          ),
+          next.piece.animate(
+            [{ transform: `scale(${1 / (cover * initial)})` }, { transform: `scale(${1 / cover})` }],
+            timing
+          ),
+          next.shade.animate([{ opacity: s.shading * 0.6 }, { opacity: 0 }], timing)
+        );
+      }
+      fragment.appendChild(element);
     });
 
-    frozenGrid.pixels.forEach((pixel, index) => {
-      const pixelElement = pixelRefs.current[index];
-      if (!pixelElement) return;
-
-      // Clone the rendered layer instead of re-rendering the content through
-      // React once per pixel: same visual result, a fraction of the cost.
-      const content = document.createElement('div');
-      content.className = 'pixel-swap__pixel-content';
-      content.style.left = `${-pixel.left}px`;
-      content.style.top = `${-pixel.top}px`;
-      content.style.width = `${frozenGrid.width}px`;
-      content.style.height = `${frozenGrid.height}px`;
-      // Counter-transform about the pixel's centre, not the content's, so the
-      // two transforms cancel to an exact identity at every frame.
-      const originX = pixel.left + frozenGrid.size / 2;
-      const originY = pixel.top + frozenGrid.size / 2;
-      content.style.transformOrigin = `${originX}px ${originY}px`;
-
-      const clone = source.cloneNode(true);
-      clone.dataset.visible = 'true';
-      clone.removeAttribute('aria-hidden');
-      content.appendChild(clone);
-      pixelElement.replaceChildren(content);
-
-      const timing = { duration: pixelMs, delay: pixel.offset * spread, easing: 'linear', fill: 'both' };
-      animationsRef.current.push(
-        pixelElement.animate(keyframes.window, timing),
-        content.animate(keyframes.content, timing)
-      );
-    });
-
-    timerRef.current = window.setTimeout(finish, total);
-    return stopAnimations;
-  }, [stopAnimations, transition]);
-
-  const requestActive = useCallback(
-    next => {
-      if (active === undefined) setInternalActive(next);
-      onActiveChange?.(next);
-    },
-    [active, onActiveChange]
-  );
-
-  const interactionProps = useMemo(() => {
-    if (trigger === 'hover') {
-      return {
-        onMouseEnter: () => requestActive(true),
-        onMouseLeave: () => requestActive(false),
-        onFocus: () => requestActive(true),
-        onBlur: () => requestActive(false),
-        tabIndex: 0
-      };
-    }
-
-    if (trigger === 'click') {
-      return {
-        onClick: () => requestActive(!desiredActive),
-        onKeyDown: event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            requestActive(!desiredActive);
-          }
-        },
-        role: 'button',
-        tabIndex: 0
-      };
-    }
-
-    return {};
-  }, [desiredActive, requestActive, trigger]);
-
-  const renderLayer = (content, index) => {
-    const isShown = index === (shownActive ? 1 : 0);
-    return (
-      <div
-        key={index}
-        ref={element => {
-          layerRefs.current[index] = element;
-        }}
-        className="pixel-swap__layer"
-        data-visible={isShown && !(transition && index === incomingIndex)}
-        style={{ zIndex: isShown ? 2 : 1 }}
-        aria-hidden={!isShown}
-      >
-        {content}
-      </div>
-    );
+    wall.replaceChildren(fragment);
+    root.setAttribute('data-swapping', '');
+    engine.animations = animations;
+    engine.running = true;
+    engine.to = to;
+    watch();
   };
+
+  const request = (to, point) => {
+    const engine = engineRef.current;
+    if (engine.running) {
+      if (engine.to === to) return;
+      engine.to = to;
+      engine.animations.forEach(animation => animation.reverse());
+      watch();
+      return;
+    }
+    if (shownRef.current === to) return;
+    start(to, point);
+  };
+  const requestRef = useRef(request);
+  requestRef.current = request;
+
+  const ask = (next, point) => {
+    desiredRef.current = next;
+    pointRef.current = point;
+    onActiveChange?.(next);
+    if (!controlled) request(next, point);
+  };
+
+  useEffect(() => {
+    if (active === undefined) return;
+    desiredRef.current = active;
+    requestRef.current(active, pointRef.current);
+  }, [active]);
+
+  useEffect(() => {
+    const engine = engineRef.current;
+    return () => {
+      engine.token += 1;
+      engine.animations.forEach(animation => animation.cancel());
+      engine.animations = [];
+      engine.running = false;
+    };
+  }, []);
+
+  const pointOf = event => {
+    const rect = rootRef.current?.getBoundingClientRect();
+    if (!rect || event.clientX === undefined || (event.clientX === 0 && event.clientY === 0 && event.detail === 0))
+      return null;
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+  };
+
+  const handlers = {};
+  if (trigger === 'hover') {
+    handlers.onPointerEnter = event => {
+      if (event.pointerType === 'touch') return;
+      ask(true, pointOf(event));
+    };
+    handlers.onPointerLeave = event => {
+      if (event.pointerType === 'touch') return;
+      ask(false, pointOf(event));
+    };
+    handlers.onClick = event => {
+      const native = event.nativeEvent;
+      const touch = 'pointerType' in native && native.pointerType === 'touch';
+      if (touch || event.detail === 0) ask(!desiredRef.current, pointOf(event));
+    };
+    handlers.onFocus = event => {
+      if (event.target === event.currentTarget && event.currentTarget.matches(':focus-visible')) ask(true, null);
+    };
+    handlers.onBlur = () => ask(false, null);
+    handlers.tabIndex = 0;
+  } else if (trigger === 'click') {
+    handlers.onClick = event => ask(!desiredRef.current, pointOf(event));
+    handlers.onKeyDown = event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      ask(!desiredRef.current, null);
+    };
+    handlers.role = 'button';
+    handlers.tabIndex = 0;
+    handlers['aria-pressed'] = shown;
+  }
 
   return (
     <div
-      ref={containerRef}
-      className={`pixel-swap ${className}`.trim()}
+      ref={rootRef}
+      className={[ROOT, className].filter(Boolean).join(' ')}
       style={{ aspectRatio, ...style }}
-      data-active={shownActive}
-      data-transitioning={!!transition}
-      {...interactionProps}
+      data-active={shown ? '' : undefined}
+      {...handlers}
     >
-      {renderLayer(firstContent, 0)}
-      {renderLayer(secondContent, 1)}
-
-      {transition && (
-        <div className="pixel-swap__grid" aria-hidden="true">
-          {transition.grid.pixels.map((pixel, index) => (
-            <div
-              key={pixel.id}
-              ref={element => {
-                pixelRefs.current[index] = element;
-              }}
-              className="pixel-swap__pixel"
-              style={{
-                left: pixel.left,
-                top: pixel.top,
-                width: transition.grid.size,
-                height: transition.grid.size,
-                borderRadius: `${clamp(pixelRadius, 0, 50)}%`
-              }}
-            />
-          ))}
+      {[firstContent, secondContent].map((content, index) => (
+        <div
+          key={index}
+          ref={element => {
+            layerRefs.current[index] = element;
+          }}
+          className={LAYER}
+          data-visible={String(index === (shown ? 1 : 0))}
+          aria-hidden={index !== (shown ? 1 : 0)}
+        >
+          {content}
         </div>
-      )}
+      ))}
+      <div ref={wallRef} className={WALL} aria-hidden="true" />
     </div>
   );
 }

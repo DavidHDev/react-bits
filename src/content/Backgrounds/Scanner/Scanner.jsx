@@ -1,61 +1,60 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './Scanner.css';
 
-const hexToRgb = hex => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return [1, 1, 1];
-  return [parseInt(result[1], 16) / 255, parseInt(result[2], 16) / 255, parseInt(result[3], 16) / 255];
-};
+const MAX_PINGS = 6;
+const INTRO_SECONDS = 2;
+const DIRECTIONS = { vertical: 0, horizontal: 1, diagonal: 2 };
 
-const directionToFloat = dir => (dir === 'horizontal' ? 1.0 : dir === 'diagonal' ? 2.0 : 0.0);
-
-const vertex = `#version 300 es
-in vec2 position;
+const VERTEX = `#version 300 es
 void main() {
-  gl_Position = vec4(position, 0.0, 1.0);
-}
-`;
+  vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
+  gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
+}`;
 
-const fragment = `#version 300 es
+const FRAGMENT = `#version 300 es
 precision highp float;
-uniform vec2 iResolution;
-uniform float iTime;
-uniform float uSpeed;
-uniform float uSweepSpeed;
+
+uniform vec2 uResolution;
+uniform float uWave;
+uniform float uSweep;
 uniform float uSweepWidth;
-uniform float uSweepFalloff;
+uniform float uTrail;
 uniform float uScale;
 uniform float uFrequency;
 uniform float uRipple;
-uniform float uBandDensity;
-uniform float uLineSharpness;
+uniform float uDensity;
+uniform float uLineWidth;
 uniform float uGlow;
-uniform float uColorSpread;
+uniform float uDirection;
+uniform float uSpread;
 uniform float uBrightness;
-uniform float uContrast;
-uniform float uSoftness;
 uniform float uVignette;
 uniform float uOpacity;
 uniform float uScanline;
+uniform float uRatio;
 uniform float uGrain;
-uniform float uGrainIntensity;
-uniform float uDirection;
+uniform float uTime;
 uniform vec2 uMouse;
-uniform float uMouseEnabled;
+uniform float uPresence;
 uniform float uMouseRadius;
 uniform float uMouseStrength;
-uniform float uMouseActive;
+uniform float uAttract;
+uniform vec3 uPings[${MAX_PINGS}];
+uniform float uIntro;
+uniform float uLightMode;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 uniform vec3 uColor3;
+
 out vec4 fragColor;
 
-const float TAU = 6.2831853;
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
 
-float signalField(vec2 p, float t) {
+float signal(vec2 p, float t) {
   float w = sin(p.x * 1.3 + t * 0.7);
   w += sin(p.y * 1.7 - t * 0.52) * 0.8;
   w += sin((p.x + p.y) * 0.9 + t * 0.91) * 0.6;
@@ -63,80 +62,165 @@ float signalField(vec2 p, float t) {
   return w * 0.35;
 }
 
-vec3 palette(float f) {
-  f = clamp(f, 0.0, 1.0);
-  f = pow(f, uContrast);
-  vec3 c = mix(uColor1, uColor2, smoothstep(0.08, 0.6, f));
-  return mix(c, uColor3, smoothstep(0.68, 1.0, f));
+float smoother(float x) {
+  x = clamp(x, 0.0, 1.0);
+  return x * x * x * (x * (x * 6.0 - 15.0) + 10.0);
 }
 
-float scanBand(float x, float aa, float sharp) {
-  float v = mix(0.5, 0.5 + 0.5 * cos(x * TAU), aa);
-  return pow(v, sharp);
+vec2 axes(vec2 p) {
+  if (uDirection < 0.5) return vec2(p.y, p.x);
+  if (uDirection < 1.5) return vec2(p.x, -p.y);
+  return vec2((p.x + p.y) * 0.70710678, (p.x - p.y) * 0.70710678);
+}
+
+float coverage(float lc, float width) {
+  float fw = max(fwidth(lc), 1e-5);
+  float dist = abs(fract(lc + 0.5) - 0.5) / fw;
+  float crowd = smoothstep(0.2, 0.55, fw);
+  float cover = clamp(width * 0.5 + 0.5 - dist, 0.0, 1.0) * min(width, 1.0);
+  return mix(cover, min(width * fw, 1.0), crowd);
 }
 
 void main() {
-  float aspect = iResolution.x / iResolution.y;
-  vec2 uv0 = (gl_FragCoord.xy * 2.0 - iResolution.xy) / iResolution.y;
-  vec2 p = uv0 / max(uScale, 0.001);
+  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution) / uResolution.y;
+  vec2 p = uv / max(uScale, 0.001);
+  vec2 ax = axes(p);
 
-  float t = iTime * uSpeed;
+  float sig = signal(p * uFrequency, uWave);
+  float coord = ax.x + sig * uRipple;
 
-  float mouseBoost = 0.0;
-  if (uMouseEnabled > 0.5) {
-    vec2 mUv = vec2((uMouse.x * 2.0 - 1.0) * aspect, uMouse.y * 2.0 - 1.0);
-    vec2 md = uv0 - mUv;
-    float r = max(uMouseRadius, 0.001);
-    mouseBoost = exp(-dot(md, md) / (r * r)) * uMouseStrength * uMouseActive;
+  vec2 mp = uMouse / max(uScale, 0.001);
+  vec2 md = p - mp;
+  float radius = max(uMouseRadius / max(uScale, 0.001), 0.01);
+  float lens = exp(-dot(md, md) / (radius * radius)) * uPresence;
+  float mouseAxis = axes(mp).x + signal(mp * uFrequency, uWave) * uRipple;
+  coord -= (coord - mouseAxis) * lens * uMouseStrength * mix(0.55, -0.9, uAttract);
+
+  float pingLight = 0.0;
+  for (int i = 0; i < ${MAX_PINGS}; i++) {
+    vec3 ping = uPings[i];
+    if (ping.z < 0.0) continue;
+    float d = length(uv - ping.xy);
+    float age = ping.z;
+    float r = age * 1.1;
+    float w = 0.12 + age * 0.1;
+    float band = exp(-((d - r) * (d - r)) / (w * w));
+    float fade = exp(-age * 0.9) * smoothstep(0.0, 0.12, age);
+    coord += band * fade * 0.018 / max(uScale, 0.001);
+    pingLight += band * fade;
   }
 
-  float axis;
-  if (uDirection < 0.5) axis = p.y;
-  else if (uDirection < 1.5) axis = p.x;
-  else axis = (p.x + p.y) * 0.70710678;
+  float u = fract(uSweep - coord / max(uSweepWidth, 0.05));
+  float tail = mix(11.0, 1.8, clamp(uTrail, 0.0, 1.0));
+  float lead = smoothstep(0.84, 1.0, u);
+  lead *= lead;
+  float sweep = max(exp(-u * tail), lead);
+  float head = max(exp(-u * 26.0), lead * lead * lead);
 
-  float sig = signalField(p * uFrequency, t);
-  float coord = axis + sig * uRipple;
+  float introFront = mix(-1.6, 1.6, smoother(uIntro)) / max(uScale, 0.001);
+  float reveal = 1.0 - smoothstep(introFront - 0.05, introFront + 0.3, coord);
+  float introHead = exp(-abs(coord - introFront) * 14.0) * (1.0 - uIntro) * step(0.0001, 1.0 - uIntro);
+  reveal = mix(reveal, 1.0, step(0.9999, uIntro));
 
-  float phase = coord / max(uSweepWidth, 0.05) - t * uSweepSpeed;
-  float sweep = pow(0.5 + 0.5 * cos(phase * TAU), max(uSweepFalloff, 0.1));
+  float lit = clamp(sweep * 0.86 + lens * uMouseStrength * 0.7 + pingLight * 0.9 + introHead, 0.0, 1.6);
+  float hot = clamp(head + introHead + pingLight * 0.35, 0.0, 1.0);
 
-  float lc = coord * uBandDensity;
-  float aa = 1.0 / (1.0 + uSoftness * fwidth(lc) * 3.0);
-  aa = clamp(aa * (1.0 + mouseBoost * 0.6), 0.0, 1.0);
+  float lc = coord * uDensity;
+  float width = uLineWidth * (1.0 + lit * 1.4 + hot * 0.9);
+  float thread = 0.62 + 0.38 * hash(vec2(floor(lc + 0.5), 3.7));
+  float split = uSpread * (0.5 + lit * 1.3) * max(fwidth(lc), 1e-5);
+  float cg = coverage(lc, width);
+  float cr = coverage(lc + split, width);
+  float cb = coverage(lc - split, width);
 
-  float bodyBase = clamp(0.5 + 0.5 * sig, 0.0, 1.0);
-  float body = bodyBase * bodyBase * uGlow * sweep;
+  float fw = max(fwidth(lc), 1e-5);
+  float dist = abs(fract(lc + 0.5) - 0.5) / fw;
+  float crowd = smoothstep(0.2, 0.55, fw);
+  float halo = exp(-dist / (3.0 + uGlow * 9.0)) * (1.0 - crowd) * uGlow * lit * 1.15;
 
-  float sharp = max(uLineSharpness, 0.1);
-  float split = uColorSpread * 0.16;
-  float fr = clamp(scanBand(lc + split, aa, sharp) * sweep + body, 0.0, 1.0);
-  float fg = clamp(scanBand(lc, aa, sharp) * sweep + body, 0.0, 1.0);
-  float fb = clamp(scanBand(lc - split, aa, sharp) * sweep + body, 0.0, 1.0);
+  float base = 0.11 * reveal;
+  float level = (base + lit * (1.0 - base)) * thread * uBrightness;
 
-  vec3 col = vec3(palette(fr).r, palette(fg).g, palette(fb).b);
+  vec3 tone = mix(uColor1, uColor2, smoothstep(0.05, 0.75, lit));
+  tone = mix(tone, uColor3, hot);
+  vec3 haloTone = mix(uColor1, uColor2, 0.65);
 
-  float inten = (fr + fg + fb) * 0.3333333 * uBrightness;
-  inten *= 1.0 + mouseBoost * 0.9;
+  float vx = smoother((1.0 - abs(uv.x / (uResolution.x / uResolution.y))) / 0.6);
+  float vy = smoother((1.0 - abs(uv.y)) / 0.6);
+  float vignette = mix(1.0, vx * vy, uVignette);
 
-  if (uScanline > 0.5) {
-    inten *= 1.0 - 0.18 * (0.5 + 0.5 * cos(gl_FragCoord.y * 1.7));
+  vec3 cover3 = vec3(cr, cg, cb);
+  float alphaLine = max(max(cr, cg), cb) * level;
+  vec3 colLine = tone * cover3 * level;
+
+  float grain = (hash(gl_FragCoord.xy + fract(uTime) * 91.7) - 0.5) * uGrain;
+  float scan = 1.0 - uScanline * 0.55 * (0.5 + 0.5 * cos(gl_FragCoord.y * 6.2831853 / (3.0 * uRatio)));
+
+  if (uLightMode > 0.5) {
+    float ink = clamp(alphaLine * vignette * scan, 0.0, 1.0);
+    float wash = clamp(halo * 0.28 * vignette, 0.0, 1.0);
+    float alpha = clamp(ink + wash * (1.0 - ink) + grain * 0.5 * ink, 0.0, 1.0) * uOpacity;
+    vec3 col = (tone * ink + haloTone * wash * (1.0 - ink)) / max(ink + wash * (1.0 - ink), 1e-4);
+    fragColor = vec4(col * alpha, alpha);
+    return;
   }
 
-  if (uGrain > 0.5) {
-    float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233)) + iTime) * 43758.5453);
-    inten += (g - 0.5) * uGrainIntensity;
+  vec3 col = (colLine + haloTone * halo) * vignette * scan;
+  float alpha = clamp(max(alphaLine, halo) * vignette * scan + grain * max(alphaLine, 0.04), 0.0, 1.0);
+  col = clamp(col + grain * 0.6 * alpha, 0.0, 1.0);
+  col = min(col, vec3(alpha));
+  fragColor = vec4(col * uOpacity, alpha * uOpacity);
+}`;
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const compile = (gl, type, source) => {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
+  gl.deleteShader(shader);
+  return null;
+};
+
+const link = gl => {
+  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+  const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
+  const program = gl.createProgram();
+  if (!vertex || !fragment || !program) return null;
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.linkProgram(program);
+  gl.deleteShader(vertex);
+  gl.deleteShader(fragment);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    gl.deleteProgram(program);
+    return null;
   }
+  const uniforms = {};
+  const total = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  for (let i = 0; i < total; i++) {
+    const info = gl.getActiveUniform(program, i);
+    if (info) uniforms[info.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(program, info.name);
+  }
+  return { program, uniforms };
+};
 
-  inten *= clamp(1.0 - uVignette * smoothstep(0.55, 1.65, length(uv0)), 0.0, 1.0);
-  inten = clamp(inten, 0.0, 1.0);
-
-  float a = clamp(inten * uOpacity, 0.0, 1.0);
-  fragColor = vec4(clamp(col, 0.0, 1.0) * a, a);
-}
-`;
-
-const ctxMap = new WeakMap();
+const toRgb = hex => {
+  let h = String(hex || '#ffffff')
+    .replace('#', '')
+    .trim();
+  if (h.length === 3 || h.length === 4)
+    h = h
+      .slice(0, 3)
+      .split('')
+      .map(c => c + c)
+      .join('');
+  const num = parseInt(h.slice(0, 6), 16);
+  if (Number.isNaN(num)) return [1, 1, 1];
+  return [((num >> 16) & 255) / 255, ((num >> 8) & 255) / 255, (num & 255) / 255];
+};
 
 const Scanner = ({
   color1 = '#5227FF',
@@ -145,262 +229,282 @@ const Scanner = ({
   speed = 0.5,
   sweepSpeed = 0.25,
   sweepWidth = 1.6,
-  sweepFalloff = 6,
+  trail = 0.5,
+  reverse = false,
   scale = 1.5,
   frequency = 2,
   ripple = 0.22,
   bandDensity = 11,
-  lineSharpness = 5.5,
-  glow = 0.22,
+  lineWidth = 1.2,
+  glow = 0.6,
   scanDirection = 'vertical',
   colorSpread = 0.7,
-  brightness = 1.0,
-  contrast = 1.15,
-  softness = 1.4,
-  vignette = 0.45,
+  brightness = 1,
+  vignette = 0.3,
   scanline = true,
+  scanlineIntensity = 0.5,
   grain = true,
-  grainIntensity = 0.05,
-  opacity = 1.0,
+  grainIntensity = 0.04,
+  opacity = 1,
   mouseInteraction = true,
   mouseRadius = 0.5,
-  mouseStrength = 0.5,
-  className = ''
+  mouseStrength = 0.7,
+  mouseMode = 'repel',
+  clickEffect = 'ping',
+  intro = true,
+  lightMode = false,
+  dpr,
+  className = '',
+  style
 }) => {
   const containerRef = useRef(null);
-  const mouseEnabledRef = useRef(mouseInteraction);
+  const canvasRef = useRef(null);
+  const wakeRef = useRef(null);
+  const settings = {
+    color1,
+    color2,
+    color3,
+    speed,
+    sweepSpeed: reverse ? -sweepSpeed : sweepSpeed,
+    sweepWidth: Math.max(0.05, sweepWidth),
+    trail: clamp(trail, 0, 1),
+    scale: Math.max(0.05, scale),
+    frequency,
+    ripple,
+    bandDensity: Math.max(0.5, bandDensity),
+    lineWidth: Math.max(0.2, lineWidth),
+    glow: Math.max(0, glow),
+    direction: DIRECTIONS[scanDirection] ?? 0,
+    colorSpread: clamp(colorSpread, 0, 1),
+    brightness: Math.max(0, brightness),
+    vignette: clamp(vignette, 0, 1),
+    scanline: scanline ? clamp(scanlineIntensity, 0, 1) : 0,
+    grain: grain ? Math.max(0, grainIntensity) : 0,
+    opacity: clamp(opacity, 0, 1),
+    mouseInteraction,
+    mouseRadius: Math.max(0.05, mouseRadius),
+    mouseStrength: Math.max(0, mouseStrength),
+    attract: mouseMode === 'attract',
+    clickEffect,
+    intro,
+    lightMode,
+    dpr
+  };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
-
-    const renderer = new Renderer({
-      webgl: 2,
+    const canvas = canvasRef.current;
+    const gl = canvas?.getContext('webgl2', {
       alpha: true,
       premultipliedAlpha: true,
       antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
+      depth: false,
+      stencil: false
     });
+    if (!container || !canvas || !gl) return undefined;
+    const shader = link(gl);
+    if (!shader) return undefined;
+    const u = shader.uniforms;
+    const vao = gl.createVertexArray();
 
-    const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 0);
-    const canvas = gl.canvas;
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.display = 'block';
-    container.appendChild(canvas);
-
-    const geometry = new Triangle(gl);
-    const program = new Program(gl, {
-      vertex,
-      fragment,
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new Float32Array([1, 1]) },
-        uSpeed: { value: 0.5 },
-        uSweepSpeed: { value: 0.25 },
-        uSweepWidth: { value: 1.6 },
-        uSweepFalloff: { value: 6 },
-        uScale: { value: 1.5 },
-        uFrequency: { value: 2 },
-        uRipple: { value: 0.22 },
-        uBandDensity: { value: 11 },
-        uLineSharpness: { value: 5.5 },
-        uGlow: { value: 0.22 },
-        uColorSpread: { value: 0.7 },
-        uBrightness: { value: 1.0 },
-        uContrast: { value: 1.15 },
-        uSoftness: { value: 1.4 },
-        uVignette: { value: 0.45 },
-        uOpacity: { value: 1.0 },
-        uScanline: { value: 1.0 },
-        uGrain: { value: 1.0 },
-        uGrainIntensity: { value: 0.05 },
-        uDirection: { value: 0.0 },
-        uMouse: { value: new Float32Array([0.5, 0.5]) },
-        uMouseEnabled: { value: 1.0 },
-        uMouseRadius: { value: 0.5 },
-        uMouseStrength: { value: 0.5 },
-        uMouseActive: { value: 0.0 },
-        uColor1: { value: new Float32Array([1, 1, 1]) },
-        uColor2: { value: new Float32Array([1, 1, 1]) },
-        uColor3: { value: new Float32Array([1, 1, 1]) }
-      }
-    });
-
-    const mesh = new Mesh(gl, { geometry, program });
-    ctxMap.set(container, { renderer, program, mesh });
-
-    const setSize = () => {
-      const rect = container.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
-      renderer.setSize(w, h);
-      const res = program.uniforms.iResolution.value;
-      res[0] = gl.drawingBufferWidth;
-      res[1] = gl.drawingBufferHeight;
-      renderer.render({ scene: mesh });
-    };
-
-    const ro = new ResizeObserver(setSize);
-    ro.observe(container);
-    setSize();
-
-    let currentMouse = [0.5, 0.5];
-    let targetMouse = [0.5, 0.5];
-    let mouseActive = 0;
-    let targetMouseActive = 0;
-
-    const onMouseMove = e => {
-      const rect = canvas.getBoundingClientRect();
-      targetMouse = [(e.clientX - rect.left) / rect.width, 1.0 - (e.clientY - rect.top) / rect.height];
-      targetMouseActive = 1;
-    };
-    const onMouseLeave = () => {
-      targetMouseActive = 0;
-    };
-    canvas.addEventListener('mousemove', onMouseMove);
-    canvas.addEventListener('mouseleave', onMouseLeave);
-
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    const view = { width: 1, height: 1, ratio: 1 };
+    const pointer = { x: 0, y: 0, inside: false };
+    const mouse = { x: 0, y: 0, ready: false };
+    const pings = new Float32Array(MAX_PINGS * 3);
+    for (let k = 0; k < MAX_PINGS; k++) pings[k * 3 + 2] = -1;
+    let pingIndex = 0;
+    let presence = 0;
+    let wave = 0;
+    let sweep = -0.39;
+    let clock = 0;
+    let introClock = settingsRef.current.intro && !reduce ? 0 : 1;
     let raf = 0;
-    let isVisible = true;
-    let isPageVisible = !document.hidden;
-    const t0 = performance.now();
+    let last = 0;
+    let visible = true;
+    let quiet = 0;
 
-    const loop = t => {
-      program.uniforms.iTime.value = (t - t0) * 0.001;
+    const toUv = (x, y) => [(x * 2 - view.width) / view.height, (view.height - y * 2) / view.height];
 
-      if (!mouseEnabledRef.current) {
-        targetMouseActive = 0;
+    const draw = () => {
+      const s = settingsRef.current;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.useProgram(shader.program);
+      gl.uniform2f(u.uResolution, canvas.width, canvas.height);
+      gl.uniform1f(u.uWave, wave);
+      gl.uniform1f(u.uSweep, sweep);
+      gl.uniform1f(u.uSweepWidth, s.sweepWidth);
+      gl.uniform1f(u.uTrail, s.trail);
+      gl.uniform1f(u.uScale, s.scale);
+      gl.uniform1f(u.uFrequency, s.frequency);
+      gl.uniform1f(u.uRipple, s.ripple);
+      gl.uniform1f(u.uDensity, s.bandDensity);
+      gl.uniform1f(u.uLineWidth, s.lineWidth * view.ratio);
+      gl.uniform1f(u.uGlow, s.glow);
+      gl.uniform1f(u.uDirection, s.direction);
+      gl.uniform1f(u.uSpread, s.colorSpread);
+      gl.uniform1f(u.uBrightness, s.brightness);
+      gl.uniform1f(u.uVignette, s.vignette);
+      gl.uniform1f(u.uOpacity, s.opacity);
+      gl.uniform1f(u.uScanline, s.scanline);
+      gl.uniform1f(u.uRatio, view.ratio);
+      gl.uniform1f(u.uGrain, s.grain);
+      gl.uniform1f(u.uTime, clock);
+      gl.uniform2f(u.uMouse, mouse.x, mouse.y);
+      gl.uniform1f(u.uPresence, s.mouseInteraction ? presence : 0);
+      gl.uniform1f(u.uMouseRadius, s.mouseRadius);
+      gl.uniform1f(u.uMouseStrength, s.mouseStrength);
+      gl.uniform1f(u.uAttract, s.attract ? 1 : 0);
+      gl.uniform3fv(u.uPings, pings);
+      gl.uniform1f(u.uIntro, introClock);
+      gl.uniform1f(u.uLightMode, s.lightMode ? 1 : 0);
+      gl.uniform3fv(u.uColor1, toRgb(s.color1));
+      gl.uniform3fv(u.uColor2, toRgb(s.color2));
+      gl.uniform3fv(u.uColor3, toRgb(s.color3));
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.bindVertexArray(vao);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    };
+
+    let sizedDpr = settingsRef.current.dpr;
+
+    const resize = () => {
+      const s = settingsRef.current;
+      sizedDpr = s.dpr;
+      view.width = Math.max(1, container.clientWidth);
+      view.height = Math.max(1, container.clientHeight);
+      view.ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(view.width * view.ratio));
+      canvas.height = Math.max(1, Math.round(view.height * view.ratio));
+      draw();
+      wake();
+    };
+
+    const frame = now => {
+      raf = 0;
+      if (!visible || document.hidden) return;
+      const s = settingsRef.current;
+      if (s.dpr !== sizedDpr) resize();
+      const dt = last ? clamp((now - last) / 1000, 0, 1 / 20) : 1 / 60;
+      last = now;
+      clock += dt;
+      if (!reduce) {
+        wave += dt * s.speed;
+        sweep += dt * s.sweepSpeed;
       }
-      currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
-      currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
-      program.uniforms.uMouse.value[0] = currentMouse[0];
-      program.uniforms.uMouse.value[1] = currentMouse[1];
-      mouseActive += 0.05 * (targetMouseActive - mouseActive);
-      program.uniforms.uMouseActive.value = mouseActive;
-
-      renderer.render({ scene: mesh });
-      raf = requestAnimationFrame(loop);
-    };
-
-    const tryStart = () => {
-      if (isVisible && isPageVisible && raf === 0) raf = requestAnimationFrame(loop);
-    };
-    const tryStop = () => {
-      if (raf !== 0) {
-        cancelAnimationFrame(raf);
-        raf = 0;
+      if (introClock < 1) introClock = Math.min(1, introClock + dt / INTRO_SECONDS);
+      const target = toUv(pointer.x, pointer.y);
+      const follow = 1 - Math.exp(-dt / 0.09);
+      mouse.x += (target[0] - mouse.x) * follow;
+      mouse.y += (target[1] - mouse.y) * follow;
+      presence += ((pointer.inside && s.mouseInteraction ? 1 : 0) - presence) * (1 - Math.exp(-dt / 0.3));
+      let busy = (!reduce && (s.speed !== 0 || s.sweepSpeed !== 0)) || introClock < 1 || presence > 0.001;
+      for (let k = 0; k < MAX_PINGS; k++) {
+        if (pings[k * 3 + 2] < 0) continue;
+        pings[k * 3 + 2] += dt;
+        if (pings[k * 3 + 2] > 4) pings[k * 3 + 2] = -1;
+        else busy = true;
       }
+      draw();
+      quiet = busy ? 0 : quiet + dt;
+      if (quiet < 0.5) raf = requestAnimationFrame(frame);
     };
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-        isVisible ? tryStart() : tryStop();
-      },
-      { threshold: 0 }
-    );
-    io.observe(container);
+    function wake() {
+      quiet = 0;
+      if (!raf && visible && !document.hidden) {
+        last = 0;
+        raf = requestAnimationFrame(frame);
+      }
+    }
 
-    const onVisibility = () => {
-      isPageVisible = !document.hidden;
-      isPageVisible ? tryStart() : tryStop();
+    const locate = event => {
+      const rect = container.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      return { x, y, inside: x >= 0 && y >= 0 && x <= rect.width && y <= rect.height };
     };
+
+    const onPointerMove = event => {
+      const { x, y, inside } = locate(event);
+      const was = pointer.inside;
+      pointer.inside = inside;
+      if (inside) {
+        pointer.x = x;
+        pointer.y = y;
+        if (!was || !mouse.ready) {
+          const [ux, uy] = toUv(x, y);
+          mouse.x = ux;
+          mouse.y = uy;
+          mouse.ready = true;
+        }
+      }
+      if (inside || was) wake();
+    };
+
+    const onPointerDown = event => {
+      const s = settingsRef.current;
+      if (s.clickEffect !== 'ping' || reduce) return;
+      const { x, y, inside } = locate(event);
+      if (!inside) return;
+      const [ux, uy] = toUv(x, y);
+      pings[pingIndex * 3] = ux;
+      pings[pingIndex * 3 + 1] = uy;
+      pings[pingIndex * 3 + 2] = 0;
+      pingIndex = (pingIndex + 1) % MAX_PINGS;
+      wake();
+    };
+
+    const onPointerLeave = () => {
+      pointer.inside = false;
+      wake();
+    };
+
+    const onVisibility = () => wake();
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
+    const intersection = new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) wake();
+    });
+    intersection.observe(container);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onPointerLeave);
     document.addEventListener('visibilitychange', onVisibility);
-
-    tryStart();
+    resize();
+    wakeRef.current = wake;
 
     return () => {
-      tryStop();
-      ro.disconnect();
-      io.disconnect();
+      cancelAnimationFrame(raf);
+      wakeRef.current = null;
+      resizeObserver.disconnect();
+      intersection.disconnect();
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      document.documentElement.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
-      canvas.removeEventListener('mousemove', onMouseMove);
-      canvas.removeEventListener('mouseleave', onMouseLeave);
-      ctxMap.delete(container);
-      try {
-        container.removeChild(canvas);
-      } catch {}
+      gl.deleteVertexArray(vao);
+      gl.deleteProgram(shader.program);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const ctx = ctxMap.get(container);
-    if (!ctx) return;
-    const { program } = ctx;
-    const u = program.uniforms;
+    wakeRef.current?.();
+  });
 
-    u.uSpeed.value = speed;
-    u.uSweepSpeed.value = sweepSpeed;
-    u.uSweepWidth.value = sweepWidth;
-    u.uSweepFalloff.value = sweepFalloff;
-    u.uScale.value = scale;
-    u.uFrequency.value = frequency;
-    u.uRipple.value = ripple;
-    u.uBandDensity.value = bandDensity;
-    u.uLineSharpness.value = lineSharpness;
-    u.uGlow.value = glow;
-    u.uColorSpread.value = colorSpread;
-    u.uBrightness.value = brightness;
-    u.uContrast.value = contrast;
-    u.uSoftness.value = softness;
-    u.uVignette.value = vignette;
-    u.uOpacity.value = opacity;
-    u.uScanline.value = scanline ? 1.0 : 0.0;
-    u.uGrain.value = grain ? 1.0 : 0.0;
-    u.uGrainIntensity.value = grainIntensity;
-    u.uDirection.value = directionToFloat(scanDirection);
-    u.uMouseEnabled.value = mouseInteraction ? 1.0 : 0.0;
-    u.uMouseRadius.value = mouseRadius;
-    u.uMouseStrength.value = mouseStrength;
-    const c1 = hexToRgb(color1);
-    const c2 = hexToRgb(color2);
-    const c3 = hexToRgb(color3);
-    u.uColor1.value[0] = c1[0];
-    u.uColor1.value[1] = c1[1];
-    u.uColor1.value[2] = c1[2];
-    u.uColor2.value[0] = c2[0];
-    u.uColor2.value[1] = c2[1];
-    u.uColor2.value[2] = c2[2];
-    u.uColor3.value[0] = c3[0];
-    u.uColor3.value[1] = c3[1];
-    u.uColor3.value[2] = c3[2];
-
-    mouseEnabledRef.current = mouseInteraction;
-  }, [
-    speed,
-    sweepSpeed,
-    sweepWidth,
-    sweepFalloff,
-    scale,
-    frequency,
-    ripple,
-    bandDensity,
-    lineSharpness,
-    glow,
-    colorSpread,
-    brightness,
-    contrast,
-    softness,
-    vignette,
-    opacity,
-    scanline,
-    grain,
-    grainIntensity,
-    scanDirection,
-    mouseInteraction,
-    mouseRadius,
-    mouseStrength,
-    color1,
-    color2,
-    color3
-  ]);
-
-  return <div ref={containerRef} className={`scanner-container ${className}`.trim()} />;
+  return (
+    <div ref={containerRef} className={`scanner-container ${className}`.trim()} style={style}>
+      <canvas ref={canvasRef} className="scanner-canvas" aria-hidden="true" />
+    </div>
+  );
 };
 
 export default Scanner;

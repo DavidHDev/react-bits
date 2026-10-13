@@ -5,7 +5,6 @@ import tsCode from '@ts-default/Animations/OrbitImages/OrbitImages.tsx?raw';
 import tsTailwind from '@ts-tailwind/Animations/OrbitImages/OrbitImages.tsx?raw';
 
 export const orbitImages = {
-  dependencies: `motion`,
   usage: `// Component created by Dominik Koch
 // https://x.com/dominikkoch
 
@@ -27,8 +26,10 @@ const images = [
   radiusY={80}
   rotation={-8}
   duration={30}
-  itemSize={80}
-  responsive={true}
+  itemSize={90}
+  depth={0.6}
+  showPath
+  centerContent={<h2>Moments</h2>}
 />`,
   code,
   css,

@@ -5,22 +5,18 @@ import tsCode from '@ts-default/Backgrounds/SideRays/SideRays.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/SideRays/SideRays.tsx?raw';
 
 export const sideRays = {
-  dependencies: `ogl`,
   usage: `import SideRays from './SideRays';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <SideRays
-    speed={2.5}
-    rayColor1="#EAB308"
+    rayColor1="#FFC46B"
     rayColor2="#96c8ff"
+    origin="top-right"
+    speed={2.5}
     intensity={2}
     spread={2}
-    origin="top-right"
-    tilt={0}
-    saturation={1.5}
-    blend={0.75}
-    falloff={1.6}
-    opacity={1.0}
+    density={5}
+    followMouse={true}
   />
 </div>`,
   code,

@@ -5,21 +5,20 @@ import tsCode from '@ts-default/Backgrounds/LightRays/LightRays.tsx?raw';
 import tsTailwind from '@ts-tailwind/Backgrounds/LightRays/LightRays.tsx?raw';
 
 export const lightRays = {
-  dependencies: `ogl`,
+  dependencies: ``,
   usage: `import LightRays from './LightRays';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <LightRays
     raysOrigin="top-center"
-    raysColor="#00ffff"
-    raysSpeed={1.5}
-    lightSpread={0.8}
-    rayLength={1.2}
-    followMouse={true}
+    raysColor="#ffffff"
+    raysSpeed={1}
+    lightSpread={0.5}
+    rayLength={3}
+    glow={0.6}
+    haze={0.25}
+    followMouse
     mouseInfluence={0.1}
-    noiseAmount={0.1}
-    distortion={0.05}
-    className="custom-rays"
   />
 </div>`,
   code,

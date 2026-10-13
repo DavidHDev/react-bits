@@ -7,7 +7,7 @@ import ts from 'typescript';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const VARIANTS = ['content', 'tailwind', 'ts-default', 'ts-tailwind'];
 // These components forward their props to an implementation or merge a config.
-const IMPLEMENTATIONS = { Antigravity: 'AntigravityInner', GradualBlur: 'DEFAULT_CONFIG' };
+const IMPLEMENTATIONS = {};
 
 const walk = (node, visit) => {
   visit(node);
