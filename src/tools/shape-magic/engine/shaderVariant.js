@@ -4,8 +4,6 @@ export const MAX_LAYERS = 10;
 
 export const markLayers = mark => (mark?.layers || []).filter(layer => layer.visible !== false).slice(0, MAX_LAYERS);
 
-// Keep the editor's full layer limit, but compile only the geometry present in
-// this scene. Uniform values still handle ordinary edits without recompilation.
 export const shaderVariant = (scene = {}, style = {}) => {
   const a = markLayers(scene.a);
   const b = markLayers(scene.b);

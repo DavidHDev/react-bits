@@ -15,6 +15,7 @@
     "studio:thumbs": "node ./scripts/generateStudioThumbs.js",
     "previews:record": "node ./scripts/recordPreviews.js",
     "shape-magic:swatches": "node ./scripts/generateShapeMagicSwatches.js",
+    "shape-magic:thumbs": "node ./scripts/generateShapeMagicThumbs.js",
     "test:seo": "node --test scripts/seo.test.js",
     "test:boot": "node --test scripts/boot.test.js",
     "test:shape-magic": "node --test src/tools/shape-magic/engine/shaderVariant.test.js",
@@ -92,6 +93,7 @@
     "jsrepo": "^3.2.0",
     "postcss-safe-parser": "^7.0.1",
     "prettier": "^3.6.2",
+    "sharp": "^0.34.5",
     "typescript": "^5.7.3",
     "vite": "^5.3.4"
   }

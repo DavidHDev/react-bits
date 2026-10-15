@@ -159,7 +159,7 @@ export default function ShapeMagic({ toolSelector }) {
   }, [light, replace]);
 
   const materialsVisible = wide ? railTab === 'materials' : mobileTab === 'materials';
-  const staticThumbs = useStaticThumbs(light, previewReady);
+  const staticThumbs = useStaticThumbs(light);
   const fillThumbs = useFillThumbs(doc, light, materialsVisible && previewReady);
   const thumbs = useMemo(() => ({ ...staticThumbs, ...fillThumbs }), [staticThumbs, fillThumbs]);
   const material = materialFor(doc);
@@ -262,7 +262,6 @@ export default function ShapeMagic({ toolSelector }) {
           time,
           surfaceResolution: morph ? 512 : 768
         });
-        // Let the preview finish before the gallery queues background shaders.
         setPreviewReady(true);
       } catch (problem) {
         if (request === renderRequestRef.current && rendererRef.current === renderer) {

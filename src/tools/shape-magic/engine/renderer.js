@@ -154,8 +154,6 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     return entry;
   };
   const start = (def, variant) => {
-    // Do not evict a program while a paired field/material preparation is in
-    // flight. Reclaim old variants before the next independent compilation.
     if (!pending.size) {
       for (const [key, entry] of programs) {
         if (programs.size < 32) break;
@@ -195,9 +193,8 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     return entry;
   };
   const programFor = (def, variant) => {
-    const entry = touch(keyOf(def, variant));
-    if (!entry) throw new Error('Prepare the Shape Magic scene before rendering.');
-    return entry;
+    const key = keyOf(def, variant);
+    return touch(key) || settle(key, pending.get(key) || start(def, variant));
   };
   const prepareAsync = (def, variant = lastVariant) => {
     if (disposed) return Promise.reject(new Error('Renderer was disposed.'));

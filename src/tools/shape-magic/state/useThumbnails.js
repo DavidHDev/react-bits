@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { createRenderer } from '../engine/renderer';
 import { bindMasks, loadField, maskPlan, masksReady } from '../engine/masks';
-import { PRIMITIVES } from '../engine/primitives';
-import { MARKS } from '../presets/marks';
+import { STATIC_THUMBNAILS } from '../presets/thumbnails';
 import { FILLS } from '../presets/materials';
-import { createDoc, isMaskLayer } from './doc';
-import { styleFor } from './style';
+import { isMaskLayer } from './doc';
 
 const SIZE = 220;
-const ICON = 96;
 
 let shared = null;
 let captures = Promise.resolve();
@@ -23,8 +20,6 @@ const thumbRenderer = () => {
 };
 
 const snap = (doc, style, size = SIZE, time = 0) => {
-  // The canvas is shared by both thumbnail hooks. Keep preparation, drawing,
-  // and readback together so concurrent hooks cannot capture another mark.
   const capture = captures.then(async () => {
     const { canvas, renderer } = thumbRenderer();
     const plan = maskPlan([doc.mark.layers]);
@@ -45,45 +40,7 @@ const waitMasks = async layers => {
 
 const yieldTask = () => new Promise(resolve => setTimeout(resolve, 0));
 
-const staticCache = {};
-
-export function useStaticThumbs(light = false, active = true) {
-  const theme = light ? 'light' : 'dark';
-  const [thumbs, setThumbs] = useState(() => staticCache[theme] || staticCache.dark || {});
-  useEffect(() => {
-    if (!active) return undefined;
-    if (staticCache[theme]) {
-      setThumbs(staticCache[theme]);
-      return undefined;
-    }
-    let cancelled = false;
-    (async () => {
-      const next = {};
-      const previous = staticCache.dark || staticCache.light;
-      // Populate the visible mark gallery before compiling shape-picker icons.
-      for (const [index, preset] of MARKS.entries()) {
-        const doc = createDoc(preset, { light });
-        await waitMasks(doc.mark.layers);
-        if (cancelled) return;
-        next[`mark:${preset.id}`] = await snap(doc, styleFor(doc));
-        if (index % 4 === 3) setThumbs({ ...previous, ...next });
-        await yieldTask();
-      }
-      for (const primitive of PRIMITIVES) {
-        if (cancelled) return;
-        const key = `shape:${primitive.id}`;
-        const doc = createDoc({ mark: { layers: [{ type: primitive.id, size: 0.78 }] } });
-        next[key] = previous?.[key] || (await snap(doc, { fill: { kind: 'solid', color1: '#ffffff' } }, ICON));
-      }
-      staticCache[theme] = next;
-      if (!cancelled) setThumbs({ ...next });
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [theme, light, active]);
-  return thumbs;
-}
+export const useStaticThumbs = (light = false) => STATIC_THUMBNAILS[light ? 'light' : 'dark'];
 
 const luminance = hex => {
   const value = String(hex || '').replace('#', '');

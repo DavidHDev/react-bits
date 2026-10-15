@@ -1,4 +1,3 @@
-/* eslint-env node */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PRIMITIVES, PRIMITIVE_INDEX } from './primitives.js';
