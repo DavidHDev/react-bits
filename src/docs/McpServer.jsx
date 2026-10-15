@@ -9,10 +9,30 @@ import useScrollToTop from '../hooks/useScrollToTop';
 import claude from '../assets/icons/claude.svg';
 import vscode from '../assets/icons/vscode.svg';
 import cursor from '../assets/icons/cursor.svg';
+import antigravity from '../assets/icons/antigravity.svg';
 
 const LOGO = { width: '15px', height: '15px' };
 
 const CLIENTS = [
+  {
+    key: 'antigravity',
+    icon: <img src={antigravity} alt="" style={LOGO} />,
+    label: 'Antigravity',
+    command: `{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}`,
+    note: (
+      <>
+        Add this to <code>~/.gemini/config/mcp_config.json</code> or project <code>.agents/mcp_config.json</code>. Works
+        across Antigravity CLI (<code>agy</code>), Antigravity IDE, and Antigravity 2.0.
+      </>
+    )
+  },
   {
     key: 'claude',
     icon: <img src={claude} alt="" style={LOGO} />,
