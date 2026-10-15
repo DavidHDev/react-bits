@@ -97,7 +97,7 @@ Prefer to copy by hand? Open a component's Code tab, pick your flavor and paste 
 
 ### Use it with your agent
 
-React Bits works with the shadcn MCP server, so Claude Code, Cursor, Codex and VS Code can find and add components for you. Add the registry to your `components.json`:
+React Bits works with the shadcn MCP server, so Claude Code, Cursor, Codex, VS Code and Antigravity can find and add components for you. Add the registry to your `components.json`:
 
 ```json
 {
