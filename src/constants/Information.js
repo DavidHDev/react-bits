@@ -1289,6 +1289,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as a real glass object that bends your own text, image or video, with no 3D models or extra dependencies. Seven shapes that melt into each other on click, plus frost, tint, dispersion and shadows.'
+      },
+      {
+        date: '2026-10-15',
+        note: 'Same look with less than half the GPU work. On high refresh rate screens it also draws fewer frames while the glass is at rest.'
       }
     ]
   },

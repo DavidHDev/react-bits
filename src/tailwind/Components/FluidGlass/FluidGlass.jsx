@@ -9,6 +9,7 @@ const HANDLE = {
 };
 
 const PIXEL_BUDGET = 5e6;
+const SHADOW_SIZE = 160;
 const SHAPES = ['lens', 'blob', 'cube', 'pill', 'torus', 'prism', 'diamond'];
 const EXTENT = { lens: 1.02, blob: 1.08, cube: 1.32, pill: 1.02, torus: 1.0, prism: 1.18, diamond: 1.05 };
 const BASE = {
@@ -106,7 +107,24 @@ const SDF = {
   }`
 };
 
-const fragmentFor = (a, b) => `#version 300 es
+const SUPERSAMPLE = `
+  float rim = tr.mode > 1.5 ? 1.0 - smoothstep(0.3, 0.55, clamp(-dot(rd, tr.n), 0.0, 1.0)) : tr.mode;
+  if (rim > 0.0) {
+    vec2 offsets[3] = vec2[3](vec2(0.33, 0.33), vec2(-0.33, 0.25), vec2(0.25, -0.33));
+    float scatter = (length(tx) + length(ty)) / max(uBound, 1.0);
+    for (int k = 0; k < 3; k++) {
+      vec2 sub = w + offsets[k] * pixel;
+      vec3 subDir = normalize(vec3(sub, 0.0) - camera);
+      Trace st = traceSurface(ro, subDir, eps, pixel);
+      if (st.mode > 1.5 && (uTint.a > 0.0 || bandOf(clamp(-dot(subDir, st.n), 0.0, 1.0), scatter) < 1.0)) {
+        traceInterior(st, subDir, eps);
+      }
+      color += shadeTrace(st, subDir, background, tone, sub, tx, ty, rx, ry);
+    }
+    color *= 0.25;
+  }`;
+
+const fragmentFor = (a, b, supersample) => `#version 300 es
 precision highp float;
 uniform vec2 uView;
 uniform float uRatio;
@@ -132,6 +150,10 @@ uniform float uMediaOn;
 uniform sampler2D uText;
 uniform float uTextOn;
 uniform vec4 uBackground;
+uniform float uPass;
+uniform sampler2D uShadowMap;
+uniform vec4 uShadowBox;
+uniform vec2 uShadowSize;
 out vec4 fragColor;
 
 float shapeA(vec3 p) ${SDF[a]}
@@ -233,10 +255,18 @@ float shadowAt(vec2 w, out float caustic) {
   return exp(-depth * 14.0) * 0.42;
 }
 
+vec2 shadowSample(vec2 w) {
+  if (uShadow <= 0.0) return vec2(0.0);
+  vec2 uv = (w - uShadowBox.xy) / uShadowBox.zw;
+  if (any(lessThan(uv, vec2(0.0))) || any(greaterThan(uv, vec2(1.0)))) return vec2(0.0);
+  vec2 s = textureLod(uShadowMap, uv, 0.0).rg;
+  return vec2(s.x * 0.42, s.y * 2.0);
+}
+
 vec2 lighting(vec2 w, float under) {
-  float caustic;
-  float dark = shadowAt(w, caustic) * uShadow * uPresence;
-  float glow = clamp(caustic * uShadow * uPresence, 0.0, 1.0) * mix(0.12, 0.3, under);
+  vec2 s = shadowSample(w);
+  float dark = s.x * uShadow * uPresence;
+  float glow = clamp(s.y * uShadow * uPresence, 0.0, 1.0) * mix(0.12, 0.3, under);
   return vec2(dark * mix(0.45, 1.0, under), glow);
 }
 
@@ -255,13 +285,14 @@ struct Trace {
   vec3 n;
   vec3 q;
   vec3 inside;
+  vec3 exitNormal;
   vec3 exitDir;
   float escaped;
   float travel;
   float bounces;
 };
 
-Trace traceRay(vec3 ro, vec3 rd, float eps, float pixel) {
+Trace traceSurface(vec3 ro, vec3 rd, float eps, float pixel) {
   Trace tr;
   tr.mode = 0.0;
   tr.cover = 0.0;
@@ -269,6 +300,7 @@ Trace traceRay(vec3 ro, vec3 rd, float eps, float pixel) {
   tr.n = vec3(0.0, 0.0, 1.0);
   tr.q = vec3(0.0);
   tr.inside = vec3(0.0, 0.0, -1.0);
+  tr.exitNormal = vec3(0.0, 0.0, 1.0);
   tr.exitDir = vec3(0.0, 0.0, -1.0);
   tr.escaped = 0.0;
   tr.travel = 0.0;
@@ -313,6 +345,10 @@ Trace traceRay(vec3 ro, vec3 rd, float eps, float pixel) {
   tr.mode = 2.0;
   tr.p = ro + rd * t;
   tr.n = normalAt(tr.p);
+  return tr;
+}
+
+void traceInterior(inout Trace tr, vec3 rd, float eps) {
   vec3 inside = refract(rd, tr.n, 1.0 / uIor);
   vec3 q = tr.p + inside * eps * 4.0;
   vec3 exitDir = inside;
@@ -326,6 +362,7 @@ Trace traceRay(vec3 ro, vec3 rd, float eps, float pixel) {
       tr.travel += stepLength;
     }
     vec3 n2 = normalAt(q);
+    tr.exitNormal = n2;
     vec3 out1 = refract(inside, -n2, uIor);
     if (dot(out1, out1) > 0.0) {
       exitDir = out1;
@@ -342,44 +379,46 @@ Trace traceRay(vec3 ro, vec3 rd, float eps, float pixel) {
   tr.inside = inside;
   tr.exitDir = exitDir;
   tr.escaped = escaped ? 1.0 : 0.0;
-  return tr;
 }
 
-vec4 shadeTrace(Trace tr, vec3 rd, vec4 background, vec2 w, vec2 tx, vec2 ty, vec2 rx, vec2 ry) {
+float bandOf(float cosi, float scatter) {
+  return max(smoothstep(0.42, 0.12, cosi), smoothstep(0.06, 0.24, scatter));
+}
+
+vec4 shadeTrace(Trace tr, vec3 rd, vec4 background, vec4 tone, vec2 w, vec2 tx, vec2 ty, vec2 rx, vec2 ry) {
   if (tr.mode < 0.5) return background;
   vec3 mirrorDir = reflect(rd, tr.n);
-  vec4 tone = content(uCenter.xy, vec2(uBound * 1.4, 0.0), vec2(0.0, uBound * 1.4));
   if (tr.mode < 1.5) {
     vec4 edgeTone = tone * uReflection * 0.8 + light(mirrorDir, uReflection) * 0.5;
     return mix(background, edgeTone + background * (1.0 - edgeTone.a), tr.cover * 0.7);
   }
-  vec4 mirror = mirrorDir.z < -0.0005 ? frosted(landing(tr.p, mirrorDir, w), rx, ry) * uReflection : light(mirrorDir, uReflection);
-
   float cosi = clamp(-dot(rd, tr.n), 0.0, 1.0);
   float f0 = pow((uIor - 1.0) / (uIor + 1.0), 2.0);
   float fresnel = f0 + (1.0 - f0) * pow(1.0 - cosi, 5.0);
-  float scatter = (length(tx) + length(ty)) / max(uBound, 1.0);
-  float band = max(smoothstep(0.42, 0.12, cosi), smoothstep(0.06, 0.24, scatter));
+  float band = bandOf(cosi, (length(tx) + length(ty)) / max(uBound, 1.0));
 
-  vec2 hitT = landing(tr.q, tr.exitDir, w);
-  vec4 green = frosted(hitT, tx, ty);
-  vec4 red = green;
-  vec4 blue = green;
-  if (tr.escaped > 0.5 && uDispersion > 0.0) {
-    vec3 n2 = normalAt(tr.q);
-    vec3 spread = vec3(-1.0, 0.0, 1.0) * uDispersion * 0.06;
-    vec3 dirR = refract(tr.inside, -n2, uIor + spread.x);
-    vec3 dirB = refract(tr.inside, -n2, uIor + spread.z);
-    if (dot(dirR, dirR) > 0.0 && dirR.z < -0.2) red = frosted(landing(tr.q, dirR, hitT), tx, ty);
-    if (dot(dirB, dirB) > 0.0 && dirB.z < -0.2) blue = frosted(landing(tr.q, dirB, hitT), tx, ty);
+  vec4 mirror = tone * uReflection;
+  vec4 transmitted = tone;
+  if (band < 1.0) {
+    mirror = mirrorDir.z < -0.0005 ? frosted(landing(tr.p, mirrorDir, w), rx, ry) * uReflection : light(mirrorDir, uReflection);
+    vec2 hitT = landing(tr.q, tr.exitDir, w);
+    vec4 green = frosted(hitT, tx, ty);
+    vec4 red = green;
+    vec4 blue = green;
+    if (tr.escaped > 0.5 && uDispersion > 0.0) {
+      vec3 spread = vec3(-1.0, 0.0, 1.0) * uDispersion * 0.06;
+      vec3 dirR = refract(tr.inside, -tr.exitNormal, uIor + spread.x);
+      vec3 dirB = refract(tr.inside, -tr.exitNormal, uIor + spread.z);
+      if (dot(dirR, dirR) > 0.0 && dirR.z < -0.2) red = frosted(landing(tr.q, dirR, hitT), tx, ty);
+      if (dot(dirB, dirB) > 0.0 && dirB.z < -0.2) blue = frosted(landing(tr.q, dirB, hitT), tx, ty);
+    }
+    vec2 factors = lighting(hitT, 0.0);
+    red = shade(red, factors);
+    green = shade(green, factors);
+    blue = shade(blue, factors);
+    transmitted = mix(vec4(red.r, green.g, blue.b, green.a), tone, band);
+    mirror = mix(mirror, tone * uReflection, band);
   }
-  vec2 factors = lighting(hitT, 0.0);
-  red = shade(red, factors);
-  green = shade(green, factors);
-  blue = shade(blue, factors);
-  vec4 transmitted = vec4(red.r, green.g, blue.b, green.a);
-  transmitted = mix(transmitted, tone, band);
-  mirror = mix(mirror, tone * uReflection, band);
 
   vec3 tint = pow(max(uTint.rgb, vec3(0.001)), vec3(uTint.a * tr.travel / max(uBound, 1.0)));
   transmitted.rgb *= tint;
@@ -398,6 +437,12 @@ vec4 shadeTrace(Trace tr, vec3 rd, vec4 background, vec2 w, vec2 tx, vec2 ty, ve
 }
 
 void main() {
+  if (uPass > 0.5) {
+    float caustic;
+    float dark = shadowAt(uShadowBox.xy + gl_FragCoord.xy / uShadowSize * uShadowBox.zw, caustic);
+    fragColor = vec4(dark / 0.42, caustic * 0.5, 0.0, 1.0);
+    return;
+  }
   vec2 w = gl_FragCoord.xy / uRatio;
   vec3 camera = vec3(uView * 0.5, uFocal);
   vec3 ro = camera;
@@ -405,7 +450,8 @@ void main() {
   float pixel = 1.0 / uRatio;
   float eps = 0.25 * pixel;
 
-  Trace tr = traceRay(ro, rd, eps, pixel);
+  Trace tr = traceSurface(ro, rd, eps, pixel);
+  if (tr.mode > 1.5) traceInterior(tr, rd, eps);
   vec2 hitT = tr.mode > 1.5 ? landing(tr.q, tr.exitDir, w) : w;
   vec2 hitR = tr.mode > 0.5 ? landing(tr.p, reflect(rd, tr.n), w) : w;
   vec2 tx = dFdx(hitT);
@@ -416,18 +462,9 @@ void main() {
   vec2 wy = dFdy(w);
 
   vec4 background = shade(content(w, wx, wy), lighting(w, 1.0));
-  vec4 color = shadeTrace(tr, rd, background, w, tx, ty, rx, ry);
-  float rim = tr.mode > 1.5 ? 1.0 - smoothstep(0.3, 0.55, clamp(-dot(rd, tr.n), 0.0, 1.0)) : tr.mode;
-  if (rim > 0.0 && uRatio < 1.75) {
-    vec2 offsets[3] = vec2[3](vec2(0.33, 0.33), vec2(-0.33, 0.25), vec2(0.25, -0.33));
-    for (int k = 0; k < 3; k++) {
-      vec2 sub = w + offsets[k] * pixel;
-      vec3 subDir = normalize(vec3(sub, 0.0) - camera);
-      Trace st = traceRay(ro, subDir, eps, pixel);
-      color += shadeTrace(st, subDir, background, sub, tx, ty, rx, ry);
-    }
-    color *= 0.25;
-  }
+  vec4 tone = tr.mode > 0.5 ? content(uCenter.xy, vec2(uBound * 1.4, 0.0), vec2(0.0, uBound * 1.4)) : vec4(0.0);
+  vec4 color = shadeTrace(tr, rd, background, tone, w, tx, ty, rx, ry);
+  ${supersample ? SUPERSAMPLE : ''}
   fragColor = color;
 }`;
 
@@ -612,10 +649,15 @@ const FluidGlass = ({
     const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
     const programs = new Map();
 
-    const request = key => {
+    const request = name => {
+      const key = name === 'content' ? name : `${name}>${view.ratio < 1.75 ? 1 : 0}`;
       if (programs.has(key)) return programs.get(key);
-      const [a, b] = key.split('>');
-      const fragment = compile(gl, gl.FRAGMENT_SHADER, key === 'content' ? CONTENT : fragmentFor(a, b));
+      const [a, b, sampled] = key.split('>');
+      const fragment = compile(
+        gl,
+        gl.FRAGMENT_SHADER,
+        key === 'content' ? CONTENT : fragmentFor(a, b, sampled === '1')
+      );
       const program = gl.createProgram();
       gl.attachShader(program, vertex);
       gl.attachShader(program, fragment);
@@ -659,6 +701,17 @@ const FluidGlass = ({
     };
     const mediaTexture = makeTexture();
     const textTexture = makeTexture();
+    const shadowMap = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, shadowMap);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, SHADOW_SIZE, SHADOW_SIZE, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    const shadowTarget = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, shadowTarget);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, shadowMap, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     const textCanvas = document.createElement('canvas');
     const view = { width: 1, height: 1, ratio: 1 };
     const media = { src: null, clip: null, image: null, ready: false, width: 1, height: 1 };
@@ -698,6 +751,10 @@ const FluidGlass = ({
     let idleClock = Math.random() * 20;
     let raf = 0;
     let last = 0;
+    let tick = 0;
+    let pace = 1000 / 60;
+    let skipped = 0;
+    let calm = false;
     let visible = true;
     let pageVisible = document.visibilityState !== 'hidden';
     let lost = false;
@@ -900,6 +957,15 @@ const FluidGlass = ({
     const frame = now => {
       raf = 0;
       if (lost) return;
+      const gap = now - tick;
+      tick = now;
+      if (gap > 2 && gap < 100) pace += (gap - pace) * 0.1;
+      if (calm && skipped < Math.round(12 / pace) - 1) {
+        skipped += 1;
+        if (visible && pageVisible) raf = requestAnimationFrame(frame);
+        return;
+      }
+      skipped = 0;
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);
       last = Math.max(last, now);
@@ -1103,9 +1169,6 @@ const FluidGlass = ({
       }
 
       const u = current.uniforms;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(current.program);
       gl.bindVertexArray(vao);
       bindContent(u, s);
@@ -1113,7 +1176,8 @@ const FluidGlass = ({
       gl.uniform3f(u.uCenter, cx, cy, height);
       gl.uniformMatrix3fv(u.uInverse, false, combined);
       gl.uniform1f(u.uScale, unit * scale * minScale);
-      gl.uniform1f(u.uBound, size * scale * maxScale * 1.08 + 2);
+      const bound = size * scale * maxScale * 1.08 + 2;
+      gl.uniform1f(u.uBound, bound);
       gl.uniform1f(u.uMorph, eased);
       gl.uniform1f(u.uRipple, body.ripple);
       gl.uniform1f(u.uTime, reduced ? 0 : time);
@@ -1127,8 +1191,37 @@ const FluidGlass = ({
       const length = Math.hypot(...light);
       gl.uniform3f(u.uLight, light[0] / length, light[1] / length, light[2] / length);
       gl.uniform1f(u.uPresence, presence);
+      const footprint = bound * 1.6 * (SHADOW_SIZE / (SHADOW_SIZE - 6)) + 1;
+      const footX = cx + (light[0] / light[2]) * height;
+      const footY = cy + (light[1] / light[2]) * height;
+      gl.uniform4f(u.uShadowBox, footX - footprint, footY - footprint, footprint * 2, footprint * 2);
+      gl.uniform2f(u.uShadowSize, SHADOW_SIZE, SHADOW_SIZE);
+      gl.uniform1i(u.uShadowMap, 2);
+      gl.activeTexture(gl.TEXTURE2);
+      gl.bindTexture(gl.TEXTURE_2D, null);
+      if (s.shadow > 0) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, shadowTarget);
+        gl.viewport(0, 0, SHADOW_SIZE, SHADOW_SIZE);
+        gl.uniform1f(u.uPass, 1);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.bindTexture(gl.TEXTURE_2D, shadowMap);
+      }
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(u.uPass, 0);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
 
+      calm =
+        !pointer.grabbed &&
+        !flying &&
+        morph.t >= 1 &&
+        !morph.pending &&
+        presence >= 1 &&
+        Math.abs(s.spin) <= 1 &&
+        Math.hypot(body.vx, body.vy) < 120 &&
+        Math.abs(spring.vstretch) + Math.abs(spring.vtiltX) + Math.abs(spring.vtiltY) + Math.abs(spring.vscale) < 0.05;
       if (busy && visible && pageVisible) raf = requestAnimationFrame(frame);
     };
 
@@ -1138,6 +1231,7 @@ const FluidGlass = ({
       raf = requestAnimationFrame(frame);
     };
     wakeRef.current = () => {
+      calm = false;
       loadMedia();
       resize();
       wake();
@@ -1161,6 +1255,7 @@ const FluidGlass = ({
       pointer.x = spot.x;
       pointer.y = spot.y;
       pointer.inside = spot.inside;
+      if (spot.inside || pointer.grabbed) calm = false;
       wake();
     };
     const onPointerDown = event => {
@@ -1181,6 +1276,7 @@ const FluidGlass = ({
       }
       pointer.startX = spot.x;
       pointer.startY = spot.y;
+      calm = false;
       wake();
     };
     const onPointerUp = event => {
@@ -1204,9 +1300,11 @@ const FluidGlass = ({
         }
       }
       if (event.pointerType !== 'mouse') pointer.inside = false;
+      calm = false;
       wake();
     };
     const onLeave = () => {
+      calm = false;
       pointer.inside = false;
       pointer.down = false;
       if (pointer.grabbed) {
@@ -1270,10 +1368,10 @@ const FluidGlass = ({
       });
     }
 
+    resize();
     request('content');
     request(`${settingsRef.current.shape}>${settingsRef.current.shape}`);
     loadMedia();
-    resize();
     wake();
 
     return () => {
@@ -1299,6 +1397,8 @@ const FluidGlass = ({
         gl.deleteShader(vertex);
         gl.deleteTexture(mediaTexture);
         gl.deleteTexture(textTexture);
+        gl.deleteTexture(shadowMap);
+        gl.deleteFramebuffer(shadowTarget);
         gl.deleteVertexArray(vao);
       }
     };

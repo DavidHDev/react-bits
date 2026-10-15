@@ -16,6 +16,14 @@
       <description>Soft gradient glows drawn in ASCII characters that scramble under the cursor.</description>
     </item>
     <item>
+      <title>Updated: Fluid Glass</title>
+      <link>https://reactbits.dev/components/fluid-glass</link>
+      <guid isPermaLink="false">reactbits:Components/FluidGlass@2026-10-15</guid>
+      <pubDate>Thu, 15 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Same look with less than half the GPU work. On high refresh rate screens it also draws fewer frames while the glass is at rest.</description>
+    </item>
+    <item>
       <title>Updated: Acid Squares</title>
       <link>https://reactbits.dev/backgrounds/acid-squares</link>
       <guid isPermaLink="false">reactbits:Backgrounds/AcidSquares@2026-10-14</guid>
@@ -798,14 +806,6 @@
       <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
       <description>Rebuilt with eight cell shapes, a glowing cursor trail and click ripples. The grid can now tilt into perspective and light up in rainbow colors.</description>
-    </item>
-    <item>
-      <title>Updated: Silk</title>
-      <link>https://reactbits.dev/backgrounds/silk</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/Silk@2026-10-11</guid>
-      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt on the same folds with deeper shading, glossy satin highlights and a soft glow. The light follows the cursor, clicks ripple through the fabric, and the folds rise in on load.</description>
     </item>
   </channel>
 </rss>
