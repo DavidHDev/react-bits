@@ -635,7 +635,7 @@ const Hero = () => {
             <span>Tune them yourself, or hand them to your agent.</span>
           </p>
           <div className="lh-actions">
-            <Link to="/get-started/introduction" className="lh-btn lh-btn--primary">
+            <Link to="/get-started/index" className="lh-btn lh-btn--primary">
               Browse components
               <HugeiconsIcon icon={ArrowRight02Icon} size={17} strokeWidth={1.8} />
             </Link>
