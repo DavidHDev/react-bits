@@ -1,0 +1,15 @@
+.splash-cursor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.splash-cursor[data-contained] {
+  position: absolute;
+}
+
+.splash-cursor__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

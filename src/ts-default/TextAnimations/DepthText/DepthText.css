@@ -10,7 +10,6 @@
   display: inline-grid;
   place-items: center;
   transform-style: preserve-3d;
-  transform: rotateX(-2.4deg) rotateY(3.15deg);
   transform-origin: 50% 50%;
   will-change: transform;
 }
@@ -35,15 +34,23 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  filter: saturate(0.95) brightness(0.92);
   pointer-events: none;
+}
+
+.depth-text__layer--back {
+  text-shadow: var(--depth-text-shadow);
+}
+
+.depth-text--outline .depth-text__layer {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: max(1px, 0.012em) currentColor;
 }
 
 .depth-text__face {
   position: relative;
   z-index: 1;
   color: var(--depth-text-face-color);
-  text-shadow: var(--depth-text-shadow);
+  text-shadow: var(--depth-text-face-shadow);
   transform: translateZ(0.6px);
 }
 

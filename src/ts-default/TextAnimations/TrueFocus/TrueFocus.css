@@ -30,44 +30,64 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  box-sizing: content-box;
-  border: none;
+}
+
+.focus-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 6px;
+  background-color: var(--highlight-color);
+  pointer-events: none;
+}
+
+.focus-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  border: var(--border-width, 3px) solid var(--border-color, currentColor);
+  border-radius: 6px;
+  filter: drop-shadow(0 0 4px var(--glow-color, transparent));
+}
+
+.focus-underline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: calc(var(--border-width, 3px) / 2);
+  background-color: var(--border-color, currentColor);
+  filter: drop-shadow(0 0 4px var(--glow-color, transparent));
 }
 
 .corner {
   position: absolute;
-  width: 1rem;
-  height: 1rem;
-  border: 3px solid var(--border-color, #fff);
-  filter: drop-shadow(0px 0px 4px var(--border-color, #fff));
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--corner-size, 1rem);
+  height: var(--corner-size, 1rem);
+  border: var(--border-width, 3px) solid var(--border-color, currentColor);
   border-radius: 3px;
-  transition: none;
+  filter: drop-shadow(0 0 4px var(--glow-color, transparent));
 }
 
 .top-left {
-  top: -10px;
-  left: -10px;
   border-right: none;
   border-bottom: none;
 }
 
 .top-right {
-  top: -10px;
-  right: -10px;
   border-left: none;
   border-bottom: none;
 }
 
 .bottom-left {
-  bottom: -10px;
-  left: -10px;
   border-right: none;
   border-top: none;
 }
 
 .bottom-right {
-  bottom: -10px;
-  right: -10px;
   border-left: none;
   border-top: none;
 }

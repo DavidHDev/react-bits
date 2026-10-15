@@ -5,17 +5,16 @@ import tsCode from '@ts-default/Components/ElasticSlider/ElasticSlider.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/ElasticSlider/ElasticSlider.tsx?raw';
 
 export const elasticSlider = {
-  dependencies: `motion`,
-  usage: `import ElasticSlider from './ElasticSlider'
-  
+  dependencies: `@hugeicons/react @hugeicons/core-free-icons`,
+  usage: `import { HugeiconsIcon } from '@hugeicons/react';
+import { VolumeHighIcon, VolumeLowIcon } from '@hugeicons/core-free-icons';
+import ElasticSlider from './ElasticSlider';
+
 <ElasticSlider
-  leftIcon={<>...your icon...</>}
-  rightIcon={<>...your icon...</>}
-  startingValue={500}
-  defaultValue={750}
-  maxValue={1000}
-  isStepped
-  stepSize={10}
+  defaultValue={50}
+  leftIcon={<HugeiconsIcon icon={VolumeLowIcon} size={20} />}
+  rightIcon={<HugeiconsIcon icon={VolumeHighIcon} size={20} />}
+  onChange={value => console.log(value)}
 />`,
   code,
   css,

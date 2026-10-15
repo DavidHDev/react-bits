@@ -23,6 +23,8 @@ public/ts/tailwind
 skills-lock.json
 AGENTS.md
 /AGENTS/
+.claude/
+.context/
 
 # Editor directories and files
 .vscode/*

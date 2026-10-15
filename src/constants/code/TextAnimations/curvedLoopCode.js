@@ -7,25 +7,21 @@ import tsTailwind from '@ts-tailwind/TextAnimations/CurvedLoop/CurvedLoop.tsx?ra
 export const curvedLoop = {
   usage: `import CurvedLoop from './CurvedLoop';
 
-// Basic usage
-<CurvedLoop marqueeText="Welcome to React Bits ✦" />
-
-// With custom props
-<CurvedLoop 
+<CurvedLoop
   marqueeText="Be ✦ Creative ✦ With ✦ React ✦ Bits ✦"
-  speed={3}
-  curveAmount={500}
-  direction="right"
+  shape="arc"
+  speed={2}
+  curveAmount={400}
+  direction="left"
+  fontSize={96}
+  fontWeight={700}
+  letterSpacing={0}
+  separator=""
+  outline={false}
+  scrollBoost={0}
+  edgeFade={0}
   interactive={true}
-  className="custom-text-style"
-/>
-
-// Non-interactive with slower speed
-<CurvedLoop 
-  marqueeText="Smooth Curved Animation"
-  speed={1}
-  curveAmount={300}
-  interactive={false}
+  pauseOnHover={false}
 />`,
   code,
   css,

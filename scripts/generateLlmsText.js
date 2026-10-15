@@ -96,7 +96,7 @@ const DOC_LINKS = [
   {
     label: 'Introduction',
     url: 'https://www.reactbits.dev/get-started/introduction',
-    note: 'Project mission and principles.'
+    note: 'What React Bits is, its five categories, the four flavours (JS or TS, CSS or Tailwind), AI features, free tools and the license.'
   },
   {
     label: 'Installation',

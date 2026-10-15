@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { DEFAULT_DESCRIPTION, HOME_SEO, SITE_URL } from '../utils/seo';
+import { DEFAULT_DESCRIPTION, HOME_SEO, SITE_URL } from '../utils/siteSeo';
 
 const DEFAULT_IMAGE = '/og.jpg';
 const DEFAULT_IMAGE_ALT = 'React Bits: free React components for creative websites.';

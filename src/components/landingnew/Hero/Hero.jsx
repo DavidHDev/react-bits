@@ -1,885 +1,755 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import DotField from './DotField';
-import HeroBand from './HeroBand';
-import { LuArrowRight, LuRotateCcw, LuMoveHorizontal } from 'react-icons/lu';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowRight02Icon, ArrowUpRight01Icon, Copy01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
 import { useColorMode } from '../../setup/color-mode';
-import './Hero.css';
+import useAdaptiveQuality from '../../../hooks/useAdaptiveQuality';
+import { buildStudioUrl } from '../../common/Preview/studio-url';
+import { TOTAL_COMPONENTS } from '../../../constants/Categories';
+import { LOOK, PRESET_OPTIONS, presetProps } from '../../../demo/Backgrounds/presets/GradientWaves';
+import './HeroFrame.css';
 
-/* ── Color conversion helpers ── */
+const GradientWaves = lazy(() => import('../../../content/Backgrounds/GradientWaves/GradientWaves'));
+const DotGrid = lazy(() => import('../../../content/Backgrounds/DotGrid/DotGrid'));
 
-function hsvToHex(h, s, v) {
-  const c = v * s;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = v - c;
-  let r, g, b;
-  if (h < 60) {
-    r = c;
-    g = x;
-    b = 0;
-  } else if (h < 120) {
-    r = x;
-    g = c;
-    b = 0;
-  } else if (h < 180) {
-    r = 0;
-    g = c;
-    b = x;
-  } else if (h < 240) {
-    r = 0;
-    g = x;
-    b = c;
-  } else if (h < 300) {
-    r = x;
-    g = 0;
-    b = c;
-  } else {
-    r = c;
-    g = 0;
-    b = x;
-  }
-  const toH = n =>
-    Math.round((n + m) * 255)
-      .toString(16)
-      .padStart(2, '0');
-  return `#${toH(r)}${toH(g)}${toH(b)}`;
-}
-
-function hexToHsv(hex) {
-  const h = hex.replace('#', '');
-  const r = parseInt(h.slice(0, 2), 16) / 255;
-  const g = parseInt(h.slice(2, 4), 16) / 255;
-  const b = parseInt(h.slice(4, 6), 16) / 255;
-  const max = Math.max(r, g, b),
-    min = Math.min(r, g, b),
-    d = max - min;
-  let hue = 0;
-  if (d > 0) {
-    if (max === r) hue = 60 * (((g - b) / d) % 6);
-    else if (max === g) hue = 60 * ((b - r) / d + 2);
-    else hue = 60 * ((r - g) / d + 4);
-  }
-  if (hue < 0) hue += 360;
-  return { h: hue, s: max === 0 ? 0 : d / max, v: max };
-}
-
-function parseHexRgb(hex) {
-  const h = hex.replace('#', '');
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
-}
-
-const SNIPPET_DEFS = [
-  {
-    label: 'ColorBends',
-    component: 'ColorBends',
-    props: [
-      { name: 'color', type: 'color', default: '#A855F7' },
-      { name: 'speed', type: 'number', default: 0.2, min: 0.1, max: 1, step: 0.1 },
-      { name: 'frequency', type: 'number', default: 1, min: 1, max: 3, step: 0.1 },
-      { name: 'noise', type: 'number', default: 0.15, min: 0, max: 0.9, step: 0.01 },
-      { name: 'bandWidth', type: 'number', default: 0.14, min: 0.1, max: 1, step: 0.01 },
-      { name: 'rotation', type: 'number', default: 90, min: 0, max: 360, step: 1 },
-      { name: 'fadeTop', type: 'number', default: 0.75, min: 0.4, max: 1, step: 0.05 },
-      { name: 'iterations', type: 'number', default: 1, min: 1, max: 2, step: 1 },
-      { name: 'intensity', type: 'number', default: 1.25, min: 0.1, max: 2, step: 0.1 }
-    ]
-  },
-  {
-    label: 'DotField',
-    component: 'DotField',
-    props: [
-      { name: 'dotRadius', type: 'number', default: 1.5, min: 1, max: 3, step: 0.1 },
-      { name: 'dotSpacing', type: 'number', default: 14, min: 10, max: 40, step: 1 },
-      { name: 'cursorRadius', type: 'number', default: 500, min: 50, max: 1000, step: 10 },
-      { name: 'cursorForce', type: 'number', default: 0.1, min: 0, max: 1, step: 0.01 },
-      { name: 'bulgeOnly', type: 'boolean', default: true },
-      { name: 'bulgeStrength', type: 'number', default: 67, min: 1, max: 200, step: 1 },
-      { name: 'glowRadius', type: 'number', default: 160, min: 50, max: 500, step: 10 },
-      { name: 'sparkle', type: 'boolean', default: false },
-      { name: 'waveAmplitude', type: 'number', default: 0, min: 0, max: 20, step: 1 }
-    ]
-  }
+const ORDER = ['ocean', 'dune', 'dusk', 'silk', 'aurora'];
+const OPTIONS = ORDER.map(value => PRESET_OPTIONS.find(option => option.value === value));
+const FIRST = 'dusk';
+const STAGE = { tilt: 40 };
+const INSTALL = 'npx shadcn@latest add @react-bits/GradientWaves-TS-TW';
+const FIELDS = [
+  { name: 'waveColor', type: 'color', label: 'Wave color' },
+  { name: 'amplitude', min: 0, max: 5, step: 0.05, label: 'Amplitude' },
+  { name: 'swell', min: 0, max: 40, step: 0.5, label: 'Swell' },
+  { name: 'lightAngle', min: -180, max: 180, step: 1, label: 'Light angle' },
+  { name: 'speed', min: 0, max: 1.5, step: 0.01, label: 'Speed' }
 ];
-
-const SCENE_PRESETS = [
-  {
-    label: 'Nebula',
-    values: [
-      {
-        color: '#A855F7',
-        speed: 0.2,
-        frequency: 1,
-        noise: 0.15,
-        bandWidth: 0.14,
-        rotation: 90,
-        fadeTop: 0.75,
-        iterations: 1,
-        intensity: 1.25
-      },
-      {
-        cursorRadius: 500,
-        cursorForce: 0.1,
-        bulgeOnly: true,
-        bulgeStrength: 67,
-        glowRadius: 160,
-        sparkle: false,
-        waveAmplitude: 0
-      }
-    ]
-  },
-  {
-    label: 'Aurora',
-    values: [
-      {
-        color: '#10B981',
-        speed: 0.35,
-        frequency: 1.5,
-        noise: 0.08,
-        bandWidth: 0.3,
-        rotation: 60,
-        fadeTop: 0.8,
-        iterations: 2,
-        intensity: 1.15
-      },
-      {
-        cursorRadius: 620,
-        cursorForce: 0.18,
-        bulgeOnly: true,
-        bulgeStrength: 45,
-        glowRadius: 280,
-        sparkle: false,
-        waveAmplitude: 5
-      }
-    ]
-  },
-  {
-    label: 'Ember',
-    values: [
-      {
-        color: '#F97316',
-        speed: 0.4,
-        frequency: 1.8,
-        noise: 0.18,
-        bandWidth: 0.22,
-        rotation: 115,
-        fadeTop: 0.7,
-        iterations: 1,
-        intensity: 1.4
-      },
-      {
-        cursorRadius: 420,
-        cursorForce: 0.26,
-        bulgeOnly: true,
-        bulgeStrength: 105,
-        glowRadius: 210,
-        sparkle: true,
-        waveAmplitude: 0
-      }
-    ]
-  },
-  {
-    label: 'Ice',
-    values: [
-      {
-        color: '#06B6D4',
-        speed: 0.15,
-        frequency: 1.2,
-        noise: 0.06,
-        bandWidth: 0.4,
-        rotation: 45,
-        fadeTop: 0.95,
-        iterations: 2,
-        intensity: 1.1
-      },
-      {
-        cursorRadius: 750,
-        cursorForce: 0.08,
-        bulgeOnly: true,
-        bulgeStrength: 35,
-        glowRadius: 340,
-        sparkle: false,
-        waveAmplitude: 7
-      }
-    ]
-  }
-];
-
-const EASE_IN_OUT = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-
-function lerp(a, b, t) {
-  return a + (b - a) * t;
-}
-
-function lerpColor(from, to, t) {
-  const a = hexToHsv(from);
-  const b = hexToHsv(to);
-  let dh = b.h - a.h;
-  if (dh > 180) dh -= 360;
-  if (dh < -180) dh += 360;
-  let h = a.h + dh * t;
-  if (h < 0) h += 360;
-  if (h >= 360) h -= 360;
-  return hsvToHex(h, lerp(a.s, b.s, t), lerp(a.v, b.v, t));
-}
-
-const PRESET_DURATION = 1100;
-
-function tweenScene({ from, target, onFrame, onDone }) {
-  const start = performance.now();
-  let raf = null;
-
-  const step = now => {
-    const t = Math.min(1, (now - start) / PRESET_DURATION);
-
-    if (t >= 1) {
-      onFrame(
-        from.map((vals, i) => ({ ...vals, ...target[i] })),
-        1
-      );
-      onDone?.();
-      return;
-    }
-
-    const e = EASE_IN_OUT(t);
-    onFrame(
-      SNIPPET_DEFS.map((def, i) => {
-        const a = from[i];
-        const b = target[i];
-        const out = { ...a };
-        for (const prop of def.props) {
-          if (!(prop.name in b)) continue;
-          if (prop.type === 'boolean') out[prop.name] = e >= 0.5 ? b[prop.name] : a[prop.name];
-          else if (prop.type === 'color') out[prop.name] = lerpColor(a[prop.name], b[prop.name], e);
-          else {
-            const v = lerp(a[prop.name], b[prop.name], e);
-            out[prop.name] = prop.step >= 1 ? Math.round(v) : v;
-          }
-        }
-        return out;
-      }),
-      e
-    );
-
-    raf = requestAnimationFrame(step);
-  };
-
-  raf = requestAnimationFrame(step);
-  return () => {
-    if (raf !== null) cancelAnimationFrame(raf);
-  };
-}
-
-/* ── Helpers ── */
-
-function formatValue(val, step) {
-  if (step >= 1) return String(Math.round(val));
-  const d = Math.max(0, Math.ceil(-Math.log10(step)));
-  return val.toFixed(d);
-}
-
-function startDrag(onMove, onEnd) {
-  document.addEventListener('pointermove', onMove);
-  const onUp = () => {
-    document.removeEventListener('pointermove', onMove);
-    document.removeEventListener('pointerup', onUp);
-    document.removeEventListener('pointercancel', onUp);
-    onEnd?.();
-  };
-  document.addEventListener('pointerup', onUp);
-  // A touch handed over to the browser for panning ends in pointercancel, never pointerup,
-  // so without this the move listener would outlive the gesture.
-  document.addEventListener('pointercancel', onUp);
-}
-
-/* ── Audio ── */
-
-let _audioCtx;
-const _buffers = {};
-const _sounds = {
-  tick: '/assets/sounds/click-004.mp3',
-  color: '/assets/sounds/drop-003.mp3',
-  toggle: '/assets/sounds/switch-007.mp3'
+const HINTS = ['amplitude', 'swell'];
+const SWATCHES = {
+  dark: ['#fb923c', '#f9a8d4', '#c4b5fd', '#38bdf8', '#34d399', '#fde68a', '#e4e4e7'],
+  light: ['#fb923c', '#e879f9', '#a78bfa', '#38bdf8', '#34d399', '#facc15', '#a1a1aa']
 };
-const _lastPlayed = {};
+const HEX = /^#[0-9a-f]{6}$/i;
 
-function preloadSounds() {
-  if (_audioCtx) return;
-  try {
-    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  } catch {
-    return;
+const lookFor = (preset, light) => ({ ...presetProps(preset, { light, defaults: LOOK }), ...STAGE });
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const decimals = step => (String(step).split('.')[1] || '').length;
+
+const roundTo = (value, step) => Number((Math.round(value / step) * step).toFixed(decimals(step)));
+
+const toRgb = hex => {
+  const value = parseInt(hex.slice(1), 16);
+  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+};
+
+const toHex = rgb => `#${rgb.map(channel => Math.round(channel).toString(16).padStart(2, '0')).join('')}`;
+
+const mix = (from, to, t) => {
+  if (typeof from === 'number' && typeof to === 'number') return from + (to - from) * t;
+  if (typeof from === 'string' && typeof to === 'string' && HEX.test(from) && HEX.test(to)) {
+    const a = toRgb(from);
+    const b = toRgb(to);
+    return toHex(a.map((channel, index) => channel + (b[index] - channel) * t));
   }
-  for (const [key, url] of Object.entries(_sounds)) {
-    fetch(url)
-      .then(r => r.arrayBuffer())
-      .then(buf => _audioCtx.decodeAudioData(buf))
-      .then(decoded => {
-        _buffers[key] = decoded;
-      })
-      .catch(() => {});
-  }
-}
+  return t < 0.5 ? from : to;
+};
 
-function playSound(name, volume = 0.25, cooldown = 0) {
-  if (!_audioCtx) preloadSounds();
-  const buf = _buffers[name];
-  if (!buf) return;
-  if (cooldown > 0) {
-    const now = performance.now();
-    if (now - (_lastPlayed[name] || 0) < cooldown) return;
-    _lastPlayed[name] = now;
-  }
-  const src = _audioCtx.createBufferSource();
-  const gain = _audioCtx.createGain();
-  gain.gain.value = volume;
-  src.buffer = buf;
-  src.connect(gain);
-  gain.connect(_audioCtx.destination);
-  src.start(0);
-}
+const tween = (from, to, onFrame, duration) => {
+  let frame = 0;
+  const start = performance.now();
+  const step = now => {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const next = { ...from };
+    Object.keys(to).forEach(key => {
+      next[key] = mix(from[key], to[key], eased);
+    });
+    onFrame(next);
+    if (t < 1) frame = requestAnimationFrame(step);
+  };
+  frame = requestAnimationFrame(step);
+  return () => cancelAnimationFrame(frame);
+};
 
-/* ── Editable value components ── */
-
-function EditableValue({ type, value, onChange, min, max, step }) {
-  const numRef = useRef(null);
-  const stateRef = useRef({ value, onChange, min, max, step });
-  stateRef.current = { value, onChange, min, max, step };
-
+function useDismiss(ref, open, close) {
   useEffect(() => {
-    const el = numRef.current;
-    if (!el) return;
-    const onWheel = e => {
-      e.preventDefault();
-      const { value: v, onChange: oc, min: mn, max: mx, step: s } = stateRef.current;
-      const dir = e.deltaY < 0 ? 1 : -1;
-      let next = v + dir * s;
-      next = Math.round(next / s) * s;
-      const clamped = Math.max(mn, Math.min(mx, next));
-      if (clamped !== v) playSound('tick', 0.25, 60);
-      oc(clamped);
+    if (!open) return undefined;
+    const onDown = event => {
+      if (!ref.current?.contains(event.target)) close();
     };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, []);
+    const onKey = event => {
+      if (event.key === 'Escape') close();
+    };
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [ref, open, close]);
+}
 
-  if (type === 'color') {
-    return <ColorValue value={value} onChange={onChange} />;
-  }
+function ScrubNumber({ value, field, onChange }) {
+  const drag = useRef(null);
+  const [active, setActive] = useState(false);
+  const range = field.max - field.min;
 
-  if (type === 'boolean') {
-    return (
-      <button
-        className="ln-hero-code-value ln-hero-code-value--bool"
-        onClick={() => {
-          playSound('toggle');
-          onChange(!value);
-        }}
-      >
-        {String(value)}
-      </button>
-    );
-  }
-
-  const handlePointerDown = e => {
-    // Preventing the default on touch would also cancel the page scroll this gesture might
-    // turn out to be. The |dx| > 2 threshold below keeps the value safe until it commits.
-    const isTouch = e.pointerType === 'touch';
-    if (!isTouch) e.preventDefault();
-    const startX = e.clientX;
-    const { value: startVal, step: s, min: mn, max: mx } = stateRef.current;
-    let moved = false;
-    let lastVal = startVal;
-
-    if (!isTouch) {
-      document.body.style.cursor = 'ew-resize';
-      document.body.style.userSelect = 'none';
-    }
-
-    startDrag(
-      ev => {
-        const dx = ev.clientX - startX;
-        if (!moved && Math.abs(dx) > 2) moved = true;
-        if (!moved) return;
-        const sens = ev.shiftKey ? 0.02 : 0.15;
-        let next = startVal + dx * s * sens;
-        next = Math.round(next / s) * s;
-        const clamped = Math.max(mn, Math.min(mx, next));
-        if (clamped !== lastVal) playSound('tick', 0.25, 60);
-        lastVal = clamped;
-        stateRef.current.onChange(clamped);
-      },
-      () => {
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
-      }
-    );
+  const down = event => {
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    drag.current = { x: event.clientX, value };
+    setActive(true);
+  };
+  const move = event => {
+    if (!drag.current) return;
+    const delta = ((event.clientX - drag.current.x) / 260) * range;
+    onChange(roundTo(clamp(drag.current.value + delta, field.min, field.max), field.step));
+  };
+  const up = () => {
+    drag.current = null;
+    setActive(false);
+  };
+  const key = event => {
+    const direction = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[event.key];
+    if (!direction) return;
+    event.preventDefault();
+    const amount = field.step * (event.shiftKey ? 10 : 1) * direction;
+    onChange(roundTo(clamp(value + amount, field.min, field.max), field.step));
   };
 
   return (
-    <span ref={numRef} className="ln-hero-code-value ln-hero-code-value--number" onPointerDown={handlePointerDown}>
-      {formatValue(value, step)}
+    <span
+      className="lh-scrub lh-value"
+      role="slider"
+      tabIndex={0}
+      aria-label={field.label}
+      aria-valuemin={field.min}
+      aria-valuemax={field.max}
+      aria-valuenow={value}
+      data-active={active ? '' : undefined}
+      onPointerDown={down}
+      onPointerMove={move}
+      onPointerUp={up}
+      onPointerCancel={up}
+      onKeyDown={key}
+    >
+      {roundTo(value, field.step)}
     </span>
   );
 }
 
-const COLOR_PRESETS = [
-  '#A855F7',
-  '#7C3AED',
-  '#6366F1',
-  '#3B82F6',
-  '#06B6D4',
-  '#10B981',
-  '#EAB308',
-  '#F97316',
-  '#EF4444',
-  '#EC4899'
-];
-
-function ColorValue({ value, onChange }) {
+function ScrubColor({ value, swatches, label, onChange }) {
   const [open, setOpen] = useState(false);
-  const [hsv, setHsv] = useState(() => hexToHsv(value));
-  const wrapRef = useRef(null);
-  const areaRef = useRef(null);
-  const hueRef = useRef(null);
-  const hsvRef = useRef(hsv);
-  hsvRef.current = hsv;
-
-  useEffect(() => {
-    if (open) return;
-    const next = hexToHsv(value);
-    setHsv(next);
-    hsvRef.current = next;
-  }, [value, open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onClickOutside = e => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener('pointerdown', onClickOutside);
-    return () => document.removeEventListener('pointerdown', onClickOutside);
-  }, [open]);
-
-  const applyHsv = useCallback(
-    next => {
-      hsvRef.current = next;
-      setHsv(next);
-      onChange(hsvToHex(next.h, next.s, next.v));
-    },
-    [onChange]
-  );
-
-  const onAreaDown = useCallback(
-    e => {
-      e.preventDefault();
-      e.stopPropagation();
-      const update = ev => {
-        const rect = areaRef.current.getBoundingClientRect();
-        const x = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
-        const y = Math.max(0, Math.min(1, (ev.clientY - rect.top) / rect.height));
-        applyHsv({ h: hsvRef.current.h, s: x, v: 1 - y });
-      };
-      update(e);
-      startDrag(update);
-    },
-    [applyHsv]
-  );
-
-  const onHueDown = useCallback(
-    e => {
-      e.preventDefault();
-      e.stopPropagation();
-      const update = ev => {
-        const rect = hueRef.current.getBoundingClientRect();
-        const x = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
-        applyHsv({ s: hsvRef.current.s, v: hsvRef.current.v, h: x * 360 });
-      };
-      update(e);
-      startDrag(update);
-    },
-    [applyHsv]
-  );
-
-  const hueColor = hsvToHex(hsv.h, 1, 1);
+  const ref = useRef(null);
+  const close = useCallback(() => setOpen(false), []);
+  useDismiss(ref, open, close);
 
   return (
-    <span ref={wrapRef} className="ln-hero-code-value ln-hero-code-value--color" style={{ position: 'relative' }}>
-      <span
-        className="ln-hero-code-swatch"
-        style={{ background: value, cursor: 'pointer' }}
-        onClick={() => setOpen(o => !o)}
-      />
-      <span style={{ cursor: 'pointer' }} onClick={() => setOpen(o => !o)}>
-        &quot;{value}&quot;
-      </span>
-
+    <span className="lh-color" ref={ref}>
+      <button
+        type="button"
+        className="lh-scrub lh-value"
+        aria-label={label}
+        aria-expanded={open}
+        onClick={() => setOpen(current => !current)}
+      >
+        <i style={{ background: value }} />
+        {`"${value}"`}
+      </button>
       {open && (
-        <div className="ln-hero-color-picker">
-          <div
-            ref={areaRef}
-            className="ln-hero-color-picker-area"
-            onPointerDown={onAreaDown}
-            style={{
-              background: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, ${hueColor})`
-            }}
-          >
-            <div
-              className="ln-hero-color-picker-thumb"
-              style={{ left: `${hsv.s * 100}%`, top: `${(1 - hsv.v) * 100}%` }}
+        <span className="lh-swatches">
+          {swatches.map(color => (
+            <button
+              key={color}
+              type="button"
+              aria-label={color}
+              aria-pressed={color.toLowerCase() === String(value).toLowerCase()}
+              style={{ '--swatch': color }}
+              onClick={() => onChange(color)}
             />
-          </div>
-          <div ref={hueRef} className="ln-hero-color-picker-hue" onPointerDown={onHueDown}>
-            <div className="ln-hero-color-picker-thumb" style={{ left: `${(hsv.h / 360) * 100}%`, top: '50%' }} />
-          </div>
-          <div className="ln-hero-color-picker-presets">
-            {COLOR_PRESETS.map(c => (
-              <button
-                key={c}
-                className="ln-hero-color-picker-preset"
-                style={{
-                  background: c,
-                  borderColor: value.toLowerCase() === c.toLowerCase() ? '#fff' : 'rgba(255,255,255,0.12)'
-                }}
-                onClick={() => {
-                  playSound('color');
-                  const next = hexToHsv(c);
-                  setHsv(next);
-                  onChange(c);
-                }}
-              />
-            ))}
-          </div>
-        </div>
+          ))}
+        </span>
       )}
     </span>
   );
 }
 
-function InteractiveCode({ def, values, onChange }) {
+function Window({ title, className, status, action, children, ...rest }) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const drag = useRef(null);
+
+  const down = event => {
+    if (event.button !== 0 || event.target.closest('button')) return;
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+    drag.current = { x: event.clientX, y: event.clientY, start: offset };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+  const move = event => {
+    if (!drag.current) return;
+    setOffset({
+      x: drag.current.start.x + event.clientX - drag.current.x,
+      y: drag.current.start.y + event.clientY - drag.current.y
+    });
+  };
+  const up = () => {
+    drag.current = null;
+  };
+
   return (
-    <pre className="ln-hero-code-pre">
-      <code>
-        <span className="c-kw">import</span>
-        <span className="c-punc">{' { '}</span>
-        <span className="c-comp">{def.component}</span>
-        <span className="c-punc">{' } '}</span>
-        <span className="c-kw">from</span>
-        <span className="c-str"> {"'@components/"}</span>
-        <span className="c-str">{def.component}</span>
-        <span className="c-str">{"';"}</span>
-        {'\n\n'}
-        <span className="c-kw">function</span>
-        <span className="c-fn"> App</span>
-        <span className="c-punc">() {'{'}</span>
-        {'\n  '}
-        <span className="c-kw">return</span>
-        <span className="c-punc"> (</span>
-        {'\n    '}
-        <span className="c-comp">{'<'}</span>
-        <span className="c-comp">{def.component}</span>
-        {def.props.map(prop => (
-          <span key={prop.name}>
-            {'\n      '}
-            <span className="c-attr">{prop.name}</span>
-            <span className="c-punc">=</span>
-            {prop.type === 'color' ? (
-              <EditableValue type="color" value={values[prop.name]} onChange={v => onChange(prop.name, v)} />
-            ) : (
-              <>
-                <span className="c-punc">{'{'}</span>
-                <EditableValue
-                  type={prop.type}
-                  value={values[prop.name]}
-                  onChange={v => onChange(prop.name, v)}
-                  min={prop.min}
-                  max={prop.max}
-                  step={prop.step}
-                />
-                <span className="c-punc">{'}'}</span>
-              </>
-            )}
-          </span>
-        ))}
-        {'\n    '}
-        <span className="c-comp">/{'>'}</span>
-        {'\n  '}
-        <span className="c-punc">)</span>
-        {'\n'}
-        <span className="c-punc">{'}'}</span>
-      </code>
-    </pre>
+    <div {...rest} className={`lh-window ${className}`} style={{ '--wx': `${offset.x}px`, '--wy': `${offset.y}px` }}>
+      <div className="lh-window-bar" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up}>
+        {title}
+        {action}
+      </div>
+      <div className="lh-well">{children}</div>
+      {status && <div className="lh-window-status">{status}</div>}
+    </div>
   );
 }
 
-/* ── Hero ── */
+const OUTPUT = ['✔ Checking registry.', '✔ Created 2 files.'];
+
+function CopyCommand() {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard?.writeText(INSTALL);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1400);
+  };
+  return (
+    <button type="button" className="lh-window-action" onClick={copy} aria-label="Copy install command">
+      <HugeiconsIcon icon={copied ? Tick02Icon : Copy01Icon} size={13} strokeWidth={1.8} />
+    </button>
+  );
+}
+
+function Terminal() {
+  const [typed, setTyped] = useState(0);
+  const [shown, setShown] = useState(0);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setTyped(INSTALL.length);
+      setShown(OUTPUT.length);
+      return undefined;
+    }
+    let timer = 0;
+    const later = (fn, ms) => {
+      timer = window.setTimeout(fn, ms);
+    };
+    const reveal = count => {
+      setShown(count);
+      if (count < OUTPUT.length) later(() => reveal(count + 1), 560);
+    };
+    const type = count => {
+      setTyped(count);
+      if (count < INSTALL.length) later(() => type(count + 1), 18 + ((count * 37) % 29));
+      else later(() => reveal(1), 480);
+    };
+    const begin = () => {
+      if (document.querySelector('.landing-wrapper.ln-loading')) later(begin, 200);
+      else later(() => type(1), 1500);
+    };
+    begin();
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const typing = typed < INSTALL.length;
+  const done = shown >= OUTPUT.length;
+
+  return (
+    <div className="lh-term">
+      <div className="lh-term-line">
+        <span className="lh-term-prompt">$</span> {INSTALL.slice(0, typed)}
+        {typing && typed > 0 && <span className="lh-caret" />}
+        <span className="lh-term-rest">{INSTALL.slice(typed)}</span>
+      </div>
+      {OUTPUT.map((line, index) => (
+        <div key={line} className="lh-term-line lh-term-out" data-shown={index < shown ? '' : undefined}>
+          <span className="lh-term-ok">{line.slice(0, 1)}</span>
+          {line.slice(1)}
+          {done && index === OUTPUT.length - 1 && <span className="lh-caret lh-caret--idle" />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const DOT = { size: 2.6, gap: 22, radius: 360, strength: 0.264 };
+const CYCLE_MS = 6000;
+
+const luminance = hex => {
+  const [r, g, b] = toRgb(hex);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+const dotTint = (wave, light) => {
+  const base = light ? '#f5f5f5' : '#120f17';
+  if (!HEX.test(String(wave))) return light ? '#c5c5cb' : '#4e4560';
+  const delta = Math.abs(luminance(wave) - luminance(base)) || 1;
+  return mix(base, wave, Math.min(1, Math.max(0.15, (light ? 48 : 54) / delta)));
+};
+const IDLE_MS = 2600;
+
+const smootherstep = t => {
+  const x = Math.min(1, Math.max(0, t));
+  return x * x * x * (x * (x * 6 - 15) + 10);
+};
+
+function useDotAlignment(ref) {
+  useEffect(() => {
+    const node = ref.current;
+    const host = node?.parentElement;
+    if (!node || !host) return undefined;
+    const layout = () => {
+      const cell = DOT.size + DOT.gap;
+      const width = host.clientWidth;
+      const height = host.clientHeight;
+      const cols = Math.max(1, Math.floor((width + DOT.gap) / cell));
+      const rows = Math.max(1, Math.floor((height + DOT.gap) / cell));
+      const startX = (width - (cols * cell - DOT.gap)) / 2 + DOT.size / 2;
+      const startY = (height - (rows * cell - DOT.gap)) / 2 + DOT.size / 2;
+      node.style.backgroundSize = `${cell}px ${cell}px`;
+      node.style.backgroundPosition = `${startX - cell / 2}px ${startY - cell / 2}px`;
+    };
+    const observer = new ResizeObserver(layout);
+    observer.observe(host);
+    layout();
+    return () => observer.disconnect();
+  }, [ref]);
+}
+
+function DotFrame({ color, live }) {
+  const ref = useRef(null);
+  useDotAlignment(ref);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    const clear = () => {
+      node.style.removeProperty('--hole-x');
+      node.style.removeProperty('--hole-y');
+    };
+    if (!live) {
+      clear();
+      return undefined;
+    }
+    const move = event => {
+      const bounds = node.getBoundingClientRect();
+      node.style.setProperty('--hole-x', `${(event.clientX - bounds.left).toFixed(1)}px`);
+      node.style.setProperty('--hole-y', `${(event.clientY - bounds.top).toFixed(1)}px`);
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', move);
+      clear();
+    };
+  }, [live]);
+
+  return (
+    <div
+      ref={ref}
+      className="lh-dotframe"
+      aria-hidden="true"
+      style={{ '--frame-color': color, '--frame-dot': `${DOT.size / 2 + 0.15}px` }}
+    />
+  );
+}
+
+function GhostReveal({ active, start, color }) {
+  const ref = useRef(null);
+  const spotRef = useRef(null);
+  const dotsRef = useRef(null);
+  const grid = useRef({ width: 0, originX: 0, originY: 0 });
+
+  useEffect(() => {
+    const host = ref.current?.parentElement;
+    if (!host) return undefined;
+    const layout = () => {
+      const cell = DOT.size + DOT.gap;
+      const width = host.clientWidth;
+      const height = host.clientHeight;
+      const cols = Math.max(1, Math.floor((width + DOT.gap) / cell));
+      const rows = Math.max(1, Math.floor((height + DOT.gap) / cell));
+      const startX = (width - (cols * cell - DOT.gap)) / 2 + DOT.size / 2;
+      const startY = (height - (rows * cell - DOT.gap)) / 2 + DOT.size / 2;
+      grid.current = { width, originX: startX - cell / 2, originY: startY - cell / 2 };
+    };
+    const observer = new ResizeObserver(layout);
+    observer.observe(host);
+    layout();
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const node = ref.current;
+    const host = node?.parentElement;
+    const spot = spotRef.current;
+    const dots = dotsRef.current;
+    if (!node || !host || !spot || !dots || !active) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const cell = DOT.size + DOT.gap;
+    const wrap = value => ((value % cell) + cell) % cell;
+    const bounds = host.getBoundingClientRect();
+    const stage = host.querySelector('.lh-stage')?.getBoundingClientRect();
+    const band = Math.max(240, (stage ? stage.top : bounds.top + 400) - bounds.top);
+    const from =
+      start.current && start.current.y - bounds.top < band + DOT.radius * 0.5
+        ? { x: start.current.x - bounds.left, y: start.current.y - bounds.top }
+        : null;
+    const began = performance.now();
+    let frame = 0;
+    const tick = now => {
+      const t = (now - began) / 1000;
+      const { width, originX, originY } = grid.current;
+      const x = width * 0.58 + width * 0.36 * (0.62 * Math.sin(t * 0.16 + 0.4) + 0.38 * Math.sin(t * 0.07 + 2.2));
+      const y = band * 0.52 + band * 0.3 * (0.6 * Math.sin(t * 0.12 + 1.1) + 0.4 * Math.sin(t * 0.05 + 0.3));
+      const blend = from ? smootherstep(t / 3.2) : 1;
+      const left = (from ? from.x + (x - from.x) * blend : x) - DOT.radius;
+      const top = (from ? from.y + (y - from.y) * blend : y) - DOT.radius;
+      spot.style.transform = `translate3d(${left.toFixed(1)}px, ${top.toFixed(1)}px, 0)`;
+      dots.style.transform = `translate3d(${(wrap(originX - left) - cell).toFixed(1)}px, ${(wrap(originY - top) - cell).toFixed(1)}px, 0)`;
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [active, start]);
+
+  return (
+    <div
+      ref={ref}
+      className="lh-ghost"
+      data-on={active ? '' : undefined}
+      aria-hidden="true"
+      style={{
+        '--ghost-color': color,
+        '--ghost-dot': `${DOT.size / 2 + 0.15}px`,
+        '--ghost-radius': `${DOT.radius}px`,
+        '--ghost-cell': `${DOT.size + DOT.gap}px`,
+        '--ghost-strength': DOT.strength
+      }}
+    >
+      <div ref={spotRef} className="lh-ghost-spot">
+        <div ref={dotsRef} className="lh-ghost-dots" />
+      </div>
+    </div>
+  );
+}
 
 const Hero = () => {
   const { resolvedTheme } = useColorMode();
-  const isLightTheme = resolvedTheme === 'light';
-  const [activeSnippet, setActiveSnippet] = useState(0);
-  const snippetTabsRef = useRef(null);
-  const activeRef = useRef(activeSnippet);
-  activeRef.current = activeSnippet;
-
-  const [propValues, setPropValues] = useState(() =>
-    SNIPPET_DEFS.map(def => Object.fromEntries(def.props.map(p => [p.name, p.default])))
-  );
-
-  const [activePreset, setActivePreset] = useState(0);
-  const [presetThumb, setPresetThumb] = useState(0);
-  const presetTabsRef = useRef(null);
-  const propValuesRef = useRef(propValues);
-  propValuesRef.current = propValues;
-  const activePresetRef = useRef(activePreset);
-  activePresetRef.current = activePreset;
-  const stopTweenRef = useRef(null);
-
-  const handlePropChange = useCallback((name, value) => {
-    stopTweenRef.current?.();
-    stopTweenRef.current = null;
-    setActivePreset(null);
-    setPropValues(prev => {
-      const idx = activeRef.current;
-      const next = [...prev];
-      next[idx] = { ...next[idx], [name]: value };
-      return next;
-    });
-  }, []);
-
-  const applyPreset = useCallback(presetIndex => {
-    const preset = SCENE_PRESETS[presetIndex];
-    if (!preset || presetIndex === activePresetRef.current) return;
-
-    playSound('toggle', 0.2);
-    stopTweenRef.current?.();
-
-    setActivePreset(presetIndex);
-    setPresetThumb(presetIndex);
-
-    stopTweenRef.current = tweenScene({
-      from: propValuesRef.current,
-      target: preset.values,
-      onFrame: values => setPropValues(values),
-      onDone: () => {
-        stopTweenRef.current = null;
-      }
-    });
-  }, []);
-
-  const handlePresetKeys = useCallback(
-    event => {
-      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-      if (!step) return;
-      event.preventDefault();
-      const current = activePresetRef.current ?? -1;
-      const next = (current + step + SCENE_PRESETS.length) % SCENE_PRESETS.length;
-      applyPreset(next);
-      presetTabsRef.current?.querySelectorAll('[role="radio"]')[next]?.focus();
-    },
-    [applyPreset]
-  );
-
-  const selectSnippet = useCallback((index, focus = false) => {
-    if (index === activeRef.current) return;
-    playSound('toggle', 0.2);
-    setActiveSnippet(index);
-    if (focus) snippetTabsRef.current?.querySelectorAll('[role="tab"]')[index]?.focus();
-  }, []);
-
-  const handleSnippetKeys = useCallback(
-    event => {
-      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-      if (!step) return;
-      event.preventDefault();
-      selectSnippet((activeRef.current + step + SNIPPET_DEFS.length) % SNIPPET_DEFS.length, true);
-    },
-    [selectSnippet]
-  );
-
-  const hasChanges = useMemo(() => {
-    const def = SNIPPET_DEFS[activeSnippet];
-    const vals = propValues[activeSnippet];
-    return def.props.some(p => vals[p.name] !== p.default);
-  }, [activeSnippet, propValues]);
-
-  const resetProps = useCallback(() => {
-    stopTweenRef.current?.();
-    stopTweenRef.current = null;
-    setActivePreset(0);
-    setPresetThumb(0);
-    setPropValues(SNIPPET_DEFS.map(def => Object.fromEntries(def.props.map(p => [p.name, p.default]))));
-  }, []);
-
-  useEffect(() => () => stopTweenRef.current?.(), []);
-
-  const accentColor = propValues[0].color;
-  const { accentText, dotGradientFrom, dotGradientTo } = useMemo(() => {
-    const [ar, ag, ab] = parseHexRgb(accentColor);
-    const hsv = hexToHsv(accentColor);
-    return {
-      accentText: hsvToHex(hsv.h, Math.min(hsv.s, 0.7), Math.max(hsv.v, 0.92)),
-      dotGradientFrom: `rgba(${ar}, ${ag}, ${ab}, 0.35)`,
-      dotGradientTo: `rgba(${Math.min(ar + 12, 255)}, ${Math.min(ag + 66, 255)}, ${Math.min(ab + 16, 255)}, 0.25)`
-    };
-  }, [accentColor]);
+  const light = resolvedTheme === 'light';
+  const [preset, setPreset] = useState(FIRST);
+  const [values, setValues] = useState(() => lookFor(FIRST, light));
+  const [visible, setVisible] = useState(true);
+  const [hover] = useState(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+  const step = useAdaptiveQuality(visible);
+  const [idle, setIdle] = useState(true);
+  const [auto, setAuto] = useState(true);
+  const [hold, setHold] = useState(false);
+  const [focused, setFocused] = useState(true);
+  const heroRef = useRef(null);
+  const idleRef = useRef(true);
+  const pointerRef = useRef(null);
+  const stageRef = useRef(null);
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
+  const stopRef = useRef(null);
+  const presetRef = useRef(preset);
+  presetRef.current = preset;
 
   useEffect(() => {
-    const hsv = hexToHsv(accentColor);
-    const dark = hsvToHex(hsv.h, Math.min(hsv.s + 0.1, 1), Math.max(hsv.v * 0.7, 0));
-    const light = hsvToHex((hsv.h + 30) % 360, Math.max(hsv.s * 0.8, 0), Math.min(hsv.v * 1.15, 1));
-    const [r, g, b] = parseHexRgb(accentColor);
+    stopRef.current?.();
+    setValues(lookFor(presetRef.current || FIRST, light));
+  }, [light]);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(([entry]) => setFocused(entry.isIntersecting), {
+      rootMargin: '-45% 0px -54% 0px'
+    });
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const root = document.documentElement;
-    const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-    root.style.setProperty('--pro-dark', dark);
-    root.style.setProperty('--pro-base', accentColor);
-    root.style.setProperty('--pro-light', light);
-    root.style.setProperty('--pro-glow', `${r}, ${g}, ${b}`);
-    root.style.setProperty('--pro-fg', lum > 0.5 ? '#000' : '#fff');
-    return () => {
-      root.style.removeProperty('--pro-dark');
-      root.style.removeProperty('--pro-base');
-      root.style.removeProperty('--pro-light');
-      root.style.removeProperty('--pro-glow');
-      root.style.removeProperty('--pro-fg');
+    if (focused) root.style.setProperty('--pro-base', mix(values.horizonColor, values.waveColor, 0.5));
+    else root.style.removeProperty('--pro-base');
+  }, [focused, values.horizonColor, values.waveColor]);
+
+  useEffect(() => () => document.documentElement.style.removeProperty('--pro-base'), []);
+
+  useEffect(() => () => stopRef.current?.(), []);
+
+  useEffect(() => {
+    let timer = 0;
+    const rest = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        idleRef.current = true;
+        setIdle(true);
+      }, IDLE_MS);
     };
-  }, [accentColor]);
+    const move = event => {
+      if (event.pointerType === 'touch') return;
+      pointerRef.current = { x: event.clientX, y: event.clientY };
+      if (idleRef.current) {
+        idleRef.current = false;
+        setIdle(false);
+      }
+      rest();
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('pointermove', move);
+    };
+  }, []);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { rootMargin: '80px' });
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  const choose = value => {
+    setPreset(value);
+    stopRef.current?.();
+    stopRef.current = tween(valuesRef.current, lookFor(value, light), setValues, 900);
+  };
+  const chooseRef = useRef(choose);
+  chooseRef.current = choose;
+
+  const pick = value => {
+    setAuto(false);
+    choose(value);
+  };
+
+  const set = (name, value) => {
+    stopRef.current?.();
+    setAuto(false);
+    setPreset(null);
+    setValues(current => ({ ...current, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (!auto || hold || !visible || !preset) return undefined;
+    const timer = window.setTimeout(() => {
+      const index = OPTIONS.findIndex(option => option.value === presetRef.current);
+      chooseRef.current(OPTIONS[(index + 1) % OPTIONS.length].value);
+    }, CYCLE_MS);
+    return () => window.clearTimeout(timer);
+  }, [auto, hold, visible, preset]);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const state = { x: 0, y: 0, tx: 0, ty: 0, frame: 0 };
+    const tick = () => {
+      state.x += (state.tx - state.x) * 0.07;
+      state.y += (state.ty - state.y) * 0.07;
+      stage.style.setProperty('--lh-px', state.x.toFixed(4));
+      stage.style.setProperty('--lh-py', state.y.toFixed(4));
+      const moving = Math.abs(state.tx - state.x) + Math.abs(state.ty - state.y) > 0.0004;
+      state.frame = moving ? requestAnimationFrame(tick) : 0;
+    };
+    const move = event => {
+      if (event.pointerType === 'touch') return;
+      state.tx = event.clientX / window.innerWidth - 0.5;
+      state.ty = event.clientY / window.innerHeight - 0.5;
+      if (!state.frame) state.frame = requestAnimationFrame(tick);
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', move);
+      cancelAnimationFrame(state.frame);
+    };
+  }, []);
+
+  const presets = useMemo(
+    () =>
+      OPTIONS.map(option => {
+        const look = lookFor(option.value, light);
+        return {
+          ...option,
+          colors: [look.horizonColor, look.waveColor, look.crestColor],
+          hint: HINTS.map(name => `${name} ${look[name]}`).join(' · ')
+        };
+      }),
+    [light]
+  );
+
+  const activeIndex = OPTIONS.findIndex(option => option.value === preset);
+
+  const studioUrl = buildStudioUrl(
+    'gradient-waves',
+    Object.fromEntries(FIELDS.map(field => [field.name, values[field.name]]).concat([['tilt', STAGE.tilt]])),
+    LOOK
+  );
 
   return (
-    <section className="ln-hero">
-      <DotField {...propValues[1]} gradientFrom={dotGradientFrom} gradientTo={dotGradientTo} />
-      <HeroBand
-        className="ln-hero-band"
-        {...propValues[0]}
-        lightMode={isLightTheme}
-        scale={1}
-        warpStrength={1}
-        yOffset={0.3}
-        mouseInfluence={0.3}
-      />
-      <svg className="ln-hero-bottom-fade" preserveAspectRatio="none" viewBox="0 0 1 1">
-        <defs>
-          <linearGradient id="hero-bottom-fade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#120F17" stopOpacity="0" />
-            <stop offset="50%" stopColor="#120F17" stopOpacity="0" />
-            <stop offset="60%" stopColor="#120F17" stopOpacity="0.03" />
-            <stop offset="68%" stopColor="#120F17" stopOpacity="0.1" />
-            <stop offset="74%" stopColor="#120F17" stopOpacity="0.22" />
-            <stop offset="80%" stopColor="#120F17" stopOpacity="0.38" />
-            <stop offset="85%" stopColor="#120F17" stopOpacity="0.55" />
-            <stop offset="90%" stopColor="#120F17" stopOpacity="0.72" />
-            <stop offset="94%" stopColor="#120F17" stopOpacity="0.87" />
-            <stop offset="97%" stopColor="#120F17" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#120F17" stopOpacity="1" />
-          </linearGradient>
-        </defs>
-        <rect width="1" height="1" fill="url(#hero-bottom-fade)" />
-      </svg>
-
-      <div className="ln-hero-content">
-        <div className="ln-hero-left">
-          <Link to="/c/micro" className="ln-hero-tag">
-            <span className="ln-hero-tag-new">New</span>
-            Micro-interactions <LuArrowRight size={13} strokeWidth={2} />
-          </Link>
-
-          <h1 className="ln-hero-headline">
-            <span className="ln-hero-headline-line">React components for</span>
-            <br />
-            <span className="ln-hero-headline-line ln-hero-headline-accent" style={{ color: accentText }}>
-              creative developers
-            </span>
+    <section className="ln-hero lh" ref={heroRef} style={{ '--lh-accent': values.waveColor }}>
+      {hover && !step.lite && (
+        <div className="lh-dots" aria-hidden="true">
+          <Suspense fallback={null}>
+            <DotGrid
+              dpr={Math.min(window.devicePixelRatio || 1, 1.5)}
+              dotSize={DOT.size}
+              gap={DOT.gap}
+              baseColor={light ? '#f5f5f5' : '#120f17'}
+              activeColor={dotTint(values.waveColor, light)}
+              proximity={DOT.radius}
+              strength={1.15}
+              bounce={0.7}
+              tension={0.35}
+              swell={1.4}
+              stretch={0.5}
+              glow={0.15}
+              opacity={0.55}
+              shockRadius={380}
+              shockStrength={4}
+              intro={false}
+              mouseInteraction={!idle}
+            />
+          </Suspense>
+        </div>
+      )}
+      <DotFrame color={dotTint(values.waveColor, light)} live={!idle} />
+      {!step.lite && (
+        <GhostReveal active={idle && visible} start={pointerRef} color={dotTint(values.waveColor, light)} />
+      )}
+      <div className="lh-inner">
+        <header className="lh-top">
+          <h1 className="lh-title">
+            Animated React components for <br />
+            interfaces people remember.
           </h1>
-
-          <p className="ln-hero-description">
-            Animated components and backgrounds that install as source you own. Tune every value, starting with this
-            page&apos;s background.
+          <p className="lh-lede">
+            <span>{TOTAL_COMPONENTS} animated components and backgrounds for React.</span>
+            <span>Tune them yourself, or hand them to your agent.</span>
           </p>
-
-          <div className="ln-hero-buttons">
-            <Link to="/get-started/index" className="ln-hero-btn ln-hero-btn-primary">
-              Browse components <LuArrowRight size={16} strokeWidth={2} />
+          <div className="lh-actions">
+            <Link to="/get-started/introduction" className="lh-btn lh-btn--primary">
+              Browse components
+              <HugeiconsIcon icon={ArrowRight02Icon} size={17} strokeWidth={1.8} />
             </Link>
             <a
               href="https://github.com/DavidHDev/react-bits"
               target="_blank"
               rel="noopener noreferrer"
-              className="ln-hero-btn ln-hero-btn-secondary"
+              className="lh-btn lh-btn--ghost"
             >
               Star on GitHub
             </a>
           </div>
-        </div>
+        </header>
 
-        <div className="ln-hero-right">
-          <div className="ln-hero-code-window" onPointerEnter={preloadSounds}>
-            <div className="ln-hero-code-titlebar">
-              <div
-                className="ln-hero-code-switch"
-                role="tablist"
-                aria-label="Component"
-                ref={snippetTabsRef}
-                onKeyDown={handleSnippetKeys}
-                style={{ '--count': SNIPPET_DEFS.length, '--index': activeSnippet }}
-              >
-                <span className="ln-hero-code-switch-thumb" aria-hidden="true" />
-                {SNIPPET_DEFS.map((def, i) => (
-                  <button
-                    key={def.label}
-                    type="button"
-                    role="tab"
-                    aria-selected={i === activeSnippet}
-                    tabIndex={i === activeSnippet ? 0 : -1}
-                    className={`ln-hero-code-switch-option${i === activeSnippet ? ' active' : ''}`}
-                    onClick={() => selectSnippet(i)}
-                  >
-                    {def.label}
-                  </button>
-                ))}
+        <div className="lh-stage" ref={stageRef}>
+          <div className="lh-art" aria-hidden="true">
+            <Suspense fallback={null}>
+              <div className="lh-art-layer">
+                <GradientWaves {...values} dpr={step.dpr} quality={step.quality} intro paused={!visible} />
               </div>
-              {hasChanges && (
-                <button className="ln-hero-code-reset" onClick={resetProps} aria-label="Reset to defaults">
-                  <LuRotateCcw size={14} strokeWidth={1.5} />
-                </button>
-              )}
-            </div>
-            <div className="ln-hero-code-body">
-              <InteractiveCode
-                def={SNIPPET_DEFS[activeSnippet]}
-                values={propValues[activeSnippet]}
-                onChange={handlePropChange}
-              />
-            </div>
-            <div className="ln-hero-code-footer">
-              <div
-                className="ln-hero-code-switch"
-                role="radiogroup"
-                aria-label="Presets"
-                ref={presetTabsRef}
-                onKeyDown={handlePresetKeys}
-                data-empty={activePreset === null ? '' : undefined}
-                style={{ '--count': SCENE_PRESETS.length, '--index': presetThumb }}
-              >
-                <span className="ln-hero-code-switch-thumb" aria-hidden="true" />
-                {SCENE_PRESETS.map((preset, i) => (
-                  <button
-                    key={preset.label}
-                    type="button"
-                    role="radio"
-                    aria-checked={activePreset === i}
-                    tabIndex={(activePreset ?? 0) === i ? 0 : -1}
-                    className={`ln-hero-code-switch-option${activePreset === i ? ' active' : ''}`}
-                    onClick={() => applyPreset(i)}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-              <p className="ln-hero-code-hint">
-                <LuMoveHorizontal size={13} strokeWidth={1.75} />
-                Every value is editable
-              </p>
-            </div>
+            </Suspense>
           </div>
+
+          <Window title="Terminal" className="lh-terminal" action={<CopyCommand />}>
+            <Terminal />
+          </Window>
+
+          <Window title="Hero.jsx" className="lh-code">
+            <pre className="lh-pre">
+              <code>
+                <span className="lh-line">
+                  <span className="lh-kw">import</span> GradientWaves <span className="lh-kw">from</span>{' '}
+                  <span className="lh-str">&apos;./GradientWaves&apos;</span>;
+                </span>
+                <span className="lh-line"> </span>
+                <span className="lh-line">
+                  <span className="lh-kw">export default function</span> Hero() {'{'}
+                </span>
+                <span className="lh-line">
+                  {'  '}
+                  <span className="lh-kw">return</span> (
+                </span>
+                <span className="lh-line">{'    '}&lt;GradientWaves</span>
+                {FIELDS.map(field => (
+                  <span className="lh-line" key={field.name}>
+                    {'      '}
+                    <span className="lh-attr">{field.name}</span>
+                    <span className="lh-punc">=</span>
+                    {field.type === 'color' ? (
+                      <ScrubColor
+                        value={values[field.name]}
+                        label={field.label}
+                        swatches={SWATCHES[light ? 'light' : 'dark']}
+                        onChange={value => set(field.name, value)}
+                      />
+                    ) : (
+                      <>
+                        <span className="lh-punc">{'{'}</span>
+                        <ScrubNumber
+                          value={values[field.name]}
+                          field={field}
+                          onChange={value => set(field.name, value)}
+                        />
+                        <span className="lh-punc">{'}'}</span>
+                      </>
+                    )}
+                  </span>
+                ))}
+                <span className="lh-line">{'    '}/&gt;</span>
+                <span className="lh-line">{'  '});</span>
+                <span className="lh-line">{'}'}</span>
+              </code>
+            </pre>
+          </Window>
+
+          <Window
+            title="Presets"
+            className="lh-presets"
+            onPointerEnter={() => setHold(true)}
+            onPointerLeave={() => setHold(false)}
+            status={
+              <Link to={studioUrl} className="lh-studio">
+                Open in Background Studio
+                <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} strokeWidth={1.8} />
+              </Link>
+            }
+          >
+            <div className="lh-preset-list" role="radiogroup" aria-label="Presets">
+              <span
+                className="lh-preset-thumb"
+                aria-hidden="true"
+                data-hidden={activeIndex < 0 ? '' : undefined}
+                style={{ '--i': Math.max(0, activeIndex) }}
+              />
+              {presets.map(option => (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={preset === option.value}
+                  className="lh-preset"
+                  onClick={() => pick(option.value)}
+                >
+                  <span className="lh-preset-swatches" aria-hidden="true">
+                    {option.colors.map((color, index) => (
+                      <i key={`${color}-${index}`} style={{ background: color }} />
+                    ))}
+                  </span>
+                  <span className="lh-preset-name">{option.label}</span>
+                  <span className="lh-preset-hint">{option.hint}</span>
+                </button>
+              ))}
+            </div>
+          </Window>
         </div>
       </div>
     </section>

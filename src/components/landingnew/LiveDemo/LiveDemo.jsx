@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { useColorMode } from '../../setup/color-mode';
+import useNearOnce from '../../../hooks/useNearOnce';
 import logo from '../../../assets/logos/react-bits-logo-small.svg';
 import './LiveDemo.css';
 
@@ -18,6 +19,7 @@ const CARDS = [
   {
     category: 'Backgrounds',
     component: 'Micro Slats',
+    poster: 'microslats',
     href: '/backgrounds/micro-slats',
     span: 7,
     tall: true,
@@ -33,6 +35,7 @@ const CARDS = [
   {
     category: 'Animations',
     component: 'Electric Logo',
+    poster: 'electriclogo',
     href: '/animations/electric-logo',
     span: 5,
     tall: true,
@@ -49,6 +52,7 @@ const CARDS = [
   {
     category: 'Text Animations',
     component: 'Tech Text',
+    poster: 'techtext',
     href: '/text-animations/tech-text',
     span: 4,
     render: light => (
@@ -63,6 +67,7 @@ const CARDS = [
   {
     category: 'Components',
     component: 'Circular Carousel',
+    poster: 'circularcarousel',
     href: '/components/circular-carousel',
     span: 5,
     render: light => <CircularCarousel cardWidth={132} fadeColor={light ? WELL.light : WELL.dark} />
@@ -70,6 +75,7 @@ const CARDS = [
   {
     category: 'Micro',
     component: 'Hold Button',
+    poster: 'holdbutton',
     href: '/micro/hold-button',
     span: 3,
     render: light => (
@@ -91,15 +97,17 @@ const CARDS = [
 const LiveDemo = () => {
   const { resolvedTheme } = useColorMode();
   const light = resolvedTheme === 'light';
+  const [sectionRef, near] = useNearOnce();
+  const lite = near && document.documentElement.hasAttribute('data-lite');
 
   return (
-    <section className="ln-demo-section">
+    <section className="ln-demo-section" ref={sectionRef}>
       <div className="ln-demo-inner">
         <h2 className="ln-demo-title">See them in action</h2>
 
         <div className="ln-demo-grid">
           {CARDS.map((card, i) => (
-            <motion.article
+            <m.article
               key={card.component}
               className={`ln-demo-card ln-demo-card--span-${card.span}${card.tall ? ' ln-demo-card--tall' : ''}`}
               initial={{ opacity: 0, y: 24 }}
@@ -108,7 +116,17 @@ const LiveDemo = () => {
               transition={{ duration: 0.5, delay: i * 0.07, ease: [0.21, 0.47, 0.32, 0.98] }}
             >
               <div className="ln-demo-well">
-                <Suspense fallback={null}>{card.render(light)}</Suspense>
+                {lite ? (
+                  <img
+                    className="ln-demo-poster"
+                    src={`/assets/video/${card.poster}${light ? '-light' : ''}.webp`}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <Suspense fallback={null}>{near && card.render(light)}</Suspense>
+                )}
               </div>
               <Link to={card.href} className="ln-demo-caption">
                 <span className="ln-demo-caption-name">{card.component}</span>
@@ -117,7 +135,7 @@ const LiveDemo = () => {
                   <ArrowUpRight size={14} aria-hidden="true" />
                 </span>
               </Link>
-            </motion.article>
+            </m.article>
           ))}
         </div>
       </div>

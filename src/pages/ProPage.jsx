@@ -7,38 +7,19 @@ import Testimonials from '../components/landingnew/Testimonials/Testimonials';
 import ProCta from '../components/common/Pro/ProCta';
 import ProShowcase from '../components/common/Pro/ProShowcase';
 import ProComparison from '../components/common/Pro/ProComparison';
+import ProPillars from '../components/common/Pro/ProPillars';
 import ColorBends from '../content/Backgrounds/ColorBends/ColorBends';
-import {
-  PRO_COUNTS,
-  PRO_SECTIONS,
-  PRO_FAQ,
-  PRO_TESTIMONIALS,
-  PRO_FREE_COPY,
-  PRO_SHOWCASE_ITEMS
-} from '../constants/Pro';
+import { PRO_COUNTS, PRO_FAQ, PRO_TESTIMONIALS, PRO_FREE_COPY } from '../constants/Pro';
 import { proUrl, proLinkProps, trackProClick, proAgentKitPreview } from '../utils/pro';
 import useProManifest from '../hooks/useProManifest';
 import useProImpression from '../hooks/useProImpression';
 import usePageSEO from '../hooks/usePageSEO';
 import useScrollToTop from '../hooks/useScrollToTop';
-import { useColorModeValue } from '../components/setup/color-mode';
 import ReactBitsProLogo from '../assets/logos/react-bits-pro-logo.svg';
 
 const HERO_PLACEMENT = 'pro-hub-hero';
 
 const CTA_PLACEMENT = 'pro-hub-cta';
-
-const PILLAR_PICKS = {
-  components: ['radial-liquid', 'orbit-reel', 'astral-shell'],
-  'app-ui': ['app-ui-12', 'app-ui-10', 'app-ui-07']
-};
-
-const pillarShots = slug => {
-  const items = PRO_SHOWCASE_ITEMS[slug] || [];
-  const picks = PILLAR_PICKS[slug];
-  if (!picks) return items.slice(0, 3);
-  return picks.map(pick => items.find(item => item.slug === pick)).filter(Boolean);
-};
 
 /** Template recordings often open on a black or half-painted frame. */
 const VIDEO_START_TIME = 0.4;
@@ -53,7 +34,6 @@ const ProPage = () => {
   });
 
   const [openFaq, setOpenFaq] = useState(null);
-  const light = useColorModeValue(true, false);
   const heroImpressionRef = useProImpression(HERO_PLACEMENT);
   const comparisonImpressionRef = useProImpression('pro-hub-comparison');
 
@@ -122,36 +102,7 @@ const ProPage = () => {
               <p className="prox-sub">Every piece installs as source you own, ready to edit and ship.</p>
             </header>
 
-            <div className="prox-pillars">
-              {PRO_SECTIONS.map(section => (
-                <a
-                  key={section.slug}
-                  className="prox-pillar"
-                  {...proLinkProps(section.proPath, `pro-hub-${section.slug}`, { sameTab: true })}
-                >
-                  <span className="prox-pillar-media" aria-hidden="true">
-                    {pillarShots(section.slug).map((item, index) => (
-                      <img
-                        key={item.slug}
-                        className={`prox-pillar-shot is-${['front', 'left', 'right'][index]}`}
-                        src={light ? item.imageLight || item.image : item.image}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ))}
-                  </span>
-
-                  <span className="prox-pillar-body">
-                    <span className="prox-pillar-title">
-                      {PRO_COUNTS[section.countKey]} {section.countLabel}
-                      <LuArrowUpRight size={16} aria-hidden="true" />
-                    </span>
-                    <span className="prox-pillar-desc">{section.tagline}</span>
-                  </span>
-                </a>
-              ))}
-            </div>
+            <ProPillars placement="pro-hub" />
           </div>
         </section>
 

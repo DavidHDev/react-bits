@@ -1,14 +1,79 @@
 .text-type {
+  position: relative;
   display: inline-block;
   white-space: pre-wrap;
 }
 
-.text-type__cursor {
-  margin-left: 0.25rem;
+.text-type__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-type__char {
+  position: relative;
+}
+
+.text-type__char--selected {
+  background-color: color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.text-type__caret {
   display: inline-block;
-  opacity: 1;
+  width: 0;
+}
+
+.text-type__cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: pre;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  will-change: transform;
 }
 
 .text-type__cursor--hidden {
-  display: none;
+  opacity: 0;
+}
+
+.text-type__blink {
+  display: inline-block;
+}
+
+.text-type__cursor--character .text-type__blink {
+  margin-left: 0.25rem;
+}
+
+.text-type__shape {
+  display: inline-block;
+  margin-left: 0.06em;
+  background-color: currentColor;
+}
+
+.text-type__cursor--bar .text-type__shape {
+  width: max(2px, 0.07em);
+  height: 1.1em;
+  vertical-align: -0.2em;
+  border-radius: 1px;
+}
+
+.text-type__cursor--block .text-type__shape {
+  width: 0.56em;
+  height: 1.1em;
+  vertical-align: -0.2em;
+  border-radius: 0.06em;
+}
+
+.text-type__cursor--underscore .text-type__shape {
+  width: 0.56em;
+  height: max(2px, 0.075em);
+  vertical-align: -0.12em;
+  border-radius: 1px;
 }

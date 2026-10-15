@@ -7,17 +7,14 @@
 }
 
 .curved-loop-svg {
-  user-select: none;
   width: 100%;
   aspect-ratio: 100 / 12;
   overflow: visible;
   display: block;
-  font-size: 6rem;
-  fill: #ffffff;
-  user-select: none;
-  -moz-user-select: none;
+  fill: currentColor;
   -webkit-user-select: none;
-  font-weight: 700;
+  -moz-user-select: none;
+  user-select: none;
   text-transform: uppercase;
   line-height: 1;
 }

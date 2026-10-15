@@ -422,12 +422,20 @@
 
 .scrubber-palette {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 40px;
-  padding: 6px 8px 6px 12px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 7px 8px 8px;
   border-radius: var(--radius-sm);
   background: var(--surface-ghost-track);
+}
+
+.scrubber-palette-head {
+  display: flex;
+  min-height: 26px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-left: 4px;
 }
 
 .scrubber-palette-label {
@@ -439,12 +447,55 @@
   white-space: nowrap;
 }
 
-.scrubber-palette-swatches {
+.scrubber-palette-strip {
   display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 6px;
+  height: 30px;
+  gap: 3px;
+}
+
+.scrubber-palette-strip .scrubber-chip-wrap {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.scrubber-palette-strip .scrubber-color-chip {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    box-shadow var(--dur-menu) var(--ease-out);
+}
+
+.scrubber-palette-strip .scrubber-chip-wrap:first-child .scrubber-color-chip {
+  border-radius: 9px 4px 4px 9px;
+}
+
+.scrubber-palette-strip .scrubber-chip-wrap:last-child .scrubber-color-chip {
+  border-radius: 4px 9px 9px 4px;
+}
+
+.scrubber-palette-strip .scrubber-chip-wrap:only-child .scrubber-color-chip {
+  border-radius: 9px;
+}
+
+.scrubber-palette-strip .scrubber-color-chip:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.scrubber-palette-strip .scrubber-color-chip:active {
+  transform: scale(0.96);
+}
+
+:root[data-theme='light'] .scrubber-palette-strip .scrubber-color-chip {
+  box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.1);
+}
+
+:root[data-theme='light'] .scrubber-palette-strip .scrubber-color-chip:hover {
+  box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.3);
 }
 
 .scrubber-chip-wrap {
@@ -474,9 +525,7 @@
 .scrubber-palette-actions {
   display: flex;
   flex-shrink: 0;
-  gap: 4px;
-  padding-left: 6px;
-  border-left: 1px solid var(--border-primary);
+  gap: 2px;
 }
 
 .scrubber-palette-button {
@@ -485,13 +534,20 @@
   width: 26px;
   height: 26px;
   padding: 0;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: var(--surface-ghost);
-  box-shadow: var(--surface-ghost-highlight);
-  color: var(--text-primary);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
   cursor: pointer;
-  transition: transform var(--dur-press) var(--ease-out);
+  transition:
+    background-color var(--dur-menu) var(--ease-out),
+    color var(--dur-menu) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.scrubber-palette-button:hover:not(:disabled) {
+  background: var(--surface-ghost);
+  color: var(--text-primary);
 }
 
 .scrubber-palette-button:active:not(:disabled) {

@@ -23,8 +23,30 @@ export default function PreviewColorList({ title = 'Colors', colors, onChange, m
 
   return (
     <div className="scrubber-palette">
-      <span className="scrubber-palette-label">{title}</span>
-      <div className="scrubber-palette-swatches">
+      <div className="scrubber-palette-head">
+        <span className="scrubber-palette-label">{title}</span>
+        <div className="scrubber-palette-actions">
+          <button
+            type="button"
+            className="scrubber-palette-button"
+            onClick={remove}
+            disabled={colors.length <= min}
+            aria-label="Remove a color"
+          >
+            <Minus size={14} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            className="scrubber-palette-button"
+            onClick={add}
+            disabled={colors.length >= max}
+            aria-label="Add a color"
+          >
+            <Plus size={14} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+      <div className="scrubber-palette-strip">
         {colors.map((color, index) => (
           <PreviewColorPickerCustom
             key={index}
@@ -34,26 +56,6 @@ export default function PreviewColorList({ title = 'Colors', colors, onChange, m
             onChange={value => update(index, value)}
           />
         ))}
-      </div>
-      <div className="scrubber-palette-actions">
-        <button
-          type="button"
-          className="scrubber-palette-button"
-          onClick={remove}
-          disabled={colors.length <= min}
-          aria-label="Remove a color"
-        >
-          <Minus size={14} aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="scrubber-palette-button"
-          onClick={add}
-          disabled={colors.length >= max}
-          aria-label="Add a color"
-        >
-          <Plus size={14} aria-hidden="true" />
-        </button>
       </div>
     </div>
   );

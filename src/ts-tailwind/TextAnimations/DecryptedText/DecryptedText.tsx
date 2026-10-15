@@ -1,40 +1,120 @@
 'use client';
 
-import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent as ReactMouseEvent
+} from 'react';
 import { motion } from 'motion/react';
 import type { HTMLMotionProps } from 'motion/react';
 
-const styles = {
-  srOnly: {
-    position: 'absolute' as const,
-    width: '1px',
-    height: '1px',
-    padding: 0,
-    margin: '-1px',
-    overflow: 'hidden',
-    clip: 'rect(0,0,0,0)',
-    whiteSpace: 'nowrap' as const,
-    border: 0,
-    visibility: 'hidden' as const
-  }
-};
+const FADE_FLOOR = 0.16;
+const FADE_PEAK = 0.62;
+const FADE_LEAD = 6;
+const SETTLE = 'color 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
 
 interface DecryptedTextProps extends HTMLMotionProps<'span'> {
   text: string;
   speed?: number;
   maxIterations?: number;
   sequential?: boolean;
-  revealDirection?: 'start' | 'end' | 'center';
+  revealDirection?: 'start' | 'end' | 'center' | 'random';
   useOriginalCharsOnly?: boolean;
   characters?: string;
   className?: string;
-  encryptedClassName?: string;
   parentClassName?: string;
+  encryptedClassName?: string;
   animateOn?: 'view' | 'hover' | 'inViewHover' | 'click';
   clickMode?: 'once' | 'toggle';
+  effect?: 'scramble' | 'flip' | 'fade';
+  scrambleColor?: string;
+  loop?: boolean;
+  loopDelay?: number;
+  hoverRadius?: number;
 }
 
-type Direction = 'forward' | 'reverse';
+interface Frame {
+  shown: string[];
+  revealed: boolean[];
+  tint: number[];
+  dim: number[];
+  squeeze: number[];
+}
+
+interface FontMetrics {
+  font: string;
+  spacing: number;
+}
+
+interface Run {
+  forward: boolean;
+  cycle: boolean;
+  iteration: number;
+  queue: (number | null)[];
+}
+
+interface RunOptions {
+  from?: boolean[];
+  cycle?: boolean;
+  lead?: number;
+}
+
+interface Engine {
+  tick: () => void;
+  paint: () => void;
+  startRun: (forward: boolean, options?: RunOptions) => void;
+  stopRun: () => void;
+  ensureTicker: () => void;
+  refit: () => void;
+}
+
+type Point = { x: number; y: number };
+
+type Group = string | { key: number; letters: number[] };
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+const isSpace = (char: string) => /\s/.test(char);
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
+
+const glyphWidths = new Map<string, Map<string, number>>();
+let measureContext: CanvasRenderingContext2D | null = null;
+
+const readFont = (node: Element): FontMetrics => {
+  const style = window.getComputedStyle(node);
+  return {
+    font: `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`,
+    spacing: parseFloat(style.letterSpacing) || 0
+  };
+};
+
+const advance = (font: string, glyph: string): number => {
+  let widths = glyphWidths.get(font);
+  if (!widths) {
+    widths = new Map<string, number>();
+    glyphWidths.set(font, widths);
+  }
+  let width = widths.get(glyph);
+  if (width === undefined) {
+    measureContext = measureContext || document.createElement('canvas').getContext('2d');
+    if (!measureContext) return 0;
+    measureContext.font = font;
+    width = measureContext.measureText(glyph).width;
+    widths.set(glyph, width);
+  }
+  return width;
+};
+
+const flipFrames = (angle: number, opacity: number): Keyframe[] => [
+  { transform: `perspective(4em) translateZ(-0.42em) rotateX(${angle}deg) translateZ(0.42em)`, opacity },
+  { transform: 'perspective(4em) translateZ(-0.42em) rotateX(0deg) translateZ(0.42em)', opacity: 1 }
+];
 
 export default function DecryptedText({
   text,
@@ -49,334 +129,468 @@ export default function DecryptedText({
   encryptedClassName = '',
   animateOn = 'hover',
   clickMode = 'once',
+  effect = 'scramble',
+  scrambleColor = '',
+  loop = false,
+  loopDelay = 2000,
+  hoverRadius = 0,
   ...props
 }: DecryptedTextProps) {
-  const [displayText, setDisplayText] = useState<string>(text);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [revealedIndices, setRevealedIndices] = useState<Set<number>>(new Set());
-  const [hasAnimated, setHasAnimated] = useState<boolean>(false);
-  const [isDecrypted, setIsDecrypted] = useState<boolean>(animateOn !== 'click');
-  const [direction, setDirection] = useState<Direction>('forward');
+  const chars = useMemo(() => Array.from(String(text ?? '')), [text]);
+
+  const pool = useMemo(() => {
+    const letters = chars.filter(char => !isSpace(char));
+    const source = useOriginalCharsOnly ? Array.from(new Set(letters)) : Array.from(characters);
+    return source.length ? source : letters;
+  }, [useOriginalCharsOnly, chars, characters]);
+
+  const startsHidden = animateOn === 'click' || animateOn === 'view' || animateOn === 'inViewHover';
+  const hoverable = animateOn === 'hover' || animateOn === 'inViewHover';
+  const local = hoverable && hoverRadius > 0;
+  const step = Math.max(16, speed);
+
+  const [frame, setFrame] = useState<Frame>(() => {
+    const revealed = chars.map(char => !startsHidden || isSpace(char));
+    return {
+      shown: chars.map((char, index) =>
+        revealed[index] ? char : pool[((char.codePointAt(0) ?? 0) + index * 7) % pool.length]
+      ),
+      revealed,
+      tint: revealed.map(shown => (shown ? 0 : 1)),
+      dim: revealed.map(shown => (shown ? 1 : FADE_FLOOR)),
+      squeeze: revealed.map(() => 1)
+    };
+  });
 
   const containerRef = useRef<HTMLSpanElement>(null);
-  const orderRef = useRef<number[]>([]);
-  const pointerRef = useRef<number>(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const cellsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const centersRef = useRef<(Point | null)[]>([]);
+  const maskRef = useRef<boolean[]>(frame.revealed);
+  const heatRef = useRef<number[]>([]);
+  const warmRef = useRef(false);
+  const pointerRef = useRef<Point | null>(null);
+  const runRef = useRef<Run | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const holdRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const pendingRef = useRef<(() => void) | null>(null);
+  const visibleRef = useRef(true);
+  const targetRef = useRef(!startsHidden);
+  const playedRef = useRef(false);
+  const previousRef = useRef<Frame>(frame);
+  const engineRef = useRef<Engine | null>(null);
+  const fontRef = useRef<FontMetrics | null>(null);
 
-  const availableChars = useMemo<string[]>(() => {
-    return useOriginalCharsOnly
-      ? Array.from(new Set(text.split(''))).filter(char => char !== ' ')
-      : characters.split('');
-  }, [useOriginalCharsOnly, text, characters]);
-
-  const shuffleText = useCallback(
-    (originalText: string, currentRevealed: Set<number>) => {
-      return originalText
-        .split('')
-        .map((char, i) => {
-          if (char === ' ') return ' ';
-          if (currentRevealed.has(i)) return originalText[i];
-          return availableChars[Math.floor(Math.random() * availableChars.length)];
-        })
-        .join('');
-    },
-    [availableChars]
-  );
-
-  const computeOrder = useCallback(
-    (len: number): number[] => {
-      const order: number[] = [];
-      if (len <= 0) return order;
-      if (revealDirection === 'start') {
-        for (let i = 0; i < len; i++) order.push(i);
-        return order;
-      }
-      if (revealDirection === 'end') {
-        for (let i = len - 1; i >= 0; i--) order.push(i);
-        return order;
-      }
-      // center
-      const middle = Math.floor(len / 2);
-      let offset = 0;
-      while (order.length < len) {
-        if (offset % 2 === 0) {
-          const idx = middle + offset / 2;
-          if (idx >= 0 && idx < len) order.push(idx);
-        } else {
-          const idx = middle - Math.ceil(offset / 2);
-          if (idx >= 0 && idx < len) order.push(idx);
-        }
-        offset++;
-      }
-      return order.slice(0, len);
-    },
-    [revealDirection]
-  );
-
-  const fillAllIndices = useCallback((): Set<number> => {
-    const s = new Set<number>();
-    for (let i = 0; i < text.length; i++) s.add(i);
-    return s;
-  }, [text]);
-
-  const removeRandomIndices = useCallback((set: Set<number>, count: number): Set<number> => {
-    const arr = Array.from(set);
-    for (let i = 0; i < count && arr.length > 0; i++) {
-      const idx = Math.floor(Math.random() * arr.length);
-      arr.splice(idx, 1);
+  const revealOrder = () => {
+    const order: number[] = [];
+    chars.forEach((char, index) => {
+      if (!isSpace(char)) order.push(index);
+    });
+    if (revealDirection === 'end') return order.reverse();
+    if (revealDirection === 'center') {
+      const middle = Math.floor(chars.length / 2);
+      return order.sort((a, b) => Math.abs(a - middle) - Math.abs(b - middle));
     }
-    return new Set(arr);
-  }, []);
-
-  const encryptInstantly = useCallback(() => {
-    const emptySet = new Set<number>();
-    setRevealedIndices(emptySet);
-    setDisplayText(shuffleText(text, emptySet));
-    setIsDecrypted(false);
-  }, [text, shuffleText]);
-
-  const triggerDecrypt = useCallback(() => {
-    if (sequential) {
-      orderRef.current = computeOrder(text.length);
-      pointerRef.current = 0;
-      setRevealedIndices(new Set());
-    } else {
-      setRevealedIndices(new Set());
-    }
-    setDirection('forward');
-    setIsAnimating(true);
-  }, [sequential, computeOrder, text.length]);
-
-  const triggerReverse = useCallback(() => {
-    if (sequential) {
-      // compute forward order then reverse it: we'll remove indices in that order
-      orderRef.current = computeOrder(text.length).slice().reverse();
-      pointerRef.current = 0;
-      setRevealedIndices(fillAllIndices()); // start fully revealed
-      setDisplayText(shuffleText(text, fillAllIndices()));
-    } else {
-      // non-seq: start from fully revealed as well
-      setRevealedIndices(fillAllIndices());
-      setDisplayText(shuffleText(text, fillAllIndices()));
-    }
-    setDirection('reverse');
-    setIsAnimating(true);
-  }, [sequential, computeOrder, fillAllIndices, shuffleText, text]);
-
-  useEffect(() => {
-    if (!isAnimating) return;
-
-    let currentIteration = 0;
-
-    const getNextIndex = (revealedSet: Set<number>): number => {
-      const textLength = text.length;
-      switch (revealDirection) {
-        case 'start':
-          return revealedSet.size;
-        case 'end':
-          return textLength - 1 - revealedSet.size;
-        case 'center': {
-          const middle = Math.floor(textLength / 2);
-          const offset = Math.floor(revealedSet.size / 2);
-          const nextIndex = revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
-
-          if (nextIndex >= 0 && nextIndex < textLength && !revealedSet.has(nextIndex)) {
-            return nextIndex;
-          }
-          for (let i = 0; i < textLength; i++) {
-            if (!revealedSet.has(i)) return i;
-          }
-          return 0;
-        }
-        default:
-          return revealedSet.size;
+    if (revealDirection === 'random') {
+      for (let i = order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [order[i], order[j]] = [order[j], order[i]];
       }
-    };
-
-    intervalRef.current = setInterval(() => {
-      setRevealedIndices(prevRevealed => {
-        if (sequential) {
-          // Forward
-          if (direction === 'forward') {
-            if (prevRevealed.size < text.length) {
-              const nextIndex = getNextIndex(prevRevealed);
-              const newRevealed = new Set(prevRevealed);
-              newRevealed.add(nextIndex);
-              setDisplayText(shuffleText(text, newRevealed));
-              return newRevealed;
-            } else {
-              clearInterval(intervalRef.current ?? undefined);
-              setIsAnimating(false);
-              setIsDecrypted(true);
-              return prevRevealed;
-            }
-          }
-          // Reverse
-          if (direction === 'reverse') {
-            if (pointerRef.current < orderRef.current.length) {
-              const idxToRemove = orderRef.current[pointerRef.current++];
-              const newRevealed = new Set(prevRevealed);
-              newRevealed.delete(idxToRemove);
-              setDisplayText(shuffleText(text, newRevealed));
-              if (newRevealed.size === 0) {
-                clearInterval(intervalRef.current ?? undefined);
-                setIsAnimating(false);
-                setIsDecrypted(false);
-              }
-              return newRevealed;
-            } else {
-              clearInterval(intervalRef.current ?? undefined);
-              setIsAnimating(false);
-              setIsDecrypted(false);
-              return prevRevealed;
-            }
-          }
-        } else {
-          // Non-Sequential
-          if (direction === 'forward') {
-            setDisplayText(shuffleText(text, prevRevealed));
-            currentIteration++;
-            if (currentIteration >= maxIterations) {
-              clearInterval(intervalRef.current ?? undefined);
-              setIsAnimating(false);
-              setDisplayText(text);
-              setIsDecrypted(true);
-            }
-            return prevRevealed;
-          }
-
-          // Non-Sequential Reverse
-          if (direction === 'reverse') {
-            let currentSet = prevRevealed;
-            if (currentSet.size === 0) {
-              currentSet = fillAllIndices();
-            }
-            const removeCount = Math.max(1, Math.ceil(text.length / Math.max(1, maxIterations)));
-            const nextSet = removeRandomIndices(currentSet, removeCount);
-            setDisplayText(shuffleText(text, nextSet));
-            currentIteration++;
-            if (nextSet.size === 0 || currentIteration >= maxIterations) {
-              clearInterval(intervalRef.current ?? undefined);
-              setIsAnimating(false);
-              setIsDecrypted(false);
-              // ensure final scrambled state
-              setDisplayText(shuffleText(text, new Set()));
-              return new Set();
-            }
-            return nextSet;
-          }
-        }
-        return prevRevealed;
-      });
-    }, speed);
-    return () => clearInterval(intervalRef.current ?? undefined);
-  }, [
-    isAnimating,
-    text,
-    speed,
-    maxIterations,
-    sequential,
-    revealDirection,
-    shuffleText,
-    direction,
-    fillAllIndices,
-    removeRandomIndices,
-    characters,
-    useOriginalCharsOnly
-  ]);
-
-  /* Click Behaviour */
-  const handleClick = () => {
-    if (animateOn !== 'click') return;
-
-    if (clickMode === 'once') {
-      if (isDecrypted) return;
-      setDirection('forward');
-      triggerDecrypt();
     }
+    return order;
+  };
 
-    if (clickMode === 'toggle') {
-      if (isDecrypted) {
-        triggerReverse();
+  const fit = (index: number, glyph: string): number => {
+    const node = containerRef.current;
+    if (!fontRef.current && node) fontRef.current = readFont(node);
+    const metrics = fontRef.current;
+    if (!metrics) return 1;
+    const room = advance(metrics.font, chars[index] ?? glyph) + metrics.spacing;
+    const need = advance(metrics.font, glyph) + metrics.spacing;
+    return need > room + 0.01 ? Math.round(Math.max(0.05, room / need) * 1000) / 1000 : 1;
+  };
+
+  const paint = () => {
+    const mask = maskRef.current;
+    const heat = heatRef.current;
+    const run = runRef.current;
+    const ranks = run?.forward && sequential ? new Map(run.queue.map((index, rank) => [index, rank])) : null;
+    const ramp = run?.forward && !sequential ? Math.min(1, run.iteration / Math.max(1, maxIterations)) : 0;
+    const next: Frame = { shown: [], revealed: [], tint: [], dim: [], squeeze: [] };
+
+    chars.forEach((char, index) => {
+      const blank = isSpace(char);
+      const hot = blank ? 0 : heat[index] || 0;
+      const hidden = !blank && !mask[index];
+      const scrambled = hidden || (hot > 0 && Math.random() < hot * 2);
+
+      const glyph = scrambled ? pool[Math.floor(Math.random() * pool.length)] : char;
+      next.revealed.push(!scrambled);
+      next.shown.push(glyph);
+      next.squeeze.push(scrambled ? fit(index, glyph) : 1);
+
+      if (!scrambled) {
+        next.tint.push(0);
+        next.dim.push(1);
+      } else if (!hidden) {
+        const level = Math.min(1, hot * 1.5);
+        next.tint.push(level);
+        next.dim.push(1 - (1 - FADE_FLOOR) * level);
       } else {
-        setDirection('forward');
-        triggerDecrypt();
+        const rank = ranks?.get(index);
+        const lift = rank === undefined ? ramp : Math.max(0, 1 - rank / FADE_LEAD);
+        next.tint.push(1);
+        next.dim.push(FADE_FLOOR + (FADE_PEAK - FADE_FLOOR) * lift);
       }
+    });
+
+    setFrame(next);
+  };
+
+  const refit = () => {
+    setFrame(previous => ({
+      ...previous,
+      squeeze: previous.shown.map((glyph, index) => (previous.revealed[index] ? 1 : fit(index, glyph)))
+    }));
+  };
+
+  const stopTicker = () => {
+    clearInterval(timerRef.current);
+    timerRef.current = undefined;
+  };
+
+  const ensureTicker = () => {
+    if (timerRef.current) return;
+    timerRef.current = setInterval(() => engineRef.current?.tick(), step);
+  };
+
+  const stopRun = () => {
+    runRef.current = null;
+    clearTimeout(holdRef.current);
+    holdRef.current = undefined;
+    pendingRef.current = null;
+  };
+
+  const schedule = (task: () => void, delay: number) => {
+    clearTimeout(holdRef.current);
+    holdRef.current = setTimeout(() => {
+      holdRef.current = undefined;
+      if (visibleRef.current) task();
+      else pendingRef.current = task;
+    }, delay);
+  };
+
+  const startRun = (forward: boolean, { from, cycle = false, lead = 0 }: RunOptions = {}) => {
+    stopRun();
+    targetRef.current = forward;
+    if (from) maskRef.current = from;
+
+    if (prefersReducedMotion()) {
+      maskRef.current = chars.map(char => forward || isSpace(char));
+      paint();
+      return;
+    }
+
+    const mask = maskRef.current;
+    const order = forward ? revealOrder() : revealOrder().reverse();
+    const queue = sequential ? order.filter(index => mask[index] !== forward) : [];
+
+    runRef.current = {
+      forward,
+      cycle,
+      iteration: 0,
+      queue: [...new Array<null>(lead).fill(null), ...queue]
+    };
+    paint();
+    ensureTicker();
+  };
+
+  const finishRun = (run: Run) => {
+    if (!loop) return;
+    if (run.forward) {
+      schedule(() => engineRef.current?.startRun(false, { cycle: true }), Math.max(0, loopDelay));
+    } else if (run.cycle) {
+      startRun(true, { cycle: true, lead: sequential ? Math.max(2, Math.round(320 / step)) : 0 });
     }
   };
 
-  /* Hover Behaviour */
-  const triggerHoverDecrypt = useCallback(() => {
-    if (isAnimating) return;
+  const warm = () => {
+    const heat = heatRef.current;
+    const pointer = pointerRef.current;
+    const box = pointer && containerRef.current ? containerRef.current.getBoundingClientRect() : null;
+    const cool = 1 / Math.max(1, maxIterations);
+    let active = false;
 
-    setRevealedIndices(new Set());
-    setIsDecrypted(false);
-    setDisplayText(text);
-    setDirection('forward');
-    setIsAnimating(true);
-  }, [isAnimating, text]);
+    chars.forEach((char, index) => {
+      if (isSpace(char)) return;
+      let target = 0;
+      const center = centersRef.current[index];
+      if (box && center && pointer) {
+        const distance =
+          Math.hypot(box.left + center.x - pointer.x, box.top + center.y - pointer.y) / Math.max(1, hoverRadius);
+        if (distance < 1) target = 1 - distance * distance * (3 - 2 * distance);
+      }
+      const value = Math.max((heat[index] || 0) - cool, target);
+      heat[index] = value > 0.001 ? value : 0;
+      if (heat[index] > 0) active = true;
+    });
 
-  const resetToPlainText = useCallback(() => {
-    clearInterval(intervalRef.current ?? undefined);
-    setIsAnimating(false);
-    setRevealedIndices(new Set());
-    setDisplayText(text);
-    setIsDecrypted(true);
-    setDirection('forward');
-  }, [text]);
+    warmRef.current = active;
+  };
 
-  /* View Observer */
-  useEffect(() => {
-    if (animateOn !== 'view' && animateOn !== 'inViewHover') return;
+  const tick = () => {
+    const run = runRef.current;
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !hasAnimated) {
-          triggerDecrypt();
-          setHasAnimated(true);
+    if (run) {
+      run.iteration += 1;
+      let mask = maskRef.current;
+      let done: boolean;
+
+      if (sequential) {
+        const index = run.queue.shift();
+        if (index !== undefined && index !== null) {
+          mask = mask.slice();
+          mask[index] = run.forward;
         }
-      });
-    };
+        done = run.queue.length === 0;
+      } else if (run.forward) {
+        done = run.iteration >= maxIterations;
+        if (done) mask = chars.map(() => true);
+      } else {
+        const visible: number[] = [];
+        mask.forEach((shown, index) => {
+          if (shown && !isSpace(chars[index])) visible.push(index);
+        });
+        const hideCount = Math.max(
+          1,
+          Math.ceil(chars.filter(char => !isSpace(char)).length / Math.max(1, maxIterations))
+        );
+        mask = mask.slice();
+        for (let i = 0; i < hideCount && visible.length; i++) {
+          mask[visible.splice(Math.floor(Math.random() * visible.length), 1)[0]] = false;
+        }
+        done = visible.length === 0 || run.iteration >= maxIterations;
+        if (done) mask = chars.map(char => isSpace(char));
+      }
 
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    const currentRef = containerRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
+      maskRef.current = mask;
+      if (done) {
+        runRef.current = null;
+        finishRun(run);
+      }
     }
 
+    if (local) warm();
+    else warmRef.current = false;
+
+    paint();
+    if (!runRef.current && !warmRef.current) stopTicker();
+  };
+
+  const measure = () => {
+    const node = containerRef.current;
+    if (!node) return;
+    const box = node.getBoundingClientRect();
+    centersRef.current = chars.map((char, index) => {
+      const cell = cellsRef.current[index];
+      if (isSpace(char) || !cell) return null;
+      const rect = cell.getBoundingClientRect();
+      return { x: rect.left - box.left + rect.width / 2, y: rect.top - box.top + rect.height / 2 };
+    });
+  };
+
+  useIsomorphicLayoutEffect(() => {
+    engineRef.current = { tick, paint, startRun, stopRun, ensureTicker, refit };
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    engine.stopRun();
+    playedRef.current = false;
+    const hidden =
+      animateOn === 'click' || ((animateOn === 'view' || animateOn === 'inViewHover') && !prefersReducedMotion());
+    targetRef.current = !hidden;
+    maskRef.current = chars.map(char => !hidden || isSpace(char));
+    heatRef.current = chars.map(() => 0);
+    pointerRef.current = null;
+    engine.paint();
+  }, [animateOn, chars]);
+
+  useEffect(
+    () => () => {
+      clearInterval(timerRef.current);
+      clearTimeout(holdRef.current);
+    },
+    []
+  );
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => {
+      const metrics = readFont(node);
+      glyphWidths.delete(metrics.font);
+      fontRef.current = metrics;
+      engineRef.current?.refit();
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!timerRef.current) return;
+    clearInterval(timerRef.current);
+    timerRef.current = undefined;
+    engineRef.current?.ensureTicker();
+  }, [step]);
+
+  useEffect(() => {
+    if (loop) return;
+    clearTimeout(holdRef.current);
+    holdRef.current = undefined;
+    pendingRef.current = null;
+  }, [loop]);
+
+  useEffect(() => {
+    const viewTrigger = animateOn === 'view' || animateOn === 'inViewHover';
+    if (!viewTrigger && !loop) return;
+    const node = containerRef.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      entries => {
+        const visible = entries.some(entry => entry.isIntersecting);
+        visibleRef.current = visible;
+        if (!visible) return;
+        if (viewTrigger && !playedRef.current) {
+          playedRef.current = true;
+          engineRef.current?.startRun(true);
+        }
+        const resume = pendingRef.current;
+        pendingRef.current = null;
+        resume?.();
+        if (!loop) observer.disconnect();
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(node);
     return () => {
-      if (currentRef) observer.unobserve(currentRef);
+      observer.disconnect();
+      visibleRef.current = true;
     };
-  }, [animateOn, hasAnimated, triggerDecrypt]);
+  }, [animateOn, loop, chars]);
 
-  useEffect(() => {
-    if (animateOn === 'click') {
-      encryptInstantly();
-    } else {
-      setDisplayText(text);
-      setIsDecrypted(true);
+  useIsomorphicLayoutEffect(() => {
+    const previous = previousRef.current;
+    previousRef.current = frame;
+    if (effect !== 'flip' || previous.shown === frame.shown || prefersReducedMotion()) return;
+    frame.revealed.forEach((revealed, index) => {
+      const node = cellsRef.current[index];
+      if (!node || typeof node.animate !== 'function' || isSpace(chars[index] ?? ' ')) return;
+      if (!revealed) {
+        node.animate(flipFrames(58 + Math.random() * 26, 0.3), {
+          duration: Math.min(step * 0.92, 240),
+          easing: 'cubic-bezier(0.3, 0.7, 0.4, 1)'
+        });
+      } else if (previous.revealed[index] === false) {
+        node.animate(flipFrames(90, 0), {
+          duration: Math.min(Math.max(step * 7, 360), 760),
+          easing: 'cubic-bezier(0.34, 1.45, 0.64, 1)'
+        });
+      }
+    });
+  }, [frame, effect, chars, step]);
+
+  const trackPointer = (event: ReactMouseEvent<HTMLSpanElement>) => {
+    if (prefersReducedMotion()) return;
+    if (!pointerRef.current) measure();
+    pointerRef.current = { x: event.clientX, y: event.clientY };
+    ensureTicker();
+  };
+
+  const handleMouseEnter = (event: ReactMouseEvent<HTMLSpanElement>) => {
+    if (local) {
+      trackPointer(event);
+      return;
     }
-    setRevealedIndices(new Set());
-    setDirection('forward');
-  }, [animateOn, text, encryptInstantly]);
+    if (runRef.current) return;
+    startRun(true, { from: chars.map(char => isSpace(char)) });
+  };
 
-  const animateProps =
-    animateOn === 'hover' || animateOn === 'inViewHover'
-      ? {
-          onMouseEnter: triggerHoverDecrypt,
-          onMouseLeave: resetToPlainText
-        }
-      : animateOn === 'click'
-        ? {
-            onClick: handleClick
-          }
-        : {};
+  const handleMouseMove = (event: ReactMouseEvent<HTMLSpanElement>) => {
+    if (local) trackPointer(event);
+  };
+
+  const handleMouseLeave = () => {
+    if (local) {
+      pointerRef.current = null;
+      return;
+    }
+    stopRun();
+    targetRef.current = true;
+    maskRef.current = chars.map(() => true);
+    paint();
+    if (loop && animateOn === 'inViewHover') {
+      schedule(() => engineRef.current?.startRun(false, { cycle: true }), Math.max(0, loopDelay));
+    }
+  };
+
+  const handleClick = () => {
+    if (clickMode === 'toggle') {
+      startRun(!targetRef.current);
+      return;
+    }
+    if (!targetRef.current) startRun(true);
+  };
+
+  const groups = useMemo(() => {
+    const result: Group[] = [];
+    let word: { key: number; letters: number[] } | null = null;
+    chars.forEach((char, index) => {
+      if (isSpace(char)) {
+        result.push(char);
+        word = null;
+        return;
+      }
+      if (!word) {
+        word = { key: index, letters: [] };
+        result.push(word);
+      }
+      word.letters.push(index);
+    });
+    return result;
+  }, [chars]);
+
+  const tinted = Boolean(scrambleColor);
+  const fading = effect === 'fade';
+  const flipping = effect === 'flip';
+  const settles = tinted || fading;
+
+  const glyphStyle = (index: number): CSSProperties | undefined => {
+    const squeeze = frame.squeeze[index] ?? 1;
+    return squeeze < 1 ? { transform: `scaleX(${squeeze})` } : undefined;
+  };
+
+  const cellClass = (revealed: boolean) =>
+    [revealed && !flipping ? '' : 'relative inline-block', revealed ? className : encryptedClassName]
+      .filter(Boolean)
+      .join(' ');
+
+  const cellStyle = (index: number, revealed: boolean): CSSProperties => {
+    const style: CSSProperties = {};
+    if (settles) style.transition = revealed ? SETTLE : `color 0.12s linear, opacity ${step}ms linear`;
+    if (tinted && !revealed) {
+      const amount = Math.round((frame.tint[index] ?? 1) * 100);
+      style.color = amount >= 100 ? scrambleColor : `color-mix(in srgb, ${scrambleColor} ${amount}%, currentColor)`;
+    }
+    if (fading) style.opacity = revealed ? 1 : (frame.dim[index] ?? FADE_FLOOR);
+    return style;
+  };
+
+  const animateProps = hoverable
+    ? { onMouseEnter: handleMouseEnter, onMouseMove: handleMouseMove, onMouseLeave: handleMouseLeave }
+    : animateOn === 'click'
+      ? { onClick: handleClick }
+      : {};
 
   return (
     <motion.span
@@ -385,18 +599,42 @@ export default function DecryptedText({
       {...animateProps}
       {...props}
     >
-      <span className="sr-only" style={styles.srOnly}>{displayText}</span>
+      <span className="sr-only">{chars.join('')}</span>
 
       <span aria-hidden="true">
-        {displayText.split('').map((char, index) => {
-          const isRevealedOrDone = revealedIndices.has(index) || (!isAnimating && isDecrypted);
-
-          return (
-            <span key={index} className={isRevealedOrDone ? className : encryptedClassName}>
-              {char}
+        {groups.map(group =>
+          typeof group === 'string' ? (
+            group
+          ) : (
+            <span key={group.key} className="whitespace-nowrap">
+              {group.letters.map(index => {
+                const char = chars[index];
+                const revealed = frame.revealed[index] ?? true;
+                return (
+                  <span
+                    key={index}
+                    ref={node => {
+                      cellsRef.current[index] = node;
+                    }}
+                    className={cellClass(revealed)}
+                    style={cellStyle(index, revealed)}
+                  >
+                    {revealed ? (
+                      char
+                    ) : (
+                      <>
+                        <span className="invisible">{char}</span>
+                        <span className="absolute top-0 left-1/2 -translate-x-1/2" style={glyphStyle(index)}>
+                          {frame.shown[index] ?? char}
+                        </span>
+                      </>
+                    )}
+                  </span>
+                );
+              })}
             </span>
-          );
-        })}
+          )
+        )}
       </span>
     </motion.span>
   );

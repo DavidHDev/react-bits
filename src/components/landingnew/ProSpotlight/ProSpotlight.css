@@ -4,6 +4,7 @@
   padding: 96px 0 104px;
   background: #0e0b13;
   z-index: 4;
+  font-family: 'Geist', sans-serif;
 }
 
 .ln-prospot-inner {
@@ -13,143 +14,77 @@
 }
 
 .ln-prospot-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 40px;
-  margin-bottom: 38px;
+  display: grid;
+  align-items: end;
+  gap: 32px 48px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-bottom: 40px;
 }
 
 .ln-prospot-header h2 {
   margin: 0;
   color: #fff;
-  font-family: 'Geist', sans-serif;
-  font-size: clamp(34px, 4vw, 46px);
-  font-weight: 500;
-  line-height: 1.06;
-  letter-spacing: -2px;
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .ln-prospot-copy > p {
-  max-width: 58ch;
-  margin: 18px 0 0;
-  color: rgba(255, 255, 255, 0.46);
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
-  line-height: 1.65;
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
-.ln-prospot-primary {
+.ln-prospot-btn {
   display: inline-flex;
-  flex: 0 0 auto;
   align-items: center;
-  gap: 9px;
-  padding: 12px 20px 12px 24px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background: var(--surface-ghost);
-  box-shadow: var(--surface-ghost-highlight);
-  color: #fff;
-  font-family: 'Geist', sans-serif;
-  font-size: 14px;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 13px;
+  font-size: 15px;
   font-weight: 500;
+  letter-spacing: -0.01em;
   text-decoration: none;
-  backdrop-filter: var(--surface-ghost-blur);
-  -webkit-backdrop-filter: var(--surface-ghost-blur);
+  white-space: nowrap;
   transition:
     background var(--transition-fast),
+    color var(--transition-fast),
     transform var(--dur-press) var(--ease-out);
 }
 
-.ln-prospot-primary:hover {
-  background: var(--surface-ghost-hover);
-  color: #fff;
-}
-
-.ln-prospot-primary:active {
+.ln-prospot-btn:active {
   transform: scale(0.97);
 }
 
-.ln-prospot-gallery {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
+.ln-prospot-btn svg {
+  transition: transform 260ms var(--ease-out);
 }
 
-.ln-prospot-item {
-  min-width: 0;
-  overflow: hidden;
-  padding: 5px;
-  border: 1px solid transparent;
-  border-radius: 16px;
-  background: var(--surface-ghost-track);
-  box-shadow: var(--surface-ghost-highlight);
-  color: inherit;
-  text-decoration: none;
+.ln-prospot-btn:hover svg {
+  transform: translateX(2px);
 }
 
-.ln-prospot-media {
-  display: block;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #09080b;
+.ln-prospot-btn--primary {
+  padding: 0 17px 0 21px;
+  background: #f4f2f7;
+  color: #141118;
 }
 
-.ln-prospot-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.88;
-  transform: scale(1.01);
-  transition:
-    opacity var(--transition-fast),
-    transform 0.55s var(--ease-out, ease);
-}
-
-.ln-prospot-item:hover .ln-prospot-media img {
-  opacity: 1;
-  transform: scale(1.04);
-}
-
-.ln-prospot-item-copy {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 5px;
-  padding: 14px 12px 9px;
-}
-
-.ln-prospot-item-copy small {
-  color: rgba(255, 255, 255, 0.45);
-  font-family: 'Geist', sans-serif;
-  font-size: 12.5px;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-}
-
-.ln-prospot-item-copy strong {
-  color: #fff;
-  font-family: 'Geist', sans-serif;
-  font-size: 14.5px;
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.25px;
+.ln-prospot-btn--primary:hover {
+  background: #fff;
+  color: #141118;
 }
 
 @media (max-width: 960px) {
-  .ln-prospot-gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .ln-prospot-header {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .ln-prospot-item:last-child {
-    grid-column: 1 / -1;
-  }
-
-  .ln-prospot-item:last-child .ln-prospot-media {
-    aspect-ratio: 16 / 7;
+  .ln-prospot-btn--primary {
+    justify-self: start;
   }
 }
 
@@ -163,65 +98,33 @@
   }
 
   .ln-prospot-header {
-    margin-bottom: 34px;
+    gap: 28px;
+    margin-bottom: 32px;
   }
 
-  .ln-prospot-header h2 {
-    font-size: 36px;
-    white-space: normal;
-  }
-
-  .ln-prospot-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .ln-prospot-gallery {
-    gap: 8px;
-  }
-
-  .ln-prospot-item {
-    border-radius: 14px;
-  }
-
-  .ln-prospot-media {
-    aspect-ratio: 4 / 3;
-  }
-
-  .ln-prospot-item-copy {
-    padding: 12px 10px 8px;
-  }
-
-  .ln-prospot-item-copy strong {
-    font-size: 12px;
+  .ln-prospot-btn--primary {
+    justify-self: stretch;
+    height: 48px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ln-prospot-item,
-  .ln-prospot-media img,
-  .ln-prospot-primary {
+  .ln-prospot-btn,
+  .ln-prospot-btn svg {
     transition: none;
   }
 
-  .ln-prospot-item:hover,
-  .ln-prospot-item:hover .ln-prospot-media img {
+  .ln-prospot-btn:active,
+  .ln-prospot-btn:hover svg {
     transform: none;
   }
-}
-
-/* ── Light theme ── */
-:root[data-theme='light'] .ln-prospot-media {
-  background: #f7f7f8;
 }
 
 :root[data-theme='light'] .ln-prospot-section {
   background: #fff;
 }
 
-:root[data-theme='light'] .ln-prospot-header h2,
-:root[data-theme='light'] .ln-prospot-item-copy strong {
+:root[data-theme='light'] .ln-prospot-header h2 {
   color: #18181b;
 }
 
@@ -229,25 +132,12 @@
   color: #71717a;
 }
 
-:root[data-theme='light'] .ln-prospot-primary {
-  border-color: var(--border-subtle);
-  background: #fff;
-  box-shadow: none;
-  color: #18181b;
-  font-family: 'Geist', sans-serif;
+:root[data-theme='light'] .ln-prospot-btn--primary {
+  background: #18171c;
+  color: #fff;
 }
 
-:root[data-theme='light'] .ln-prospot-primary:hover {
-  background: #f8f8fa;
-  color: #18181b;
-}
-
-:root[data-theme='light'] .ln-prospot-item {
-  border-color: var(--border-subtle);
-  background: #fff;
-  box-shadow: none;
-}
-
-:root[data-theme='light'] .ln-prospot-item-copy small {
-  color: #71717a;
+:root[data-theme='light'] .ln-prospot-btn--primary:hover {
+  background: #000;
+  color: #fff;
 }

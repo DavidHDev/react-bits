@@ -9,14 +9,15 @@
 }
 
 .content__img {
-  width: 190px;
-  aspect-ratio: 1.1;
-  border-radius: 15px;
+  width: var(--trail-size, 190px);
+  aspect-ratio: var(--trail-aspect, 1.1);
+  border-radius: var(--trail-radius, 15px);
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0;
   overflow: hidden;
+  pointer-events: none;
   will-change: transform, filter;
 }
 

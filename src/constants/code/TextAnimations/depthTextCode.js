@@ -12,8 +12,10 @@ export const depthText = {
   text="Elevate"
   layers={34}
   depth={2.4}
-  faceColor="#f8fafc"
   depthColor="#7c3aed"
+  gradientDepth={false}
+  hoverPush={0.5}
+  float={false}
   tilt={7.5}
   pointerTracking
   smoothing={0.14}
@@ -23,6 +25,8 @@ export const depthText = {
   fontSize="clamp(3rem, 12vw, 7rem)"
   fontWeight={900}
   shadow
+  outline={false}
+  intro
 />`,
   code,
   css,

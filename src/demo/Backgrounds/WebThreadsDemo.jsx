@@ -1,452 +1,366 @@
-import { useMemo } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
 import CodeExample from '../../components/code/CodeExample';
 import PropTable from '../../components/common/Preview/PropTable';
-import Dependencies from '../../components/code/Dependencies';
 import PreviewSlider from '../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorList from '../../components/common/Preview/PreviewColorList';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { useColorMode } from '../../components/setup/color-mode';
 
-import WebThreads from '@/content/Backgrounds/WebThreads/WebThreads';
+import WebThreads from '../../content/Backgrounds/WebThreads/WebThreads';
 import { webThreads } from '../../constants/code/Backgrounds/webThreadsCode';
+import { LOOK, PRESET_OPTIONS, presetProps } from './presets/WebThreads';
 
 const DEFAULT_PROPS = {
-  color1: '#5227FF',
-  color2: '#FF9FFC',
-  color3: '#FFFFFF',
-  speed: 0.2,
-  threadCount: 6,
-  frequency: 5.0,
-  spread: 0.18,
-  taper: 1.0,
-  position: 0.5,
-  fanMode: 'center',
-  glow: 0.02,
-  falloff: 0.6,
-  thickness: 1.1,
-  brightness: 0.6,
-  opacity: 1.0,
-  mirror: true,
-  shimmer: false,
-  grain: true,
-  grainIntensity: 0.05,
+  preset: 'aurora',
+  ...LOOK,
+  intro: true,
   mouseInteraction: true,
-  mouseStrength: 0.3
+  mouseStrength: 0.5,
+  pulseOnClick: true,
+  paused: false
 };
 
-const WebThreadsDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const {
-    color1,
-    color2,
-    color3,
-    speed,
-    threadCount,
-    frequency,
-    spread,
-    taper,
-    position,
-    fanMode,
-    glow,
-    falloff,
-    thickness,
-    brightness,
-    opacity,
-    mirror,
-    shimmer,
-    grain,
-    grainIntensity,
-    mouseInteraction,
-    mouseStrength,
-    backgroundColor,
-    lightMode
-  } = props;
-  const [key, forceRerender] = useForceRerender();
+const propData = [
+  {
+    name: 'colors',
+    type: 'string[]',
+    default: "['#5227FF', '#FF9FFC']",
+    description: 'Gradient across the threads, from the first thread to the last. Up to six colors.'
+  },
+  {
+    name: 'coreColor',
+    type: 'string',
+    default: "'#FFFFFF'",
+    description: 'Hot color where threads overlap and converge.'
+  },
+  {
+    name: 'backgroundColor',
+    type: 'string',
+    default: "'transparent'",
+    description: 'Fills the canvas behind the threads. Transparent lets the page show through.'
+  },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws crisp ink strokes for light backgrounds instead of glowing light.'
+  },
+  { name: 'threadCount', type: 'number', default: '6', description: 'Number of threads, up to 24.' },
+  { name: 'speed', type: 'number', default: '0.2', description: 'How fast the threads weave.' },
+  { name: 'frequency', type: 'number', default: '5', description: 'How many waves fit across the width.' },
+  { name: 'spread', type: 'number', default: '0.18', description: 'How far the threads fan away from the pinch.' },
+  {
+    name: 'taper',
+    type: 'number',
+    default: '1',
+    description: 'How much wider each next thread swings, nesting them inside each other.'
+  },
+  { name: 'position', type: 'number', default: '0.5', description: 'Height of the weave, from bottom 0 to top 1.' },
+  {
+    name: 'pinch',
+    type: 'number',
+    default: '0.5',
+    description: 'Where the threads converge across the width, from 0 to 1.'
+  },
+  {
+    name: 'nodes',
+    type: 'number',
+    default: '1',
+    description: 'Number of pinch points. More than one braids the threads through each of them.'
+  },
+  { name: 'angle', type: 'number', default: '0', description: 'Rotation of the whole weave in degrees.' },
+  { name: 'glow', type: 'number', default: '0.02', description: 'Strength of the light around each thread.' },
+  { name: 'falloff', type: 'number', default: '0.6', description: 'How quickly the glow fades. Higher is tighter.' },
+  { name: 'thickness', type: 'number', default: '1.1', description: 'Width of the threads.' },
+  { name: 'brightness', type: 'number', default: '0.6', description: 'Overall brightness.' },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
+  {
+    name: 'depth',
+    type: 'number',
+    default: '0',
+    description: 'Twists the threads in 3D, so strands behind the bundle turn thinner and dimmer.'
+  },
+  {
+    name: 'pulses',
+    type: 'number',
+    default: '0',
+    description: 'Strength of light pulses that travel along the threads toward the pinch.'
+  },
+  { name: 'mirror', type: 'boolean', default: 'true', description: 'Weaves each side of the pinch as a mirror.' },
+  { name: 'shimmer', type: 'boolean', default: 'false', description: 'Adds a gentle, uneven sway to each thread.' },
+  {
+    name: 'fade',
+    type: 'number',
+    default: '0',
+    description: 'Fades the threads out toward both ends so they melt into the page.'
+  },
+  { name: 'grain', type: 'number', default: '0.05', description: 'Film grain in the light. 0 turns it off.' },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'Draws the threads in one after another the first time they come into view, each led by a soft light.'
+  },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The strand nearest the cursor lights up while the others recede.'
+  },
+  {
+    name: 'mouseStrength',
+    type: 'number',
+    default: '0.5',
+    description: 'How strongly the focused strand stands out from the rest.'
+  },
+  {
+    name: 'pulseOnClick',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends light along every thread, gathering in the pinch and fading out the far side.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the weaving.' },
+  { name: 'dpr', type: 'number', default: '2', description: 'Maximum device pixel ratio of the canvas.' },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'color1',
-        type: 'string',
-        default: "'#5227FF'",
-        description: 'Color of the first thread; threads blend from this toward color2.'
-      },
-      {
-        name: 'color2',
-        type: 'string',
-        default: "'#FF9FFC'",
-        description: 'Color of the last thread; threads blend toward this hue.'
-      },
-      {
-        name: 'color3',
-        type: 'string',
-        default: "'#FFFFFF'",
-        description: 'Hot-core color mixed into the brightest parts of the threads.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '0.2',
-        description: 'Animation speed of the weaving motion.'
-      },
-      {
-        name: 'threadCount',
-        type: 'number',
-        default: '6',
-        description: 'Number of glowing threads (1–10).'
-      },
-      {
-        name: 'frequency',
-        type: 'number',
-        default: '5.0',
-        description: 'Number of sine waves across the screen width.'
-      },
-      {
-        name: 'spread',
-        type: 'number',
-        default: '0.18',
-        description: 'How far the threads fan out away from the pinch point.'
-      },
-      {
-        name: 'taper',
-        type: 'number',
-        default: '1.0',
-        description: 'Per-thread amplitude growth; higher values fan later threads out more.'
-      },
-      {
-        name: 'position',
-        type: 'number',
-        default: '0.5',
-        description: 'Vertical position of the woven strand (0 bottom, 1 top).'
-      },
-      {
-        name: 'fanMode',
-        type: 'string',
-        default: "'center'",
-        description: 'Where the threads pinch together: center, left, or right.'
-      },
-      {
-        name: 'glow',
-        type: 'number',
-        default: '0.02',
-        description: 'Brightness of the glow radiating from each thread.'
-      },
-      {
-        name: 'falloff',
-        type: 'number',
-        default: '0.6',
-        description: 'How tightly the glow hugs the thread (higher = thinner filament).'
-      },
-      {
-        name: 'thickness',
-        type: 'number',
-        default: '1.1',
-        description: 'Core thickness of each thread.'
-      },
-      {
-        name: 'brightness',
-        type: 'number',
-        default: '0.6',
-        description: 'Overall brightness multiplier.'
-      },
-      {
-        name: 'opacity',
-        type: 'number',
-        default: '1.0',
-        description: 'Overall opacity of the effect (0–1).'
-      },
-      {
-        name: 'mirror',
-        type: 'boolean',
-        default: 'true',
-        description: 'Mirror the wave phase across the pinch point for a woven look.'
-      },
-      {
-        name: 'shimmer',
-        type: 'boolean',
-        default: 'false',
-        description: 'Add a subtle per-thread phase shimmer.'
-      },
-      {
-        name: 'grain',
-        type: 'boolean',
-        default: 'true',
-        description: 'Overlay a whisper-subtle animated film grain on the threads.'
-      },
-      {
-        name: 'grainIntensity',
-        type: 'number',
-        default: '0.05',
-        description: 'Amplitude of the grain overlay. 0 disables it entirely.'
-      },
-      {
-        name: 'mouseInteraction',
-        type: 'boolean',
-        default: 'true',
-        description: 'Let the pinch point drift toward the cursor with a soft brightness bloom.'
-      },
-      {
-        name: 'mouseStrength',
-        type: 'number',
-        default: '0.3',
-        description: 'Strength of the cursor influence on the pinch point and bloom.'
-      },
-      {
-        name: 'className',
-        type: 'string',
-        default: "''",
-        description: 'Additional CSS classes applied to the container.'
-      }
-    ],
-    []
-  );
+const WebThreadsDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { colorMode } = useColorMode();
+  const { props, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    updateProps({ ...presetProps(value, { light: colorMode === 'light' }), preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <WebThreads
-              key={key}
-              color1={color1}
-              color2={color2}
-              color3={color3}
-              speed={speed}
-              threadCount={threadCount}
-              frequency={frequency}
-              spread={spread}
-              taper={taper}
-              position={position}
-              fanMode={fanMode}
-              glow={glow}
-              falloff={falloff}
-              thickness={thickness}
-              brightness={brightness}
-              opacity={opacity}
-              mirror={mirror}
-              shimmer={shimmer}
-              grain={grain}
-              grainIntensity={grainIntensity}
-              mouseInteraction={mouseInteraction}
-              mouseStrength={mouseStrength}
-              backgroundColor={backgroundColor}
-              lightMode={lightMode}
-            />
+            <WebThreads key={key} {...settings} />
             <BackgroundContent pillText="New Background" headline="Luminous threads woven to a glowing pinch." />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton
-              backgroundId="web-threads"
-              currentProps={{
-                color1,
-                color2,
-                color3,
-                speed,
-                threadCount,
-                frequency,
-                spread,
-                taper,
-                position,
-                fanMode,
-                glow,
-                falloff,
-                thickness,
-                brightness,
-                opacity,
-                mirror,
-                shimmer,
-                grain,
-                grainIntensity,
-                mouseInteraction,
-                mouseStrength
-              }}
-              defaultProps={{
-                color1: '#5227FF',
-                color2: '#FF9FFC',
-                color3: '#FFFFFF',
-                speed: 0.2,
-                threadCount: 6,
-                frequency: 5.0,
-                spread: 0.18,
-                taper: 1.0,
-                position: 0.5,
-                fanMode: 'center',
-                glow: 0.02,
-                falloff: 0.6,
-                thickness: 1.1,
-                brightness: 0.6,
-                opacity: 1.0,
-                mirror: true,
-                shimmer: false,
-                grain: true,
-                grainIntensity: 0.05,
-                mouseInteraction: true,
-                mouseStrength: 0.3
-              }}
-            />
+            <OpenInStudioButton backgroundId="web-threads" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
-          <Customize forceRerender={forceRerender}>
-            <PreviewColorPickerCustom title="Color 1" color={color1} onChange={val => updateProp('color1', val)} />
-            <PreviewColorPickerCustom title="Color 2" color={color2} onChange={val => updateProp('color2', val)} />
-            <PreviewColorPickerCustom title="Core Color" color={color3} onChange={val => updateProp('color3', val)} />
-
+          <Customize>
+            <PreviewColorList
+              title="Colors"
+              colors={settings.colors}
+              min={1}
+              max={6}
+              onChange={value => updateProp('colors', value)}
+            />
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
+            <PreviewColorPickerCustom
+              title="Core Color"
+              color={settings.coreColor}
+              onChange={value => updateProp('coreColor', value)}
+            />
+            <PreviewSlider
+              title="Threads"
+              min={1}
+              max={24}
+              step={1}
+              value={settings.threadCount}
+              onChange={value => updateProp('threadCount', value)}
+            />
             <PreviewSlider
               title="Speed"
               min={0}
-              max={2}
-              step={0.05}
-              value={speed}
-              onChange={val => updateProp('speed', val)}
+              max={1}
+              step={0.01}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
             />
-
-            <PreviewSlider
-              title="Thread Count"
-              min={1}
-              max={10}
-              step={1}
-              value={threadCount}
-              onChange={val => updateProp('threadCount', val)}
-            />
-
             <PreviewSlider
               title="Frequency"
               min={1}
-              max={14}
-              step={0.5}
-              value={frequency}
-              onChange={val => updateProp('frequency', val)}
+              max={12}
+              step={0.1}
+              value={settings.frequency}
+              onChange={value => updateProp('frequency', value)}
             />
-
             <PreviewSlider
               title="Spread"
               min={0}
-              max={0.6}
+              max={0.5}
               step={0.01}
-              value={spread}
-              onChange={val => updateProp('spread', val)}
+              value={settings.spread}
+              onChange={value => updateProp('spread', value)}
             />
-
             <PreviewSlider
               title="Taper"
               min={0}
-              max={3}
+              max={2}
               step={0.05}
-              value={taper}
-              onChange={val => updateProp('taper', val)}
+              value={settings.taper}
+              onChange={value => updateProp('taper', value)}
             />
-
             <PreviewSlider
               title="Position"
               min={0}
               max={1}
               step={0.01}
-              value={position}
-              onChange={val => updateProp('position', val)}
+              value={settings.position}
+              onChange={value => updateProp('position', value)}
             />
-
-            <PreviewSelect
-              title="Fan Mode"
-              name="web-threads-fan"
-              width={140}
-              value={fanMode}
-              options={[
-                { label: 'Center', value: 'center' },
-                { label: 'Left', value: 'left' },
-                { label: 'Right', value: 'right' }
-              ]}
-              onChange={val => updateProp('fanMode', val)}
+            <PreviewSlider
+              title="Pinch"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.pinch}
+              onChange={value => updateProp('pinch', value)}
             />
-
+            <PreviewSlider
+              title="Nodes"
+              min={1}
+              max={4}
+              step={1}
+              value={settings.nodes}
+              onChange={value => updateProp('nodes', value)}
+            />
+            <PreviewSlider
+              title="Angle"
+              min={-45}
+              max={45}
+              step={1}
+              value={settings.angle}
+              valueUnit="°"
+              onChange={value => updateProp('angle', value)}
+            />
             <PreviewSlider
               title="Glow"
-              min={0}
-              max={0.06}
+              min={0.004}
+              max={0.05}
               step={0.001}
-              value={glow}
-              onChange={val => updateProp('glow', val)}
+              value={settings.glow}
+              onChange={value => updateProp('glow', value)}
             />
-
             <PreviewSlider
               title="Falloff"
               min={0.3}
               max={1.2}
               step={0.01}
-              value={falloff}
-              onChange={val => updateProp('falloff', val)}
+              value={settings.falloff}
+              onChange={value => updateProp('falloff', value)}
             />
-
             <PreviewSlider
               title="Thickness"
               min={0.3}
               max={3}
               step={0.05}
-              value={thickness}
-              onChange={val => updateProp('thickness', val)}
+              value={settings.thickness}
+              onChange={value => updateProp('thickness', value)}
             />
-
             <PreviewSlider
               title="Brightness"
-              min={0}
-              max={2.5}
+              min={0.2}
+              max={1.5}
               step={0.05}
-              value={brightness}
-              onChange={val => updateProp('brightness', val)}
+              value={settings.brightness}
+              onChange={value => updateProp('brightness', value)}
             />
-
             <PreviewSlider
               title="Opacity"
               min={0}
               max={1}
               step={0.01}
-              value={opacity}
-              onChange={val => updateProp('opacity', val)}
+              value={settings.opacity}
+              onChange={value => updateProp('opacity', value)}
             />
-
-            <PreviewSwitch title="Mirror" isChecked={mirror} onChange={val => updateProp('mirror', val)} />
-
-            <PreviewSwitch title="Shimmer" isChecked={shimmer} onChange={val => updateProp('shimmer', val)} />
-
-            <PreviewSwitch title="Grain" isChecked={grain} onChange={val => updateProp('grain', val)} />
-
             <PreviewSlider
-              title="Grain Intensity"
+              title="Depth"
               min={0}
-              max={0.3}
+              max={1}
               step={0.01}
-              value={grainIntensity}
-              onChange={val => updateProp('grainIntensity', val)}
+              value={settings.depth}
+              onChange={value => updateProp('depth', value)}
             />
-
-            <PreviewSwitch
-              title="Cursor Light"
-              isChecked={mouseInteraction}
-              onChange={val => updateProp('mouseInteraction', val)}
+            <PreviewSlider
+              title="Pulses"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.pulses}
+              onChange={value => updateProp('pulses', value)}
             />
-
+            <PreviewSlider
+              title="Fade"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.fade}
+              onChange={value => updateProp('fade', value)}
+            />
+            <PreviewSlider
+              title="Grain"
+              min={0}
+              max={0.15}
+              step={0.005}
+              value={settings.grain}
+              onChange={value => updateProp('grain', value)}
+            />
             <PreviewSlider
               title="Cursor Strength"
               min={0}
               max={1}
               step={0.01}
-              value={mouseStrength}
-              onChange={val => updateProp('mouseStrength', val)}
+              value={settings.mouseStrength}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseStrength', value)}
             />
+            <PreviewSwitch title="Mirror" isChecked={settings.mirror} onChange={value => updateProp('mirror', value)} />
+            <PreviewSwitch
+              title="Shimmer"
+              isChecked={settings.shimmer}
+              onChange={value => updateProp('shimmer', value)}
+            />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSwitch
+              title="Cursor"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch
+              title="Pulse on Click"
+              isChecked={settings.pulseOnClick}
+              onChange={value => updateProp('pulseOnClick', value)}
+            />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
+            />
+            <PreviewSwitch title="Pause" isChecked={settings.paused} onChange={value => updateProp('paused', value)} />
           </Customize>
 
           <PropTable data={propData} />
-          <Dependencies dependencyList={['ogl']} />
         </PreviewTab>
 
         <CodeTab>

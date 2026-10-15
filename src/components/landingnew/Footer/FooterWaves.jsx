@@ -3,10 +3,29 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useColorModeValue } from '../../setup/color-mode';
 
+const FONT = 'Geist, "Geist Sans", system-ui, sans-serif';
+const WORD = 'React Bits';
+const SHOWN = 0.6;
+const CAP = 0.9;
+const FADE = 0.4;
+
+const measureWord = () => {
+  const context = document.createElement('canvas').getContext('2d');
+  context.font = `600 100px ${FONT}`;
+  const metrics = context.measureText(WORD);
+  return {
+    advance: metrics.width / 100,
+    left: metrics.actualBoundingBoxLeft / 100,
+    right: metrics.actualBoundingBoxRight / 100,
+    ascent: metrics.actualBoundingBoxAscent / 100,
+    descent: metrics.actualBoundingBoxDescent / 100
+  };
+};
+
 export default function FooterWaves() {
   const rootRef = useRef(null);
-  const fallbackTextRef = useRef(null);
   const id = useId().replace(/:/g, '');
+  const [layout, setLayout] = useState(null);
   const [near, setNear] = useState(false);
   const [visible, setVisible] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
@@ -16,26 +35,41 @@ export default function FooterWaves() {
   const [capabilities, setCapabilities] = useState({ gpu: false, fine: false, reduced: true });
   const color = useColorModeValue('#8d8498', '#655a72');
   const hoverColor = useColorModeValue('#7f4ecb', '#cba6f7');
-  const backgroundColor = useColorModeValue('#ffffff', '#120f17');
+  const backgroundColor = useColorModeValue('#f6f6f7', '#17141d');
   const handleError = useCallback(() => setFailed(true), []);
   const eligible = capabilities.gpu && !capabilities.reduced && !failed;
 
   useEffect(() => {
     const root = rootRef.current;
-    const text = fallbackTextRef.current;
-    if (!root || !text) return;
+    if (!root) return;
     let cancelled = false;
-    const centerText = () => {
-      if (cancelled) return;
-      setCellSize(Math.min(9, Math.max(3, Math.round(root.clientWidth / 135))));
-      const bounds = text.getBBox();
-      const x = root.clientWidth / 2 - bounds.x - bounds.width / 2;
-      const y = root.clientHeight / 2 - bounds.y - bounds.height / 2;
-      text.setAttribute('transform', `translate(${x} ${y})`);
+    const update = () => {
+      const width = root.clientWidth;
+      if (cancelled || !width) return;
+      const top = root.parentElement?.querySelector('.ln-footer-top');
+      const inset = top ? parseFloat(getComputedStyle(top).paddingLeft) || 0 : 0;
+      const word = measureWord();
+      const font = Math.max(24, (width - inset * 2) / (word.left + word.right));
+      const glyph = font * (word.ascent + word.descent);
+      const above = Math.max(36, glyph * 0.46);
+      const boxWidth = (font * word.advance) / CAP;
+      const boxHeight = above * 2 + glyph;
+      setCellSize(Math.min(9, Math.max(3, Math.round(width / 135))));
+      setLayout({
+        font,
+        above,
+        fade: above + glyph * FADE,
+        boxWidth,
+        boxHeight,
+        left: (width - boxWidth) / 2,
+        height: above + glyph * SHOWN,
+        x: boxWidth / 2 + ((word.left - word.right) * font) / 2,
+        y: boxHeight / 2 + ((word.ascent - word.descent) * font) / 2
+      });
     };
-    const observer = new ResizeObserver(centerText);
+    const observer = new ResizeObserver(update);
     observer.observe(root);
-    document.fonts.ready.then(centerText);
+    document.fonts.ready.then(update);
     return () => {
       cancelled = true;
       observer.disconnect();
@@ -101,9 +135,18 @@ export default function FooterWaves() {
     };
   }, [near, eligible, LiveWaves]);
 
+  const box = layout
+    ? { left: layout.left, top: 0, right: 'auto', bottom: 'auto', width: layout.boxWidth, height: layout.boxHeight }
+    : undefined;
+
   return (
-    <div ref={rootRef} className="ln-footer-art" aria-hidden="true">
-      <svg className="ln-footer-art-fallback" width="100%" height="100%" focusable="false">
+    <div
+      ref={rootRef}
+      className="ln-footer-art"
+      aria-hidden="true"
+      style={layout ? { height: layout.height, '--art-fade': `${layout.fade}px` } : undefined}
+    >
+      <svg className="ln-footer-art-fallback" width="100%" height="100%" focusable="false" style={box}>
         <defs>
           <pattern
             id={`${id}-shapes`}
@@ -127,32 +170,32 @@ export default function FooterWaves() {
           </pattern>
           <mask id={`${id}-mask`}>
             <rect width="100%" height="100%" fill="white" />
-            <text
-              ref={fallbackTextRef}
-              x="50%"
-              y="50%"
-              textAnchor="middle"
-              dominantBaseline="central"
-              fill="black"
-              fontFamily={'Geist, "Geist Sans", system-ui, sans-serif'}
-              fontWeight="600"
-              letterSpacing="-0.055em"
-              style={{ fontSize: 'clamp(58px, 18vw, 220px)' }}
-            >
-              React Bits
-            </text>
+            {layout && (
+              <text
+                x={layout.x}
+                y={layout.y}
+                textAnchor="middle"
+                fill="black"
+                fontFamily={FONT}
+                fontWeight="600"
+                fontSize={layout.font}
+              >
+                {WORD}
+              </text>
+            )}
           </mask>
         </defs>
         <g fill="currentColor">
           <rect width="100%" height="100%" fill={`url(#${id}-shapes)`} mask={`url(#${id}-mask)`} />
         </g>
       </svg>
-      {eligible && visible && LiveWaves && (
-        <div className="ln-footer-art-live">
+      {eligible && visible && LiveWaves && layout && (
+        <div className="ln-footer-art-live" style={box}>
           <LiveWaves
-            text="React Bits"
+            text={WORD}
+            fontFamily={FONT}
             fontWeight={600}
-            textSize={0.8}
+            textSize={2}
             shapes="mixed"
             cellSize={cellSize}
             dotSize={0.72}

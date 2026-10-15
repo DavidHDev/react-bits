@@ -34,3 +34,18 @@
 .text-rotate-space {
   white-space: pre;
 }
+
+.text-rotate-highlight {
+  box-sizing: content-box;
+  flex-wrap: nowrap;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.1em 0.28em;
+  border-radius: 0.16em;
+}
+
+.text-rotate-highlight-content {
+  display: flex;
+  flex-shrink: 0;
+  white-space: pre;
+}

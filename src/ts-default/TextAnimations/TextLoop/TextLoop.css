@@ -4,6 +4,11 @@
   overflow: hidden;
 }
 
+.text-loop--draggable {
+  cursor: grab;
+  touch-action: pan-y;
+}
+
 .text-loop-svg {
   display: block;
   width: 100%;

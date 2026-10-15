@@ -1,0 +1,9445 @@
+[
+  {
+    "slug": "animated-content",
+    "duration": 5.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": 1.2,
+        "to": 4.2,
+        "to_px": "bottom"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "blob-cursor",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": -1,
+        "to": -0.6,
+        "points": [
+          [0.46, 0.56],
+          [0.5, 0.5]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 0,
+        "to": 2.7,
+        "points": [
+          [0.5, 0.5],
+          [0.7, 0.28],
+          [0.82, 0.55],
+          [0.6, 0.72],
+          [0.34, 0.3],
+          [0.2, 0.55],
+          [0.42, 0.56]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3,
+        "x": 0.42,
+        "y": 0.56
+      },
+      {
+        "type": "path",
+        "from": 3.5,
+        "to": 5.6,
+        "points": [
+          [0.42, 0.56],
+          [0.62, 0.66],
+          [0.74, 0.42],
+          [0.58, 0.3],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 1
+  },
+  {
+    "slug": "click-spark",
+    "duration": 5,
+    "loop": "replay",
+    "frame": {
+      "zoom": 1.5,
+      "cx": 0.5,
+      "cy": 0.47
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 0.5,
+        "points": [
+          [0.72, 0.92],
+          {
+            "selector": "button[aria-label='Like']"
+          }
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 0.95,
+        "to": 1.3,
+        "points": [
+          {
+            "selector": "button[aria-label='Like']"
+          },
+          {
+            "selector": "button[aria-label='Repost']"
+          }
+        ]
+      },
+      {
+        "type": "click",
+        "at": 1.4,
+        "selector": "button[aria-label='Repost']"
+      },
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 2.25,
+        "points": [
+          {
+            "selector": "button[aria-label='Repost']"
+          },
+          {
+            "selector": "button[aria-label='Save']"
+          }
+        ]
+      },
+      {
+        "type": "click",
+        "at": 2.35,
+        "selector": "button[aria-label='Save']"
+      },
+      {
+        "type": "path",
+        "from": 2.75,
+        "to": 3.1,
+        "points": [
+          {
+            "selector": "button[aria-label='Save']"
+          },
+          {
+            "selector": "button[aria-label='Like']",
+            "dx": 0.03,
+            "dy": -0.09
+          }
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.2,
+        "selector": "button[aria-label='Like']",
+        "dx": 0.03,
+        "dy": -0.09
+      },
+      {
+        "type": "leave",
+        "at": 3.8
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "crosshair",
+    "duration": 6.2,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": -0.6,
+        "to": -0.2,
+        "points": [
+          [0.82, 0.84],
+          [0.78, 0.78]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 1.2,
+        "points": [
+          [0.78, 0.78],
+          [0.68, 0.54],
+          [0.56, 0.37]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 1.4,
+        "to": 2.2,
+        "points": [
+          [0.56, 0.37],
+          [0.42, 0.36]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 2.5,
+        "to": 3,
+        "points": [
+          [0.42, 0.36],
+          {
+            "selector": "button"
+          }
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.2,
+        "selector": "button"
+      },
+      {
+        "type": "path",
+        "from": 3.6,
+        "to": 4.1,
+        "points": [
+          {
+            "selector": "button"
+          },
+          {
+            "selector": "a"
+          }
+        ]
+      },
+      {
+        "type": "path",
+        "from": 4.5,
+        "to": 5.2,
+        "points": [
+          {
+            "selector": "a"
+          },
+          [0.72, 0.74],
+          [0.78, 0.78]
+        ]
+      }
+    ],
+    "warmup": 0.6
+  },
+  {
+    "slug": "cubes",
+    "duration": 7.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.9,
+        "points": [
+          [1.03, 0.52],
+          [0.84, 0.5],
+          [0.72, 0.58],
+          [0.63, 0.45],
+          [0.69, 0.31]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 4.1,
+        "to": 4.4,
+        "points": [
+          [0.69, 0.31],
+          [0.56, 0.46],
+          [0.44, 0.6]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.85,
+        "x": 0.44,
+        "y": 0.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "electric-border",
+    "duration": 7.2,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.15,
+        "to": 2.75,
+        "points": [
+          [0.9, 0.24],
+          [0.74, 0.352],
+          [0.56, 0.355],
+          [0.38, 0.36],
+          [0.27, 0.47]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 3,
+        "x": 0.27,
+        "y": 0.47
+      },
+      {
+        "type": "path",
+        "from": 3.3,
+        "to": 3.9,
+        "points": [
+          [0.27, 0.47],
+          [0.4, 0.648],
+          [0.6, 0.648],
+          {
+            "selector": "button[aria-label='Stop generating']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.15,
+        "selector": "button[aria-label='Stop generating']"
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "selector": "button[aria-label='Send']"
+      },
+      {
+        "type": "leave",
+        "at": 5.55
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "fade-content",
+    "duration": 6.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": 1.3,
+        "to": 4.5,
+        "to_px": 1040
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "glare-hover",
+    "duration": 5.6,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": -1,
+        "to": -0.2,
+        "points": [
+          [1.1, 1.14],
+          [0.5, 1.16],
+          [-0.12, 1.12],
+          [-0.13, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 2.5,
+        "points": [
+          [-0.13, 0.5],
+          [0.12, 0.49],
+          [0.5, 0.47],
+          [0.88, 0.49],
+          [1.12, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 2.9,
+        "to": 5.1,
+        "points": [
+          [1.12, 0.5],
+          [0.88, 0.53],
+          [0.5, 0.55],
+          [0.12, 0.53],
+          [-0.13, 0.5]
+        ],
+        "ease": "linear"
+      }
+    ],
+    "warmup": 1
+  },
+  {
+    "slug": "gradual-blur",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": 0.3,
+        "to": 3.3,
+        "to_px": "bottom"
+      },
+      {
+        "type": "scroll",
+        "from": 4,
+        "to": 6.7,
+        "to_px": 0
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "crystalized-ball",
+    "duration": 6.8,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 3.8,
+        "points": [
+          [1, 0.62],
+          [0.72, 0.56],
+          [0.6, 0.36],
+          [0.44, 0.4],
+          [0.4, 0.58],
+          [0.52, 0.62]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 4.1,
+        "x": 0.52,
+        "y": 0.62
+      },
+      {
+        "type": "path",
+        "from": 4.5,
+        "to": 5.1,
+        "points": [
+          [0.52, 0.62],
+          [0.36, 0.78],
+          [0.2, 0.94]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 5.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "electric-logo",
+    "duration": 6.2,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 2.8,
+        "points": [
+          [0, 0.6],
+          [0.24, 0.55],
+          [0.36, 0.3],
+          [0.56, 0.2],
+          [0.7, 0.4],
+          [0.62, 0.66],
+          [0.5, 0.52]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.2,
+        "x": 0.5,
+        "y": 0.52
+      },
+      {
+        "type": "path",
+        "from": 3.8,
+        "to": 4.6,
+        "points": [
+          [0.5, 0.52],
+          [0.66, 0.78],
+          [0.82, 0.94]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 4.7
+      }
+    ],
+    "warmup": 2
+  },
+  {
+    "slug": "dither-veil",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.3,
+        "to": 3.8,
+        "points": [
+          [0, 0.62],
+          [0.24, 0.4],
+          [0.44, 0.62],
+          [0.62, 0.36],
+          [0.78, 0.56],
+          [0.62, 0.7],
+          [0.5, 0.52]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 4,
+        "x": 0.5,
+        "y": 0.52
+      },
+      {
+        "type": "path",
+        "from": 4.4,
+        "to": 4.9,
+        "points": [
+          [0.5, 0.52],
+          [0.3, 0.8],
+          [0.12, 0.94]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "glow-cursor",
+    "duration": 6.4,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 3.5,
+        "points": [
+          [0.112, 0.61],
+          [0.273, 0.54],
+          [0.315, 0.4],
+          [0.238, 0.33],
+          [0.16, 0.4],
+          [0.202, 0.54],
+          [0.363, 0.61],
+          [0.524, 0.54],
+          [0.566, 0.4],
+          [0.489, 0.33],
+          [0.412, 0.4],
+          [0.454, 0.54],
+          [0.614, 0.61]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 3.6,
+        "to": 3.82,
+        "points": [
+          [0.614, 0.61],
+          [0.71, 0.47],
+          [0.8, 0.3]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.8,
+        "y": 0.3
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "ghost-cursor",
+    "duration": 8.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.9,
+        "to": 1.7,
+        "points": [
+          [1.1, -0.14],
+          [0.62, -0.14]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 2.1,
+        "to": 2.4,
+        "points": [
+          [0.62, -0.14],
+          [0.61, 0.08],
+          [0.6, 0.44]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 2.5,
+        "to": 4.5,
+        "points": [
+          [0.6, 0.44],
+          [0.644, 0.5],
+          [0.613, 0.62],
+          [0.506, 0.68],
+          [0.399, 0.62],
+          [0.367, 0.5],
+          [0.412, 0.44],
+          [0.456, 0.5],
+          [0.424, 0.62],
+          [0.317, 0.68]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 6.6,
+        "x": 0.317,
+        "y": 0.68
+      },
+      {
+        "type": "click",
+        "at": 7.15,
+        "x": 0.42,
+        "y": 0.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "image-trail",
+    "duration": 5.6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 4,
+        "points": [
+          [0, 0.7],
+          [0.25, 0.35],
+          [0.5, 0.65],
+          [0.75, 0.3],
+          [0.88, 0.6],
+          [0.62, 0.78],
+          [0.38, 0.5],
+          [0.2, 0.22]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "logo-loop",
+    "duration": 6,
+    "loop": "replay",
+    "frame": {
+      "zoom": 1.25,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 2.2,
+        "points": [
+          [0.6, 0.92],
+          [0.53, 0.5]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 2.9,
+        "points": [
+          [0.53, 0.5],
+          [0.46, 0.5]
+        ]
+      },
+      {
+        "type": "drag",
+        "from": 3.1,
+        "to": 3.45,
+        "points": [
+          [0.46, 0.5],
+          [0.58, 0.5],
+          [0.72, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 4.3
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "magnet",
+    "duration": 6.4,
+    "loop": "crossfade",
+    "frame": {
+      "zoom": 1.7,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 2.2,
+        "points": [
+          [0.2, 0.86],
+          [0.3, 0.68],
+          [0.37, 0.6],
+          [0.31, 0.5],
+          [0.36, 0.4],
+          [0.43, 0.45]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 4.4,
+        "points": [
+          [0.43, 0.45],
+          [0.53, 0.56],
+          [0.63, 0.6],
+          [0.68, 0.46],
+          [0.6, 0.38]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 4.7,
+        "to": 5.4,
+        "points": [
+          [0.6, 0.38],
+          [0.74, 0.22],
+          [0.88, 0.1]
+        ]
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "meta-balls",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.5,
+        "points": [
+          [1.03, 0.56],
+          [0.84, 0.5],
+          [0.67, 0.43],
+          [0.52, 0.5],
+          [0.42, 0.59],
+          [0.33, 0.52]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 4.7,
+        "to": 4.95,
+        "points": [
+          [0.33, 0.52],
+          [0.56, 0.36],
+          [0.8, 0.28]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "click",
+        "at": 5.5,
+        "x": 0.5,
+        "y": 0.5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "strands",
+    "duration": 6.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 2.8,
+        "points": [
+          [1, 0.25],
+          [0.78, 0.34],
+          [0.62, 0.46]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 3,
+        "to": 3.9,
+        "points": [
+          [0.62, 0.46],
+          [0.46, 0.62],
+          [0.36, 0.44]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 4.1,
+        "x": 0.36,
+        "y": 0.44
+      },
+      {
+        "type": "leave",
+        "at": 4.7
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "metallic-paint",
+    "duration": 6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4.4,
+        "points": [
+          [1.04, 0.32],
+          [0.74, 0.27],
+          [0.5, 0.5],
+          [0.26, 0.7],
+          [-0.05, 0.56]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "noise",
+    "duration": 4,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {
+      "preset": "dust",
+      "opacity": 0.16,
+      "fps": 18,
+      "dust": 0.55,
+      "scratches": 0.5,
+      "flicker": 0.25
+    },
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0.5
+  },
+  {
+    "slug": "pixel-trail",
+    "duration": 5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 3.8,
+        "points": [
+          [0, 0.55],
+          [0.2, 0.3],
+          [0.36, 0.6],
+          [0.52, 0.32],
+          [0.7, 0.62],
+          [0.84, 0.42],
+          [0.7, 0.24],
+          [0.56, 0.42],
+          [0.62, 0.7],
+          [0.8, 0.78]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "pixel-transition",
+    "duration": 5,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 1,
+        "points": [
+          [0.02, 0.9],
+          [0.3, 0.7],
+          [0.45, 0.56]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 1.3,
+        "to": 2.3,
+        "points": [
+          [0.45, 0.56],
+          [0.53, 0.46],
+          [0.56, 0.4]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3.2,
+        "points": [
+          [0.56, 0.4],
+          [0.75, 0.24],
+          [0.92, 0.14]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 3.3
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "pixel-swap",
+    "duration": 5.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.95,
+        "points": [
+          [1.08, 1.12],
+          [0.5, 1.14],
+          [-0.08, 1.1]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 0.95,
+        "to": 1.25,
+        "points": [
+          [-0.08, 1.1],
+          [-0.08, 0.58]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 1.35,
+        "to": 2.35,
+        "points": [
+          [-0.08, 0.58],
+          [0.14, 0.55],
+          [0.3, 0.5],
+          [0.42, 0.47]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3.3,
+        "points": [
+          [0.42, 0.47],
+          [0.6, 0.42],
+          [0.78, 0.38],
+          [1.06, 0.32]
+        ],
+        "ease": "in"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "ribbons",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 4.8,
+        "points": [
+          [0.5, 0.5],
+          [0.7, 0.28],
+          [0.86, 0.5],
+          [0.7, 0.72],
+          [0.5, 0.5],
+          [0.3, 0.28],
+          [0.14, 0.5],
+          [0.3, 0.72],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "shape-blur",
+    "duration": 6.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": -1,
+        "to": 1.8,
+        "points": [[1.36, 0.46]]
+      },
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 2.15,
+        "points": [
+          [1.36, 0.46],
+          [1, 0.4],
+          [0.8, 0.34]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.2,
+        "points": [
+          [0.8, 0.34],
+          [0.64, 0.28],
+          [0.44, 0.38],
+          [0.36, 0.58],
+          [0.5, 0.72],
+          [0.66, 0.6],
+          [0.74, 0.46]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.3,
+        "to": 4.65,
+        "points": [
+          [0.74, 0.46],
+          [1, 0.44],
+          [1.36, 0.46]
+        ],
+        "ease": "in"
+      }
+    ],
+    "warmup": 1
+  },
+  {
+    "slug": "splash-cursor",
+    "duration": 5,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {
+      "contained": true
+    },
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.25,
+        "points": [
+          [1.05, 0.6],
+          [0.8, 0.52],
+          [0.3, 0.36]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "click",
+        "at": 3.1,
+        "x": 0.3,
+        "y": 0.36
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "star-border",
+    "duration": 4,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 0.9,
+        "points": [
+          [0.72, 0.84],
+          [0.6, 0.62],
+          [0.55, 0.52]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 1.1,
+        "to": 1.5,
+        "points": [
+          [0.55, 0.52],
+          [0.5, 0.5]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 1.8,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 2.8,
+        "points": [
+          [0.5, 0.5],
+          [0.36, 0.3],
+          [0.22, 0.16]
+        ]
+      }
+    ],
+    "warmup": 2
+  },
+  {
+    "slug": "sticker-peel",
+    "duration": 6.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 3,
+        "points": [
+          [0.67, 0.42],
+          [0.5702, 0.4476],
+          [0.5925, 0.5],
+          [0.5671, 0.562],
+          [0.545, 0.6248],
+          [0.5, 0.632],
+          [0.455, 0.6248],
+          [0.4345, 0.5734]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "drag",
+        "from": 3.2,
+        "to": 4.2,
+        "points": [
+          [0.4345, 0.5734],
+          [0.4, 0.44],
+          [0.46, 0.34],
+          [0.54, 0.38],
+          [0.5, 0.74]
+        ],
+        "ease": "in"
+      },
+      {
+        "type": "path",
+        "from": 4.3,
+        "to": 4.8,
+        "points": [
+          [0.5, 0.74],
+          [0.72, 0.84],
+          [0.96, 1.08]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "target-cursor",
+    "duration": 6.2,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 1.6,
+        "points": [
+          [0.16, 0.17],
+          [0.28, 0.09],
+          [0.42, 0.15],
+          [0.56, 0.08],
+          [0.7, 0.14],
+          [0.8, 0.24]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1.7,
+        "to": 2.6,
+        "points": [
+          [0.8, 0.24],
+          [0.64, 0.36],
+          [0.5, 0.42],
+          [0.38, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.8,
+        "to": 3.2,
+        "points": [
+          [0.38, 0.5],
+          {
+            "selector": "[data-cursor-label='Play']"
+          }
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.4,
+        "selector": "[data-cursor-label='Play']",
+        "hold": 0.3
+      },
+      {
+        "type": "path",
+        "from": 3.95,
+        "to": 4.3,
+        "points": [
+          {
+            "selector": "[data-cursor-label='Play']"
+          },
+          {
+            "selector": "[data-cursor-label='Like']"
+          }
+        ]
+      },
+      {
+        "type": "path",
+        "from": 4.55,
+        "to": 4.85,
+        "points": [
+          {
+            "selector": "[data-cursor-label='Like']"
+          },
+          {
+            "selector": "[data-cursor-label='Share']"
+          }
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "laser-flow",
+    "duration": 6.8,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.9,
+        "to": 3.4,
+        "points": [
+          [1.04, 0.3],
+          [0.86, 0.33],
+          [0.7, 0.38]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 3.4,
+        "to": 4.5,
+        "points": [
+          [0.7, 0.38],
+          [0.66, 0.46],
+          [0.71, 0.5],
+          [0.74, 0.42],
+          [0.69, 0.36]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.6,
+        "to": 5,
+        "points": [
+          [0.69, 0.36],
+          [0.86, 0.32],
+          [1.05, 0.3]
+        ],
+        "ease": "in"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "antigravity",
+    "duration": 8.1,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.5,
+        "points": [
+          [0.66, 0.42],
+          [0.55, 0.3],
+          [0.38, 0.36],
+          [0.36, 0.6],
+          [0.52, 0.66],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.75,
+        "x": 0.5,
+        "y": 0.5,
+        "hold": 1
+      },
+      {
+        "type": "path",
+        "from": 5.95,
+        "to": 6.5,
+        "points": [
+          [0.5, 0.5],
+          [0.51, 0.49]
+        ],
+        "ease": "inOut"
+      }
+    ]
+  },
+  {
+    "slug": "orbit-images",
+    "duration": 7.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.45,
+        "to": 2.2,
+        "points": [
+          [1.04, 0.82],
+          [0.8, 0.76],
+          {
+            "selector": "[data-orbit-item='1']"
+          }
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "click",
+        "at": 3.1,
+        "selector": "[data-orbit-item='4']"
+      },
+      {
+        "type": "path",
+        "from": 3.45,
+        "to": 4.25,
+        "points": [
+          {
+            "selector": "[data-orbit-item='4']"
+          },
+          [0.36, 0.56],
+          [0.3, 0.71]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 4.45,
+        "to": 4.75,
+        "points": [
+          [0.3, 0.71],
+          [0.47, 0.71],
+          [0.62, 0.71]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 4.95,
+        "to": 5.4,
+        "points": [
+          [0.62, 0.71],
+          [0.66, 0.86],
+          [0.7, 1.08]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "ascii-text",
+    "duration": 6.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 4,
+        "points": [
+          [0.1, 0.5],
+          [0.28, 0.3],
+          [0.55, 0.34],
+          [0.78, 0.5],
+          [0.62, 0.68],
+          [0.4, 0.62],
+          [0.3, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.3,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "blur-text",
+    "duration": 4,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "circular-text",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": {
+      "zoom": 1.6,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.9,
+        "to": 1.9,
+        "points": [
+          [0.96, 0.66],
+          [0.78, 0.56],
+          [0.62, 0.38]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "drag",
+        "from": 2.2,
+        "to": 2.7,
+        "points": [
+          [0.62, 0.38],
+          [0.636, 0.5],
+          [0.61, 0.62],
+          [0.5, 0.7],
+          [0.39, 0.62]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "count-up",
+    "duration": 4,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 2.3,
+        "points": [
+          [0.15, 0.88],
+          [0.42, 0.58],
+          [0.6, 0.42],
+          [0.88, 0.14]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 2.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "curved-loop",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.1,
+        "to": 1.9,
+        "points": [
+          [0.94, 0.9],
+          [0.84, 0.7],
+          [0.74, 0.57]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "drag",
+        "from": 2.1,
+        "to": 2.45,
+        "points": [
+          [0.74, 0.57],
+          [0.55, 0.62],
+          [0.36, 0.63]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 3.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "decrypted-text",
+    "duration": 5.6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.7,
+        "points": [
+          [0.04, 0.51],
+          [0.3, 0.5],
+          [0.55, 0.51],
+          [0.95, 0.49]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "falling-text",
+    "duration": 8.8,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.65,
+        "points": [
+          [1.04, 0.42],
+          [0.8, 0.45],
+          [0.62, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 0.75,
+        "to": 1.55,
+        "points": [
+          [0.62, 0.48],
+          [0.56, 0.72],
+          [0.5, 0.95]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "drag",
+        "from": 1.65,
+        "to": 2.1,
+        "points": [
+          [0.5, 0.95],
+          [0.54, 0.82],
+          [0.64, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 2.7,
+        "points": [
+          [0.64, 0.5],
+          [0.3, 0.66],
+          [0.06, 0.85]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.7,
+        "to": 3.3,
+        "points": [
+          [0.06, 0.85],
+          [0.5, 0.88],
+          [1.06, 0.88]
+        ],
+        "ease": "linear"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "fuzzy-text",
+    "duration": 5.6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 4,
+        "points": [
+          [0.92, 0.3],
+          [0.66, 0.42],
+          [0.45, 0.4],
+          [0.36, 0.45],
+          [0.45, 0.62],
+          [0.62, 0.65]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "glitch-text",
+    "duration": 5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {
+      "fontSize": 84
+    },
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "gradient-text",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "rotating-text",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 2.2
+  },
+  {
+    "slug": "scrambled-text",
+    "duration": 6.4,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 3.8,
+        "points": [
+          [0.14, 0.32],
+          [0.42, 0.36],
+          [0.76, 0.42],
+          [0.6, 0.52],
+          [0.3, 0.56],
+          [0.46, 0.64],
+          [0.8, 0.66]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.1,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.7
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "scroll-float",
+    "duration": 4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": -2,
+        "to": 2.6,
+        "to_px": 800
+      }
+    ],
+    "warmup": 2
+  },
+  {
+    "slug": "scroll-reveal",
+    "duration": 4.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": -2.4,
+        "to": 3.6,
+        "to_px": 980
+      }
+    ],
+    "warmup": 2.4
+  },
+  {
+    "slug": "scroll-velocity",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "selector": "window",
+        "from": 1.2,
+        "to": 1.9,
+        "to_px": 300,
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0,
+    "pageScroll": true
+  },
+  {
+    "slug": "shiny-text",
+    "duration": 4,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "split-text",
+    "duration": 5.2,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {
+      "showCallback": false
+    },
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.1,
+        "to": 3.6,
+        "points": [
+          [0.1, 0.52],
+          [0.3, 0.48],
+          [0.5, 0.53],
+          [0.7, 0.48],
+          [0.9, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "text-cursor",
+    "duration": 5.8,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 0.3,
+        "points": [[0.52, 0.5]]
+      },
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 4.4,
+        "points": [
+          [0.52, 0.5],
+          [0.66, 0.3],
+          [0.82, 0.42],
+          [0.78, 0.64],
+          [0.6, 0.66],
+          [0.52, 0.5],
+          [0.38, 0.34],
+          [0.2, 0.42],
+          [0.22, 0.62],
+          [0.4, 0.66],
+          [0.52, 0.5]
+        ],
+        "ease": "linear"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "text-pressure",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.2,
+        "to": 3.6,
+        "points": [
+          [0.02, 0.36],
+          [0.22, 0.3],
+          [0.5, 0.27],
+          [0.8, 0.32],
+          [0.62, 0.42],
+          [0.35, 0.34]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.5,
+        "y": 0.3
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "text-type",
+    "duration": 4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "true-focus",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0.8
+  },
+  {
+    "slug": "variable-proximity",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.6,
+        "to": 4.8,
+        "points": [
+          [0.08, 0.3],
+          [0.3, 0.36],
+          [0.55, 0.35],
+          [0.85, 0.4],
+          [0.6, 0.5],
+          [0.35, 0.5],
+          [0.12, 0.56],
+          [0.35, 0.64],
+          [0.65, 0.65],
+          [0.8, 0.9]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "shuffle",
+    "duration": 4,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.3,
+        "to": 1.9,
+        "points": [
+          [0.12, 0.88],
+          [0.38, 0.62],
+          [0.55, 0.5]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "leave",
+        "at": 2.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "particle-text",
+    "duration": 6.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 3.6,
+        "points": [
+          [0.04, 0.62],
+          [0.22, 0.46],
+          [0.42, 0.55],
+          [0.62, 0.45],
+          [0.8, 0.54]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.62,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "split-flap-text",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "warp-text",
+    "duration": 6.5,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 3.6,
+        "points": [
+          [0.08, 0.62],
+          [0.3, 0.42],
+          [0.5, 0.58],
+          [0.7, 0.42],
+          [0.88, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.6,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "tech-text",
+    "duration": 6.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.5,
+        "to": 1.9,
+        "points": [
+          [0.12, 0.86],
+          [0.15, 0.56],
+          [0.3, 0.5],
+          [0.45, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.2,
+        "x": 0.45,
+        "y": 0.52
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3.2,
+        "points": [
+          [0.45, 0.52],
+          [0.56, 0.58],
+          [0.66, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3.4,
+        "to": 4,
+        "points": [
+          [0.66, 0.52],
+          [0.69, 0.36],
+          [0.72, 0.22]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.8
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "stroke-text",
+    "duration": 4.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "depth-text",
+    "duration": 6.6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.3,
+        "to": 3.3,
+        "points": [
+          [0.1, 0.2],
+          [0.35, 0.15],
+          [0.72, 0.22],
+          [0.88, 0.58],
+          [0.62, 0.84],
+          [0.3, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.3,
+        "to": 3.8,
+        "points": [
+          [0.3, 0.72],
+          [0.42, 0.58],
+          [0.5, 0.5]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "click",
+        "at": 4.1,
+        "x": 0.5,
+        "y": 0.5,
+        "hold": 0.35
+      },
+      {
+        "type": "leave",
+        "at": 4.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "fold-text",
+    "duration": 5.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 3.8,
+        "points": [
+          [0.05, 0.62],
+          [0.25, 0.5],
+          [0.5, 0.56],
+          [0.72, 0.46],
+          [0.86, 0.5],
+          [0.7, 0.2],
+          [0.6, 0.06]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "echo-text",
+    "duration": 6.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {
+      "fontSize": "clamp(2.5rem, 7vw, 5.5rem)"
+    },
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.3,
+        "to": 3.6,
+        "points": [
+          [0.12, 0.35],
+          [0.35, 0.13],
+          [0.68, 0.15],
+          [0.86, 0.45],
+          [0.7, 0.82],
+          [0.35, 0.85],
+          [0.15, 0.6]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "masked-heading",
+    "duration": 4.5,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "text-loop",
+    "duration": 4.2,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "animated-list",
+    "duration": 7.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "refresh",
+        "at": 0.01
+      },
+      {
+        "type": "path",
+        "from": 1.1,
+        "to": 2.6,
+        "points": [
+          [0.86, 0.18],
+          [0.64, 0.16],
+          [0.55, 0.28],
+          [0.5, 0.4],
+          [0.5, 0.53],
+          [0.52, 0.65]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "wheel",
+        "from": 2.9,
+        "to": 3.9,
+        "deltaY": 480,
+        "x": 0.52,
+        "y": 0.65
+      },
+      {
+        "type": "wheel",
+        "from": 4.2,
+        "to": 5.1,
+        "deltaY": -480,
+        "x": 0.52,
+        "y": 0.65
+      },
+      {
+        "type": "key",
+        "at": 5.5,
+        "key": "ArrowDown"
+      },
+      {
+        "type": "key",
+        "at": 5.85,
+        "key": "ArrowDown"
+      },
+      {
+        "type": "key",
+        "at": 6.3,
+        "key": "End"
+      }
+    ]
+  },
+  {
+    "slug": "bounce-cards",
+    "duration": 6.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 2.1,
+        "points": [
+          [0.36, 0.94],
+          [0.394, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3,
+        "points": [
+          [0.394, 0.52],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.5,
+        "to": 3.9,
+        "points": [
+          [0.5, 0.5],
+          [0.606, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.4,
+        "to": 5,
+        "points": [
+          [0.606, 0.5],
+          [0.64, 0.94]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "bubble-menu",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 1,
+        "points": [
+          [0.62, 0.97],
+          [0.82, 0.4],
+          {
+            "selector": ".toggle-bubble"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.1,
+        "selector": ".toggle-bubble"
+      },
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 4,
+        "points": [
+          {
+            "selector": ".toggle-bubble"
+          },
+          {
+            "selector": ".pill-col:nth-child(3) .pill-link"
+          },
+          {
+            "selector": ".pill-col:nth-child(2) .pill-link"
+          },
+          {
+            "selector": ".pill-col:nth-child(5) .pill-link"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.2,
+        "to": 4.6,
+        "points": [
+          {
+            "selector": ".pill-col:nth-child(5) .pill-link"
+          },
+          {
+            "selector": ".toggle-bubble"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.7,
+        "selector": ".toggle-bubble"
+      },
+      {
+        "type": "leave",
+        "at": 5.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "card-nav",
+    "duration": 7,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "refresh",
+        "at": 0.01
+      },
+      {
+        "type": "path",
+        "from": 1,
+        "to": 1.7,
+        "points": [
+          [0.42, 0.82],
+          [0.22, 0.45],
+          {
+            "selector": ".card-nav__menu"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.85,
+        "selector": ".card-nav__menu"
+      },
+      {
+        "type": "path",
+        "from": 2.5,
+        "to": 3.2,
+        "points": [
+          {
+            "selector": ".card-nav__menu"
+          },
+          {
+            "selector": ".card-nav__card:nth-child(2) .card-nav__link"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.5,
+        "to": 3.9,
+        "points": [
+          {
+            "selector": ".card-nav__card:nth-child(2) .card-nav__link"
+          },
+          {
+            "selector": ".card-nav__card:nth-child(3) .card-nav__link"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.2,
+        "to": 4.7,
+        "points": [
+          {
+            "selector": ".card-nav__card:nth-child(3) .card-nav__link"
+          },
+          {
+            "selector": ".card-nav__menu"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.85,
+        "selector": ".card-nav__menu"
+      },
+      {
+        "type": "path",
+        "from": 5.2,
+        "to": 5.8,
+        "points": [
+          {
+            "selector": ".card-nav__menu"
+          },
+          [0.45, 0.82]
+        ],
+        "ease": "inOut"
+      }
+    ]
+  },
+  {
+    "slug": "card-swap",
+    "duration": 8.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {
+      "delay": 2000
+    },
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "refresh",
+        "at": 0.01
+      },
+      {
+        "type": "path",
+        "from": 2.95,
+        "to": 3.45,
+        "points": [
+          [0.66, 0.97],
+          [0.5, 0.72],
+          [0.447, 0.613]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3.6,
+        "to": 4.1,
+        "points": [
+          [0.447, 0.613],
+          [0.445, 0.72],
+          [0.44, 0.88]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.55,
+        "to": 4.95,
+        "points": [
+          [0.44, 0.88],
+          [0.447, 0.613]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 5.1,
+        "to": 5.28,
+        "points": [
+          [0.447, 0.613],
+          [0.56, 0.62],
+          [0.7, 0.63]
+        ],
+        "ease": "in"
+      },
+      {
+        "type": "click",
+        "at": 6.2,
+        "x": 0.66,
+        "y": 0.228
+      },
+      {
+        "type": "leave",
+        "at": 6.65
+      }
+    ]
+  },
+  {
+    "slug": "carousel",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": {
+      "zoom": 1.5,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.8,
+        "points": [
+          [0.72, 0.9],
+          [0.57, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.9,
+        "to": 1.35,
+        "points": [
+          [0.57, 0.48],
+          [0.49, 0.48],
+          [0.41, 0.48]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 1.7,
+        "to": 2.1,
+        "points": [
+          [0.41, 0.48],
+          [0.57, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.2,
+        "to": 2.65,
+        "points": [
+          [0.57, 0.48],
+          [0.49, 0.48],
+          [0.41, 0.48]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.7,
+        "selector": ".carousel-dot"
+      },
+      {
+        "type": "leave",
+        "at": 4.8
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "chroma-grid",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 4.3,
+        "points": [
+          [0.04, 0.36],
+          [0.24, 0.3],
+          [0.44, 0.64],
+          [0.66, 0.36],
+          [0.86, 0.62]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "holo-card",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.5,
+        "to": 4.6,
+        "points": [
+          [0.26, 0.86],
+          [0.4, 0.64],
+          [0.58, 0.3],
+          [0.62, 0.64],
+          [0.42, 0.4],
+          [0.5, 0.18]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.9
+      }
+    ],
+    "warmup": 0.5
+  },
+  {
+    "slug": "circular-carousel",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.4,
+        "points": [
+          [0.62, 0.95],
+          [0.66, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.5,
+        "to": 2.85,
+        "points": [
+          [0.66, 0.5],
+          [0.5, 0.51],
+          [0.34, 0.52]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "flex-carousel",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 2.8,
+        "points": [
+          [0.86, 0.8],
+          [0.72, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.9,
+        "to": 4,
+        "points": [
+          [0.72, 0.52],
+          [0.52, 0.51],
+          [0.3, 0.5]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "depth-carousel",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.8,
+        "points": [
+          [0.64, 0.97],
+          [0.56, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.9,
+        "to": 1.4,
+        "points": [
+          [0.56, 0.5],
+          [0.46, 0.5],
+          [0.36, 0.5]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 1.7,
+        "to": 2.1,
+        "points": [
+          [0.36, 0.5],
+          [0.56, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.3,
+        "to": 2.8,
+        "points": [
+          [0.56, 0.5],
+          [0.46, 0.5],
+          [0.36, 0.5]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "selector": ".depth-carousel__dot"
+      },
+      {
+        "type": "leave",
+        "at": 5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "accordion-gallery",
+    "duration": 7.2,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 1.2,
+        "points": [
+          [0.95, 0.97],
+          [0.92, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.1,
+        "to": 3.1,
+        "points": [
+          [0.92, 0.55],
+          [0.5, 0.52],
+          [0.08, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.1,
+        "to": 4.9,
+        "points": [
+          [0.08, 0.5],
+          [0.4, 0.5],
+          [0.68, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 5.2,
+        "to": 5.7,
+        "points": [
+          [0.68, 0.5],
+          [0.66, 0.97]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.8
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "morph-slider",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.8,
+        "points": [
+          [0.64, 0.97],
+          [0.76, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.9,
+        "to": 2.2,
+        "points": [
+          [0.76, 0.5],
+          [0.52, 0.5],
+          [0.27, 0.5]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 3.4,
+        "selector": ".morph-slider-dot"
+      },
+      {
+        "type": "leave",
+        "at": 4.9
+      }
+    ],
+    "warmup": 0.5
+  },
+  {
+    "slug": "drift-wall",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.4,
+        "to": 4.2,
+        "points": [
+          [0.18, 0.97],
+          [0.32, 0.6],
+          [0.5, 0.42],
+          [0.66, 0.58],
+          [0.8, 0.4]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ],
+    "warmup": 0.5
+  },
+  {
+    "slug": "circular-gallery",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 2,
+        "points": [
+          [0.8, 0.9],
+          [0.66, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.1,
+        "to": 2.6,
+        "points": [
+          [0.66, 0.5],
+          [0.48, 0.5],
+          [0.3, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 3.3,
+        "to": 3.9,
+        "points": [
+          [0.3, 0.5],
+          [0.42, 0.42],
+          [0.5, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.5,
+        "y": 0.48
+      },
+      {
+        "type": "leave",
+        "at": 4.5
+      },
+      {
+        "type": "key",
+        "at": 5,
+        "key": "Tab"
+      },
+      {
+        "type": "key",
+        "at": 5.35,
+        "key": "ArrowRight"
+      },
+      {
+        "type": "key",
+        "at": 6,
+        "key": "ArrowRight"
+      },
+      {
+        "type": "key",
+        "at": 6.7,
+        "key": "Escape"
+      }
+    ]
+  },
+  {
+    "slug": "counter",
+    "duration": 5,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "decay-card",
+    "duration": 7,
+    "warmup": 2,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": -2,
+        "to": -1.3,
+        "points": [
+          [0.66, 0.92],
+          [0.58, 0.62],
+          [0.53, 0.47]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 0.4,
+        "to": 2.4,
+        "points": [
+          [0.53, 0.47],
+          [0.36, 0.36],
+          [0.22, 0.52],
+          [0.3, 0.74],
+          [0.48, 0.8]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3.6,
+        "points": [
+          [0.48, 0.8],
+          [0.8, 0.3],
+          [0.2, 0.25],
+          [0.75, 0.7],
+          [0.3, 0.75],
+          [0.6, 0.35]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 3.75,
+        "to": 4.5,
+        "points": [
+          [0.6, 0.35],
+          [0.56, 0.42],
+          [0.53, 0.47]
+        ],
+        "ease": "out"
+      }
+    ]
+  },
+  {
+    "slug": "dock",
+    "duration": 7.4,
+    "warmup": 0,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.45,
+        "to": 2.3,
+        "points": [
+          [0.92, 0.9],
+          [0.62, 0.9],
+          [0.3, 0.9],
+          [0.22, 0.9],
+          {
+            "selector": ".dock-item[aria-label='Music']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.6,
+        "selector": ".dock-item[aria-label='Music']",
+        "hold": 0.65
+      },
+      {
+        "type": "path",
+        "from": 3.55,
+        "to": 4.05,
+        "points": [
+          {
+            "selector": ".dock-item[aria-label='Music']"
+          },
+          {
+            "selector": "[role='menu'][aria-label='Music'] .dock-menu-row[aria-haspopup='menu']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.5,
+        "to": 4.95,
+        "points": [
+          {
+            "selector": "[role='menu'][aria-label='Music'] .dock-menu-row[aria-haspopup='menu']"
+          },
+          {
+            "selector": "[role='menu'][aria-label='Options'] .dock-menu-row[data-dock-row='0']"
+          },
+          {
+            "selector": "[role='menu'][aria-label='Options'] .dock-menu-row[data-dock-row='1']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5.9,
+        "x": 0.86,
+        "y": 0.22
+      },
+      {
+        "type": "leave",
+        "at": 6.2
+      }
+    ]
+  },
+  {
+    "slug": "dome-gallery",
+    "duration": 5,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.7,
+        "points": [
+          [0.72, 0.8],
+          [0.68, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.8,
+        "to": 1.4,
+        "points": [
+          [0.68, 0.52],
+          [0.5, 0.5],
+          [0.32, 0.48]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 2.6,
+        "x": 0.5,
+        "y": 0.5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "elastic-slider",
+    "duration": 6.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 0.9,
+        "points": [
+          [0.62, 0.92],
+          [0.64, 0.528]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 1,
+        "to": 2.1,
+        "points": [
+          [0.64, 0.528],
+          [0.78, 0.53],
+          [0.9, 0.532],
+          [0.95, 0.534]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.5,
+        "to": 2.95,
+        "points": [
+          [0.95, 0.534],
+          [0.76, 0.632]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3.05,
+        "to": 4.55,
+        "points": [
+          [0.76, 0.632],
+          [0.69, 0.632],
+          [0.795, 0.632],
+          [0.705, 0.632],
+          [0.745, 0.632]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.85
+      }
+    ]
+  },
+  {
+    "slug": "flowing-menu",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "refresh",
+        "at": 0.01
+      },
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4,
+        "points": [
+          [1.1, 0.06],
+          [0.78, 0.1],
+          [0.62, 0.32],
+          [0.56, 0.56],
+          [0.52, 0.78],
+          [0.5, 0.88]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.1,
+        "to": 4.8,
+        "points": [
+          [0.5, 0.88],
+          [0.5, 1.08],
+          [0.8, 1.1],
+          [1.1, 1],
+          [1.12, 0.5],
+          [1.1, 0.03]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.95,
+        "to": 5.35,
+        "points": [
+          [1.1, 0.03],
+          [0.8, 0.06],
+          [0.6, 0.45],
+          [0.46, 0.9]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 5.6,
+        "to": 5.85,
+        "points": [
+          [0.46, 0.9],
+          [0.84, 0.88]
+        ],
+        "ease": "in"
+      },
+      {
+        "type": "path",
+        "from": 6.3,
+        "to": 6.55,
+        "points": [
+          [0.84, 0.88],
+          [0.86, 1.08]
+        ],
+        "ease": "inOut"
+      }
+    ]
+  },
+  {
+    "slug": "fluid-glass",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.8,
+        "to": 3.2,
+        "points": [
+          [0.15, 0.8],
+          [0.3, 0.5],
+          [0.55, 0.42],
+          [0.72, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.7,
+        "x": 0.72,
+        "y": 0.55
+      },
+      {
+        "type": "path",
+        "from": 4.6,
+        "to": 5.4,
+        "points": [
+          [0.72, 0.55],
+          [0.5, 0.62],
+          [0.36, 0.86]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "flying-posters",
+    "duration": 6.5,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.6,
+        "points": [
+          [0.62, 0.95],
+          [0.5, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "wheel",
+        "from": 0.7,
+        "to": 1.6,
+        "deltaY": 1800,
+        "x": 0.5,
+        "y": 0.55
+      },
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.2,
+        "points": [
+          [0.5, 0.55],
+          [0.5, 0.28]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.3,
+        "to": 3,
+        "points": [
+          [0.5, 0.28],
+          [0.5, 0.5],
+          [0.5, 0.74]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 3.4
+      }
+    ]
+  },
+  {
+    "slug": "folder",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 3,
+        "points": [
+          [0.78, 0.9],
+          [0.64, 0.67],
+          [0.5, 0.64],
+          [0.36, 0.67],
+          [0.5, 0.66]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.2,
+        "x": 0.5,
+        "y": 0.66
+      },
+      {
+        "type": "drag",
+        "from": 4.1,
+        "to": 5.2,
+        "points": [
+          [0.672, 0.4],
+          [0.78, 0.42],
+          [0.87, 0.5],
+          [0.86, 0.53],
+          [0.7, 0.52],
+          [0.52, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 6.1,
+        "x": 0.5,
+        "y": 0.36
+      },
+      {
+        "type": "leave",
+        "at": 6.7
+      }
+    ]
+  },
+  {
+    "slug": "glass-icons",
+    "duration": 6.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.1,
+        "to": 1.6,
+        "points": [
+          [0.24, 0.86],
+          {
+            "selector": ".glass-icon[aria-label='Weather']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.8,
+        "selector": ".glass-icon[aria-label='Weather']",
+        "hold": 0.22
+      },
+      {
+        "type": "path",
+        "from": 2.15,
+        "to": 2.9,
+        "points": [
+          {
+            "selector": ".glass-icon[aria-label='Weather']"
+          },
+          {
+            "selector": ".glass-icon[aria-label='Notes']"
+          },
+          {
+            "selector": ".glass-icon[aria-label='Stats']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.1,
+        "selector": ".glass-icon[aria-label='Stats']",
+        "hold": 0.22
+      },
+      {
+        "type": "path",
+        "from": 3.45,
+        "to": 4.25,
+        "points": [
+          {
+            "selector": ".glass-icon[aria-label='Stats']"
+          },
+          {
+            "selector": ".glass-icon[aria-label='Health']"
+          },
+          {
+            "selector": ".glass-icon[aria-label='Books']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.45,
+        "selector": ".glass-icon[aria-label='Books']",
+        "hold": 0.22
+      },
+      {
+        "type": "path",
+        "from": 4.8,
+        "to": 5.2,
+        "points": [
+          {
+            "selector": ".glass-icon[aria-label='Books']"
+          },
+          {
+            "selector": ".glass-icon[aria-label='Files']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.45
+      }
+    ]
+  },
+  {
+    "slug": "glass-surface",
+    "duration": 7.6,
+    "warmup": 0,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 3,
+        "points": [
+          [0.86, 0.82],
+          [0.62, 0.82],
+          [0.26, 0.7],
+          [0.18, 0.42],
+          [0.34, 0.2],
+          [0.66, 0.2],
+          [0.82, 0.4],
+          [0.66, 0.5],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3.2,
+        "to": 5.4,
+        "points": [
+          [0.5, 0.5],
+          [0.36, 0.4],
+          [0.27, 0.56],
+          [0.45, 0.64],
+          [0.7, 0.52],
+          [0.62, 0.38],
+          [0.5, 0.5]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 5.6,
+        "to": 6.1,
+        "points": [
+          [0.5, 0.5],
+          [0.62, 0.82]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 6.2
+      }
+    ]
+  },
+  {
+    "slug": "gooey-nav",
+    "duration": 6,
+    "warmup": 0,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 0.9,
+        "points": [
+          [0.62, 0.92],
+          {
+            "selector": "[data-gooey-index='3'] .gooey-nav__link"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.1,
+        "selector": "[data-gooey-index='3'] .gooey-nav__link"
+      },
+      {
+        "type": "click",
+        "at": 2.6,
+        "selector": "[data-gooey-index='2'] .gooey-nav__link"
+      },
+      {
+        "type": "click",
+        "at": 2.95,
+        "selector": "[data-gooey-index='0'] .gooey-nav__link"
+      },
+      {
+        "type": "leave",
+        "at": 4.2
+      }
+    ]
+  },
+  {
+    "slug": "infinite-spiral",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0.5
+  },
+  {
+    "slug": "infinite-menu",
+    "duration": 7,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 2.3,
+        "points": [
+          [0.8, 0.9],
+          [0.62, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.4,
+        "to": 3.1,
+        "points": [
+          [0.62, 0.5],
+          [0.46, 0.46],
+          [0.3, 0.42]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 3.45,
+        "x": 0.615,
+        "y": 0.77
+      },
+      {
+        "type": "leave",
+        "at": 4.3
+      }
+    ]
+  },
+  {
+    "slug": "lanyard",
+    "duration": 7.5,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3.2,
+        "points": [
+          [0.66, 0.92],
+          [0.5, 0.45]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3.4,
+        "to": 4.2,
+        "points": [
+          [0.5, 0.45],
+          [0.38, 0.4],
+          [0.26, 0.34]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "magic-bento",
+    "duration": 7.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 3,
+        "points": [
+          [0.12, 0.92],
+          [0.3, 0.72],
+          [0.5, 0.63],
+          [0.6, 0.42],
+          [0.45, 0.22],
+          {
+            "selector": ".magic-bento__plot",
+            "dx": 0.055
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.15,
+        "to": 4.45,
+        "points": [
+          {
+            "selector": ".magic-bento__plot",
+            "dx": 0.055
+          },
+          {
+            "selector": ".magic-bento__plot",
+            "dx": 0
+          },
+          {
+            "selector": ".magic-bento__plot",
+            "dx": -0.06
+          },
+          {
+            "selector": ".magic-bento__plot",
+            "dx": -0.02
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.9,
+        "x": 0.416,
+        "y": 0.27
+      },
+      {
+        "type": "leave",
+        "at": 5.5
+      }
+    ]
+  },
+  {
+    "slug": "masonry",
+    "duration": 7.5,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": 1.8,
+        "to": 4.6,
+        "to_px": 700
+      },
+      {
+        "type": "path",
+        "from": 5,
+        "to": 5.8,
+        "points": [
+          [0.6, 0.97],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "model-viewer",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 2,
+        "points": [
+          [0.7, 0.9],
+          [0.62, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.1,
+        "to": 2.6,
+        "points": [
+          [0.62, 0.55],
+          [0.46, 0.54],
+          [0.3, 0.53]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 3.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "pill-nav",
+    "duration": 6.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "refresh",
+        "at": 0.01
+      },
+      {
+        "type": "path",
+        "from": 1.2,
+        "to": 2.6,
+        "points": [
+          [0.3, 0.85],
+          {
+            "selector": ".pill-nav__bar a[href='#journal']"
+          },
+          {
+            "selector": ".pill-nav__bar a[href='#about']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3,
+        "selector": ".pill-nav__bar a[href='#photos']"
+      },
+      {
+        "type": "path",
+        "from": 3.4,
+        "to": 4,
+        "points": [
+          {
+            "selector": ".pill-nav__bar a[href='#photos']"
+          },
+          {
+            "selector": ".pill-nav__logo-link"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.5,
+        "to": 4.9,
+        "points": [
+          {
+            "selector": ".pill-nav__logo-link"
+          },
+          [0.24, 0.95]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5
+      }
+    ]
+  },
+  {
+    "slug": "pixel-card",
+    "duration": 7.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4.4,
+        "points": [
+          [0.08, 0.92],
+          [0.2, 0.55],
+          [0.5, 0.45],
+          [0.8, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.8,
+        "y": 0.55
+      },
+      {
+        "type": "leave",
+        "at": 5.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "profile-card",
+    "duration": 7,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 4.3,
+        "points": [
+          [0.32, 0.92],
+          [0.42, 0.66],
+          [0.58, 0.32],
+          [0.6, 0.6],
+          {
+            "selector": ".profile-card__contact"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ]
+  },
+  {
+    "slug": "scroll-stack",
+    "duration": 6.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "wheel",
+        "from": 0.4,
+        "to": 5,
+        "deltaY": 1300,
+        "x": 0.5,
+        "y": 0.5,
+        "ease": "linear"
+      }
+    ]
+  },
+  {
+    "slug": "spotlight-card",
+    "duration": 7,
+    "warmup": 0,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.4,
+        "to": 2,
+        "points": [
+          [0.86, 0.75],
+          [0.62, 0.8],
+          [0.42, 0.62],
+          [0.5, 0.36],
+          [0.64, 0.3],
+          {
+            "selector": "[aria-label='Ethan Harrison']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.3,
+        "selector": "[aria-label='Ethan Harrison']",
+        "hold": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 3
+      },
+      {
+        "type": "key",
+        "at": 3.4,
+        "key": "Tab"
+      },
+      {
+        "type": "key",
+        "at": 4,
+        "key": "Tab"
+      },
+      {
+        "type": "key",
+        "at": 4.6,
+        "key": "Tab"
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "x": 0.88,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.6
+      }
+    ]
+  },
+  {
+    "slug": "border-glow",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.4,
+        "to": 4.9,
+        "points": [
+          [0.16, 0.6],
+          [0.31, 0.56],
+          [0.32, 0.34],
+          [0.5, 0.315],
+          [0.68, 0.33],
+          [0.69, 0.6],
+          [0.52, 0.685],
+          [0.34, 0.67],
+          [0.2, 0.84]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "line-sidebar",
+    "duration": 6.2,
+    "loop": "crossfade",
+    "frame": {
+      "zoom": 1.4,
+      "cx": 0.22,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 4.6,
+        "points": [
+          [0.5, 0.22],
+          [0.22, 0.24],
+          [0.2, 0.5],
+          [0.21, 0.78],
+          [0.2, 0.56],
+          [0.24, 0.4]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "option-wheel",
+    "duration": 6.6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {
+      "inset": 240
+    },
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.8,
+        "points": [
+          [0.56, 0.92],
+          [0.42, 0.66]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.9,
+        "to": 2.1,
+        "points": [
+          [0.42, 0.66],
+          [0.42, 0.46],
+          [0.42, 0.26]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 2.8,
+        "points": [
+          [0.42, 0.26],
+          [0.42, 0.32]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3,
+        "to": 4.2,
+        "points": [
+          [0.42, 0.32],
+          [0.42, 0.52],
+          [0.42, 0.72]
+        ]
+      },
+      {
+        "type": "path",
+        "from": 4.4,
+        "to": 5,
+        "points": [
+          [0.42, 0.72],
+          [0.56, 0.92]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "specular-button",
+    "duration": 6.8,
+    "warmup": 0,
+    "loop": "crossfade",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 2.9,
+        "points": [
+          [0.84, 0.6],
+          [0.7, 0.77],
+          [0.5, 0.8],
+          [0.3, 0.75],
+          [0.2, 0.5],
+          [0.3, 0.25],
+          [0.5, 0.2],
+          [0.7, 0.25],
+          [0.8, 0.42]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3,
+        "to": 3.4,
+        "points": [
+          [0.8, 0.42],
+          [0.625, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.8,
+        "to": 4.5,
+        "points": [
+          [0.625, 0.5],
+          [0.375, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.9,
+        "x": 0.5,
+        "y": 0.5,
+        "hold": 0.12
+      },
+      {
+        "type": "leave",
+        "at": 5.4
+      }
+    ]
+  },
+  {
+    "slug": "elastic-mesh",
+    "duration": 7.4,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.85,
+        "to": 4,
+        "points": [
+          [1.03, 0.5],
+          [0.83, 0.5],
+          [0.69, 0.53],
+          [0.59, 0.49],
+          [0.48, 0.53],
+          [0.33, 0.55],
+          [0.18, 0.48]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "drag",
+        "from": 4.2,
+        "to": 4.9,
+        "points": [
+          [0.18, 0.48],
+          [0.21, 0.34],
+          [0.26, 0.18]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5.7,
+        "x": 0.48,
+        "y": 0.53
+      },
+      {
+        "type": "path",
+        "from": 6,
+        "to": 6.4,
+        "points": [
+          [0.48, 0.53],
+          [0.5, 0.8],
+          [0.52, 1.08]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "ripple-distortion",
+    "duration": 6.4,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 3,
+        "points": [
+          [0, 0.6],
+          [0.24, 0.36],
+          [0.46, 0.6],
+          [0.66, 0.34],
+          [0.84, 0.56],
+          [0.7, 0.76]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.2
+      }
+    ],
+    "warmup": 0.5
+  },
+  {
+    "slug": "swarm-cursor",
+    "duration": 8.3,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.45,
+        "to": 2,
+        "points": [
+          [1.04, 0.62],
+          [0.9, 0.61],
+          [0.78, 0.6]
+        ],
+        "ease": "out"
+      },
+      {
+        "type": "path",
+        "from": 2.7,
+        "to": 3.6,
+        "points": [
+          [0.78, 0.6],
+          [0.9, 0.42],
+          [0.82, 0.22],
+          [0.66, 0.17],
+          [0.5, 0.24]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.25,
+        "to": 4.8,
+        "points": [
+          [0.5, 0.24],
+          [0.74, 0.19],
+          [0.89, 0.17],
+          {
+            "selector": ".swarm-cursor-content > div > div:first-child > div:last-child > button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 5.35,
+        "to": 6.15,
+        "points": [
+          {
+            "selector": ".swarm-cursor-content > div > div:first-child > div:last-child > button"
+          },
+          [0.66, 0.42],
+          {
+            "selector": ".swarm-cursor-content > div > div:last-child button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 6.75,
+        "selector": ".swarm-cursor-content > div > div:last-child button"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "halftone-reveal",
+    "duration": 7.2,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 3.8,
+        "points": [
+          [1, 0.36],
+          [0.74, 0.3],
+          [0.56, 0.5],
+          [0.42, 0.32],
+          [0.36, 0.6],
+          [0.5, 0.7],
+          [0.5, 0.48]
+        ]
+      },
+      {
+        "type": "click",
+        "at": 4,
+        "x": 0.5,
+        "y": 0.48
+      },
+      {
+        "type": "path",
+        "from": 4.3,
+        "to": 4.8,
+        "points": [
+          [0.5, 0.48],
+          [0.7, 0.8],
+          [0.9, 0.96]
+        ]
+      },
+      {
+        "type": "leave",
+        "at": 4.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "scroll-expand",
+    "duration": 5,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "scroll",
+        "from": 0.6,
+        "to": 3.4,
+        "selector": ".scroll-expand",
+        "to_px": 640
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "cursor-grid",
+    "duration": 6.6,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 4,
+        "points": [
+          [1.03, 0.42],
+          [0.78, 0.3],
+          [0.6, 0.6],
+          [0.4, 0.34],
+          [0.24, 0.6],
+          [0.36, 0.72],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.3,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "path",
+        "from": 4.7,
+        "to": 5.2,
+        "points": [
+          [0.5, 0.5],
+          [0.76, 0.3],
+          [1.03, 0.2]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "curved-input",
+    "duration": 6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.8,
+        "points": [
+          [0.36, 0.86],
+          {
+            "selector": ".curved-input__svg"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.9,
+        "selector": ".curved-input__svg"
+      },
+      {
+        "type": "key",
+        "at": 1.2,
+        "key": "h"
+      },
+      {
+        "type": "key",
+        "at": 1.28,
+        "key": "e"
+      },
+      {
+        "type": "key",
+        "at": 1.36,
+        "key": "l"
+      },
+      {
+        "type": "key",
+        "at": 1.44,
+        "key": "l"
+      },
+      {
+        "type": "key",
+        "at": 1.52,
+        "key": "o"
+      },
+      {
+        "type": "key",
+        "at": 1.62,
+        "key": "@"
+      },
+      {
+        "type": "key",
+        "at": 1.72,
+        "key": "r"
+      },
+      {
+        "type": "key",
+        "at": 1.8,
+        "key": "e"
+      },
+      {
+        "type": "key",
+        "at": 1.88,
+        "key": "a"
+      },
+      {
+        "type": "key",
+        "at": 1.96,
+        "key": "c"
+      },
+      {
+        "type": "key",
+        "at": 2.04,
+        "key": "t"
+      },
+      {
+        "type": "key",
+        "at": 2.12,
+        "key": "b"
+      },
+      {
+        "type": "key",
+        "at": 2.2,
+        "key": "i"
+      },
+      {
+        "type": "key",
+        "at": 2.28,
+        "key": "t"
+      },
+      {
+        "type": "key",
+        "at": 2.36,
+        "key": "s"
+      },
+      {
+        "type": "key",
+        "at": 2.46,
+        "key": "."
+      },
+      {
+        "type": "key",
+        "at": 2.56,
+        "key": "d"
+      },
+      {
+        "type": "key",
+        "at": 2.64,
+        "key": "e"
+      },
+      {
+        "type": "key",
+        "at": 2.72,
+        "key": "v"
+      },
+      {
+        "type": "path",
+        "from": 3,
+        "to": 3.5,
+        "points": [
+          {
+            "selector": ".curved-input__svg"
+          },
+          {
+            "selector": ".curved-input__button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.8,
+        "selector": ".curved-input__button"
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "stack",
+    "duration": 6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.8,
+        "points": [
+          [0.66, 0.86],
+          [0.52, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.9,
+        "to": 1.4,
+        "points": [
+          [0.52, 0.52],
+          [0.62, 0.46],
+          [0.78, 0.4]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 2.3,
+        "points": [
+          [0.78, 0.4],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.5,
+        "to": 3,
+        "points": [
+          [0.5, 0.5],
+          [0.4, 0.56],
+          [0.24, 0.62]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "stepper",
+    "duration": 7.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": {
+      "zoom": 1.4,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 0.9,
+        "points": [
+          [0.66, 0.95],
+          {
+            "selector": ".stepper__button--next"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1,
+        "selector": ".stepper__button--next"
+      },
+      {
+        "type": "click",
+        "at": 2.2,
+        "selector": "button.stepper__button--next"
+      },
+      {
+        "type": "click",
+        "at": 3.3,
+        "selector": ".stepper__pane input"
+      },
+      {
+        "type": "key",
+        "at": 3.6,
+        "key": "M"
+      },
+      {
+        "type": "key",
+        "at": 3.72,
+        "key": "a"
+      },
+      {
+        "type": "key",
+        "at": 3.84,
+        "key": "y"
+      },
+      {
+        "type": "key",
+        "at": 3.96,
+        "key": "a"
+      },
+      {
+        "type": "click",
+        "at": 4.6,
+        "selector": ".stepper__footer .stepper__button--next"
+      },
+      {
+        "type": "click",
+        "at": 5.8,
+        "selector": ".stepper__footer > button.stepper__button--next"
+      },
+      {
+        "type": "leave",
+        "at": 6.3
+      }
+    ]
+  },
+  {
+    "slug": "tilted-card",
+    "duration": 7.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.2,
+        "to": 3.2,
+        "points": [
+          [0.3, 0.88],
+          [0.42, 0.62],
+          [0.58, 0.36],
+          [0.6, 0.62],
+          [0.47, 0.45]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.5,
+        "x": 0.47,
+        "y": 0.45
+      },
+      {
+        "type": "click",
+        "at": 4.7,
+        "x": 0.47,
+        "y": 0.45
+      },
+      {
+        "type": "leave",
+        "at": 5.2
+      }
+    ]
+  },
+  {
+    "slug": "staggered-menu",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 0.9,
+        "points": [
+          [0.6, 0.97],
+          [0.8, 0.3],
+          {
+            "selector": ".sm-toggle"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1,
+        "selector": ".sm-toggle"
+      },
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 3.4,
+        "points": [
+          {
+            "selector": ".sm-toggle"
+          },
+          {
+            "selector": ".sm-panel-itemWrap:nth-child(2) .sm-panel-item"
+          },
+          {
+            "selector": ".sm-panel-itemWrap:nth-child(3) .sm-panel-item"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.6,
+        "to": 4,
+        "points": [
+          {
+            "selector": ".sm-panel-itemWrap:nth-child(3) .sm-panel-item"
+          },
+          {
+            "selector": ".sm-toggle"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "selector": ".sm-toggle"
+      },
+      {
+        "type": "leave",
+        "at": 5.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "reflective-card",
+    "duration": 7,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.7,
+        "to": 4.7,
+        "points": [
+          [0.32, 0.92],
+          [0.44, 0.66],
+          [0.58, 0.34],
+          [0.6, 0.66],
+          [0.45, 0.4]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "pattern-waves",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 2.4,
+        "points": [
+          [0.25, 0.64],
+          [0.37, 0.38],
+          [0.5, 0.6],
+          [0.63, 0.38],
+          [0.75, 0.62]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.8,
+        "x": 0.55,
+        "y": 0.48
+      },
+      {
+        "type": "leave",
+        "at": 3.3
+      }
+    ],
+    "warmup": 2.2
+  },
+  {
+    "slug": "micro-slats",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 2.4,
+        "points": [
+          [0.25, 0.62],
+          [0.38, 0.4],
+          [0.5, 0.58],
+          [0.62, 0.4],
+          [0.75, 0.6]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.8,
+        "x": 0.52,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 3.2
+      }
+    ],
+    "warmup": 1.7
+  },
+  {
+    "slug": "shape-waves",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 3,
+        "points": [
+          [0.24, 0.64],
+          [0.36, 0.36],
+          [0.5, 0.62],
+          [0.64, 0.36],
+          [0.76, 0.64]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.4
+      }
+    ],
+    "warmup": 2.4
+  },
+  {
+    "slug": "aero-shards",
+    "duration": 9,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 3.05,
+        "to": 4.25,
+        "points": [
+          [0.62, 0.36],
+          [0.56, 0.62],
+          [0.49, 0.74],
+          [0.467, 0.6]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.55,
+        "x": 0.467,
+        "y": 0.6
+      },
+      {
+        "type": "click",
+        "at": 5.2,
+        "x": 0.5,
+        "y": 0.48,
+        "hold": 1.2
+      },
+      {
+        "type": "leave",
+        "at": 6.6
+      }
+    ]
+  },
+  {
+    "slug": "ghost-fibers",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 2.6,
+        "points": [
+          [0.3, 0.62],
+          [0.42, 0.42],
+          [0.58, 0.58],
+          [0.66, 0.44]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3,
+        "x": 0.55,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 3.9
+      }
+    ],
+    "warmup": 2.8
+  },
+  {
+    "slug": "aurora",
+    "duration": 8.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4.7,
+        "points": [
+          [0.66, 0.64],
+          [0.36, 0.6],
+          [0.62, 0.64]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.8
+      }
+    ]
+  },
+  {
+    "slug": "balatro",
+    "duration": 9,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 2.2,
+        "points": [
+          [1.04, 0.4],
+          [0.82, 0.39],
+          [0.6, 0.38]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4,
+        "points": [
+          [0.6, 0.38],
+          [0.571, 0.493],
+          [0.5, 0.54],
+          [0.429, 0.493],
+          [0.4, 0.38],
+          [0.429, 0.267],
+          [0.5, 0.22],
+          [0.571, 0.267],
+          [0.6, 0.38],
+          [0.571, 0.493],
+          [0.5, 0.54]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 4.4,
+        "to": 5.1,
+        "points": [
+          [0.26, 0.72],
+          [0.48, 0.7],
+          [0.7, 0.6]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "x": 0.62,
+        "y": 0.54
+      }
+    ]
+  },
+  {
+    "slug": "ballpit",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.5,
+        "to": 3.7,
+        "points": [
+          [1.04, 0.3],
+          [0.76, 0.26],
+          [0.5, 0.34],
+          [0.62, 0.48],
+          [0.84, 0.42],
+          [1.06, 0.4]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 3.75,
+        "to": 4.19,
+        "points": [
+          [1.06, 0.4],
+          [1.08, 0.44]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "drag",
+        "from": 4.2,
+        "to": 4.5,
+        "points": [
+          [0.4, 0.64],
+          [0.62, 0.52]
+        ],
+        "ease": "in"
+      },
+      {
+        "type": "click",
+        "at": 4.85,
+        "x": 0.62,
+        "y": 0.52
+      },
+      {
+        "type": "leave",
+        "at": 5.05
+      }
+    ]
+  },
+  {
+    "slug": "beams",
+    "duration": 7.5,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 4.6,
+        "points": [
+          [0.62, 0.78],
+          [0.4, 0.22],
+          [0.6, 0.74]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.7
+      }
+    ]
+  },
+  {
+    "slug": "color-bends",
+    "duration": 6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 5,
+        "points": [
+          [0.5, 0.5],
+          [0.64, 0.36],
+          [0.74, 0.56],
+          [0.56, 0.68],
+          [0.36, 0.52],
+          [0.42, 0.36],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "crt-warp",
+    "duration": 8.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 3.9,
+        "points": [
+          [0.32, 0.58],
+          [0.45, 0.4],
+          [0.6, 0.56],
+          [0.55, 0.46]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.55,
+        "y": 0.46
+      },
+      {
+        "type": "click",
+        "at": 5.15,
+        "x": 0.55,
+        "y": 0.46
+      },
+      {
+        "type": "click",
+        "at": 6.1,
+        "x": 0.55,
+        "y": 0.46
+      },
+      {
+        "type": "leave",
+        "at": 6.55
+      }
+    ]
+  },
+  {
+    "slug": "dark-veil",
+    "duration": 7.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 5.2,
+        "points": [
+          [1.04, 0.56],
+          [0.6, 0.38],
+          [0.34, 0.56],
+          [0.64, 0.66],
+          [1.04, 0.52]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "dither",
+    "duration": 7.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4,
+        "points": [
+          [0.76, 0.62],
+          [0.6, 0.38],
+          [0.4, 0.46],
+          [0.38, 0.66],
+          [0.52, 0.56]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 4.35,
+        "x": 0.52,
+        "y": 0.56
+      },
+      {
+        "type": "leave",
+        "at": 4.75
+      }
+    ]
+  },
+  {
+    "slug": "dot-field",
+    "duration": 7.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.8,
+        "points": [
+          [0.68, 0.56],
+          [0.52, 0.36],
+          [0.34, 0.5],
+          [0.46, 0.64],
+          [0.56, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.1,
+        "x": 0.56,
+        "y": 0.5,
+        "hold": 1
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "dot-grid",
+    "duration": 7.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.2,
+        "to": 2,
+        "points": [
+          [1.12, 0.62],
+          [0.8, 0.58],
+          [0.5, 0.47],
+          [0.26, 0.4]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.8,
+        "x": 0.36,
+        "y": 0.44
+      },
+      {
+        "type": "click",
+        "at": 3.5,
+        "x": 0.62,
+        "y": 0.52
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.46,
+        "y": 0.62
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ]
+  },
+  {
+    "slug": "faulty-terminal",
+    "duration": 8.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.4,
+        "to": 4.3,
+        "points": [
+          [0.74, 0.42],
+          [0.6, 0.62],
+          [0.44, 0.38],
+          [0.3, 0.56],
+          [0.48, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.6,
+        "x": 0.48,
+        "y": 0.5
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "x": 0.56,
+        "y": 0.44
+      },
+      {
+        "type": "leave",
+        "at": 5.7
+      }
+    ]
+  },
+  {
+    "slug": "galaxy",
+    "duration": 8.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 4.2,
+        "points": [
+          [0.7, 0.58],
+          [0.56, 0.4],
+          [0.42, 0.56],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.5,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ]
+  },
+  {
+    "slug": "gradient-blinds",
+    "duration": 7.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.3,
+        "points": [
+          [0.63, 0.7],
+          [0.46, 0.52],
+          [0.34, 0.36],
+          [0.52, 0.3],
+          [0.54, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.6,
+        "x": 0.52,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "lightfall",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.4,
+        "to": 3.9,
+        "points": [
+          [0.7, 0.56],
+          [0.56, 0.4],
+          [0.42, 0.56],
+          [0.52, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.1,
+        "x": 0.52,
+        "y": 0.48,
+        "hold": 1
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "flux-lines",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.2,
+        "to": 2.2,
+        "points": [
+          [0.28, 0.6],
+          [0.42, 0.4],
+          [0.58, 0.58],
+          [0.52, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.6,
+        "x": 0.52,
+        "y": 0.48
+      },
+      {
+        "type": "leave",
+        "at": 3.4
+      }
+    ],
+    "warmup": 2
+  },
+  {
+    "slug": "ferrofluid",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.9,
+        "to": 4.6,
+        "points": [
+          [0.68, 0.6],
+          [0.56, 0.44],
+          [0.42, 0.56],
+          [0.5, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.9,
+        "x": 0.5,
+        "y": 0.52
+      },
+      {
+        "type": "leave",
+        "at": 5.5
+      }
+    ]
+  },
+  {
+    "slug": "molten-metal",
+    "duration": 7.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.4,
+        "points": [
+          [1.12, 0.62],
+          [0.8, 0.42],
+          [0.62, 0.6],
+          [0.46, 0.4],
+          [0.36, 0.54]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.7,
+        "x": 0.4,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.4
+      }
+    ]
+  },
+  {
+    "slug": "gradient-waves",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.4,
+        "to": 4,
+        "points": [
+          [0.74, 0.58],
+          [0.5, 0.64],
+          [0.28, 0.58]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.3,
+        "x": 0.48,
+        "y": 0.52
+      },
+      {
+        "type": "leave",
+        "at": 4.8
+      }
+    ]
+  },
+  {
+    "slug": "web-threads",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.8,
+        "points": [
+          [0.74, 0.28],
+          [0.72, 0.68],
+          [0.28, 0.68],
+          [0.27, 0.32]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "x": 0.27,
+        "y": 0.12
+      }
+    ]
+  },
+  {
+    "slug": "topography",
+    "duration": 8.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.9,
+        "to": 4.2,
+        "points": [
+          [0.74, 0.66],
+          [0.6, 0.54],
+          [0.46, 0.6]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.6,
+        "x": 0.46,
+        "y": 0.6
+      },
+      {
+        "type": "leave",
+        "at": 5.1
+      }
+    ]
+  },
+  {
+    "slug": "light-tunnel",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.7,
+        "points": [
+          [0.78, 0.32],
+          [0.72, 0.26]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3,
+        "to": 4.3,
+        "points": [
+          [0.72, 0.26],
+          [0.5, 0.46],
+          [0.26, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.7,
+        "to": 5.4,
+        "points": [
+          [0.26, 0.72],
+          [0.4, 0.6],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5.6,
+        "x": 0.5,
+        "y": 0.5
+      }
+    ]
+  },
+  {
+    "slug": "sliced-waves",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.3,
+        "points": [
+          [0.66, 0.72],
+          [0.45, 0.68],
+          [0.24, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.7,
+        "to": 5.1,
+        "points": [
+          [0.24, 0.72],
+          [0.5, 0.68],
+          [0.76, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "acid-squares",
+    "duration": 7.87,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 2.6,
+        "points": [
+          [0.32, 0.62],
+          [0.45, 0.48],
+          [0.6, 0.56],
+          [0.55, 0.62]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3,
+        "x": 0.55,
+        "y": 0.6
+      },
+      {
+        "type": "leave",
+        "at": 3.6
+      }
+    ],
+    "warmup": 7
+  },
+  {
+    "slug": "scanner",
+    "duration": 8.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4,
+        "points": [
+          [0.7, 0.6],
+          [0.55, 0.42],
+          [0.42, 0.58],
+          [0.32, 0.46]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.4,
+        "y": 0.5
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.6,
+        "y": 0.44
+      },
+      {
+        "type": "click",
+        "at": 5.4,
+        "x": 0.5,
+        "y": 0.62
+      },
+      {
+        "type": "leave",
+        "at": 5.8
+      }
+    ]
+  },
+  {
+    "slug": "grainient",
+    "duration": 7.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4,
+        "points": [
+          [0.74, 0.62],
+          [0.6, 0.36],
+          [0.42, 0.62],
+          [0.5, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.4,
+        "x": 0.5,
+        "y": 0.48
+      }
+    ]
+  },
+  {
+    "slug": "grid-scan",
+    "duration": 7.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.5,
+        "to": 3.8,
+        "points": [
+          [0.76, 0.38],
+          [0.5, 0.62],
+          [0.24, 0.44]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.2,
+        "y": 0.62
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.4,
+        "y": 0.84
+      },
+      {
+        "type": "leave",
+        "at": 5.2
+      }
+    ]
+  },
+  {
+    "slug": "grid-distortion",
+    "duration": 6.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 3.6,
+        "points": [
+          [0.74, 0.62],
+          [0.6, 0.34],
+          [0.44, 0.66],
+          [0.3, 0.38],
+          [0.4, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.4,
+        "y": 0.5
+      }
+    ]
+  },
+  {
+    "slug": "grid-motion",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 5,
+        "points": [
+          [0.5, 0.72],
+          [0.26, 0.5],
+          [0.5, 0.3],
+          [0.74, 0.5],
+          [0.5, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.4
+      }
+    ],
+    "warmup": 1
+  },
+  {
+    "slug": "hyperspeed",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.6,
+        "to": 1.1,
+        "points": [
+          [0.5, 0.6],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.3,
+        "x": 0.5,
+        "y": 0.5,
+        "hold": 2.5
+      }
+    ],
+    "warmup": 2.5
+  },
+  {
+    "slug": "iridescence",
+    "duration": 7,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 3.2,
+        "points": [
+          [0.72, 0.62],
+          [0.58, 0.36],
+          [0.42, 0.64],
+          [0.3, 0.42],
+          [0.42, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.4,
+        "x": 0.42,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "letter-glitch",
+    "duration": 7.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 3.4,
+        "points": [
+          [0.7, 0.58],
+          [0.6, 0.48],
+          [0.5, 0.46]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.6,
+        "to": 4.4,
+        "points": [
+          [0.5, 0.46],
+          [0.32, 0.42],
+          [0.3, 0.6],
+          [0.54, 0.62]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.54,
+        "y": 0.62
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "light-rays",
+    "duration": 7,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.4,
+        "to": 3.2,
+        "points": [
+          [0.7, 0.58],
+          [0.6, 0.38],
+          [0.4, 0.36],
+          [0.34, 0.46],
+          [0.44, 0.42]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.5,
+        "x": 0.44,
+        "y": 0.42
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ]
+  },
+  {
+    "slug": "lightning",
+    "duration": 7.6,
+    "warmup": 0.6,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 4.1,
+        "points": [
+          [0.68, 0.58],
+          [0.6, 0.5],
+          [0.58, 0.38],
+          [0.59, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.4,
+        "x": 0.32,
+        "y": 0.68
+      },
+      {
+        "type": "click",
+        "at": 5,
+        "x": 0.44,
+        "y": 0.82
+      },
+      {
+        "type": "click",
+        "at": 5.6,
+        "x": 0.68,
+        "y": 0.72
+      },
+      {
+        "type": "leave",
+        "at": 5.9
+      }
+    ]
+  },
+  {
+    "slug": "line-waves",
+    "duration": 7.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.4,
+        "points": [
+          [0.7, 0.62],
+          [0.58, 0.4],
+          [0.44, 0.6],
+          [0.34, 0.44],
+          [0.46, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.6,
+        "x": 0.46,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.2
+      }
+    ]
+  },
+  {
+    "slug": "evil-eye",
+    "duration": 6.5,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.3,
+        "to": 4.8,
+        "points": [
+          [0.5, 0.8],
+          [0.2, 0.55],
+          [0.34, 0.2],
+          [0.66, 0.2],
+          [0.8, 0.55],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "radar",
+    "duration": 7.5,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 2.8,
+        "points": [
+          [0.74, 0.66],
+          [0.58, 0.77]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.2
+      }
+    ]
+  },
+  {
+    "slug": "soft-aurora",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.7,
+        "to": 3.7,
+        "points": [
+          [0.72, 0.34],
+          [0.54, 0.31],
+          [0.36, 0.36],
+          [0.42, 0.66]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4,
+        "x": 0.58,
+        "y": 0.56
+      },
+      {
+        "type": "click",
+        "at": 4.45,
+        "x": 0.42,
+        "y": 0.5
+      },
+      {
+        "type": "click",
+        "at": 4.9,
+        "x": 0.52,
+        "y": 0.47
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "magic-rings",
+    "duration": 7.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 3,
+        "to": 4.4,
+        "points": [
+          [0.8, 0.64],
+          [0.76, 0.5],
+          [0.72, 0.38],
+          [0.75, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.7,
+        "x": 0.75,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "liquid-chrome",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 4,
+        "points": [
+          [0.72, 0.62],
+          [0.58, 0.38],
+          [0.44, 0.6],
+          [0.32, 0.42],
+          [0.44, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.44,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ]
+  },
+  {
+    "slug": "orb",
+    "duration": 7.9,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 4.8,
+        "points": [
+          [0.781, 0.5],
+          [0.744, 0.725],
+          [0.641, 0.89],
+          [0.5, 0.95],
+          [0.359, 0.89],
+          [0.256, 0.725],
+          [0.219, 0.5],
+          [0.256, 0.275],
+          [0.359, 0.11],
+          [0.5, 0.05],
+          [0.641, 0.11],
+          [0.744, 0.275],
+          [0.781, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 5.05,
+        "x": 0.72,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 5.6
+      }
+    ]
+  },
+  {
+    "slug": "particles",
+    "duration": 7.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 4.8,
+        "points": [
+          [0.74, 0.64],
+          [0.46, 0.78],
+          [0.22, 0.52],
+          [0.36, 0.22],
+          [0.66, 0.26],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "click",
+        "at": 5.6,
+        "x": 0.5,
+        "y": 0.5
+      }
+    ]
+  },
+  {
+    "slug": "pixel-blast",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 4,
+        "points": [
+          [0.7, 0.62],
+          [0.6, 0.38],
+          [0.4, 0.34],
+          [0.3, 0.56],
+          [0.44, 0.68],
+          [0.56, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.56,
+        "y": 0.52
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.38,
+        "y": 0.42
+      },
+      {
+        "type": "click",
+        "at": 5.4,
+        "x": 0.62,
+        "y": 0.62
+      },
+      {
+        "type": "leave",
+        "at": 5.7
+      }
+    ]
+  },
+  {
+    "slug": "plasma",
+    "duration": 7.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.6,
+        "points": [
+          [0.76, 0.52],
+          [0.5, 0.5],
+          [0.24, 0.48]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.6,
+        "to": 5.2,
+        "points": [
+          [0.24, 0.48],
+          [0.5, 0.5],
+          [0.76, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.4
+      }
+    ]
+  },
+  {
+    "slug": "plasma-wave",
+    "duration": 7.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.7,
+        "points": [
+          [0.74, 0.5],
+          [0.5, 0.56],
+          [0.26, 0.48]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 3.7,
+        "to": 5.4,
+        "points": [
+          [0.26, 0.48],
+          [0.5, 0.42],
+          [0.74, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 5.5
+      }
+    ]
+  },
+  {
+    "slug": "prism",
+    "duration": 7.5,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 5,
+        "points": [
+          [0.8, 0.5],
+          [0.712, 0.274],
+          [0.5, 0.18],
+          [0.288, 0.274],
+          [0.2, 0.5],
+          [0.288, 0.726],
+          [0.5, 0.82],
+          [0.712, 0.726],
+          [0.8, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "leave",
+        "at": 5.15
+      }
+    ]
+  },
+  {
+    "slug": "prismatic-burst",
+    "duration": 8.1,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 4.4,
+        "points": [
+          [0.76, 0.6],
+          [0.6, 0.22],
+          [0.26, 0.36],
+          [0.42, 0.64]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.5,
+        "x": 0.42,
+        "y": 0.64
+      },
+      {
+        "type": "click",
+        "at": 5,
+        "x": 0.42,
+        "y": 0.64
+      },
+      {
+        "type": "click",
+        "at": 5.5,
+        "x": 0.42,
+        "y": 0.64
+      },
+      {
+        "type": "leave",
+        "at": 5.75
+      }
+    ]
+  },
+  {
+    "slug": "ripple-grid",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.4,
+        "points": [
+          [0.76, 0.56],
+          [0.6, 0.34],
+          [0.4, 0.32],
+          [0.34, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.6,
+        "x": 0.34,
+        "y": 0.5
+      },
+      {
+        "type": "click",
+        "at": 4.2,
+        "x": 0.5,
+        "y": 0.64
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.64,
+        "y": 0.46
+      },
+      {
+        "type": "leave",
+        "at": 5.05
+      }
+    ]
+  },
+  {
+    "slug": "silk",
+    "duration": 8.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.2,
+        "to": 5,
+        "points": [
+          [0.65, 0.5],
+          [0.606, 0.33],
+          [0.5, 0.26],
+          [0.394, 0.33],
+          [0.35, 0.5],
+          [0.394, 0.67],
+          [0.5, 0.74],
+          [0.606, 0.67],
+          [0.65, 0.5],
+          [0.606, 0.33],
+          [0.5, 0.26],
+          [0.394, 0.33],
+          [0.35, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 5.15,
+        "to": 5.6,
+        "points": [
+          [0.35, 0.5],
+          [0.55, 0.47],
+          [0.75, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "click",
+        "at": 5.85,
+        "x": 0.66,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 6.1
+      }
+    ]
+  },
+  {
+    "slug": "side-rays",
+    "duration": 7.5,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 3.9,
+        "points": [
+          [0.8, 0.7],
+          [0.58, 0.48],
+          [0.36, 0.26]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 4.2,
+        "to": 5.2,
+        "points": [
+          [0.36, 0.26],
+          [0.46, 0.4],
+          [0.54, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ]
+  },
+  {
+    "slug": "shape-grid",
+    "duration": 7.3,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1,
+        "to": 3.6,
+        "points": [
+          [0.76, 0.62],
+          [0.6, 0.38],
+          [0.42, 0.6],
+          [0.3, 0.42],
+          [0.46, 0.5],
+          [0.6, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.8,
+        "x": 0.6,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 3.9
+      }
+    ]
+  },
+  {
+    "slug": "threads",
+    "duration": 7,
+    "warmup": 0,
+    "loop": "crossfade",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": []
+  },
+  {
+    "slug": "waves",
+    "duration": 8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.8,
+        "to": 3.7,
+        "points": [
+          [1.04, 0.42],
+          [0.66, 0.4],
+          [0.3, 0.46]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 4.1,
+        "to": 4.45,
+        "points": [
+          [0.3, 0.46],
+          [0.62, 0.54]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "x": 0.62,
+        "y": 0.54
+      }
+    ]
+  },
+  {
+    "slug": "magnet-lines",
+    "duration": 7.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 1.5,
+        "points": [
+          [0.5, 0.5],
+          [0.5, 0.5]
+        ],
+        "ease": "linear"
+      },
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 4.6,
+        "points": [
+          [0.5, 0.5],
+          [0.32, 0.36],
+          [0.3, 0.64],
+          [0.56, 0.72],
+          [0.68, 0.48],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.9,
+        "x": 0.5,
+        "y": 0.5
+      }
+    ]
+  },
+  {
+    "slug": "liquid-ether",
+    "duration": 8.8,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 4.2,
+        "to": 5.6,
+        "points": [
+          [0.84, 0.6],
+          [0.62, 0.4],
+          [0.42, 0.6],
+          [0.26, 0.44]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 5.8,
+        "to": 6,
+        "points": [
+          [0.26, 0.44],
+          [0.56, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 6.1,
+        "x": 0.56,
+        "y": 0.52
+      },
+      {
+        "type": "leave",
+        "at": 6.35
+      }
+    ]
+  },
+  {
+    "slug": "floating-lines",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3.7,
+        "points": [
+          [0.74, 0.6],
+          [0.6, 0.4],
+          [0.46, 0.6],
+          [0.36, 0.46],
+          [0.46, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.46,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.2
+      }
+    ]
+  },
+  {
+    "slug": "light-pillar",
+    "duration": 8.2,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.3,
+        "to": 3.5,
+        "points": [
+          [0.76, 0.56],
+          [0.24, 0.58]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.9,
+        "to": 4.7,
+        "points": [
+          [0.24, 0.58],
+          [0.44, 0.84]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.9,
+        "x": 0.44,
+        "y": 0.84
+      },
+      {
+        "type": "click",
+        "at": 5.3,
+        "x": 0.44,
+        "y": 0.84
+      },
+      {
+        "type": "click",
+        "at": 5.7,
+        "x": 0.44,
+        "y": 0.84
+      },
+      {
+        "type": "leave",
+        "at": 5.9
+      }
+    ]
+  },
+  {
+    "slug": "pixel-snow",
+    "duration": 6.9,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 1.6,
+        "to": 4.8,
+        "points": [
+          [1.04, 0.44],
+          [0.7, 0.58],
+          [0.46, 0.42],
+          [0.22, 0.56],
+          [-0.04, 0.48]
+        ],
+        "ease": "linear"
+      }
+    ]
+  },
+  {
+    "slug": "squish-switch",
+    "duration": 4.2,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.47, 0.99],
+          [0.44, 0.74],
+          {
+            "selector": ".squish-switch"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".squish-switch"
+      },
+      {
+        "type": "click",
+        "at": 2.2,
+        "selector": ".squish-switch"
+      },
+      {
+        "type": "leave",
+        "at": 3.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "hold-button",
+    "duration": 5.4,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.55, 0.99],
+          [0.53, 0.75],
+          {
+            "selector": ".hold-button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".hold-button",
+        "hold": 2.3
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "peek-rating",
+    "duration": 4.5,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.9,
+        "points": [
+          [0.3, 0.99],
+          [0.33, 0.75],
+          {
+            "selector": ".peek-rating__star:nth-of-type(1)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1,
+        "to": 2,
+        "points": [
+          {
+            "selector": ".peek-rating__star:nth-of-type(1)"
+          },
+          {
+            "selector": ".peek-rating__star:nth-of-type(3)"
+          },
+          {
+            "selector": ".peek-rating__star:nth-of-type(5)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.15,
+        "selector": ".peek-rating__star:nth-of-type(5)"
+      },
+      {
+        "type": "path",
+        "from": 2.4,
+        "to": 2.9,
+        "points": [
+          {
+            "selector": ".peek-rating__star:nth-of-type(5)"
+          },
+          {
+            "selector": ".peek-rating__star:nth-of-type(3)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.05,
+        "selector": ".peek-rating__star:nth-of-type(3)"
+      },
+      {
+        "type": "leave",
+        "at": 3.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "spring-check",
+    "duration": 4.8,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.38, 0.99],
+          [0.34, 0.72],
+          {
+            "selector": ".spring-check:nth-of-type(1) .spring-check__box"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".spring-check:nth-of-type(1) .spring-check__box"
+      },
+      {
+        "type": "path",
+        "from": 1.05,
+        "to": 1.4,
+        "points": [
+          {
+            "selector": ".spring-check:nth-of-type(1) .spring-check__box"
+          },
+          {
+            "selector": ".spring-check:nth-of-type(2) .spring-check__box"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.55,
+        "selector": ".spring-check:nth-of-type(2) .spring-check__box"
+      },
+      {
+        "type": "click",
+        "at": 2.75,
+        "selector": ".spring-check:nth-of-type(2) .spring-check__box"
+      },
+      {
+        "type": "path",
+        "from": 2.95,
+        "to": 3.3,
+        "points": [
+          {
+            "selector": ".spring-check:nth-of-type(2) .spring-check__box"
+          },
+          {
+            "selector": ".spring-check:nth-of-type(1) .spring-check__box"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.45,
+        "selector": ".spring-check:nth-of-type(1) .spring-check__box"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "pulse-heart",
+    "duration": 4.2,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.55, 0.99],
+          [0.52, 0.75],
+          {
+            "selector": ".pulse-heart"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".pulse-heart"
+      },
+      {
+        "type": "click",
+        "at": 2.4,
+        "selector": ".pulse-heart"
+      },
+      {
+        "type": "leave",
+        "at": 3.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "rubber-segment",
+    "duration": 4.7,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.6, 0.99],
+          [0.57, 0.74],
+          {
+            "selector": "button.rubber-segment__item:nth-of-type(3)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": "button.rubber-segment__item:nth-of-type(3)"
+      },
+      {
+        "type": "path",
+        "from": 1.1,
+        "to": 1.55,
+        "points": [
+          {
+            "selector": "button.rubber-segment__item:nth-of-type(3)"
+          },
+          {
+            "selector": "button.rubber-segment__item:nth-of-type(1)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.7,
+        "selector": "button.rubber-segment__item:nth-of-type(1)"
+      },
+      {
+        "type": "drag",
+        "from": 2.6,
+        "to": 3.3,
+        "points": [
+          [0.345, 0.5],
+          [0.449, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.8
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "slide-commit",
+    "duration": 5.6,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.36, 0.99],
+          [0.34, 0.72],
+          [0.325, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.8,
+        "to": 1.8,
+        "points": [
+          [0.325, 0.5],
+          [0.5, 0.5],
+          [0.71, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 2.5
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "warm-tooltip",
+    "duration": 5,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.45,
+      "cx": 0.5,
+      "cy": 0.46
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.34, 0.99],
+          [0.33, 0.74],
+          {
+            "selector": "button[aria-label='Bold']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1.3,
+        "to": 3.1,
+        "points": [
+          {
+            "selector": "button[aria-label='Bold']"
+          },
+          {
+            "selector": "button[aria-label='Italic']"
+          },
+          {
+            "selector": "button[aria-label='Underline']"
+          },
+          {
+            "selector": "button[aria-label='Link']"
+          },
+          {
+            "selector": "button[aria-label='Insert image']"
+          },
+          {
+            "selector": "button[aria-label='More']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.3,
+        "to": 3.75,
+        "points": [
+          {
+            "selector": "button[aria-label='More']"
+          },
+          {
+            "selector": "button[aria-label='Italic']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "fuse-button",
+    "duration": 4.8,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.55, 0.99],
+          [0.53, 0.75],
+          {
+            "selector": ".fuse-button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".fuse-button"
+      },
+      {
+        "type": "path",
+        "from": 1.1,
+        "to": 1.6,
+        "points": [
+          {
+            "selector": ".fuse-button"
+          },
+          [0.56, 0.7]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.9,
+        "to": 3.3,
+        "points": [
+          [0.56, 0.7],
+          {
+            "selector": ".fuse-button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.45,
+        "selector": ".fuse-button"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "scrub-field",
+    "duration": 4.7,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.45, 0.99],
+          [0.43, 0.74],
+          [0.42, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.75,
+        "to": 3.35,
+        "points": [
+          [0.42, 0.5],
+          [0.592, 0.47],
+          [0.2325, 0.53],
+          [0.4255, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "lattice-loader",
+    "duration": 5.184,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "dodge-field",
+    "duration": 5.8,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.35,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0,
+        "to": 1,
+        "points": [
+          [0.06, 0.7],
+          [0.47, 0.51],
+          [0.36, 0.12]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1,
+        "to": 2,
+        "points": [
+          [0.36, 0.12],
+          [0.51, 0.45],
+          [0.8, 0.3]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2,
+        "to": 3,
+        "points": [
+          [0.8, 0.3],
+          [0.53, 0.53],
+          [0.7, 0.88]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3,
+        "to": 3.7,
+        "points": [
+          [0.7, 0.88],
+          [0.5, 0.56]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.15,
+        "selector": ".dodge-field__pill"
+      },
+      {
+        "type": "path",
+        "from": 4.35,
+        "to": 4.75,
+        "points": [
+          {
+            "selector": ".dodge-field__pill"
+          },
+          [0.5, 0.97]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.95
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "code-slots",
+    "duration": 6,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.53, 0.99],
+          [0.51, 0.74],
+          {
+            "selector": ".code-slots__row"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.75,
+        "selector": ".code-slots__row"
+      },
+      {
+        "type": "path",
+        "from": 0.95,
+        "to": 1.3,
+        "points": [
+          {
+            "selector": ".code-slots__row"
+          },
+          [0.64, 0.86]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "key",
+        "at": 1.25,
+        "key": "4"
+      },
+      {
+        "type": "key",
+        "at": 1.43,
+        "key": "8"
+      },
+      {
+        "type": "key",
+        "at": 1.61,
+        "key": "1"
+      },
+      {
+        "type": "key",
+        "at": 1.79,
+        "key": "9"
+      },
+      {
+        "type": "key",
+        "at": 1.97,
+        "key": "2"
+      },
+      {
+        "type": "key",
+        "at": 2.15,
+        "key": "7"
+      },
+      {
+        "type": "click",
+        "at": 4.85,
+        "x": 0.64,
+        "y": 0.86
+      },
+      {
+        "type": "leave",
+        "at": 5.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "wake-slider",
+    "duration": 4,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.5, 0.99],
+          [0.48, 0.74],
+          [0.473, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.7,
+        "to": 2.7,
+        "points": [
+          [0.473, 0.5],
+          [0.66, 0.47],
+          [0.3, 0.53],
+          [0.6, 0.48],
+          [0.473, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "comet-dial",
+    "duration": 4.6,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.22, 0.97],
+          [0.27, 0.74],
+          [0.3474, 0.5537]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.75,
+        "x": 0.3474,
+        "y": 0.5537
+      },
+      {
+        "type": "drag",
+        "from": 1.55,
+        "to": 2.45,
+        "points": [
+          [0.3474, 0.5537],
+          [0.3839, 0.3327],
+          [0.5, 0.25],
+          [0.6161, 0.3327],
+          [0.6449, 0.5937]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3,
+        "points": [
+          [0.6449, 0.5937],
+          [0.5971, 0.3041]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.15,
+        "x": 0.5971,
+        "y": 0.3041
+      },
+      {
+        "type": "leave",
+        "at": 3.7
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "jelly-radio",
+    "duration": 4.6,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.6, 0.99],
+          [0.58, 0.74],
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(4)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.75,
+        "selector": ".jelly-radio__chip:nth-of-type(4)"
+      },
+      {
+        "type": "path",
+        "from": 1,
+        "to": 1.45,
+        "points": [
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(4)"
+          },
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(1)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.6,
+        "selector": ".jelly-radio__chip:nth-of-type(1)"
+      },
+      {
+        "type": "path",
+        "from": 1.85,
+        "to": 2.35,
+        "points": [
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(1)"
+          },
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(5)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.5,
+        "selector": ".jelly-radio__chip:nth-of-type(5)"
+      },
+      {
+        "type": "path",
+        "from": 2.75,
+        "to": 3.1,
+        "points": [
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(5)"
+          },
+          {
+            "selector": ".jelly-radio__chip:nth-of-type(3)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.25,
+        "selector": ".jelly-radio__chip:nth-of-type(3)"
+      },
+      {
+        "type": "leave",
+        "at": 3.8
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "swipe-row",
+    "duration": 5.2,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.7, 0.99],
+          [0.68, 0.72],
+          [0.64, 0.49]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.75,
+        "to": 1.3,
+        "points": [
+          [0.64, 0.49],
+          [0.45, 0.49]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.1,
+        "to": 2.7,
+        "points": [
+          [0.45, 0.49],
+          [0.12, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "glide-select",
+    "duration": 5.2,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.5,
+      "cx": 0.54,
+      "cy": 0.62
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.46, 0.99],
+          [0.47, 0.76],
+          {
+            "selector": ".glide-select__trigger"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.75,
+        "selector": ".glide-select__trigger"
+      },
+      {
+        "type": "path",
+        "from": 1,
+        "to": 2.1,
+        "points": [
+          {
+            "selector": ".glide-select__trigger"
+          },
+          [0.56, 0.59],
+          [0.57, 0.848],
+          [0.56, 0.719]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.3,
+        "x": 0.56,
+        "y": 0.719
+      },
+      {
+        "type": "path",
+        "from": 2.55,
+        "to": 2.9,
+        "points": [
+          [0.56, 0.719],
+          {
+            "selector": ".glide-select__trigger"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.05,
+        "selector": ".glide-select__trigger"
+      },
+      {
+        "type": "path",
+        "from": 3.3,
+        "to": 3.75,
+        "points": [
+          {
+            "selector": ".glide-select__trigger"
+          },
+          [0.55, 0.59]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.9,
+        "x": 0.55,
+        "y": 0.59
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "status-mark",
+    "duration": 6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "call-chip",
+    "duration": 4.6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "bell-toggle",
+    "duration": 5.2,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.55, 0.99],
+          [0.52, 0.75],
+          {
+            "selector": ".bell-toggle__button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".bell-toggle__button"
+      },
+      {
+        "type": "path",
+        "from": 1.4,
+        "to": 1.8,
+        "points": [
+          {
+            "selector": ".bell-toggle__button"
+          },
+          [0.56, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.3,
+        "to": 3.7,
+        "points": [
+          [0.56, 0.72],
+          {
+            "selector": ".bell-toggle__button"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.85,
+        "selector": ".bell-toggle__button"
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "sling-button",
+    "duration": 5.4,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.4,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.56, 0.99],
+          [0.53, 0.74],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.75,
+        "to": 1.65,
+        "points": [
+          [0.5, 0.5],
+          [0.5, 0.66],
+          [0.45, 0.74]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1.95,
+        "to": 2.4,
+        "points": [
+          [0.45, 0.74],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.6,
+        "to": 3.4,
+        "points": [
+          [0.5, 0.5],
+          [0.52, 0.67],
+          [0.58, 0.72]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.9
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "swipe-toast",
+    "duration": 4.8,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.35,
+        "to": 1,
+        "points": [
+          [0.02, 0.62],
+          [0.4, 0.75],
+          [0.55, 0.83]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 1.15,
+        "to": 1.6,
+        "points": [
+          [0.55, 0.83],
+          [0.56, 0.99]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.6,
+        "points": [
+          [0.56, 0.99],
+          [0.52, 0.45],
+          [0.5, 0.1]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.75,
+        "x": 0.5,
+        "y": 0.1
+      },
+      {
+        "type": "leave",
+        "at": 3.2
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "prompt-bar",
+    "duration": 6.6,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.2,
+      "cx": 0.5,
+      "cy": 0.53
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.14, 0.99],
+          [0.19, 0.92],
+          {
+            "selector": "button[aria-label='Add files and sources']"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": "button[aria-label='Add files and sources']"
+      },
+      {
+        "type": "path",
+        "from": 1.05,
+        "to": 2.15,
+        "points": [
+          {
+            "selector": "button[aria-label='Add files and sources']"
+          },
+          [0.4, 0.6375],
+          [0.42, 0.4575],
+          [0.41, 0.2775],
+          [0.4, 0.1875]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.35,
+        "x": 0.4,
+        "y": 0.1875
+      },
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 3.15,
+        "points": [
+          [0.4, 0.1875],
+          {
+            "selector": ".prompt-bar__send"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.3,
+        "selector": ".prompt-bar__send"
+      },
+      {
+        "type": "path",
+        "from": 3.55,
+        "to": 4,
+        "points": [
+          {
+            "selector": ".prompt-bar__send"
+          },
+          [0.97, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.15,
+        "x": 0.97,
+        "y": 0.5
+      },
+      {
+        "type": "leave",
+        "at": 4.4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "slosh-gauge",
+    "duration": 5.6,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.3,
+      "cx": 0.5,
+      "cy": 0.585
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.68, 0.99],
+          [0.66, 0.95],
+          {
+            "selector": "button:nth-of-type(4)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.75,
+        "selector": "button:nth-of-type(4)"
+      },
+      {
+        "type": "path",
+        "from": 1,
+        "to": 1.45,
+        "points": [
+          {
+            "selector": "button:nth-of-type(4)"
+          },
+          {
+            "selector": "button:nth-of-type(1)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.6,
+        "selector": "button:nth-of-type(1)"
+      },
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.4,
+        "points": [
+          {
+            "selector": "button:nth-of-type(1)"
+          },
+          [0.5, 0.635]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 2.5,
+        "to": 3.3,
+        "points": [
+          [0.5, 0.635],
+          [0.5, 0.3]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.45,
+        "to": 3.9,
+        "points": [
+          [0.5, 0.3],
+          {
+            "selector": "button:nth-of-type(3)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.05,
+        "selector": "button:nth-of-type(3)"
+      },
+      {
+        "type": "leave",
+        "at": 4.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "voice-pill",
+    "duration": 5,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.7,
+      "cx": 0.43,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.56, 0.99],
+          [0.53, 0.74],
+          {
+            "selector": ".voice-pill"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.75,
+        "selector": ".voice-pill"
+      },
+      {
+        "type": "path",
+        "from": 1.05,
+        "to": 1.45,
+        "points": [
+          {
+            "selector": ".voice-pill"
+          },
+          [0.56, 0.7]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.25,
+        "to": 3.65,
+        "points": [
+          [0.56, 0.7],
+          {
+            "selector": ".voice-pill"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 3.8,
+        "selector": ".voice-pill"
+      },
+      {
+        "type": "leave",
+        "at": 4.3
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "thought-line",
+    "duration": 6,
+    "loop": "replay",
+    "frame": {
+      "zoom": 1.6,
+      "cx": 0.55,
+      "cy": 0.62
+    },
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "refine-frame",
+    "duration": 5.8,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [],
+    "warmup": 0
+  },
+  {
+    "slug": "folder-float",
+    "duration": 5,
+    "loop": "cut",
+    "frame": {
+      "zoom": 1.3,
+      "cx": 0.5,
+      "cy": 0.56
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.7,
+        "points": [
+          [0.3, 0.99],
+          [0.42, 0.88],
+          [0.5, 0.76]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 1.2,
+        "to": 1.8,
+        "points": [
+          [0.5, 0.76],
+          [0.45, 0.5],
+          [0.399, 0.365]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 1.95,
+        "to": 2.95,
+        "points": [
+          [0.399, 0.365],
+          [0.5, 0.43],
+          [0.62, 0.36],
+          [0.56, 0.3]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 3.1,
+        "to": 3.6,
+        "points": [
+          [0.56, 0.3],
+          [0.52, 0.74]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "branched-menu",
+    "duration": 5.6,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.6, 0.99],
+          [0.55, 0.75],
+          {
+            "selector": ".branched-menu__section:nth-of-type(1) .branched-menu__item:nth-of-type(4)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 0.8,
+        "selector": ".branched-menu__section:nth-of-type(1) .branched-menu__item:nth-of-type(4)"
+      },
+      {
+        "type": "path",
+        "from": 1.05,
+        "to": 1.5,
+        "points": [
+          {
+            "selector": ".branched-menu__section:nth-of-type(1) .branched-menu__item:nth-of-type(4)"
+          },
+          {
+            "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__item:nth-of-type(2)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.65,
+        "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__item:nth-of-type(2)"
+      },
+      {
+        "type": "path",
+        "from": 1.9,
+        "to": 2.3,
+        "points": [
+          {
+            "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__item:nth-of-type(2)"
+          },
+          {
+            "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__head"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 2.45,
+        "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__head"
+      },
+      {
+        "type": "click",
+        "at": 3.25,
+        "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__head"
+      },
+      {
+        "type": "path",
+        "from": 3.5,
+        "to": 4,
+        "points": [
+          {
+            "selector": ".branched-menu__section:nth-of-type(2) .branched-menu__head"
+          },
+          {
+            "selector": ".branched-menu__section:nth-of-type(1) .branched-menu__item:nth-of-type(2)"
+          }
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.15,
+        "selector": ".branched-menu__section:nth-of-type(1) .branched-menu__item:nth-of-type(2)"
+      },
+      {
+        "type": "leave",
+        "at": 4.7
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "flip-card",
+    "duration": 5.2,
+    "loop": "cut",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 1.2,
+        "points": [
+          [0.06, 0.64],
+          [0.42, 0.36],
+          [0.6, 0.6],
+          [0.5, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 1.35,
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "type": "path",
+        "from": 2.15,
+        "to": 2.9,
+        "points": [
+          [0.5, 0.5],
+          [0.42, 0.66],
+          [0.62, 0.5]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 3,
+        "to": 3.55,
+        "points": [
+          [0.62, 0.5],
+          [0.36, 0.52]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 4.3
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "tear-ticket",
+    "duration": 4.8,
+    "loop": "replay",
+    "frame": {
+      "zoom": 1.35,
+      "cx": 0.5,
+      "cy": 0.5
+    },
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.85,
+        "points": [
+          [0.32, 0.95],
+          [0.5, 0.58],
+          [0.677, 0.421]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 1,
+        "to": 2.2,
+        "points": [
+          [0.677, 0.421],
+          [0.742, 0.509],
+          [0.784, 0.639],
+          [0.788, 0.786],
+          [0.85, 0.86]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "path",
+        "from": 2.4,
+        "to": 2.9,
+        "points": [
+          [0.85, 0.86],
+          [0.55, 0.92]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.1
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "paper-crumple",
+    "duration": 4.6,
+    "loop": "cut",
+    "frame": "full",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.6,
+        "points": [
+          [0.62, 0.99],
+          [0.59, 0.76],
+          [0.56, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.75,
+        "to": 3.15,
+        "points": [
+          [0.56, 0.55],
+          [0.5, 0.45],
+          [0.36, 0.42],
+          [0.4, 0.62],
+          [0.55, 0.55]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 3.7
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "shredder",
+    "duration": 4.6,
+    "loop": "replay",
+    "frame": "auto",
+    "cursor": "auto",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 0.1,
+        "to": 0.65,
+        "points": [
+          [0.8, 0.995],
+          [0.62, 0.4],
+          [0.5, 0.277]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "drag",
+        "from": 0.8,
+        "to": 2,
+        "points": [
+          [0.5, 0.277],
+          [0.53, 0.45],
+          [0.5, 0.69]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "leave",
+        "at": 2.6
+      }
+    ],
+    "warmup": 0
+  },
+  {
+    "slug": "gradient-ascii",
+    "duration": 8,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 4.4,
+        "points": [
+          [0.76, 0.42],
+          [0.6, 0.28],
+          [0.44, 0.4],
+          [0.3, 0.3]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 4.8,
+        "x": 0.5,
+        "y": 0.34
+      },
+      {
+        "type": "leave",
+        "at": 5.3
+      }
+    ],
+    "warmup": 0
+  }
+]

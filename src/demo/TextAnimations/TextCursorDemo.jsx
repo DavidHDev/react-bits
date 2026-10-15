@@ -64,7 +64,7 @@ const PRESETS = {
 const DEFAULT_PROPS = {
   preset: 'words',
   ...LOOK,
-  color: '',
+  textColor: '',
   hideCursor: false
 };
 
@@ -162,7 +162,7 @@ const propData = [
 
 const TextCursorDemo = () => {
   const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
-  const { preset, color, ...settings } = props;
+  const { preset, textColor, ...settings } = props;
   const ink = useColorModeValue('#18181b', '#ffffff');
 
   const applyPreset = value => {
@@ -170,7 +170,7 @@ const TextCursorDemo = () => {
     updateProps({ ...base, ...PRESETS[value], preset: value });
   };
 
-  const computedProps = useMemo(() => (color ? { color } : {}), [color]);
+  const computedProps = useMemo(() => (textColor ? { color: textColor } : {}), [textColor]);
 
   return (
     <ComponentPropsProvider
@@ -178,7 +178,7 @@ const TextCursorDemo = () => {
       defaultProps={DEFAULT_PROPS}
       resetProps={resetProps}
       hasChanges={hasChanges}
-      demoOnlyProps={['preset', 'color']}
+      demoOnlyProps={['preset', 'textColor']}
       computedProps={computedProps}
     >
       <TabsLayout>
@@ -196,7 +196,7 @@ const TextCursorDemo = () => {
             >
               Move around
             </Text>
-            <TextCursor {...settings} color={color || 'currentColor'} />
+            <TextCursor {...settings} color={textColor || 'currentColor'} />
           </Box>
 
           <Customize>
@@ -211,8 +211,8 @@ const TextCursorDemo = () => {
             />
             <PreviewColorPickerCustom
               title="Color"
-              color={color || ink}
-              onChange={value => updateProp('color', value)}
+              color={textColor || ink}
+              onChange={value => updateProp('textColor', value)}
             />
             <PreviewSelect
               title="Mode"

@@ -15,3 +15,14 @@
   height: 100%;
   display: block;
 }
+
+.warp-text__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7%;
+  text-align: center;
+  white-space: pre-line;
+}

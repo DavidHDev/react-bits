@@ -237,7 +237,13 @@ export const componentMetadata = {
     name: 'ImageTrail',
     docsUrl: 'https://reactbits.dev/animations/image-trail',
     tags: [],
-    added: '2025-01-30'
+    added: '2025-01-30',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'The eight fixed variants are now one trail you can tune: size, timing, zoom, flash, drift, tilt, rotation and a stacking pile. Four presets recreate the favourite looks.'
+      }
+    ]
   },
   'Animations/LogoLoop': {
     videoUrl: '/assets/video/logoloop.webm',
@@ -286,12 +292,18 @@ export const componentMetadata = {
   },
   'Animations/Strands': {
     videoUrl: '/assets/video/strands.webm',
-    description: 'Glowing ribbon-like strands that ripple and weave across a transparent canvas.',
+    description: 'Spectral strands that twist inside a frosted glass orb and swell into a smooth bulge where they come together, like the new Siri.',
     category: 'Animations',
     name: 'Strands',
     docsUrl: 'https://reactbits.dev/animations/strands',
     tags: [],
-    added: '2026-06-10'
+    added: '2026-06-10',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt to match the new Siri orb: spectral strands twist inside frosted glass and swell into one smooth bulge where they come together. It livens up with a voice, a click or the cursor.'
+      }
+    ]
   },
   'Animations/MetallicPaint': {
     videoUrl: '/assets/video/metallicpaint.webm',
@@ -355,7 +367,7 @@ export const componentMetadata = {
   },
   'Animations/PixelSwap': {
     videoUrl: '/assets/video/pixelswap.webm',
-    description: 'A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.',
+    description: 'New content builds in pixel by pixel in a springy wave that starts wherever the cursor enters.',
     category: 'Animations',
     name: 'PixelSwap',
     docsUrl: 'https://reactbits.dev/animations/pixel-swap',
@@ -364,7 +376,7 @@ export const componentMetadata = {
     updates: [
       {
         date: '2026-10-13',
-        note: 'Rebuilt as a wall of 3D tiles that flip over in a wave from the cursor and turn back the way they came. New assemble and grow styles, depth and shading.'
+        note: 'Rebuilt to be fast and seamless, with pixels that spring in from wherever the cursor enters and retreat the moment it leaves. New dot and spin styles and a pixel intro.'
       }
     ]
   },
@@ -400,12 +412,18 @@ export const componentMetadata = {
   },
   'Animations/SplashCursor': {
     videoUrl: '/assets/video/splashcursor.webm',
-    description: 'Liquid splash burst at cursor with curling ripples and waves.',
+    description: 'A fluid simulation that trails the cursor in swirling ink and bursts into a splash on click.',
     category: 'Animations',
     name: 'SplashCursor',
     docsUrl: 'https://reactbits.dev/animations/splash-cursor',
     tags: [],
-    added: '2025-01-03'
+    added: '2025-01-03',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Strokes now flow unbroken with smoothly shifting colors, clicks burst into a real splash, and it rests when idle. New ink, smoke, lava and silk looks, a soft glow and a light theme.'
+      }
+    ]
   },
   'Animations/StarBorder': {
     videoUrl: '/assets/video/starborder.webm',
@@ -523,7 +541,13 @@ export const componentMetadata = {
     name: 'BlurText',
     docsUrl: 'https://reactbits.dev/text-animations/blur-text',
     tags: [],
-    added: '2024-08-06'
+    added: '2024-08-06',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Text can now zoom, tilt in 3D, pull into focus or drift in, starting from the middle, the end or at random. It can also loop, replay on hover or click, start in a second color and keep the hovered word sharp.'
+      }
+    ]
   },
   'TextAnimations/CircularText': {
     videoUrl: '/assets/video/circulartext.webm',
@@ -532,7 +556,13 @@ export const componentMetadata = {
     name: 'CircularText',
     docsUrl: 'https://reactbits.dev/text-animations/circular-text',
     tags: [],
-    added: '2025-02-14'
+    added: '2025-02-14',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Fling the ring and it coasts back to its cruising speed, leans toward the cursor in 3D and can sit back like a planet’s orbit. Add an icon in the middle, an inner circle and natural spacing with gaps.'
+      }
+    ]
   },
   'TextAnimations/CountUp': {
     videoUrl: '/assets/video/countup.webm',
@@ -541,7 +571,13 @@ export const componentMetadata = {
     name: 'CountUp',
     docsUrl: 'https://reactbits.dev/text-animations/count-up',
     tags: [],
-    added: '2024-08-13'
+    added: '2024-08-13',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Numbers can roll into place like an odometer, settle with a spring, shorten to 1.2K or 3.4M and replay on hover.'
+      }
+    ]
   },
   'TextAnimations/CurvedLoop': {
     videoUrl: '/assets/video/curvedloop.webm',
@@ -550,7 +586,13 @@ export const componentMetadata = {
     name: 'CurvedLoop',
     docsUrl: 'https://reactbits.dev/text-animations/curved-loop',
     tags: [],
-    added: '2025-07-06'
+    added: '2025-07-06',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Text can now travel along a wave, a closed ring or a straight line, with outlined letters and an accent mark between repeats. Scrolling the page gives the loop a burst of speed that eases off.'
+      }
+    ]
   },
   'TextAnimations/DecryptedText': {
     videoUrl: '/assets/video/decryptedtext.webm',
@@ -559,7 +601,13 @@ export const componentMetadata = {
     name: 'DecryptedText',
     docsUrl: 'https://reactbits.dev/text-animations/decrypted-text',
     tags: [],
-    added: '2025-01-06'
+    added: '2025-01-06',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Letters can now roll in like a flip board or brighten out of faint glyphs, with an accent color that settles as they decode. Text can loop, and hovering can scramble just the letters near the cursor.'
+      }
+    ]
   },
   'TextAnimations/FallingText': {
     videoUrl: '/assets/video/fallingtext.webm',
@@ -583,7 +631,13 @@ export const componentMetadata = {
     name: 'FuzzyText',
     docsUrl: 'https://reactbits.dev/text-animations/fuzzy-text',
     tags: [],
-    added: '2025-02-18'
+    added: '2025-02-18',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Text can now resolve out of heavy static when it first appears and tear into soft color fringes. The fuzz can follow the cursor, run all the time or fire in bursts on click.'
+      }
+    ]
   },
   'TextAnimations/GlitchText': {
     videoUrl: '/assets/video/glitchtext.webm',
@@ -592,7 +646,13 @@ export const componentMetadata = {
     name: 'GlitchText',
     docsUrl: 'https://reactbits.dev/text-animations/glitch-text',
     tags: [],
-    added: '2025-02-18'
+    added: '2025-02-18',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Pick from four glitch styles: sliced bands, a jittering color split, a scanning tear or swapped glyphs. Set how hard it glitches, add skew and flicker, and play short bursts on click.'
+      }
+    ]
   },
   'TextAnimations/GradientText': {
     videoUrl: '/assets/video/gradienttext.webm',
@@ -616,7 +676,13 @@ export const componentMetadata = {
     name: 'RotatingText',
     docsUrl: 'https://reactbits.dev/text-animations/rotating-text',
     tags: [],
-    added: '2025-02-02'
+    added: '2025-02-02',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Words can now flip, blur, zoom or drop in with a small bounce, rolling up or down. A highlight block smoothly resizes to fit each word and keeps the text readable on any color.'
+      }
+    ]
   },
   'TextAnimations/ScrambledText': {
     videoUrl: '/assets/video/scrambledtext.webm',
@@ -625,7 +691,13 @@ export const componentMetadata = {
     name: 'ScrambledText',
     docsUrl: 'https://reactbits.dev/text-animations/scrambled-text',
     tags: [],
-    added: '2025-05-23'
+    added: '2025-05-23',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Letters near the cursor can now rise, blur or swell like a lens, and a click sends a scramble wave through the text. Works with any typeface without the layout jumping.'
+      }
+    ]
   },
   'TextAnimations/ScrollFloat': {
     videoUrl: '/assets/video/scrollfloat.webm',
@@ -634,7 +706,13 @@ export const componentMetadata = {
     name: 'ScrollFloat',
     docsUrl: 'https://reactbits.dev/text-animations/scroll-float',
     tags: [],
-    added: '2025-02-17'
+    added: '2025-02-17',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Letters can now flip, scatter, blur or wave into place, by letter or by word, from above or below. Pick which go first and let them arrive in an accent color.'
+      }
+    ]
   },
   'TextAnimations/ScrollReveal': {
     videoUrl: '/assets/video/scrollreveal.webm',
@@ -643,7 +721,13 @@ export const componentMetadata = {
     name: 'ScrollReveal',
     docsUrl: 'https://reactbits.dev/text-animations/scroll-reveal',
     tags: [],
-    added: '2025-02-17'
+    added: '2025-02-17',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Text can now reveal by word, letter or line, rising, flipping or popping into place, and light up in an accent color as it appears. It can also play once on entering view.'
+      }
+    ]
   },
   'TextAnimations/ScrollVelocity': {
     videoUrl: '/assets/video/scrollvelocity.webm',
@@ -652,7 +736,13 @@ export const componentMetadata = {
     name: 'ScrollVelocity',
     docsUrl: 'https://reactbits.dev/text-animations/scroll-velocity',
     tags: [],
-    added: '2025-02-14'
+    added: '2025-02-14',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rows can lean and stretch with scroll speed, be grabbed and thrown with inertia, and alternate with outlined text. Set the text size, weight, color and spacing directly.'
+      }
+    ]
   },
   'TextAnimations/ShinyText': {
     videoUrl: '/assets/video/shinytext.webm',
@@ -676,7 +766,13 @@ export const componentMetadata = {
     name: 'SplitText',
     docsUrl: 'https://reactbits.dev/text-animations/split-text',
     tags: [],
-    added: '2024-08-06'
+    added: '2024-08-06',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Text can now flip, pop, blur, skew or wave into place, loop, and replay on hover or click. Pieces can arrive in an accent color, and letters lift or ripple under the cursor.'
+      }
+    ]
   },
   'TextAnimations/TextCursor': {
     videoUrl: '/assets/video/textcursor.webm',
@@ -700,7 +796,13 @@ export const componentMetadata = {
     name: 'TextPressure',
     docsUrl: 'https://reactbits.dev/text-animations/text-pressure',
     tags: [],
-    added: '2025-01-17'
+    added: '2025-01-17',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Click to send a ripple of pressure through the letters, and let the word keep rolling or breathing while the cursor is away. Letters can warm toward an accent color as they swell, and you can set how softly they follow.'
+      }
+    ]
   },
   'TextAnimations/TextType': {
     videoUrl: '/assets/video/texttype.webm',
@@ -709,7 +811,13 @@ export const componentMetadata = {
     name: 'TextType',
     docsUrl: 'https://reactbits.dev/text-animations/text-type',
     tags: [],
-    added: '2025-07-20'
+    added: '2025-07-20',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Pick a bar, block or underscore cursor that glides and blinks softly, and let letters fade, blur or rise in as they type. Add occasional typos that get corrected, or a fixed lead-in before rotating words.'
+      }
+    ]
   },
   'TextAnimations/TrueFocus': {
     videoUrl: '/assets/video/truefocus.webm',
@@ -718,7 +826,13 @@ export const componentMetadata = {
     name: 'TrueFocus',
     docsUrl: 'https://reactbits.dev/text-animations/true-focus',
     tags: [],
-    added: '2025-01-07'
+    added: '2025-01-07',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Mark the focused word with a box, an underline or a soft highlight, and let it scale up slightly. The frame can spring between words and visit them in random order.'
+      }
+    ]
   },
   'TextAnimations/VariableProximity': {
     videoUrl: '/assets/video/variableproximity.webm',
@@ -727,7 +841,13 @@ export const componentMetadata = {
     name: 'VariableProximity',
     docsUrl: 'https://reactbits.dev/text-animations/variable-proximity',
     tags: [],
-    added: '2025-01-07'
+    added: '2025-01-07',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Letters can now shift toward an accent color, grow and rise as the cursor gets close, and a gentle wave of weight runs through the text while idle. Adds a font size setting, and lines no longer rewrap while letters change weight.'
+      }
+    ]
   },
   'TextAnimations/Shuffle': {
     videoUrl: '/assets/video/shuffle.webm',
@@ -736,7 +856,13 @@ export const componentMetadata = {
     name: 'Shuffle',
     docsUrl: 'https://reactbits.dev/text-animations/shuffle',
     tags: [],
-    added: '2025-09-06'
+    added: '2025-09-06',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Letters can now flip like cards in 3D or spin in place with motion blur, and hovering can reshuffle just the letters near the cursor. Adds text and accent colors and a motion blur for sliding letters, and up or left shuffles no longer land on random symbols.'
+      }
+    ]
   },
   'TextAnimations/ParticleText': {
     videoUrl: '/assets/video/particletext.webm',
@@ -745,7 +871,13 @@ export const componentMetadata = {
     name: 'ParticleText',
     docsUrl: 'https://reactbits.dev/text-animations/particle-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Text can now rain in, swirl into place or print behind a sweeping line, and particles can be drawn as squares or short strokes. Click to blow the particles apart and watch them spring back.'
+      }
+    ]
   },
   'TextAnimations/SplitFlapText': {
     videoUrl: '/assets/video/splitflaptext.webm',
@@ -754,7 +886,13 @@ export const componentMetadata = {
     name: 'SplitFlapText',
     docsUrl: 'https://reactbits.dev/text-animations/split-flap-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Boards can now cascade from the right, from the middle or in random order, with a soft sheen across falling flaps and adjustable depth. A new minimal style drops the tiles and flips bare characters split by a hinge line.'
+      }
+    ]
   },
   'TextAnimations/WarpText': {
     videoUrl: '/assets/video/warptext.webm',
@@ -763,7 +901,13 @@ export const componentMetadata = {
     name: 'WarpText',
     docsUrl: 'https://reactbits.dev/text-animations/warp-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Clicking now sends a shockwave through the text, and the lens can keep wandering across the words when the cursor leaves. Adds glass-like color fringing inside the lens, with smoother fringe edges in light and dark mode.'
+      }
+    ]
   },
   'TextAnimations/TechText': {
     videoUrl: '/assets/video/techtext.webm',
@@ -772,7 +916,13 @@ export const componentMetadata = {
     name: 'TechText',
     docsUrl: 'https://reactbits.dev/text-animations/tech-text',
     tags: [],
-    added: '2026-09-24'
+    added: '2026-09-24',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Click a letter to ripple the word, play a typed, assembled or font metrics intro, and show the font’s guide lines.'
+      }
+    ]
   },
   'TextAnimations/StrokeText': {
     videoUrl: '/assets/video/stroketext.webm',
@@ -781,7 +931,13 @@ export const componentMetadata = {
     name: 'StrokeText',
     docsUrl: 'https://reactbits.dev/text-animations/stroke-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Outlines can now be dashed or dotted and keep flowing around the letters, and they redraw when hovered. Filled letters can also lift off the page with a soft offset shadow.'
+      }
+    ]
   },
   'TextAnimations/DepthText': {
     videoUrl: '/assets/video/depthtext.webm',
@@ -790,7 +946,13 @@ export const componentMetadata = {
     name: 'DepthText',
     docsUrl: 'https://reactbits.dev/text-animations/depth-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'The extrusion can now fade into the page, and the word presses in on hover and springs back. It can also float gently while idle.'
+      }
+    ]
   },
   'TextAnimations/FoldText': {
     videoUrl: '/assets/video/foldtext.webm',
@@ -799,7 +961,13 @@ export const componentMetadata = {
     name: 'FoldText',
     docsUrl: 'https://reactbits.dev/text-animations/fold-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Letters can now open like blinds or flip over like cards, and fold away near the cursor as it passes. Looping text can hold as long as you like before folding back up.'
+      }
+    ]
   },
   'TextAnimations/EchoText': {
     videoUrl: '/assets/video/echotext.webm',
@@ -808,7 +976,13 @@ export const componentMetadata = {
     name: 'EchoText',
     docsUrl: 'https://reactbits.dev/text-animations/echo-text',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Click the text to send out a burst of echoes, or let the echoes drift on their own or trail behind page scrolling. Echoes can also fade between two colors.'
+      }
+    ]
   },
   'TextAnimations/MaskedHeading': {
     videoUrl: '/assets/video/maskedheading.webm',
@@ -817,7 +991,13 @@ export const componentMetadata = {
     name: 'MaskedHeading',
     docsUrl: 'https://reactbits.dev/text-animations/masked-heading',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Two new entrances, letters growing in one by one and a focus pull, plus a soft light that follows the cursor and brings back full color. Letters can also be drawn as thin strokes that the image fills as it arrives.'
+      }
+    ]
   },
   'TextAnimations/TextLoop': {
     videoUrl: '/assets/video/textloop.webm',
@@ -826,7 +1006,13 @@ export const componentMetadata = {
     name: 'TextLoop',
     docsUrl: 'https://reactbits.dev/text-animations/text-loop',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Add a second band that crosses the first in an X with a soft shadow, drag or fling the loop, and let page scrolling speed it up or reverse it. Letters can now be drawn as outlines.'
+      }
+    ]
   },
 
   //! Components -------------------------------------------------------------------------------------------------------------------------------
@@ -1009,12 +1195,18 @@ export const componentMetadata = {
   },
   'Components/Counter': {
     videoUrl: '/assets/video/counter.webm',
-    description: 'Flexible animated counter supporting increments + easing.',
+    description: 'An odometer-style number whose digits roll to every new value, with currency, separators and locales.',
     category: 'Components',
     name: 'Counter',
     docsUrl: 'https://reactbits.dev/components/counter',
     tags: [],
-    added: '2025-02-15'
+    added: '2025-02-15',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt with springy rolling digits, motion blur and a spin-in intro. Formats currency, percentages, separators and locales, and digits slide in and out as the number grows or shrinks.'
+      }
+    ]
   },
   'Components/DecayCard': {
     videoUrl: '/assets/video/decaycard.webm',
@@ -1057,21 +1249,33 @@ export const componentMetadata = {
   },
   'Components/ElasticSlider': {
     videoUrl: '/assets/video/elasticslider.webm',
-    description: 'Slider handle stretches elastically then snaps with spring physics.',
+    description: 'A slider that grows under your cursor and stretches like rubber when pulled past either end, then springs back.',
     category: 'Components',
     name: 'ElasticSlider',
     docsUrl: 'https://reactbits.dev/components/elastic-slider',
     tags: [],
-    added: '2024-08-18'
+    added: '2024-08-18',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt with smoother springs and a rubber-band pull at both ends. Adds vertical and pill styles, icons and values inside the track, ticks, a handle, centered fills, and keyboard and scroll control.'
+      }
+    ]
   },
   'Components/FlowingMenu': {
     videoUrl: '/assets/video/flowingmenu.webm',
-    description: 'Liquid flowing active indicator glides between menu items.',
+    description: 'A full-height menu with a liquid band that glides between rows and reveals a scrolling marquee of each item.',
     category: 'Components',
     name: 'FlowingMenu',
     docsUrl: 'https://reactbits.dev/components/flowing-menu',
     tags: [],
-    added: '2025-01-31'
+    added: '2025-01-31',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt around one liquid band that glides and stretches between rows and leans toward the cursor, with an intro sweep. New capsule and slab shapes, an editorial layout, notes per row and keyboard support.'
+      }
+    ]
   },
   'Components/FluidGlass': {
     videoUrl: '/assets/video/fluidglass.webm',
@@ -1219,12 +1423,18 @@ export const componentMetadata = {
   },
   'Components/Masonry': {
     videoUrl: '/assets/video/masonry.webm',
-    description: 'Responsive masonry layout with animated reflow + gaps optimization.',
+    description: 'A masonry gallery that springs into place, reflows as it resizes and opens images in a lightbox.',
     category: 'Components',
     name: 'Masonry',
     docsUrl: 'https://reactbits.dev/components/masonry',
     tags: [],
-    added: '2024-08-08'
+    added: '2024-08-08',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt with springy reflow, tiles that appear as you scroll, hover zoom, lift and tilt, captions, a lightbox and drag to reorder. Columns now follow the container and tiles keep each image\'s shape.'
+      }
+    ]
   },
   'Components/ModelViewer': {
     videoUrl: '/assets/video/modelviewer.webm',
@@ -1546,16 +1756,22 @@ export const componentMetadata = {
   },
   'Backgrounds/AeroShards': {
     videoUrl: '/assets/video/aeroshards.webm',
-    description: 'A GPU-driven wind sculpture of folded foil shards that responds to the pointer.',
+    description: 'Silk ribbons of thick glass shards streaming on layered depths among survey markers, catching light along their edges.',
     category: 'Backgrounds',
     name: 'AeroShards',
     docsUrl: 'https://reactbits.dev/backgrounds/aero-shards',
     tags: ['webgpu', 'vgpu', 'particles', 'procedural', 'post-processing', 'interactive'],
-    added: '2026-08-31'
+    added: '2026-08-31',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt as silk ribbons of thick glass shards that stream smoothly on layered depths, light up along their edges and soften into the distance. Adds a chrome finish, survey markers, a cursor that parts the shards, a light wave on click, presets and an edge fade.'
+      }
+    ]
   },
   'Backgrounds/GhostFibers': {
     videoUrl: '/assets/video/ghostfibers.webm',
-    description: 'A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.',
+    description: 'Layered ribbons of fine glowing fibers that twist, fold and drift through soft depth of field.',
     category: 'Backgrounds',
     name: 'GhostFibers',
     docsUrl: 'https://reactbits.dev/backgrounds/ghost-fibers',
@@ -1565,6 +1781,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Sharper fibers with crisp cores and a cleaner glow, plus a light mode that matches the dark one.'
+      },
+      {
+        date: '2026-10-14',
+        note: 'Rebuilt as layered ribbons of fine glowing fibers with soft depth of field, bright folds and new looks to pick from.'
       }
     ]
   },
@@ -1639,12 +1859,18 @@ export const componentMetadata = {
   },
   'Backgrounds/CRTWarp': {
     videoUrl: '/assets/video/crtwarp.webm',
-    description: 'Full-canvas CRT plasma with curved distortion, scanlines, bloom and pointer interaction.',
+    description: 'A blocky plasma glowing on a curved CRT, with real scanlines, a phosphor mask, afterglow and a power-on intro.',
     category: 'Backgrounds',
     name: 'CRTWarp',
     docsUrl: 'https://reactbits.dev/backgrounds/crt-warp',
     tags: [],
-    added: '2026-08-26'
+    added: '2026-08-26',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Rebuilt as a real CRT that warms up into view, with true scanlines, phosphor masks, afterglow and bloom. The cursor bends the picture like a magnet, clicks flip the channel, and presets add amber, green and arcade looks.'
+      }
+    ]
   },
   'Backgrounds/DarkVeil': {
     videoUrl: '/assets/video/darkveil.webm',
@@ -1792,30 +2018,48 @@ export const componentMetadata = {
   },
   'Backgrounds/MoltenMetal': {
     videoUrl: '/assets/video/moltenmetal.webm',
-    description: 'Swirling caustic plasma filaments with molten, white-hot cores.',
+    description: 'Swirling caustic filaments with white-hot cores that heat up under the cursor and flare on click.',
     category: 'Backgrounds',
     name: 'MoltenMetal',
     docsUrl: 'https://reactbits.dev/backgrounds/molten-metal',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'The metal now ignites from its white-hot cores, the cursor heats the filaments it passes and clicks flare them white-hot. Adds filament width, haze, rotation and position controls, more colors, crisper fine detail, a richer light mode and no dependencies.'
+      }
+    ]
   },
   'Backgrounds/GradientWaves': {
     videoUrl: '/assets/video/gradientwaves.webm',
-    description: 'Raymarched sine waves rolling toward a soft, hazy horizon.',
+    description: 'Lit satin waves rolling in from a hazy horizon, with a light that follows the cursor and swells on click.',
     category: 'Backgrounds',
     name: 'GradientWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/gradient-waves',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Waves are now lit with soft light and shadow, rise from calm water on load, catch a light that follows the cursor and roll a swell in on click. Adds light direction, presets, a light mode and no dependencies.'
+      }
+    ]
   },
   'Backgrounds/WebThreads': {
     videoUrl: '/assets/video/webthreads.webm',
-    description: 'Glowing sine threads woven through a luminous convergence point.',
+    description: 'Glowing threads woven through luminous pinch points that light up under the cursor and carry light on click.',
     category: 'Backgrounds',
     name: 'WebThreads',
     docsUrl: 'https://reactbits.dev/backgrounds/web-threads',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-10-13',
+        note: 'Threads now draw in one after another, the strand under the cursor lights up while the rest recede, and clicks send light into the pinch. Adds braids, a 3D twist, traveling pulses, rotation, soft ends, more threads and colors, and a cleaner light mode.'
+      }
+    ]
   },
   'Backgrounds/Topography': {
     videoUrl: '/assets/video/topography.webm',
@@ -1864,7 +2108,7 @@ export const componentMetadata = {
   },
   'Backgrounds/AcidSquares': {
     videoUrl: '/assets/video/acidsquares.webm',
-    description: 'A crystalline corridor of stacked squares with rings of light travelling toward you.',
+    description: 'A rolling field of glossy squares that ripples under two drifting colored lights.',
     category: 'Backgrounds',
     name: 'AcidSquares',
     docsUrl: 'https://reactbits.dev/backgrounds/acid-squares',
@@ -1874,6 +2118,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Crisp glass edges, travelling rings of light and twinkling squares, plus a clean light mode.'
+      },
+      {
+        date: '2026-10-14',
+        note: 'Rebuilt as a rolling field of glossy squares under two drifting colored lights, with square ripples, film grain and an intro that switches the squares on from the center.'
       }
     ]
   },
@@ -1891,6 +2139,15 @@ export const componentMetadata = {
         note: 'Crisper glowing lines and a scan head with an afterglow trail, plus lines that part around the cursor, click pings, a power-on intro and a light mode.'
       }
     ]
+  },
+  'Backgrounds/GradientASCII': {
+    videoUrl: '/assets/video/gradientascii.webm',
+    description: 'Soft gradient glows drawn in ASCII characters that scramble under the cursor.',
+    category: 'Backgrounds',
+    name: 'GradientASCII',
+    docsUrl: 'https://reactbits.dev/backgrounds/gradient-ascii',
+    tags: [],
+    added: '2026-10-15'
   },
   'Backgrounds/Grainient': {
     videoUrl: '/assets/video/grainient.webm',

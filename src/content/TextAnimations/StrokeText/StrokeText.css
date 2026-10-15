@@ -11,7 +11,10 @@
 .stroke-text__svg {
   display: block;
   width: 100%;
-  height: var(--stroke-text-height, 160px);
+  max-width: var(--stroke-text-width, 600px);
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
 }
 
 .stroke-text__stroke,

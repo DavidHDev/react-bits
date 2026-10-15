@@ -18,20 +18,7 @@ import { useColorModeValue } from '../../components/setup/color-mode';
 
 import GhostCursor from '../../content/Animations/GhostCursor/GhostCursor';
 import { ghostCursor } from '../../constants/code/Animations/ghostCursorCode';
-
-const LOOK = {
-  color: '#b497cf',
-  size: 80,
-  trailLength: 50,
-  inertia: 0.5,
-  turbulence: 0.5,
-  drift: 0.3,
-  detail: 1,
-  brightness: 1,
-  bloomStrength: 0.6,
-  bloomRadius: 1,
-  grainIntensity: 0.05
-};
+import { LOOK, PRESET_OPTIONS, presetProps } from './presets/GhostCursor';
 
 const DEFAULT_PROPS = {
   preset: 'phantom',
@@ -43,24 +30,6 @@ const DEFAULT_PROPS = {
   intro: true
 };
 
-const PRESETS = {
-  phantom: {},
-  wraith: { color: '#7aa2ff', trailLength: 80, turbulence: 0.8, drift: 0.2, bloomStrength: 0.8 },
-  ember: { color: '#ff8a3d', drift: 0.7, turbulence: 0.7, brightness: 1.2, bloomStrength: 0.9, size: 70 },
-  mist: {
-    color: '#e4e4e7',
-    size: 110,
-    trailLength: 90,
-    inertia: 0.7,
-    drift: 0.15,
-    brightness: 0.75,
-    bloomStrength: 0.3,
-    grainIntensity: 0.08
-  },
-  ecto: { color: '#6ee7b7', turbulence: 1, size: 70, bloomStrength: 0.8 },
-  wisp: { size: 45, trailLength: 30, inertia: 0.25, brightness: 1.3, bloomStrength: 0.8, detail: 0.8 }
-};
-
 const LIGHT_SWAP = {
   '#b497cf': '#8b6fb3',
   '#7aa2ff': '#3b5bdb',
@@ -70,15 +39,6 @@ const LIGHT_SWAP = {
 };
 
 const DARK_SWAP = Object.fromEntries(Object.entries(LIGHT_SWAP).map(([dark, light]) => [light, dark]));
-
-const PRESET_OPTIONS = [
-  { value: 'phantom', label: 'Phantom' },
-  { value: 'wraith', label: 'Wraith' },
-  { value: 'ember', label: 'Ember' },
-  { value: 'mist', label: 'Mist' },
-  { value: 'ecto', label: 'Ecto' },
-  { value: 'wisp', label: 'Wisp' }
-];
 
 const propData = [
   { name: 'color', type: 'string', default: "'#B497CF'", description: 'Color of the smoke. Dense parts glow lighter.' },
@@ -189,8 +149,7 @@ const GhostCursorDemo = () => {
   const shown = swap[picked] ?? picked;
 
   const applyPreset = value => {
-    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
-    updateProps({ ...base, ...PRESETS[value], preset: value });
+    updateProps({ ...presetProps(value, { defaults: defaultProps }), preset: value });
     forceRerender();
   };
 

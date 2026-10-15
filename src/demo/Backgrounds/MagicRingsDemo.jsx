@@ -19,25 +19,7 @@ import { useColorModeValue } from '../../components/setup/color-mode';
 
 import MagicRings from '../../content/Backgrounds/MagicRings/MagicRings';
 import { magicRings } from '../../constants/code/Backgrounds/magicRingsCode';
-
-const LOOK = {
-  color: '#A855F7',
-  colorTwo: '#6366F1',
-  motion: 'pulse',
-  ringCount: 6,
-  speed: 1,
-  lineThickness: 2,
-  glow: 1,
-  baseRadius: 0.35,
-  radiusStep: 0.1,
-  expansion: 0.1,
-  taper: 1.5,
-  rotation: 0,
-  spin: 0,
-  tilt: 0,
-  dispersion: 0,
-  grain: 0
-};
+import { LOOK, PRESET_OPTIONS, presetProps } from './presets/MagicRings';
 
 const DEFAULT_PROPS = {
   preset: 'portal',
@@ -50,40 +32,6 @@ const DEFAULT_PROPS = {
   parallax: 0.05,
   clickBurst: true,
   intro: true
-};
-
-const PRESETS = {
-  portal: {},
-  halo: {
-    color: '#ffffff',
-    colorTwo: '#a1a1aa',
-    motion: 'breathe',
-    ringCount: 5,
-    lineThickness: 1.5,
-    glow: 0.6,
-    taper: 1.25
-  },
-  ripple: { color: '#22d3ee', colorTwo: '#3b82f6', motion: 'ripple', ringCount: 7, radiusStep: 0.09 },
-  prism: {
-    color: '#ffffff',
-    colorTwo: '#e0e7ff',
-    motion: 'breathe',
-    lineThickness: 1.5,
-    glow: 0.6,
-    dispersion: 0.6
-  },
-  gyro: { color: '#fcd34d', colorTwo: '#f97316', ringCount: 4, taper: 1.1, spin: 0.8, tilt: 60 },
-  eclipse: {
-    color: '#ffffff',
-    colorTwo: '#fb923c',
-    motion: 'breathe',
-    ringCount: 3,
-    lineThickness: 1.5,
-    glow: 1.3,
-    baseRadius: 0.3,
-    radiusStep: 0.05,
-    taper: 1
-  }
 };
 
 const LIGHT_SWAP = {
@@ -100,15 +48,6 @@ const LIGHT_SWAP = {
 };
 
 const DARK_SWAP = Object.fromEntries(Object.entries(LIGHT_SWAP).map(([dark, light]) => [light, dark]));
-
-const PRESET_OPTIONS = [
-  { value: 'portal', label: 'Portal' },
-  { value: 'halo', label: 'Halo' },
-  { value: 'ripple', label: 'Ripple' },
-  { value: 'prism', label: 'Prism' },
-  { value: 'gyro', label: 'Gyro' },
-  { value: 'eclipse', label: 'Eclipse' }
-];
 
 const MOTION_OPTIONS = [
   { value: 'pulse', label: 'Pulse' },
@@ -248,8 +187,7 @@ const MagicRingsDemo = () => {
   const colors = { color: swapColor(color, swap), colorTwo: swapColor(colorTwo, swap) };
 
   const applyPreset = value => {
-    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
-    updateProps({ ...base, ...PRESETS[value], preset: value });
+    updateProps({ ...presetProps(value, { defaults: defaultProps }), preset: value });
     forceRerender();
   };
 

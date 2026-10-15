@@ -6,11 +6,11 @@ import tsTailwind from '@ts-tailwind/TextAnimations/TextPressure/TextPressure.ts
 export const textPressure = {
   usage: `// Component ported from https://codepen.io/JuanFuentes/full/rgXKGQ
 // Font used - https://compressa.preusstype.com/
-  
+
 import TextPressure from './TextPressure';
 
 // Note:
-// Make sure the font you're using supports all the variable properties. 
+// Make sure the font you're using supports all the variable properties.
 // React Bits does not take responsibility for the fonts used
 
 <div style={{position: 'relative', height: '300px'}}>
@@ -22,8 +22,13 @@ import TextPressure from './TextPressure';
     width={true}
     weight={true}
     italic={true}
-    textColor="#ffffff"
+    radius={0.5}
+    smoothing={0.5}
+    idle="wave"
+    idleSpeed={1}
+    clickRipple={true}
     strokeColor="#ff0000"
+    strokeWidth={3}
     minFontSize={36}
   />
 </div>`,

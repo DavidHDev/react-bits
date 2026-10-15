@@ -9,16 +9,15 @@ export const ghostFibers = {
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <GhostFibers
-    glowColor="#2f5bff"
-    speed={0.2}
-    scale={2}
-    rotationSpeed={0.25}
-    layers={4}
-    twist={0.1}
-    threads={1}
-    glow={2}
-    brightness={1.4}
-    vignette={0.8}
+    glowColor="#8b5cf6"
+    layers={3}
+    twist={1.2}
+    threads={72}
+    fiberStyle="dots"
+    depthOfField={0.85}
+    hoverEffect="focus"
+    intro={true}
+    mouseInteraction={true}
   />
 </div>`,
   code,

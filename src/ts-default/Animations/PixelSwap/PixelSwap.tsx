@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -14,20 +15,28 @@ import './PixelSwap.css';
 export interface PixelSwapProps {
   firstContent?: ReactNode;
   secondContent?: ReactNode;
-  effect?: 'flip' | 'assemble' | 'grow';
+  pattern?:
+    | 'pointer'
+    | 'random'
+    | 'center'
+    | 'edges'
+    | 'left-to-right'
+    | 'right-to-left'
+    | 'top-to-bottom'
+    | 'bottom-to-top'
+    | 'diagonal'
+    | 'spiral';
   pixelSize?: number;
   gap?: number;
   pixelRadius?: number;
-  origin?: 'pointer' | 'center' | 'edges' | 'left' | 'right' | 'top' | 'bottom' | 'diagonal' | 'random';
-  axis?: 'auto' | 'x' | 'y';
+  pixelScale?: number;
+  pixelSpin?: number;
   duration?: number;
   pixelDuration?: number;
-  depth?: number;
-  shading?: number;
-  bounce?: number;
   randomness?: number;
-  backdropColor?: string;
+  bounce?: number;
   trigger?: 'hover' | 'click' | 'none';
+  intro?: boolean;
   initialActive?: boolean;
   active?: boolean;
   onActiveChange?: (active: boolean) => void;
@@ -42,35 +51,58 @@ interface Point {
   y: number;
 }
 
-interface Tile {
-  index: number;
-  left: number;
-  top: number;
-  x: number;
-  y: number;
-}
-
 interface Grid {
-  tiles: Tile[];
+  count: number;
   size: number;
+  stride: number;
+  gap: number;
   width: number;
   height: number;
+  cx: Float32Array;
+  cy: Float32Array;
+  gx: Float32Array;
+  gy: Float32Array;
 }
 
-const MAX_TILES = 196;
-const EFFECTS = ['flip', 'assemble', 'grow'];
-const ORIGINS = ['pointer', 'center', 'edges', 'left', 'right', 'top', 'bottom', 'diagonal', 'random'];
-const AXES = ['auto', 'x', 'y'];
+interface Engine {
+  mode: 'intro' | 'swap';
+  grid: Grid;
+  value: Float32Array;
+  velocity: Float32Array;
+  flipAt: Float64Array;
+  target: Uint8Array;
+  desired: number;
+  last: number;
+  running: boolean;
+  raf: number;
+}
+
+const MAX_PIXELS = 600;
+const STEP = 1 / 240;
+const PATTERNS = [
+  'pointer',
+  'random',
+  'center',
+  'edges',
+  'left-to-right',
+  'right-to-left',
+  'top-to-bottom',
+  'bottom-to-top',
+  'diagonal',
+  'spiral'
+];
 
 const ROOT = 'pixel-swap';
 const LAYER = 'pixel-swap__layer';
-const WALL = 'pixel-swap__wall';
-const TILE = 'pixel-swap__tile';
-const FACE = 'pixel-swap__face';
-const PIECE = 'pixel-swap__piece';
-const SHADE = 'pixel-swap__shade';
+
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const smoothstep = (edge0: number, edge1: number, value: number) => {
+  const t = clamp((value - edge0) / (edge1 - edge0), 0, 1);
+  return t * t * (3 - 2 * t);
+};
 
 const hash = (index: number) => {
   let h = Math.imul(index + 1, 0x27d4eb2d);
@@ -79,103 +111,99 @@ const hash = (index: number) => {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 };
 
+const round = (value: number) => Math.round(value * 10) / 10;
+
 const buildGrid = (width: number, height: number, pixelSize: number, gap: number): Grid => {
   let size = pixelSize;
   let columns = Math.max(1, Math.ceil((width + gap) / (size + gap)));
   let rows = Math.max(1, Math.ceil((height + gap) / (size + gap)));
-  if (columns * rows > MAX_TILES) {
-    size = Math.ceil(size * Math.sqrt((columns * rows) / MAX_TILES));
+  if (columns * rows > MAX_PIXELS) {
+    size = Math.ceil(size * Math.sqrt((columns * rows) / MAX_PIXELS));
     columns = Math.max(1, Math.ceil((width + gap) / (size + gap)));
     rows = Math.max(1, Math.ceil((height + gap) / (size + gap)));
   }
   const stride = size + gap;
   const startX = (width - (columns * stride - gap)) / 2;
   const startY = (height - (rows * stride - gap)) / 2;
-  const tiles: Tile[] = [];
+  const count = columns * rows;
+  const cx = new Float32Array(count);
+  const cy = new Float32Array(count);
+  const gx = new Float32Array(count);
+  const gy = new Float32Array(count);
   for (let row = 0; row < rows; row++) {
     for (let column = 0; column < columns; column++) {
-      tiles.push({
-        index: row * columns + column,
-        left: startX + column * stride,
-        top: startY + row * stride,
-        x: columns > 1 ? column / (columns - 1) : 0.5,
-        y: rows > 1 ? row / (rows - 1) : 0.5
-      });
+      const index = row * columns + column;
+      cx[index] = startX + column * stride + size / 2;
+      cy[index] = startY + row * stride + size / 2;
+      gx[index] = columns > 1 ? column / (columns - 1) : 0.5;
+      gy[index] = rows > 1 ? row / (rows - 1) : 0.5;
     }
   }
-  return { tiles, size, width, height };
+  return { count, size, stride, gap, width, height, cx, cy, gx, gy };
 };
 
-const routeOf = (tile: Tile, grid: Grid, origin: string, point: Point | null) => {
-  const cx = tile.left + grid.size / 2;
-  const cy = tile.top + grid.size / 2;
-  if (origin === 'pointer' || origin === 'center' || origin === 'random') {
-    const px = origin === 'pointer' && point ? point.x : grid.width / 2;
-    const py = origin === 'pointer' && point ? point.y : grid.height / 2;
-    const reach = Math.max(
-      Math.hypot(px, py),
-      Math.hypot(grid.width - px, py),
-      Math.hypot(px, grid.height - py),
-      Math.hypot(grid.width - px, grid.height - py),
-      1
-    );
-    const length = Math.hypot(cx - px, cy - py);
-    const order = origin === 'random' ? hash(tile.index + 7) : length / reach;
-    return { order, dx: length ? (cx - px) / length : 0, dy: length ? (cy - py) / length : 1 };
+const orderOf = (grid: Grid, index: number, pattern: string, point: Point | null) => {
+  const x = grid.gx[index];
+  const y = grid.gy[index];
+  if (pattern === 'random') return hash(index + 11);
+  if (pattern === 'center') return Math.hypot(x - 0.5, y - 0.5) / Math.SQRT1_2;
+  if (pattern === 'edges') return 1 - Math.min(x, 1 - x, y, 1 - y) * 2;
+  if (pattern === 'left-to-right') return x;
+  if (pattern === 'right-to-left') return 1 - x;
+  if (pattern === 'top-to-bottom') return y;
+  if (pattern === 'bottom-to-top') return 1 - y;
+  if (pattern === 'diagonal') return (x + y) / 2;
+  if (pattern === 'spiral') {
+    const angle = (Math.atan2(y - 0.5, x - 0.5) + Math.PI) / (Math.PI * 2);
+    return (angle + Math.hypot(x - 0.5, y - 0.5) / Math.SQRT1_2) / 2;
   }
-  if (origin === 'left') return { order: tile.x, dx: 1, dy: 0 };
-  if (origin === 'right') return { order: 1 - tile.x, dx: -1, dy: 0 };
-  if (origin === 'top') return { order: tile.y, dx: 0, dy: 1 };
-  if (origin === 'bottom') return { order: 1 - tile.y, dx: 0, dy: -1 };
-  if (origin === 'diagonal') return { order: (tile.x + tile.y) / 2, dx: Math.SQRT1_2, dy: Math.SQRT1_2 };
-  const edge = Math.min(tile.x, 1 - tile.x, tile.y, 1 - tile.y);
-  if (edge === tile.x) return { order: edge * 2, dx: 1, dy: 0 };
-  if (edge === 1 - tile.x) return { order: edge * 2, dx: -1, dy: 0 };
-  if (edge === tile.y) return { order: edge * 2, dx: 0, dy: 1 };
-  return { order: edge * 2, dx: 0, dy: -1 };
+  const px = point ? point.x : grid.width / 2;
+  const py = point ? point.y : grid.height / 2;
+  const reach = Math.max(
+    Math.hypot(px, py),
+    Math.hypot(grid.width - px, py),
+    Math.hypot(px, grid.height - py),
+    Math.hypot(grid.width - px, grid.height - py),
+    1
+  );
+  return Math.hypot(grid.cx[index] - px, grid.cy[index] - py) / reach;
 };
 
-const makeFace = (layer: HTMLElement, tile: Tile, grid: Grid, cover: number) => {
-  const face = document.createElement('div');
-  face.className = FACE;
-  const piece = document.createElement('div');
-  piece.className = PIECE;
-  piece.style.left = `${-tile.left}px`;
-  piece.style.top = `${-tile.top}px`;
-  piece.style.width = `${grid.width}px`;
-  piece.style.height = `${grid.height}px`;
-  piece.style.transformOrigin = `${tile.left + grid.size / 2}px ${tile.top + grid.size / 2}px`;
-  piece.style.transform = `scale(${1 / cover})`;
-  const clone = layer.cloneNode(true) as HTMLElement;
-  clone.removeAttribute('class');
-  clone.removeAttribute('data-visible');
-  clone.removeAttribute('aria-hidden');
-  clone.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;visibility:visible;';
-  piece.appendChild(clone);
-  const shade = document.createElement('div');
-  shade.className = SHADE;
-  face.append(piece, shade);
-  face.style.transform = `scale(${cover})`;
-  return { face, piece, shade };
+const pixelPath = (x: number, y: number, half: number, radius: number, angle: number) => {
+  if (!angle) {
+    const x0 = round(x - half);
+    const x1 = round(x + half);
+    const y0 = round(y - half);
+    const y1 = round(y + half);
+    if (radius < 0.2) return `M${x0} ${y0}H${x1}V${y1}H${x0}Z`;
+    const r = round(radius);
+    return `M${round(x0 + r)} ${y0}H${round(x1 - r)}A${r} ${r} 0 0 1 ${x1} ${round(y0 + r)}V${round(y1 - r)}A${r} ${r} 0 0 1 ${round(x1 - r)} ${y1}H${round(x0 + r)}A${r} ${r} 0 0 1 ${x0} ${round(y1 - r)}V${round(y0 + r)}A${r} ${r} 0 0 1 ${round(x0 + r)} ${y0}Z`;
+  }
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  const at = (u: number, v: number) => `${round(x + u * cos - v * sin)} ${round(y + u * sin + v * cos)}`;
+  const h = half;
+  if (radius < 0.2) return `M${at(-h, -h)}L${at(h, -h)}L${at(h, h)}L${at(-h, h)}Z`;
+  const r = round(radius);
+  const k = h - radius;
+  return `M${at(-k, -h)}L${at(k, -h)}A${r} ${r} 0 0 1 ${at(h, -k)}L${at(h, k)}A${r} ${r} 0 0 1 ${at(k, h)}L${at(-k, h)}A${r} ${r} 0 0 1 ${at(-h, k)}L${at(-h, -k)}A${r} ${r} 0 0 1 ${at(-k, -h)}Z`;
 };
 
 function PixelSwap({
   firstContent,
   secondContent,
-  effect = 'flip',
-  pixelSize = 72,
+  pattern = 'pointer',
+  pixelSize = 48,
   gap = 0,
   pixelRadius = 0,
-  origin = 'pointer',
-  axis = 'auto',
-  duration = 1100,
-  pixelDuration = 700,
-  depth = 0.5,
-  shading = 0.5,
+  pixelScale = 0,
+  pixelSpin = 0,
+  duration = 400,
+  pixelDuration = 350,
+  randomness = 0.2,
   bounce = 0.3,
-  randomness = 0.15,
-  backdropColor = 'transparent',
   trigger = 'hover',
+  intro = true,
   initialActive = false,
   active,
   onActiveChange,
@@ -187,238 +215,164 @@ function PixelSwap({
   const controlled = active !== undefined;
   const [shown, setShown] = useState(controlled ? active : initialActive);
   const rootRef = useRef<HTMLDivElement>(null);
-  const wallRef = useRef<HTMLDivElement>(null);
   const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
   const shownRef = useRef(shown);
   const desiredRef = useRef(shown);
   const pointRef = useRef<Point | null>(null);
-  const engineRef = useRef<{ running: boolean; to: boolean; animations: Animation[]; token: number }>({
-    running: false,
-    to: false,
-    animations: [],
-    token: 0
-  });
+  const engineRef = useRef<Engine | null>(null);
+  const waitingRef = useRef(false);
 
   const settings = {
-    effect: EFFECTS.includes(effect) ? effect : 'flip',
-    pixelSize: Math.max(12, Math.round(pixelSize)),
-    gap: Math.max(0, Math.round(gap)),
+    pattern: PATTERNS.includes(pattern) ? pattern : 'pointer',
+    pixelSize: Math.max(8, Math.round(pixelSize)),
+    gap: Math.max(0, gap),
     pixelRadius: clamp(pixelRadius, 0, 50),
-    origin: ORIGINS.includes(origin) ? origin : 'pointer',
-    axis: AXES.includes(axis) ? axis : 'auto',
-    duration: Math.max(200, duration),
-    pixelDuration: Math.max(80, pixelDuration),
-    depth: clamp(depth, 0, 1),
-    shading: clamp(shading, 0, 1),
-    bounce: clamp(bounce, 0, 1),
+    pixelScale: clamp(pixelScale, 0, 0.9),
+    pixelSpin: (clamp(pixelSpin, -360, 360) * Math.PI) / 180,
+    duration: Math.max(0, duration),
+    pixelDuration: Math.max(60, pixelDuration),
     randomness: clamp(randomness, 0, 1),
-    backdropColor,
+    bounce: clamp(bounce, 0, 1),
     onComplete
   };
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
 
-  const commit = (target: boolean) => {
-    const root = rootRef.current;
+  const setLayer = (index: number, visible: boolean, clip: string) => {
+    const layer = layerRefs.current[index];
+    if (!layer) return;
+    layer.setAttribute('data-visible', String(visible));
+    layer.style.clipPath = clip || '';
+  };
+
+  const finish = () => {
     const engine = engineRef.current;
+    if (!engine) return;
     engine.running = false;
-    engine.animations.forEach(animation => animation.cancel());
-    engine.animations = [];
-    layerRefs.current.forEach((layer, index) =>
-      layer?.setAttribute('data-visible', String(index === (target ? 1 : 0)))
-    );
-    root?.removeAttribute('data-swapping');
-    wallRef.current?.replaceChildren();
+    rootRef.current?.removeAttribute('data-swapping');
+    if (engine.mode === 'intro') {
+      setLayer(0, !shownRef.current, '');
+      engine.mode = 'swap';
+      if (desiredRef.current !== shownRef.current) requestRef.current(desiredRef.current, pointRef.current);
+      return;
+    }
+    const target = engine.desired === 1;
+    setLayer(1, target, '');
+    setLayer(0, !target, '');
     shownRef.current = target;
     setShown(target);
     settingsRef.current.onComplete?.(target);
   };
 
-  const watch = () => {
+  const frame = (now: number) => {
     const engine = engineRef.current;
-    engine.token += 1;
-    const token = engine.token;
-    Promise.all(engine.animations.map(animation => animation.finished))
-      .then(() => {
-        if (token === engine.token && engine.running) commit(engine.to);
-      })
-      .catch(() => {});
+    if (!engine) return;
+    const s = settingsRef.current;
+    const grid = engine.grid;
+    const { value, velocity, flipAt, target } = engine;
+    const elapsed = clamp((now - engine.last) / 1000, 0, 1 / 20);
+    engine.last = now;
+    const omega = (Math.PI * 2) / (s.pixelDuration / 1000);
+    const zeta = clamp(1 - s.bounce, 0.15, 1);
+    const steps = Math.max(1, Math.ceil(elapsed / STEP));
+    const dt = elapsed / steps;
+    const pop = s.pixelScale;
+    const half = grid.size / 2;
+    const cover = grid.gap / 2 + 0.5;
+    let moving = false;
+    let path = '';
+
+    for (let i = 0; i < grid.count; i++) {
+      if (now >= flipAt[i] && target[i] !== engine.desired) {
+        target[i] = engine.desired;
+        if (target[i] === 1 && value[i] < pop) value[i] = pop;
+      }
+      let x = value[i];
+      let v = velocity[i];
+      const goal = target[i];
+      for (let n = 0; n < steps; n++) {
+        v += (-omega * omega * (x - goal) - 2 * zeta * omega * v) * dt;
+        x += v * dt;
+      }
+      if (goal === 0 && x <= pop) {
+        x = 0;
+        v = 0;
+      }
+      if (Math.abs(x - goal) > 0.001 || Math.abs(v) > 0.01 || now < flipAt[i]) moving = true;
+      else {
+        x = goal;
+        v = 0;
+      }
+      value[i] = x;
+      velocity[i] = v;
+      if (x <= 0.002) continue;
+      const size = Math.min(x * 1.08, 1.25) * (half + cover * smoothstep(0.6, 0.93, x));
+      const radius = Math.min(size, (s.pixelRadius / 50) * size * (1 - smoothstep(0.6, 0.93, x)));
+      path += pixelPath(grid.cx[i], grid.cy[i], size, radius, s.pixelSpin * (1 - x));
+    }
+
+    const layer = engine.mode === 'intro' ? 0 : 1;
+    setLayer(layer, path !== '', path ? `path('${path}')` : '');
+
+    if (moving) engine.raf = requestAnimationFrame(frame);
+    else finish();
   };
 
-  const start = (to: boolean, point: Point | null) => {
+  const launch = (mode: Engine['mode'], to: boolean, point: Point | null) => {
     const root = rootRef.current;
-    const wall = wallRef.current;
-    const engine = engineRef.current;
     const s = settingsRef.current;
-    const from = layerRefs.current[shownRef.current ? 1 : 0];
-    const target = layerRefs.current[to ? 1 : 0];
+    let engine: Engine | null = engineRef.current;
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     const width = root?.clientWidth ?? 0;
     const height = root?.clientHeight ?? 0;
-    if (!root || !wall || !from || !target || reduce || !width || !height) {
-      commit(to);
-      return;
+    if (!root || reduce || !width || !height) return false;
+
+    const now = performance.now();
+    if (!engine?.running) {
+      const grid = buildGrid(width, height, s.pixelSize, s.gap);
+      const start = mode === 'intro' ? 0 : shownRef.current ? 1 : 0;
+      engine = {
+        mode,
+        grid,
+        value: new Float32Array(grid.count).fill(start),
+        velocity: new Float32Array(grid.count),
+        flipAt: new Float64Array(grid.count),
+        target: new Uint8Array(grid.count).fill(start),
+        desired: start,
+        last: now,
+        running: true,
+        raf: engineRef.current?.raf ?? 0
+      };
+      engineRef.current = engine;
     }
-
-    const grid = buildGrid(width, height, s.pixelSize, s.gap);
-    const cover = (grid.size + s.gap + 1.5) / grid.size;
-    const lift = grid.size * (0.15 + 0.65 * s.depth);
-    const spread = Math.max(0, s.duration - s.pixelDuration);
-    const tileMs = Math.min(s.pixelDuration, s.duration);
-    const overshoot = 1 + 0.6 * s.bounce;
-    const radius = `${s.pixelRadius}%`;
-    const animations: Animation[] = [];
-    const fragment = document.createDocumentFragment();
-
-    wall.style.perspective = `${Math.max(width, height) * (2.6 - 1.8 * s.depth)}px`;
-    wall.style.background = s.backdropColor;
-
-    grid.tiles.forEach(tile => {
-      const route = routeOf(tile, grid, s.origin, point);
-      const order = route.order * (1 - s.randomness) + hash(tile.index) * s.randomness;
-      const delay = order * spread;
-      const element = document.createElement('div');
-      element.className = TILE;
-      element.style.left = `${tile.left}px`;
-      element.style.top = `${tile.top}px`;
-      element.style.width = `${grid.size}px`;
-      element.style.height = `${grid.size}px`;
-      const old = makeFace(from, tile, grid, cover);
-      const next = makeFace(target, tile, grid, cover);
-      const seal = [{ borderRadius: '0%' }, { borderRadius: radius, offset: 0.5 }, { borderRadius: '0%' }];
-      const pieceSeal = [
-        { transform: `scale(${1 / cover})` },
-        { transform: 'scale(1)', offset: 0.5 },
-        { transform: `scale(${1 / cover})` }
-      ];
-
-      if (s.effect === 'flip') {
-        let ax = -route.dy;
-        let ay = route.dx;
-        let sign = 1;
-        if (s.axis === 'x') {
-          ax = 1;
-          ay = 0;
-          sign = route.dy >= 0 ? -1 : 1;
-        } else if (s.axis === 'y') {
-          ax = 0;
-          ay = 1;
-          sign = route.dx >= 0 ? 1 : -1;
-        }
-        const turn = (angle: number) => `rotate3d(${ax}, ${ay}, 0, ${angle * sign}deg)`;
-        old.face.style.transform = '';
-        next.face.style.transform = turn(180);
-        element.append(old.face, next.face);
-        const timing: KeyframeAnimationOptions = {
-          duration: tileMs,
-          delay,
-          easing: `cubic-bezier(0.6, 0, 0.3, ${overshoot})`,
-          fill: 'both'
-        };
-        animations.push(
-          element.animate(
-            [
-              { transform: `translateZ(0px) ${turn(0)} scale(${cover})` },
-              { transform: `translateZ(${lift}px) ${turn(90)} scale(1)`, offset: 0.5 },
-              { transform: `translateZ(0px) ${turn(180)} scale(${cover})` }
-            ],
-            timing
-          ),
-          old.piece.animate(pieceSeal, timing),
-          next.piece.animate(pieceSeal, timing),
-          old.shade.animate([{ opacity: 0 }, { opacity: s.shading * 0.85, offset: 0.5 }, { opacity: 0 }], timing),
-          next.shade.animate([{ opacity: 0 }, { opacity: s.shading * 0.85, offset: 0.5 }, { opacity: 0 }], timing)
-        );
-        if (s.pixelRadius > 0) {
-          animations.push(old.face.animate(seal, timing), next.face.animate(seal, timing));
-        }
-      } else if (s.effect === 'assemble') {
-        const fall = grid.size * (0.5 + 0.9 * s.depth);
-        const tilt = (hash(tile.index + 3) - 0.5) * 2;
-        element.append(next.face, old.face);
-        const out: KeyframeAnimationOptions = {
-          duration: tileMs * 0.8,
-          delay,
-          easing: 'cubic-bezier(0.5, 0, 0.75, 0)',
-          fill: 'both'
-        };
-        const into: KeyframeAnimationOptions = {
-          duration: tileMs * 0.85,
-          delay: delay + tileMs * 0.3,
-          easing: `cubic-bezier(0.2, 0.8, 0.3, ${overshoot})`,
-          fill: 'both'
-        };
-        animations.push(
-          old.face.animate(
-            [
-              { transform: `translate3d(0px, 0px, 0px) rotateX(0deg) rotateZ(0deg) scale(${cover})`, opacity: 1 },
-              {
-                transform: `translate3d(${route.dx * fall * 0.6}px, ${route.dy * fall * 0.6 + fall}px, ${-lift}px) rotateX(${-50 - 30 * Math.abs(tilt)}deg) rotateZ(${tilt * 35}deg) scale(${cover * 0.85})`,
-                opacity: 0
-              }
-            ],
-            out
-          ),
-          old.shade.animate([{ opacity: 0 }, { opacity: s.shading * 0.7 }], out),
-          next.face.animate(
-            [
-              {
-                transform: `translate3d(0px, 0px, ${-lift * 2.2}px) rotateX(${20 * tilt}deg) scale(${cover * 0.6})`,
-                opacity: 0,
-                borderRadius: radius
-              },
-              { transform: `translate3d(0px, 0px, 0px) rotateX(0deg) scale(${cover})`, opacity: 1, borderRadius: '0%' }
-            ],
-            into
-          ),
-          next.shade.animate([{ opacity: s.shading * 0.8 }, { opacity: 0 }], into)
-        );
-      } else {
-        element.append(old.face, next.face);
-        const initial = 0.25;
-        const timing: KeyframeAnimationOptions = {
-          duration: tileMs,
-          delay,
-          easing: `cubic-bezier(0.2, 0.8, 0.3, ${overshoot})`,
-          fill: 'both'
-        };
-        animations.push(
-          next.face.animate(
-            [
-              { transform: `scale(${cover * initial})`, opacity: 0, borderRadius: radius },
-              { transform: `scale(${cover})`, opacity: 1, borderRadius: '0%' }
-            ],
-            timing
-          ),
-          next.piece.animate(
-            [{ transform: `scale(${1 / (cover * initial)})` }, { transform: `scale(${1 / cover})` }],
-            timing
-          ),
-          next.shade.animate([{ opacity: s.shading * 0.6 }, { opacity: 0 }], timing)
-        );
-      }
-      fragment.appendChild(element);
-    });
-
-    wall.replaceChildren(fragment);
+    engine.desired = to ? 1 : 0;
+    const grid = engine.grid;
+    const orders = new Float32Array(grid.count);
+    let first = Infinity;
+    for (let i = 0; i < grid.count; i++) {
+      orders[i] = orderOf(grid, i, s.pattern, point) * (1 - s.randomness) + hash(i) * s.randomness;
+      const settled = engine.target[i] === engine.desired && Math.abs(engine.value[i] - engine.desired) < 0.001;
+      if (!settled) first = Math.min(first, orders[i]);
+    }
+    if (first === Infinity) first = 0;
+    for (let i = 0; i < grid.count; i++) engine.flipAt[i] = now + Math.max(0, orders[i] - first) * s.duration;
     root.setAttribute('data-swapping', '');
-    engine.animations = animations;
-    engine.running = true;
-    engine.to = to;
-    watch();
+    if (mode === 'swap') setLayer(0, true, '');
+    cancelAnimationFrame(engine.raf);
+    engine.raf = requestAnimationFrame(frame);
+    return true;
   };
 
   const request = (to: boolean, point: Point | null) => {
     const engine = engineRef.current;
-    if (engine.running) {
-      if (engine.to === to) return;
-      engine.to = to;
-      engine.animations.forEach(animation => animation.reverse());
-      watch();
-      return;
-    }
-    if (shownRef.current === to) return;
-    start(to, point);
+    if (waitingRef.current || (engine?.running && engine.mode === 'intro')) return;
+    if (!engine?.running && shownRef.current === to) return;
+    if (launch('swap', to, point)) return;
+    setLayer(1, to, '');
+    setLayer(0, !to, '');
+    shownRef.current = to;
+    setShown(to);
+    settingsRef.current.onComplete?.(to);
   };
   const requestRef = useRef(request);
   requestRef.current = request;
@@ -430,43 +384,84 @@ function PixelSwap({
     if (!controlled) request(next, point);
   };
 
+  const launchRef = useRef(launch);
+  launchRef.current = launch;
+
+  useIsoLayoutEffect(() => {
+    if (!intro || shownRef.current) return;
+    const images = [...(layerRefs.current[0]?.querySelectorAll('img') ?? [])].filter(image => !image.complete);
+    let started = false;
+    let timer = 0;
+    const begin = () => {
+      if (started) return;
+      started = true;
+      clearTimeout(timer);
+      waitingRef.current = false;
+      if (launchRef.current('intro', true, null)) return;
+      setLayer(0, true, '');
+      if (desiredRef.current !== shownRef.current) requestRef.current(desiredRef.current, pointRef.current);
+    };
+    setLayer(0, false, '');
+    if (!images.length) {
+      begin();
+      return undefined;
+    }
+    waitingRef.current = true;
+    let left = images.length;
+    const settle = () => {
+      left -= 1;
+      if (left <= 0) begin();
+    };
+    images.forEach(image => {
+      image.addEventListener('load', settle, { once: true });
+      image.addEventListener('error', settle, { once: true });
+    });
+    timer = setTimeout(begin, 3000);
+    return () => {
+      started = true;
+      clearTimeout(timer);
+      waitingRef.current = false;
+      images.forEach(image => {
+        image.removeEventListener('load', settle);
+        image.removeEventListener('error', settle);
+      });
+    };
+  }, []);
+
   useEffect(() => {
     if (active === undefined) return;
     desiredRef.current = active;
     requestRef.current(active, pointRef.current);
   }, [active]);
 
-  useEffect(() => {
-    const engine = engineRef.current;
-    return () => {
-      engine.token += 1;
-      engine.animations.forEach(animation => animation.cancel());
-      engine.animations = [];
+  useEffect(
+    () => () => {
+      const engine = engineRef.current;
+      if (!engine) return;
+      cancelAnimationFrame(engine.raf);
       engine.running = false;
-    };
-  }, []);
+    },
+    []
+  );
 
   const pointOf = (event: ReactMouseEvent<HTMLDivElement>): Point | null => {
     const rect = rootRef.current?.getBoundingClientRect();
-    if (!rect || event.clientX === undefined || (event.clientX === 0 && event.clientY === 0 && event.detail === 0))
-      return null;
+    if (!rect || (event.detail === 0 && event.clientX === 0 && event.clientY === 0)) return null;
     return { x: event.clientX - rect.left, y: event.clientY - rect.top };
   };
 
   const handlers: HTMLAttributes<HTMLDivElement> = {};
   if (trigger === 'hover') {
     handlers.onPointerEnter = event => {
-      if (event.pointerType === 'touch') return;
-      ask(true, pointOf(event));
+      if (event.pointerType !== 'touch') ask(true, pointOf(event));
     };
     handlers.onPointerLeave = event => {
-      if (event.pointerType === 'touch') return;
-      ask(false, pointOf(event));
+      if (event.pointerType !== 'touch') ask(false, pointOf(event));
     };
     handlers.onClick = event => {
       const native = event.nativeEvent;
       const touch = 'pointerType' in native && native.pointerType === 'touch';
-      if (touch || event.detail === 0) ask(!desiredRef.current, pointOf(event));
+      if (event.detail === 0 || touch) ask(!desiredRef.current, pointOf(event));
     };
     handlers.onFocus = event => {
       if (event.target === event.currentTarget && event.currentTarget.matches(':focus-visible')) ask(true, null);
@@ -500,13 +495,13 @@ function PixelSwap({
             layerRefs.current[index] = element;
           }}
           className={LAYER}
+          style={{ zIndex: index }}
           data-visible={String(index === (shown ? 1 : 0))}
           aria-hidden={index !== (shown ? 1 : 0)}
         >
           {content}
         </div>
       ))}
-      <div ref={wallRef} className={WALL} aria-hidden="true" />
     </div>
   );
 }

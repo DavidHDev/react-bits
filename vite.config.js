@@ -36,6 +36,11 @@ export default defineConfig({
   assetsInclude: ['**/*.glb'],
   build: {
     rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, 'index.html'),
+        'studio-frame': path.resolve(__dirname, 'studio-frame.html'),
+        'shape-frame': path.resolve(__dirname, 'shape-frame.html')
+      },
       onwarn(warning, warn) {
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client')) return;
         warn(warning);

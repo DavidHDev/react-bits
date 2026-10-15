@@ -1,4 +1,5 @@
 .split-flap-text {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--split-flap-gap, 6px);
@@ -13,8 +14,21 @@
   font-variant-numeric: tabular-nums;
 }
 
+.split-flap-text__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .split-flap-text__tile {
   position: relative;
+  flex: none;
   width: 0.78em;
   height: 1.08em;
   overflow: hidden;
@@ -29,8 +43,9 @@
   box-shadow:
     0 0.035em 0.08em rgba(255, 255, 255, 0.08) inset,
     0 -0.05em 0.1em rgba(0, 0, 0, 0.38) inset,
-    0 0.16em 0.38em rgba(0, 0, 0, 0.28);
-  perspective: 520px;
+    0 calc(0.16em * var(--split-flap-lift, 1)) calc(0.38em * var(--split-flap-lift, 1))
+      rgba(0, 0, 0, var(--split-flap-drop, 0.28));
+  perspective: 10em;
   transform-style: preserve-3d;
   isolation: isolate;
 }
@@ -39,15 +54,15 @@
   content: '';
   position: absolute;
   z-index: 8;
-  top: calc(50% - 0.5px);
+  top: calc(50% - var(--split-flap-hinge, 1px) / 2);
   left: 0;
   width: 100%;
-  height: 1px;
+  height: var(--split-flap-hinge, 1px);
   background: linear-gradient(
     90deg,
     transparent,
     rgba(255, 255, 255, 0.18) 18%,
-    rgba(0, 0, 0, 0.64) 50%,
+    rgba(0, 0, 0, var(--split-flap-hinge-shade, 0.64)) 50%,
     rgba(255, 255, 255, 0.14) 82%,
     transparent
   );
@@ -129,32 +144,112 @@
 
 .split-flap-text__flap--front {
   transform-origin: center bottom;
-  animation: split-flap-front var(--split-flap-flip-duration, 0.12s) cubic-bezier(0.23, 1, 0.32, 1) both;
+  box-shadow: inset 0 var(--split-flap-edge, 0em) 0 rgba(255, 255, 255, 0.16);
+  animation: split-flap-front var(--split-flap-flip-duration, 0.12s) linear both;
 }
 
 .split-flap-text__flap--back {
   transform-origin: center top;
   transform: rotateX(90deg);
-  animation: split-flap-back var(--split-flap-flip-duration, 0.12s) cubic-bezier(0.23, 1, 0.32, 1) both;
+  box-shadow: inset 0 calc(var(--split-flap-edge, 0em) * -1) 0 rgba(0, 0, 0, 0.4);
+  animation: split-flap-back var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text__shade {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  pointer-events: none;
+  animation: split-flap-shade-top var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text__shade--top {
+  top: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, var(--split-flap-cast, 0)), transparent 85%);
+}
+
+.split-flap-text__shade--bottom {
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, var(--split-flap-cast, 0)), transparent 90%);
+  animation-name: split-flap-shade-bottom;
+}
+
+.split-flap-text--glare .split-flap-text__flap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+      180deg,
+      transparent 32%,
+      rgba(255, 255, 255, var(--split-flap-glare, 0)) 50%,
+      transparent 68%
+    )
+    0 100% / 100% 300% no-repeat;
+  animation: split-flap-glare-front var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text--glare .split-flap-text__flap--back::after {
+  animation-name: split-flap-glare-back;
+}
+
+.split-flap-text--minimal .split-flap-text__tile {
+  background: none;
+  box-shadow: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat,
+    linear-gradient(#000 0 0) bottom / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat;
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat,
+    linear-gradient(#000 0 0) bottom / 100% calc(50% - var(--split-flap-split, 0.045em) / 2) no-repeat;
+}
+
+.split-flap-text--minimal .split-flap-text__tile::before,
+.split-flap-text--minimal .split-flap-text__tile::after,
+.split-flap-text--minimal .split-flap-text__flap::after {
+  display: none;
+}
+
+.split-flap-text--minimal .split-flap-text__half,
+.split-flap-text--minimal .split-flap-text__flap {
+  background: none;
+  box-shadow: none;
+}
+
+.split-flap-text--minimal .split-flap-text__char {
+  text-shadow: none;
+}
+
+.split-flap-text--minimal .split-flap-text__tile.is-flipping .split-flap-text__half--top {
+  animation: split-flap-reveal var(--split-flap-flip-duration, 0.12s) linear both;
+}
+
+.split-flap-text--minimal .split-flap-text__tile.is-flipping .split-flap-text__half--bottom {
+  animation: split-flap-cover var(--split-flap-flip-duration, 0.12s) linear both;
 }
 
 @keyframes split-flap-front {
   0% {
     transform: rotateX(0deg);
-    filter: brightness(1.08);
+    filter: brightness(var(--split-flap-front-from, 1.08));
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 
+  50%,
   100% {
     transform: rotateX(-90deg);
-    filter: brightness(0.52);
+    filter: brightness(var(--split-flap-front-to, 0.52));
   }
 }
 
 @keyframes split-flap-back {
   0%,
-  45% {
+  50% {
     transform: rotateX(90deg);
-    filter: brightness(0.58);
+    filter: brightness(var(--split-flap-back-from, 0.58));
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 
   100% {
@@ -163,8 +258,143 @@
   }
 }
 
+@keyframes split-flap-shade-top {
+  0%,
+  32% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes split-flap-shade-bottom {
+  0% {
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes split-flap-glare-front {
+  0% {
+    background-position: 0 100%;
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    background-position: 0 0%;
+    opacity: 0.75;
+  }
+}
+
+@keyframes split-flap-glare-back {
+  0%,
+  50% {
+    background-position: 0 100%;
+    opacity: 0.75;
+  }
+
+  100% {
+    background-position: 0 0%;
+    opacity: 0;
+  }
+}
+
+@keyframes split-flap-reveal {
+  0% {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  23.14% {
+    clip-path: inset(0 0 99.21% 0);
+  }
+
+  29.67% {
+    clip-path: inset(0 0 95.55% 0);
+  }
+
+  33.95% {
+    clip-path: inset(0 0 89.09% 0);
+  }
+
+  37.41% {
+    clip-path: inset(0 0 79.46% 0);
+  }
+
+  40.56% {
+    clip-path: inset(0 0 66.05% 0);
+  }
+
+  43.73% {
+    clip-path: inset(0 0 47.69% 0);
+  }
+
+  47.38% {
+    clip-path: inset(0 0 21.22% 0);
+  }
+
+  50%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes split-flap-cover {
+  0%,
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+
+  54.42% {
+    clip-path: inset(35.75% 0 0 0);
+  }
+
+  57.44% {
+    clip-path: inset(55.86% 0 0 0);
+  }
+
+  60.39% {
+    clip-path: inset(70.63% 0 0 0);
+  }
+
+  63.65% {
+    clip-path: inset(81.86% 0 0 0);
+  }
+
+  67.65% {
+    clip-path: inset(90.23% 0 0 0);
+  }
+
+  73.17% {
+    clip-path: inset(96% 0 0 0);
+  }
+
+  82.62% {
+    clip-path: inset(99.25% 0 0 0);
+  }
+
+  100% {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .split-flap-text__flap {
+  .split-flap-text__flap,
+  .split-flap-text__flap::after,
+  .split-flap-text__shade,
+  .split-flap-text__half {
     animation: none !important;
   }
 }

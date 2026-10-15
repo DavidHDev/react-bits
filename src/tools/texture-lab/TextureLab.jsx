@@ -1,891 +1,556 @@
-import { Box, Flex, Text, Icon, useBreakpointValue } from '@chakra-ui/react';
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { Settings, ChevronUp } from 'lucide-react';
-import Controls from './Controls';
-import Canvas from './Canvas';
-import { createRenderer } from './renderer';
-import { createInitialState, OVERLAY_TEXTURES } from './types';
-import {
-  loadImageFromFile,
-  loadImageFromURL,
-  loadVideoFromFile,
-  loadVideoFromURL,
-  copyCanvasToClipboard,
-  copyDataURLToClipboard,
-  exportCanvas,
-  isClipboardImageSupported,
-  generateProceduralTexture
-} from './utils';
-import { toaster } from '../../components/setup/toaster';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { Engine } from './engine/engine';
+import { EFFECTS, EFFECT_LIST } from './effects';
+import { LOOKS, LOOKS_BY_ID } from './looks';
+import { useLayers } from './state/useLayers';
+import { useThumbnails } from './state/useThumbnails';
+import { SAMPLES, isMediaFile, loadFile, loadSample, mediaFrame, releaseMedia, startCamera, workSize } from './media';
+import { decodeLook, readSharedLook } from './share';
+import { EffectsGrid, GallerySearch, GalleryScroll, LooksGrid } from './components/Gallery';
+import LayersPanel from './components/LayersPanel';
+import LabToolbar from './components/LabToolbar';
+import LabStage from './components/LabStage';
+import LabTimeline from './components/LabTimeline';
+import ExportDialog from './components/ExportDialog';
+import { Track } from '../background-studio/components/ui';
+import { downloadBlob } from '../background-studio/utils/download';
+import '../background-studio/studio.css';
+import './lab.css';
+
+const WIDE_QUERY = '(min-width: 1280px)';
+const DESKTOP_QUERY = '(min-width: 1024px)';
+const DEFAULT_LOOK = 'soft-type';
+const LOOK_COUNT = LOOKS.length;
+const EFFECT_COUNT = EFFECT_LIST.length;
+
+const RAIL_TABS = [
+  { value: 'looks', label: 'Styles' },
+  { value: 'effects', label: 'Effects' }
+];
+
+const MOBILE_TABS = [
+  { value: 'looks', label: 'Styles' },
+  { value: 'effects', label: 'Effects' },
+  { value: 'layers', label: 'Layers' }
+];
+
+const useMediaQuery = query => {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+  useEffect(() => {
+    const list = window.matchMedia(query);
+    const update = () => setMatches(list.matches);
+    update();
+    list.addEventListener('change', update);
+    return () => list.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+};
+
+const isTyping = target =>
+  typeof target?.closest === 'function' &&
+  Boolean(
+    target.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [role="dialog"], [role="menu"]')
+  );
 
 export default function TextureLab({ toolSelector }) {
-  const isMobile = useBreakpointValue({ base: true, lg: false });
-  const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
-
+  const wide = useMediaQuery(WIDE_QUERY);
+  const desktop = useMediaQuery(DESKTOP_QUERY);
+  const stack = useLayers();
+  const { add: addLayer, applyLook, replace: replaceLayers } = stack;
+  const [media, setMedia] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [railTab, setRailTab] = useState('looks');
+  const [mobileTab, setMobileTab] = useState('looks');
+  const [zoom, setZoom] = useState('fit');
+  const [comparing, setComparing] = useState(false);
+  const [dropping, setDropping] = useState(false);
+  const [playing, setPlaying] = useState(true);
+  const [trim, setTrim] = useState([0, 0]);
+  const [thumbVersion, setThumbVersion] = useState(0);
+  const [exporting, setExporting] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [strength, setStrength] = useState(1);
+  const [queries, setQueries] = useState({ looks: '', effects: '' });
+  const searchRef = useRef(null);
   const canvasRef = useRef(null);
-  const rendererRef = useRef(null);
-  const renderTimeoutRef = useRef(null);
-  const videoRef = useRef(null);
-  const videoAnimationRef = useRef(null);
+  const stageRef = useRef(null);
+  const fileRef = useRef(null);
+  const engineRef = useRef(null);
+  const clock = useRef(0);
+  const dirty = useRef(true);
+  const recorder = useRef(null);
+  const mediaRef = useRef(null);
 
-  const [state, setState] = useState(createInitialState);
-  const {
-    image,
-    video,
-    mediaType,
-    corsError,
-    effects,
-    seed,
-    previewQuality,
-    exportFormat,
-    exportQuality,
-    exportScale,
-    viewMode,
-    isPlaying,
-    currentTime,
-    duration,
-    isExporting,
-    exportProgress,
-    exportStatus
-  } = state;
+  const thumbs = useThumbnails(media, thumbVersion);
+
+  const animated = useMemo(
+    () =>
+      stack.layers.some(layer => {
+        const effect = EFFECTS[layer.type];
+        if (!layer.visible || !effect?.animated) return false;
+        return effect.animates ? effect.animates(layer.params) : true;
+      }),
+    [stack.layers]
+  );
+
+  const live = useRef({});
+  live.current = { layers: stack.layers, media, comparing, playing, animated, strength };
 
   useEffect(() => {
-    if (canvasRef.current && !rendererRef.current) {
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
+    let engine;
+    try {
+      engine = new Engine(canvas);
+    } catch (problem) {
+      setError(problem.message);
+      return undefined;
+    }
+    engineRef.current = engine;
+    let raf = 0;
+    let last = performance.now();
+    let shown = -1;
+    let shownMedia = null;
+    const tick = now => {
+      raf = requestAnimationFrame(tick);
+      const state = live.current;
+      if (!state.media) return;
+      const dt = Math.min((now - last) / 1000, 0.1);
+      last = now;
+      const media = state.media;
+      const kind = media.kind;
+      if (kind !== 'video' && (state.playing || kind === 'camera')) clock.current += dt;
+      let fresh = false;
+      if (kind === 'video') {
+        media.player.update();
+        fresh = media.player.version !== shown || shownMedia !== media;
+      }
+      const moving = kind === 'camera' || fresh || (state.playing && state.animated);
+      if (!moving && !dirty.current) return;
+      const frame = mediaFrame(media);
+      if (!frame) return;
+      dirty.current = false;
+      if (kind === 'video') {
+        shown = media.player.version;
+        shownMedia = media;
+      }
       try {
-        rendererRef.current = createRenderer(canvasRef.current);
-      } catch (err) {
-        console.error('Failed to create renderer:', err);
-        toaster.create({
-          title: 'Renderer Error',
-          description: 'Failed to initialize graphics renderer.',
-          type: 'error',
-          duration: 5000
+        if (kind !== 'image') engine.setSource(frame.image, frame.width, frame.height);
+        const time = kind === 'video' ? media.player.currentTime : clock.current;
+        engine.render(state.layers, EFFECTS, {
+          ...workSize(media),
+          time,
+          frame: Math.round(time * 30),
+          original: state.comparing,
+          mirror: Boolean(media.mirror),
+          rotation: frame.rotation,
+          flip: frame.flip,
+          strength: state.strength
         });
+      } catch (problem) {
+        console.error(problem);
       }
-    }
-
+    };
+    raf = requestAnimationFrame(tick);
     return () => {
-      if (rendererRef.current) {
-        rendererRef.current.destroy();
-        rendererRef.current = null;
-      }
-      if (videoRef.current) {
-        videoRef.current.pause();
-        if (videoRef.current.src && videoRef.current.src.startsWith('blob:')) {
-          URL.revokeObjectURL(videoRef.current.src);
-        }
-        videoRef.current.src = '';
-        videoRef.current = null;
-      }
+      cancelAnimationFrame(raf);
+      engine.dispose();
+      engineRef.current = null;
     };
   }, []);
 
-  const renderPreview = useCallback(() => {
-    if (!rendererRef.current) return;
+  useEffect(() => {
+    dirty.current = true;
+  }, [stack.layers, comparing, media, zoom, strength]);
 
-    if (mediaType === 'video' && video) {
-      rendererRef.current.updateVideoFrame(video);
-      rendererRef.current.render(effects, seed, video.videoWidth, video.videoHeight);
-      return;
-    }
-
-    if (!image) return;
-
-    let targetWidth = image.width;
-    let targetHeight = image.height;
-
-    if (previewQuality === 'draft' && (image.width > 1000 || image.height > 1000)) {
-      const scale = Math.min(1000 / image.width, 1000 / image.height);
-      targetWidth = Math.round(image.width * scale);
-      targetHeight = Math.round(image.height * scale);
-    }
-
-    rendererRef.current.render(effects, seed, targetWidth, targetHeight);
-  }, [image, video, mediaType, effects, seed, previewQuality]);
-
-  const rafRef = useRef(null);
+  const pickLook = useCallback(
+    look => {
+      applyLook(look);
+      setStrength(1);
+    },
+    [applyLook]
+  );
 
   useEffect(() => {
-    if (mediaType !== 'video' || !video || !isPlaying) {
-      if (videoAnimationRef.current) {
-        cancelAnimationFrame(videoAnimationRef.current);
-        videoAnimationRef.current = null;
+    if (media?.kind === 'video') media.player.setRange(trim[0], trim[1]);
+  }, [media, trim]);
+
+  const openMedia = useCallback(async loader => {
+    setLoading(true);
+    setError(null);
+    try {
+      const next = await loader();
+      releaseMedia(mediaRef.current);
+      mediaRef.current = next;
+      if (next.kind === 'image') engineRef.current?.setSource(next.element, next.width, next.height);
+      if (next.kind === 'video') {
+        setTrim([0, next.duration]);
+        next.player.setRange(0, next.duration);
+        await next.player.play();
+        setPlaying(true);
       }
-      return;
+      clock.current = 0;
+      setMedia(next);
+      setThumbVersion(version => version + 1);
+    } catch (problem) {
+      setError(problem?.message || 'That file could not be opened.');
+    } finally {
+      setLoading(false);
     }
+  }, []);
 
-    const updateFrame = () => {
-      if (!video.paused && !video.ended) {
-        renderPreview();
-        setState(s => ({ ...s, currentTime: video.currentTime }));
-        videoAnimationRef.current = requestAnimationFrame(updateFrame);
-      }
-    };
-
-    videoAnimationRef.current = requestAnimationFrame(updateFrame);
-
-    return () => {
-      if (videoAnimationRef.current) {
-        cancelAnimationFrame(videoAnimationRef.current);
-      }
-    };
-  }, [mediaType, video, isPlaying, renderPreview]);
-
-  useEffect(() => {
-    if (renderTimeoutRef.current) {
-      clearTimeout(renderTimeoutRef.current);
-    }
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
-    if (previewQuality === 'draft') {
-      rafRef.current = requestAnimationFrame(() => {
-        renderPreview();
-      });
-    } else {
-      renderTimeoutRef.current = setTimeout(() => {
-        rafRef.current = requestAnimationFrame(() => {
-          renderPreview();
-        });
-      }, 150);
-    }
-
-    return () => {
-      if (renderTimeoutRef.current) {
-        clearTimeout(renderTimeoutRef.current);
-      }
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [renderPreview, previewQuality]);
-
-  const lastOverlayParamsRef = useRef(null);
-
-  useEffect(() => {
-    const loadOverlayTextures = async () => {
-      if (!rendererRef.current) return;
-
-      const overlayEffect = effects.find(e => e.type === 'overlay' && e.enabled);
-      if (!overlayEffect) {
-        if (lastOverlayParamsRef.current !== null) {
-          rendererRef.current.setOverlayTexture(null);
-          lastOverlayParamsRef.current = null;
-        }
-        return;
-      }
-
-      const { texture, customTextureUrl } = overlayEffect.params;
-      const paramsKey = `${texture}:${customTextureUrl || ''}`;
-
-      if (lastOverlayParamsRef.current === paramsKey) {
-        return;
-      }
-
-      if (texture === OVERLAY_TEXTURES.CUSTOM && customTextureUrl) {
+  const openFile = useCallback(file => openMedia(() => loadFile(file)), [openMedia]);
+  const openSample = useCallback(sample => openMedia(() => loadSample(sample)), [openMedia]);
+  const openCamera = useCallback(
+    () =>
+      openMedia(async () => {
         try {
-          const result = await loadImageFromURL(customTextureUrl);
-          if (cancelled) return;
-          rendererRef.current.setOverlayTexture(result.image);
-          lastOverlayParamsRef.current = paramsKey;
-          renderPreview();
-        } catch {
-          console.warn('Failed to load custom overlay texture');
+          return await startCamera();
+        } catch (problem) {
+          throw new Error(problem?.name === 'NotAllowedError' ? 'Camera access was blocked.' : problem.message);
         }
-      } else if (texture !== OVERLAY_TEXTURES.CUSTOM) {
-        const textureImg = await generateProceduralTexture(texture);
-        if (cancelled) return;
-        rendererRef.current.setOverlayTexture(textureImg);
-        lastOverlayParamsRef.current = paramsKey;
-        renderPreview();
-      }
-    };
-
-    let cancelled = false;
-    loadOverlayTextures();
-    return () => {
-      cancelled = true;
-    };
-  }, [effects, renderPreview]);
-
-  const handleImageLoad = useCallback(async (source, type) => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      if (videoRef.current.src && videoRef.current.src.startsWith('blob:')) {
-        URL.revokeObjectURL(videoRef.current.src);
-      }
-      videoRef.current.src = '';
-      videoRef.current = null;
-    }
-
-    try {
-      let result;
-
-      if (type === 'file') {
-        result = await loadImageFromFile(source);
-      } else {
-        result = await loadImageFromURL(source);
-      }
-
-      if (rendererRef.current) {
-        rendererRef.current.setImage(result.image);
-      }
-
-      setState(s => ({
-        ...s,
-        image: result.image,
-        imageUrl: result.url,
-        video: null,
-        videoUrl: null,
-        mediaType: 'image',
-        corsError: result.corsError,
-        isPlaying: false,
-        currentTime: 0,
-        duration: 0
-      }));
-
-      if (result.corsError) {
-        toaster.create({
-          title: 'CORS Warning',
-          description: 'Image loaded but export/copy disabled. Re-upload locally to enable.',
-          type: 'warning',
-          duration: 5000
-        });
-      }
-    } catch (err) {
-      toaster.create({
-        title: 'Failed to load image',
-        description: err.message,
-        type: 'error',
-        duration: 3000
-      });
-    }
-  }, []);
-
-  const handleVideoLoad = useCallback(async (source, type) => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      if (videoRef.current.src && videoRef.current.src.startsWith('blob:')) {
-        URL.revokeObjectURL(videoRef.current.src);
-      }
-      videoRef.current.src = '';
-    }
-
-    try {
-      let result;
-
-      if (type === 'file') {
-        result = await loadVideoFromFile(source);
-      } else {
-        result = await loadVideoFromURL(source);
-      }
-
-      videoRef.current = result.video;
-
-      if (rendererRef.current) {
-        rendererRef.current.setImage(result.video);
-        rendererRef.current.updateVideoFrame(result.video);
-        rendererRef.current.render([], 0, result.video.videoWidth, result.video.videoHeight);
-      }
-
-      result.video.play();
-
-      setState(s => ({
-        ...s,
-        image: null,
-        imageUrl: null,
-        video: result.video,
-        videoUrl: result.url,
-        mediaType: 'video',
-        corsError: result.corsError,
-        isPlaying: true,
-        currentTime: 0,
-        duration: result.duration
-      }));
-
-      if (result.corsError) {
-        toaster.create({
-          title: 'CORS Warning',
-          description: 'Video loaded but export disabled. Re-upload locally to enable.',
-          type: 'warning',
-          duration: 5000
-        });
-      }
-    } catch (err) {
-      toaster.create({
-        title: 'Failed to load video',
-        description: err.message,
-        type: 'error',
-        duration: 3000
-      });
-    }
-  }, []);
-
-  const handleMediaLoad = useCallback(
-    async (source, type) => {
-      if (type === 'file') {
-        if (source.type.startsWith('video/')) {
-          return handleVideoLoad(source, type);
-        }
-        return handleImageLoad(source, type);
-      }
-
-      const ext = source.split('?')[0].split('.').pop()?.toLowerCase();
-      if (['mp4', 'webm', 'ogg', 'mov'].includes(ext)) {
-        return handleVideoLoad(source, type);
-      }
-      return handleImageLoad(source, type);
-    },
-    [handleImageLoad, handleVideoLoad]
+      }),
+    [openMedia]
   );
 
-  const handlePlayPause = useCallback(() => {
-    if (!videoRef.current) return;
+  useEffect(() => {
+    const shared = readSharedLook();
+    if (shared) replaceLayers(shared);
+    else applyLook(LOOKS_BY_ID[DEFAULT_LOOK]);
+    openSample(SAMPLES[0]);
+    return () => releaseMedia(mediaRef.current);
+  }, [applyLook, openSample, replaceLayers]);
 
-    if (videoRef.current.paused) {
-      videoRef.current.play();
-      setState(s => ({ ...s, isPlaying: true }));
-    } else {
-      videoRef.current.pause();
-      setState(s => ({ ...s, isPlaying: false }));
-    }
-  }, []);
-
-  const handleSeek = useCallback(
-    time => {
-      if (!videoRef.current) return;
-      videoRef.current.currentTime = time;
-      setState(s => ({ ...s, currentTime: time }));
-      renderPreview();
-    },
-    [renderPreview]
-  );
-
-  const handleEffectsChange = useCallback(newEffects => {
-    setState(s => ({ ...s, effects: newEffects }));
-  }, []);
-
-  const handleSeedChange = useCallback(newSeed => {
-    setState(s => ({ ...s, seed: newSeed }));
-  }, []);
-
-  const handlePreviewQualityChange = useCallback(quality => {
-    setState(s => ({ ...s, previewQuality: quality }));
-  }, []);
-
-  const handleExportFormatChange = useCallback(format => {
-    setState(s => ({ ...s, exportFormat: format }));
-  }, []);
-
-  const handleExportQualityChange = useCallback(quality => {
-    setState(s => ({ ...s, exportQuality: quality }));
-  }, []);
-
-  const handleExportScaleChange = useCallback(scale => {
-    setState(s => ({ ...s, exportScale: scale }));
-  }, []);
-
-  const handleViewModeChange = useCallback(mode => {
-    setState(s => ({ ...s, viewMode: mode }));
-  }, []);
-
-  const handleCopyToClipboard = useCallback(async () => {
-    if (!canvasRef.current || corsError) return;
-    if (mediaType === 'video') {
-      toaster.create({
-        title: 'Cannot copy video',
-        description: 'Copy to clipboard only works for images. Use export for video.',
-        type: 'warning',
-        duration: 3000
-      });
+  const togglePlay = useCallback(() => {
+    const current = live.current.media;
+    if (current?.kind === 'video') {
+      if (current.player.paused) {
+        current.player.play();
+        setPlaying(true);
+      } else {
+        current.player.pause();
+        setPlaying(false);
+        setThumbVersion(version => version + 1);
+      }
       return;
     }
-
-    try {
-      if (rendererRef.current && image) {
-        rendererRef.current.render(effects, seed, image.width, image.height);
-      }
-
-      if (isClipboardImageSupported()) {
-        await copyCanvasToClipboard(canvasRef.current);
-        toaster.create({
-          title: 'Copied to clipboard',
-          type: 'success',
-          duration: 2000
-        });
-      } else {
-        await copyDataURLToClipboard(canvasRef.current);
-        toaster.create({
-          title: 'Copied as data URL',
-          description: 'Image clipboard not supported in this browser.',
-          type: 'info',
-          duration: 3000
-        });
-      }
-
-      renderPreview();
-    } catch (err) {
-      toaster.create({
-        title: 'Copy failed',
-        description: err.message,
-        type: 'error',
-        duration: 3000
-      });
-    }
-  }, [corsError, mediaType, image, effects, seed, renderPreview]);
-
-  const handleVideoExport = useCallback(async () => {
-    if (!canvasRef.current || !video || corsError || isExporting) return;
-
-    setState(s => ({
-      ...s,
-      isExporting: true,
-      exportProgress: 0,
-      exportStatus: 'Preparing...'
-    }));
-
-    const wasPlaying = !video.paused;
-    if (wasPlaying) {
-      video.pause();
-      setState(s => ({ ...s, isPlaying: false }));
-    }
-
-    const wasLooping = video.loop;
-    video.loop = false;
-
-    const currentVideo = video;
-    const currentCanvas = canvasRef.current;
-    const currentRenderer = rendererRef.current;
-
-    let animationId = null;
-    let mediaRecorder = null;
-
-    try {
-      const videoDuration = currentVideo.duration;
-
-      currentVideo.currentTime = 0;
-      await Promise.race([
-        new Promise(resolve => {
-          const onSeeked = () => {
-            currentVideo.removeEventListener('seeked', onSeeked);
-            resolve();
-          };
-          currentVideo.addEventListener('seeked', onSeeked);
-        }),
-        new Promise(resolve => setTimeout(resolve, 200))
-      ]);
-
-      if (currentVideo.currentTime > 0.1) {
-        currentVideo.currentTime = 0;
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-
-      currentRenderer.updateVideoFrame(currentVideo);
-      currentRenderer.render(effects, seed, currentVideo.videoWidth, currentVideo.videoHeight);
-
-      setState(s => ({ ...s, exportStatus: 'Recording...' }));
-
-      const stream = currentCanvas.captureStream(60);
-      mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'video/webm;codecs=vp9',
-        videoBitsPerSecond: 12000000
-      });
-
-      const chunks = [];
-      mediaRecorder.ondataavailable = e => {
-        if (e.data.size > 0) chunks.push(e.data);
-      };
-
-      const recordingDone = new Promise(resolve => {
-        mediaRecorder.onstop = () => resolve(chunks);
-      });
-
-      mediaRecorder.start(100);
-      await new Promise(resolve => setTimeout(resolve, 50));
-
-      const renderLoop = () => {
-        currentRenderer.updateVideoFrame(currentVideo);
-        currentRenderer.render(effects, seed, currentVideo.videoWidth, currentVideo.videoHeight);
-
-        const progress = Math.round((currentVideo.currentTime / videoDuration) * 100);
-        setState(s => ({
-          ...s,
-          exportProgress: Math.min(progress, 100),
-          exportStatus: 'Exporting...'
-        }));
-
-        if (!currentVideo.ended && !currentVideo.paused) {
-          animationId = requestAnimationFrame(renderLoop);
-        }
-      };
-
-      animationId = requestAnimationFrame(renderLoop);
-
-      await currentVideo.play();
-
-      await new Promise(resolve => {
-        if (currentVideo.ended) {
-          resolve();
-          return;
-        }
-        currentVideo.addEventListener('ended', resolve, { once: true });
-      });
-
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-        animationId = null;
-      }
-
-      currentRenderer.updateVideoFrame(currentVideo);
-      currentRenderer.render(effects, seed, currentVideo.videoWidth, currentVideo.videoHeight);
-
-      await new Promise(resolve => setTimeout(resolve, 200));
-
-      mediaRecorder.stop();
-
-      const finalChunks = await recordingDone;
-
-      const webmBlob = new Blob(finalChunks, { type: 'video/webm' });
-      const url = URL.createObjectURL(webmBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `texture-lab-${Date.now()}.webm`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      currentVideo.loop = wasLooping;
-      currentVideo.currentTime = 0;
-      if (wasPlaying) {
-        currentVideo.play();
-        setState(s => ({ ...s, isPlaying: true }));
-      }
-      renderPreview();
-
-      setState(s => ({ ...s, isExporting: false, exportProgress: 0, exportStatus: '' }));
-      toaster.create({
-        title: 'Video exported',
-        description: `Saved as WebM (${(webmBlob.size / 1024 / 1024).toFixed(1)} MB)`,
-        type: 'success',
-        duration: 2000
-      });
-    } catch (err) {
-      console.error('Video export error:', err);
-
-      if (animationId) cancelAnimationFrame(animationId);
-      if (mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.stop();
-      }
-
-      currentVideo.loop = wasLooping;
-      currentVideo.pause();
-      currentVideo.currentTime = 0;
-
-      setState(s => ({ ...s, isExporting: false, exportProgress: 0, exportStatus: '' }));
-      toaster.create({
-        title: 'Video export failed',
-        description: err.message,
-        type: 'error',
-        duration: 3000
-      });
-    }
-  }, [video, corsError, isExporting, effects, seed, renderPreview]);
-
-  const handleExport = useCallback(async () => {
-    if (!canvasRef.current || corsError) return;
-
-    if (mediaType === 'video' && video) {
-      return handleVideoExport();
-    }
-
-    if (!image) return;
-
-    try {
-      const exportWidth = Math.min(image.width * exportScale, 8192);
-      const exportHeight = Math.min(image.height * exportScale, 8192);
-
-      if (rendererRef.current) {
-        rendererRef.current.render(effects, seed, exportWidth, exportHeight);
-      }
-
-      await exportCanvas(canvasRef.current, {
-        format: exportFormat,
-        quality: exportQuality,
-        filename: `texture-lab-${Date.now()}`
-      });
-
-      toaster.create({
-        title: 'Export complete',
-        type: 'success',
-        duration: 2000
-      });
-
-      renderPreview();
-    } catch (err) {
-      toaster.create({
-        title: 'Export failed',
-        description: err.message,
-        type: 'error',
-        duration: 3000
-      });
-    }
-  }, [
-    image,
-    video,
-    mediaType,
-    corsError,
-    exportScale,
-    exportFormat,
-    exportQuality,
-    effects,
-    seed,
-    renderPreview,
-    handleVideoExport
-  ]);
-
-  const handleReset = useCallback(() => {
-    setState(s => ({
-      ...s,
-      effects: [],
-      seed: Math.floor(Math.random() * 100000),
-      previewQuality: 'draft',
-      viewMode: 'preview',
-      exportFormat: 'png',
-      exportQuality: 0.92,
-      exportScale: 1
-    }));
-    if (rendererRef.current) {
-      rendererRef.current.setOverlayTexture(null);
-    }
+    setPlaying(value => !value);
   }, []);
 
-  const handleClearMedia = useCallback(() => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      if (videoRef.current.src) {
-        URL.revokeObjectURL(videoRef.current.src);
-      }
-      videoRef.current.src = '';
-      videoRef.current = null;
-    }
-
-    setState(s => ({
-      ...s,
-      image: null,
-      imageUrl: null,
-      video: null,
-      videoUrl: null,
-      mediaType: null,
-      corsError: false,
-      isPlaying: false,
-      currentTime: 0,
-      duration: 0
-    }));
-    if (rendererRef.current) {
-      rendererRef.current.setImage(null);
-    }
+  const toggleFullscreen = useCallback(() => {
+    const element = stageRef.current;
+    if (!element) return;
+    if (document.fullscreenElement) document.exitFullscreen?.();
+    else Promise.resolve(element.requestFullscreen?.()).catch(() => toast.error('Fullscreen is not available here'));
   }, []);
+
+  const toggleRecording = useCallback(() => {
+    if (recorder.current) {
+      recorder.current.stop();
+      return;
+    }
+    const canvas = canvasRef.current;
+    if (!canvas?.captureStream || typeof MediaRecorder === 'undefined') {
+      toast.error('Recording is not available in this browser');
+      return;
+    }
+    const type = ['video/mp4;codecs=avc1', 'video/webm;codecs=vp9', 'video/webm'].find(item =>
+      MediaRecorder.isTypeSupported(item)
+    );
+    const chunks = [];
+    const instance = new MediaRecorder(canvas.captureStream(30), { mimeType: type, videoBitsPerSecond: 12e6 });
+    instance.ondataavailable = event => event.data.size && chunks.push(event.data);
+    instance.onstop = () => {
+      recorder.current = null;
+      setRecording(false);
+      const blob = new Blob(chunks, { type: instance.mimeType });
+      const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+      downloadBlob(blob, `camera-${stamp}.${instance.mimeType.includes('mp4') ? 'mp4' : 'webm'}`);
+      toast.success('Recording saved');
+    };
+    instance.start(250);
+    recorder.current = instance;
+    setRecording(true);
+  }, []);
+
+  useEffect(() => {
+    if (media?.kind !== 'camera' && recorder.current) recorder.current.stop();
+  }, [media]);
+
+  const addEffect = useCallback(
+    type => {
+      addLayer(type);
+      if (!wide) setMobileTab('layers');
+    },
+    [addLayer, wide]
+  );
+
+  const keys = useRef(null);
+  keys.current = event => {
+    if (exporting || event.defaultPrevented) return;
+    const key = event.key.toLowerCase();
+    const modifier = event.metaKey || event.ctrlKey;
+    if (modifier && key === 'o') {
+      event.preventDefault();
+      fileRef.current?.click();
+      return;
+    }
+    if (modifier && (key === 'z' || key === 'y')) {
+      if (typeof event.target?.matches === 'function' && event.target.matches('input, textarea')) return;
+      event.preventDefault();
+      if (key === 'y' || event.shiftKey) stack.redo();
+      else stack.undo();
+      return;
+    }
+    if (modifier && key === 'd' && stack.selected) {
+      event.preventDefault();
+      stack.duplicate(stack.selected);
+      return;
+    }
+    if (modifier || event.altKey || isTyping(event.target)) return;
+    if (key === ' ') {
+      if (typeof event.target?.closest === 'function' && event.target.closest('button, a')) return;
+      event.preventDefault();
+      togglePlay();
+    } else if (key === 'c' && !event.repeat) {
+      setComparing(true);
+    } else if ((key === 'backspace' || key === 'delete') && stack.selected) {
+      event.preventDefault();
+      stack.remove(stack.selected);
+    } else if (key === 'f') {
+      toggleFullscreen();
+    } else if (key === 'e') {
+      setExporting(true);
+    } else if (key === 'r' && live.current.media?.kind === 'camera') {
+      toggleRecording();
+    } else if (key === '/') {
+      event.preventDefault();
+      if (!searchRef.current) {
+        if (wide) setRailTab('looks');
+        else setMobileTab('looks');
+      }
+      requestAnimationFrame(() => searchRef.current?.focus());
+    } else if (key === '0') {
+      setZoom('fit');
+    } else if (key === '1') {
+      setZoom('actual');
+    }
+  };
+
+  useEffect(() => {
+    const down = event => keys.current?.(event);
+    const up = event => {
+      if (event.key.toLowerCase() === 'c') setComparing(false);
+    };
+    const paste = event => {
+      const file = [...(event.clipboardData?.files || [])].find(isMediaFile);
+      if (file) {
+        event.preventDefault();
+        openFile(file);
+        return;
+      }
+      const text = event.clipboardData?.getData('text');
+      const look = text && decodeLook(text);
+      if (look) {
+        event.preventDefault();
+        replaceLayers(look);
+        toast.success('Style pasted');
+      }
+    };
+    window.addEventListener('keydown', down);
+    window.addEventListener('keyup', up);
+    window.addEventListener('paste', paste);
+    return () => {
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+      window.removeEventListener('paste', paste);
+    };
+  }, [openFile, replaceLayers]);
+
+  useEffect(() => {
+    let depth = 0;
+    const hasFiles = event => [...(event.dataTransfer?.types || [])].includes('Files');
+    const enter = event => {
+      if (!hasFiles(event)) return;
+      depth += 1;
+      setDropping(true);
+    };
+    const leave = event => {
+      if (!hasFiles(event)) return;
+      depth = Math.max(0, depth - 1);
+      if (!depth) setDropping(false);
+    };
+    const over = event => {
+      if (hasFiles(event)) event.preventDefault();
+    };
+    const drop = event => {
+      if (!hasFiles(event)) return;
+      event.preventDefault();
+      depth = 0;
+      setDropping(false);
+      const file = [...(event.dataTransfer?.files || [])].find(isMediaFile);
+      if (file) openFile(file);
+      else toast.error('Drop an image or video file.');
+    };
+    window.addEventListener('dragenter', enter);
+    window.addEventListener('dragleave', leave);
+    window.addEventListener('dragover', over);
+    window.addEventListener('drop', drop);
+    return () => {
+      window.removeEventListener('dragenter', enter);
+      window.removeEventListener('dragleave', leave);
+      window.removeEventListener('dragover', over);
+      window.removeEventListener('drop', drop);
+    };
+  }, [openFile]);
+
+  const canPlay = Boolean(media) && media.kind !== 'camera' && (media.kind === 'video' || animated);
+  const isPlaying = playing;
+
+  const library = tab =>
+    tab === 'looks' ? (
+      <LooksGrid thumbs={thumbs} activeLook={stack.look} onApply={pickLook} query={queries.looks} />
+    ) : (
+      <EffectsGrid thumbs={thumbs} onAdd={addEffect} query={queries.effects} />
+    );
+
+  const search = tab => (
+    <GallerySearch
+      inputRef={searchRef}
+      value={queries[tab] ?? ''}
+      onChange={value => setQueries(previous => ({ ...previous, [tab]: value }))}
+      placeholder={tab === 'effects' ? `Search ${EFFECT_COUNT} effects` : `Search ${LOOK_COUNT} styles`}
+    />
+  );
+
+  const panel = (
+    <LayersPanel
+      stack={stack}
+      look={stack.look ? LOOKS_BY_ID[stack.look] : null}
+      strength={strength}
+      onStrength={setStrength}
+      onResetLook={() => stack.look && pickLook(LOOKS_BY_ID[stack.look])}
+      onAdd={() => {
+        if (wide) setRailTab('effects');
+        else setMobileTab('effects');
+      }}
+    />
+  );
 
   return (
-    <Flex
-      h="100%"
-      w="100%"
-      gap={{ base: 0, lg: 4 }}
-      direction={{ base: 'column', lg: 'row' }}
-      position="relative"
-      overflow="hidden"
-    >
-      <Box
-        w="280px"
-        flexShrink={0}
-        h="100%"
-        overflow="hidden"
-        display={{ base: 'none', lg: 'flex' }}
-        flexDirection="column"
-      >
-        <Controls
-          image={image}
-          video={video}
-          mediaType={mediaType}
-          corsError={corsError}
-          effects={effects}
-          seed={seed}
-          previewQuality={previewQuality}
-          exportFormat={exportFormat}
-          exportQuality={exportQuality}
-          exportScale={exportScale}
-          isExporting={isExporting}
-          exportProgress={exportProgress}
-          exportStatus={exportStatus}
-          onMediaLoad={handleMediaLoad}
-          onClearMedia={handleClearMedia}
-          onEffectsChange={handleEffectsChange}
-          onSeedChange={handleSeedChange}
-          onPreviewQualityChange={handlePreviewQualityChange}
-          onExportFormatChange={handleExportFormatChange}
-          onExportQualityChange={handleExportQualityChange}
-          onExportScaleChange={handleExportScaleChange}
-          onCopyToClipboard={handleCopyToClipboard}
-          onExport={handleExport}
-          onReset={handleReset}
-          toolSelector={toolSelector}
-        />
-      </Box>
+    <div className="lab" data-layout={wide ? 'wide' : desktop ? 'desktop' : 'compact'}>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*,video/mp4,video/webm,video/quicktime,.mov,.m4v"
+        hidden
+        onChange={event => {
+          const file = event.target.files?.[0];
+          if (file) openFile(file);
+          event.target.value = '';
+        }}
+      />
 
-      <Box
-        flex={1}
-        position="relative"
-        borderRadius={{ base: '12px', lg: '16px' }}
-        overflow="hidden"
-        border="1px solid var(--border-primary)"
-        bg="var(--bg-body)"
-        maxWidth="1920px"
-        margin="0 auto"
-        width="100%"
-        minH={{ base: '400px', lg: 'auto' }}
-      >
-        <Canvas
-          image={image}
-          video={video}
-          mediaType={mediaType}
-          canvasRef={canvasRef}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          onMediaDrop={file => handleMediaLoad(file, 'file')}
-          onMediaLoad={handleMediaLoad}
-          isPlaying={isPlaying}
-          currentTime={currentTime}
-          duration={duration}
-          onPlayPause={handlePlayPause}
-          onSeek={handleSeek}
-          isExporting={isExporting}
-        />
-
-        <Flex
-          as="button"
-          display={{ base: 'flex', lg: 'none' }}
-          position="absolute"
-          bottom={20}
-          right={4}
-          align="center"
-          gap={2}
-          bg="var(--color-primary)"
-          px={4}
-          py={2.5}
-          borderRadius="12px"
-          cursor="pointer"
-          onClick={() => setMobileControlsOpen(true)}
-          boxShadow="0 4px 20px rgba(168, 85, 247, 0.4)"
-          _active={{ transform: 'scale(0.95)' }}
-          transition="transform 0.1s"
-          zIndex={10}
-        >
-          <Icon as={Settings} boxSize={4} color="#fff" />
-          <Text fontSize="13px" fontWeight={600} color="#fff">
-            Controls
-          </Text>
-        </Flex>
-      </Box>
-
-      {isMobile && (
-        <>
-          <Box
-            position="fixed"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            bg="rgba(0, 0, 0, 0.6)"
-            opacity={mobileControlsOpen ? 1 : 0}
-            visibility={mobileControlsOpen ? 'visible' : 'hidden'}
-            transition="all 0.3s"
-            zIndex={999}
-            onClick={() => setMobileControlsOpen(false)}
-          />
-
-          <Box
-            position="fixed"
-            bottom={0}
-            left={0}
-            right={0}
-            bg="var(--bg-card)"
-            borderTop="1px solid var(--border-primary)"
-            borderTopRadius="24px"
-            transform={mobileControlsOpen ? 'translateY(0)' : 'translateY(100%)'}
-            transition="transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-            zIndex={1000}
-            maxH="85vh"
-            overflow="hidden"
-            display="flex"
-            flexDirection="column"
-          >
-            <Flex justify="center" pt={3} pb={2} cursor="pointer" onClick={() => setMobileControlsOpen(false)}>
-              <Box w="40px" h="4px" bg="var(--border-primary)" borderRadius="2px" />
-            </Flex>
-
-            <Flex align="center" justify="space-between" px={4} pb={3} borderBottom="1px solid var(--border-primary)">
-              <Text fontSize="16px" fontWeight={700} color="var(--text-primary)">
-                Controls
-              </Text>
-              <Flex
-                as="button"
-                align="center"
-                justify="center"
-                w={8}
-                h={8}
-                borderRadius="8px"
-                bg="var(--bg-elevated)"
-                cursor="pointer"
-                onClick={() => setMobileControlsOpen(false)}
-                _hover={{ bg: 'var(--bg-elevated)' }}
-              >
-                <Icon as={ChevronUp} boxSize={5} color="var(--text-muted)" />
-              </Flex>
-            </Flex>
-
-            <Box
-              flex={1}
-              overflowY="auto"
-              px={4}
-              py={4}
-              css={{
-                '&::-webkit-scrollbar': { display: 'none' },
-                scrollbarWidth: 'none'
-              }}
-            >
-              <Controls
-                image={image}
-                video={video}
-                mediaType={mediaType}
-                corsError={corsError}
-                effects={effects}
-                seed={seed}
-                previewQuality={previewQuality}
-                exportFormat={exportFormat}
-                exportQuality={exportQuality}
-                exportScale={exportScale}
-                isExporting={isExporting}
-                exportProgress={exportProgress}
-                exportStatus={exportStatus}
-                onMediaLoad={handleMediaLoad}
-                onClearMedia={handleClearMedia}
-                onEffectsChange={handleEffectsChange}
-                onSeedChange={handleSeedChange}
-                onPreviewQualityChange={handlePreviewQualityChange}
-                onExportFormatChange={handleExportFormatChange}
-                onExportQualityChange={handleExportQualityChange}
-                onExportScaleChange={handleExportScaleChange}
-                onCopyToClipboard={handleCopyToClipboard}
-                onExport={handleExport}
-                onReset={handleReset}
-                toolSelector={toolSelector}
-              />
-            </Box>
-          </Box>
-        </>
+      {wide && (
+        <aside className="lab-rail" aria-label="Styles and effects">
+          {toolSelector}
+          <Track label="Library" value={railTab} options={RAIL_TABS} onChange={setRailTab} className="lab-rail-tabs" />
+          {search(railTab)}
+          <GalleryScroll>{library(railTab)}</GalleryScroll>
+        </aside>
       )}
-    </Flex>
+
+      <section className="lab-main" aria-label="Editor">
+        <LabToolbar
+          media={media}
+          playing={isPlaying}
+          canPlay={canPlay}
+          zoom={zoom}
+          recording={recording}
+          onUpload={() => fileRef.current?.click()}
+          onCamera={openCamera}
+          onSample={openSample}
+          onZoom={setZoom}
+          onCompare={setComparing}
+          onTogglePlay={togglePlay}
+          onRecord={toggleRecording}
+          onFullscreen={toggleFullscreen}
+          onExport={() => setExporting(true)}
+        />
+        <LabStage
+          ref={stageRef}
+          canvasRef={canvasRef}
+          media={media}
+          zoom={zoom}
+          padding={desktop ? 32 : 0}
+          loading={loading}
+          error={error}
+          comparing={comparing}
+          dropping={dropping}
+          hint={desktop && zoom === 'fit' && Boolean(media?.sample)}
+          onUpload={() => fileRef.current?.click()}
+          onCamera={openCamera}
+          onSample={openSample}
+        />
+        {media?.kind === 'video' && (
+          <LabTimeline media={media} playing={isPlaying} trim={trim} onTrim={setTrim} onTogglePlay={togglePlay} />
+        )}
+      </section>
+
+      {wide ? (
+        panel
+      ) : desktop ? (
+        <aside className="lab-side" aria-label="Library and layers">
+          {toolSelector}
+          <Track
+            label="Panels"
+            value={mobileTab}
+            options={MOBILE_TABS}
+            onChange={setMobileTab}
+            className="lab-mobile-tabs"
+          />
+          {mobileTab === 'layers' ? (
+            panel
+          ) : (
+            <>
+              {search(mobileTab)}
+              <GalleryScroll>{library(mobileTab)}</GalleryScroll>
+            </>
+          )}
+        </aside>
+      ) : (
+        <section className="lab-mobile" aria-label="Library and layers">
+          <Track
+            label="Panels"
+            value={mobileTab}
+            options={MOBILE_TABS}
+            onChange={setMobileTab}
+            className="lab-mobile-tabs"
+          />
+          {mobileTab === 'layers' ? (
+            panel
+          ) : (
+            <>
+              {search(mobileTab)}
+              <div className="lab-mobile-gallery">{library(mobileTab)}</div>
+            </>
+          )}
+        </section>
+      )}
+
+      {exporting && media && (
+        <ExportDialog
+          media={media}
+          layers={stack.layers}
+          strength={strength}
+          serializable={stack.serializable}
+          trim={trim}
+          clock={media.kind === 'video' ? media.player.currentTime : clock.current}
+          onClose={() => setExporting(false)}
+        />
+      )}
+    </div>
   );
 }

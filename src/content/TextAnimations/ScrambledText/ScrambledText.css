@@ -1,12 +1,18 @@
-.text-block {
+.scrambled-text {
   margin: 7vw;
   max-width: 800px;
   font-family: monospace;
   font-size: clamp(14px, 4vw, 32px);
-  color: #fff;
 }
 
-.char {
-  will-change: transform;
-  display: inline-block;
+.scrambled-text-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

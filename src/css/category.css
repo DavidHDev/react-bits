@@ -86,7 +86,7 @@
 .right-panel .right-card {
   background-color: var(--bg-card);
   border: 1px solid var(--bg-elevated);
-  border-radius: var(--docs-rail-radius);
+  border-radius: var(--docs-rail-radius, 16px);
 }
 
 .category-page .main-category {
@@ -592,20 +592,12 @@
 :root[data-theme='light'] .category-text-animations .circular-text,
 :root[data-theme='light'] .category-text-animations .curved-loop-svg,
 :root[data-theme='light'] .category-text-animations .glitch,
-:root[data-theme='light'] .category-text-animations .glitch::before,
-:root[data-theme='light'] .category-text-animations .glitch::after,
-:root[data-theme='light'] .category-text-animations .text-block,
 :root[data-theme='light'] .category-text-animations .rotating-text-demo {
   color: #18181b;
 }
 
 :root[data-theme='light'] .category-text-animations .curved-loop-svg {
   fill: #18181b;
-}
-
-:root[data-theme='light'] .category-text-animations .glitch::before,
-:root[data-theme='light'] .category-text-animations .glitch::after {
-  background-color: #fff;
 }
 
 :root[data-theme='light'] .category-text-animations .gradient-overlay::before {
@@ -616,12 +608,32 @@
   color: #27272a;
 }
 
-.category-text-animations .demo-instruction {
-  color: #2f293a;
+.category-text-animations .demo-scroll-hint {
+  color: rgba(255, 255, 255, 0.5);
 }
 
-:root[data-theme='light'] .category-text-animations .demo-instruction {
-  color: #d4d4d8;
+:root[data-theme='light'] .category-text-animations .demo-scroll-hint {
+  color: rgba(18, 15, 23, 0.5);
+}
+
+.category-text-animations .demo-scroll-hint svg {
+  animation: demo-scroll-hint-bob 1.8s ease-in-out infinite;
+}
+
+@keyframes demo-scroll-hint-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-text-animations .demo-scroll-hint svg {
+    animation: none;
+  }
 }
 
 .preview-footer {
@@ -1163,8 +1175,18 @@
   background: var(--bg-body);
 }
 
-.preview-options > :not(.scrubber) {
+.preview-options > :not(.scrubber):not(.scrubber-palette) {
   grid-column: 1 / -1;
+}
+
+.preview-options > .scrubber-palette {
+  grid-row: span 2;
+}
+
+.preview-options > .scrubber-palette .scrubber-palette-strip {
+  flex: 1;
+  height: auto;
+  min-height: 30px;
 }
 
 .customize-frame .scrubber-track,
@@ -1537,7 +1559,7 @@
 
 .pro-card {
   overflow: hidden;
-  border-radius: var(--docs-rail-radius);
+  border-radius: var(--docs-rail-radius, 16px);
   background: color-mix(in srgb, var(--shell-panel-solid) 78%, transparent);
   border: 1px solid var(--shell-border);
   box-shadow: var(--shadow-elevated);
@@ -1563,7 +1585,7 @@
   height: 160px;
   margin: 6px;
   overflow: hidden;
-  border-radius: calc(var(--docs-rail-radius) - 6px);
+  border-radius: calc(var(--docs-rail-radius, 16px) - 6px);
   background: #09080b;
   box-shadow: 0 0 18px rgba(166, 92, 255, 0.08);
 }

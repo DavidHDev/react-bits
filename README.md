@@ -1,167 +1,205 @@
 <div align="center">
-	<br>
-	<br>
-    <picture>
-      <source media="(prefers-color-scheme: light)" srcset="src/assets/logos/reactbits-gh-black.svg">
-      <source media="(prefers-color-scheme: dark)" srcset="src/assets/logos/reactbits-gh-white.svg">
-      <img src="src/assets/logos/reactbits-gh-black.svg" alt="react-bits logo" width="600">
-    </picture>
-	<br>
-	<br>
-  <strong>The largest & most creative library of animated React components.</strong>
   <br />
-  <sub>Stand out with 200+ free, customizable animations for text, backgrounds, UI, and micro interactions.</sub>
-	<br>
-	<br>
-  <a href="https://github.com/davidhdev/react-bits/stargazers"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/davidhdev/react-bits"></a>
-  <a href="https://github.com/davidhdev/react-bits/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/License-MIT+Commons_Clause-magenta"></a>
-  <br>
-  <br>
-  <a href="https://reactbits.dev/">📖 Documentation</a> · <a href="https://reactbits.dev/get-started/installation">⚡ Quick Start</a> · <a href="https://reactbits.dev/tools">🛠️ Tools</a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="src/assets/logos/reactbits-gh-white.svg">
+    <source media="(prefers-color-scheme: light)" srcset="src/assets/logos/reactbits-gh-black.svg">
+    <img src="src/assets/logos/reactbits-gh-black.svg" alt="React Bits" width="420">
+  </picture>
+  <br />
+  <br />
+  <h3>Animated React components for interfaces people remember.</h3>
+  <p>215+ free animated components and backgrounds for React.<br />Tune them yourself, or hand them to your agent.</p>
+  <p>
+    <a href="https://github.com/davidhdev/react-bits/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/davidhdev/react-bits?style=flat&logo=github&label=Stars&color=27272a&labelColor=18181b"></a>
+    <a href="https://github.com/davidhdev/react-bits/blob/main/LICENSE.md"><img alt="License: MIT + Commons Clause" src="https://img.shields.io/badge/License-MIT%20%2B%20Commons%20Clause-27272a?style=flat&labelColor=18181b"></a>
+  </p>
+  <p>
+    <a href="https://reactbits.dev/get-started/introduction"><strong>Documentation</strong></a> ·
+    <a href="https://reactbits.dev/get-started/installation"><strong>Installation</strong></a> ·
+    <a href="https://reactbits.dev/get-started/mcp"><strong>MCP</strong></a> ·
+    <a href="https://reactbits.dev/tools"><strong>Tools</strong></a> ·
+    <a href="https://pro.reactbits.dev/?utm_source=github&utm_medium=readme&utm_campaign=pro-conversion&utm_content=readme-nav"><strong>Pro</strong></a>
+  </p>
+  <br />
 </div>
 
-<br />
+<a href="https://reactbits.dev">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/assets/readme/hero-dark.webp">
+    <source media="(prefers-color-scheme: light)" srcset="public/assets/readme/hero-light.webp">
+    <img src="public/assets/readme/hero-light.webp" alt="A grid of React Bits components: Topography, Fluid Glass, Liquid Chrome, Circular Gallery, Strands, Gradient ASCII, Split Text, Ballpit, Metallic Paint, Light Tunnel, Profile Card and Laser Flow" width="100%">
+  </picture>
+</a>
 
-<div align="center">
-  <img src="src/assets/common/gh-showcase.png" alt="React Bits component showcase" width="1000">
-</div>
+## What's inside
 
-<br />
+Every component has a live demo with controls, and comes in four flavors: JavaScript or TypeScript, styled with CSS or Tailwind.
+
+| Category                                                   | Count | What you'll find                                                  |
+| ---------------------------------------------------------- | ----: | ----------------------------------------------------------------- |
+| [Text Animations](https://reactbits.dev/c/text-animations) |    33 | Split text, typewriters, rotating words and scroll reveals        |
+| [Animations](https://reactbits.dev/c/animations)           |    38 | Cursor effects, hover interactions, borders and image effects     |
+| [Components](https://reactbits.dev/c/components)           |    48 | Cards, navigation, carousels and galleries                        |
+| [Micro](https://reactbits.dev/c/micro)                     |    34 | Buttons, toggles, indicators and other small interface details    |
+| [Backgrounds](https://reactbits.dev/c/backgrounds)         |    63 | Gradients, particles, grids and shader effects for whole sections |
 
 ## React Bits Pro
 
-React Bits Pro adds premium components, page blocks, app UI, and complete templates for your next project.
+**The complete React toolkit for crafting memorable UI.** React Bits stays free forever. Pro takes you from individual effects to complete pages, product UI, templates and an Agent Kit, all delivered as source you own.
 
-[![React Bits Pro previews: ASCII Ripple, Radial Liquid, Hero 12, and Dashboard 12](public/assets/readme/react-bits-pro.webp)](https://pro.reactbits.dev/?utm_source=github&utm_medium=readme&utm_campaign=pro-conversion&utm_content=readme-pro)
+<a href="https://pro.reactbits.dev/?utm_source=github&utm_medium=readme&utm_campaign=pro-conversion&utm_content=readme-pro">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/assets/readme/pro-dark.webp">
+    <source media="(prefers-color-scheme: light)" srcset="public/assets/readme/pro-light.webp">
+    <img src="public/assets/readme/pro-light.webp" alt="React Bits Pro: 230 animated components, 300 page sections, 300 app UI blocks, 15 full templates and 20 agent skills" width="100%">
+  </picture>
+</a>
 
-## ✨ Why React Bits?
+> "Everything about this is next level." — [@shadcn](https://x.com/shadcn/status/1962854085587275932)
+>
+> "Paid once, and he keeps shipping updates. Easiest value I've gotten from any tool." — [@juandadotdev](https://x.com/juandadotdev/status/2082117331103162412)
 
-React Bits helps you **ship stunning interfaces faster**. Instead of spending hours crafting animations from scratch, grab a polished component and customize it to fit your vision.
+**Pay once, keep every update.** Every file is yours to edit, and lifetime access includes every future update. Want to see how it fits your workflow first? [Grab a free template and agent skill](https://reactbits.dev/pro), no checkout needed.
 
-> 💬 **Text Animations** · 🌀 **Animations** · 🧩 **Components** · ⚡ **Micro** · 🖼️ **Backgrounds**
+<p>
+  <a href="https://pro.reactbits.dev/?utm_source=github&utm_medium=readme&utm_campaign=pro-conversion&utm_content=readme-pro-cta#pricing">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/readme/pro-get-dark.webp">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/readme/pro-get-light.webp">
+      <img src="public/assets/readme/pro-get-light.webp" alt="Get React Bits Pro" height="46">
+    </picture>
+  </a>
+  &nbsp;
+  <a href="https://pro.reactbits.dev/docs/components?utm_source=github&utm_medium=readme&utm_campaign=pro-conversion&utm_content=readme-pro-catalogue">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/readme/pro-browse-dark.webp">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/readme/pro-browse-light.webp">
+      <img src="public/assets/readme/pro-browse-light.webp" alt="Browse the catalogue" height="46">
+    </picture>
+  </a>
+</p>
 
-## 🚀 Features
+## Installation
 
-- **200+ components** — text animations, UI elements, micro interactions, and backgrounds, growing weekly
-- **Minimal dependencies** — lightweight and tree-shakeable
-- **Fully customizable** — tweak everything via props or edit the source directly
-- **4 variants per component** — JS-CSS, JS-TW, TS-CSS, TS-TW (everyone's happy)
-- **Copy-paste ready** — works with any modern React project
-
-## 🛠️ Creative Tools
-
-<div align="center">
-  <img src="src/assets/common/tools-readme.webp" alt="React Bits Tools" width="1000" style="border-radius: 30px; max-width: 1920px;">
-</div>
-
-<hr />
-
-### Beyond components, React Bits offers **free creative tools** to supercharge your workflow:
-
-| Tool                                                 | What it does                                                                             |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| **[Background Studio](https://reactbits.dev/tools)** | Explore animated backgrounds, customize effects, export as video/image/code              |
-| **[Shape Magic](https://reactbits.dev/tools)**       | Create inner rounded corners between shapes, export as SVG, React code or clip-path code |
-| **[Texture Lab](https://reactbits.dev/tools)**       | Apply 20+ effects (noise, dithering, ASCII) to images/videos and export in high quality  |
-
-## 📦 Installation
-
-React Bits supports [shadcn](https://ui.shadcn.com/) and [jsrepo](https://jsrepo.dev) for quick CLI installs.
+Add any component with the [shadcn](https://ui.shadcn.com/) CLI. The suffix picks the flavor: `JS` or `TS`, then `CSS` or `TW`.
 
 ```bash
-# Example: Add a component via shadcn
-npx shadcn@latest add @react-bits/BlurText-TS-TW
+npx shadcn@latest add @react-bits/SplitText-TS-TW
 ```
 
-Each component page includes copy-ready CLI commands. See the [installation guide](https://reactbits.dev/get-started/installation) for full details.
+Or with [jsrepo](https://jsrepo.dev):
 
-You can also select your preferred technologies, and copy the code manually.
+```bash
+npx jsrepo@latest add https://reactbits.dev/r/SplitText-TS-TW
+```
 
-## 🚀 Sponsors
+Prefer to copy by hand? Open a component's Code tab, pick your flavor and paste the files into your project. The [installation guide](https://reactbits.dev/get-started/installation) covers both.
 
-React Bits is proudly supported by these amazing sponsors:
+### Use it with your agent
 
-### Diamond
+React Bits works with the shadcn MCP server, so Claude Code, Cursor, Codex and VS Code can find and add components for you. Add the registry to your `components.json`:
 
-<a href="https://www.shadcnblocks.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=diamond&ref=reactbits" target="_blank">
+```json
+{
+  "registries": {
+    "@react-bits": "https://reactbits.dev/r/{name}.json"
+  }
+}
+```
+
+Then connect your client, for example `npx shadcn@latest mcp init --client claude`, and ask for what you need. See the [MCP guide](https://reactbits.dev/get-started/mcp) for every client.
+
+## Creative tools
+
+Three free tools for making assets with React Bits, right in the browser.
+
+<a href="https://reactbits.dev/tools">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnblocks.svg">
-    <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcnblocks-lightmode.svg">
-    <img src="public/assets/sponsors/shadcnblocks.svg" alt="shadcnblocks.com" style="height: 50px;">
+    <source media="(prefers-color-scheme: dark)" srcset="public/assets/readme/tools-dark.webp">
+    <source media="(prefers-color-scheme: light)" srcset="public/assets/readme/tools-light.webp">
+    <img src="public/assets/readme/tools-light.webp" alt="Background Studio, Shape Magic and Texture Lab" width="100%">
   </picture>
 </a>
 
-<a href="https://shaders.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=diamond&ref=reactbits" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shaders.svg">
-    <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shaders-lightmode.svg">
-    <img src="public/assets/sponsors/shaders.svg" alt="shaders.com" style="height: 50px;">
-  </picture>
+- **[Background Studio](https://reactbits.dev/tools/background-studio)**: browse every animated background, start from a preset and tune it live. Export the code, a high-resolution image or a looping MP4 or WebM video.
+- **[Shape Magic](https://reactbits.dev/tools/shape-magic)**: design a logo mark from shapes, patterns, text or your own SVG, then give it a 3D material like chrome, glass or neon. Export SVG, PNG, favicons, video or React.
+- **[Texture Lab](https://reactbits.dev/tools/texture-lab)**: run photos, videos or your camera through 160 one-click styles and 75+ stackable effects, from ASCII and halftone to glass and glitch. Export images, videos or GIFs.
+
+## Sponsors
+
+React Bits is supported by these sponsors. [Become a sponsor](https://reactbits.dev/sponsors) to reach 500K+ developers every month.
+
+**Diamond**
+
+<p>
+  <a href="https://www.shadcnblocks.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=diamond&ref=reactbits">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnblocks.svg">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcnblocks-lightmode.svg">
+      <img src="public/assets/sponsors/shadcnblocks-lightmode.svg" alt="shadcnblocks.com" height="44">
+    </picture>
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://shaders.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=diamond&ref=reactbits">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shaders.svg">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shaders-lightmode.svg">
+      <img src="public/assets/sponsors/shaders-lightmode.svg" alt="shaders.com" height="44">
+    </picture>
+  </a>
+</p>
+
+**Silver**
+
+<p>
+  <a href="https://shadcncraft.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcncraft.svg">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcncraft-lightmode.svg">
+      <img src="public/assets/sponsors/shadcncraft-lightmode.svg" alt="Shadcncraft" height="30">
+    </picture>
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://shadcnuikit.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnuikit.svg">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcnuikit-lightmode.svg">
+      <img src="public/assets/sponsors/shadcnuikit-lightmode.svg" alt="shadcnuikit.com" height="30">
+    </picture>
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://shadcnstudio.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnstudio.svg">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcnstudio-lightmode.svg">
+      <img src="public/assets/sponsors/shadcnstudio-lightmode.svg" alt="Shadcn Studio" height="30">
+    </picture>
+  </a>
+</p>
+
+## Community
+
+**Contributing.** Ideas and fixes are welcome. Browse the [open issues](https://github.com/DavidHDev/react-bits/issues), suggest something with the [feature request template](https://github.com/DavidHDev/react-bits/issues/new?template=2-feature-request.yml), and read the [contribution guide](https://github.com/DavidHDev/react-bits/blob/main/CONTRIBUTING.md) before opening a pull request.
+
+**Official ports.** React Bits is also available for [Vue](https://vue-bits.dev/) and [Svelte](https://sveltebits.xyz/).
+
+**Contributors.** Thanks to everyone who has helped build React Bits.
+
+<a href="https://github.com/davidhdev/react-bits/graphs/contributors">
+  <img src="https://contrib-circles.vercel.app/davidhdev/react-bits?padding=16&borders=none&transparent=true" alt="React Bits contributors">
 </a>
 
-### Silver
-
-<a href="https://shadcncraft.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcncraft.svg">
-    <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcncraft-lightmode.svg">
-    <img src="public/assets/sponsors/shadcncraft.svg" alt="Shadcncraft" style="height: 40px;">
-  </picture>
-</a>
-
-<a href="https://shadcnuikit.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnuikit.svg">
-    <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcnuikit-lightmode.svg">
-    <img src="public/assets/sponsors/shadcnuikit.svg" alt="shadcnuikit.com" style="height: 40px;">
-  </picture>
-</a>
-
-<a href="https://shadcnstudio.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnstudio.svg">
-    <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcnstudio-lightmode.svg">
-    <img src="public/assets/sponsors/shadcnstudio.svg" alt="Shadcn Studio" style="height: 40px;">
-  </picture>
-</a>
-
-<hr />
-
-**[Become a sponsor](https://reactbits.dev/sponsors)** — Get your brand in front of 500K+ developers monthly.
-
-## 🤝 Contributing
-
-We'd love your help! Check the [open issues](https://github.com/DavidHDev/react-bits/issues) or submit ideas via the [feature request template](https://github.com/DavidHDev/react-bits/issues/new?template=2-feature-request.yml).
-
-Please read the [contribution guide](https://github.com/DavidHDev/react-bits/blob/main/CONTRIBUTING.md) first — thanks for making React Bits better!
-
-## 🙌 Contributors
-
-<!-- <a href="https://github.com/davidhdev/react-bits/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=davidhdev/react-bits" />
-</a> -->
-
-![Contributors](https://contrib-circles.vercel.app/davidhdev/react-bits?padding=16&borders=none&transparent=true)
-
-## 👤 Maintainer
-
-**[David Haz](https://github.com/DavidHDev)** — creator & lead maintainer
-
-## 🌐 Official Ports
-
-| Framework | Link                                      |
-| --------- | ----------------------------------------- |
-| Vue.js    | [vue-bits.dev](https://vue-bits.dev/)     |
-| Svelte    | [sveltebits.xyz](https://sveltebits.xyz/) |
-
-## 📊 Stats
+<br />
+<br />
 
 ![Repobeats analytics](https://repobeats.axiom.co/api/embed/b1bf4dc0226458617adbdbf5586f2df953eb0922.svg 'Repobeats analytics image')
 
-## 🗳️ Credit
+## Credit
 
-React Bits occasionally draws inspiration from publicly available code examples. These are rewritten as full-fledged, customizable components for JS, TS, CSS, and Tailwind. If you recognize your work, [open an issue](https://github.com/DavidHDev/react-bits/issues) to request credit.
+React Bits occasionally draws inspiration from publicly available code examples. These are rewritten as full-fledged, customizable components for JS, TS, CSS and Tailwind. If you recognize your work, [open an issue](https://github.com/DavidHDev/react-bits/issues) to request credit.
 
-## 📄 License
+Some Texture Lab effects and Shape Magic materials are adapted from [Paper Shaders](https://shaders.paper.design) (Apache 2.0) and [Shaders.com](https://shaders.com) by Shader Effects Inc. (MIT). The third-party notices for [Texture Lab](src/tools/texture-lab/THIRD_PARTY_NOTICES.md) and [Shape Magic](src/tools/shape-magic/THIRD_PARTY_NOTICES.md) list the adapted files and include the licenses.
 
-[MIT + Commons Clause](https://github.com/davidhdev/react-bits/blob/main/LICENSE.md) — free for personal and commercial use.
+## License
+
+[MIT + Commons Clause](https://github.com/davidhdev/react-bits/blob/main/LICENSE.md), free for personal and commercial use. Created and maintained by [David Haz](https://github.com/DavidHDev).

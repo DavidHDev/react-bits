@@ -11,25 +11,24 @@ export const pixelSwap = {
   <PixelSwap
     firstContent={
       <img
-        src="/assets/demo/day-landscape.webp"
+        src="/assets/demo/day-sky.webp"
         alt=""
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       />
     }
     secondContent={
       <img
-        src="/assets/demo/night-landscape.webp"
+        src="/assets/demo/night-sky.webp"
         alt=""
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
       />
     }
-    effect="flip"
-    pixelSize={72}
-    origin="pointer"
-    duration={1100}
-    pixelDuration={700}
-    depth={0.5}
-    shading={0.5}
+    pattern="pointer"
+    pixelSize={48}
+    pixelRadius={0}
+    duration={400}
+    pixelDuration={350}
+    randomness={0.2}
     bounce={0.3}
     trigger="hover"
     style={{ borderRadius: 18 }}

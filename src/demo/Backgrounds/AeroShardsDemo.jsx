@@ -1,463 +1,343 @@
-import { useMemo } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { CodeTab, PreviewTab, TabsLayout } from '../../components/common/TabsLayout';
 import Customize from '../../components/common/Preview/Customize';
-import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
-import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
-import PreviewSelect from '../../components/common/Preview/PreviewSelect';
-import PreviewSlider from '../../components/common/Preview/PreviewSlider';
-import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
-import PropTable from '../../components/common/Preview/PropTable';
 import CodeExample from '../../components/code/CodeExample';
 import Dependencies from '../../components/code/Dependencies';
-import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
-import useComponentProps from '../../hooks/useComponentProps';
+import PropTable from '../../components/common/Preview/PropTable';
+import PreviewSlider from '../../components/common/Preview/PreviewSlider';
+import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
+import PreviewSelect from '../../components/common/Preview/PreviewSelect';
+import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
+import BackgroundContent from '../../components/common/Preview/BackgroundContent';
+import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
-import AeroShards from '@/content/Backgrounds/AeroShards/AeroShards';
+import useForceRerender from '../../hooks/useForceRerender';
+import useComponentProps from '../../hooks/useComponentProps';
+import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
+import { useColorMode } from '../../components/setup/color-mode';
+
+import AeroShards from '../../content/Backgrounds/AeroShards/AeroShards';
 import { aeroShards } from '../../constants/code/Backgrounds/aeroShardsCode';
-import BackgroundContent from '@/components/common/Preview/BackgroundContent';
+import { LOOK, PRESET_OPTIONS, presetProps } from './presets/AeroShards';
 
 const DEFAULT_PROPS = {
-  backgroundColor: '#120F17',
-  shardColor: '#896ABD',
-  accentColor: '#A855F7',
-  placement: 'full',
-  flow: 'stream',
-  material: 'pearl',
-  detail: 'balanced',
-  effect: 'none',
-  scale: 1,
-  spread: 1,
-  depth: 1,
-  speed: 1,
-  spin: 1,
-  interaction: 'repel',
-  density: 1.5,
-  shardSize: 1.1,
-  stretch: 1,
-  turbulence: 1,
-  glow: 1,
-  edgeSoftness: 2,
-  bloom: 0.5,
-  grain: 0.05,
-  chromaticAberration: 0.0075,
-  transitionDuration: 1,
-  interactionRadius: 1.5,
-  interactionStrength: 0.5,
-  rippleIntensity: 1,
+  preset: 'amethyst',
+  ...LOOK,
+  intro: true,
+  mouseInteraction: true,
+  mouseStrength: 0.6,
+  parallax: 0.5,
+  pulseOnClick: true,
   holdToGather: true,
   paused: false
 };
 
-const AeroShardsDemo = () => {
-  const { props, updateProp, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+const PLACEMENT_OPTIONS = [
+  { value: 'full', label: 'Full' },
+  { value: 'left', label: 'Left' },
+  { value: 'right', label: 'Right' },
+  { value: 'center', label: 'Center' }
+];
 
-  const propData = useMemo(
-    () => [
-      {
-        name: 'backgroundColor',
-        type: 'string',
-        default: "'#120F17'",
-        description: 'Background behind the wind sculpture. Lighting and bloom adapt automatically to light surfaces.'
-      },
-      {
-        name: 'shardColor',
-        type: 'string',
-        default: "'#896ABD'",
-        description: 'Primary body color for the shards.'
-      },
-      {
-        name: 'accentColor',
-        type: 'string',
-        default: "'#A855F7'",
-        description: 'Accent color used to derive reflections, depth, and highlights.'
-      },
-      {
-        name: 'placement',
-        type: "'right' | 'left' | 'center' | 'full'",
-        default: "'full'",
-        description: 'Places the sculpture while preserving a content-safe region.'
-      },
-      {
-        name: 'material',
-        type: "'pearl' | 'chrome' | 'satin'",
-        default: "'pearl'",
-        description: 'Applies a complete lighting and surface finish.'
-      },
-      {
-        name: 'detail',
-        type: "'bold' | 'balanced' | 'fine'",
-        default: "'balanced'",
-        description: 'Balances shard count and size into a finished visual texture.'
-      },
-      {
-        name: 'flow',
-        type: "'stream' | 'vortex' | 'ribbon'",
-        default: "'stream'",
-        description:
-          'Morphs the same shards between a flowing stream, circulating vortex, and twisted ribbon without restarting the animation.'
-      },
-      {
-        name: 'rippleIntensity',
-        type: 'number',
-        default: '1',
-        description:
-          'Strength of the click/release wave and its accent-colored illumination. Set to 0 to disable ripples.'
-      },
-      {
-        name: 'holdToGather',
-        type: 'boolean',
-        default: 'true',
-        description:
-          'Press and hold to gather a softly circulating cloud around the cursor; release to unfurl. Respects interaction="none", pause, and reduced motion.'
-      },
-      {
-        name: 'effect',
-        type: "'none' | 'dither' | 'ascii'",
-        default: "'none'",
-        description:
-          'Applies ordered color dithering or compact, shape-matched ASCII before postprocessing. Stylized modes use fewer, larger shards for readability; none preserves the original render.'
-      },
-      {
-        name: 'scale',
-        type: 'number',
-        default: '1',
-        description: 'Zooms the complete shard field without changing its shard count or individual shard size.'
-      },
-      {
-        name: 'spread',
-        type: 'number',
-        default: '1',
-        description: 'Controls how tightly the shards gather around the flow path.'
-      },
-      {
-        name: 'depth',
-        type: 'number',
-        default: '1',
-        description: 'Controls front-to-back volume and perspective variation.'
-      },
-      {
-        name: 'speed',
-        type: 'number',
-        default: '1',
-        description: 'Controls the shared travel speed of every shard.'
-      },
-      {
-        name: 'spin',
-        type: 'number',
-        default: '1',
-        description: 'Controls how quickly shards roll around their direction of travel.'
-      },
-      {
-        name: 'interaction',
-        type: "'none' | 'repel' | 'attract'",
-        default: "'repel'",
-        description:
-          'Disables interaction or enables damped cursor repulsion/attraction and click ripples across the field.'
-      },
-      {
-        name: 'density',
-        type: 'number',
-        default: '1.5',
-        description: 'Fine-tuning multiplier for the shard count selected by detail.'
-      },
-      {
-        name: 'shardSize',
-        type: 'number',
-        default: '1.1',
-        description: 'Fine-tuning multiplier for the shard size selected by detail.'
-      },
-      {
-        name: 'stretch',
-        type: 'number',
-        default: '1',
-        description: 'Controls shard length without changing their overall count.'
-      },
-      {
-        name: 'turbulence',
-        type: 'number',
-        default: '1',
-        description: 'Fine-tuning multiplier for the turbulence produced by motion.'
-      },
-      {
-        name: 'glow',
-        type: 'number',
-        default: '1',
-        description: 'Fine-tuning multiplier for emissive edges and reflected highlights.'
-      },
-      {
-        name: 'edgeSoftness',
-        type: 'number',
-        default: '2',
-        description: 'Controls analytic antialiasing without blurring the whole image.'
-      },
-      {
-        name: 'bloom',
-        type: 'number',
-        default: '0.5',
-        description:
-          'Adds a soft halo without blurring the shards; on light backgrounds the halo uses the shard and accent colors.'
-      },
-      {
-        name: 'grain',
-        type: 'number',
-        default: '0.05',
-        description: 'Adds screen-space film grain; set to 0 for a completely clean render.'
-      },
-      {
-        name: 'chromaticAberration',
-        type: 'number',
-        default: '0.0075',
-        description:
-          'Adds RGB edge separation; set to 0 for a color-neutral finish. Dither and ASCII use subtler separation to preserve their fine patterns.'
-      },
-      {
-        name: 'transitionDuration',
-        type: 'number',
-        default: '1',
-        description: 'Controls the transition time for placement and flow formation changes.'
-      },
-      {
-        name: 'interactionRadius',
-        type: 'number',
-        default: '1.5',
-        description: 'Scales the soft, flow-aligned reach of the cursor interaction.'
-      },
-      {
-        name: 'interactionStrength',
-        type: 'number',
-        default: '0.5',
-        description: 'Fine-tuning multiplier for the selected interaction force.'
-      },
-      { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the shard field.' },
-      { name: 'className', type: 'string', default: "''", description: 'Additional classes for the root element.' },
-      {
-        name: 'onError',
-        type: '(error: Error) => void',
-        default: 'undefined',
-        description: 'Called when WebGPU setup or rendering fails.'
-      }
-    ],
-    []
-  );
+const MATERIAL_OPTIONS = [
+  { value: 'glass', label: 'Glass' },
+  { value: 'chrome', label: 'Chrome' }
+];
+
+const MARKER_OPTIONS = [
+  { value: 'plus', label: 'Plus' },
+  { value: 'dots', label: 'Dots' },
+  { value: 'none', label: 'None' }
+];
+
+const propData = [
+  { name: 'shardColor', type: 'string', default: "'#896ABD'", description: 'Main color of the shards.' },
+  {
+    name: 'accentColor',
+    type: 'string',
+    default: "'#A855F7'",
+    description: 'Color of the light the shards catch, their rim light and the markers.'
+  },
+  {
+    name: 'backgroundColor',
+    type: 'string',
+    default: "'transparent'",
+    description: 'Fills the canvas behind the shards. Transparent lets the page show through.'
+  },
+  {
+    name: 'lightMode',
+    type: 'boolean',
+    default: 'false',
+    description: 'Draws the shards as soft tinted glass for light backgrounds.'
+  },
+  {
+    name: 'placement',
+    type: "'full' | 'left' | 'right' | 'center'",
+    default: "'full'",
+    description: 'Where the ribbons flow: across the whole view, down one side, or in a ring around the center.'
+  },
+  {
+    name: 'material',
+    type: "'glass' | 'chrome'",
+    default: "'glass'",
+    description: 'Surface of the shards: thick glass that catches light along its edges, or polished chrome.'
+  },
+  {
+    name: 'markers',
+    type: "'plus' | 'dots' | 'none'",
+    default: "'plus'",
+    description:
+      'Survey markers floating at each depth. A few blink, and the one nearest the cursor gets a target frame.'
+  },
+  { name: 'count', type: 'number', default: '1300', description: 'Number of shards across all the ribbons.' },
+  { name: 'shardSize', type: 'number', default: '1', description: 'Size of the shards.' },
+  { name: 'spread', type: 'number', default: '1', description: 'Width of the ribbons.' },
+  { name: 'twist', type: 'number', default: '1', description: 'How much the ribbons twist along their length.' },
+  { name: 'billow', type: 'number', default: '1', description: 'How much the ribbons ripple like silk.' },
+  { name: 'speed', type: 'number', default: '1', description: 'How fast the shards flow.' },
+  { name: 'scale', type: 'number', default: '1', description: 'Zoom of the whole scene.' },
+  {
+    name: 'depthOfField',
+    type: 'number',
+    default: '0.75',
+    description: 'How soft the farther ribbons get. 0 keeps everything sharp.'
+  },
+  { name: 'glow', type: 'number', default: '0.35', description: 'Soft bloom around the brightest glints.' },
+  { name: 'grain', type: 'number', default: '0.06', description: 'Film grain on the shards. 0 turns it off.' },
+  {
+    name: 'vignette',
+    type: 'number',
+    default: '0.3',
+    description: 'Fades everything out toward the edges of the frame. 0 runs edge to edge.'
+  },
+  {
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'The ribbons draw in from the left, front to back, on mount.'
+  },
+  {
+    name: 'mouseInteraction',
+    type: 'boolean',
+    default: 'true',
+    description: 'The cursor parts the shards it passes through and leans the camera toward it.'
+  },
+  { name: 'mouseStrength', type: 'number', default: '0.6', description: 'How strongly the cursor parts the shards.' },
+  { name: 'parallax', type: 'number', default: '0.5', description: 'How far the camera leans toward the cursor.' },
+  {
+    name: 'pulseOnClick',
+    type: 'boolean',
+    default: 'true',
+    description: 'Clicking sends a ring of light out through every depth, flipping the shards it passes.'
+  },
+  {
+    name: 'holdToGather',
+    type: 'boolean',
+    default: 'true',
+    description: 'Pressing and holding gathers nearby shards into a swirl that scatters back on release.'
+  },
+  { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the flow.' },
+  { name: 'dpr', type: 'number', default: '2', description: 'Maximum device pixel ratio of the canvas.' },
+  {
+    name: 'onError',
+    type: '(error: Error) => void',
+    default: '-',
+    description: 'Called if WebGPU is unavailable or fails, so you can show a fallback.'
+  },
+  { name: 'className', type: 'string', default: "''", description: 'Extra class names for the container.' },
+  { name: 'style', type: 'CSSProperties', default: '-', description: 'Inline styles for the container.' }
+];
+
+const AeroShardsDemo = () => {
+  const [key, forceRerender] = useForceRerender();
+  const { colorMode } = useColorMode();
+  const { props, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
+  const { preset, ...settings } = props;
+
+  const applyPreset = value => {
+    updateProps({ ...presetProps(value, { light: colorMode === 'light' }), preset: value });
+  };
 
   return (
-    <ComponentPropsProvider props={props} defaultProps={DEFAULT_PROPS} resetProps={resetProps} hasChanges={hasChanges}>
+    <ComponentPropsProvider
+      props={props}
+      defaultProps={DEFAULT_PROPS}
+      resetProps={resetProps}
+      hasChanges={hasChanges}
+      demoOnlyProps={['preset']}
+    >
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <AeroShards {...props} onError={error => console.error('[AeroShards]', error)} />
-
-            <BackgroundContent headline="Don't touch them, they are pretty sharp!" />
+            <AeroShards key={key} {...settings} />
+            <BackgroundContent pillText="New Background" headline="Don't touch them, they are pretty sharp!" />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
-            <OpenInStudioButton backgroundId="aero-shards" currentProps={props} defaultProps={DEFAULT_PROPS} />
+            <OpenInStudioButton backgroundId="aero-shards" currentProps={settings} defaultProps={DEFAULT_PROPS} />
           </Flex>
 
           <Customize>
+            <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewColorPickerCustom
-              title="Background"
-              color={props.backgroundColor}
-              onChange={value => updateProp('backgroundColor', value)}
-            />
-            <PreviewColorPickerCustom
-              title="Shards"
-              color={props.shardColor}
+              title="Shard Color"
+              color={settings.shardColor}
               onChange={value => updateProp('shardColor', value)}
             />
             <PreviewColorPickerCustom
-              title="Accent"
-              color={props.accentColor}
+              title="Accent Color"
+              color={settings.accentColor}
               onChange={value => updateProp('accentColor', value)}
             />
             <PreviewSelect
               title="Placement"
-              value={props.placement}
-              options={['right', 'left', 'center', 'full']}
+              options={PLACEMENT_OPTIONS}
+              value={settings.placement}
               onChange={value => updateProp('placement', value)}
             />
             <PreviewSelect
               title="Material"
-              value={props.material}
-              options={['pearl', 'chrome', 'satin']}
+              options={MATERIAL_OPTIONS}
+              value={settings.material}
               onChange={value => updateProp('material', value)}
             />
             <PreviewSelect
-              title="Detail"
-              value={props.detail}
-              options={['bold', 'balanced', 'fine']}
-              onChange={value => updateProp('detail', value)}
-            />
-            <PreviewSelect
-              title="Flow"
-              value={props.flow}
-              options={['stream', 'vortex', 'ribbon']}
-              onChange={value => updateProp('flow', value)}
-            />
-            <PreviewSelect
-              title="Effect"
-              value={props.effect}
-              options={['none', 'dither', { value: 'ascii', label: 'ASCII' }]}
-              onChange={value => updateProp('effect', value)}
-            />
-            <PreviewSelect
-              title="Interaction"
-              value={props.interaction}
-              options={['none', 'repel', 'attract']}
-              onChange={value => updateProp('interaction', value)}
+              title="Markers"
+              options={MARKER_OPTIONS}
+              value={settings.markers}
+              onChange={value => updateProp('markers', value)}
             />
             <PreviewSlider
-              title="Scale"
-              min={0.5}
-              max={2.5}
-              step={0.05}
-              value={props.scale}
-              onChange={value => updateProp('scale', value)}
-            />
-            <PreviewSlider
-              title="Spread"
-              min={0.15}
-              max={1.1}
-              step={0.05}
-              value={props.spread}
-              onChange={value => updateProp('spread', value)}
-            />
-            <PreviewSlider
-              title="Depth"
-              min={0}
-              max={1.25}
-              step={0.05}
-              value={props.depth}
-              onChange={value => updateProp('depth', value)}
-            />
-            <PreviewSlider
-              title="Speed"
-              min={0}
-              max={2}
-              step={0.05}
-              value={props.speed}
-              onChange={value => updateProp('speed', value)}
-            />
-            <PreviewSlider
-              title="Spin"
-              min={0}
-              max={2}
-              step={0.05}
-              value={props.spin}
-              onChange={value => updateProp('spin', value)}
-            />
-            <PreviewSlider
-              title="Density"
-              min={0.5}
-              max={1.5}
-              step={0.05}
-              value={props.density}
-              onChange={value => updateProp('density', value)}
+              title="Count"
+              min={400}
+              max={3200}
+              step={50}
+              value={settings.count}
+              onChange={value => updateProp('count', value)}
             />
             <PreviewSlider
               title="Shard Size"
               min={0.5}
-              max={1.5}
-              step={0.05}
-              value={props.shardSize}
+              max={2}
+              step={0.01}
+              value={settings.shardSize}
               onChange={value => updateProp('shardSize', value)}
             />
             <PreviewSlider
-              title="Stretch"
-              min={0.6}
-              max={1.8}
-              step={0.05}
-              value={props.stretch}
-              onChange={value => updateProp('stretch', value)}
+              title="Spread"
+              min={0.3}
+              max={2}
+              step={0.01}
+              value={settings.spread}
+              onChange={value => updateProp('spread', value)}
             />
             <PreviewSlider
-              title="Turbulence"
+              title="Twist"
               min={0}
               max={2}
-              step={0.05}
-              value={props.turbulence}
-              onChange={value => updateProp('turbulence', value)}
+              step={0.01}
+              value={settings.twist}
+              onChange={value => updateProp('twist', value)}
+            />
+            <PreviewSlider
+              title="Billow"
+              min={0}
+              max={2}
+              step={0.01}
+              value={settings.billow}
+              onChange={value => updateProp('billow', value)}
+            />
+            <PreviewSlider
+              title="Speed"
+              min={0}
+              max={3}
+              step={0.01}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
+            />
+            <PreviewSlider
+              title="Scale"
+              min={0.6}
+              max={1.8}
+              step={0.01}
+              value={settings.scale}
+              onChange={value => updateProp('scale', value)}
+            />
+            <PreviewSlider
+              title="Depth of Field"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.depthOfField}
+              onChange={value => updateProp('depthOfField', value)}
             />
             <PreviewSlider
               title="Glow"
               min={0}
-              max={2}
-              step={0.05}
-              value={props.glow}
+              max={1.5}
+              step={0.01}
+              value={settings.glow}
               onChange={value => updateProp('glow', value)}
-            />
-            <PreviewSlider
-              title="Edge Softness"
-              min={0}
-              max={2}
-              step={0.05}
-              value={props.edgeSoftness}
-              onChange={value => updateProp('edgeSoftness', value)}
-            />
-            <PreviewSlider
-              title="Bloom"
-              min={0}
-              max={3}
-              step={0.05}
-              value={props.bloom}
-              onChange={value => updateProp('bloom', value)}
             />
             <PreviewSlider
               title="Grain"
               min={0}
-              max={0.12}
-              step={0.0025}
-              value={props.grain}
+              max={0.4}
+              step={0.01}
+              value={settings.grain}
               onChange={value => updateProp('grain', value)}
             />
             <PreviewSlider
-              title="Chromatic Aberration"
+              title="Vignette"
               min={0}
-              max={0.01}
-              step={0.0005}
-              value={props.chromaticAberration}
-              onChange={value => updateProp('chromaticAberration', value)}
+              max={1}
+              step={0.01}
+              value={settings.vignette}
+              onChange={value => updateProp('vignette', value)}
             />
             <PreviewSlider
-              title="Transition Duration"
-              min={0.2}
-              max={2}
-              step={0.05}
-              value={props.transitionDuration}
-              onChange={value => updateProp('transitionDuration', value)}
-            />
-            <PreviewSlider
-              title="Interaction Radius"
-              min={0.5}
-              max={2}
-              step={0.05}
-              value={props.interactionRadius}
-              onChange={value => updateProp('interactionRadius', value)}
-            />
-            <PreviewSlider
-              title="Interaction Strength"
+              title="Cursor Strength"
               min={0}
-              max={2}
-              step={0.05}
-              value={props.interactionStrength}
-              onChange={value => updateProp('interactionStrength', value)}
+              max={1}
+              step={0.01}
+              value={settings.mouseStrength}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('mouseStrength', value)}
             />
             <PreviewSlider
-              title="Ripple Intensity"
-              value={props.rippleIntensity}
+              title="Parallax"
               min={0}
-              max={2}
-              step={0.05}
-              onChange={value => updateProp('rippleIntensity', value)}
+              max={1}
+              step={0.01}
+              value={settings.parallax}
+              isDisabled={!settings.mouseInteraction}
+              onChange={value => updateProp('parallax', value)}
+            />
+            <PreviewSwitch title="Intro" isChecked={settings.intro} onChange={value => updateProp('intro', value)} />
+            <PreviewSwitch
+              title="Cursor"
+              isChecked={settings.mouseInteraction}
+              onChange={value => updateProp('mouseInteraction', value)}
+            />
+            <PreviewSwitch
+              title="Pulse on Click"
+              isChecked={settings.pulseOnClick}
+              onChange={value => updateProp('pulseOnClick', value)}
             />
             <PreviewSwitch
               title="Hold to Gather"
-              isChecked={props.holdToGather}
+              isChecked={settings.holdToGather}
               onChange={value => updateProp('holdToGather', value)}
             />
-            <PreviewSwitch title="Paused" isChecked={props.paused} onChange={value => updateProp('paused', value)} />
+            <PreviewSwitch
+              title="Light Mode"
+              isChecked={settings.lightMode}
+              onChange={value => updateProp('lightMode', value)}
+            />
+            <PreviewSwitch title="Pause" isChecked={settings.paused} onChange={value => updateProp('paused', value)} />
           </Customize>
 
           <PropTable data={propData} />

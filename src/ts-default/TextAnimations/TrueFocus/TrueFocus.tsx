@@ -1,18 +1,26 @@
 'use client';
 
-import { useEffect, useRef, useState, type RefObject } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type FC } from 'react';
+import { motion, useReducedMotion, type Transition } from 'motion/react';
 import './TrueFocus.css';
 
 interface TrueFocusProps {
   sentence?: string;
   separator?: string;
   manualMode?: boolean;
+  focusStyle?: 'brackets' | 'box' | 'underline' | 'highlight';
+  order?: 'sequential' | 'random';
+  easing?: 'smooth' | 'spring';
   blurAmount?: number;
+  focusScale?: number;
   borderColor?: string;
+  highlightColor?: string;
   glowColor?: string;
   animationDuration?: number;
   pauseBetweenAnimations?: number;
+  cornerSize?: number;
+  borderWidth?: number;
+  unfocusedOpacity?: number;
 }
 
 interface FocusRect {
@@ -22,129 +30,199 @@ interface FocusRect {
   height: number;
 }
 
-const TrueFocus: React.FC<TrueFocusProps> = ({
+type Corner = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+
+const CORNERS: Corner[] = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+const FRAME_GAP = 10;
+const SMOOTH_EASE = [0.65, 0, 0.35, 1] as const;
+const SMOOTH_CSS = 'cubic-bezier(0.65, 0, 0.35, 1)';
+const SPRING_CSS = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+const TrueFocus: FC<TrueFocusProps> = ({
   sentence = 'True Focus',
   separator = ' ',
   manualMode = false,
+  focusStyle = 'brackets',
+  order = 'sequential',
+  easing = 'smooth',
   blurAmount = 5,
+  focusScale = 1,
   borderColor = 'green',
-  glowColor = 'rgba(0, 255, 0, 0.6)',
+  highlightColor,
+  glowColor = 'transparent',
   animationDuration = 0.5,
-  pauseBetweenAnimations = 1
+  pauseBetweenAnimations = 1,
+  cornerSize = 16,
+  borderWidth = 3,
+  unfocusedOpacity = 1
 }) => {
-  const words = sentence.split(separator);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [lastActiveIndex, setLastActiveIndex] = useState<number | null>(null);
+  const words = sentence.split(separator).filter(word => word.trim() !== '');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [focusRect, setFocusRect] = useState<FocusRect | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const wordRefs: React.MutableRefObject<(HTMLSpanElement | null)[]> = useRef([]);
-  const [focusRect, setFocusRect] = useState<FocusRect>({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0
-  });
+  const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const reduceMotion = useReducedMotion();
+  const duration = reduceMotion ? 0 : animationDuration;
+  const activeIndex = words.length ? currentIndex % words.length : -1;
+  const spring = easing === 'spring' && !reduceMotion;
+  const transition: Transition = spring
+    ? { type: 'spring', visualDuration: duration, bounce: 0.38 }
+    : { duration, ease: SMOOTH_EASE };
 
   useEffect(() => {
-    if (!manualMode) {
-      const interval = setInterval(
-        () => {
-          setCurrentIndex(prev => (prev + 1) % words.length);
-        },
-        (animationDuration + pauseBetweenAnimations) * 1000
+    if (manualMode || words.length < 2) return;
+    const interval = setInterval(
+      () => {
+        const roll = Math.random();
+        setCurrentIndex(prev => {
+          const current = prev % words.length;
+          if (order !== 'random') return (current + 1) % words.length;
+          const next = Math.floor(roll * (words.length - 1));
+          return next >= current ? next + 1 : next;
+        });
+      },
+      (animationDuration + pauseBetweenAnimations) * 1000
+    );
+    return () => clearInterval(interval);
+  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length, order]);
+
+  useIsomorphicLayoutEffect(() => {
+    const container = containerRef.current;
+    const word = wordRefs.current[activeIndex];
+    if (!container || !word) return;
+
+    const measure = () => {
+      const next = { x: word.offsetLeft, y: word.offsetTop, width: word.offsetWidth, height: word.offsetHeight };
+      setFocusRect(prev =>
+        prev && prev.x === next.x && prev.y === next.y && prev.width === next.width && prev.height === next.height
+          ? prev
+          : next
       );
+    };
 
-      return () => clearInterval(interval);
-    }
-  }, [manualMode, animationDuration, pauseBetweenAnimations, words.length]);
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    wordRefs.current.forEach(node => node && observer.observe(node));
+    return () => observer.disconnect();
+  }, [activeIndex, sentence, separator]);
 
-  useEffect(() => {
-    if (currentIndex === null || currentIndex === -1) return;
+  const frame: FocusRect | null = focusRect && {
+    x: focusRect.x - (focusRect.width * (focusScale - 1)) / 2,
+    y: focusRect.y - (focusRect.height * (focusScale - 1)) / 2,
+    width: focusRect.width * focusScale,
+    height: focusRect.height * focusScale
+  };
 
-    if (!wordRefs.current[currentIndex] || !containerRef.current) return;
-
-    const parentRect = containerRef.current.getBoundingClientRect();
-    const activeRect = wordRefs.current[currentIndex]!.getBoundingClientRect();
-
-    setFocusRect({
-      x: activeRect.left - parentRect.left,
-      y: activeRect.top - parentRect.top,
-      width: activeRect.width,
-      height: activeRect.height
-    });
-  }, [currentIndex, words.length]);
-
-  const handleMouseEnter = (index: number) => {
-    if (manualMode) {
-      setLastActiveIndex(index);
-      setCurrentIndex(index);
+  const corners: Record<Corner, { x: number; y: number }> | null = frame && {
+    'top-left': { x: frame.x - FRAME_GAP, y: frame.y - FRAME_GAP },
+    'top-right': { x: frame.x + frame.width + FRAME_GAP - cornerSize, y: frame.y - FRAME_GAP },
+    'bottom-left': { x: frame.x - FRAME_GAP, y: frame.y + frame.height + FRAME_GAP - cornerSize },
+    'bottom-right': {
+      x: frame.x + frame.width + FRAME_GAP - cornerSize,
+      y: frame.y + frame.height + FRAME_GAP - cornerSize
     }
   };
 
-  const handleMouseLeave = () => {
-    if (manualMode) {
-      setCurrentIndex(lastActiveIndex ?? 0);
+  const shapes = frame && {
+    box: {
+      x: frame.x - FRAME_GAP,
+      y: frame.y - FRAME_GAP,
+      width: frame.width + FRAME_GAP * 2,
+      height: frame.height + FRAME_GAP * 2
+    },
+    underline: {
+      x: frame.x,
+      y: frame.y + frame.height + FRAME_GAP * 0.4,
+      width: frame.width,
+      height: borderWidth
+    },
+    highlight: {
+      x: frame.x - frame.height * 0.14,
+      y: frame.y + frame.height * 0.04,
+      width: frame.width + frame.height * 0.28,
+      height: frame.height * 0.92
     }
   };
+
+  const frameStyle = {
+    '--border-color': borderColor,
+    '--highlight-color': `color-mix(in srgb, ${highlightColor ?? borderColor} 30%, transparent)`,
+    '--glow-color': glowColor,
+    '--corner-size': `${cornerSize}px`,
+    '--border-width': `${borderWidth}px`
+  } as CSSProperties;
 
   return (
-    <div className="focus-container" ref={containerRef}>
+    <div className="focus-container" ref={containerRef} style={frameStyle}>
+      {focusStyle === 'highlight' && shapes && (
+        <motion.span
+          className="focus-highlight"
+          aria-hidden="true"
+          initial={{ ...shapes.highlight, opacity: 0 }}
+          animate={{ ...shapes.highlight, opacity: 1 }}
+          transition={transition}
+        />
+      )}
+
       {words.map((word, index) => {
-        const isActive = index === currentIndex;
+        const isActive = index === activeIndex;
         return (
           <span
             key={index}
             ref={el => {
-              if (el) {
-                wordRefs.current[index] = el;
-              }
+              wordRefs.current[index] = el;
             }}
             className={`focus-word ${manualMode ? 'manual' : ''} ${isActive && !manualMode ? 'active' : ''}`}
-            style={
-              {
-                filter: manualMode
-                  ? isActive
-                    ? `blur(0px)`
-                    : `blur(${blurAmount}px)`
-                  : isActive
-                    ? `blur(0px)`
-                    : `blur(${blurAmount}px)`,
-                transition: `filter ${animationDuration}s ease`,
-                '--border-color': borderColor,
-                '--glow-color': glowColor
-              } as React.CSSProperties
-            }
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
+            style={{
+              filter: `blur(${isActive ? 0 : blurAmount}px)`,
+              opacity: isActive ? 1 : unfocusedOpacity,
+              transform: focusScale !== 1 ? `scale(${isActive ? focusScale : 1})` : undefined,
+              transition: `filter ${duration}s ease, opacity ${duration}s ease, transform ${duration}s ${spring ? SPRING_CSS : SMOOTH_CSS}`
+            }}
+            onMouseEnter={() => {
+              if (manualMode) setCurrentIndex(index);
+            }}
           >
             {word}
           </span>
         );
       })}
 
-      <motion.div
-        className="focus-frame"
-        animate={{
-          x: focusRect.x,
-          y: focusRect.y,
-          width: focusRect.width,
-          height: focusRect.height,
-          opacity: currentIndex >= 0 ? 1 : 0
-        }}
-        transition={{
-          duration: animationDuration
-        }}
-        style={
-          {
-            '--border-color': borderColor,
-            '--glow-color': glowColor
-          } as React.CSSProperties
-        }
-      >
-        <span className="corner top-left"></span>
-        <span className="corner top-right"></span>
-        <span className="corner bottom-left"></span>
-        <span className="corner bottom-right"></span>
-      </motion.div>
+      {shapes && corners && focusStyle !== 'highlight' && (
+        <div className="focus-frame" aria-hidden="true">
+          {focusStyle === 'box' && (
+            <motion.span
+              className="focus-box"
+              initial={{ ...shapes.box, opacity: 0 }}
+              animate={{ ...shapes.box, opacity: 1 }}
+              transition={transition}
+            />
+          )}
+          {focusStyle === 'underline' && (
+            <motion.span
+              className="focus-underline"
+              initial={{ ...shapes.underline, opacity: 0 }}
+              animate={{ ...shapes.underline, opacity: 1 }}
+              transition={transition}
+            />
+          )}
+          {focusStyle !== 'box' &&
+            focusStyle !== 'underline' &&
+            CORNERS.map(corner => (
+              <motion.span
+                key={corner}
+                className={`corner ${corner}`}
+                initial={{ ...corners[corner], opacity: 0 }}
+                animate={{ ...corners[corner], opacity: 1 }}
+                transition={transition}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

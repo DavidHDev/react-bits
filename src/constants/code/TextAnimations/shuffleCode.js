@@ -10,6 +10,7 @@ export const shuffle = {
 
 <Shuffle
   text="Hello World"
+  effect="slide"
   shuffleDirection="right"
   duration={0.35}
   animationMode="evenodd"
@@ -19,6 +20,8 @@ export const shuffle = {
   threshold={0.1}
   triggerOnce={true}
   triggerOnHover={true}
+  hoverRadius={0}
+  motionBlur={false}
   respectReducedMotion={true}
 />`,
   code,

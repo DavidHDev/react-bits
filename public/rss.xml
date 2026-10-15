@@ -5,439 +5,807 @@
     <link>https://reactbits.dev/get-started/changelog</link>
     <description>Keep up with the newest additions to React Bits.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 15 Oct 2026 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://reactbits.dev/rss.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Updated: Glass Surface</title>
-      <link>https://reactbits.dev/components/glass-surface</link>
-      <guid isPermaLink="false">reactbits:Components/GlassSurface@2026-10-10</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Turn any SVG logo into glass, with a polished frosted look in Safari and Firefox. The new demo glass follows your cursor and can be dragged.</description>
-    </item>
-    <item>
-      <title>Updated: Pixel Snow</title>
-      <link>https://reactbits.dev/backgrounds/pixel-snow</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/PixelSnow@2026-10-10</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
+      <title>New: Gradient ASCII</title>
+      <link>https://reactbits.dev/backgrounds/gradient-ascii</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/GradientASCII@added</guid>
+      <pubDate>Thu, 15 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
-      <description>Rebuilt with crisp pixel-art flakes in layers of depth, a soft glow, wind and cursor play, snow that can pile up, and a light mode.</description>
-    </item>
-    <item>
-      <title>Updated: Plasma</title>
-      <link>https://reactbits.dev/backgrounds/plasma</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/Plasma@2026-10-10</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt as soft folds of satin light with bright highlights, a cursor that turns them in 3D and a new light mode.</description>
-    </item>
-    <item>
-      <title>Updated: Plasma Wave</title>
-      <link>https://reactbits.dev/backgrounds/plasma-wave</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/PlasmaWave@2026-10-10</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Smoother, faster plasma with soft glow, white-hot cores and a cursor that stirs it, plus a new light mode.</description>
-    </item>
-    <item>
-      <title>Updated: Radar</title>
-      <link>https://reactbits.dev/backgrounds/radar</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/Radar@2026-10-10</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt as a detailed radar scope with a glowing sweep, contacts that ping and fade, a sonar mode and a tilted floor view.</description>
-    </item>
-    <item>
-      <title>Updated: Specular Button</title>
-      <link>https://reactbits.dev/components/specular-button</link>
-      <guid isPermaLink="false">reactbits:Components/SpecularButton@2026-10-10</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt with a crisp glass edge whose light glides around the rim toward the cursor, rests softly when idle and flashes on press.</description>
+      <description>Soft gradient glows drawn in ASCII characters that scramble under the cursor.</description>
     </item>
     <item>
       <title>Updated: Acid Squares</title>
       <link>https://reactbits.dev/backgrounds/acid-squares</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/AcidSquares@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <guid isPermaLink="false">reactbits:Backgrounds/AcidSquares@2026-10-14</guid>
+      <pubDate>Wed, 14 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
-      <description>Crisp glass edges, travelling rings of light and twinkling squares, plus a clean light mode.</description>
-    </item>
-    <item>
-      <title>Updated: Carousel</title>
-      <link>https://reactbits.dev/components/carousel</link>
-      <guid isPermaLink="false">reactbits:Components/Carousel@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt with momentum swiping, five transitions, photo cards, an autoplay timer and a cleaner frame in both themes.</description>
-    </item>
-    <item>
-      <title>Updated: Elastic Mesh</title>
-      <link>https://reactbits.dev/animations/elastic-mesh</link>
-      <guid isPermaLink="false">reactbits:Animations/ElasticMesh@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt as inflated, squishy type and logos that dent, stretch and snap back with a jiggle.</description>
-    </item>
-    <item>
-      <title>Updated: Flying Posters</title>
-      <link>https://reactbits.dev/components/flying-posters</link>
-      <guid isPermaLink="false">reactbits:Components/FlyingPosters@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt so it only scrolls when you use it, with optional columns and a camera you can pull back or push in.</description>
+      <description>Rebuilt as a rolling field of glossy squares under two drifting colored lights, with square ripples, film grain and an intro that switches the squares on from the center.</description>
     </item>
     <item>
       <title>Updated: Ghost Fibers</title>
       <link>https://reactbits.dev/backgrounds/ghost-fibers</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/GhostFibers@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <guid isPermaLink="false">reactbits:Backgrounds/GhostFibers@2026-10-14</guid>
+      <pubDate>Wed, 14 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
-      <description>Sharper fibers with crisp cores and a cleaner glow, plus a light mode that matches the dark one.</description>
+      <description>Rebuilt as layered ribbons of fine glowing fibers with soft depth of field, bright folds and new looks to pick from.</description>
     </item>
     <item>
-      <title>Updated: Glass Icons</title>
-      <link>https://reactbits.dev/components/glass-icons</link>
-      <guid isPermaLink="false">reactbits:Components/GlassIcons@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt with real liquid glass that bends light at its edges, a smooth entrance, new card styles and presets.</description>
-    </item>
-    <item>
-      <title>Updated: Glow Cursor</title>
-      <link>https://reactbits.dev/animations/glow-cursor</link>
-      <guid isPermaLink="false">reactbits:Animations/GlowCursor@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt as light that pours from the cursor and drifts softly as it fades, with a burst on click and a light mode.</description>
-    </item>
-    <item>
-      <title>Updated: Halftone Reveal</title>
-      <link>https://reactbits.dev/animations/halftone-reveal</link>
-      <guid isPermaLink="false">reactbits:Animations/HalftoneReveal@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt as a print on the page in mono, duotone or full color, with dots that swell into the photo.</description>
-    </item>
-    <item>
-      <title>Updated: Infinite Menu</title>
-      <link>https://reactbits.dev/components/infinite-menu</link>
-      <guid isPermaLink="false">reactbits:Components/InfiniteMenu@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt to be lighter, with more ways to shape the tiles, autoplay, keyboard support and click to select.</description>
-    </item>
-    <item>
-      <title>Updated: Iridescence</title>
-      <link>https://reactbits.dev/backgrounds/iridescence</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/Iridescence@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Aero Shards</title>
+      <link>https://reactbits.dev/backgrounds/aero-shards</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/AeroShards@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
-      <description>Rebuilt with full control over color, folds and motion, a liquid stir under the cursor, a swirl on click and presets.</description>
+      <description>Rebuilt as silk ribbons of thick glass shards that stream smoothly on layered depths, light up along their edges and soften into the distance. Adds a chrome finish, survey markers, a cursor that parts the shards, a light wave on click, presets and an edge fade.</description>
     </item>
     <item>
-      <title>Updated: Laser Flow</title>
-      <link>https://reactbits.dev/animations/laser-flow</link>
-      <guid isPermaLink="false">reactbits:Animations/LaserFlow@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt as a waterfall of light that lands on your content, pours over its corners and can reveal your UI around the cursor.</description>
-    </item>
-    <item>
-      <title>Updated: Shape Blur</title>
-      <link>https://reactbits.dev/animations/shape-blur</link>
-      <guid isPermaLink="false">reactbits:Animations/ShapeBlur@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt as a real lens blur that follows the cursor. Use any SVG or PNG as the shape, or switch to focus mode.</description>
-    </item>
-    <item>
-      <title>Updated: Sliced Waves</title>
-      <link>https://reactbits.dev/backgrounds/sliced-waves</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/SlicedWaves@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt as waves of light sliced into glowing bars, seen in depth with a focus that follows the cursor.</description>
-    </item>
-    <item>
-      <title>Updated: Threads</title>
-      <link>https://reactbits.dev/backgrounds/threads</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/Threads@2026-10-09</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt to run several times faster, with presets, much more control over the threads and a cursor that parts them.</description>
-    </item>
-    <item>
-      <title>New: Holo Card</title>
-      <link>https://reactbits.dev/components/holo-card</link>
-      <guid isPermaLink="false">reactbits:Components/HoloCard@added</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Collectible trading card with a real holographic foil.</description>
-    </item>
-    <item>
-      <title>Updated: ASCII Text</title>
-      <link>https://reactbits.dev/text-animations/ascii-text</link>
-      <guid isPermaLink="false">reactbits:TextAnimations/AsciiText@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Blur Text</title>
+      <link>https://reactbits.dev/text-animations/blur-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/BlurText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Text Animations</category>
-      <description>Rebuilt so the layers never slip apart on load, with a scramble on hover, click ripples and custom characters.</description>
+      <description>Text can now zoom, tilt in 3D, pull into focus or drift in, starting from the middle, the end or at random. It can also loop, replay on hover or click, start in a second color and keep the hovered word sharp.</description>
     </item>
     <item>
-      <title>Updated: Blob Cursor</title>
-      <link>https://reactbits.dev/animations/blob-cursor</link>
-      <guid isPermaLink="false">reactbits:Animations/BlobCursor@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt as a smooth 3D liquid that stretches as it moves, with new looks, drips and a splashy click burst.</description>
-    </item>
-    <item>
-      <title>Updated: Bounce Cards</title>
-      <link>https://reactbits.dev/components/bounce-cards</link>
-      <guid isPermaLink="false">reactbits:Components/BounceCards@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Card Nav</title>
+      <link>https://reactbits.dev/components/card-nav</link>
+      <guid isPermaLink="false">reactbits:Components/CardNav@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Components</category>
-      <description>Rebuilt on springs, so hovering no longer flickers. The fan is easier to shape and cards can now be clicked.</description>
+      <description>Rebuilt with a springy open, cards that rise, unfold or fade in, sliding link arrows, open on hover, a stacked layout for small screens and a light mode.</description>
     </item>
     <item>
-      <title>Updated: Crosshair</title>
-      <link>https://reactbits.dev/animations/crosshair</link>
-      <guid isPermaLink="false">reactbits:Animations/Crosshair@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt from scratch. It frames what you hover with measuring brackets, with new line styles and a click pulse.</description>
-    </item>
-    <item>
-      <title>Updated: Decay Card</title>
-      <link>https://reactbits.dev/components/decay-card</link>
-      <guid isPermaLink="false">reactbits:Components/DecayCard@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt to run smoother. The decay now shows at normal speeds, spreads evenly and frays gently when idle.</description>
-    </item>
-    <item>
-      <title>Updated: Dock</title>
-      <link>https://reactbits.dev/components/dock</link>
-      <guid isPermaLink="false">reactbits:Components/Dock@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt with smoother magnification, a right-click menu, badges, auto hide and placement on any edge.</description>
-    </item>
-    <item>
-      <title>Updated: Gradient Text</title>
-      <link>https://reactbits.dev/text-animations/gradient-text</link>
-      <guid isPermaLink="false">reactbits:TextAnimations/GradientText@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Circular Text</title>
+      <link>https://reactbits.dev/text-animations/circular-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/CircularText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Text Animations</category>
-      <description>Rebuilt with new flow and conic styles, a soft glow and colors that drift toward the cursor.</description>
+      <description>Fling the ring and it coasts back to its cruising speed, leans toward the cursor in 3D and can sit back like a planet’s orbit. Add an icon in the middle, an inner circle and natural spacing with gaps.</description>
     </item>
     <item>
-      <title>Updated: Grid Distortion</title>
-      <link>https://reactbits.dev/backgrounds/grid-distortion</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/GridDistortion@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt to be lighter. Images no longer stretch, and new modes range from crisp blocks to a liquid warp.</description>
-    </item>
-    <item>
-      <title>Updated: Grid Motion</title>
-      <link>https://reactbits.dev/backgrounds/grid-motion</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/GridMotion@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt to fit its container, with drift, parallax, a 3D tilt and a spotlight that follows the cursor.</description>
-    </item>
-    <item>
-      <title>Updated: Hyperspeed</title>
-      <link>https://reactbits.dev/backgrounds/hyperspeed</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/Hyperspeed@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt with a real glow and a transparent background. Every part of the road and lights is now customizable.</description>
-    </item>
-    <item>
-      <title>Updated: Lanyard</title>
-      <link>https://reactbits.dev/components/lanyard</link>
-      <guid isPermaLink="false">reactbits:Components/Lanyard@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt with no setup needed. Pass any image and the card swings with real momentum and flips on click.</description>
-    </item>
-    <item>
-      <title>Updated: Noise</title>
-      <link>https://reactbits.dev/animations/noise</link>
-      <guid isPermaLink="false">reactbits:Animations/Noise@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt to be much lighter, with film dust, scratches, scanlines and flicker for a real film look.</description>
-    </item>
-    <item>
-      <title>Updated: Pixel Transition</title>
-      <link>https://reactbits.dev/animations/pixel-transition</link>
-      <guid isPermaLink="false">reactbits:Animations/PixelTransition@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt to stay smooth on quick hovers, with new reveal patterns, pixel shapes and a choppy retro mode.</description>
-    </item>
-    <item>
-      <title>Updated: Shiny Text</title>
-      <link>https://reactbits.dev/text-animations/shiny-text</link>
-      <guid isPermaLink="false">reactbits:TextAnimations/ShinyText@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Count Up</title>
+      <link>https://reactbits.dev/text-animations/count-up</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/CountUp@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Text Animations</category>
-      <description>Rebuilt with more control over the shine, a travelling glow and new ways to play it, like on hover or scroll.</description>
+      <description>Numbers can roll into place like an odometer, settle with a spring, shorten to 1.2K or 3.4M and replay on hover.</description>
     </item>
     <item>
-      <title>Updated: Spotlight Card</title>
-      <link>https://reactbits.dev/components/spotlight-card</link>
-      <guid isPermaLink="false">reactbits:Components/SpotlightCard@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Counter</title>
+      <link>https://reactbits.dev/components/counter</link>
+      <guid isPermaLink="false">reactbits:Components/Counter@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Components</category>
-      <description>Rebuilt with a smoother light that follows the cursor, glows along the edge and can be shared across a grid.</description>
+      <description>Rebuilt with springy rolling digits, motion blur and a spin-in intro. Formats currency, percentages, separators and locales, and digits slide in and out as the number grows or shrinks.</description>
     </item>
     <item>
-      <title>Updated: Stack</title>
-      <link>https://reactbits.dev/components/stack</link>
-      <guid isPermaLink="false">reactbits:Components/Stack@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Components</category>
-      <description>Rebuilt so cards never jump mid-drag. Throws carry momentum, with four new layouts and keyboard support.</description>
-    </item>
-    <item>
-      <title>Updated: Star Border</title>
-      <link>https://reactbits.dev/animations/star-border</link>
-      <guid isPermaLink="false">reactbits:Animations/StarBorder@2026-10-08</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Rebuilt from scratch. The star glides evenly around any shape with a soft trail, hover laps and a click pulse.</description>
-    </item>
-    <item>
-      <title>New: Crystalized Ball</title>
-      <link>https://reactbits.dev/animations/crystalized-ball</link>
-      <guid isPermaLink="false">reactbits:Animations/CrystalizedBall@added</guid>
-      <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>A glass ball held together by a crackling electric rim, with a bowl of glowing dust inside that swirls in the cursor wake, shakes on click and lights up on mount, all from one color.</description>
-    </item>
-    <item>
-      <title>Updated: Shape Waves</title>
-      <link>https://reactbits.dev/backgrounds/shape-waves</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/ShapeWaves@2026-10-06</guid>
-      <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
+      <title>Updated: CRT Warp</title>
+      <link>https://reactbits.dev/backgrounds/crt-warp</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/CRTWarp@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
-      <description>Centered text cutouts using actual glyph bounds.</description>
+      <description>Rebuilt as a real CRT that warms up into view, with true scanlines, phosphor masks, afterglow and bloom. The cursor bends the picture like a magnet, clicks flip the channel, and presets add amber, green and arcade looks.</description>
     </item>
     <item>
-      <title>New: Pattern Waves</title>
-      <link>https://reactbits.dev/backgrounds/pattern-waves</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/PatternWaves@added</guid>
-      <pubDate>Wed, 30 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>A lit halftone surface of dots, lines, crosses or glyphs that moves like draped silk, rolling swells or ripples, with six presets, one-color theming and a cursor that sends ripples through it.</description>
+      <title>Updated: Curved Loop</title>
+      <link>https://reactbits.dev/text-animations/curved-loop</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/CurvedLoop@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Text can now travel along a wave, a closed ring or a straight line, with outlined letters and an accent mark between repeats. Scrolling the page gives the loop a burst of speed that eases off.</description>
     </item>
     <item>
-      <title>New: Circular Carousel</title>
-      <link>https://reactbits.dev/components/circular-carousel</link>
-      <guid isPermaLink="false">reactbits:Components/CircularCarousel@added</guid>
-      <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Decrypted Text</title>
+      <link>https://reactbits.dev/text-animations/decrypted-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/DecryptedText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Letters can now roll in like a flip board or brighten out of faint glyphs, with an accent color that settles as they decode. Text can loop, and hovering can scramble just the letters near the cursor.</description>
+    </item>
+    <item>
+      <title>Updated: Depth Text</title>
+      <link>https://reactbits.dev/text-animations/depth-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/DepthText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>The extrusion can now fade into the page, and the word presses in on hover and springs back. It can also float gently while idle.</description>
+    </item>
+    <item>
+      <title>Updated: Echo Text</title>
+      <link>https://reactbits.dev/text-animations/echo-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/EchoText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Click the text to send out a burst of echoes, or let the echoes drift on their own or trail behind page scrolling. Echoes can also fade between two colors.</description>
+    </item>
+    <item>
+      <title>Updated: Elastic Slider</title>
+      <link>https://reactbits.dev/components/elastic-slider</link>
+      <guid isPermaLink="false">reactbits:Components/ElasticSlider@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Components</category>
-      <description>A 3D ring of images with four layouts, bendable cards, depth fade, momentum drag, snapping and click to focus.</description>
+      <description>Rebuilt with smoother springs and a rubber-band pull at both ends. Adds vertical and pill styles, icons and values inside the track, ticks, a handle, centered fills, and keyboard and scroll control.</description>
     </item>
     <item>
-      <title>Updated: Electric Logo</title>
-      <link>https://reactbits.dev/animations/electric-logo</link>
-      <guid isPermaLink="false">reactbits:Animations/ElectricLogo@2026-09-28</guid>
-      <pubDate>Mon, 28 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>Added an onRender callback for capturing live frames and reflection effects.</description>
-    </item>
-    <item>
-      <title>New: Micro Slats</title>
-      <link>https://reactbits.dev/backgrounds/micro-slats</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/MicroSlats@added</guid>
-      <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>A wall of tiny slats that becomes a rolling sea in perspective, with glinting crests, four presets, a real fluid the cursor stirs and an intro that rolls in from the horizon.</description>
-    </item>
-    <item>
-      <title>New: Flex Carousel</title>
-      <link>https://reactbits.dev/components/flex-carousel</link>
-      <guid isPermaLink="false">reactbits:Components/FlexCarousel@added</guid>
-      <pubDate>Sat, 26 Sep 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Flowing Menu</title>
+      <link>https://reactbits.dev/components/flowing-menu</link>
+      <guid isPermaLink="false">reactbits:Components/FlowingMenu@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Components</category>
-      <description>An infinite image row that flows through invisible liquid glass at its edges, with four bend presets, five entrances, a speed squeeze and click to focus.</description>
+      <description>Rebuilt around one liquid band that glides and stretches between rows and leans toward the cursor, with an intro sweep. New capsule and slab shapes, an editorial layout, notes per row and keyboard support.</description>
     </item>
     <item>
-      <title>New: Electric Logo</title>
-      <link>https://reactbits.dev/animations/electric-logo</link>
-      <guid isPermaLink="false">reactbits:Animations/ElectricLogo@added</guid>
-      <pubDate>Fri, 25 Sep 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Fold Text</title>
+      <link>https://reactbits.dev/text-animations/fold-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/FoldText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Letters can now open like blinds or flip over like cards, and fold away near the cursor as it passes. Looping text can hold as long as you like before folding back up.</description>
+    </item>
+    <item>
+      <title>Updated: Fuzzy Text</title>
+      <link>https://reactbits.dev/text-animations/fuzzy-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/FuzzyText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Text can now resolve out of heavy static when it first appears and tear into soft color fringes. The fuzz can follow the cursor, run all the time or fire in bursts on click.</description>
+    </item>
+    <item>
+      <title>Updated: Glitch Text</title>
+      <link>https://reactbits.dev/text-animations/glitch-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/GlitchText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Pick from four glitch styles: sliced bands, a jittering color split, a scanning tear or swapped glyphs. Set how hard it glitches, add skew and flicker, and play short bursts on click.</description>
+    </item>
+    <item>
+      <title>Updated: Gradient Waves</title>
+      <link>https://reactbits.dev/backgrounds/gradient-waves</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/GradientWaves@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Waves are now lit with soft light and shadow, rise from calm water on load, catch a light that follows the cursor and roll a swell in on click. Adds light direction, presets, a light mode and no dependencies.</description>
+    </item>
+    <item>
+      <title>Updated: Image Trail</title>
+      <link>https://reactbits.dev/animations/image-trail</link>
+      <guid isPermaLink="false">reactbits:Animations/ImageTrail@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Animations</category>
-      <description>Turns any SVG or PNG into a living lightning outline, with flowing strands, arcs that leap off the edges and a charge that follows the cursor.</description>
+      <description>The eight fixed variants are now one trail you can tune: size, timing, zoom, flash, drift, tilt, rotation and a stacking pile. Four presets recreate the favourite looks.</description>
     </item>
     <item>
-      <title>New: Tech Text</title>
+      <title>Updated: Logo Loop</title>
+      <link>https://reactbits.dev/animations/logo-loop</link>
+      <guid isPermaLink="false">reactbits:Animations/LogoLoop@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Now draggable with a soft fade that works on any background and an intro. Adds wave, arc and 3D orbit paths, a center lens, dock-style magnify, stepping, labels and perspective tilt.</description>
+    </item>
+    <item>
+      <title>Updated: Masked Heading</title>
+      <link>https://reactbits.dev/text-animations/masked-heading</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/MaskedHeading@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Two new entrances, letters growing in one by one and a focus pull, plus a soft light that follows the cursor and brings back full color. Letters can also be drawn as thin strokes that the image fills as it arrives.</description>
+    </item>
+    <item>
+      <title>Updated: Masonry</title>
+      <link>https://reactbits.dev/components/masonry</link>
+      <guid isPermaLink="false">reactbits:Components/Masonry@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with springy reflow, tiles that appear as you scroll, hover zoom, lift and tilt, captions, a lightbox and drag to reorder. Columns now follow the container and tiles keep each image's shape.</description>
+    </item>
+    <item>
+      <title>Updated: Molten Metal</title>
+      <link>https://reactbits.dev/backgrounds/molten-metal</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/MoltenMetal@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>The metal now ignites from its white-hot cores, the cursor heats the filaments it passes and clicks flare them white-hot. Adds filament width, haze, rotation and position controls, more colors, crisper fine detail, a richer light mode and no dependencies.</description>
+    </item>
+    <item>
+      <title>Updated: Orbit Images</title>
+      <link>https://reactbits.dev/animations/orbit-images</link>
+      <guid isPermaLink="false">reactbits:Animations/OrbitImages@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt with real depth, so photos pass behind and in front of whatever sits in the middle, and it now fits any container. Drag to spin it, click a photo to bring it forward, and style the tiles, shadows and path.</description>
+    </item>
+    <item>
+      <title>Updated: Particle Text</title>
+      <link>https://reactbits.dev/text-animations/particle-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/ParticleText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Text can now rain in, swirl into place or print behind a sweeping line, and particles can be drawn as squares or short strokes. Click to blow the particles apart and watch them spring back.</description>
+    </item>
+    <item>
+      <title>Updated: Pill Nav</title>
+      <link>https://reactbits.dev/components/pill-nav</link>
+      <guid isPermaLink="false">reactbits:Components/PillNav@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with a smoother rising fill and rolling labels, a sliding active dot, a gliding pill option, a menu that folds in on small screens, and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Pixel Swap</title>
+      <link>https://reactbits.dev/animations/pixel-swap</link>
+      <guid isPermaLink="false">reactbits:Animations/PixelSwap@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt to be fast and seamless, with pixels that spring in from wherever the cursor enters and retreat the moment it leaves. New dot and spin styles and a pixel intro.</description>
+    </item>
+    <item>
+      <title>Updated: Rotating Text</title>
+      <link>https://reactbits.dev/text-animations/rotating-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/RotatingText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Words can now flip, blur, zoom or drop in with a small bounce, rolling up or down. A highlight block smoothly resizes to fit each word and keeps the text readable on any color.</description>
+    </item>
+    <item>
+      <title>Updated: Scrambled Text</title>
+      <link>https://reactbits.dev/text-animations/scrambled-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/ScrambledText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Letters near the cursor can now rise, blur or swell like a lens, and a click sends a scramble wave through the text. Works with any typeface without the layout jumping.</description>
+    </item>
+    <item>
+      <title>Updated: Scroll Float</title>
+      <link>https://reactbits.dev/text-animations/scroll-float</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/ScrollFloat@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Letters can now flip, scatter, blur or wave into place, by letter or by word, from above or below. Pick which go first and let them arrive in an accent color.</description>
+    </item>
+    <item>
+      <title>Updated: Scroll Reveal</title>
+      <link>https://reactbits.dev/text-animations/scroll-reveal</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/ScrollReveal@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Text can now reveal by word, letter or line, rising, flipping or popping into place, and light up in an accent color as it appears. It can also play once on entering view.</description>
+    </item>
+    <item>
+      <title>Updated: Scroll Velocity</title>
+      <link>https://reactbits.dev/text-animations/scroll-velocity</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/ScrollVelocity@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Rows can lean and stretch with scroll speed, be grabbed and thrown with inertia, and alternate with outlined text. Set the text size, weight, color and spacing directly.</description>
+    </item>
+    <item>
+      <title>Updated: Shuffle</title>
+      <link>https://reactbits.dev/text-animations/shuffle</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/Shuffle@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Letters can now flip like cards in 3D or spin in place with motion blur, and hovering can reshuffle just the letters near the cursor. Adds text and accent colors and a motion blur for sliding letters, and up or left shuffles no longer land on random symbols.</description>
+    </item>
+    <item>
+      <title>Updated: Splash Cursor</title>
+      <link>https://reactbits.dev/animations/splash-cursor</link>
+      <guid isPermaLink="false">reactbits:Animations/SplashCursor@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Strokes now flow unbroken with smoothly shifting colors, clicks burst into a real splash, and it rests when idle. New ink, smoke, lava and silk looks, a soft glow and a light theme.</description>
+    </item>
+    <item>
+      <title>Updated: Split Flap Text</title>
+      <link>https://reactbits.dev/text-animations/split-flap-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/SplitFlapText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Boards can now cascade from the right, from the middle or in random order, with a soft sheen across falling flaps and adjustable depth. A new minimal style drops the tiles and flips bare characters split by a hinge line.</description>
+    </item>
+    <item>
+      <title>Updated: Split Text</title>
+      <link>https://reactbits.dev/text-animations/split-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/SplitText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Text can now flip, pop, blur, skew or wave into place, loop, and replay on hover or click. Pieces can arrive in an accent color, and letters lift or ripple under the cursor.</description>
+    </item>
+    <item>
+      <title>Updated: Strands</title>
+      <link>https://reactbits.dev/animations/strands</link>
+      <guid isPermaLink="false">reactbits:Animations/Strands@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt to match the new Siri orb: spectral strands twist inside frosted glass and swell into one smooth bulge where they come together. It livens up with a voice, a click or the cursor.</description>
+    </item>
+    <item>
+      <title>Updated: Stroke Text</title>
+      <link>https://reactbits.dev/text-animations/stroke-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/StrokeText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Outlines can now be dashed or dotted and keep flowing around the letters, and they redraw when hovered. Filled letters can also lift off the page with a soft offset shadow.</description>
+    </item>
+    <item>
+      <title>Updated: Tech Text</title>
       <link>https://reactbits.dev/text-animations/tech-text</link>
-      <guid isPermaLink="false">reactbits:TextAnimations/TechText@added</guid>
-      <pubDate>Thu, 24 Sep 2026 12:00:00 GMT</pubDate>
+      <guid isPermaLink="false">reactbits:TextAnimations/TechText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Text Animations</category>
-      <description>A wordmark whose letters turn into dashed vector paths under the cursor.</description>
+      <description>Click a letter to ripple the word, play a typed, assembled or font metrics intro, and show the font’s guide lines.</description>
     </item>
     <item>
-      <title>New: Dither Veil</title>
-      <link>https://reactbits.dev/animations/dither-veil</link>
-      <guid isPermaLink="false">reactbits:Animations/DitherVeil@added</guid>
-      <pubDate>Wed, 23 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Animations</category>
-      <description>A photo printed as a 1-bit dither that the cursor burns through to full colour, leaving a trail that knits back cell by cell.</description>
+      <title>Updated: Text Loop</title>
+      <link>https://reactbits.dev/text-animations/text-loop</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/TextLoop@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Add a second band that crosses the first in an X with a soft shadow, drag or fling the loop, and let page scrolling speed it up or reverse it. Letters can now be drawn as outlines.</description>
     </item>
     <item>
-      <title>New: Shredder</title>
-      <link>https://reactbits.dev/micro/shredder</link>
-      <guid isPermaLink="false">reactbits:Micro/Shredder@added</guid>
-      <pubDate>Tue, 22 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Micro</category>
-      <description>A list with a paper shredder at the bottom.</description>
+      <title>Updated: Text Pressure</title>
+      <link>https://reactbits.dev/text-animations/text-pressure</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/TextPressure@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Click to send a ripple of pressure through the letters, and let the word keep rolling or breathing while the cursor is away. Letters can warm toward an accent color as they swell, and you can set how softly they follow.</description>
     </item>
     <item>
-      <title>New: Paper Crumple</title>
-      <link>https://reactbits.dev/micro/paper-crumple</link>
-      <guid isPermaLink="false">reactbits:Micro/PaperCrumple@added</guid>
-      <pubDate>Sun, 20 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Micro</category>
-      <description>An image that crumples into a textured 3D sheet while held and follows the grabbed point as you drag.</description>
+      <title>Updated: Text Type</title>
+      <link>https://reactbits.dev/text-animations/text-type</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/TextType@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Pick a bar, block or underscore cursor that glides and blinks softly, and let letters fade, blur or rise in as they type. Add occasional typos that get corrected, or a fixed lead-in before rotating words.</description>
     </item>
     <item>
-      <title>New: Flip Card</title>
-      <link>https://reactbits.dev/micro/flip-card</link>
-      <guid isPermaLink="false">reactbits:Micro/FlipCard@added</guid>
-      <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Micro</category>
-      <description>Two-faced card that flips in 3D on a click, a drag or a flick, settling on a spring that carries your release velocity, with an optional cursor tilt, a sheen that follows the pointer and a shadow that narrows as it turns edge on.</description>
+      <title>Updated: True Focus</title>
+      <link>https://reactbits.dev/text-animations/true-focus</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/TrueFocus@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Mark the focused word with a box, an underline or a soft highlight, and let it scale up slightly. The frame can spring between words and visit them in random order.</description>
     </item>
     <item>
-      <title>New: Tear Ticket</title>
-      <link>https://reactbits.dev/micro/tear-ticket</link>
-      <guid isPermaLink="false">reactbits:Micro/TearTicket@added</guid>
-      <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Micro</category>
-      <description>Ticket whose perforated stub tears off by hand: paper bridges stretch into fibres and snap one by one from the far end, the torn edges are jagged and fit each other, the freed stub dangles and drops, and the body is stamped as used.</description>
+      <title>Updated: Variable Proximity</title>
+      <link>https://reactbits.dev/text-animations/variable-proximity</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/VariableProximity@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Letters can now shift toward an accent color, grow and rise as the cursor gets close, and a gentle wave of weight runs through the text while idle. Adds a font size setting, and lines no longer rewrap while letters change weight.</description>
     </item>
     <item>
-      <title>New category: Micro</title>
-      <link>https://reactbits.dev/c/micro</link>
-      <guid isPermaLink="false">reactbits:Micro@launch</guid>
-      <pubDate>Fri, 18 Sep 2026 12:00:00 GMT</pubDate>
-      <category>Micro</category>
-      <description>A new category of small, satisfying interactions: switches, buttons, sliders, toasts, menus, loaders and more. Launched with 30 components: Bell Toggle, Branched Menu, Call Chip, Code Slots, Comet Dial, Dodge Field, Folder Float, Fuse Button, Glide Select, Hold Button, Jelly Radio, Lattice Loader, Peek Rating, Prompt Bar, Pulse Heart, Refine Frame, Rubber Segment, Scrub Field, Slide Commit, Sling Button, Slosh Gauge, Spring Check, Squish Switch, Status Mark, Swipe Row, Swipe Toast, Thought Line, Voice Pill, Wake Slider, Warm Tooltip.</description>
+      <title>Updated: Warp Text</title>
+      <link>https://reactbits.dev/text-animations/warp-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/WarpText@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Clicking now sends a shockwave through the text, and the lens can keep wandering across the words when the cursor leaves. Adds glass-like color fringing inside the lens, with smoother fringe edges in light and dark mode.</description>
     </item>
     <item>
-      <title>New: Shape Waves</title>
-      <link>https://reactbits.dev/backgrounds/shape-waves</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/ShapeWaves@added</guid>
-      <pubDate>Tue, 15 Sep 2026 12:00:00 GMT</pubDate>
+      <title>Updated: Web Threads</title>
+      <link>https://reactbits.dev/backgrounds/web-threads</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/WebThreads@2026-10-13</guid>
+      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
-      <description>A WebGPU field of triangles, circles and squares that brighten and grow along rolling waves, with an optional text cutout the waves flow around.</description>
+      <description>Threads now draw in one after another, the strand under the cursor lights up while the rest recede, and clicks send light into the pinch. Adds braids, a 3D twist, traveling pulses, rotation, soft ends, more threads and colors, and a cleaner light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Animated Content</title>
+      <link>https://reactbits.dev/animations/animated-content</link>
+      <guid isPermaLink="false">reactbits:Animations/AnimatedContent@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Now with blur-in, rotate, 3D tilt and soft wipe reveals, staggered children for lists and grids, scroll-linked progress, replay on scroll and a mount trigger.</description>
+    </item>
+    <item>
+      <title>Updated: Antigravity</title>
+      <link>https://reactbits.dev/backgrounds/antigravity</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Antigravity@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with crisp, colorful particles that swirl into a ring with springy motion and streak when they move fast. Hold to charge and release to burst, plus presets, a liftoff intro and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Balatro</title>
+      <link>https://reactbits.dev/backgrounds/balatro</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Balatro@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt on the same swirl with crisp pixels and no extra dependencies. The cursor now stirs the paint, clicks spin up whirlpools, and an intro spins it into place.</description>
+    </item>
+    <item>
+      <title>Updated: Ballpit</title>
+      <link>https://reactbits.dev/backgrounds/ballpit</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Ballpit@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt for smooth physics that handles thousands of balls, with soft modern finishes, and you can now grab, throw and blast them apart.</description>
+    </item>
+    <item>
+      <title>Updated: Circular Gallery</title>
+      <link>https://reactbits.dev/components/circular-gallery</link>
+      <guid isPermaLink="false">reactbits:Components/CircularGallery@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with crisp, smooth edges and no extra dependencies. Cards now open to the full image, respond to hover and the keyboard, and the gallery can drift, snap, fade and change shape.</description>
+    </item>
+    <item>
+      <title>Updated: Click Spark</title>
+      <link>https://reactbits.dev/animations/click-spark</link>
+      <guid isPermaLink="false">reactbits:Animations/ClickSpark@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Sharper sparks with new shapes, colors, gravity and glow. Bursts can now spill past small buttons, appear behind your content, and fire from code.</description>
+    </item>
+    <item>
+      <title>Updated: Cursor Grid</title>
+      <link>https://reactbits.dev/animations/cursor-grid</link>
+      <guid isPermaLink="false">reactbits:Animations/CursorGrid@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as a crisp, minimal grid with a soft spotlight, single cell or area highlights, tiles, dashed, dot and mark styles, clean click rings, an intro and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Dot Field</title>
+      <link>https://reactbits.dev/backgrounds/dot-field</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/DotField@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt around a smooth magnifying lens that stays under the cursor and zooms closer while you hold. New dot layouts, swirl and pinch lenses, and an intro that pulls into focus.</description>
+    </item>
+    <item>
+      <title>Updated: Electric Border</title>
+      <link>https://reactbits.dev/animations/electric-border</link>
+      <guid isPermaLink="false">reactbits:Animations/ElectricBorder@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt with layered lightning strands, sparks and a soft glow. The current races around the edge as it powers on, surges near the cursor and jolts around on click, and now works in light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Fade Content</title>
+      <link>https://reactbits.dev/animations/fade-content</link>
+      <guid isPermaLink="false">reactbits:Animations/FadeContent@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Now fades in out of focus, from washed-out gray, or through grain, mist and pixel blocks, with staggered children and scroll-linked fades in and out.</description>
+    </item>
+    <item>
+      <title>Updated: Faulty Terminal</title>
+      <link>https://reactbits.dev/backgrounds/faulty-terminal</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/FaultyTerminal@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Same terminal, now with phosphor glow, trails under the cursor, glitches on click, a cleaner light mode and new dot and character glyphs. Around 4x faster.</description>
+    </item>
+    <item>
+      <title>Updated: Fluid Glass</title>
+      <link>https://reactbits.dev/components/fluid-glass</link>
+      <guid isPermaLink="false">reactbits:Components/FluidGlass@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt as a real glass object that bends your own text, image or video, with no 3D models or extra dependencies. Seven shapes that melt into each other on click, plus frost, tint, dispersion and shadows.</description>
+    </item>
+    <item>
+      <title>Updated: Ghost Cursor</title>
+      <link>https://reactbits.dev/animations/ghost-cursor</link>
+      <guid isPermaLink="false">reactbits:Animations/GhostCursor@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as real drifting smoke that stays sharp on any screen, many times faster and with no extra dependencies. Clicks release a puff, and it works on light pages too.</description>
+    </item>
+    <item>
+      <title>Updated: Gradient Blinds</title>
+      <link>https://reactbits.dev/backgrounds/gradient-blinds</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/GradientBlinds@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Same blinds with satin shading that turns with the light, a soft glow, a gentle sway and a cleaner light mode. A click sends a wave of light through them, with no extra dependencies.</description>
+    </item>
+    <item>
+      <title>Updated: Gradual Blur</title>
+      <link>https://reactbits.dev/animations/gradual-blur</link>
+      <guid isPermaLink="false">reactbits:Animations/GradualBlur@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Smoother blur with no visible steps, plus a fade to any color, a color boost, hover to clear, and a blur that hides itself at the ends of a scroll.</description>
+    </item>
+    <item>
+      <title>Updated: Grainient</title>
+      <link>https://reactbits.dev/backgrounds/grainient</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Grainient@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with richer colors, flowing waves and no extra dependencies. Drag the colors around or click to swirl them, and try stripes, rings, crisp poster edges or a satin sheen.</description>
+    </item>
+    <item>
+      <title>Updated: Grid Scan</title>
+      <link>https://reactbits.dev/backgrounds/grid-scan</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/GridScan@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as a lit 3D room with crisp lines, a glossy floor and sparkling scan points, with no extra dependencies. The view shifts like a window as you move, and clicks send a ping across the walls.</description>
+    </item>
+    <item>
+      <title>Updated: Letter Glitch</title>
+      <link>https://reactbits.dev/backgrounds/letter-glitch</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LetterGlitch@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Redesigned as a crisp, calm field of letters that glitch in color, now much lighter to run. The cursor scrambles nearby letters, a click tears through the rows, and fonts, spacing and character sets are all adjustable.</description>
+    </item>
+    <item>
+      <title>Updated: Light Rays</title>
+      <link>https://reactbits.dev/backgrounds/light-rays</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LightRays@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt on the same rays with a glowing source, drifting haze and crisper shafts, at a fraction of the cost. The cursor now casts a soft shadow and clicks send a wave of light down the beam.</description>
+    </item>
+    <item>
+      <title>Updated: Line Waves</title>
+      <link>https://reactbits.dev/backgrounds/line-waves</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LineWaves@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with crisp, smoothly flowing lines and a soft band of light that drifts through them. Adds presets, a cursor spotlight, click ripples and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Liquid Chrome</title>
+      <link>https://reactbits.dev/backgrounds/liquid-chrome</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LiquidChrome@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as soft, glossy liquid chrome whose reflections follow the cursor, with a liquid wake and ripples on click. Adds presets, a light mode and a faster renderer.</description>
+    </item>
+    <item>
+      <title>Updated: Liquid Ether</title>
+      <link>https://reactbits.dev/backgrounds/liquid-ether</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LiquidEther@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with smoother, glowing swirls, a sweeping intro and puffs on click. Runs several times faster and adds presets and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Magic Bento</title>
+      <link>https://reactbits.dev/components/magic-bento</link>
+      <guid isPermaLink="false">reactbits:Components/MagicBento@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Redesigned with animated artwork in every card, smoother cursor light and a click wave across the grid. Cards now take your own content, photos and links, with dark and light themes.</description>
+    </item>
+    <item>
+      <title>Updated: Magic Rings</title>
+      <link>https://reactbits.dev/backgrounds/magic-rings</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/MagicRings@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt from scratch and moved to Backgrounds, lighter and about three times faster, with crisper lines and glow. Rings can now ripple, breathe, spin or lean in 3D, react to hover and clicks, split into prism fringes, and work in light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Magnet</title>
+      <link>https://reactbits.dev/animations/magnet</link>
+      <guid isPermaLink="false">reactbits:Animations/Magnet@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Now moves on a real spring with a smooth pull at the edge of its range, and only the nearest magnet reacts when several overlap. Adds tilt, scale, axis locking and a movement cap.</description>
+    </item>
+    <item>
+      <title>Updated: Magnet Lines</title>
+      <link>https://reactbits.dev/backgrounds/magnet-lines</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/MagnetLines@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Now a background that fills its container, with the square still available. Lines swing on springs, ripple out from the cursor and spin with each click, with new field modes, arrow and compass shapes, and a 3D tilt.</description>
+    </item>
+    <item>
+      <title>Updated: Pixel Blast</title>
+      <link>https://reactbits.dev/backgrounds/pixel-blast</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/PixelBlast@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Same pixel clouds, now smoother and softer, with drift, shimmer, glow, an accent color, a blast intro and a cursor that lights pixels up. New shapes and a perspective floor, much faster, no dependencies.</description>
+    </item>
+    <item>
+      <title>Updated: Prism</title>
+      <link>https://reactbits.dev/backgrounds/prism</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Prism@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Same glowing prism, now several times faster with no extra dependencies. It tilts toward the cursor, fades in, takes custom colors, and has a cleaner light mode and a working 3D rotation.</description>
+    </item>
+    <item>
+      <title>Updated: Reflective Card</title>
+      <link>https://reactbits.dev/components/reflective-card</link>
+      <guid isPermaLink="false">reactbits:Components/ReflectiveCard@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt as a satin metal card that reflects a looping video until you turn the camera on. It tilts toward the cursor, catches a sweeping light and comes in dark and light themes.</description>
+    </item>
+    <item>
+      <title>Updated: Scanner</title>
+      <link>https://reactbits.dev/backgrounds/scanner</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Scanner@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Crisper glowing lines and a scan head with an afterglow trail, plus lines that part around the cursor, click pings, a power-on intro and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Side Rays</title>
+      <link>https://reactbits.dev/backgrounds/side-rays</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/SideRays@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with soft, shimmering light shafts that grow in from the corner and lean toward the cursor. Adds presets, side origins, drifting dust and a light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Soft Aurora</title>
+      <link>https://reactbits.dev/backgrounds/soft-aurora</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/SoftAurora@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>The band now reaches toward a nearby cursor, clicks send a pulse of light along it, and it blooms in from a thin line. New presets, a tilt and a cleaner light mode, with no extra dependencies.</description>
+    </item>
+    <item>
+      <title>Updated: Sticker Peel</title>
+      <link>https://reactbits.dev/animations/sticker-peel</link>
+      <guid isPermaLink="false">reactbits:Animations/StickerPeel@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt with a real curl, soft shadows and no extra dependencies. The edge nearest the cursor lifts, thrown stickers swing, slide and bounce, and there are gloss, matte and holographic finishes.</description>
+    </item>
+    <item>
+      <title>Updated: Swarm Cursor</title>
+      <link>https://reactbits.dev/animations/swarm-cursor</link>
+      <guid isPermaLink="false">reactbits:Animations/SwarmCursor@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Animations</category>
+      <description>Rebuilt as a liquid swarm that flows after the cursor, curls into eddies when you stop, pours around hovered buttons and splashes on click. No extra dependencies.</description>
+    </item>
+    <item>
+      <title>Updated: Tilted Card</title>
+      <link>https://reactbits.dev/components/tilted-card</link>
+      <guid isPermaLink="false">reactbits:Components/TiltedCard@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with springy motion, glare, a soft shadow and floating depth layers, and no extra dependencies. Cards now flip to a back side, work with touch and phone tilt, and come with album, gallery and ticket demos.</description>
+    </item>
+    <item>
+      <title>Updated: Topography</title>
+      <link>https://reactbits.dev/backgrounds/topography</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Topography@2026-10-12</guid>
+      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as a 3D landscape of glowing contour lines that rises from a flat map, with land that lifts under the cursor, click pulses, optional survey markers and glitches, and a light mode.</description>
+    </item>
+    <item>
+      <title>New: Flux Lines</title>
+      <link>https://reactbits.dev/backgrounds/flux-lines</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/FluxLines@added</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Glowing flux lines tracing a churning magnetic fluid.</description>
+    </item>
+    <item>
+      <title>Updated: Aurora</title>
+      <link>https://reactbits.dev/backgrounds/aurora</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Aurora@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with smoother, richer color blending and a softer edge that never bands. It reaches gently toward the cursor, fades in on load, and can rise from the bottom or stack extra layers.</description>
+    </item>
+    <item>
+      <title>Updated: Dither</title>
+      <link>https://reactbits.dev/backgrounds/dither</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Dither@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt on the same waves with crisp pixels and no extra dependencies. New dither patterns, retro palettes, cursor trails and click ripples, and an intro that sharpens into place.</description>
+    </item>
+    <item>
+      <title>Updated: Falling Text</title>
+      <link>https://reactbits.dev/text-animations/falling-text</link>
+      <guid isPermaLink="false">reactbits:TextAnimations/FallingText@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Text Animations</category>
+      <description>Rebuilt with smoother physics. Words or single letters knock each other loose as they fall, can be thrown and swept around, and fly back into place, with a new tiles style and light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Ferrofluid</title>
+      <link>https://reactbits.dev/backgrounds/ferrofluid</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Ferrofluid@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt as a glossy ferrofluid sea with no extra dependencies. Swells of spikes roll across it, the cursor raises a crown and clicks send out a ring of spikes.</description>
+    </item>
+    <item>
+      <title>Updated: Floating Lines</title>
+      <link>https://reactbits.dev/backgrounds/floating-lines</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/FloatingLines@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Redrawn with crisp, finely glowing lines and no extra dependencies. The lines part smoothly around the cursor, curl when clicked, and come in dotted and dashed styles with a clean ink light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Galaxy</title>
+      <link>https://reactbits.dev/backgrounds/galaxy</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Galaxy@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with no extra dependencies. Stars now glide away from the cursor, a click jumps to warp speed and it arrives from hyperspace. New star colors, flares, depth and a cleaner light mode.</description>
+    </item>
+    <item>
+      <title>Updated: Light Pillar</title>
+      <link>https://reactbits.dev/backgrounds/light-pillar</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LightPillar@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt to run about four times faster with the same look. It now ignites on load, follows the cursor, surges on click and has a soft glow, presets and more controls.</description>
+    </item>
+    <item>
+      <title>Updated: Light Tunnel</title>
+      <link>https://reactbits.dev/backgrounds/light-tunnel</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/LightTunnel@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Redesigned with fine glowing fibres and comet-like pulses, and no extra dependencies. The cursor steers the tunnel, a click sends a ring of light down it, and light mode draws it in ink.</description>
+    </item>
+    <item>
+      <title>Updated: Lightfall</title>
+      <link>https://reactbits.dev/backgrounds/lightfall</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Lightfall@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with crisp, steady streaks and round glowing heads. The light now warps in on load, bends around the cursor and stretches into warp trails while you hold.</description>
+    </item>
+    <item>
+      <title>Updated: Orb</title>
+      <link>https://reactbits.dev/backgrounds/orb</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Orb@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with a crisper, more luminous ring that reaches toward the cursor and lights up where you hover. It pulses on click, powers on with an intro, and can tilt in 3D with custom colors, size and glow.</description>
+    </item>
+    <item>
+      <title>Updated: Particles</title>
+      <link>https://reactbits.dev/backgrounds/particles</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Particles@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with the same floating motion, now crisp and far faster with thousands of particles. New shapes, glow, twinkle, bokeh, constellation lines, drifting and cursor effects.</description>
+    </item>
+    <item>
+      <title>Updated: Pixel Card</title>
+      <link>https://reactbits.dev/components/pixel-card</link>
+      <guid isPermaLink="false">reactbits:Components/PixelCard@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Rebuilt with crisp pixels and a glowing reveal wave that can start from the cursor. It can run on hover, click or always on, with an edge fade that keeps card content readable.</description>
+    </item>
+    <item>
+      <title>Updated: Prismatic Burst</title>
+      <link>https://reactbits.dev/backgrounds/prismatic-burst</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/PrismaticBurst@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Runs up to four times faster with the same look, and adds spirals, flowing color and finer control over the rays. The burst now ignites on load, leans toward the cursor and sends a wave of light outward on click.</description>
+    </item>
+    <item>
+      <title>Updated: Shape Grid</title>
+      <link>https://reactbits.dev/backgrounds/shape-grid</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/ShapeGrid@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt with eight cell shapes, a glowing cursor trail and click ripples. The grid can now tilt into perspective and light up in rainbow colors.</description>
+    </item>
+    <item>
+      <title>Updated: Silk</title>
+      <link>https://reactbits.dev/backgrounds/silk</link>
+      <guid isPermaLink="false">reactbits:Backgrounds/Silk@2026-10-11</guid>
+      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Backgrounds</category>
+      <description>Rebuilt on the same folds with deeper shading, glossy satin highlights and a soft glow. The light follows the cursor, clicks ripple through the fabric, and the folds rise in on load.</description>
     </item>
   </channel>
 </rss>

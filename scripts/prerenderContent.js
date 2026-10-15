@@ -54,9 +54,12 @@ const pageBody = page => {
         )
         .join('')}</ol>`;
     case '/get-started/introduction':
-      return `<h2>Choose a component</h2>${paragraph('Browse by category or search for the interaction you need.')}${categories()}
-        <h2>Make it yours</h2>${paragraph('Tune the preview and send settings to your usage code.')}
-        <h2>Add it to your project</h2>${paragraph('Copy the source or install your chosen variant with the CLI.')}${link('/get-started/installation', 'Installation guide')}`;
+      return `<h2>What is inside</h2>${categories()}
+        <h2>Four flavours of every component</h2>${paragraph('Each component comes in JavaScript or TypeScript, styled with plain CSS or Tailwind. The install name ends with the flavour: JS-CSS, JS-TW, TS-CSS or TS-TW.')}<pre><code>npx shadcn@latest add @react-bits/SplitText-TS-TW</code></pre>
+        <h2>Built for AI workflows</h2>${paragraph('Copy for AI on every component, Copy as Markdown on every docs page, MCP through the shadcn MCP server and an llms.txt map of the whole library.')}
+        <h2>Free tools</h2>${grid(TOOLS.map(tool => ({ name: tool.label, path: tool.path, description: tool.description })))}
+        <h2>License</h2>${paragraph('Free for personal and commercial work under the MIT + Commons Clause license. Use the components in any app, website or product, but do not sell, sublicense or redistribute the components themselves.')}
+        ${link('/get-started/installation', 'Installation guide')}`;
     case '/get-started/mcp':
       return `<h2>Registry configuration</h2><pre><code>${escapeHtml(JSON.stringify({ registries: { '@react-bits': 'https://reactbits.dev/r/{name}.json' } }, null, 2))}</code></pre>
         ${paragraph('Add the registry to components.json. Follow the shadcn MCP setup for your coding client.')}

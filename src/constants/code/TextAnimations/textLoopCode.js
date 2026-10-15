@@ -15,14 +15,20 @@ export const textLoop = {
   direction="forward"
   separator="✦"
   curviness={90}
+  tilt={0}
   fontSize={46}
   fontWeight={800}
   letterSpacing={2}
   uppercase
-  color="#ffffff"
   ribbon
   ribbonColor="#5227FF"
   ribbonWidth={86}
+  edgeFade={0}
+  cross={false}
+  crossAngle={16}
+  draggable={false}
+  scrollBoost={0}
+  outline={false}
   pauseOnHover
 />`,
   code,

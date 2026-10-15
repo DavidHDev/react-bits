@@ -1,10 +1,23 @@
+import { Link } from 'react-router-dom';
+import { HugeiconsIcon } from '@hugeicons/react';
+import {
+  ArrowRight02Icon,
+  ArrowUpRight01Icon,
+  Image01Icon,
+  Motion01Icon,
+  MousePointerClickIcon,
+  PuzzleIcon,
+  TextFontIcon
+} from '@hugeicons/core-free-icons';
+import { CornerDownLeft, Search } from 'lucide-react';
 import useScrollToTop from '../hooks/useScrollToTop';
 import DocsButtonBar from './DocsButtonBar';
 import CopyPageButton from './CopyPageButton';
-import { Link } from 'react-router-dom';
-import { ArrowRight, CornerDownLeft, Search } from 'lucide-react';
-import HeroBand from '../components/landingnew/Hero/HeroBand';
-import { useColorModeValue } from '../components/setup/color-mode';
+import CommandList from './CommandList';
+import { CATEGORIES, TOTAL_COMPONENTS } from '../constants/Categories';
+import { TOOLS } from '../constants/Tools';
+import { TOOL_ICONS } from '../tools/toolIcons';
+import { useOptions } from '../components/context/OptionsContext/useOptions';
 
 const SLIDERS = [
   { label: 'Delay', value: 0.32 },
@@ -14,8 +27,8 @@ const SLIDERS = [
 
 const QUICK_START_STEPS = [
   {
-    title: 'Choose a component',
-    description: 'Browse by category or search for the interaction you need.',
+    title: 'Find a component',
+    description: 'Browse five categories or search for the effect you have in mind.',
     visual: (
       <>
         <span className="docs-qs-field">
@@ -33,7 +46,7 @@ const QUICK_START_STEPS = [
   },
   {
     title: 'Make it yours',
-    description: 'Tune the preview and send settings to your usage code.',
+    description: 'Tune props in the live preview or start from a preset. The code follows along.',
     visual: SLIDERS.map(({ label, value }) => (
       <span className="docs-qs-slider" key={label}>
         {label}
@@ -45,7 +58,7 @@ const QUICK_START_STEPS = [
   },
   {
     title: 'Add it to your project',
-    description: 'Copy the source or install your chosen variant with the CLI.',
+    description: 'Install the version you use with one command, or copy the source.',
     visual: (
       <span className="docs-qs-cli">
         <span className="docs-qs-prompt">$</span> npx shadcn@latest add
@@ -56,25 +69,89 @@ const QUICK_START_STEPS = [
   }
 ];
 
+const CATEGORY_DETAILS = {
+  'Text Animations': {
+    icon: TextFontIcon,
+    description: 'Split, scramble, blur and morph text, from headlines to scroll-driven reveals.'
+  },
+  Animations: {
+    icon: Motion01Icon,
+    description: 'Cursor effects, hover interactions and reveals that wrap around any element.'
+  },
+  Components: {
+    icon: PuzzleIcon,
+    description: 'Carousels, galleries, cards, menus and docks with the motion built in.'
+  },
+  Micro: {
+    icon: MousePointerClickIcon,
+    description: 'Small interactive pieces like toggles, sliders, buttons and loaders.'
+  },
+  Backgrounds: {
+    icon: Image01Icon,
+    description: 'Shader and canvas backgrounds for heroes and full pages, most with presets.'
+  }
+};
+
+const LIBRARY = CATEGORIES.filter(category => CATEGORY_DETAILS[category.name]).map(category => ({
+  name: category.name,
+  path: `/c/${category.name.replace(/\s+/g, '-').toLowerCase()}`,
+  count: category.subcategories.length,
+  ...CATEGORY_DETAILS[category.name]
+}));
+
+const FLAVOURS = [
+  { language: 'JavaScript', variants: ['JS-CSS', 'JS-TW'] },
+  { language: 'TypeScript', variants: ['TS-CSS', 'TS-TW'] }
+];
+
+const TOOL_BLURBS = {
+  'background-studio':
+    'Start from a preset, tune any animated background live, then export the code, a 4K image or a looping video.',
+  'shape-magic':
+    'Design a logo mark or style your own logo with 3D materials. Export SVG, PNG, favicons, video or React.',
+  'texture-lab':
+    'Run photos, videos or your camera through 160 styles and 75+ effects, then export images, videos or GIFs.'
+};
+
+const PRINCIPLES = [
+  {
+    title: 'You own the code',
+    text: 'Components land in your project as source files, not an import, so you can change anything.'
+  },
+  {
+    title: 'Props first',
+    text: 'The details you would want to adjust are exposed as props, so most tweaks need no code edits.'
+  },
+  {
+    title: 'Nothing to depend on',
+    text: 'React Bits is not an npm package. Install only what you use; each component lists its own dependencies.'
+  },
+  {
+    title: 'Your stack',
+    text: 'JavaScript or TypeScript, plain CSS or Tailwind. All four flavours share the same props.'
+  }
+];
+
 const Introduction = () => {
   useScrollToTop();
-  const light = useColorModeValue(true, false);
+  const { languagePreset, stylePreset } = useOptions();
+  const variant = `${languagePreset === 'TS' ? 'TS' : 'JS'}-${stylePreset === 'TW' ? 'TW' : 'CSS'}`;
 
   return (
-    <section className="docs-section">
+    <section className="docs-section docs-intro">
       <div className="docs-page-header">
         <h1 className="docs-title">Introduction</h1>
         <CopyPageButton />
       </div>
 
       <p className="docs-lead">
-        React Bits is an open-source collection of expressive UI components for adding motion and personality without
-        adopting an entire design system.
+        React Bits is a free, open source library of animated React components and backgrounds that you copy into your
+        project and make your own.
       </p>
 
-      <p className="docs-lead">
-        Pick a component, tune it in the preview, then copy or install the exact variant for your stack. React Bits
-        makes it easy to be creative, and works great with AI.
+      <p className="docs-paragraph docs-intro-sublead">
+        There are {TOTAL_COMPONENTS} of them across five categories. Tune any of them in a live preview, then install
+        the exact version your project uses.
       </p>
 
       <div className="docs-quickstart">
@@ -92,117 +169,200 @@ const Introduction = () => {
             </div>
           ))}
         </div>
-        <div className="docs-quickstart-cta">
-          <div className="docs-quickstart-cta-card">
-            <div className="docs-quickstart-band" aria-hidden="true">
-              <HeroBand
-                className="docs-quickstart-band-canvas"
-                color="#A855F7"
-                speed={0.2}
-                frequency={1}
-                noise={0.15}
-                bandWidth={0.14}
-                rotation={90}
-                fadeTop={0.75}
-                iterations={1}
-                intensity={1.25}
-                scale={1}
-                warpStrength={1}
-                yOffset={0.3}
-                mouseInfluence={0}
-                lightMode={light}
-              />
-            </div>
-            <div className="docs-quickstart-actions">
-              <Link to="/get-started/index" className="docs-quickstart-primary">
-                Browse components
-                <ArrowRight size={14} aria-hidden="true" />
-              </Link>
-              <Link to="/get-started/installation" className="docs-quickstart-secondary">
-                Installation guide
-              </Link>
-            </div>
-          </div>
+        <div className="docs-quickstart-actions">
+          <Link to="/get-started/index" className="docs-quickstart-primary">
+            Browse components
+            <HugeiconsIcon icon={ArrowRight02Icon} size={15} strokeWidth={1.8} />
+          </Link>
+          <Link to="/get-started/installation" className="docs-quickstart-secondary">
+            Installation guide
+          </Link>
         </div>
       </div>
 
-      <h2 className="docs-section-title">Mission</h2>
+      <h2 className="docs-section-title">What&apos;s inside</h2>
 
-      <p className="docs-paragraph dim">
-        The goal of React Bits is simple - provide flexible, visually stunning and most importantly, free components
-        that take web projects to the next level.
+      <p className="docs-paragraph">Every component belongs to one of five categories. Open one to browse it.</p>
+
+      <div className="docs-intro-cats">
+        {LIBRARY.map(category => (
+          <Link key={category.name} to={category.path} className="docs-intro-cat">
+            <span className="docs-intro-cat-icon" aria-hidden="true">
+              <HugeiconsIcon icon={category.icon} size={18} strokeWidth={1.6} />
+            </span>
+            <div className="docs-intro-cat-text">
+              <h3>
+                {category.name} <span className="docs-intro-count">{category.count}</span>
+              </h3>
+              <p>{category.description}</p>
+            </div>
+            <HugeiconsIcon className="docs-intro-arrow" icon={ArrowUpRight01Icon} size={16} strokeWidth={1.8} />
+          </Link>
+        ))}
+      </div>
+
+      <h2 className="docs-section-title">Four flavours of every component</h2>
+
+      <p className="docs-paragraph">
+        Each component comes in JavaScript or TypeScript, styled with plain CSS or Tailwind. Pick yours once in the
+        Preferences menu in the header and every code tab and install command on the site follows it.
       </p>
-      <p className="docs-paragraph">To make that happen, the project is committed to the following principles:</p>
 
-      <ul className="docs-list">
+      <div className="docs-intro-flavours" aria-hidden="true">
+        <span />
+        <span className="docs-intro-flavour-head">CSS</span>
+        <span className="docs-intro-flavour-head">Tailwind</span>
+        {FLAVOURS.map(row => (
+          <div className="docs-intro-flavour-row" key={row.language}>
+            <span className="docs-intro-flavour-lang">{row.language}</span>
+            {row.variants.map(name => (
+              <code key={name} className={`docs-intro-flavour${name === variant ? ' is-active' : ''}`}>
+                {name}
+              </code>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <p className="docs-paragraph">
+        The ending of the install name picks the flavour: <code>JS-CSS</code>, <code>JS-TW</code>, <code>TS-CSS</code>{' '}
+        or <code>TS-TW</code>. With the shadcn CLI it looks like this:
+      </p>
+
+      <CommandList
+        items={[{ key: 'shadcn', label: 'shadcn', command: `npx shadcn@latest add @react-bits/SplitText-${variant}` }]}
+      />
+
+      <p className="docs-paragraph docs-intro-after">
+        jsrepo works too, or you can copy the files from any component&apos;s Code tab. The{' '}
+        <Link className="docs-inline-link" to="/get-started/installation">
+          Installation guide
+        </Link>{' '}
+        walks through each option.
+      </p>
+
+      <h2 className="docs-section-title">Built for AI workflows</h2>
+
+      <p className="docs-paragraph">
+        Every component is plain, readable source, which makes it easy for coding agents to work with. A few extras
+        help:
+      </p>
+
+      <ul className="docs-list docs-intro-list">
         <li className="docs-list-item">
-          <span className="docs-highlight">Free For All:</span> You own the code, and it&apos;s free to use in your
-          projects
+          <strong>Copy for AI</strong> on every component copies a ready prompt, your configured code or the install
+          command, or opens it in ChatGPT, Claude or v0.
         </li>
         <li className="docs-list-item">
-          <span className="docs-highlight">Prop-First Approach:</span> Easy customization through thoughtfully exposed
-          props
+          <strong>Copy as Markdown</strong> on every docs page, this one included, for pasting into a chat.
         </li>
         <li className="docs-list-item">
-          <span className="docs-highlight">Fully Modular:</span> Install strictly what you need, React Bits is not a
-          dependency
+          <strong>MCP</strong> through the shadcn MCP server lets your agent find and install components for you.{' '}
+          <Link className="docs-inline-link" to="/get-started/mcp">
+            Set it up
+          </Link>
         </li>
         <li className="docs-list-item">
-          <span className="docs-highlight">Free Choice:</span> JS or TS, plain CSS or Tailwind, the code is all here
+          <strong>llms.txt</strong> gives language models a plain-text map of the whole library.{' '}
+          <a className="docs-inline-link" href="/llms.txt" target="_blank" rel="noopener noreferrer">
+            Open it
+          </a>
         </li>
       </ul>
 
-      <h3 className="docs-subtitle">Free For All</h3>
+      <h2 className="docs-section-title">Free tools</h2>
+
+      <p className="docs-paragraph">Three browser tools built on the same components, free to use.</p>
+
+      <div className="docs-intro-cats">
+        {TOOLS.map(tool => (
+          <Link key={tool.id} to={tool.path} className="docs-intro-cat">
+            <span className="docs-intro-cat-icon" aria-hidden="true">
+              <HugeiconsIcon icon={TOOL_ICONS[tool.id]} size={18} strokeWidth={1.6} />
+            </span>
+            <div className="docs-intro-cat-text">
+              <h3>{tool.label}</h3>
+              <p>{TOOL_BLURBS[tool.id]}</p>
+            </div>
+            <HugeiconsIcon className="docs-intro-arrow" icon={ArrowUpRight01Icon} size={16} strokeWidth={1.8} />
+          </Link>
+        ))}
+      </div>
+
+      <h2 className="docs-section-title">Principles</h2>
 
       <p className="docs-paragraph">
-        Every component you choose to bring into your project is yours to modify or extend, because you get full
-        visibility of the code, not just an import.
+        React Bits exists to make expressive interfaces easy to build, and free. Four ideas shape every component:
       </p>
 
-      <h3 className="docs-subtitle">Prop-First Approach</h3>
+      <div className="docs-intro-principles">
+        {PRINCIPLES.map(principle => (
+          <div className="docs-intro-principle" key={principle.title}>
+            <h3>{principle.title}</h3>
+            <p>{principle.text}</p>
+          </div>
+        ))}
+      </div>
 
-      <p className="docs-paragraph">
-        Every component is designed to be flexible and customizable, with props that allow you to adjust the look and
-        feel without having to always dive into the code.
-      </p>
+      <h2 className="docs-section-title">Use motion with care</h2>
 
-      <h3 className="docs-subtitle">Fully Modular</h3>
-
-      <p className="docs-paragraph">
-        React Bits is not your classic NPM library, you install only the components you need by either copying the code
-        or using the CLI, without pulling in a whole library.
-      </p>
-
-      <h3 className="docs-subtitle">Free Choice</h3>
-
-      <p className="docs-paragraph">
-        I don&apos;t want to dictate how you build your projects. Whether you prefer JavaScript or TypeScript, plain CSS
-        or Tailwind, it&apos;s all here for you to use as you see fit.
-      </p>
-
-      <p className="docs-paragraph dim">
-        P.S. The header has a neat dropdown to help you choose your preferred technologies.
-      </p>
-
-      <h2 className="docs-section-title">Performance</h2>
-
-      <p className="docs-paragraph dim">
-        While we do everything possible to optimize components and offer the best experience, here are some tips to keep
-        in mind when using React Bits:
-      </p>
-
-      <ul className="docs-list">
+      <ul className="docs-list docs-intro-list">
         <li className="docs-list-item">
-          <span className="docs-highlight">Less Is More:</span> Using more than 2-3 components on a page is not advised,
-          it can overload your page with animations, potentially impacting performance or UX
+          <strong>Two or three per page.</strong> Effects compete for attention and for the GPU, so save them for the
+          moments that matter.
         </li>
         <li className="docs-list-item">
-          <span className="docs-highlight">Mobile Optimization:</span> Consider disabling certain effects on mobile and
-          replacing them with static placeholders instead
+          <strong>Plan for mobile.</strong> Swap heavy effects for lighter versions or static images on small screens.
         </li>
         <li className="docs-list-item">
-          <span className="docs-highlight">Test Thoroughly:</span> Your device may be high-end, but be considerate of
-          your users - always test on multiple devices before going live
+          <strong>Test on real devices.</strong> Your machine is likely faster than your users&apos;, so check low-end
+          phones and laptops before you ship.
+        </li>
+      </ul>
+
+      <h2 className="docs-section-title">License</h2>
+
+      <p className="docs-paragraph">
+        React Bits is free for personal and commercial work under the MIT + Commons Clause license. Use the components
+        in any app, website or product, client work included. What you can&apos;t do is sell, sublicense or redistribute
+        the components themselves, on their own, in a bundle or as a port.{' '}
+        <a
+          className="docs-inline-link"
+          href="https://github.com/DavidHDev/react-bits/blob/main/LICENSE.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Read the license
+        </a>
+      </p>
+
+      <h2 className="docs-section-title">Keep exploring</h2>
+
+      <ul className="docs-list docs-intro-list">
+        <li className="docs-list-item">
+          <strong>What&apos;s new.</strong> The{' '}
+          <Link className="docs-inline-link" to="/get-started/changelog">
+            changelog
+          </Link>{' '}
+          lists every new component and update by month, with an RSS feed.
+        </li>
+        <li className="docs-list-item">
+          <strong>Vue and Svelte.</strong> Official ports live at{' '}
+          <a className="docs-inline-link" href="https://vue-bits.dev/" target="_blank" rel="noopener noreferrer">
+            Vue Bits
+          </a>{' '}
+          and{' '}
+          <a className="docs-inline-link" href="https://sveltebits.xyz/" target="_blank" rel="noopener noreferrer">
+            Svelte Bits
+          </a>
+          .
+        </li>
+        <li className="docs-list-item">
+          <strong>The whole product.</strong>{' '}
+          <Link className="docs-inline-link" to="/pro">
+            React Bits Pro
+          </Link>{' '}
+          adds page sections, app UI blocks, full templates and agent skills.
         </li>
       </ul>
 

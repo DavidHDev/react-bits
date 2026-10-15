@@ -11,17 +11,22 @@ export const strokeText = {
 <StrokeText
   text="Draw Attention"
   strokeColor="#A78BFA"
-  fillColor="#F8FAFC"
+  strokeStyle="solid"
   strokeWidth={1.4}
+  dashLength={10}
   drawDuration={1.6}
   fillDelay={0.2}
   stagger={0.05}
   ease="power2.out"
   trigger="mount"
   fillMode="wipe"
+  wipeFrom="left"
   fontSize={128}
   fontWeight={800}
   letterSpacing={-4}
+  marching={false}
+  hoverRedraw={true}
+  shadow={false}
 />`,
   code,
   css,

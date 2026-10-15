@@ -7,11 +7,16 @@ import tsTailwind from '@ts-tailwind/TextAnimations/CircularText/CircularText.ts
 export const circularText = {
   dependencies: `motion`,
   usage: `import CircularText from './CircularText';
-  
+
 <CircularText
   text="REACT*BITS*COMPONENTS*"
   onHover="speedUp"
+  direction="clockwise"
   spinDuration={20}
+  size={200}
+  fontSize={24}
+  draggable
+  hoverTilt={20}
   className="custom-class"
 />`,
   code,

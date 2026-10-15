@@ -59,7 +59,7 @@ export const AIMenuSections = ({ copyItems, openItems, done }) => (
   </>
 );
 
-const CopyForAIMenu = ({ copyItems, openItems, done }) => {
+const CopyForAIMenu = ({ copyItems, openItems, done, zIndex = 1500 }) => {
   return (
     <Menu.Root positioning={{ placement: 'bottom-end', gutter: 8 }}>
       <Menu.Trigger asChild>
@@ -83,7 +83,7 @@ const CopyForAIMenu = ({ copyItems, openItems, done }) => {
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <FluidMenuContent minW="236px" zIndex={1500} transformOrigin="top right">
+          <FluidMenuContent minW="236px" zIndex={zIndex} transformOrigin="top right">
             <AIMenuSections copyItems={copyItems} openItems={openItems} done={done} />
           </FluidMenuContent>
         </Menu.Positioner>

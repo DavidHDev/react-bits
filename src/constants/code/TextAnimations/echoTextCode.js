@@ -17,13 +17,16 @@ export const echoText = {
   fade={0.72}
   blur={3}
   tint="#7dd3fc"
+  echoStyle="solid"
+  echoScale={1}
   mode="both"
+  trail="pointer"
+  clickBurst
   cursorRadius={320}
   duration={900}
   ease="ease-out"
   fontSize="clamp(3rem, 9vw, 7rem)"
   fontWeight={800}
-  color="#f8fafc"
 />`,
   code,
   css,

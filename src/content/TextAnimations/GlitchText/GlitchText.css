@@ -1,120 +1,115 @@
 .glitch {
-  color: #fff;
-  font-size: clamp(2rem, 10vw, 8rem);
-  white-space: nowrap;
-  font-weight: 900;
+  --glitch-mask-a: linear-gradient(
+    #000 var(--glitch-a-top, 0%),
+    transparent var(--glitch-a-top, 0%),
+    transparent calc(100% - var(--glitch-a-bottom, 100%)),
+    #000 calc(100% - var(--glitch-a-bottom, 100%))
+  );
+  --glitch-mask-b: linear-gradient(
+    #000 var(--glitch-b-top, 0%),
+    transparent var(--glitch-b-top, 0%),
+    transparent calc(100% - var(--glitch-b-bottom, 100%)),
+    #000 calc(100% - var(--glitch-b-bottom, 100%))
+  );
   position: relative;
   margin: 0 auto;
+  font-size: clamp(2rem, 10vw, 8rem);
+  font-weight: 900;
+  white-space: nowrap;
   user-select: none;
   cursor: pointer;
 }
 
-.glitch::after,
-.glitch::before {
-  content: attr(data-text);
+.glitch__text {
+  display: block;
+  opacity: var(--glitch-alpha, 1);
+  transform: skewX(var(--glitch-skew, 0deg));
+  transform-origin: 0 50%;
+  -webkit-mask-image: var(--glitch-mask-a), var(--glitch-mask-b);
+  mask-image: var(--glitch-mask-a), var(--glitch-mask-b);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.glitch__slice {
   position: absolute;
   top: 0;
-  color: #fff;
-  background-color: #120F17;
+  left: 0;
   overflow: hidden;
-  clip-path: inset(0 0 0 0);
+  pointer-events: none;
+  opacity: var(--glitch-alpha, 1);
+  transform-origin: 0 50%;
 }
 
-.glitch:not(.enable-on-hover)::after {
-  left: 10px;
-  text-shadow: var(--after-shadow, -10px 0 red);
-  animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;
-}
-.glitch:not(.enable-on-hover)::before {
-  left: -10px;
-  text-shadow: var(--before-shadow, 10px 0 cyan);
-  animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;
+.glitch__slice--a {
+  text-shadow: var(--glitch-a-shadow, none);
+  clip-path: inset(var(--glitch-a-top, 0%) 0 var(--glitch-a-bottom, 100%) 0);
+  transform: translate3d(var(--glitch-a-x, 0px), var(--glitch-a-y, 0px), 0) skewX(var(--glitch-skew, 0deg));
 }
 
-.glitch.enable-on-hover::after,
-.glitch.enable-on-hover::before {
-  content: '';
-  opacity: 0;
-  animation: none;
+.glitch__slice--b {
+  text-shadow: var(--glitch-b-shadow, none);
+  clip-path: inset(var(--glitch-b-top, 0%) 0 var(--glitch-b-bottom, 100%) 0);
+  transform: translate3d(var(--glitch-b-x, 0px), var(--glitch-b-y, 0px), 0) skewX(var(--glitch-skew, 0deg));
+  -webkit-mask-image: var(--glitch-mask-a);
+  mask-image: var(--glitch-mask-a);
 }
 
-.glitch.enable-on-hover:hover::after {
-  content: attr(data-text);
-  opacity: 1;
-  left: 10px;
-  text-shadow: var(--after-shadow, -10px 0 red);
-  animation: animate-glitch var(--after-duration, 3s) infinite linear alternate-reverse;
-}
-.glitch.enable-on-hover:hover::before {
-  content: attr(data-text);
-  opacity: 1;
-  left: -10px;
-  text-shadow: var(--before-shadow, 10px 0 cyan);
-  animation: animate-glitch var(--before-duration, 2s) infinite linear alternate-reverse;
+.glitch--rgb .glitch__text {
+  position: relative;
+  z-index: 1;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
-@keyframes animate-glitch {
-  0% {
-    clip-path: inset(20% 0 50% 0);
-  }
-  5% {
-    clip-path: inset(10% 0 60% 0);
-  }
-  10% {
-    clip-path: inset(15% 0 55% 0);
-  }
-  15% {
-    clip-path: inset(25% 0 35% 0);
-  }
-  20% {
-    clip-path: inset(30% 0 40% 0);
-  }
-  25% {
-    clip-path: inset(40% 0 20% 0);
-  }
-  30% {
-    clip-path: inset(10% 0 60% 0);
-  }
-  35% {
-    clip-path: inset(15% 0 55% 0);
-  }
-  40% {
-    clip-path: inset(25% 0 35% 0);
-  }
-  45% {
-    clip-path: inset(30% 0 40% 0);
-  }
-  50% {
-    clip-path: inset(20% 0 50% 0);
-  }
-  55% {
-    clip-path: inset(10% 0 60% 0);
-  }
-  60% {
-    clip-path: inset(15% 0 55% 0);
-  }
-  65% {
-    clip-path: inset(25% 0 35% 0);
-  }
-  70% {
-    clip-path: inset(30% 0 40% 0);
-  }
-  75% {
-    clip-path: inset(40% 0 20% 0);
-  }
-  80% {
-    clip-path: inset(20% 0 50% 0);
-  }
-  85% {
-    clip-path: inset(10% 0 60% 0);
-  }
-  90% {
-    clip-path: inset(15% 0 55% 0);
-  }
-  95% {
-    clip-path: inset(25% 0 35% 0);
-  }
-  100% {
-    clip-path: inset(30% 0 40% 0);
-  }
+.glitch--rgb .glitch__slice {
+  clip-path: none;
+  text-shadow: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+  opacity: calc(var(--glitch-alpha, 1) * var(--glitch-split, 0));
+}
+
+.glitch--rgb .glitch__slice--a {
+  color: var(--glitch-color-a, currentColor);
+}
+
+.glitch--rgb .glitch__slice--b {
+  color: var(--glitch-color-b, currentColor);
+}
+
+.glitch--noise .glitch__slice {
+  display: none;
+}
+
+.glitch__char {
+  position: relative;
+}
+
+.glitch__char[data-glyph] {
+  visibility: hidden;
+}
+
+.glitch__char::after {
+  content: attr(data-glyph);
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  visibility: visible;
+  text-align: center;
+  color: var(--glitch-glyph, currentColor);
+}
+
+.glitch__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

@@ -10,15 +10,18 @@ export const acidSquares = {
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
   <AcidSquares
     color="#120f17"
-    accentColor="#c6ff3d"
-    shape="square"
+    accentColor="#ff4fb8"
+    secondaryColor="#3b6bff"
+    tileSize={1}
+    gap={0.12}
+    roundness={0.25}
+    rotation={35}
+    waves={1}
     pulse={1}
-    pulseSpeed={0.45}
-    sparkle={0.04}
-    speed={0.7}
-    zoom={1.3}
-    depth={10}
-    edges={0.45}
+    lighting="split"
+    tilt={0.7}
+    grain={0.12}
+    intro={true}
     mouseInteraction={true}
   />
 </div>`,

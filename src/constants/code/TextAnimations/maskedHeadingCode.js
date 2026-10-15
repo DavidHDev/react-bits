@@ -8,8 +8,6 @@ export const maskedHeading = {
   dependencies: 'gsap',
   usage: `import MaskedHeading from './MaskedHeading';
 
-<MaskedHeading text="Designed in the details" src="/hero.jpg" />
-
 <MaskedHeading
   text="Shot on location"
   mediaType="video"
@@ -17,8 +15,11 @@ export const maskedHeading = {
   poster="/reel-poster.jpg"
   fillScale={1.3}
   parallax={34}
-  reveal="wipe"
+  reveal="scale"
   trigger="view"
+  spotlight
+  spotlightRadius={180}
+  outline
 />`,
   code,
   css,

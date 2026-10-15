@@ -21,6 +21,17 @@
   backface-visibility: hidden;
 }
 
+.echo-text__bursts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.echo-text__echo--outline {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: max(1px, 0.014em) currentColor;
+}
+
 .echo-text__echo--front {
   position: relative;
   z-index: 2;

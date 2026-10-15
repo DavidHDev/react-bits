@@ -613,3 +613,74 @@
 .ln-anim-paused *::after {
   animation-play-state: paused !important;
 }
+
+.landing-wrapper {
+  --ln-shell: rgba(28, 25, 34, 0.72);
+  --ln-shell-edge: rgba(255, 255, 255, 0.08);
+  --ln-shell-highlight: rgba(255, 255, 255, 0.07);
+  --ln-shell-shadow: 0 30px 70px rgba(0, 0, 0, 0.36), 0 14px 32px rgba(0, 0, 0, 0.26);
+  --ln-well: rgba(8, 6, 12, 0.34);
+  --ln-well-edge: rgba(255, 255, 255, 0.055);
+}
+:root[data-theme='light'] .landing-wrapper {
+  --ln-shell: rgba(242, 242, 245, 0.78);
+  --ln-shell-edge: rgba(24, 24, 27, 0.07);
+  --ln-shell-highlight: rgba(255, 255, 255, 0.95);
+  --ln-shell-shadow: 0 30px 70px rgba(24, 24, 27, 0.1), 0 14px 32px rgba(24, 24, 27, 0.06);
+  --ln-well: rgba(255, 255, 255, 0.72);
+  --ln-well-edge: rgba(24, 24, 27, 0.06);
+}
+
+.landing-wrapper .ln-features-title,
+.landing-wrapper .ln-demo-title,
+.landing-wrapper .ln-tools-title,
+.landing-wrapper .ln-prospot-header h2,
+.landing-wrapper .ln-how-title,
+.landing-wrapper .ln-sp-title,
+.landing-wrapper .ln-test-title,
+.landing-wrapper .ln-faq-title,
+.landing-wrapper .ln-cta-headline {
+  font-size: clamp(30px, 2.6vw, 42px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.036em;
+}
+
+@media (max-width: 768px) {
+  .landing-wrapper .ln-features-title,
+  .landing-wrapper .ln-demo-title,
+  .landing-wrapper .ln-tools-title,
+  .landing-wrapper .ln-prospot-header h2,
+  .landing-wrapper .ln-how-title,
+  .landing-wrapper .ln-sp-title,
+  .landing-wrapper .ln-test-title,
+  .landing-wrapper .ln-faq-title,
+  .landing-wrapper .ln-cta-headline {
+    font-size: clamp(27px, 7.4vw, 34px);
+  }
+}
+
+:root[data-lite] .landing-wrapper *,
+:root[data-lite] .landing-wrapper *::before,
+:root[data-lite] .landing-wrapper *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+:root[data-lite] .landing-wrapper {
+  --ln-shell: rgb(28 25 34 / 0.96);
+}
+:root[data-lite] .landing-wrapper .lh {
+  --lh-window: rgb(24 21 30 / 0.96);
+}
+:root[data-lite] .landing-wrapper .ln-navbar.ln-navbar-scrolled .ln-navbar-inner {
+  background: rgb(18 15 23 / 0.94);
+}
+:root[data-lite][data-theme='light'] .landing-wrapper {
+  --ln-shell: rgb(242 242 245 / 0.97);
+}
+:root[data-lite][data-theme='light'] .landing-wrapper .lh {
+  --lh-window: rgb(242 242 245 / 0.96);
+}
+:root[data-lite][data-theme='light'] .landing-wrapper .ln-navbar.ln-navbar-scrolled .ln-navbar-inner {
+  background: rgb(255 255 255 / 0.94);
+}

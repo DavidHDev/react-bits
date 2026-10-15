@@ -5,17 +5,13 @@ import tsCode from '@ts-default/Components/Counter/Counter.tsx?raw';
 import tsTailwind from '@ts-tailwind/Components/Counter/Counter.tsx?raw';
 
 export const counter = {
-  dependencies: `motion`,
+  dependencies: ``,
   usage: `import Counter from './Counter';
 
 <Counter
-  value={1}
-  places={[100, 10, 1]}
+  value={1284}
   fontSize={80}
-  padding={5}
-  gap={10}
-  textColor="white"
-  fontWeight={900}
+  fontWeight={600}
 />`,
   code,
   css,

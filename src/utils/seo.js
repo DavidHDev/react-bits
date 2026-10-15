@@ -1,17 +1,6 @@
 import { getComponentCatalog } from './catalog.js';
 
-export const SITE_URL = 'https://reactbits.dev';
-export const DEFAULT_DESCRIPTION =
-  'Free, open source React components for animated text, backgrounds, interactive cards and micro interactions. Explore live demos and copy the source.';
-
-export const HOME_SEO = {
-  title: 'React Bits — Free Animated React Components',
-  description: DEFAULT_DESCRIPTION,
-  heading: 'React components for creative developers',
-  path: '/',
-  intro:
-    'Animated components and backgrounds that install as source you own. Tune every value, starting with this page’s background.'
-};
+export { SITE_URL, DEFAULT_DESCRIPTION, HOME_SEO } from './siteSeo.js';
 
 export const INDEX_SEO = {
   title: 'Browse Free React Components | React Bits',

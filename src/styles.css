@@ -1,4 +1,9 @@
 @import 'tailwindcss';
+@source not '../public/r';
+@source not './ts-tailwind';
+@source not './tailwind/{Animations,Backgrounds,Micro,TextAnimations}';
+@source not './tailwind/Components/[!I]*';
+@source not './tailwind/Components/InfiniteMenu';
 @import './css/fonts.css';
 @import './css/variables.css';
 @import './css/misc.css';

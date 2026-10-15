@@ -17,6 +17,10 @@ export const techText = {
     dashLength={4}
     dashGap={2}
     specks={15}
+    intro="none"
+    introDuration={2}
+    clickKick
+    guides={false}
   />
 </div>`,
   code,

@@ -50,7 +50,44 @@
   position: absolute;
   inset: 0;
   display: block;
+  background: color-mix(in srgb, currentColor 10%, transparent);
   will-change: transform, filter;
+}
+
+.masked-heading__tint {
+  position: absolute;
+  inset: 0;
+  display: block;
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+.masked-heading__spot {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.masked-heading__spot--tone {
+  background: #808080;
+  mix-blend-mode: saturation;
+}
+
+.masked-heading__spot--shade {
+  background: #000;
+  opacity: 0.55;
+}
+
+.masked-heading__outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke-linejoin: round;
 }
 
 .masked-heading__source {

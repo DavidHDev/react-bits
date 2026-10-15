@@ -20,8 +20,10 @@ import {
 // import { ArrowRightIcon } from 'lucide-react';
 // import Aurora from '../../content/Backgrounds/Aurora/Aurora';
 import { colors } from '../../constants/colors';
-import { CATEGORIES, NEW_KEYS } from '../../constants/Categories';
+import { CATEGORIES } from '../../constants/Categories';
+import { NEW_KEYS } from '../../constants/Badges';
 import usePreviewMediaAllowed from '../../hooks/usePreviewMediaAllowed';
+import { useColorMode } from '../setup/color-mode';
 import { FluidSelectContent } from './FluidMenuContent';
 import '../../css/docs-overview.css';
 
@@ -706,7 +708,11 @@ const LazyCardMedia = ({ videoUrl, playing, title }) => {
 
   const show = !!videoUrl && !failed;
 
-  const base = useMemo(() => (videoUrl ? videoUrl.replace(/\.(webm|mp4)$/i, '') : ''), [videoUrl]);
+  const { colorMode } = useColorMode();
+  const base = useMemo(() => {
+    const plain = videoUrl ? videoUrl.replace(/\.(webm|mp4)$/i, '') : '';
+    return plain && colorMode === 'light' ? `${plain}-light` : plain;
+  }, [videoUrl, colorMode]);
   const webm = base ? `${base}.webm` : '';
   const mp4 = base ? `${base}.mp4` : '';
 
@@ -715,52 +721,26 @@ const LazyCardMedia = ({ videoUrl, playing, title }) => {
     if (!v) return;
 
     if (playing) {
-      const tryPlay = () => {
-        try {
-          const p = v.play();
-          if (p && typeof p.then === 'function') {
-            p.catch(() => {});
-          }
-        } catch (e) {
-          // ignore
-        }
-      };
-
-      if (v.readyState >= 3) {
-        tryPlay();
-      } else {
-        const onCanPlay = () => tryPlay();
-        v.addEventListener('canplay', onCanPlay, { once: true });
-        return () => {
-          v.removeEventListener('canplay', onCanPlay);
-        };
-      }
+      const p = v.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
     } else {
-      try {
-        v.pause();
-      } catch (e) {
-        // ignore
-      }
+      v.pause();
     }
   }, [playing]);
-  const handleLoadedMetadata = e => {
-    const v = e.target;
-    v.currentTime = 0.1;
-  };
 
   return (
     <Box className="browse-card-well" h="190px" borderRadius="12px" overflow="hidden">
       {show ? (
         <video
+          key={base}
           ref={videoRef}
           loop
           muted
           playsInline
-          preload="metadata"
-          onLoadedMetadata={handleLoadedMetadata}
+          preload="none"
+          poster={`${base}.webp`}
           className="browse-card-video"
         >
-          {/* Let the browser choose the best supported source */}
           <source src={webm} type="video/webm" />
           <source src={mp4} type="video/mp4" onError={() => setFailed(true)} />
         </video>

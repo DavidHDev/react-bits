@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+
+let gsapLoad = null;
+const loadGsap = () => {
+  gsapLoad ??= import('gsap').then(module => module.gsap);
+  return gsapLoad;
+};
 
 export const Logo = () => {
   const svgRef = useRef(null);
@@ -10,11 +15,27 @@ export const Logo = () => {
     const atomEl = atomRef.current;
     if (!svgEl || !atomEl) return;
 
-    gsap.set(atomEl, { transformOrigin: 'center center' });
+    let hovered = false;
+    const animate = () =>
+      loadGsap().then(gsap => {
+        gsap.set(atomEl, { transformOrigin: 'center center' });
+        gsap.to(
+          atomEl,
+          hovered
+            ? { rotation: 20, scale: 0.95, duration: 1, ease: 'elastic.out(1, 0.3)' }
+            : { rotation: 0, scale: 1, duration: 1, ease: 'elastic.out(2, 1)' }
+        );
+      });
 
-    const handleEnter = () => gsap.to(atomEl, { rotation: 20, scale: 0.95, duration: 1, ease: 'elastic.out(1, 0.3)' });
+    const handleEnter = () => {
+      hovered = true;
+      animate();
+    };
 
-    const handleLeave = () => gsap.to(atomEl, { rotation: 0, scale: 1, duration: 1, ease: 'elastic.out(2, 1)' });
+    const handleLeave = () => {
+      hovered = false;
+      animate();
+    };
 
     svgEl.addEventListener('mouseenter', handleEnter);
     svgEl.addEventListener('mouseleave', handleLeave);

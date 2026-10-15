@@ -10,14 +10,18 @@ export const warpText = {
 
 <WarpText
   text="Bend the moment"
-  color="#f8f5ff"
   warpStrength={0.08}
   warpScale={1.7}
   speed={0.55}
+  lens="bulge"
   pointerInfluence={0.42}
   pointerStrength={0.38}
   refraction={0.018}
+  chromatic={0.35}
+  idleDrift={0.2}
   ripple
+  clickRipple
+  intro
   fontSize="clamp(3rem, 10vw, 9rem)"
   fontWeight={800}
   style={{ height: '320px' }}

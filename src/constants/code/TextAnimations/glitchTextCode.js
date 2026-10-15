@@ -6,11 +6,19 @@ import tsTailwind from '@ts-tailwind/TextAnimations/GlitchText/GlitchText.tsx?ra
 
 export const glitchText = {
   usage: `import GlitchText from './GlitchText';
-  
+
 <GlitchText
+  mode="slices"
+  trigger="always"
   speed={1}
+  intensity={0.5}
+  burstDuration={0.6}
+  offset={10}
+  skew={0}
+  flicker={false}
+  fontWeight={900}
   enableShadows={true}
-  enableOnHover={true}
+  shadowColors={['#ff0000', '#00ffff']}
   className='custom-class'
 >
   React Bits

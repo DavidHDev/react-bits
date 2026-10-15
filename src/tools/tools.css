@@ -4,70 +4,6 @@
   --tool-control-hover: rgba(255, 255, 255, 0.1);
 }
 
-:root {
-  --tool-popover-bg: var(--bg-elevated);
-  --tool-popover-border: var(--border-primary);
-  --tool-menu-shadow: var(--shadow-menu);
-}
-
-.tool-selector-wrapper {
-  position: relative;
-  border-radius: 14px;
-  cursor: pointer;
-}
-
-.tool-selector-button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 12px 12px 12px 10px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background: var(--surface-ghost);
-  box-shadow: var(--surface-ghost-highlight);
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.tool-selector-button:hover {
-  background: var(--surface-ghost-hover);
-}
-
-/* Info Tooltip */
-.info-tooltip-trigger {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  background: var(--bg-hover);
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
-
-.info-tooltip-trigger:hover {
-  background: var(--border-secondary);
-}
-
-:root[data-theme='light'] .tool-selector-button {
-  border-color: var(--shell-border);
-  background: #fff;
-  box-shadow: none;
-}
-
-:root[data-theme='light'] .tool-selector-button:hover {
-  background: #fafafa;
-}
-
-:root[data-theme='light'] {
-  --tool-popover-bg: #fff;
-  --tool-popover-border: var(--shell-border);
-  --tool-menu-shadow: 0 14px 34px rgba(24, 24, 27, 0.09);
-}
-
 :root[data-theme='light'] .rb-tools-page {
   --bg-card: #fff;
   --bg-elevated: #fff;
@@ -81,15 +17,6 @@
   --tool-control-hover: rgba(24, 24, 27, 0.055);
 }
 
-:root[data-theme='light'] .rb-tools-page .info-tooltip-trigger {
-  border: 1px solid var(--shell-border);
-  background: #fff;
-}
-
-:root[data-theme='light'] .rb-tools-page .info-tooltip-trigger:hover {
-  background: #f8f8f9;
-}
-
 :root[data-theme='light'] .rb-tools-page .scrubber-track {
   background: #fff;
   border-color: var(--shell-border);
@@ -97,4 +24,174 @@
 
 :root[data-theme='light'] .rb-tools-page .scrubber-fill {
   background: rgba(24, 24, 27, 0.045);
+}
+
+.tool-switch {
+  position: relative;
+  flex: none;
+}
+
+.tool-switch-trigger {
+  display: flex;
+  width: 100%;
+  height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 11px 0 13px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--tool-track);
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--dur-menu) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.tool-switch-trigger:hover,
+.tool-switch[data-open] .tool-switch-trigger {
+  background: var(--tool-track-hover);
+}
+
+.tool-switch-trigger:active {
+  transform: scale(0.985);
+}
+
+.tool-switch-trigger:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.tool-switch-trigger svg {
+  flex: none;
+}
+
+.tool-switch-trigger svg:last-child {
+  color: var(--tool-muted);
+}
+
+.tool-switch-label {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-switch-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: 14px;
+  background: var(--menu-bg);
+  box-shadow: var(--menu-shadow);
+  opacity: 0;
+  transform: translateY(-4px) scale(0.985);
+  transform-origin: top center;
+  visibility: hidden;
+  transition:
+    opacity 140ms var(--ease-out),
+    transform 200ms var(--ease-out),
+    visibility 0s linear 200ms;
+}
+
+.tool-switch-menu[data-open] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 240ms var(--ease-out),
+    visibility 0s;
+}
+
+.tool-switch-highlight {
+  position: absolute;
+  top: 0;
+  right: 6px;
+  left: 6px;
+  border-radius: 9px;
+  background: var(--menu-highlight);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 260ms var(--ease-out),
+    height 260ms var(--ease-out),
+    opacity 160ms var(--ease-out);
+}
+
+.tool-switch-item {
+  position: relative;
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  grid-template-columns: 18px minmax(0, 1fr) 16px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  color: var(--text-primary);
+  outline: none;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tool-switch-item > svg {
+  color: var(--tool-muted);
+  transition: color var(--dur-menu) var(--ease-out);
+}
+
+.tool-switch-item:hover > svg,
+.tool-switch-item:focus-visible > svg,
+.tool-switch-item[aria-checked='true'] > svg {
+  color: var(--text-primary);
+}
+
+.tool-switch-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tool-switch-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.tool-switch-tagline {
+  overflow: hidden;
+  color: var(--menu-label);
+  font-size: 12px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-switch-check {
+  display: flex;
+  color: var(--text-primary);
+  opacity: 0;
+}
+
+.tool-switch-item[aria-checked='true'] .tool-switch-check {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-switch-menu,
+  .tool-switch-menu[data-open],
+  .tool-switch-highlight {
+    transition: none;
+  }
 }

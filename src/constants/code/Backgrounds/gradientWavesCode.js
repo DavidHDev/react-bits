@@ -5,7 +5,7 @@ import tsCode from '@ts-default/Backgrounds/GradientWaves/GradientWaves.tsx?raw'
 import tsTailwind from '@ts-tailwind/Backgrounds/GradientWaves/GradientWaves.tsx?raw';
 
 export const gradientWaves = {
-  dependencies: `ogl`,
+  dependencies: ``,
   usage: `import GradientWaves from './GradientWaves';
 
 <div style={{ width: '100%', height: '600px', position: 'relative' }}>
@@ -15,21 +15,10 @@ export const gradientWaves = {
     crestColor="#FFFFFF"
     speed={0.4}
     amplitude={2.5}
-    waveScale={0.6}
-    waveRatio={0.9}
-    swell={35}
-    turbulence={20}
-    tilt={1.11}
-    zoom={1.0}
-    height={5.5}
-    fogDepth={15}
-    detail="medium"
-    brightness={1.0}
-    opacity={1.0}
-    mouseInteraction={true}
-    parallaxStrength={0.5}
-    grain={true}
-    grainIntensity={0.05}
+    relief={1}
+    lightAngle={120}
+    mouseInteraction
+    swellOnClick
   />
 </div>`,
   code,

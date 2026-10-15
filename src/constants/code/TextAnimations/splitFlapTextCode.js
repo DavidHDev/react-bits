@@ -15,13 +15,19 @@ export const splitFlapText = {
   cycleDelay={2400}
   charset="alphanumeric"
   flipsPerChar={8}
+  order="left"
+  align="left"
+  tileStyle="board"
   tileColor="#111827"
   textColor="#f8fafc"
+  glare={0}
+  depth={0.5}
   tileRadius={8}
   gap={6}
   fontSize={52}
   loop
   padTo={12}
+  intro
 />`,
   code,
   css,

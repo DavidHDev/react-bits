@@ -19,7 +19,6 @@ import { getComponentMatchLabel, rankComponentSearch } from '../../utils/compone
 import { searchPro } from '../../utils/proSearch';
 import { proUrl, trackProClick } from '../../utils/pro';
 import { useProManifest } from '../../hooks/useProManifest';
-import { useSearch } from '../context/SearchContext/useSearch';
 import './SearchDialog.css';
 
 const PRO_PLACEMENT = 'search';
@@ -122,7 +121,6 @@ const SearchDialog = ({ isOpen, onClose }) => {
   const inputRef = useRef(null);
   const [highlight, setHighlight] = useState(null);
   const navigate = useNavigate();
-  const { toggleSearch } = useSearch();
 
   // Only fetched once the dialog has been opened, and cached from then on.
   const { manifest } = useProManifest({ enabled: isOpen && !freeOnly });
@@ -244,19 +242,6 @@ const SearchDialog = ({ isOpen, onClose }) => {
     }
     setKeyboardNav(false);
   }, [selectedIndex, keyboardNav]);
-
-  useEffect(() => {
-    const onKey = e => {
-      if (e.key === '/') {
-        e.preventDefault();
-        toggleSearch();
-      } else if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [toggleSearch, onClose]);
 
   useEffect(() => {
     if (isOpen) {

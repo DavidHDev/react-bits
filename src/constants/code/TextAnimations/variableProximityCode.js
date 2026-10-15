@@ -5,7 +5,6 @@ import tsCode from '@ts-default/TextAnimations/VariableProximity/VariableProximi
 import tsTailwind from '@ts-tailwind/TextAnimations/VariableProximity/VariableProximity.tsx?raw';
 
 export const variableProximity = {
-  dependencies: `motion`,
   usage: `import { useRef } from 'react';
 import VariableProximity from './VariableProximity';
 
@@ -23,6 +22,11 @@ style={{position: 'relative'}}
     containerRef={containerRef}
     radius={100}
     falloff='linear'
+    smoothing={0.2}
+    scale={1}
+    lift={0}
+    idleWave={false}
+    fontSize={64}
   />
 </div>`,
   code,

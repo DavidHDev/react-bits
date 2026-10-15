@@ -1,5 +1,11 @@
 .scroll-float {
+  margin: 20px 0;
   overflow: hidden;
+}
+
+.scroll-float--open {
+  overflow: visible;
+  overflow-x: clip;
 }
 
 .scroll-float-text {
@@ -10,6 +16,23 @@
   line-height: 1.5;
 }
 
-.char {
+.scroll-float-word {
   display: inline-block;
+  white-space: nowrap;
+}
+
+.scroll-float-char {
+  display: inline-block;
+}
+
+.scroll-float-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

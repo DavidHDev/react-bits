@@ -10,76 +10,37 @@ import PreviewSelect from '../../components/common/Preview/PreviewSelect';
 import PreviewColorPickerCustom from '../../components/common/Preview/PreviewColorPickerCustom';
 import BackgroundContent from '../../components/common/Preview/BackgroundContent';
 import OpenInStudioButton from '../../components/common/Preview/OpenInStudioButton';
+import RefreshButton from '../../components/common/Preview/RefreshButton';
 
+import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 import { useColorModeValue } from '../../components/setup/color-mode';
 
 import AcidSquares from '@/content/Backgrounds/AcidSquares/AcidSquares';
 import { acidSquares } from '../../constants/code/Backgrounds/acidSquaresCode';
-
-const ACID = {
-  accentColor: '#c6ff3d',
-  shape: 'square',
-  pulse: 1,
-  pulseSpeed: 0.45,
-  pulseSpacing: 1,
-  pulseWidth: 1,
-  sparkle: 0.04,
-  speed: 0.7,
-  breathe: 1,
-  zoom: 1.3,
-  depth: 10,
-  edges: 0.45,
-  twist: 0,
-  roll: 0,
-  brightness: 1
-};
-
-const DEFAULT_PROPS = {
-  preset: 'acid',
-  color: '#120f17',
-  ...ACID,
-  mouseInteraction: true,
-  mouseStrength: 1,
-  mouseRadius: 0.35,
-  detail: 'medium',
-  grain: 0.03,
-  fade: 0,
-  opacity: 1,
-  lightMode: false
-};
-
-const PRESETS = {
-  acid: ACID,
-  cobalt: { ...ACID, accentColor: '#3d7bff' },
-  mono: { ...ACID, accentColor: '#ffffff', sparkle: 0 },
-  ember: { ...ACID, accentColor: '#ff7a2f', pulseSpacing: 1.4, pulseWidth: 1.6 },
-  glass: { ...ACID, accentColor: '#7ff3ff', edges: 0.1, pulse: 0.8, sparkle: 0.06 },
-  vortex: { ...ACID, shape: 'round', twist: 0.06, roll: 0.12, depth: 12, pulseSpeed: 0.6 }
-};
-
-const LIGHT_ACCENTS = {
-  acid: '#8fd61f',
-  cobalt: '#2f6bff',
-  mono: '#3f3f46',
-  ember: '#f26a1b',
-  glass: '#1fb6d4',
-  vortex: '#8fd61f'
-};
-
-const PRESET_OPTIONS = [
-  { value: 'acid', label: 'Acid' },
-  { value: 'cobalt', label: 'Cobalt' },
-  { value: 'mono', label: 'Mono' },
-  { value: 'ember', label: 'Ember' },
-  { value: 'glass', label: 'Glass' },
-  { value: 'vortex', label: 'Vortex' }
-];
+import { DEFAULT_PROPS, PRESET_OPTIONS, presetProps } from './presets/AcidSquares';
 
 const SHAPE_OPTIONS = [
   { value: 'square', label: 'Square' },
   { value: 'round', label: 'Round' }
+];
+
+const ORIGIN_OPTIONS = [
+  { value: 'center', label: 'Center' },
+  { value: 'random', label: 'Random' }
+];
+
+const LIGHTING_OPTIONS = [
+  { value: 'split', label: 'Split' },
+  { value: 'backlit', label: 'Backlit' },
+  { value: 'overhead', label: 'Overhead' }
+];
+
+const HOVER_OPTIONS = [
+  { value: 'press', label: 'Press' },
+  { value: 'lift', label: 'Lift' },
+  { value: 'none', label: 'None' }
 ];
 
 const DETAIL_OPTIONS = [
@@ -93,80 +54,131 @@ const propData = [
     name: 'color',
     type: 'string',
     default: "'#120f17'",
-    description: 'Color of the squares. Set it to your page background, every shade is derived from it.'
+    description: 'Base color of the squares. Set it to your page background, the gaps show the page through.'
   },
   {
     name: 'accentColor',
     type: 'string',
-    default: "'#c6ff3d'",
-    description: 'Color of the light rings, the twinkling squares and the cursor light.'
+    default: "'#ff4fb8'",
+    description: 'Color of the first light that drifts across the squares.'
   },
-  { name: 'shape', type: "'square' | 'round'", default: "'square'", description: 'Shape of the corridor.' },
   {
-    name: 'pulse',
-    type: 'number',
-    default: '1',
-    description: 'Brightness of the rings of light that travel toward you. 0 turns them off.'
+    name: 'secondaryColor',
+    type: 'string',
+    default: "'#3b6bff'",
+    description: 'Color of the second light.'
   },
-  { name: 'pulseSpeed', type: 'number', default: '0.45', description: 'How fast the rings travel.' },
-  { name: 'pulseSpacing', type: 'number', default: '1', description: 'Distance between the rings.' },
-  { name: 'pulseWidth', type: 'number', default: '1', description: 'Thickness of each ring and its trail.' },
+  { name: 'tileSize', type: 'number', default: '1', description: 'Size of the squares.' },
+  { name: 'gap', type: 'number', default: '0.12', description: 'Width of the gaps between the squares.' },
   {
-    name: 'sparkle',
+    name: 'roundness',
     type: 'number',
-    default: '0.04',
-    description: 'Share of squares that twinkle with light, from 0 to 1.'
+    default: '0.25',
+    description: 'Corner radius, from sharp squares at 0 to circles at 1.'
   },
-  { name: 'speed', type: 'number', default: '0.7', description: 'Speed of the slow drift in and out of the corridor.' },
   {
-    name: 'breathe',
+    name: 'softness',
     type: 'number',
-    default: '1',
-    description: 'How far the view drifts in and out. 0 holds it still.'
+    default: '0.5',
+    description: 'How softly the edges of each square round off into the gaps.'
   },
-  { name: 'zoom', type: 'number', default: '1.3', description: 'Field of view into the corridor. Higher zooms in.' },
+  {
+    name: 'bulge',
+    type: 'number',
+    default: '0.3',
+    description: 'How much each square domes up like a cushion. 0 keeps the tops flat.'
+  },
+  { name: 'rotation', type: 'number', default: '35', description: 'Rotation of the grid, in degrees.' },
+  {
+    name: 'gloss',
+    type: 'number',
+    default: '0.6',
+    description: 'From soft satin at 0 to glossy at 1, with tighter highlights along the edges.'
+  },
+  { name: 'waves', type: 'number', default: '1', description: 'Height of the slow swells. 0 lays the surface flat.' },
+  { name: 'waveScale', type: 'number', default: '1', description: 'Size of the swells. Higher makes them broader.' },
+  { name: 'speed', type: 'number', default: '0.6', description: 'Speed of the swells and the drifting lights.' },
+  {
+    name: 'shape',
+    type: "'square' | 'round'",
+    default: "'square'",
+    description: 'Shape of the ripples that travel across the surface.'
+  },
+  { name: 'pulse', type: 'number', default: '1', description: 'Height of the ripples. 0 turns them off.' },
+  { name: 'pulseSpeed', type: 'number', default: '0.45', description: 'How fast the ripples travel.' },
+  { name: 'pulseSpacing', type: 'number', default: '1', description: 'Time between ripples.' },
+  { name: 'pulseWidth', type: 'number', default: '1', description: 'Width of each ripple.' },
+  {
+    name: 'pulseOrigin',
+    type: "'center' | 'random'",
+    default: "'center'",
+    description: 'Start every ripple from the center, or from random spots on the surface.'
+  },
+  {
+    name: 'lighting',
+    type: "'split' | 'backlit' | 'overhead'",
+    default: "'split'",
+    description: 'Placement of the two lights: from either side, low behind the surface, or from above.'
+  },
+  { name: 'brightness', type: 'number', default: '1', description: 'Overall brightness.' },
+  {
+    name: 'tilt',
+    type: 'number',
+    default: '0.7',
+    description: 'View angle, from straight down at 0 to low across the surface at 1.'
+  },
+  { name: 'zoom', type: 'number', default: '1', description: 'Zoom. Higher brings the squares closer.' },
   {
     name: 'depth',
     type: 'number',
     default: '10',
-    description: 'How deep the corridor reaches. Higher shows more rings of smaller squares.'
+    description: 'How far the surface reaches before it fades into the page.'
   },
+  { name: 'grain', type: 'number', default: '0.12', description: 'Strength of the film grain.' },
+  { name: 'fade', type: 'number', default: '0', description: 'Fades the edges into the page, from 0 to 1.' },
+  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
   {
-    name: 'edges',
-    type: 'number',
-    default: '0.45',
-    description: 'Look of the squares, from 0 for solid glass blocks to 1 for thin wireframe edges.'
+    name: 'intro',
+    type: 'boolean',
+    default: 'true',
+    description: 'Switches the squares on from the center outward when the effect first appears.'
   },
-  { name: 'twist', type: 'number', default: '0', description: 'How much the corridor spirals as it recedes.' },
-  { name: 'roll', type: 'number', default: '0', description: 'Speed at which the corridor slowly rotates.' },
-  { name: 'brightness', type: 'number', default: '1', description: 'Overall brightness.' },
   {
     name: 'mouseInteraction',
     type: 'boolean',
     default: 'true',
-    description: 'Lights up the squares around the cursor and lets the view follow it slightly.'
+    description: 'Lets the cursor shape the surface and the view follow it slightly.'
   },
-  { name: 'mouseStrength', type: 'number', default: '1', description: 'Brightness of the cursor light.' },
+  {
+    name: 'hoverEffect',
+    type: "'press' | 'lift' | 'none'",
+    default: "'press'",
+    description: 'Whether the cursor presses the surface down or lifts it up.'
+  },
+  { name: 'mouseStrength', type: 'number', default: '1', description: 'Depth of the cursor press or lift.' },
   {
     name: 'mouseRadius',
     type: 'number',
     default: '0.35',
-    description: 'Size of the cursor light, as a fraction of the view height.'
+    description: 'Size of the area the cursor shapes.'
+  },
+  {
+    name: 'pulseOnClick',
+    type: 'boolean',
+    default: 'true',
+    description: 'Sends a ripple out from wherever you click.'
   },
   {
     name: 'detail',
     type: "'low' | 'medium' | 'high'",
     default: "'medium'",
-    description: 'Rendering detail. Lower it for weaker devices.'
+    description: 'Smoothness of the surface. Lower it for weaker devices.'
   },
-  { name: 'grain', type: 'number', default: '0.03', description: 'Strength of the film grain.' },
-  { name: 'fade', type: 'number', default: '0', description: 'Fades the edges into the page, from 0 to 1.' },
-  { name: 'opacity', type: 'number', default: '1', description: 'Opacity of the whole effect.' },
   {
     name: 'lightMode',
     type: 'boolean',
     default: 'false',
-    description: 'Draws the corridor as ink for light backgrounds.'
+    description: 'Draws pale squares with soft tints for light backgrounds.'
   },
   { name: 'paused', type: 'boolean', default: 'false', description: 'Freezes the animation.' },
   { name: 'dpr', type: 'number', default: 'auto', description: 'Maximum device pixel ratio, capped at 2.' },
@@ -174,14 +186,13 @@ const propData = [
 ];
 
 const AcidSquaresDemo = () => {
+  const [key, forceRerender] = useForceRerender();
   const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const { preset, ...settings } = props;
   const light = useColorModeValue(true, false);
 
   const applyPreset = value => {
-    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(key => [key, defaultProps[key]]));
-    const tone = light ? { accentColor: LIGHT_ACCENTS[value] } : {};
-    updateProps({ ...base, ...PRESETS[value], ...tone, preset: value });
+    updateProps({ ...presetProps(value, { light, defaults: defaultProps }), preset: value });
   };
 
   return (
@@ -195,8 +206,9 @@ const AcidSquaresDemo = () => {
       <TabsLayout>
         <PreviewTab>
           <Box position="relative" className="demo-container" h={500} p={0} overflow="hidden">
-            <AcidSquares {...settings} />
-            <BackgroundContent headline="A luminous crystal corridor of stacked squares." />
+            <AcidSquares key={key} {...settings} />
+            <BackgroundContent headline="Glossy squares that ripple under colored light." />
+            <RefreshButton onClick={forceRerender} />
           </Box>
 
           <Flex justify="flex-end" mt={2} mb={-2}>
@@ -207,18 +219,103 @@ const AcidSquaresDemo = () => {
             <PreviewSelect title="Preset" options={PRESET_OPTIONS} value={preset} onChange={applyPreset} />
             <PreviewColorPickerCustom
               title="Color"
-              color={props.color}
+              color={settings.color}
               onChange={value => updateProp('color', value)}
             />
             <PreviewColorPickerCustom
               title="Accent"
-              color={props.accentColor}
+              color={settings.accentColor}
               onChange={value => updateProp('accentColor', value)}
             />
+            <PreviewColorPickerCustom
+              title="Secondary"
+              color={settings.secondaryColor}
+              onChange={value => updateProp('secondaryColor', value)}
+            />
+            <PreviewSlider
+              title="Tile Size"
+              min={0.3}
+              max={2.5}
+              step={0.05}
+              value={settings.tileSize}
+              onChange={value => updateProp('tileSize', value)}
+            />
+            <PreviewSlider
+              title="Gap"
+              min={0}
+              max={0.4}
+              step={0.01}
+              value={settings.gap}
+              onChange={value => updateProp('gap', value)}
+            />
+            <PreviewSlider
+              title="Roundness"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.roundness}
+              onChange={value => updateProp('roundness', value)}
+            />
+            <PreviewSlider
+              title="Softness"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.softness}
+              onChange={value => updateProp('softness', value)}
+            />
+            <PreviewSlider
+              title="Bulge"
+              min={0}
+              max={1.5}
+              step={0.01}
+              value={settings.bulge}
+              onChange={value => updateProp('bulge', value)}
+            />
+            <PreviewSlider
+              title="Rotation"
+              min={-90}
+              max={90}
+              step={1}
+              value={settings.rotation}
+              onChange={value => updateProp('rotation', value)}
+            />
+            <PreviewSlider
+              title="Gloss"
+              min={0}
+              max={1}
+              step={0.01}
+              value={settings.gloss}
+              onChange={value => updateProp('gloss', value)}
+            />
+            <PreviewSlider
+              title="Waves"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.waves}
+              onChange={value => updateProp('waves', value)}
+            />
+            <PreviewSlider
+              title="Wave Scale"
+              min={0.4}
+              max={2.5}
+              step={0.05}
+              value={settings.waveScale}
+              onChange={value => updateProp('waveScale', value)}
+            />
+            <PreviewSlider
+              title="Speed"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.speed}
+              onChange={value => updateProp('speed', value)}
+            />
             <PreviewSelect
-              title="Shape"
+              title="Ripple Shape"
               options={SHAPE_OPTIONS}
-              value={props.shape}
+              value={settings.shape}
               onChange={value => updateProp('shape', value)}
             />
             <PreviewSlider
@@ -226,7 +323,7 @@ const AcidSquaresDemo = () => {
               min={0}
               max={2}
               step={0.05}
-              value={props.pulse}
+              value={settings.pulse}
               onChange={value => updateProp('pulse', value)}
             />
             <PreviewSlider
@@ -234,7 +331,7 @@ const AcidSquaresDemo = () => {
               min={0}
               max={2}
               step={0.05}
-              value={props.pulseSpeed}
+              value={settings.pulseSpeed}
               onChange={value => updateProp('pulseSpeed', value)}
             />
             <PreviewSlider
@@ -242,7 +339,7 @@ const AcidSquaresDemo = () => {
               min={0.4}
               max={3}
               step={0.05}
-              value={props.pulseSpacing}
+              value={settings.pulseSpacing}
               onChange={value => updateProp('pulseSpacing', value)}
             />
             <PreviewSlider
@@ -250,109 +347,59 @@ const AcidSquaresDemo = () => {
               min={0.3}
               max={3}
               step={0.05}
-              value={props.pulseWidth}
+              value={settings.pulseWidth}
               onChange={value => updateProp('pulseWidth', value)}
             />
-            <PreviewSlider
-              title="Sparkle"
-              min={0}
-              max={0.3}
-              step={0.01}
-              value={props.sparkle}
-              onChange={value => updateProp('sparkle', value)}
+            <PreviewSelect
+              title="Pulse Origin"
+              options={ORIGIN_OPTIONS}
+              value={settings.pulseOrigin}
+              onChange={value => updateProp('pulseOrigin', value)}
             />
-            <PreviewSlider
-              title="Speed"
-              min={0}
-              max={2}
-              step={0.05}
-              value={props.speed}
-              onChange={value => updateProp('speed', value)}
-            />
-            <PreviewSlider
-              title="Breathe"
-              min={0}
-              max={3}
-              step={0.05}
-              value={props.breathe}
-              onChange={value => updateProp('breathe', value)}
-            />
-            <PreviewSlider
-              title="Zoom"
-              min={0.9}
-              max={2.5}
-              step={0.05}
-              value={props.zoom}
-              onChange={value => updateProp('zoom', value)}
-            />
-            <PreviewSlider
-              title="Depth"
-              min={5}
-              max={16}
-              step={0.5}
-              value={props.depth}
-              onChange={value => updateProp('depth', value)}
-            />
-            <PreviewSlider
-              title="Edges"
-              min={0}
-              max={1}
-              step={0.05}
-              value={props.edges}
-              onChange={value => updateProp('edges', value)}
-            />
-            <PreviewSlider
-              title="Twist"
-              min={0}
-              max={0.3}
-              step={0.01}
-              value={props.twist}
-              onChange={value => updateProp('twist', value)}
-            />
-            <PreviewSlider
-              title="Roll"
-              min={-0.5}
-              max={0.5}
-              step={0.01}
-              value={props.roll}
-              onChange={value => updateProp('roll', value)}
+            <PreviewSelect
+              title="Lighting"
+              options={LIGHTING_OPTIONS}
+              value={settings.lighting}
+              onChange={value => updateProp('lighting', value)}
             />
             <PreviewSlider
               title="Brightness"
               min={0.3}
               max={2}
               step={0.05}
-              value={props.brightness}
+              value={settings.brightness}
               onChange={value => updateProp('brightness', value)}
             />
             <PreviewSlider
-              title="Cursor Light"
+              title="Tilt"
               min={0}
-              max={2}
-              step={0.05}
-              value={props.mouseStrength}
-              onChange={value => updateProp('mouseStrength', value)}
-            />
-            <PreviewSlider
-              title="Cursor Radius"
-              min={0.1}
               max={1}
               step={0.01}
-              value={props.mouseRadius}
-              onChange={value => updateProp('mouseRadius', value)}
+              value={settings.tilt}
+              onChange={value => updateProp('tilt', value)}
             />
-            <PreviewSelect
-              title="Detail"
-              options={DETAIL_OPTIONS}
-              value={props.detail}
-              onChange={value => updateProp('detail', value)}
+            <PreviewSlider
+              title="Zoom"
+              min={0.5}
+              max={2.5}
+              step={0.05}
+              value={settings.zoom}
+              onChange={value => updateProp('zoom', value)}
+            />
+            <PreviewSlider
+              title="Depth"
+              min={3}
+              max={20}
+              step={0.5}
+              value={settings.depth}
+              onChange={value => updateProp('depth', value)}
             />
             <PreviewSlider
               title="Grain"
               min={0}
-              max={0.15}
-              step={0.005}
-              value={props.grain}
+              max={0.4}
+              step={0.01}
+              value={settings.grain}
               onChange={value => updateProp('grain', value)}
             />
             <PreviewSlider
@@ -360,7 +407,7 @@ const AcidSquaresDemo = () => {
               min={0}
               max={1}
               step={0.05}
-              value={props.fade}
+              value={settings.fade}
               onChange={value => updateProp('fade', value)}
             />
             <PreviewSlider
@@ -368,17 +415,58 @@ const AcidSquaresDemo = () => {
               min={0}
               max={1}
               step={0.05}
-              value={props.opacity}
+              value={settings.opacity}
               onChange={value => updateProp('opacity', value)}
+            />
+            <PreviewSelect
+              title="Hover Effect"
+              options={HOVER_OPTIONS}
+              value={settings.hoverEffect}
+              onChange={value => updateProp('hoverEffect', value)}
+            />
+            <PreviewSlider
+              title="Hover Strength"
+              min={0}
+              max={2}
+              step={0.05}
+              value={settings.mouseStrength}
+              onChange={value => updateProp('mouseStrength', value)}
+            />
+            <PreviewSlider
+              title="Hover Radius"
+              min={0.1}
+              max={1}
+              step={0.01}
+              value={settings.mouseRadius}
+              onChange={value => updateProp('mouseRadius', value)}
+            />
+            <PreviewSelect
+              title="Detail"
+              options={DETAIL_OPTIONS}
+              value={settings.detail}
+              onChange={value => updateProp('detail', value)}
             />
             <PreviewSwitch
               title="Mouse Interaction"
-              isChecked={props.mouseInteraction}
+              isChecked={settings.mouseInteraction}
               onChange={value => updateProp('mouseInteraction', value)}
             />
             <PreviewSwitch
+              title="Pulse On Click"
+              isChecked={settings.pulseOnClick}
+              onChange={value => updateProp('pulseOnClick', value)}
+            />
+            <PreviewSwitch
+              title="Intro"
+              isChecked={settings.intro}
+              onChange={value => {
+                updateProp('intro', value);
+                forceRerender();
+              }}
+            />
+            <PreviewSwitch
               title="Light Mode"
-              isChecked={props.lightMode}
+              isChecked={settings.lightMode}
               onChange={value => updateProp('lightMode', value)}
             />
           </Customize>

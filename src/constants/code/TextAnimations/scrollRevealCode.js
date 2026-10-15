@@ -9,10 +9,18 @@ export const scrollReveal = {
   usage: `import ScrollReveal from './ScrollReveal';
 
 <ScrollReveal
-  baseOpacity={0}
+  highlightColor=""
+  mode="scrub"
+  splitBy="words"
+  effect="fade"
+  stagger={0.05}
+  duration={0.8}
+  smoothing={0}
+  baseOpacity={0.1}
+  baseRotation={3}
+  baseOffset={0}
   enableBlur={true}
-  baseRotation={5}
-  blurStrength={10}
+  blurStrength={4}
 >
   When does a man die? When he is hit by a bullet? No! When he suffers a disease?
   No! When he ate a soup made out of a poisonous mushroom?

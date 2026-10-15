@@ -1,42 +1,110 @@
-.counter-container {
+.counter {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.counter__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.counter__row {
+  display: inline-flex;
+  align-items: baseline;
+  margin: 0 calc(var(--counter-gap, 0px) / -2);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.counter__affix,
+.counter__digit,
+.counter__symbol {
+  margin: 0 calc(var(--counter-gap, 0px) / 2 * var(--counter-shown, 1));
+  opacity: var(--counter-shown, 1);
+}
+
+.counter__affix {
+  white-space: pre;
+}
+
+.counter__digit {
   position: relative;
   display: inline-block;
+  box-sizing: content-box;
+  line-height: calc(1em + var(--counter-padding, 0px));
+  text-align: center;
 }
 
-.counter-counter {
-  display: flex;
-  overflow: hidden;
-  line-height: 1;
+.counter__sizer {
+  visibility: hidden;
 }
 
-.counter-digit {
-  position: relative;
-  width: 1ch;
-  font-variant-numeric: tabular-nums;
-}
-
-.counter-number {
+.counter__window {
   position: absolute;
-  top: 0;
+  top: calc(var(--counter-fade, 0em) * -1);
   right: 0;
-  bottom: 0;
+  bottom: calc(var(--counter-fade, 0em) * -1);
   left: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.counter__strip {
+  position: absolute;
+  inset: 0;
+}
+
+.counter__numeral {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform;
 }
 
-.gradient-container {
-  pointer-events: none;
+.counter__symbol {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  clip-path: inset(-0.5em 0);
+}
+
+.counter__symbol-text {
+  display: inline-block;
+  white-space: pre;
+}
+
+.counter__blur {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.counter__measure {
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
-  right: 0;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.bottom-gradient {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.counter__measure > span {
+  display: inline-block;
 }

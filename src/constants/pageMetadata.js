@@ -3,9 +3,9 @@ export const PAGE_METADATA = {
     title: 'Introduction to React Bits | Free React Components',
     heading: 'Introduction',
     description:
-      'Choose, customize and install open-source React components in JavaScript or TypeScript, with plain CSS or Tailwind.',
+      'Free, open source animated React components and backgrounds in JavaScript or TypeScript, with plain CSS or Tailwind. See what is inside, how to install it and how it works with AI.',
     intro:
-      'React Bits is an open-source collection of expressive UI components for adding motion and personality without adopting an entire design system.'
+      'React Bits is a free, open source library of animated React components and backgrounds that you copy into your project and make your own.'
   },
   '/get-started/installation': {
     title: 'Install React Bits Components | React Bits',

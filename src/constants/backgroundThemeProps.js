@@ -1,14 +1,12 @@
 export const BACKGROUND_LIGHT_PROPS = {
-  'aero-shards': {
-    backgroundColor: '#ffffff'
-  },
-  'acid-squares': { lightMode: true, color: '#ffffff', accentColor: '#8fd61f' },
+  'aero-shards': { lightMode: true, shardColor: '#7c5cbf', accentColor: '#a855f7' },
+  'acid-squares': { lightMode: true, color: '#ffffff', accentColor: '#ec4899', secondaryColor: '#4f46e5' },
   antigravity: { lightMode: true },
   aurora: { lightMode: true },
   balatro: { lightMode: true },
   ballpit: { colors: ['#18181b'] },
   beams: { lightMode: true },
-  'crt-warp': { color: '#7c3aed', backgroundColor: '#ffffff', bloom: 0.75, noise: 0.055, brightness: 0.72 },
+  'crt-warp': { lightMode: true, color: '#7c3aed', backgroundColor: '#ffffff', bloom: 0.6, noise: 0.05 },
   'color-bends': { lightMode: true, color: '#6d28d9', intensity: 1.2, noise: 0.08 },
   'dark-veil': { lightMode: true },
   dither: { waveColor: '#9e9e9e', backgroundColor: '#ffffff' },
@@ -21,8 +19,9 @@ export const BACKGROUND_LIGHT_PROPS = {
   'floating-lines': { lightMode: true },
   galaxy: { lightMode: true },
   'gradient-blinds': { lightMode: true, gradientColors: ['#be185d', '#5b21b6'], noise: 0.28 },
-  'gradient-waves': { horizonColor: '#5b21b6', waveColor: '#be185d', crestColor: '#18181b', grainIntensity: 0.025 },
-  'ghost-fibers': { lightMode: true },
+  'gradient-waves': { lightMode: true, horizonColor: '#8b5cf6', waveColor: '#e879f9', crestColor: '#f5d0fe' },
+  'ghost-fibers': { lightMode: true, glowColor: '#7c3aed', lineColor: '#4c1d95', secondaryColor: '#a78bfa' },
+  'gradient-ascii': { lightMode: true, colors: ['#4f8ff7', '#e8f0ff', '#b4d0ff', '#7cb4fb'] },
   grainient: { lightMode: true },
   'grid-distortion': { imageSrc: '/assets/demo/day-landscape.webp' },
   'grid-motion': { theme: 'light' },
@@ -46,16 +45,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   'liquid-ether': { lightMode: true },
   'magic-rings': { theme: 'light', color: '#7C3AED', colorTwo: '#4F46E5' },
   'magnet-lines': { lineColor: '#27272a' },
-  'molten-metal': {
-    lightMode: true,
-    backgroundColor: '#ffffff',
-    color1: '#ede9fe',
-    color2: '#a855f7',
-    color3: '#312e81',
-    glow: 1.25,
-    blackPoint: 0.025,
-    brightness: 1.2
-  },
+  'molten-metal': { lightMode: true, colors: ['#8b5cf6', '#c026d3'], coreColor: '#7e22ce' },
   orb: { backgroundColor: '#ffffff', hue: 275 },
   particles: { lightMode: true },
   'pixel-blast': { lightMode: true, color: '#6D28D9', accentColor: '#6D28D9' },
@@ -77,14 +67,26 @@ export const BACKGROUND_LIGHT_PROPS = {
   waves: { lightMode: true, accentColor: '#18181b' },
   'web-threads': {
     lightMode: true,
-    backgroundColor: '#ffffff',
-    color1: '#6d28d9',
-    color2: '#ec4899',
-    color3: '#06b6d4',
+    colors: ['#6d28d9', '#ec4899'],
     glow: 0.018,
     brightness: 0.82,
-    grainIntensity: 0.015
+    grain: 0.015
   }
+};
+
+export const STUDIO_DARK_PROPS = {
+  'micro-slats': { backgroundColor: '#120f17' },
+  'pattern-waves': { backgroundColor: '#120f17' },
+  'shape-waves': { backgroundColor: '#120f17' }
+};
+
+export const STUDIO_LIGHT_PROPS = {
+  'click-spark': { sparkColor: '#18181b' },
+  'laser-flow': { theme: 'light' },
+  'magnet-lines': { accentColor: '#18181b' },
+  'micro-slats': { glintColor: '#6B21A8', backgroundColor: '#ffffff' },
+  'pattern-waves': { color: '#18181b', backgroundColor: '#ffffff' },
+  'shape-waves': { color: '#8a8a8a', hoverColor: '#18181b', backgroundColor: '#ffffff' }
 };
 
 export const getBackgroundLightProps = () => {

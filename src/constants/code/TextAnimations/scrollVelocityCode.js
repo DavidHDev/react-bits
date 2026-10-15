@@ -7,10 +7,15 @@ import tsTailwind from '@ts-tailwind/TextAnimations/ScrollVelocity/ScrollVelocit
 export const scrollVelocity = {
   dependencies: `motion`,
   usage: `import ScrollVelocity from './ScrollVelocity';
-  
+
 <ScrollVelocity
-  texts={['React Bits', 'Scroll Down']} 
-  velocity={velocity} 
+  texts={['React Bits', 'Scroll Down']}
+  velocity={100}
+  skewWithVelocity={16}
+  scaleWithVelocity={0.18}
+  draggable
+  fontSize={104}
+  fontWeight={900}
   className="custom-scroll-text"
 />`,
   code,

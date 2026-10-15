@@ -15,12 +15,16 @@ const handleAnimationComplete = () => {
 <SplitText
   text="Hello, GSAP!"
   className="text-2xl font-semibold text-center"
-  delay={100}
-  duration={0.6}
-  ease="power3.out"
+  effect="rise"
   splitType="chars"
-  from={{ opacity: 0, y: 40 }}
-  to={{ opacity: 1, y: 0 }}
+  delay={50}
+  duration={1.25}
+  staggerFrom="start"
+  trigger="view"
+  hoverEffect="lift"
+  loop={false}
+  loopDelay={1.5}
+  mask={false}
   threshold={0.1}
   rootMargin="-100px"
   textAlign="center"

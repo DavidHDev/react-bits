@@ -8,16 +8,21 @@ export const particleText = {
   dependencies: ``,
   usage: `import ParticleText from './ParticleText';
 
-<div style={{ width: '100%', height: 360, background: '#09090f' }}>
+<div style={{ width: '100%', height: 360 }}>
   <ParticleText
     text="Launch Faster"
     particleSize={2}
     density={4}
-    color="#ffffff"
-    highlightColor="#8b5cf6"
+    color="currentColor"
+    highlightColor="#ff5a36"
+    highlightMode="motion"
+    shape="circle"
+    intro="gather"
     scatter={180}
     gatherDuration={1600}
     stagger={420}
+    clickBurst
+    burstStrength={1}
     pointerRepel={40}
     repelRadius={120}
     idleDrift={0.7}

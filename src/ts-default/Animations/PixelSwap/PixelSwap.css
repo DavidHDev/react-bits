@@ -18,40 +18,6 @@
   height: 100%;
 }
 
-.pixel-swap__layer[data-visible='false'],
-.pixel-swap[data-swapping] .pixel-swap__layer {
+.pixel-swap__layer[data-visible='false'] {
   visibility: hidden;
-}
-
-.pixel-swap__wall {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.pixel-swap__tile {
-  position: absolute;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.pixel-swap__face {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-.pixel-swap__piece {
-  position: absolute;
-}
-
-.pixel-swap__shade {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
 }

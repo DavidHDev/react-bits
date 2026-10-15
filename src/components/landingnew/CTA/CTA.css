@@ -1,126 +1,101 @@
-/* ══════════════════════════════════════════════
-   CTA (Final)
-   ══════════════════════════════════════════════ */
-
-.ln-cta-section {
-  position: relative;
-  width: 100%;
-  padding: 100px 0 160px;
-  background: #120f17;
-  z-index: 4;
-  overflow: hidden;
-}
-
-.ln-test-section + .ln-cta-section {
-  padding-top: clamp(24px, 3vw, 40px);
-}
-
-.ln-cta-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 500px;
-  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.025) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ─── Inner container ─── */
-
-.ln-cta-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1324px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.ln-cta-card-wrapper {
-  position: relative;
-  padding: 6px;
-  border: 1px solid transparent;
-  border-radius: 34px;
-  background: var(--surface-ghost-track);
-  box-shadow: var(--surface-ghost-highlight);
-}
-
-/* ─── Card ─── */
-
 .ln-cta-card {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  padding: 100px 0;
-  border-radius: 28px;
+  margin: 6px 6px 0;
+  padding: clamp(80px, 7.5vw, 104px) 24px clamp(120px, 11vw, 156px);
+  border-radius: 18px;
   background: #0e0b13;
   overflow: hidden;
+  text-align: center;
+  isolation: isolate;
+}
+
+.ln-cta-card::after {
+  position: absolute;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+  content: '';
+  inset: 0;
+  pointer-events: none;
 }
 
 .ln-cta-bg {
+  --ln-cta-fade: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 22%,
+    rgb(0 0 0 / 0.009) 27.6%,
+    rgb(0 0 0 / 0.058) 33.2%,
+    rgb(0 0 0 / 0.163) 38.8%,
+    rgb(0 0 0 / 0.317) 44.4%,
+    rgb(0 0 0 / 0.5) 50%,
+    rgb(0 0 0 / 0.683) 55.6%,
+    rgb(0 0 0 / 0.837) 61.2%,
+    rgb(0 0 0 / 0.942) 66.8%,
+    rgb(0 0 0 / 0.991) 72.4%,
+    #000 78%
+  );
   position: absolute;
   inset: 0;
   z-index: 0;
-  mix-blend-mode: screen;
   border-radius: inherit;
   overflow: hidden;
   pointer-events: none;
-  -webkit-mask: radial-gradient(120% 130% at 50% 50%, #000 55%, transparent 100%);
-  mask: radial-gradient(120% 130% at 50% 50%, #000 55%, transparent 100%);
+  -webkit-mask: var(--ln-cta-fade);
+  mask: var(--ln-cta-fade);
 }
 
-.ln-cta-band {
-  position: absolute;
-  inset: 0;
+.ln-cta-bg > * {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: scaleX(1.18);
 }
-
-/* ─── Headlines ─── */
 
 .ln-cta-headline {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 12px;
+  color: #fff;
   font-family: 'Geist', sans-serif;
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -2px;
-  color: #fff;
-  margin: 0 0 12px;
-  position: relative;
-  z-index: 1;
 }
 
 .ln-cta-sub {
+  position: relative;
+  z-index: 1;
+  max-width: 44ch;
+  margin: 0 0 32px;
+  color: rgba(255, 255, 255, 0.65);
   font-family: 'Geist', sans-serif;
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.65);
-  margin: 0 0 32px;
-  max-width: 44ch;
-  position: relative;
-  z-index: 1;
 }
 
-/* ─── Buttons ─── */
-
 .ln-cta-buttons {
-  display: flex;
-  gap: 10px;
   position: relative;
   z-index: 1;
+  display: flex;
+  gap: 10px;
 }
 
 .ln-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 10px;
   font-family: 'Geist', sans-serif;
   font-size: 13px;
   font-weight: 500;
-  padding: 11px 22px;
-  border-radius: 10px;
+  gap: 8px;
   text-decoration: none;
   transition:
     filter 0.2s ease,
@@ -129,10 +104,19 @@
 }
 
 .ln-cta-btn--primary {
+  padding-right: 19px;
+  border: 1px solid transparent;
   background: #fff;
   color: #120f17;
+}
+
+.ln-cta-btn--secondary {
   border: 1px solid transparent;
-  padding-right: 19px;
+  background: var(--surface-ghost);
+  box-shadow: var(--surface-ghost-highlight);
+  color: #fff;
+  -webkit-backdrop-filter: var(--surface-ghost-blur);
+  backdrop-filter: var(--surface-ghost-blur);
 }
 
 .ln-cta-btn:active {
@@ -151,24 +135,15 @@
   }
 }
 
-.ln-cta-btn--secondary {
-  background: var(--surface-ghost);
-  color: #fff;
-  border: 1px solid transparent;
-  box-shadow: var(--surface-ghost-highlight);
-  backdrop-filter: var(--surface-ghost-blur);
-  -webkit-backdrop-filter: var(--surface-ghost-blur);
+@media (max-width: 700px) {
+  .ln-cta-card {
+    border-radius: 14px;
+  }
 }
 
-/* ─── Responsive ─── */
-
 @media (max-width: 600px) {
-  .ln-cta-section {
-    padding: 72px 0 96px;
-  }
-
   .ln-cta-card {
-    padding: 36px 24px 32px;
+    padding: 56px 20px 96px;
   }
 
   .ln-cta-buttons {
@@ -189,24 +164,16 @@
   }
 }
 
-/* ── Light theme ── */
-:root[data-theme='light'] .ln-cta-section {
-  background: #fff;
-}
-
-:root[data-theme='light'] .ln-cta-card-wrapper {
-  border-color: var(--border-subtle);
-  background: #fff;
-  box-shadow: none;
-}
-
 :root[data-theme='light'] .ln-cta-card {
-  background: #fbfbfc;
+  background: #fff;
+}
+
+:root[data-theme='light'] .ln-cta-card::after {
+  box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.05);
 }
 
 :root[data-theme='light'] .ln-cta-bg {
   opacity: 0.88;
-  mix-blend-mode: normal;
 }
 
 :root[data-theme='light'] .ln-cta-headline {
@@ -219,16 +186,16 @@
 
 :root[data-theme='light'] .ln-cta-btn--primary {
   background: #18181b;
-  color: #fff;
   box-shadow: 0 5px 18px rgba(24, 24, 27, 0.14);
+  color: #fff;
 }
 
 :root[data-theme='light'] .ln-cta-btn--secondary {
   background: #fff;
   box-shadow: 0 1px 2px rgba(24, 24, 27, 0.1);
   color: var(--text-primary);
-  backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 @media (hover: hover) and (pointer: fine) {

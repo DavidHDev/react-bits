@@ -521,7 +521,11 @@
 
 .browse-card-well {
   position: relative;
-  background-color: #0e0b13;
+  background-color: #120f17;
+}
+
+:root[data-theme='light'] .browse-card-well {
+  background-color: #ffffff;
 }
 
 .browse-card-well::after {
@@ -534,26 +538,12 @@
   pointer-events: none;
 }
 
-/* Preview clips were recorded across a long stretch of time against different backdrops:
-   most are on pure black, but a later batch sits on the #120F15 surface colour and some on
-   a dark purple. `screen` blending drops a pure black backdrop out completely, so those
-   lifted ones instead composite their pedestal on top of the well (#0e0b13 -> #1f1a26) and
-   read as visibly washed out next to the rest.
-
-   The filter is a black-point correction that removes the pedestal before blending:
-     out = in * 1.0807 - 0.0810   (brightness k, then contrast c => slope k*c, offset .5(1-c))
-   which maps input 19/255 to 0 while leaving 1.0 at 1.0, so the lifted backdrops go black,
-   already-black clips are untouched, and highlights are not clipped. Deliberately built
-   from the CSS filter shorthands rather than an SVG feComponentTransfer, since those stay
-   on the GPU-accelerated path across a grid of simultaneously playing videos. */
 .browse-card-video {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
   pointer-events: none;
-  mix-blend-mode: screen;
-  filter: brightness(0.93) contrast(1.162);
 }
 
 .browse-card-empty {

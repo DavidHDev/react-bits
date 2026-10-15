@@ -1,0 +1,307 @@
+.ln-how-section {
+  --how-ink: #f6f4f9;
+  --how-muted: rgba(246, 244, 249, 0.6);
+  --how-faint: rgba(246, 244, 249, 0.38);
+  --how-kw: rgba(246, 244, 249, 0.42);
+  --how-str: rgba(246, 244, 249, 0.62);
+  --how-edit: rgba(255, 255, 255, 0.05);
+  --how-hover: rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  padding: 112px 0;
+  background: #0e0b13;
+  font-family: 'Geist', sans-serif;
+}
+
+.ln-how-inner {
+  display: grid;
+  max-width: 1324px;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 64px;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.ln-how-title {
+  margin: 0;
+  color: var(--how-ink);
+  text-wrap: balance;
+}
+
+.ln-how-sub {
+  max-width: 44ch;
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.ln-how-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  margin-top: 30px;
+  padding: 0 17px 0 21px;
+  border-radius: 13px;
+  background: #221e29;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  color: var(--how-ink);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition:
+    background var(--transition-fast),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.ln-how-btn:hover {
+  background: #2b2633;
+  color: var(--how-ink);
+}
+
+.ln-how-btn:active {
+  transform: scale(0.97);
+}
+
+.ln-how-btn svg {
+  transition: transform 260ms var(--ease-out);
+}
+
+.ln-how-btn:hover svg {
+  transform: translateX(2px);
+}
+
+.ln-how-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ln-how-window {
+  display: flex;
+  flex-direction: column;
+  padding: 0 6px 6px;
+  border-radius: 18px;
+  background: var(--ln-shell);
+  box-shadow:
+    var(--ln-shell-shadow),
+    inset 0 0 0 1px var(--ln-shell-edge),
+    inset 0 1px 0 var(--ln-shell-highlight);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  backdrop-filter: blur(24px) saturate(1.5);
+}
+
+.ln-how-terminal {
+  width: 62%;
+  align-self: flex-start;
+}
+
+.ln-how-editor {
+  width: 86%;
+  align-self: flex-end;
+}
+
+.ln-how-bar {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding-top: 2px;
+  color: var(--how-faint);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.ln-how-copy {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--how-faint);
+  cursor: pointer;
+  place-items: center;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.ln-how-copy:hover {
+  background: var(--how-hover);
+  color: var(--how-ink);
+}
+
+.ln-how-well {
+  position: relative;
+  margin: 0;
+  border-radius: 12px;
+  background: var(--ln-well);
+  box-shadow: inset 0 0 0 1px var(--ln-well-edge);
+}
+
+.ln-how-code {
+  padding: 16px 20px 18px 0;
+  overflow: hidden;
+  color: var(--how-ink);
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 13.5px;
+  line-height: 1.75;
+  counter-reset: how-line;
+}
+
+.ln-how-line {
+  position: relative;
+  display: block;
+  padding-left: 52px;
+  white-space: pre;
+  counter-increment: how-line;
+}
+
+.ln-how-line::before {
+  position: absolute;
+  left: 0;
+  width: 32px;
+  color: var(--how-faint);
+  content: counter(how-line);
+  text-align: right;
+}
+
+.ln-how-line.is-edited {
+  background: var(--how-edit);
+}
+
+.ln-how-term {
+  padding: 12px 16px 13px;
+  color: var(--how-ink);
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.ln-how-term-line {
+  white-space: pre;
+}
+
+.ln-how-t-kw {
+  color: var(--how-kw);
+}
+
+.ln-how-t-str {
+  color: var(--how-str);
+}
+
+.ln-how-t-attr,
+.ln-how-t-muted {
+  color: var(--how-muted);
+}
+
+.ln-how-t-punc {
+  color: var(--how-faint);
+}
+
+.ln-how-t-ink {
+  color: var(--how-ink);
+}
+
+@media (max-width: 1000px) {
+  .ln-how-inner {
+    align-items: start;
+    gap: 48px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .ln-how-section {
+    padding: 80px 0;
+  }
+
+  .ln-how-inner {
+    padding: 0 16px;
+  }
+
+  .ln-how-btn {
+    display: flex;
+    justify-content: center;
+    height: 48px;
+  }
+
+  .ln-how-visual {
+    gap: 10px;
+  }
+
+  .ln-how-editor,
+  .ln-how-terminal {
+    width: 100%;
+  }
+
+  .ln-how-code {
+    font-size: 12px;
+  }
+
+  .ln-how-line {
+    padding-left: 40px;
+  }
+
+  .ln-how-line::before {
+    width: 24px;
+  }
+
+  .ln-how-term-line {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ln-how-btn,
+  .ln-how-btn svg,
+  .ln-how-copy {
+    transition: none;
+  }
+
+  .ln-how-btn:active,
+  .ln-how-btn:hover svg {
+    transform: none;
+  }
+}
+
+:root[data-theme='light'] .ln-how-section {
+  --how-ink: #17151c;
+  --how-muted: #5b5866;
+  --how-faint: #9b98a4;
+  --how-kw: rgba(23, 21, 28, 0.42);
+  --how-str: rgba(23, 21, 28, 0.62);
+  --how-edit: rgba(24, 24, 27, 0.045);
+  --how-hover: rgba(24, 24, 27, 0.045);
+  background: #fff;
+}
+
+:root[data-theme='light'] .ln-how-sub {
+  color: #71717a;
+}
+
+:root[data-theme='light'] .ln-how-btn {
+  background: #fff;
+  box-shadow:
+    inset 0 0 0 1px rgba(24, 24, 27, 0.07),
+    0 1px 2px rgba(24, 24, 27, 0.04);
+}
+
+:root[data-theme='light'] .ln-how-btn:hover {
+  background: #fafafa;
+}

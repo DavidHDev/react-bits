@@ -13,6 +13,7 @@ import PreviewSwitch from '../../components/common/Preview/PreviewSwitch';
 
 import Noise from '../../content/Animations/Noise/Noise';
 import { noise } from '../../constants/code/Animations/noiseCode';
+import { DEFAULT_PROPS, PRESET_OPTIONS, presetProps } from './presets/Noise';
 
 const PHOTO = 'https://images.unsplash.com/photo-1762846818262-33c197852fa8?w=1600&q=80&auto=format&fit=crop';
 
@@ -24,46 +25,6 @@ const SCENES = {
   dark: { background: '#0b0b0d' },
   paper: { background: '#f3efe6' }
 };
-
-const DEFAULT_PROPS = {
-  preset: 'film',
-  scene: 'photo',
-  opacity: 0.2,
-  size: 1,
-  fps: 24,
-  blendMode: 'overlay',
-  contrast: 0.6,
-  colored: false,
-  dust: 0,
-  scratches: 0,
-  scanlines: 0,
-  flicker: 0
-};
-
-const PRESETS = {
-  film: {},
-  studio: { scene: 'studio', opacity: 0.15, fps: 18, blendMode: 'overlay', contrast: 0.5 },
-  dust: { opacity: 0.16, fps: 18, dust: 0.55, scratches: 0.5, flicker: 0.25 },
-  static: {
-    scene: 'dark',
-    opacity: 0.42,
-    size: 2,
-    fps: 30,
-    blendMode: 'screen',
-    contrast: 1,
-    scanlines: 0.4,
-    flicker: 0.35
-  },
-  paper: { scene: 'paper', opacity: 0.5, fps: 0, blendMode: 'soft-light', contrast: 0.3 }
-};
-
-const PRESET_OPTIONS = [
-  { value: 'film', label: 'Film' },
-  { value: 'studio', label: 'Studio' },
-  { value: 'dust', label: 'Dust' },
-  { value: 'static', label: 'Static' },
-  { value: 'paper', label: 'Paper' }
-];
 
 const BLEND_OPTIONS = [
   { value: 'normal', label: 'Normal' },
@@ -80,8 +41,7 @@ const NoiseDemo = () => {
   const look = SCENES[scene] ?? SCENES.photo;
 
   const applyPreset = value => {
-    const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(key => [key, DEFAULT_PROPS[key]]));
-    updateProps({ ...base, ...PRESETS[value], preset: value });
+    updateProps({ ...presetProps(value), preset: value });
   };
 
   const propData = useMemo(

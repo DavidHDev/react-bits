@@ -3,11 +3,13 @@
 }
 
 .scroll-reveal-text {
+  display: block;
   font-size: clamp(1.6rem, 4vw, 3rem);
   line-height: 1.5;
   font-weight: 600;
 }
 
-.word {
+.scroll-reveal-word,
+.scroll-reveal-piece {
   display: inline-block;
 }

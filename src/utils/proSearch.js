@@ -36,16 +36,27 @@ const SECTIONS = [
 
 const lower = value => (value || '').toString().toLowerCase();
 
+const compact = value => value.replace(/[^a-z0-9]/g, '');
+
+const wordTails = value => {
+  const words = value.split(/[^a-z0-9]+/).filter(Boolean);
+  return words.map((_, index) => words.slice(index).join(''));
+};
+
 function scoreToken(item, token) {
   const name = lower(item.name);
+  const flatToken = compact(token);
+  const tails = flatToken ? wordTails(name) : [];
 
-  if (name === token) return FIELD_SCORE.nameExact;
-  if (name.startsWith(token)) return FIELD_SCORE.namePrefix;
-  if (name.includes(token)) return FIELD_SCORE.nameIncludes;
+  if (name === token || tails[0] === flatToken) return FIELD_SCORE.nameExact;
+  if (name.startsWith(token) || tails[0]?.startsWith(flatToken)) return FIELD_SCORE.namePrefix;
+  if (name.includes(token) || tails.some(tail => tail.startsWith(flatToken))) return FIELD_SCORE.nameIncludes;
 
   const tags = (item.tags || []).map(lower);
-  if (tags.some(tag => tag === token)) return FIELD_SCORE.tagExact;
-  if (tags.some(tag => tag.startsWith(token))) return FIELD_SCORE.tagPrefix;
+  const flatTags = flatToken ? tags.map(compact) : [];
+  if (tags.some(tag => tag === token) || flatTags.some(tag => tag === flatToken)) return FIELD_SCORE.tagExact;
+  if (tags.some(tag => tag.startsWith(token)) || flatTags.some(tag => tag.startsWith(flatToken)))
+    return FIELD_SCORE.tagPrefix;
 
   const grouping = `${lower(item.category)} ${lower(item.group)}`;
   if (grouping.includes(token)) return FIELD_SCORE.categoryIncludes;
@@ -55,7 +66,8 @@ function scoreToken(item, token) {
 
   // Last resort, so "carrousel" still finds Carousel. Only ever applied to the
   // name; fuzzy-matching prose produces noise.
-  if (token.length > 3 && fuzzyMatch(name, token)) return FIELD_SCORE.fuzzyName;
+  if (token.length > 3 && (fuzzyMatch(name, token) || fuzzyMatch(compact(name), flatToken)))
+    return FIELD_SCORE.fuzzyName;
 
   return 0;
 }

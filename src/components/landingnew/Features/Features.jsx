@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence } from 'motion/react';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Palette, Shapes, ImageIcon } from 'lucide-react';
@@ -80,27 +80,15 @@ const ComponentMarquee = () => (
 
 const ToolsFloat = () => (
   <div className="ln-feat-tools">
-    <motion.div
-      className="ln-feat-tool-box ln-feat-tool-box--center"
-      animate={{ y: [-4, 4, -4] }}
-      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-    >
+    <div className="ln-feat-tool-box ln-feat-tool-box--center ln-feat-float ln-feat-float--center">
       <Palette size={22} />
-    </motion.div>
-    <motion.div
-      className="ln-feat-tool-box ln-feat-tool-box--left"
-      animate={{ y: [3, -3, 3], x: [-3, 2, -3] }}
-      transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
-    >
+    </div>
+    <div className="ln-feat-tool-box ln-feat-tool-box--left ln-feat-float ln-feat-float--left">
       <Shapes size={18} />
-    </motion.div>
-    <motion.div
-      className="ln-feat-tool-box ln-feat-tool-box--right"
-      animate={{ y: [3, -3, 3], x: [3, -2, 3] }}
-      transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-    >
+    </div>
+    <div className="ln-feat-tool-box ln-feat-tool-box--right ln-feat-float ln-feat-float--right">
       <ImageIcon size={18} />
-    </motion.div>
+    </div>
   </div>
 );
 
@@ -176,7 +164,7 @@ const VariantTabs = () => {
   return (
     <div className="ln-feat-vrows" ref={ref}>
       {VARIANTS.map((v, i) => (
-        <motion.div
+        <m.div
           key={i}
           className="ln-feat-vrow"
           animate={{
@@ -191,7 +179,7 @@ const VariantTabs = () => {
             <div className="ln-feat-vrow-bar" style={{ width: `${20 + ((i + 2) % 4) * 7}%` }} />
             <div className="ln-feat-vrow-bar" style={{ width: `${45 + ((i + 1) % 3) * 10}%` }} />
           </div>
-        </motion.div>
+        </m.div>
       ))}
     </div>
   );
@@ -313,7 +301,7 @@ const AITerminal = () => {
   return (
     <div className="ln-feat-aichat" ref={ref}>
       <AnimatePresence mode="wait">
-        <motion.div
+        <m.div
           key={idx}
           className="ln-feat-aichat-inner"
           initial={{ opacity: 0 }}
@@ -347,7 +335,7 @@ const AITerminal = () => {
           {phase === 'code' && (
             <div className="ln-feat-aichat-code-block">
               {codeLines >= 1 && (
-                <motion.div
+                <m.div
                   className="ln-feat-aichat-code-line"
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -359,20 +347,20 @@ const AITerminal = () => {
                       {t.text}
                     </span>
                   ))}
-                </motion.div>
+                </m.div>
               )}
               {codeLines >= 2 && (
-                <motion.div
+                <m.div
                   className="ln-feat-aichat-code-line"
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.2 }}
                 >
                   <span className="ln-feat-aichat-ln">2</span>
-                </motion.div>
+                </m.div>
               )}
               {codeLines >= 3 && (
-                <motion.div
+                <m.div
                   className="ln-feat-aichat-code-line"
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -384,11 +372,11 @@ const AITerminal = () => {
                       {t.text}
                     </span>
                   ))}
-                </motion.div>
+                </m.div>
               )}
             </div>
           )}
-        </motion.div>
+        </m.div>
       </AnimatePresence>
     </div>
   );
@@ -419,7 +407,7 @@ const StarCard = () => {
             d="M0 45 C15 43,30 40,45 36 C60 32,75 30,90 26 C105 22,115 24,125 20 C140 15,155 12,170 10 C180 8,190 5,200 3 L200 50 L0 50Z"
             fill="url(#starFill)"
           />
-          <motion.path
+          <m.path
             d="M0 45 C15 43,30 40,45 36 C60 32,75 30,90 26 C105 22,115 24,125 20 C140 15,155 12,170 10 C180 8,190 5,200 3"
             stroke="rgba(255,255,255,0.5)"
             strokeWidth="1.5"
@@ -484,7 +472,7 @@ const Features = () => (
 
       <div className="ln-features-grid">
         {CARDS.map((card, i) => (
-          <motion.div
+          <m.div
             key={card.title}
             className={`ln-features-card ln-features-card--span-${card.span}`}
             initial={{ opacity: 0, y: 24 }}
@@ -497,7 +485,7 @@ const Features = () => (
               <h3>{card.title}</h3>
               <p>{card.desc}</p>
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
     </div>

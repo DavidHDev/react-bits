@@ -209,3 +209,12 @@
 :root[data-theme='light'] .ln-demo-caption:focus-visible {
   outline-color: #18181b;
 }
+
+.ln-demo-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+}

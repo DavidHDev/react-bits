@@ -1200,11 +1200,9 @@
 		{
 			"name": "Strands-JS-CSS",
 			"title": "Strands",
-			"description": "Glowing ribbon-like strands that ripple and weave across a transparent canvas.",
+			"description": "Spectral strands that twist inside a frosted glass orb and swell into a smooth bulge where they come together, like the new Siri.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1221,11 +1219,9 @@
 		{
 			"name": "Strands-JS-TW",
 			"title": "Strands",
-			"description": "Glowing ribbon-like strands that ripple and weave across a transparent canvas.",
+			"description": "Spectral strands that twist inside a frosted glass orb and swell into a smooth bulge where they come together, like the new Siri.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1237,11 +1233,9 @@
 		{
 			"name": "Strands-TS-CSS",
 			"title": "Strands",
-			"description": "Glowing ribbon-like strands that ripple and weave across a transparent canvas.",
+			"description": "Spectral strands that twist inside a frosted glass orb and swell into a smooth bulge where they come together, like the new Siri.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1258,11 +1252,9 @@
 		{
 			"name": "Strands-TS-TW",
 			"title": "Strands",
-			"description": "Glowing ribbon-like strands that ripple and weave across a transparent canvas.",
+			"description": "Spectral strands that twist inside a frosted glass orb and swell into a smooth bulge where they come together, like the new Siri.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -1538,7 +1530,7 @@
 		{
 			"name": "PixelSwap-JS-CSS",
 			"title": "PixelSwap",
-			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
+			"description": "New content builds in pixel by pixel in a springy wave that starts wherever the cursor enters.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1557,7 +1549,7 @@
 		{
 			"name": "PixelSwap-JS-TW",
 			"title": "PixelSwap",
-			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
+			"description": "New content builds in pixel by pixel in a springy wave that starts wherever the cursor enters.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1571,7 +1563,7 @@
 		{
 			"name": "PixelSwap-TS-CSS",
 			"title": "PixelSwap",
-			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
+			"description": "New content builds in pixel by pixel in a springy wave that starts wherever the cursor enters.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1590,7 +1582,7 @@
 		{
 			"name": "PixelSwap-TS-TW",
 			"title": "PixelSwap",
-			"description": "A wall of 3D tiles that flip over in a wave from the cursor to reveal new content.",
+			"description": "New content builds in pixel by pixel in a springy wave that starts wherever the cursor enters.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1736,21 +1728,26 @@
 		{
 			"name": "SplashCursor-JS-CSS",
 			"title": "SplashCursor",
-			"description": "Liquid splash burst at cursor with curling ripples and waves.",
+			"description": "A fluid simulation that trails the cursor in swirling ink and bursts into a splash on click.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "SplashCursor.css",
+					"target": "@components/SplashCursor.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "SplashCursor/SplashCursor.jsx"
+					"path": "SplashCursor.jsx"
 				}
 			]
 		},
 		{
 			"name": "SplashCursor-JS-TW",
 			"title": "SplashCursor",
-			"description": "Liquid splash burst at cursor with curling ripples and waves.",
+			"description": "A fluid simulation that trails the cursor in swirling ink and bursts into a splash on click.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -1764,21 +1761,26 @@
 		{
 			"name": "SplashCursor-TS-CSS",
 			"title": "SplashCursor",
-			"description": "Liquid splash burst at cursor with curling ripples and waves.",
+			"description": "A fluid simulation that trails the cursor in swirling ink and bursts into a splash on click.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
+					"type": "registry:file",
+					"path": "SplashCursor.css",
+					"target": "@components/SplashCursor.css"
+				},
+				{
 					"type": "registry:component",
-					"path": "SplashCursor/SplashCursor.tsx"
+					"path": "SplashCursor.tsx"
 				}
 			]
 		},
 		{
 			"name": "SplashCursor-TS-TW",
 			"title": "SplashCursor",
-			"description": "Liquid splash burst at cursor with curling ripples and waves.",
+			"description": "A fluid simulation that trails the cursor in swirling ink and bursts into a splash on click.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -3622,9 +3624,7 @@
 			"title": "VariableProximity",
 			"description": "Letter styling changes continuously with pointer distance mapping.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3643,9 +3643,7 @@
 			"title": "VariableProximity",
 			"description": "Letter styling changes continuously with pointer distance mapping.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3659,9 +3657,7 @@
 			"title": "VariableProximity",
 			"description": "Letter styling changes continuously with pointer distance mapping.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -3680,9 +3676,7 @@
 			"title": "VariableProximity",
 			"description": "Letter styling changes continuously with pointer distance mapping.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5554,11 +5548,9 @@
 		{
 			"name": "Counter-JS-CSS",
 			"title": "Counter",
-			"description": "Flexible animated counter supporting increments + easing.",
+			"description": "An odometer-style number whose digits roll to every new value, with currency, separators and locales.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5575,11 +5567,9 @@
 		{
 			"name": "Counter-JS-TW",
 			"title": "Counter",
-			"description": "Flexible animated counter supporting increments + easing.",
+			"description": "An odometer-style number whose digits roll to every new value, with currency, separators and locales.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5591,11 +5581,9 @@
 		{
 			"name": "Counter-TS-CSS",
 			"title": "Counter",
-			"description": "Flexible animated counter supporting increments + easing.",
+			"description": "An odometer-style number whose digits roll to every new value, with currency, separators and locales.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5612,11 +5600,9 @@
 		{
 			"name": "Counter-TS-TW",
 			"title": "Counter",
-			"description": "Flexible animated counter supporting increments + easing.",
+			"description": "An odometer-style number whose digits roll to every new value, with currency, separators and locales.",
 			"type": "registry:component",
-			"dependencies": [
-				"motion@^12.23.12"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -5842,12 +5828,11 @@
 		{
 			"name": "ElasticSlider-JS-CSS",
 			"title": "ElasticSlider",
-			"description": "Slider handle stretches elastically then snaps with spring physics.",
+			"description": "A slider that grows under your cursor and stretches like rubber when pulled past either end, then springs back.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12",
-				"@chakra-ui/react@^3.20.0",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5865,10 +5850,11 @@
 		{
 			"name": "ElasticSlider-JS-TW",
 			"title": "ElasticSlider",
-			"description": "Slider handle stretches elastically then snaps with spring physics.",
+			"description": "A slider that grows under your cursor and stretches like rubber when pulled past either end, then springs back.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5881,12 +5867,11 @@
 		{
 			"name": "ElasticSlider-TS-CSS",
 			"title": "ElasticSlider",
-			"description": "Slider handle stretches elastically then snaps with spring physics.",
+			"description": "A slider that grows under your cursor and stretches like rubber when pulled past either end, then springs back.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12",
-				"@chakra-ui/react@^3.20.0",
-				"react-icons@^5.5.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5904,10 +5889,11 @@
 		{
 			"name": "ElasticSlider-TS-TW",
 			"title": "ElasticSlider",
-			"description": "Slider handle stretches elastically then snaps with spring physics.",
+			"description": "A slider that grows under your cursor and stretches like rubber when pulled past either end, then springs back.",
 			"type": "registry:component",
 			"dependencies": [
-				"motion@^12.23.12"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5920,10 +5906,11 @@
 		{
 			"name": "FlowingMenu-JS-CSS",
 			"title": "FlowingMenu",
-			"description": "Liquid flowing active indicator glides between menu items.",
+			"description": "A full-height menu with a liquid band that glides between rows and reveals a scrolling marquee of each item.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5941,10 +5928,11 @@
 		{
 			"name": "FlowingMenu-JS-TW",
 			"title": "FlowingMenu",
-			"description": "Liquid flowing active indicator glides between menu items.",
+			"description": "A full-height menu with a liquid band that glides between rows and reveals a scrolling marquee of each item.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5957,10 +5945,11 @@
 		{
 			"name": "FlowingMenu-TS-CSS",
 			"title": "FlowingMenu",
-			"description": "Liquid flowing active indicator glides between menu items.",
+			"description": "A full-height menu with a liquid band that glides between rows and reveals a scrolling marquee of each item.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -5978,10 +5967,11 @@
 		{
 			"name": "FlowingMenu-TS-TW",
 			"title": "FlowingMenu",
-			"description": "Liquid flowing active indicator glides between menu items.",
+			"description": "A full-height menu with a liquid band that glides between rows and reveals a scrolling marquee of each item.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6674,10 +6664,12 @@
 		{
 			"name": "Masonry-JS-CSS",
 			"title": "Masonry",
-			"description": "Responsive masonry layout with animated reflow + gaps optimization.",
+			"description": "A masonry gallery that springs into place, reflows as it resizes and opens images in a lightbox.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6695,10 +6687,12 @@
 		{
 			"name": "Masonry-JS-TW",
 			"title": "Masonry",
-			"description": "Responsive masonry layout with animated reflow + gaps optimization.",
+			"description": "A masonry gallery that springs into place, reflows as it resizes and opens images in a lightbox.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6711,10 +6705,12 @@
 		{
 			"name": "Masonry-TS-CSS",
 			"title": "Masonry",
-			"description": "Responsive masonry layout with animated reflow + gaps optimization.",
+			"description": "A masonry gallery that springs into place, reflows as it resizes and opens images in a lightbox.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -6732,10 +6728,12 @@
 		{
 			"name": "Masonry-TS-TW",
 			"title": "Masonry",
-			"description": "Responsive masonry layout with animated reflow + gaps optimization.",
+			"description": "A masonry gallery that springs into place, reflows as it resizes and opens images in a lightbox.",
 			"type": "registry:component",
 			"dependencies": [
-				"gsap@^3.13.0"
+				"react-dom@^19.0.0",
+				"@hugeicons/react@^1.1.10",
+				"@hugeicons/core-free-icons@^4.3.3"
 			],
 			"registryDependencies": [],
 			"files": [
@@ -8488,7 +8486,7 @@
 		{
 			"name": "AeroShards-JS-CSS",
 			"title": "AeroShards",
-			"description": "A GPU-driven wind sculpture of folded foil shards that responds to the pointer.",
+			"description": "Silk ribbons of thick glass shards streaming on layered depths among survey markers, catching light along their edges.",
 			"type": "registry:component",
 			"dependencies": [
 				"vgpu@^0.3.1"
@@ -8509,7 +8507,7 @@
 		{
 			"name": "AeroShards-JS-TW",
 			"title": "AeroShards",
-			"description": "A GPU-driven wind sculpture of folded foil shards that responds to the pointer.",
+			"description": "Silk ribbons of thick glass shards streaming on layered depths among survey markers, catching light along their edges.",
 			"type": "registry:component",
 			"dependencies": [
 				"vgpu@^0.3.1"
@@ -8525,7 +8523,7 @@
 		{
 			"name": "AeroShards-TS-CSS",
 			"title": "AeroShards",
-			"description": "A GPU-driven wind sculpture of folded foil shards that responds to the pointer.",
+			"description": "Silk ribbons of thick glass shards streaming on layered depths among survey markers, catching light along their edges.",
 			"type": "registry:component",
 			"dependencies": [
 				"vgpu@^0.3.1"
@@ -8546,7 +8544,7 @@
 		{
 			"name": "AeroShards-TS-TW",
 			"title": "AeroShards",
-			"description": "A GPU-driven wind sculpture of folded foil shards that responds to the pointer.",
+			"description": "Silk ribbons of thick glass shards streaming on layered depths among survey markers, catching light along their edges.",
 			"type": "registry:component",
 			"dependencies": [
 				"vgpu@^0.3.1"
@@ -8562,7 +8560,7 @@
 		{
 			"name": "GhostFibers-JS-CSS",
 			"title": "GhostFibers",
-			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
+			"description": "Layered ribbons of fine glowing fibers that twist, fold and drift through soft depth of field.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -8581,7 +8579,7 @@
 		{
 			"name": "GhostFibers-JS-TW",
 			"title": "GhostFibers",
-			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
+			"description": "Layered ribbons of fine glowing fibers that twist, fold and drift through soft depth of field.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -8595,7 +8593,7 @@
 		{
 			"name": "GhostFibers-TS-CSS",
 			"title": "GhostFibers",
-			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
+			"description": "Layered ribbons of fine glowing fibers that twist, fold and drift through soft depth of field.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -8614,7 +8612,7 @@
 		{
 			"name": "GhostFibers-TS-TW",
 			"title": "GhostFibers",
-			"description": "A deep-blue recursive fiber field with luminous bands, radial twisting and soft atmospheric glow.",
+			"description": "Layered ribbons of fine glowing fibers that twist, fold and drift through soft depth of field.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -8956,11 +8954,9 @@
 		{
 			"name": "CRTWarp-JS-CSS",
 			"title": "CRTWarp",
-			"description": "Full-canvas CRT plasma with curved distortion, scanlines, bloom and pointer interaction.",
+			"description": "A blocky plasma glowing on a curved CRT, with real scanlines, a phosphor mask, afterglow and a power-on intro.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8977,11 +8973,9 @@
 		{
 			"name": "CRTWarp-JS-TW",
 			"title": "CRTWarp",
-			"description": "Full-canvas CRT plasma with curved distortion, scanlines, bloom and pointer interaction.",
+			"description": "A blocky plasma glowing on a curved CRT, with real scanlines, a phosphor mask, afterglow and a power-on intro.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -8993,11 +8987,9 @@
 		{
 			"name": "CRTWarp-TS-CSS",
 			"title": "CRTWarp",
-			"description": "Full-canvas CRT plasma with curved distortion, scanlines, bloom and pointer interaction.",
+			"description": "A blocky plasma glowing on a curved CRT, with real scanlines, a phosphor mask, afterglow and a power-on intro.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9014,11 +9006,9 @@
 		{
 			"name": "CRTWarp-TS-TW",
 			"title": "CRTWarp",
-			"description": "Full-canvas CRT plasma with curved distortion, scanlines, bloom and pointer interaction.",
+			"description": "A blocky plasma glowing on a curved CRT, with real scanlines, a phosphor mask, afterglow and a power-on intro.",
 			"type": "registry:component",
-			"dependencies": [
-				"three@^0.180.0"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9690,11 +9680,9 @@
 		{
 			"name": "MoltenMetal-JS-CSS",
 			"title": "MoltenMetal",
-			"description": "Swirling caustic plasma filaments with molten, white-hot cores.",
+			"description": "Swirling caustic filaments with white-hot cores that heat up under the cursor and flare on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9711,11 +9699,9 @@
 		{
 			"name": "MoltenMetal-JS-TW",
 			"title": "MoltenMetal",
-			"description": "Swirling caustic plasma filaments with molten, white-hot cores.",
+			"description": "Swirling caustic filaments with white-hot cores that heat up under the cursor and flare on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9727,11 +9713,9 @@
 		{
 			"name": "MoltenMetal-TS-CSS",
 			"title": "MoltenMetal",
-			"description": "Swirling caustic plasma filaments with molten, white-hot cores.",
+			"description": "Swirling caustic filaments with white-hot cores that heat up under the cursor and flare on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9748,11 +9732,9 @@
 		{
 			"name": "MoltenMetal-TS-TW",
 			"title": "MoltenMetal",
-			"description": "Swirling caustic plasma filaments with molten, white-hot cores.",
+			"description": "Swirling caustic filaments with white-hot cores that heat up under the cursor and flare on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9764,11 +9746,9 @@
 		{
 			"name": "GradientWaves-JS-CSS",
 			"title": "GradientWaves",
-			"description": "Raymarched sine waves rolling toward a soft, hazy horizon.",
+			"description": "Lit satin waves rolling in from a hazy horizon, with a light that follows the cursor and swells on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9785,11 +9765,9 @@
 		{
 			"name": "GradientWaves-JS-TW",
 			"title": "GradientWaves",
-			"description": "Raymarched sine waves rolling toward a soft, hazy horizon.",
+			"description": "Lit satin waves rolling in from a hazy horizon, with a light that follows the cursor and swells on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9801,11 +9779,9 @@
 		{
 			"name": "GradientWaves-TS-CSS",
 			"title": "GradientWaves",
-			"description": "Raymarched sine waves rolling toward a soft, hazy horizon.",
+			"description": "Lit satin waves rolling in from a hazy horizon, with a light that follows the cursor and swells on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9822,11 +9798,9 @@
 		{
 			"name": "GradientWaves-TS-TW",
 			"title": "GradientWaves",
-			"description": "Raymarched sine waves rolling toward a soft, hazy horizon.",
+			"description": "Lit satin waves rolling in from a hazy horizon, with a light that follows the cursor and swells on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9838,11 +9812,9 @@
 		{
 			"name": "WebThreads-JS-CSS",
 			"title": "WebThreads",
-			"description": "Glowing sine threads woven through a luminous convergence point.",
+			"description": "Glowing threads woven through luminous pinch points that light up under the cursor and carry light on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9859,11 +9831,9 @@
 		{
 			"name": "WebThreads-JS-TW",
 			"title": "WebThreads",
-			"description": "Glowing sine threads woven through a luminous convergence point.",
+			"description": "Glowing threads woven through luminous pinch points that light up under the cursor and carry light on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9875,11 +9845,9 @@
 		{
 			"name": "WebThreads-TS-CSS",
 			"title": "WebThreads",
-			"description": "Glowing sine threads woven through a luminous convergence point.",
+			"description": "Glowing threads woven through luminous pinch points that light up under the cursor and carry light on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -9896,11 +9864,9 @@
 		{
 			"name": "WebThreads-TS-TW",
 			"title": "WebThreads",
-			"description": "Glowing sine threads woven through a luminous convergence point.",
+			"description": "Glowing threads woven through luminous pinch points that light up under the cursor and carry light on click.",
 			"type": "registry:component",
-			"dependencies": [
-				"ogl@^1.0.11"
-			],
+			"dependencies": [],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -10110,7 +10076,7 @@
 		{
 			"name": "AcidSquares-JS-CSS",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
+			"description": "A rolling field of glossy squares that ripples under two drifting colored lights.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -10129,7 +10095,7 @@
 		{
 			"name": "AcidSquares-JS-TW",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
+			"description": "A rolling field of glossy squares that ripples under two drifting colored lights.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -10143,7 +10109,7 @@
 		{
 			"name": "AcidSquares-TS-CSS",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
+			"description": "A rolling field of glossy squares that ripples under two drifting colored lights.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -10162,7 +10128,7 @@
 		{
 			"name": "AcidSquares-TS-TW",
 			"title": "AcidSquares",
-			"description": "A crystalline corridor of stacked squares with rings of light travelling toward you.",
+			"description": "A rolling field of glossy squares that ripples under two drifting colored lights.",
 			"type": "registry:component",
 			"dependencies": [],
 			"registryDependencies": [],
@@ -10236,6 +10202,72 @@
 				{
 					"type": "registry:component",
 					"path": "Scanner/Scanner.tsx"
+				}
+			]
+		},
+		{
+			"name": "GradientASCII-JS-CSS",
+			"title": "GradientASCII",
+			"description": "Soft gradient glows drawn in ASCII characters that scramble under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "GradientASCII.css",
+					"target": "@components/GradientASCII.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "GradientASCII.jsx"
+				}
+			]
+		},
+		{
+			"name": "GradientASCII-JS-TW",
+			"title": "GradientASCII",
+			"description": "Soft gradient glows drawn in ASCII characters that scramble under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "GradientASCII/GradientASCII.jsx"
+				}
+			]
+		},
+		{
+			"name": "GradientASCII-TS-CSS",
+			"title": "GradientASCII",
+			"description": "Soft gradient glows drawn in ASCII characters that scramble under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "GradientASCII.css",
+					"target": "@components/GradientASCII.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "GradientASCII.tsx"
+				}
+			]
+		},
+		{
+			"name": "GradientASCII-TS-TW",
+			"title": "GradientASCII",
+			"description": "Soft gradient glows drawn in ASCII characters that scramble under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "GradientASCII/GradientASCII.tsx"
 				}
 			]
 		},

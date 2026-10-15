@@ -10,9 +10,17 @@ export const countup = {
 <CountUp
   from={0}
   to={100}
+  mode="count"
+  easing="easeOut"
+  format="standard"
   separator=","
+  prefix=""
+  suffix=""
   direction="up"
   duration={1}
+  delay={0}
+  trigger="view"
+  replayOnHover
   className="count-up-text"
 />`,
   code,

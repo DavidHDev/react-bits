@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { diamondSponsors, platinumSponsors, silverSponsors } from '../../../constants/Sponsors';
 import { useColorModeValue } from '../../setup/color-mode';
@@ -70,7 +70,7 @@ export const SponsorGrid = ({ detailed = false }) => (
 
 const Sponsors = () => (
   <section className="ln-sp-section">
-    <motion.div
+    <m.div
       className="ln-sp-inner"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +88,7 @@ const Sponsors = () => (
       </header>
 
       <SponsorGrid />
-    </motion.div>
+    </m.div>
   </section>
 );
 

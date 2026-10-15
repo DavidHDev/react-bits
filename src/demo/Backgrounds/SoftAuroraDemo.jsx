@@ -19,23 +19,7 @@ import { useColorMode } from '../../components/setup/color-mode';
 
 import SoftAurora from '../../content/Backgrounds/SoftAurora/SoftAurora';
 import { softAurora } from '../../constants/code/Backgrounds/softAuroraCode';
-
-const LOOK = {
-  color1: '#f7f7f7',
-  color2: '#e100ff',
-  spectrum: 1,
-  speed: 0.6,
-  colorSpeed: 1,
-  scale: 1.5,
-  brightness: 1,
-  noiseFrequency: 2.5,
-  noiseAmplitude: 1,
-  bandHeight: 0.5,
-  bandSpread: 1,
-  tilt: 0,
-  octaveDecay: 0.1,
-  layerOffset: 0
-};
+import { LOOK, PRESET_OPTIONS, presetProps } from './presets/SoftAurora';
 
 const DEFAULT_PROPS = {
   preset: 'classic',
@@ -46,37 +30,6 @@ const DEFAULT_PROPS = {
   intro: true,
   lightMode: false
 };
-
-const PRESETS = {
-  classic: {},
-  borealis: {
-    color1: '#3EE59A',
-    color2: '#22B8D3',
-    spectrum: 0.2,
-    bandHeight: 0.55,
-    noiseAmplitude: 1.6,
-    brightness: 0.8
-  },
-  dusk: { color1: '#FFB86B', color2: '#FF5C8A', spectrum: 0.35, bandHeight: 0.38 },
-  mono: { color1: '#E4E4E7', color2: '#71717A', spectrum: 0, brightness: 0.7 },
-  ribbon: { tilt: -14, noiseAmplitude: 2.2, bandSpread: 1.3, scale: 1.2 },
-  halo: { bandSpread: 0.55, brightness: 1.2, noiseFrequency: 1.5 },
-  calm: { speed: 0.25, colorSpeed: 0.4, noiseAmplitude: 0.6 }
-};
-
-const LIGHT_SWAP = {
-  mono: { color1: '#52525B', color2: '#A1A1AA' }
-};
-
-const PRESET_OPTIONS = [
-  { value: 'classic', label: 'Classic' },
-  { value: 'borealis', label: 'Borealis' },
-  { value: 'dusk', label: 'Dusk' },
-  { value: 'mono', label: 'Mono' },
-  { value: 'ribbon', label: 'Ribbon' },
-  { value: 'halo', label: 'Halo' },
-  { value: 'calm', label: 'Calm' }
-];
 
 const propData = [
   { name: 'color1', type: 'string', default: "'#f7f7f7'", description: 'Tint of the first aurora layer.' },
@@ -156,13 +109,7 @@ const SoftAuroraDemo = () => {
   const { preset, ...settings } = props;
 
   const applyPreset = value => {
-    const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaultProps[name]]));
-    updateProps({
-      ...base,
-      ...PRESETS[value],
-      ...(colorMode === 'light' ? LIGHT_SWAP[value] : null),
-      preset: value
-    });
+    updateProps({ ...presetProps(value, { light: colorMode === 'light', defaults: defaultProps }), preset: value });
   };
 
   return (

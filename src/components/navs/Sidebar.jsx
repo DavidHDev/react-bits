@@ -19,7 +19,9 @@ import { colors } from '../../constants/colors';
 
 import { useTransition } from '../../hooks/useTransition';
 import usePreviewMediaAllowed from '../../hooks/usePreviewMediaAllowed';
-import { CATEGORIES, NEW, TOTAL_COMPONENTS, UPDATED } from '../../constants/Categories';
+import { useColorMode } from '../setup/color-mode';
+import { CATEGORIES, TOTAL_COMPONENTS } from '../../constants/Categories';
+import { NEW, UPDATED } from '../../constants/Badges';
 import { componentMap } from '../../constants/Components';
 import { componentMetadata } from '../../constants/Information';
 
@@ -115,6 +117,8 @@ const useScrollEdges = ref => {
 
 const SidebarHoverPreview = ({ preview, x, y, reduceMotion }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { colorMode } = useColorMode();
+  const videoSuffix = colorMode === 'light' ? '-light' : '';
   const items = preview?.items || [];
   const previewKey = preview?.key;
   const itemCount = items.length;
@@ -160,9 +164,17 @@ const SidebarHoverPreview = ({ preview, x, y, reduceMotion }) => {
                 {activeItem.type === 'video' ? (
                   <video src={activeItem.src} autoPlay loop muted playsInline preload="metadata" />
                 ) : activeItem.videoBase ? (
-                  <video autoPlay loop muted playsInline preload="metadata">
-                    <source src={`${activeItem.videoBase}.webm`} type="video/webm" />
-                    <source src={`${activeItem.videoBase}.mp4`} type="video/mp4" />
+                  <video
+                    key={`${activeItem.videoBase}${videoSuffix}`}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    poster={`${activeItem.videoBase}${videoSuffix}.webp`}
+                  >
+                    <source src={`${activeItem.videoBase}${videoSuffix}.webm`} type="video/webm" />
+                    <source src={`${activeItem.videoBase}${videoSuffix}.mp4`} type="video/mp4" />
                   </video>
                 ) : (
                   <img

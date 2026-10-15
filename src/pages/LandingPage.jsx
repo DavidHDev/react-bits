@@ -1,20 +1,24 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { LazyMotion } from 'motion/react';
 import Navbar from '@/components/landingnew/Navbar/Navbar';
 import Hero from '@/components/landingnew/Hero/Hero';
 import Features from '@/components/landingnew/Features/Features';
 import Testimonials from '@/components/landingnew/Testimonials/Testimonials';
 import LiveDemo from '@/components/landingnew/LiveDemo/LiveDemo';
+import Tools from '@/components/landingnew/Tools/Tools';
 import ProSpotlight from '@/components/landingnew/ProSpotlight/ProSpotlight';
-import QuickStart from '@/components/landingnew/QuickStart/QuickStart';
-import Ownership from '@/components/landingnew/Ownership/Ownership';
+import HowItWorks from '@/components/landingnew/HowItWorks/HowItWorks';
 import Sponsors from '@/components/landingnew/Sponsors/Sponsors';
+import FAQ from '@/components/landingnew/FAQ/FAQ';
 import CTA from '@/components/landingnew/CTA/CTA';
 import Footer from '@/components/landingnew/Footer/Footer';
 import LandingLoader from '@/components/landingnew/LandingLoader/LandingLoader';
 import useScrollToTop from '../hooks/useScrollToTop';
 import usePageSEO from '../hooks/usePageSEO';
 import usePauseOffscreenAnimations from '../hooks/usePauseOffscreenAnimations';
-import { HOME_SEO } from '../utils/seo';
+import { HOME_SEO } from '../utils/siteSeo';
+
+const loadMotionFeatures = () => import('../utils/motionFeatures').then(module => module.default);
 
 const MIN_LOADER_MS = 800;
 const MAX_FONT_WAIT_MS = 2500;
@@ -90,7 +94,7 @@ const LandingPage = () => {
   }, [phase]);
 
   return (
-    <>
+    <LazyMotion features={loadMotionFeatures}>
       {!ready && <LandingLoader hiding={hidingLoader} />}
       <section
         className={`landing-wrapper no-side-fades ${phase === 'loading' ? 'ln-loading' : 'ln-loaded'}`}
@@ -100,15 +104,15 @@ const LandingPage = () => {
         <Hero />
         <Features />
         <LiveDemo />
+        <HowItWorks />
         <ProSpotlight />
-        <QuickStart />
-        <Ownership />
+        <Tools />
         <Sponsors />
         <Testimonials />
-        <CTA />
-        <Footer />
+        <FAQ />
+        <Footer lead={<CTA />} />
       </section>
-    </>
+    </LazyMotion>
   );
 };
 

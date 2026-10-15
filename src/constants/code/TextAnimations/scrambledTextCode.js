@@ -10,16 +10,21 @@ export const scrambledTextCode = {
 // https://codepen.io/creativeocean/pen/NPWLwJM
 
 import ScrambledText from './ScrambledText';
-  
+
 <ScrambledText
   className="scrambled-text-demo"
+  effect="scramble"
   radius={100}
+  strength={1}
+  trail={0.6}
   duration={1.2}
   speed={0.5}
-  scrambleChars={.:}
+  scrambleChars=".:"
+  clickBurst
+  intro
 >
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-  Similique pariatur dignissimos porro eius quam doloremque 
+  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+  Similique pariatur dignissimos porro eius quam doloremque
   et enim velit nobis maxime.
 </ScrambledText>`,
   code,
