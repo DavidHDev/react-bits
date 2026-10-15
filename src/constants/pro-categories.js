@@ -85,6 +85,14 @@ export const PRO_UPSELLS = {
   }
 };
 
+export const CATEGORY_PRO_PICKS = {
+  backgrounds: ['axial-beam', 'satin-ridges', 'interference-ribbons', 'binary-orbits'],
+  'text-animations': ['orbital-type', 'shatter-type', 'ribbon-type', 'elastic-lettering'],
+  animations: ['pigment-trail', 'chroma-halo', 'glyph-stream', 'celebration-cursor'],
+  components: ['helix-gallery', 'depth-ribbon', 'tumble-wall', 'elastic-reel'],
+  default: ['helix-gallery', 'orbital-type', 'axial-beam', 'pigment-trail']
+};
+
 export const HIDDEN_TEMPLATE_SLUGS = ['ai-app-template', 'minimal-landing'];
 
 export const PRO_SHOWCASE = {

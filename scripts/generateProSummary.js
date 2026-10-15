@@ -3,6 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import {
   CATEGORY_PRO_GROUPS,
+  CATEGORY_PRO_PICKS,
   HIDDEN_TEMPLATE_SLUGS,
   PRO_SHOWCASE,
   PRO_UPSELLS
@@ -22,7 +23,9 @@ const componentMedia = item => {
   };
   return {
     animated: catalogAsset(item.media?.animated) || local(''),
-    poster: catalogAsset(item.media?.poster) || local('-poster') || catalogAsset(item.preview?.dark)
+    poster: catalogAsset(item.media?.poster) || local('-poster') || catalogAsset(item.preview?.dark),
+    light: catalogAsset(item.preview?.light),
+    dark: catalogAsset(item.preview?.dark)
   };
 };
 
@@ -33,10 +36,10 @@ const categories = Object.fromEntries(
   }).map(([category, config]) => {
     const groups = config.groups || (config.group ? [config.group] : null);
     const items = manifest.components.filter(item => !groups || groups.includes(item.group));
-    const preferred = PRO_UPSELLS[category]?.featured.map(item => item.slug) || [];
+    const preferred = CATEGORY_PRO_PICKS[category] || PRO_UPSELLS[category]?.featured.map(item => item.slug) || [];
     const withMedia = items.filter(item => {
       const media = componentMedia(item);
-      return media.animated || media.poster;
+      return item.isNew && (media.light || media.dark || media.animated || media.poster);
     });
     const featured = [...withMedia].sort((a, b) => {
       const aIndex = preferred.indexOf(a.slug);

@@ -1893,6 +1893,10 @@ a.pro-item-overlay-pill-ghost:hover {
   object-fit: cover;
 }
 
+:root[data-theme='light'] .pro-media {
+  background: #f4f4f5;
+}
+
 .pro-media-fallback {
   display: grid;
   place-items: center;

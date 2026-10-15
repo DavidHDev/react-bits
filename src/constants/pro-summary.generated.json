@@ -501,39 +501,47 @@
       "path": "/docs/components?category=Backgrounds",
       "items": [
         {
-          "name": "Glass Tiles",
-          "slug": "glass-tiles",
-          "href": "https://pro.reactbits.dev/docs/components/glass-tiles",
+          "name": "Axial Beam",
+          "slug": "axial-beam",
+          "href": "https://pro.reactbits.dev/docs/components/axial-beam",
           "media": {
-            "animated": "/rbp/showcase/components/glass-tiles.webp",
-            "poster": "/rbp/showcase/components/glass-tiles-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/axial-beam-dark.webp",
+            "light": "/rbp/components/axial-beam-light.webp",
+            "dark": "/rbp/components/axial-beam-dark.webp"
           }
         },
         {
-          "name": "Radial Liquid",
-          "slug": "radial-liquid",
-          "href": "https://pro.reactbits.dev/docs/components/radial-liquid",
+          "name": "Satin Ridges",
+          "slug": "satin-ridges",
+          "href": "https://pro.reactbits.dev/docs/components/satin-ridges",
           "media": {
-            "animated": "/rbp/showcase/components/radial-liquid.webp",
-            "poster": "/rbp/showcase/components/radial-liquid-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/satin-ridges-dark.webp",
+            "light": "/rbp/components/satin-ridges-light.webp",
+            "dark": "/rbp/components/satin-ridges-dark.webp"
           }
         },
         {
-          "name": "Vortex",
-          "slug": "vortex",
-          "href": "https://pro.reactbits.dev/docs/components/vortex",
+          "name": "Interference Ribbons",
+          "slug": "interference-ribbons",
+          "href": "https://pro.reactbits.dev/docs/components/interference-ribbons",
           "media": {
-            "animated": "/rbp/showcase/components/vortex.webp",
-            "poster": "/rbp/showcase/components/vortex-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/interference-ribbons-dark.webp",
+            "light": "/rbp/components/interference-ribbons-light.webp",
+            "dark": "/rbp/components/interference-ribbons-dark.webp"
           }
         },
         {
-          "name": "Chroma Blinds",
-          "slug": "chroma-blinds",
-          "href": "https://pro.reactbits.dev/docs/components/chroma-blinds",
+          "name": "Binary Orbits",
+          "slug": "binary-orbits",
+          "href": "https://pro.reactbits.dev/docs/components/binary-orbits",
           "media": {
-            "animated": "/rbp/showcase/components/chroma-blinds.webp",
-            "poster": "/rbp/showcase/components/chroma-blinds-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/binary-orbits-dark.webp",
+            "light": "/rbp/components/binary-orbits-light.webp",
+            "dark": "/rbp/components/binary-orbits-dark.webp"
           }
         }
       ]
@@ -545,39 +553,47 @@
       "path": "/docs/components?category=Text",
       "items": [
         {
-          "name": "Glitch Text",
-          "slug": "glitch-text",
-          "href": "https://pro.reactbits.dev/docs/components/glitch-text",
+          "name": "Orbital Type",
+          "slug": "orbital-type",
+          "href": "https://pro.reactbits.dev/docs/components/orbital-type",
           "media": {
-            "animated": "/rbp/showcase/components/glitch-text.webp",
-            "poster": "/rbp/showcase/components/glitch-text-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/orbital-type-dark.webp",
+            "light": "/rbp/components/orbital-type-light.webp",
+            "dark": "/rbp/components/orbital-type-dark.webp"
           }
         },
         {
-          "name": "ASCII Ripple",
-          "slug": "ascii-ripple",
-          "href": "https://pro.reactbits.dev/docs/components/ascii-ripple",
+          "name": "Shatter Type",
+          "slug": "shatter-type",
+          "href": "https://pro.reactbits.dev/docs/components/shatter-type",
           "media": {
-            "animated": "/rbp/showcase/components/ascii-ripple.webp",
-            "poster": "/rbp/showcase/components/ascii-ripple-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/shatter-type-dark.webp",
+            "light": "/rbp/components/shatter-type-light.webp",
+            "dark": "/rbp/components/shatter-type-dark.webp"
           }
         },
         {
-          "name": "Speeding Text",
-          "slug": "speeding-text",
-          "href": "https://pro.reactbits.dev/docs/components/speeding-text",
+          "name": "Ribbon Type",
+          "slug": "ribbon-type",
+          "href": "https://pro.reactbits.dev/docs/components/ribbon-type",
           "media": {
-            "animated": "/rbp/showcase/components/speeding-text.webp",
-            "poster": "/rbp/showcase/components/speeding-text-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/ribbon-type-dark.webp",
+            "light": "/rbp/components/ribbon-type-light.webp",
+            "dark": "/rbp/components/ribbon-type-dark.webp"
           }
         },
         {
-          "name": "Staggered Text",
-          "slug": "staggered-text",
-          "href": "https://pro.reactbits.dev/docs/components/staggered-text",
+          "name": "Elastic Lettering",
+          "slug": "elastic-lettering",
+          "href": "https://pro.reactbits.dev/docs/components/elastic-lettering",
           "media": {
-            "animated": "/rbp/showcase/components/staggered-text.webp",
-            "poster": "/rbp/showcase/components/staggered-text-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/elastic-lettering-dark.webp",
+            "light": "/rbp/components/elastic-lettering-light.webp",
+            "dark": "/rbp/components/elastic-lettering-dark.webp"
           }
         }
       ]
@@ -589,39 +605,47 @@
       "path": "/docs/components?category=Cursor%20Effects",
       "items": [
         {
-          "name": "Glass Cursor",
-          "slug": "glass-cursor",
-          "href": "https://pro.reactbits.dev/docs/components/glass-cursor",
+          "name": "Pigment Trail",
+          "slug": "pigment-trail",
+          "href": "https://pro.reactbits.dev/docs/components/pigment-trail",
           "media": {
-            "animated": "/rbp/showcase/components/glass-cursor.webp",
-            "poster": "/rbp/showcase/components/glass-cursor-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/pigment-trail-dark.webp",
+            "light": "/rbp/components/pigment-trail-light.webp",
+            "dark": "/rbp/components/pigment-trail-dark.webp"
           }
         },
         {
-          "name": "Dither Cursor",
-          "slug": "dither-cursor",
-          "href": "https://pro.reactbits.dev/docs/components/dither-cursor",
+          "name": "Chroma Halo",
+          "slug": "chroma-halo",
+          "href": "https://pro.reactbits.dev/docs/components/chroma-halo",
           "media": {
-            "animated": "/rbp/showcase/components/dither-cursor.webp",
-            "poster": "/rbp/showcase/components/dither-cursor-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/chroma-halo-dark.webp",
+            "light": "/rbp/components/chroma-halo-light.webp",
+            "dark": "/rbp/components/chroma-halo-dark.webp"
           }
         },
         {
-          "name": "Smooth Cursor",
-          "slug": "smooth-cursor",
-          "href": "https://pro.reactbits.dev/docs/components/smooth-cursor",
+          "name": "Glyph Stream",
+          "slug": "glyph-stream",
+          "href": "https://pro.reactbits.dev/docs/components/glyph-stream",
           "media": {
-            "animated": "/rbp/showcase/components/smooth-cursor.webp",
-            "poster": "/rbp/showcase/components/smooth-cursor-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/glyph-stream-dark.webp",
+            "light": "/rbp/components/glyph-stream-light.webp",
+            "dark": "/rbp/components/glyph-stream-dark.webp"
           }
         },
         {
-          "name": "Custom Cursor",
-          "slug": "custom-cursor",
-          "href": "https://pro.reactbits.dev/docs/components/custom-cursor",
+          "name": "Celebration Cursor",
+          "slug": "celebration-cursor",
+          "href": "https://pro.reactbits.dev/docs/components/celebration-cursor",
           "media": {
-            "animated": "/rbp/showcase/components/custom-cursor.webp",
-            "poster": "/rbp/showcase/components/custom-cursor-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/celebration-cursor-dark.webp",
+            "light": "/rbp/components/celebration-cursor-light.webp",
+            "dark": "/rbp/components/celebration-cursor-dark.webp"
           }
         }
       ]
@@ -633,39 +657,47 @@
       "path": "/docs/components",
       "items": [
         {
-          "name": "Reel Gallery",
-          "slug": "reel-gallery",
-          "href": "https://pro.reactbits.dev/docs/components/reel-gallery",
+          "name": "Helix Gallery",
+          "slug": "helix-gallery",
+          "href": "https://pro.reactbits.dev/docs/components/helix-gallery",
           "media": {
-            "animated": "/rbp/showcase/components/reel-gallery.webp",
-            "poster": "/rbp/showcase/components/reel-gallery-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/helix-gallery-dark.webp",
+            "light": "/rbp/components/helix-gallery-light.webp",
+            "dark": "/rbp/components/helix-gallery-dark.webp"
           }
         },
         {
-          "name": "Shader Card",
-          "slug": "shader-card",
-          "href": "https://pro.reactbits.dev/docs/components/shader-card",
+          "name": "Depth Ribbon",
+          "slug": "depth-ribbon",
+          "href": "https://pro.reactbits.dev/docs/components/depth-ribbon",
           "media": {
-            "animated": "/rbp/showcase/components/shader-card.webp",
-            "poster": "/rbp/showcase/components/shader-card-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/depth-ribbon-dark.webp",
+            "light": "/rbp/components/depth-ribbon-light.webp",
+            "dark": "/rbp/components/depth-ribbon-dark.webp"
           }
         },
         {
-          "name": "Comparison Slider",
-          "slug": "comparison-slider",
-          "href": "https://pro.reactbits.dev/docs/components/comparison-slider",
+          "name": "Tumble Wall",
+          "slug": "tumble-wall",
+          "href": "https://pro.reactbits.dev/docs/components/tumble-wall",
           "media": {
-            "animated": "/rbp/showcase/components/comparison-slider.webp",
-            "poster": "/rbp/showcase/components/comparison-slider-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/tumble-wall-dark.webp",
+            "light": "/rbp/components/tumble-wall-light.webp",
+            "dark": "/rbp/components/tumble-wall-dark.webp"
           }
         },
         {
-          "name": "Staggered Text",
-          "slug": "staggered-text",
-          "href": "https://pro.reactbits.dev/docs/components/staggered-text",
+          "name": "Elastic Reel",
+          "slug": "elastic-reel",
+          "href": "https://pro.reactbits.dev/docs/components/elastic-reel",
           "media": {
-            "animated": "/rbp/showcase/components/staggered-text.webp",
-            "poster": "/rbp/showcase/components/staggered-text-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/elastic-reel-dark.webp",
+            "light": "/rbp/components/elastic-reel-light.webp",
+            "dark": "/rbp/components/elastic-reel-dark.webp"
           }
         }
       ]
@@ -677,39 +709,47 @@
       "path": "/",
       "items": [
         {
-          "name": "Aurora Beam",
-          "slug": "aurora-beam",
-          "href": "https://pro.reactbits.dev/docs/components/aurora-beam",
+          "name": "Helix Gallery",
+          "slug": "helix-gallery",
+          "href": "https://pro.reactbits.dev/docs/components/helix-gallery",
           "media": {
-            "animated": "/rbp/showcase/components/aurora-beam.webp",
-            "poster": "/rbp/showcase/components/aurora-beam-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/helix-gallery-dark.webp",
+            "light": "/rbp/components/helix-gallery-light.webp",
+            "dark": "/rbp/components/helix-gallery-dark.webp"
           }
         },
         {
-          "name": "Smooth Cursor",
-          "slug": "smooth-cursor",
-          "href": "https://pro.reactbits.dev/docs/components/smooth-cursor",
+          "name": "Orbital Type",
+          "slug": "orbital-type",
+          "href": "https://pro.reactbits.dev/docs/components/orbital-type",
           "media": {
-            "animated": "/rbp/showcase/components/smooth-cursor.webp",
-            "poster": "/rbp/showcase/components/smooth-cursor-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/orbital-type-dark.webp",
+            "light": "/rbp/components/orbital-type-light.webp",
+            "dark": "/rbp/components/orbital-type-dark.webp"
           }
         },
         {
-          "name": "Circle Gallery",
-          "slug": "circle-gallery",
-          "href": "https://pro.reactbits.dev/docs/components/circle-gallery",
+          "name": "Axial Beam",
+          "slug": "axial-beam",
+          "href": "https://pro.reactbits.dev/docs/components/axial-beam",
           "media": {
-            "animated": "/rbp/showcase/components/circle-gallery.webp",
-            "poster": "/rbp/showcase/components/circle-gallery-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/axial-beam-dark.webp",
+            "light": "/rbp/components/axial-beam-light.webp",
+            "dark": "/rbp/components/axial-beam-dark.webp"
           }
         },
         {
-          "name": "Staggered Text",
-          "slug": "staggered-text",
-          "href": "https://pro.reactbits.dev/docs/components/staggered-text",
+          "name": "Pigment Trail",
+          "slug": "pigment-trail",
+          "href": "https://pro.reactbits.dev/docs/components/pigment-trail",
           "media": {
-            "animated": "/rbp/showcase/components/staggered-text.webp",
-            "poster": "/rbp/showcase/components/staggered-text-poster.webp"
+            "animated": null,
+            "poster": "/rbp/components/pigment-trail-dark.webp",
+            "light": "/rbp/components/pigment-trail-light.webp",
+            "dark": "/rbp/components/pigment-trail-dark.webp"
           }
         }
       ]
