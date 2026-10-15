@@ -57,8 +57,10 @@ export async function readMarkField(doc, longSide = 1024) {
   const renderer = createRenderer(canvas, { preserve: true });
   try {
     const plan = maskPlan([doc.mark.layers]);
+    const scene = { a: doc.mark, maskSlots: plan.slots };
+    await renderer.prepareScene(scene);
     bindMasks(renderer, plan.keys);
-    return renderer.readField({ scene: { a: doc.mark, maskSlots: plan.slots }, width, height });
+    return renderer.readField({ scene, width, height });
   } finally {
     renderer.dispose();
   }

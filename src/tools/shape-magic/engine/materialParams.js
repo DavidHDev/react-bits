@@ -1,4 +1,4 @@
-import { parseColor } from '../../../components/common/Preview/colorMath';
+import { parseColor } from '../../../components/common/Preview/colorMath.js';
 
 export const MAT_FLOATS = 32;
 export const MAT_COLORS = 16;

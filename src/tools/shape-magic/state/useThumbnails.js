@@ -11,6 +11,7 @@ const SIZE = 220;
 const ICON = 96;
 
 let shared = null;
+let captures = Promise.resolve();
 
 const thumbRenderer = () => {
   if (shared) return shared;
@@ -22,11 +23,19 @@ const thumbRenderer = () => {
 };
 
 const snap = (doc, style, size = SIZE, time = 0) => {
-  const { canvas, renderer } = thumbRenderer();
-  const plan = maskPlan([doc.mark.layers]);
-  bindMasks(renderer, plan.keys);
-  renderer.draw({ scene: { a: doc.mark, maskSlots: plan.slots }, style, width: size, height: size, time });
-  return canvas.toDataURL('image/png');
+  // The canvas is shared by both thumbnail hooks. Keep preparation, drawing,
+  // and readback together so concurrent hooks cannot capture another mark.
+  const capture = captures.then(async () => {
+    const { canvas, renderer } = thumbRenderer();
+    const plan = maskPlan([doc.mark.layers]);
+    const scene = { a: doc.mark, maskSlots: plan.slots };
+    await renderer.prepareScene(scene, style);
+    bindMasks(renderer, plan.keys);
+    renderer.draw({ scene, style, width: size, height: size, time });
+    return canvas.toDataURL('image/png');
+  });
+  captures = capture.catch(() => {});
+  return capture;
 };
 
 const waitMasks = async layers => {
@@ -38,10 +47,11 @@ const yieldTask = () => new Promise(resolve => setTimeout(resolve, 0));
 
 const staticCache = {};
 
-export function useStaticThumbs(light = false) {
+export function useStaticThumbs(light = false, active = true) {
   const theme = light ? 'light' : 'dark';
   const [thumbs, setThumbs] = useState(() => staticCache[theme] || staticCache.dark || {});
   useEffect(() => {
+    if (!active) return undefined;
     if (staticCache[theme]) {
       setThumbs(staticCache[theme]);
       return undefined;
@@ -49,19 +59,21 @@ export function useStaticThumbs(light = false) {
     let cancelled = false;
     (async () => {
       const next = {};
-      for (const primitive of PRIMITIVES) {
-        const doc = createDoc({ mark: { layers: [{ type: primitive.id, size: 0.78 }] } });
-        next[`shape:${primitive.id}`] = snap(doc, { fill: { kind: 'solid', color1: '#ffffff' } }, ICON);
-      }
       const previous = staticCache.dark || staticCache.light;
-      if (!cancelled) setThumbs(previous ? { ...previous, ...next } : { ...next });
+      // Populate the visible mark gallery before compiling shape-picker icons.
       for (const [index, preset] of MARKS.entries()) {
         const doc = createDoc(preset, { light });
         await waitMasks(doc.mark.layers);
         if (cancelled) return;
-        next[`mark:${preset.id}`] = snap(doc, styleFor(doc));
-        if (index % 8 === 7 && !previous) setThumbs({ ...next });
+        next[`mark:${preset.id}`] = await snap(doc, styleFor(doc));
+        if (index % 4 === 3) setThumbs({ ...previous, ...next });
         await yieldTask();
+      }
+      for (const primitive of PRIMITIVES) {
+        if (cancelled) return;
+        const key = `shape:${primitive.id}`;
+        const doc = createDoc({ mark: { layers: [{ type: primitive.id, size: 0.78 }] } });
+        next[key] = previous?.[key] || (await snap(doc, { fill: { kind: 'solid', color1: '#ffffff' } }, ICON));
       }
       staticCache[theme] = next;
       if (!cancelled) setThumbs({ ...next });
@@ -69,7 +81,7 @@ export function useStaticThumbs(light = false) {
     return () => {
       cancelled = true;
     };
-  }, [theme, light]);
+  }, [theme, light, active]);
   return thumbs;
 }
 
@@ -95,7 +107,7 @@ export function useFillThumbs(doc, light, active) {
       if (cancelled) return;
       const plan = maskPlan([doc.mark.layers]);
       if (!masksReady(plan.keys)) return;
-      const next = { silhouette: snap(doc, { fill: { kind: 'solid', color1: '#ffffff' } }, 160) };
+      const next = { silhouette: await snap(doc, { fill: { kind: 'solid', color1: '#ffffff' } }, 160) };
       setThumbs(previous => ({ ...previous, silhouette: next.silhouette }));
       for (const item of FILLS) {
         await yieldTask();
@@ -109,7 +121,7 @@ export function useFillThumbs(doc, light, active) {
           gloss,
           background: clash ? { kind: 'color', color1: light ? '#26232d' : '#e8e5ee' } : { kind: 'none' }
         };
-        next[item.id] = snap(doc, style);
+        next[item.id] = await snap(doc, style);
       }
       if (cancelled) return;
       doneKey.current = key;

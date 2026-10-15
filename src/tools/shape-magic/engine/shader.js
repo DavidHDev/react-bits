@@ -1,7 +1,8 @@
-import { PRIMITIVES } from './primitives';
-import { MAT_COLORS, MAT_FLOATS } from './materialParams';
+import { PRIMITIVES } from './primitives.js';
+import { MAT_COLORS, MAT_FLOATS } from './materialParams.js';
+import { MAX_LAYERS } from './shaderVariant.js';
 
-export const MAX_LAYERS = 10;
+export { MAX_LAYERS } from './shaderVariant.js';
 export const MASK_SLOTS = 4;
 export const MASK_TYPE = 100;
 export const FIELD_RANGE = 4;
@@ -12,8 +13,10 @@ void main() {
   gl_Position = vec4(aPosition, 0.0, 1.0);
 }`;
 
-const dispatch = () =>
-  PRIMITIVES.map((primitive, index) => `  if (t == ${index}) return sd_${primitive.id}(p, a, b);`).join('\n');
+const dispatch = types =>
+  PRIMITIVES.flatMap((primitive, index) =>
+    !types || types.includes(index) ? [`  if (t == ${index}) return sd_${primitive.id}(p, a, b);`] : []
+  ).join('\n');
 
 const materialPrelude = material => `
 ${material.kind === 'fill' ? '#define HAS_FILL_MATERIAL 1' : '#define HAS_MATERIAL 1'}
@@ -71,23 +74,35 @@ float domeHeight(Surface s, float width) {
 ${material.glsl}
 `;
 
-export const buildFragment = (material = null) => `#version 300 es
+export const buildFragment = (
+  material = null,
+  {
+    capacity = MAX_LAYERS,
+    types = null,
+    morph = true,
+    patterns = true,
+    radialCopies = true,
+    linearCopies = true,
+    shadow = true,
+    bevel = true
+  } = {}
+) => `#version 300 es
 precision highp float;
 precision highp int;
 #define PI 3.14159265359
 #define TAU 6.28318530718
-#define MAXL ${MAX_LAYERS}
+#define MAXL ${capacity}
 ${material ? materialPrelude(material) : ''}
 uniform int uCountA;
 uniform int uCountB;
-uniform int uType[${MAX_LAYERS * 2}];
-uniform vec4 uA[${MAX_LAYERS * 2}];
-uniform vec4 uB[${MAX_LAYERS * 2}];
-uniform vec4 uXf[${MAX_LAYERS * 2}];
-uniform vec4 uRep[${MAX_LAYERS * 2}];
-uniform vec4 uMod[${MAX_LAYERS * 2}];
-uniform vec4 uPat[${MAX_LAYERS * 2}];
-uniform vec4 uPat2[${MAX_LAYERS * 2}];
+uniform int uType[${capacity * 2}];
+uniform vec4 uA[${capacity * 2}];
+uniform vec4 uB[${capacity * 2}];
+uniform vec4 uXf[${capacity * 2}];
+uniform vec4 uRep[${capacity * 2}];
+uniform vec4 uMod[${capacity * 2}];
+uniform vec4 uPat[${capacity * 2}];
+uniform vec4 uPat2[${capacity * 2}];
 uniform vec4 uMarkA;
 uniform vec4 uMarkB;
 uniform float uMorph;
@@ -142,12 +157,14 @@ float smax(float a, float b, float k) {
   return -smin(-a, -b, k);
 }
 
-${PRIMITIVES.map(primitive => primitive.glsl).join('\n\n')}
+${PRIMITIVES.filter((_, index) => !types || types.includes(index))
+  .map(primitive => primitive.glsl)
+  .join('\n\n')}
 
 float primitive(int t, vec2 p, vec4 a, vec4 b) {
   if (t < 0) return 1000.0;
   if (abs(p.x) + abs(p.y) < 1e-6) p.x = 1e-6;
-${dispatch()}
+${dispatch(types)}
   return length(p) - 1.0;
 }
 
@@ -244,9 +261,13 @@ float patternField(int i, vec2 q) {
 float shapeCore(int i, vec2 q) {
   int t = uType[i];
   float d = t >= ${MASK_TYPE} ? sampleMask(t - ${MASK_TYPE}, q) : primitive(t, q, uA[i], uB[i]);
-  if (uPat[i].x > 0.5) {
+  ${
+    patterns
+      ? `if (uPat[i].x > 0.5) {
     float f = patternField(i, q);
     d = uPat2[i].z > 0.5 ? max(d, -f) : max(d, f);
+  }`
+      : ''
   }
   return d;
 }
@@ -267,7 +288,9 @@ vec2 rowFold(int i, vec2 q) {
 
 float layerShape(int i, vec2 p) {
   vec2 q = layerPoint(i, p);
-  vec4 rep = uRep[i];
+  ${
+    linearCopies
+      ? `vec4 rep = uRep[i];
   float d;
   if (uPat2[i].w > 0.5 && rep.x > 1.5) {
     vec2 axis = rowAxis(i);
@@ -281,6 +304,8 @@ float layerShape(int i, vec2 p) {
     }
   } else {
     d = shapeCore(i, q);
+  }`
+      : 'float d = shapeCore(i, q);'
   }
   return d * uXf[i].z;
 }
@@ -288,11 +313,15 @@ float layerShape(int i, vec2 p) {
 float layerSD(int i, vec2 p) {
   vec4 rep = uRep[i];
   if (rep.z > 0.5) p.x = abs(p.x);
-  int reach = uPat2[i].w > 0.5 ? 0 : copyReach(rep.x);
+  ${
+    radialCopies
+      ? `int reach = uPat2[i].w > 0.5 ? 0 : copyReach(rep.x);
   float d = 1e5;
   for (int k = -2; k <= 2; k++) {
     if (k < -reach || k > reach) continue;
     d = min(d, layerShape(i, reach > 0 ? copyPoint(p, rep.x, rep.y, k) : p));
+  }`
+      : 'float d = min(1e5, layerShape(i, p));'
   }
   vec4 m = uMod[i];
   d -= m.x;
@@ -321,7 +350,9 @@ float sceneRange(int start, int count, vec4 mark, vec2 p) {
 }
 
 float scene(vec2 p) {
-  int passes = uMorph > 0.0 && uMorph < 1.0 ? 2 : 1;
+  ${
+    morph
+      ? `int passes = uMorph > 0.0 && uMorph < 1.0 ? 2 : 1;
   int first = uMorph >= 1.0 ? 1 : 0;
   float result[2];
   result[0] = 1e5;
@@ -331,7 +362,9 @@ float scene(vec2 p) {
     bool second = first + s == 1;
     result[s] = sceneRange(second ? MAXL : 0, second ? uCountB : uCountA, second ? uMarkB : uMarkA, p);
   }
-  return passes == 2 ? mix(result[0], result[1], uMorph) : result[0];
+  return passes == 2 ? mix(result[0], result[1], uMorph) : result[0];`
+      : 'return sceneRange(0, uCountA, uMarkA, p);'
+  }
 }
 
 vec4 encodeField(float d) {
@@ -461,17 +494,19 @@ void main() {
   vec2 frag = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y);
   vec2 p = (frag - uCenter) / uUnit;
   float px = 1.0 / uUnit;
-  bool shadowed = uEncode < 0.5 && uShadow.x > 0.0;
+  bool shadowed = ${shadow ? 'uEncode < 0.5 && uShadow.x > 0.0' : 'false'};
 #ifdef HAS_MATERIAL
-  bool beveled = uEncode < 0.5 && MATERIAL_NORMALS;
+  bool beveled = ${bevel ? 'uEncode < 0.5 && MATERIAL_NORMALS' : 'false'};
   float bw = max(uSurface.x, px);
 #else
   bool lit = uEncode < 0.5 && uFill.x > 0.5 && uBevel.z > 0.0;
-  bool beveled = lit && uSurfInfo.z < 0.5;
+  bool beveled = ${bevel ? 'lit && uSurfInfo.z < 0.5' : 'false'};
   float bw = max(uBevel.z, px);
 #endif
   float e = clamp(bw * 0.2, px * 1.5, max(bw * 0.5, px * 1.5));
-  vec2 points[6];
+  ${
+    shadow || bevel
+      ? `vec2 points[6];
   points[0] = p;
   int count = 1;
   int shadowAt = -1;
@@ -498,7 +533,11 @@ void main() {
   float aa = clamp(length(vec2(dFdx(d), dFdy(d))), px * 0.5, px * 1.5);
   vec2 g = glossAt >= 0
     ? vec2(values[glossAt] - values[glossAt + 1], values[glossAt + 2] - values[glossAt + 3]) / (2.0 * e)
-    : vec2(0.0);
+    : vec2(0.0);`
+      : `float d = scene(p);
+  float aa = clamp(length(vec2(dFdx(d), dFdy(d))), px * 0.5, px * 1.5);
+  vec2 g = vec2(0.0);`
+  }
   if (uEncode > 1.5) {
     outColor = vec4(d, 0.0, 0.0, 1.0);
     return;
@@ -511,11 +550,15 @@ void main() {
   vec4 bg = backgroundColor(p);
   vec4 col = vec4(bg.rgb * bg.a, bg.a);
 
-  if (shadowAt >= 0) {
+  ${
+    shadow
+      ? `if (shadowAt >= 0) {
     float ds = values[shadowAt];
     float blur = max(uShadow.y, px);
     float a = (1.0 - smoothstep(-blur, blur, ds)) * uShadow.x;
     col = over(col, vec4(uShadowColor.rgb, 1.0) * a * uShadowColor.a);
+  }`
+      : ''
   }
 
   if (uGlow.x > 0.0) {

@@ -17,6 +17,7 @@
     "shape-magic:swatches": "node ./scripts/generateShapeMagicSwatches.js",
     "test:seo": "node --test scripts/seo.test.js",
     "test:boot": "node --test scripts/boot.test.js",
+    "test:shape-magic": "node --test src/tools/shape-magic/engine/shaderVariant.test.js",
     "verify:seo": "node scripts/verifySeo.js",
     "verify:seo:http": "node scripts/verifySeoHttp.js",
     "registry:build": "jsrepo build",
