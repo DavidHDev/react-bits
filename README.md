@@ -7,7 +7,7 @@
   </picture>
   <br />
   <br />
-  <h3>Animated React components for interfaces people remember.</h3>
+  <h3>Animated React components for websites people remember.</h3>
   <p>215+ free animated components and backgrounds for React.<br />Tune them yourself, or hand them to your agent.</p>
   <p>
     <a href="https://github.com/davidhdev/react-bits/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/davidhdev/react-bits?style=flat&logo=github&label=Stars&color=27272a&labelColor=18181b"></a>

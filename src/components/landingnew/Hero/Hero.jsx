@@ -628,7 +628,7 @@ const Hero = () => {
         <header className="lh-top">
           <h1 className="lh-title">
             Animated React components for <br />
-            interfaces people remember.
+            websites people remember.
           </h1>
           <p className="lh-lede">
             <span>{TOTAL_COMPONENTS} animated components and backgrounds for React.</span>
