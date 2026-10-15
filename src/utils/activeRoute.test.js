@@ -31,7 +31,9 @@ test('generates component CLI commands for every selected stack on both route fo
   for (const prefix of ['', '/c']) {
     for (const [categorySlug, componentSlug, componentName] of [
       ['text-animations', 'tech-text', 'TechText'],
-      ['backgrounds', 'aurora', 'Aurora']
+      ['backgrounds', 'aurora', 'Aurora'],
+      ['backgrounds', 'crt-warp', 'CRTWarp'],
+      ['text-animations', 'ascii-text', 'ASCIIText']
     ]) {
       const { category, subcategory } = getActiveRoute(`${prefix}/${categorySlug}/${componentSlug}`);
       for (const language of ['JS', 'TS']) {

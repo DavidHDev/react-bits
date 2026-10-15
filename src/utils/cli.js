@@ -1,7 +1,7 @@
 const variantForShadcn = (language, style) =>
   `${(language || 'JS').toUpperCase()}-${(style || 'CSS').toUpperCase().replace('TAILWIND', 'TW')}`;
 
-const UPPERCASE_PARTS = new Set(['ascii']);
+const UPPERCASE_PARTS = new Set(['ascii', 'crt']);
 
 const slugToComponentName = slug => {
   if (!slug) return '';
