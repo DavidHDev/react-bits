@@ -846,6 +846,7 @@ const MagicRings = ({
     };
     wakeRef.current = () => {
       resize();
+      render();
       wake();
     };
 
@@ -918,6 +919,7 @@ const MagicRings = ({
 
     const resizeObserver = new ResizeObserver(() => {
       resize();
+      render();
       wake();
     });
     resizeObserver.observe(container);
