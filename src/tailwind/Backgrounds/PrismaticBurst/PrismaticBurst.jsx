@@ -771,7 +771,7 @@ const PrismaticBurst = ({
       const ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
       canvas.width = Math.max(1, Math.round(width * ratio));
       canvas.height = Math.max(1, Math.round(height * ratio));
-      if (!raf) render();
+      render();
       wake();
     };
 
