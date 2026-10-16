@@ -258,6 +258,7 @@ export default function PromptBar({
     let speed = 1;
     let pulse = 0;
     const parts = [];
+    let resizePending = false;
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -280,6 +281,10 @@ export default function PromptBar({
       });
     };
     const tick = now => {
+      if (resizePending) {
+        resizePending = false;
+        resize();
+      }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const typed = typing.current;
@@ -331,7 +336,9 @@ export default function PromptBar({
     };
     resize();
     for (let i = 0; i < 26; i += 1) spawn(true);
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => {
+      resizePending = true;
+    });
     ro.observe(canvas);
     raf = requestAnimationFrame(tick);
     return () => {
