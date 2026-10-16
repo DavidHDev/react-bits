@@ -939,7 +939,8 @@ const Hyperspeed = ({
       }
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
       renderer.setSize(width, height, false);
@@ -951,11 +952,19 @@ const Hyperspeed = ({
       );
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
+    };
+
+    const resize = () => {
+      resizePending = true;
       wake();
     };
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
