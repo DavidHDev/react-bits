@@ -133,6 +133,7 @@ export default function ShapeMagic({ toolSelector }) {
   const [queries, setQueries] = useState({});
   const [maskVersion, setMaskVersion] = useState(0);
   const [artboard, setArtboard] = useState(null);
+  const [previewReady, setPreviewReady] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [dropping, setDropping] = useState(false);
@@ -141,6 +142,8 @@ export default function ShapeMagic({ toolSelector }) {
   const [focusText, setFocusText] = useState(0);
   const canvasRef = useRef(null);
   const rendererRef = useRef(null);
+  const renderRequestRef = useRef(0);
+  const materialRequestRef = useRef(0);
   const fileRef = useRef(null);
   const searchRef = useRef(null);
   const clockRef = useRef(0);
@@ -157,7 +160,7 @@ export default function ShapeMagic({ toolSelector }) {
 
   const materialsVisible = wide ? railTab === 'materials' : mobileTab === 'materials';
   const staticThumbs = useStaticThumbs(light);
-  const fillThumbs = useFillThumbs(doc, light, materialsVisible);
+  const fillThumbs = useFillThumbs(doc, light, materialsVisible && previewReady);
   const thumbs = useMemo(() => ({ ...staticThumbs, ...fillThumbs }), [staticThumbs, fillThumbs]);
   const material = materialFor(doc);
   const procedural = material.kind === 'procedural' ? material.def : null;
@@ -231,28 +234,40 @@ export default function ShapeMagic({ toolSelector }) {
   }, []);
 
   const draw = useCallback(
-    time => {
+    async time => {
       if (!artboard) return;
       const renderer = ensureRenderer();
       if (!renderer) return;
+      const request = ++renderRequestRef.current;
       const current = docRef.current;
       const morph = current.morph.on && current.morph.target;
       const currentPlan = maskPlan([current.mark.layers, morph ? current.morph.target.layers : null]);
       bindMasks(renderer, currentPlan.keys);
       const ratio = Math.min(window.devicePixelRatio || 1, proceduralFor(current)?.heavy ? 1 : 2);
-      renderer.draw({
-        scene: {
-          a: current.mark,
-          b: morph ? current.morph.target : null,
-          morph: morph ? morphPhase(time, current.morph) : 0,
-          maskSlots: currentPlan.slots
-        },
-        style: styleFor(current),
-        width: Math.round(artboard.width * ratio),
-        height: Math.round(artboard.height * ratio),
-        time,
-        surfaceResolution: morph ? 512 : 768
-      });
+      const scene = {
+        a: current.mark,
+        b: morph ? current.morph.target : null,
+        morph: morph ? morphPhase(time, current.morph) : 0,
+        maskSlots: currentPlan.slots
+      };
+      const style = styleFor(current);
+      try {
+        await renderer.prepareScene(scene, style);
+        if (request !== renderRequestRef.current || rendererRef.current !== renderer) return;
+        renderer.draw({
+          scene,
+          style,
+          width: Math.round(artboard.width * ratio),
+          height: Math.round(artboard.height * ratio),
+          time,
+          surfaceResolution: morph ? 512 : 768
+        });
+        setPreviewReady(true);
+      } catch (problem) {
+        if (request === renderRequestRef.current && rendererRef.current === renderer) {
+          toast.error(problem?.message?.slice(0, 160) || 'The preview could not be rendered.');
+        }
+      }
     },
     [artboard, ensureRenderer]
   );
@@ -288,8 +303,9 @@ export default function ShapeMagic({ toolSelector }) {
   useEffect(() => {
     if (!looping) return undefined;
     let raf = 0;
+    let cancelled = false;
     let last = performance.now();
-    const tick = now => {
+    const tick = async now => {
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
       let dirty = dirtyRef.current;
@@ -299,15 +315,20 @@ export default function ShapeMagic({ toolSelector }) {
         if (morphing || animatedMaterial) dirty = true;
       }
       if (textureActive && pullCapture()) dirty = true;
-      if (dirty) draw(clockRef.current);
-      raf = requestAnimationFrame(tick);
+      if (dirty) await draw(clockRef.current);
+      if (!cancelled) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+    };
   }, [looping, playing, morphing, animatedMaterial, textureActive, draw, pullCapture]);
 
   useEffect(
     () => () => {
+      renderRequestRef.current += 1;
+      materialRequestRef.current += 1;
       rendererRef.current?.dispose();
       rendererRef.current = null;
     },
@@ -660,14 +681,18 @@ export default function ShapeMagic({ toolSelector }) {
 
   const applyMaterial = useCallback(
     async item => {
+      const request = ++materialRequestRef.current;
       if (item.kind === 'procedural') {
         try {
           await (ensureRenderer()?.prepareAsync(item.def) ?? Promise.resolve());
         } catch (problem) {
-          toast.error(problem?.message?.slice(0, 160) || 'That material could not start.');
+          if (request === materialRequestRef.current) {
+            toast.error(problem?.message?.slice(0, 160) || 'That material could not start.');
+          }
           return;
         }
       }
+      if (request !== materialRequestRef.current) return;
       updateDoc(current => {
         const family = bevelFamily(item);
         const kept = family === bevelFamily(materialFor(current));

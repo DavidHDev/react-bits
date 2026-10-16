@@ -163,6 +163,16 @@ async function createComposer(doc, output, { previewWidth, background = true, si
   const baseStyle = background ? styleFor(doc) : { ...styleFor(doc), background: { kind: 'none' } };
   const motionMorph = doc.morph.on && Boolean(doc.morph.target);
   const kind = materialFor(doc).kind;
+  const scene = { a: doc.mark, b: motionMorph ? doc.morph.target : null };
+  try {
+    await base.renderer.prepareScene(scene, baseStyle);
+    if (kind === 'metal' && !motionMorph) await mask.renderer.prepareScene(scene, SILHOUETTE);
+    guard(signal);
+  } catch (problem) {
+    base.renderer.dispose();
+    mask.renderer.dispose();
+    throw problem;
+  }
   let frame = null;
   let settings = null;
   if (kind === 'background') {
@@ -232,6 +242,8 @@ export async function renderSilhouetteBlob(doc, longSide = 1024) {
   const output = outputSize(doc, longSide);
   const { canvas, renderer } = gpuCanvas(output.width, output.height);
   try {
+    const scene = { a: doc.mark, b: doc.morph.on ? doc.morph.target : null };
+    await renderer.prepareScene(scene, SILHOUETTE);
     drawMark(renderer, doc, { width: output.width, height: output.height, style: SILHOUETTE });
     return await toBlob(canvas);
   } finally {

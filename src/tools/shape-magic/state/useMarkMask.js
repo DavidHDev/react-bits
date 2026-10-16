@@ -12,16 +12,19 @@ const maskRenderer = () => {
   return shared;
 };
 
-export const renderSilhouette = (doc, longSide = 1024) => {
+export const renderSilhouette = async (doc, longSide = 1024) => {
   const ratio = ratioOf(doc.artboard);
   const width = ratio.w >= ratio.h ? longSide : Math.round((longSide * ratio.w) / ratio.h);
   const height = ratio.w >= ratio.h ? Math.round((longSide * ratio.h) / ratio.w) : longSide;
   const { canvas, renderer } = maskRenderer();
   const plan = maskPlan([doc.mark.layers]);
+  const scene = { a: doc.mark, maskSlots: plan.slots };
+  const style = { fill: { kind: 'solid', color1: '#ffffff' }, background: { kind: 'none' } };
+  await renderer.prepareScene(scene, style);
   bindMasks(renderer, plan.keys);
   renderer.draw({
-    scene: { a: doc.mark, maskSlots: plan.slots },
-    style: { fill: { kind: 'solid', color1: '#ffffff' }, background: { kind: 'none' } },
+    scene,
+    style,
     width,
     height
   });
@@ -44,7 +47,7 @@ export function useMarkMask(doc, enabled) {
       if (cancelled) return;
       const plan = maskPlan([current.mark.layers]);
       if (!masksReady(plan.keys)) return;
-      const canvas = renderSilhouette(current, 1024);
+      const canvas = await renderSilhouette(current, 1024);
       if (!cancelled) setUrl(canvas.toDataURL('image/png'));
     }, 120);
     return () => {

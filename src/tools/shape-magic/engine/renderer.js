@@ -1,10 +1,13 @@
 import { parseColor } from '../../../components/common/Preview/colorMath';
-import { FIELD_RANGE, MASK_SLOTS, MASK_TYPE, MAX_LAYERS, VERTEX, buildFragment } from './shader';
+import { FIELD_RANGE, MASK_SLOTS, MASK_TYPE, VERTEX, buildFragment } from './shader';
 import { PRIMITIVE_INDEX, primitiveSlots } from './primitives';
 import { smoothFor } from '../state/doc';
 import { layoutParams, packParams } from './materialParams';
 import { createSurfaceSolver } from './surfaceGpu';
 import { solveSurface as solveSurfaceCpu } from './surface';
+import { markLayers, shaderVariant, variantKey } from './shaderVariant';
+
+export { markLayers } from './shaderVariant';
 
 const OPS = { add: 0, merge: 1, cut: 2, keep: 3, exclude: 4 };
 const PATTERNS = { none: 0, lines: 1, rings: 2, rays: 3, grid: 4, dots: 5, halftone: 6 };
@@ -116,7 +119,12 @@ export const encodeLayer = (layer, maskSlots = {}) => {
   };
 };
 
-export const markLayers = mark => (mark?.layers || []).filter(layer => layer.visible !== false).slice(0, MAX_LAYERS);
+const sceneArrays = capacity => ({
+  type: new Int32Array(capacity * 2),
+  ...Object.fromEntries(
+    ['a', 'b', 'xf', 'rep', 'mod', 'pat', 'pat2'].map(name => [name, new Float32Array(capacity * 8)])
+  )
+});
 
 export function createRenderer(canvas, { preserve = false } = {}) {
   const gl = canvas.getContext('webgl2', {
@@ -132,8 +140,28 @@ export function createRenderer(canvas, { preserve = false } = {}) {
   const parallel = gl.getExtension('KHR_parallel_shader_compile');
   const programs = new Map();
   const pending = new Map();
-  const keyOf = def => (def ? def.id : '');
-  const start = def => {
+  let current = null;
+  let loc = {};
+  let disposed = false;
+  let lastVariant = shaderVariant();
+  const keyOf = (def, variant = lastVariant) => `${def?.id || ''}|${variantKey(variant)}`;
+  const touch = key => {
+    const entry = programs.get(key);
+    if (entry) {
+      programs.delete(key);
+      programs.set(key, entry);
+    }
+    return entry;
+  };
+  const start = (def, variant) => {
+    if (!pending.size) {
+      for (const [key, entry] of programs) {
+        if (programs.size < 32) break;
+        if (entry === current) continue;
+        gl.deleteProgram(entry.program);
+        programs.delete(key);
+      }
+    }
     const layout = def ? layoutParams(def.params) : null;
     const source = buildFragment(
       def
@@ -145,9 +173,10 @@ export function createRenderer(canvas, { preserve = false } = {}) {
             reach: def.reach,
             defines: layout.defines
           }
-        : null
+        : null,
+      { ...variant, bevel: def && def.kind !== 'fill' ? def.normals !== false : variant.bevel }
     );
-    return { def, layout, started: startProgram(gl, VERTEX, source) };
+    return { def, layout, variant, started: startProgram(gl, VERTEX, source) };
   };
   const settle = (key, record) => {
     pending.delete(key);
@@ -156,28 +185,30 @@ export function createRenderer(canvas, { preserve = false } = {}) {
       program,
       layout: record.layout,
       def: record.def,
+      capacity: record.variant.capacity,
+      arrays: sceneArrays(record.variant.capacity),
       loc: Object.fromEntries(UNIFORMS.map(name => [name, gl.getUniformLocation(program, name)]))
     };
     programs.set(key, entry);
     return entry;
   };
-  const programFor = def => {
-    const key = keyOf(def);
-    if (programs.has(key)) return programs.get(key);
-    return settle(key, pending.get(key) || start(def));
+  const programFor = (def, variant) => {
+    const key = keyOf(def, variant);
+    return touch(key) || settle(key, pending.get(key) || start(def, variant));
   };
-  const prepareAsync = def => {
-    const key = keyOf(def);
-    if (programs.has(key)) return Promise.resolve(programs.get(key));
+  const prepareAsync = (def, variant = lastVariant) => {
+    if (disposed) return Promise.reject(new Error('Renderer was disposed.'));
+    const key = keyOf(def, variant);
+    if (programs.has(key)) return Promise.resolve(touch(key));
     if (pending.has(key)) return pending.get(key).promise;
-    const record = start(def);
+    const record = start(def, variant);
     record.promise = new Promise((resolve, reject) => {
       const check = () => {
         if (programs.has(key)) {
           resolve(programs.get(key));
           return;
         }
-        if (pending.get(key) !== record) {
+        if (disposed || pending.get(key) !== record || gl.isContextLost()) {
           reject(new Error('Shader compile was cancelled.'));
           return;
         }
@@ -196,11 +227,10 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     pending.set(key, record);
     return record.promise;
   };
-  let current = programFor(null);
-  let loc = current.loc;
-  const switchProgram = def => {
-    current = programFor(def);
+  const switchProgram = (def, variant) => {
+    current = programFor(def, variant);
     loc = current.loc;
+    arrays = current.arrays;
     gl.useProgram(current.program);
   };
 
@@ -277,16 +307,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
   };
   setMaterialTexture(null);
 
-  const arrays = {
-    type: new Int32Array(MAX_LAYERS * 2),
-    a: new Float32Array(MAX_LAYERS * 8),
-    b: new Float32Array(MAX_LAYERS * 8),
-    xf: new Float32Array(MAX_LAYERS * 8),
-    rep: new Float32Array(MAX_LAYERS * 8),
-    mod: new Float32Array(MAX_LAYERS * 8),
-    pat: new Float32Array(MAX_LAYERS * 8),
-    pat2: new Float32Array(MAX_LAYERS * 8)
-  };
+  let arrays = null;
 
   let readTarget = null;
 
@@ -363,7 +384,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     logoIndex = -1;
     logoTexture = blankColor;
     const countA = writeScene(a, 0, maskSlots);
-    const countB = b ? writeScene(b, MAX_LAYERS, maskSlots) : 0;
+    const countB = b ? writeScene(b, current.capacity, maskSlots) : 0;
     gl.uniform1i(loc.uCountA, countA);
     gl.uniform1i(loc.uCountB, countB);
     gl.uniform1iv(loc.uType, arrays.type);
@@ -483,7 +504,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     surfaceOn = false;
     const plan = solver?.prepare(fieldW, fieldH, Math.min(fieldW, fieldH) / 2);
     if (plan) {
-      switchProgram(null);
+      switchProgram(null, shaderVariant(scene));
       applyScene(scene);
       plan.forEach(level => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, level.fbo);
@@ -522,7 +543,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
       gloss?.on && solveSurface(scene, Math.max(gloss.bevel ?? 0.4, 0.005), width, height, surfaceResolution)
     );
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    switchProgram(style?.material?.def || null);
+    switchProgram(style?.material?.def || null, shaderVariant(scene, style));
     applyScene(scene);
     applyStyle(style);
     frame({ width, height, unit, center, time });
@@ -549,7 +570,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
   const readField = ({ scene, width, height, unit, center }) => {
     const target = ensureReadTarget(width, height);
     gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo);
-    switchProgram(null);
+    switchProgram(null, shaderVariant(scene));
     applyScene(scene);
     frame({ width, height, unit, center, encode: true });
     const bytes = new Uint8Array(width * height * 4);
@@ -574,6 +595,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
   };
 
   const dispose = () => {
+    disposed = true;
     masks.forEach(mask => {
       gl.deleteTexture(mask.texture);
       if (mask.color) gl.deleteTexture(mask.color);
@@ -598,9 +620,15 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     pending.clear();
   };
 
-  const prepare = def => {
-    programFor(def || null);
+  const prepareScene = (scene, style = {}) => {
+    const variant = shaderVariant(scene, style);
+    lastVariant = variant;
+    const work = [prepareAsync(style.material?.def || null, variant)];
+    if (style.gloss?.on) work.push(prepareAsync(null, shaderVariant(scene)));
+    return Promise.all(work);
   };
+
+  const prepare = def => prepareAsync(def || null);
 
   const isReady = def => programs.has(keyOf(def));
 
@@ -612,6 +640,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     setMaterialTexture,
     prepare,
     prepareAsync,
+    prepareScene,
     isReady,
     dispose
   };
