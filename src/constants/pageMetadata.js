@@ -34,7 +34,9 @@ export const PAGE_METADATA = {
     description:
       'Create animated backgrounds, SVG shapes and image textures with free browser-based tools from React Bits.',
     intro:
-      'Free tools that run in your browser. Make a background, a shape or a texture, tune it live, then take it into your project.'
+      'Free tools that run in your browser. Make a background, a shape or a texture, tune it live, then take it into your project.',
+    image: '/og/tools/index.jpg',
+    imageAlt: 'Background Studio, Shape Magic and Texture Lab, free creative tools by React Bits.'
   },
   '/showcase': {
     title: 'React Bits - Showcase',
@@ -71,5 +73,7 @@ export const getToolSEO = tool => ({
   heading: tool.label,
   description: tool.description,
   intro: tool.description,
-  path: tool.path
+  path: tool.path,
+  image: `/og/tools/${tool.id}.jpg`,
+  imageAlt: `${tool.label}, a free creative tool by React Bits.`
 });
