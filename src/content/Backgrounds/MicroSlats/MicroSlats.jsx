@@ -626,12 +626,17 @@ const MicroSlats = ({
       fluidTexel.value = [1 / w, 1 / h];
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
       renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
       renderer.setSize(width, height);
       buildFluid();
+    };
+
+    const resize = () => {
+      resizePending = true;
       start();
     };
 
@@ -732,6 +737,10 @@ const MicroSlats = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
