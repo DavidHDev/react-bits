@@ -434,7 +434,7 @@ export default function GradientWaves({
     const measure = () => {
       state.cssWidth = container.clientWidth;
       state.cssHeight = container.clientHeight;
-      fit();
+      state.quiet = 0;
       wake();
     };
 
