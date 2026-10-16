@@ -2951,6 +2951,16 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/micro/shredder',
     tags: ['shredder', 'delete', 'drag', 'list', 'strips', 'paper', 'physics', 'remove'],
     added: '2026-09-22'
+  },
+  'Micro/FlyingButton': {
+    videoUrl: '/assets/video/flyingbutton.webm',
+    description:
+      'Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud.',
+    category: 'Micro',
+    name: 'FlyingButton',
+    docsUrl: 'https://reactbits.dev/micro/flying-button',
+    tags: ['button', 'hover', 'webgl', 'smoke', 'fluid', 'physics', 'cursor', 'flight'],
+    added: '2026-10-16'
   }
 };
 

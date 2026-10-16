@@ -15056,6 +15056,72 @@
 					"path": "Shredder/Shredder.tsx"
 				}
 			]
+		},
+		{
+			"name": "FlyingButton-JS-CSS",
+			"title": "FlyingButton",
+			"description": "Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FlyingButton.css",
+					"target": "@components/FlyingButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FlyingButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "FlyingButton-JS-TW",
+			"title": "FlyingButton",
+			"description": "Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FlyingButton/FlyingButton.jsx"
+				}
+			]
+		},
+		{
+			"name": "FlyingButton-TS-CSS",
+			"title": "FlyingButton",
+			"description": "Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "FlyingButton.css",
+					"target": "@components/FlyingButton.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "FlyingButton.tsx"
+				}
+			]
+		},
+		{
+			"name": "FlyingButton-TS-TW",
+			"title": "FlyingButton",
+			"description": "Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "FlyingButton/FlyingButton.tsx"
+				}
+			]
 		}
 	]
 }

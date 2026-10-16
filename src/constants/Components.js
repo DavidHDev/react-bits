@@ -156,6 +156,7 @@ const micro = {
   'call-chip': () => import('../demo/Micro/CallChipDemo'),
   'bell-toggle': () => import('../demo/Micro/BellToggleDemo'),
   'sling-button': () => import('../demo/Micro/SlingButtonDemo'),
+  'flying-button': () => import('../demo/Micro/FlyingButtonDemo'),
   'swipe-toast': () => import('../demo/Micro/SwipeToastDemo'),
   'prompt-bar': () => import('../demo/Micro/PromptBarDemo'),
   'slosh-gauge': () => import('../demo/Micro/SloshGaugeDemo'),
