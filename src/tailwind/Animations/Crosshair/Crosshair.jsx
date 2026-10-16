@@ -92,13 +92,18 @@ const Crosshair = ({
     let last = 0;
     let alive = true;
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const rect = canvas.getBoundingClientRect();
       size.dpr = Math.min(window.devicePixelRatio || 1, 2);
       size.w = rect.width;
       size.h = rect.height;
       canvas.width = Math.max(1, Math.round(rect.width * size.dpr));
       canvas.height = Math.max(1, Math.round(rect.height * size.dpr));
+    };
+
+    const resize = () => {
+      resizePending = true;
       wake();
     };
 
@@ -247,6 +252,10 @@ const Crosshair = ({
 
     const tick = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
