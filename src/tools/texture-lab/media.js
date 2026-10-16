@@ -1,9 +1,16 @@
 import { openVideo } from './player';
 
 export const SAMPLES = [
-  { id: 'clouds', label: 'Clouds', kind: 'video', url: '/assets/demo/cloud-flight.mp4' },
+  { id: 'neon', label: 'Neon', kind: 'video', url: '/assets/demo/neon-dancer.mp4' },
+  { id: 'grass', label: 'Grass', kind: 'video', url: '/assets/demo/golden-grass.mp4' },
+  { id: 'mountain', label: 'Mountain', kind: 'video', url: '/assets/demo/fuji-dawn.mp4' },
   { id: 'sky', label: 'Sky', kind: 'image', url: '/assets/demo/day-sky.webp' }
 ];
+
+export function randomSampleVideo() {
+  const videos = SAMPLES.filter(sample => sample.kind === 'video');
+  return videos[Math.floor(Math.random() * videos.length)];
+}
 
 export const MAX_PREVIEW = 2048;
 const MIN_PREVIEW = 1280;

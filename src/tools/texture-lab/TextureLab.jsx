@@ -5,7 +5,16 @@ import { EFFECTS, EFFECT_LIST } from './effects';
 import { LOOKS, LOOKS_BY_ID } from './looks';
 import { useLayers } from './state/useLayers';
 import { useThumbnails } from './state/useThumbnails';
-import { SAMPLES, isMediaFile, loadFile, loadSample, mediaFrame, releaseMedia, startCamera, workSize } from './media';
+import {
+  isMediaFile,
+  loadFile,
+  loadSample,
+  mediaFrame,
+  randomSampleVideo,
+  releaseMedia,
+  startCamera,
+  workSize
+} from './media';
 import { decodeLook, readSharedLook } from './share';
 import { EffectsGrid, GallerySearch, GalleryScroll, LooksGrid } from './components/Gallery';
 import LayersPanel from './components/LayersPanel';
@@ -67,6 +76,7 @@ export default function TextureLab({ toolSelector }) {
   const [comparing, setComparing] = useState(false);
   const [dropping, setDropping] = useState(false);
   const [playing, setPlaying] = useState(true);
+  const [defaultSample] = useState(randomSampleVideo);
   const [trim, setTrim] = useState([0, 0]);
   const [thumbVersion, setThumbVersion] = useState(0);
   const [exporting, setExporting] = useState(false);
@@ -219,9 +229,9 @@ export default function TextureLab({ toolSelector }) {
     const shared = readSharedLook();
     if (shared) replaceLayers(shared);
     else applyLook(LOOKS_BY_ID[DEFAULT_LOOK]);
-    openSample(SAMPLES[0]);
+    openSample(defaultSample);
     return () => releaseMedia(mediaRef.current);
-  }, [applyLook, openSample, replaceLayers]);
+  }, [applyLook, defaultSample, openSample, replaceLayers]);
 
   const togglePlay = useCallback(() => {
     const current = live.current.media;

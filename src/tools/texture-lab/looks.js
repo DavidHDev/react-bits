@@ -22,7 +22,7 @@ export const LOOKS = [
     tags: 'ascii glyphs blur dreamy',
     primary: 2,
     layers: [
-      { type: 'blur', params: { mode: 'gaussian', amount: 12 } },
+      { type: 'blur', params: { mode: 'gaussian', amount: 5 } },
       { type: 'adjust', params: { exposure: -0.45 } },
       {
         type: 'ascii',
