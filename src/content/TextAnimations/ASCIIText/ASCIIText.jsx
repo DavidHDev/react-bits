@@ -364,7 +364,8 @@ export default function ASCIIText({
       }
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const width = Math.max(1, Math.round(container.clientWidth * dpr));
       const height = Math.max(1, Math.round(container.clientHeight * dpr));
@@ -374,8 +375,17 @@ export default function ASCIIText({
       }
     };
 
+    const resize = () => {
+      resizePending = true;
+      wake();
+    };
+
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));

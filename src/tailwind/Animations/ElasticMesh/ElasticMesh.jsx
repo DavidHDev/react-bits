@@ -1102,7 +1102,8 @@ const ElasticMesh = ({
       return sampleSdf(mesh.restX[bestK] + (px - x[bestK]), mesh.restY[bestK] + (py - y[bestK])) > -4;
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
@@ -1117,6 +1118,10 @@ const ElasticMesh = ({
         if (first) rasterize();
         else resizeTimer = window.setTimeout(rasterize, 160);
       }
+    };
+
+    const resize = () => {
+      resizePending = true;
       wake();
     };
 
@@ -1190,6 +1195,10 @@ const ElasticMesh = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive || !visible || document.hidden) return;
       const s = settingsRef.current;
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;

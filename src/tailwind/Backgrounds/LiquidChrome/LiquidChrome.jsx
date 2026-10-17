@@ -515,6 +515,7 @@ const LiquidChrome = ({
     };
     wakeRef.current = () => {
       resize();
+      render(settingsRef.current);
       wake();
     };
 
@@ -603,6 +604,7 @@ const LiquidChrome = ({
 
     const resizeObserver = new ResizeObserver(() => {
       resize();
+      render(settingsRef.current);
       wake();
     });
     resizeObserver.observe(container);

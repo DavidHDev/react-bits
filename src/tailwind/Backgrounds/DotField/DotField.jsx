@@ -418,7 +418,8 @@ const DotField = ({
       gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const rect = container.getBoundingClientRect();
       const cssWidth = Math.max(1, rect.width);
@@ -440,8 +441,17 @@ const DotField = ({
       layout();
     };
 
+    const resize = () => {
+      resizePending = true;
+      wake();
+    };
+
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost) return;
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);

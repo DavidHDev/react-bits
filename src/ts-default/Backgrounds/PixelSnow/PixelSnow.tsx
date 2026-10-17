@@ -821,7 +821,7 @@ export default function PixelSnow({
       view.gridHeight = Math.max(1, Math.ceil(height / view.pixel));
       if (pile.length !== view.gridWidth) pile = new Float32Array(view.gridWidth);
       populate(s);
-      if (!raf) render();
+      render();
       wake();
     };
 

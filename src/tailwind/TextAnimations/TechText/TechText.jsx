@@ -115,6 +115,7 @@ const TechText = ({
     let visible = false;
     let alive = true;
     let layoutKey = '';
+    let sizeDirty = true;
     let requestedFont = '';
     let word = null;
     let glyphs = [];
@@ -288,12 +289,13 @@ const TechText = ({
           }
         };
         const kept = previous[glyphs.length];
+        const sameGlyph = kept?.char === char && kept.index === i;
         glyphs.push({
           ...base,
-          offset: kept?.char === char ? kept.offset : { x: 0, y: 0 },
-          velocity: { x: 0, y: 0 },
-          outline: 0,
-          shown: 1,
+          offset: sameGlyph ? kept.offset : { x: 0, y: 0 },
+          velocity: sameGlyph ? kept.velocity : { x: 0, y: 0 },
+          outline: sameGlyph ? kept.outline : 0,
+          shown: sameGlyph ? kept.shown : 1,
           cells: null,
           assembled: 0,
           index: i,
@@ -301,8 +303,8 @@ const TechText = ({
           dashes: sprite(s, next, base, true, ink)
         });
       });
-      dragging = -1;
-      frame.index = -1;
+      if (dragging >= 0 && glyphs[dragging]?.index !== previous[dragging]?.index) dragging = -1;
+      if (frame.index >= 0 && glyphs[frame.index]?.char !== previous[frame.index]?.char) frame.index = -1;
       return next;
     };
 
@@ -680,6 +682,16 @@ const TechText = ({
       raf = 0;
       const s = settingsRef.current;
       if (!s) return;
+      if (sizeDirty) {
+        sizeDirty = false;
+        width = Math.max(1, container.clientWidth);
+        height = Math.max(1, container.clientHeight);
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const pixelWidth = Math.round(width * dpr);
+        const pixelHeight = Math.round(height * dpr);
+        if (canvas.width !== pixelWidth) canvas.width = pixelWidth;
+        if (canvas.height !== pixelHeight) canvas.height = pixelHeight;
+      }
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
       last = now;
       const { ink, accent } = palette(s);
@@ -875,12 +887,7 @@ const TechText = ({
     wakeRef.current = wake;
 
     const resize = () => {
-      width = Math.max(1, container.clientWidth);
-      height = Math.max(1, container.clientHeight);
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      layoutKey = '';
+      sizeDirty = true;
       wake();
     };
 
@@ -948,6 +955,7 @@ const TechText = ({
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
+    window.addEventListener('resize', resize, { passive: true });
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       wake();
@@ -968,6 +976,7 @@ const TechText = ({
       cancelAnimationFrame(raf);
       wakeRef.current = () => {};
       resizeObserver.disconnect();
+      window.removeEventListener('resize', resize);
       intersectionObserver.disconnect();
       themeObserver.disconnect();
       schemeQuery?.removeEventListener?.('change', wake);

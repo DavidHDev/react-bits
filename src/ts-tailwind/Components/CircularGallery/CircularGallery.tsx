@@ -807,6 +807,10 @@ const CircularGallery = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!visible || document.hidden) return;
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
@@ -895,7 +899,8 @@ const CircularGallery = ({
       if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
     }
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       view.width = Math.max(1, container.clientWidth);
       view.height = Math.max(1, container.clientHeight);
@@ -909,6 +914,10 @@ const CircularGallery = ({
         state.target = (state.target / before) * spacing;
       }
       state.spacing = spacing;
+    };
+
+    const resize = () => {
+      resizePending = true;
       wake();
     };
 

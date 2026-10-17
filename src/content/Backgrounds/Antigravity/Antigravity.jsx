@@ -459,7 +459,8 @@ const Antigravity = ({
       return next;
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const rect = container.getBoundingClientRect();
       const cssWidth = Math.max(1, rect.width);
@@ -491,6 +492,11 @@ const Antigravity = ({
       ) {
         field = buildField(s.count, cssWidth, cssHeight, field);
       }
+    };
+
+    const resize = () => {
+      resizePending = true;
+      wake();
     };
 
     const simulate = (s, dt) => {
@@ -567,6 +573,10 @@ const Antigravity = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost || !field) return;
       const s = settingsRef.current;
       updatePalette(s);

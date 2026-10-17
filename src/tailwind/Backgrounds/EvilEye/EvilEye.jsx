@@ -5,11 +5,7 @@ import { useEffect, useRef } from 'react';
 
 function hexToVec3(hex) {
   const h = hex.replace('#', '');
-  return [
-    parseInt(h.slice(0, 2), 16) / 255,
-    parseInt(h.slice(2, 4), 16) / 255,
-    parseInt(h.slice(4, 6), 16) / 255
-  ];
+  return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
 }
 
 function generateNoiseTexture(size = 256) {
@@ -193,7 +189,7 @@ export default function EvilEye({
       width: 256,
       height: 256,
       generateMipmaps: false,
-      flipY: false,
+      flipY: false
     });
     noiseTexture.minFilter = gl.LINEAR;
     noiseTexture.magFilter = gl.LINEAR;
@@ -224,7 +220,13 @@ export default function EvilEye({
         program.uniforms.uResolution.value = [gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height];
       }
     }
-    window.addEventListener('resize', resize);
+    let resizePending = false;
+    const onResize = () => {
+      resizePending = true;
+    };
+    const resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(container);
+    window.addEventListener('resize', onResize);
     resize();
 
     const geometry = new Triangle(gl);
@@ -256,6 +258,10 @@ export default function EvilEye({
     let animationFrameId;
 
     function update(time) {
+      if (resizePending) {
+        resizePending = false;
+        resize();
+      }
       animationFrameId = requestAnimationFrame(update);
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
@@ -267,13 +273,26 @@ export default function EvilEye({
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', onResize);
+      resizeObserver.disconnect();
       container.removeEventListener('mousemove', onMouseMove);
       container.removeEventListener('mouseleave', onMouseLeave);
       container.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [eyeColor, intensity, pupilSize, irisWidth, glowIntensity, scale, noiseScale, pupilFollow, flameSpeed, backgroundColor, lightMode]);
+  }, [
+    eyeColor,
+    intensity,
+    pupilSize,
+    irisWidth,
+    glowIntensity,
+    scale,
+    noiseScale,
+    pupilFollow,
+    flameSpeed,
+    backgroundColor,
+    lightMode
+  ]);
 
   return <div ref={containerRef} className="w-full h-full" />;
 }

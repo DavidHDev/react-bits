@@ -640,10 +640,8 @@ export const Cubes = ({
       canvas.width = Math.max(1, Math.round(width * view.ratio));
       canvas.height = Math.max(1, Math.round(height * view.ratio));
       allocate(s.gridSize);
-      if (!raf) {
-        step(0);
-        render();
-      }
+      step(0);
+      render();
       wake();
     };
 

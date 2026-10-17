@@ -821,7 +821,8 @@ const ReflectiveCard = ({
       return source.mix !== before;
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       size.width = body.offsetWidth;
       size.height = body.offsetHeight;
       size.scale = Math.min(window.devicePixelRatio || 1, 2);
@@ -834,8 +835,17 @@ const ReflectiveCard = ({
       envFresh = true;
     };
 
+    const resize = () => {
+      resizePending = true;
+      wake();
+    };
+
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost) return;
       const dt = Math.min(0.05, (now - last) / 1000 || 0);
       last = now;
