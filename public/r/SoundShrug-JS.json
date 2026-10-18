@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundShrug-JS",
+	"title": "SoundShrug",
+	"description": "A gentle falling pair that says not quite.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "shrug.js",
+			"target": "@components/sounds/shrug.js",
+			"content": "const shrug = {\n  duration: 0.55,\n  seed: 43,\n  loudness: -18,\n  lowpass: 5500,\n  reverb: { mix: 0.12, decay: 0.5, predelay: 0.01, damp: 4500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.096, 0.55],\n        [3, 0.024, 0.35]\n      ],\n      env: { attack: 0.006, decay: 0.22, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 523.25,\n      at: 0.12,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.096, 0.55],\n        [3, 0.024, 0.35]\n      ],\n      env: { attack: 0.006, decay: 0.32, curve: 6 }\n    }\n  ]\n};\n\nexport default shrug;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

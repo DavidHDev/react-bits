@@ -13,7 +13,7 @@ const TechText = lazy(() => import('../../../content/TextAnimations/TechText/Tec
 const CircularCarousel = lazy(() => import('../../../content/Components/CircularCarousel/CircularCarousel'));
 const HoldButton = lazy(() => import('../../../content/Micro/HoldButton/HoldButton'));
 
-const WELL = { dark: '#09080b', light: '#f7f7f8' };
+const WELL = { dark: '#0e0b13', light: '#ffffff' };
 
 const CARDS = [
   {

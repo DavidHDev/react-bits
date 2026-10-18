@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDing-JS",
+	"title": "SoundDing",
+	"description": "A clean bell ding for highlights.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "ding.js",
+			"target": "@components/sounds/ding.js",
+			"content": "const ding = {\n  duration: 1.6,\n  seed: 143,\n  loudness: -16,\n  lowpass: 8500,\n  reverb: { mix: 0.25, decay: 1.4, predelay: 0.01, damp: 6500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.128, 0.55],\n        [3, 0.032, 0.35]\n      ],\n      env: { attack: 0.004, decay: 1.4, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0,\n      gain: -14,\n      partials: [\n        [1, 1, 1],\n        [2, 0.048, 0.55],\n        [3, 0.012, 0.35]\n      ],\n      env: { attack: 0.004, decay: 1, curve: 6 }\n    }\n  ]\n};\n\nexport default ding;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCircuit-TS",
+	"title": "SoundCircuit",
+	"description": "A clean electronic logo sting.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "circuit.ts",
+			"target": "@components/sounds/circuit.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst circuit: Recipe = {\n  duration: 2.2,\n  seed: 356,\n  loudness: -16,\n  lowpass: 7000,\n  highpass: 40,\n  width: 0.7,\n  reverb: { mix: 0.25, decay: 1.8, predelay: 0.01, damp: 5500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0,\n      gain: -2,\n      fm: { ratio: 2, index: { from: 1, to: 0, time: 0.15 } },\n      env: { attack: 0.002, decay: 0.25, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.06,\n      gain: -3,\n      fm: { ratio: 2, index: { from: 1, to: 0, time: 0.15 } },\n      env: { attack: 0.002, decay: 0.25, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.12,\n      gain: -4,\n      fm: { ratio: 2, index: { from: 1, to: 0, time: 0.15 } },\n      env: { attack: 0.002, decay: 0.25, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1479.98,\n      at: 0.18,\n      gain: -5,\n      fm: { ratio: 2, index: { from: 1, to: 0, time: 0.15 } },\n      env: { attack: 0.002, decay: 0.25, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.24,\n      gain: -6,\n      fm: { ratio: 2, index: { from: 1, to: 0, time: 0.15 } },\n      env: { attack: 0.002, decay: 0.25, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 90, to: 45, time: 0.36, curve: 3 },\n      at: 0.3,\n      gain: 0,\n      env: { attack: 0.004, decay: 0.6, curve: 5 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 2,\n      detune: 6,\n      freq: 293.66,\n      at: 0.3,\n      gain: -6,\n      filter: { type: 'lowpass', freq: 4000, q: 0.6 },\n      env: { attack: 0.05, rise: 1, decay: 1.6, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 2,\n      detune: 6,\n      freq: 440,\n      at: 0.3,\n      gain: -8,\n      filter: { type: 'lowpass', freq: 4000, q: 0.6 },\n      env: { attack: 0.05, rise: 1, decay: 1.6, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 2,\n      detune: 6,\n      freq: 587.33,\n      at: 0.3,\n      gain: -10,\n      filter: { type: 'lowpass', freq: 4000, q: 0.6 },\n      env: { attack: 0.05, rise: 1, decay: 1.6, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 2,\n      detune: 6,\n      freq: 739.99,\n      at: 0.3,\n      gain: -12,\n      filter: { type: 'lowpass', freq: 4000, q: 0.6 },\n      env: { attack: 0.05, rise: 1, decay: 1.6, curve: 4 }\n    }\n  ]\n};\n\nexport default circuit;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

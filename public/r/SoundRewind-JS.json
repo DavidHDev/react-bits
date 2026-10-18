@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundRewind-JS",
+	"title": "SoundRewind",
+	"description": "A quick tape rewind for flashbacks.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "rewind.js",
+			"target": "@components/sounds/rewind.js",
+			"content": "const rewind = {\n  duration: 1.05,\n  seed: 134,\n  loudness: -17,\n  lowpass: 5000,\n  highpass: 100,\n  reverb: { mix: 0.08, decay: 0.4, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      freq: { from: 180, to: 1600, time: 0.95, curve: 0.8 },\n      tremolo: { rate: 28, depth: 0.6 },\n      filter: { type: 'lowpass', freq: 2600, q: 0.8 },\n      gain: -6,\n      env: { attack: 0.05, hold: 0.8, decay: 0.12, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 260, to: 2200, time: 0.95, curve: 0.8 },\n      vibrato: { rate: 13, depth: 60 },\n      gain: -12,\n      filter: { type: 'lowpass', freq: 3000, q: 0.6 },\n      env: { attack: 0.05, hold: 0.8, decay: 0.12, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -10,\n      filter: { type: 'bandpass', freq: { from: 500, to: 3000, time: 0.97, curve: 2 }, q: 0.6 },\n      env: { attack: 0.05, rise: 1.5, hold: 0.8, decay: 0.12, curve: 4 }\n    }\n  ]\n};\n\nexport default rewind;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

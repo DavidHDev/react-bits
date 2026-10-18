@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundGlimmer-TS",
+	"title": "SoundGlimmer",
+	"description": "A quick sparkle for small wins.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "glimmer.ts",
+			"target": "@components/sounds/glimmer.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst glimmer: Recipe = {\n  duration: 0.6,\n  seed: 252,\n  loudness: -19,\n  lowpass: 9000,\n  highpass: 400,\n  width: 0.7,\n  reverb: { mix: 0.25, decay: 0.8, predelay: 0.01, damp: 7000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1975.53,\n      at: 0.0094,\n      gain: -1.7232,\n      pan: 0.0473,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.048, 0.4],\n        [5.4, 0.012, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1972, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.051,\n      gain: -2.1416,\n      pan: 0.4804,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.048, 0.4],\n        [5.4, 0.012, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1935, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.1032,\n      gain: -3.7591,\n      pan: -0.282,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.048, 0.4],\n        [5.4, 0.012, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1274, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.1421,\n      gain: -5.1606,\n      pan: -0.4566,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.048, 0.4],\n        [5.4, 0.012, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.189, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1479.98,\n      at: 0.1849,\n      gain: -6.3813,\n      pan: 0.5774,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.048, 0.4],\n        [5.4, 0.012, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.2167, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1975.53,\n      at: 0.2324,\n      gain: -7.3901,\n      pan: 0.1312,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.048, 0.4],\n        [5.4, 0.012, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1965, curve: 6 }\n    }\n  ]\n};\n\nexport default glimmer;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

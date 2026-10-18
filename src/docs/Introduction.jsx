@@ -107,10 +107,14 @@ const FLAVOURS = [
 const TOOL_BLURBS = {
   'background-studio':
     'Start from a preset, tune any animated background live, then export the code, a 4K image or a looping video.',
+  'center-stage':
+    'Put a screenshot or recording on lifelike devices with depth and shadows. Perfect for launch videos or demos.',
   'shape-magic':
     'Design a logo mark or style your own logo with 3D materials. Export SVG, PNG, favicons, video or React.',
   'texture-lab':
-    'Run photos, videos or your camera through 160 styles and 75+ effects, then export images, videos or GIFs.'
+    'Run photos, videos or your camera through 160 styles and 75+ effects, then export images, videos or GIFs.',
+  'sound-lab':
+    'Tune polished interface and video sounds live, then install one with a single command or download WAV, MP3 or OGG.'
 };
 
 const PRINCIPLES = [
@@ -272,7 +276,7 @@ const Introduction = () => {
 
       <h2 className="docs-section-title">Free tools</h2>
 
-      <p className="docs-paragraph">Three browser tools built on the same components, free to use.</p>
+      <p className="docs-paragraph">Five browser tools, free to use.</p>
 
       <div className="docs-intro-cats">
         {TOOLS.map(tool => (

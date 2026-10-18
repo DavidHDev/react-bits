@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundBurble-TS",
+	"title": "SoundBurble",
+	"description": "A string of bubbles rising.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "burble.ts",
+			"target": "@components/sounds/burble.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst burble: Recipe = {\n  duration: 0.9,\n  seed: 347,\n  loudness: -18,\n  lowpass: 5000,\n  highpass: 150,\n  reverb: { mix: 0.15, decay: 0.6, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 298.0217, to: 536.4391, time: 0.045, curve: 1.6 },\n      at: 0.0295,\n      gain: -0.871,\n      pan: 0.0566,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 334.0204, to: 601.2367, time: 0.045, curve: 1.6 },\n      at: 0.0998,\n      gain: -1.0414,\n      pan: -0.3739,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 425.5039, to: 765.907, time: 0.045, curve: 1.6 },\n      at: 0.203,\n      gain: -3.074,\n      pan: 0.302,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 493.5488, to: 888.3878, time: 0.045, curve: 1.6 },\n      at: 0.2825,\n      gain: -3.7123,\n      pan: 0.3719,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 584.7093, to: 1052.4767, time: 0.045, curve: 1.6 },\n      at: 0.3638,\n      gain: -2.924,\n      pan: 0.0923,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 664.7525, to: 1196.5545, time: 0.045, curve: 1.6 },\n      at: 0.4532,\n      gain: -3.3878,\n      pan: -0.3615,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 738.7544, to: 1329.7579, time: 0.045, curve: 1.6 },\n      at: 0.5643,\n      gain: -5.2702,\n      pan: 0.3376,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 926.5723, to: 1667.8301, time: 0.045, curve: 1.6 },\n      at: 0.6545,\n      gain: -5.1202,\n      pan: -0.1351,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    }\n  ]\n};\n\nexport default burble;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundStreak-JS",
+	"title": "SoundStreak",
+	"description": "A quick wooden run for keeping a streak.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "streak.js",
+			"target": "@components/sounds/streak.js",
+			"content": "const streak = {\n  duration: 0.6,\n  seed: 256,\n  loudness: -18,\n  lowpass: 7000,\n  reverb: { mix: 0.12, decay: 0.5, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0,\n      gain: -2,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.08, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0.045,\n      gain: -2,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.08, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 739.99,\n      at: 0.09,\n      gain: -2,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.08, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.135,\n      gain: -2,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.08, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 987.77,\n      at: 0.18,\n      gain: -2,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.08, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.225,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.35, curve: 6 }\n    }\n  ]\n};\n\nexport default streak;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

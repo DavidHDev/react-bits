@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCushion-TS",
+	"title": "SoundCushion",
+	"description": "A muffled, padded thump for gentle cuts.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "cushion.ts",
+			"target": "@components/sounds/cushion.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst cushion: Recipe = {\n  duration: 0.6,\n  seed: 112,\n  loudness: -15,\n  lowpass: 2800,\n  highpass: 30,\n  reverb: { mix: 0.12, decay: 0.8, predelay: 0.01, damp: 2000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 98, to: 56, time: 0.14, curve: 3 },\n      env: { attack: 0.003, decay: 0.45, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 210, to: 130, time: 0.08, curve: 3 },\n      gain: 2,\n      env: { attack: 0.003, decay: 0.14, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -6,\n      filter: { type: 'lowpass', freq: { from: 900, to: 250, time: 0.08 }, q: 0.6 },\n      env: { attack: 0.002, decay: 0.08, curve: 5 }\n    }\n  ]\n};\n\nexport default cushion;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

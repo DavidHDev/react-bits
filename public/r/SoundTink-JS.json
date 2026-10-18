@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundTink-JS",
+	"title": "SoundTink",
+	"description": "A tiny metallic tap for links and icons.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "tink.js",
+			"target": "@components/sounds/tink.js",
+			"content": "const tink = {\n  duration: 0.08,\n  seed: 18,\n  loudness: -22,\n  lowpass: 8500,\n  reverb: { mix: 0.08, decay: 0.25, predelay: 0.01, damp: 7000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1760,\n      partials: [\n        [1, 1, 1],\n        [2.32, 0.14, 0.45],\n        [4.25, 0.04, 0.25]\n      ],\n      env: { attack: 0.0012, decay: 0.045, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -26,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 3000, q: 1.2 },\n        { type: 'lowpass', freq: 7800, q: 0.5 }\n      ],\n      env: { attack: 0.0006, decay: 0.002, curve: 6 }\n    }\n  ]\n};\n\nexport default tink;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

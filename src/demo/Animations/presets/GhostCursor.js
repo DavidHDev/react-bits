@@ -39,10 +39,20 @@ export const PRESET_OPTIONS = [
   { value: 'wisp', label: 'Wisp' }
 ];
 
-export const presetProps = (value, { defaults = {} } = {}) => {
+export const LIGHT_SWAP = {
+  phantom: { color: '#8b6fb3' },
+  wraith: { color: '#3b5bdb' },
+  ember: { color: '#ea580c' },
+  mist: { color: '#52525b' },
+  ecto: { color: '#059669' },
+  wisp: { color: '#8b6fb3' }
+};
+
+export const presetProps = (value, { light = false, defaults = {} } = {}) => {
   const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaults[name]]));
   return {
     ...base,
-    ...PRESETS[value]
+    ...PRESETS[value],
+    ...(light ? LIGHT_SWAP[value] : null)
   };
 };

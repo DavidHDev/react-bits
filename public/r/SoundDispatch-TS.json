@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDispatch-TS",
+	"title": "SoundDispatch",
+	"description": "A quick airy lift for sending a message.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "dispatch.ts",
+			"target": "@components/sounds/dispatch.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst dispatch: Recipe = {\n  duration: 0.24,\n  seed: 231,\n  loudness: -19.5,\n  lowpass: 6500,\n  highpass: 200,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      pan: { from: 0, to: 0.4, time: 0.15 },\n      filter: { type: 'bandpass', freq: { from: 600, to: 2200, time: 0.14, curve: 2 }, q: 0.9 },\n      env: { attack: 0.04, rise: 1.5, decay: 0.1, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 587.33, to: 1174.66, time: 0.12, curve: 2 },\n      gain: -8,\n      env: { attack: 0.03, decay: 0.12, curve: 4 }\n    }\n  ]\n};\n\nexport default dispatch;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

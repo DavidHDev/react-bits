@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundMark-TS",
+	"title": "SoundMark",
+	"description": "A soft plucked tick for each completed step.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "mark.ts",
+			"target": "@components/sounds/mark.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst mark: Recipe = {\n  duration: 0.18,\n  seed: 221,\n  loudness: -20,\n  lowpass: 7500,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.24, 0.55],\n        [3, 0.096, 0.35],\n        [4, 0.042, 0.22],\n        [5, 0.018, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.12, curve: 6 }\n    }\n  ]\n};\n\nexport default mark;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

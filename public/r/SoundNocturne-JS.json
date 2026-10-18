@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundNocturne-JS",
+	"title": "SoundNocturne",
+	"description": "A dark, slow drone with faint night insects.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "nocturne.js",
+			"target": "@components/sounds/nocturne.js",
+			"content": "const nocturne = {\n  duration: 9.5,\n  seed: 327,\n  loudness: -21,\n  lowpass: 6000,\n  highpass: 40,\n  width: 0.9,\n  reverb: { mix: 0.3, decay: 2.4, predelay: 0.01, damp: 3500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 9,\n      freq: 73.42,\n      at: 0,\n      gain: -2,\n      filter: { type: 'lowpass', freq: 450, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 9,\n      freq: 110,\n      at: 0,\n      gain: -5,\n      filter: { type: 'lowpass', freq: 450, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 9,\n      freq: 146.83,\n      at: 0,\n      gain: -8,\n      filter: { type: 'lowpass', freq: 450, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 3997.857,\n      at: 1.1927,\n      gain: -25.2768,\n      pan: 0.1111,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 4440.6691,\n      at: 1.9986,\n      gain: -24.0223,\n      pan: -0.7539,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 4034.0892,\n      at: 2.6098,\n      gain: -28.1215,\n      pan: -0.4444,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 3946.8109,\n      at: 3.4982,\n      gain: -28.0884,\n      pan: -0.6409,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 4470.3593,\n      at: 4.1518,\n      gain: -27.4477,\n      pan: 0.5516,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 3888.71,\n      at: 4.968,\n      gain: -25.2435,\n      pan: -0.0467,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 3824.7807,\n      at: 5.5883,\n      gain: -25.2964,\n      pan: -0.5547,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 4487.513,\n      at: 6.2756,\n      gain: -28.8114,\n      pan: 0.1451,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 4173.6029,\n      at: 7.1468,\n      gain: -25.9918,\n      pan: 0.7608,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 4133.667,\n      at: 7.9843,\n      gain: -27.354,\n      pan: -0.4337,\n      tremolo: { rate: 38, depth: 0.9 },\n      env: { attack: 0.02, hold: 0.1, decay: 0.05, curve: 4 }\n    }\n  ]\n};\n\nexport default nocturne;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

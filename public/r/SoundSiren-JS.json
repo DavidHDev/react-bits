@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSiren-JS",
+	"title": "SoundSiren",
+	"description": "A distant, soft siren swell.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "siren.js",
+			"target": "@components/sounds/siren.js",
+			"content": "const siren = {\n  duration: 4,\n  seed: 367,\n  loudness: -18,\n  lowpass: 1800,\n  highpass: 150,\n  width: 0.8,\n  reverb: { mix: 0.5, decay: 2.5, predelay: 0.04, damp: 2000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 587.33,\n      vibrato: { rate: 0.45, depth: 350 },\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 1],\n        [3, 0.08, 1]\n      ],\n      env: { attack: 1.2, hold: 1.4, decay: 1.3, curve: 3 }\n    }\n  ]\n};\n\nexport default siren;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

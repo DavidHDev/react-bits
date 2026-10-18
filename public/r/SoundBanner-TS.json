@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundBanner-TS",
+	"title": "SoundBanner",
+	"description": "A clean sweep and click for lower thirds.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "banner.ts",
+			"target": "@components/sounds/banner.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst banner: Recipe = {\n  duration: 0.7,\n  seed: 336,\n  loudness: -18,\n  lowpass: 7000,\n  highpass: 120,\n  reverb: { mix: 0.12, decay: 0.5, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      pan: { from: -0.6, to: 0.2, time: 0.3 },\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 500],\n            [0.18, 1500],\n            [0.3, 900]\n          ]\n        },\n        q: 0.8\n      },\n      env: { attack: 0.18, rise: 1.5, decay: 0.12, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.3,\n      gain: -10,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1500, q: 0.8 },\n        { type: 'lowpass', freq: 3900, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.006, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.3,\n      gain: -8,\n      partials: [\n        [1, 1, 1],\n        [2, 0.048, 0.55],\n        [3, 0.012, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.3, curve: 6 }\n    }\n  ]\n};\n\nexport default banner;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

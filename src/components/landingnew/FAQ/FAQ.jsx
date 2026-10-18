@@ -63,9 +63,9 @@ const QUESTIONS = [
     q: 'What are the tools for?',
     a: (
       <>
-        Background Studio, Shape Magic and Texture Lab are free apps that run in your browser. Tune any animated
-        background, design a logo mark with 3D materials or restyle photos and videos, then export code, images or
-        video.{' '}
+        Background Studio, Center Stage, Shape Magic, Texture Lab and Sound Lab are free apps that run in your browser.
+        Tune an animated background, turn a screenshot into a product shot, design a logo mark with 3D materials,
+        restyle photos and videos or shape interface sounds, then export code, images, video or audio.{' '}
         <Link className="ln-faq-link" to="/tools">
           Open the tools
         </Link>

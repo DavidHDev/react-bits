@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPlush-JS",
+	"title": "SoundPlush",
+	"description": "A cushioned press that springs back, for cards and large buttons.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "plush.js",
+			"target": "@components/sounds/plush.js",
+			"content": "const plush = {\n  duration: 0.15,\n  seed: 16,\n  loudness: -19,\n  lowpass: 3200,\n  reverb: { mix: 0.06, decay: 0.25, predelay: 0.01, damp: 3000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 290, to: 220, time: 0.03, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 0.06, curve: 6 },\n      filter: { type: 'lowpass', freq: 1100, q: 0.6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -15,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 600, q: 0.6 },\n        { type: 'lowpass', freq: 1560, q: 0.5 }\n      ],\n      env: { attack: 0.003, decay: 0.02, curve: 6 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 330, to: 400, time: 0.04, curve: 3 },\n      at: 0.075,\n      gain: -10,\n      env: { attack: 0.006, decay: 0.05, curve: 6 },\n      filter: { type: 'lowpass', freq: 1400, q: 0.6 }\n    }\n  ]\n};\n\nexport default plush;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

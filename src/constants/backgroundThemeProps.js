@@ -82,9 +82,11 @@ export const STUDIO_DARK_PROPS = {
 
 export const STUDIO_LIGHT_PROPS = {
   'click-spark': { sparkColor: '#18181b' },
+  'ghost-cursor': { theme: 'light', color: '#8b6fb3' },
   'laser-flow': { theme: 'light' },
   'magnet-lines': { accentColor: '#18181b' },
   'micro-slats': { glintColor: '#6B21A8', backgroundColor: '#ffffff' },
+  noise: { blendMode: 'multiply' },
   'pattern-waves': { color: '#18181b', backgroundColor: '#ffffff' },
   'shape-waves': { color: '#8a8a8a', hoverColor: '#18181b', backgroundColor: '#ffffff' }
 };

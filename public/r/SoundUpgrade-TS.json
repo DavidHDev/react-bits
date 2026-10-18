@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundUpgrade-TS",
+	"title": "SoundUpgrade",
+	"description": "A rising power-up for leveling up.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "upgrade.ts",
+			"target": "@components/sounds/upgrade.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst upgrade: Recipe = {\n  duration: 0.9,\n  seed: 253,\n  loudness: -17.5,\n  lowpass: 7000,\n  reverb: { mix: 0.16, decay: 0.7, predelay: 0.01, damp: 6000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 2,\n      detune: 8,\n      freq: { from: 293.66, to: 587.33, time: 0.3, curve: 1.5 },\n      filter: { type: 'lowpass', freq: { from: 600, to: 3200, time: 0.3 }, q: 0.8 },\n      gain: -10,\n      env: { attack: 0.03, decay: 0.32, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.3,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.096, 0.55],\n        [3, 0.024, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.5, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.36,\n      gain: -5,\n      partials: [\n        [1, 1, 1],\n        [2, 0.064, 0.55],\n        [3, 0.016, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.45, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -20,\n      filter: { type: 'bandpass', freq: { from: 1500, to: 6000, time: 0.4, curve: 2 }, q: 0.8 },\n      env: { attack: 0.28, rise: 1.5, decay: 0.12, curve: 4 }\n    }\n  ]\n};\n\nexport default upgrade;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

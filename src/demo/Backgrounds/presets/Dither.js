@@ -66,10 +66,17 @@ export const PRESET_OPTIONS = [
   { value: 'static', label: 'Static' }
 ];
 
-export const presetProps = (value, { defaults = {} } = {}) => {
+export const LIGHT_SWAP = {
+  gameboy: { palette: [...PALETTES.gameboy].reverse() },
+  amber: { palette: [...PALETTES.amber].reverse() },
+  blueprint: { palette: [...PALETTES.blueprint].reverse() }
+};
+
+export const presetProps = (value, { light = false, defaults = {} } = {}) => {
   const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(name => [name, defaults[name]]));
   return {
     ...base,
-    ...PRESETS[value]
+    ...PRESETS[value],
+    ...(light ? LIGHT_SWAP[value] : null)
   };
 };

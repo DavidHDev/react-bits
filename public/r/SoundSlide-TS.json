@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSlide-TS",
+	"title": "SoundSlide",
+	"description": "A short tonal slide that lands, for titles moving in.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "slide.ts",
+			"target": "@components/sounds/slide.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst slide: Recipe = {\n  duration: 0.45,\n  seed: 334,\n  loudness: -18,\n  lowpass: 6500,\n  highpass: 150,\n  reverb: { mix: 0.1, decay: 0.4, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: { type: 'bandpass', freq: { from: 500, to: 1500, time: 0.33, curve: 2 }, q: 0.8 },\n      env: { attack: 0.25, rise: 1.6, decay: 0.08, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 440, to: 659.26, time: 0.3, curve: 2 },\n      gain: -10,\n      env: { attack: 0.25, rise: 1.6, decay: 0.08, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0.32,\n      gain: -6,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.06, curve: 6 }\n    }\n  ]\n};\n\nexport default slide;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

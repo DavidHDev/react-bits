@@ -168,6 +168,7 @@ Notes:
 - [Comet Dial](https://www.reactbits.dev/micro/comet-dial): Tick-ring dial you flick by angle, with a comet that streaks behind the lit head. CLI: `CometDial`.
 - [Dodge Field](https://www.reactbits.dev/micro/dodge-field): Wrapper that makes any child dodge the pointer until it relents and glides home. CLI: `DodgeField`.
 - [Flip Card](https://www.reactbits.dev/micro/flip-card): Two-faced card that flips in 3D on a click, drag or flick and settles on a spring. CLI: `FlipCard`.
+- [Flying Button](https://www.reactbits.dev/micro/flying-button): Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud. CLI: `FlyingButton`.
 - [Folder Float](https://www.reactbits.dev/micro/folder-float): Folder whose notes spring out into a floating cloud when it opens on hover or press. CLI: `FolderFloat`.
 - [Fuse Button](https://www.reactbits.dev/micro/fuse-button): Action button whose done state carries an undo on a burning fuse. CLI: `FuseButton`.
 - [Glide Select](https://www.reactbits.dev/micro/glide-select): Select chip whose menu pops from its corner and whose highlight glides between rows. CLI: `GlideSelect`.

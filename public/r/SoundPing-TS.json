@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPing-TS",
+	"title": "SoundPing",
+	"description": "One clear bell with a quiet tail.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "ping.ts",
+			"target": "@components/sounds/ping.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst ping: Recipe = {\n  duration: 1.2,\n  seed: 53,\n  loudness: -17,\n  lowpass: 8000,\n  reverb: { mix: 0.2, decay: 1.2, predelay: 0.01, damp: 6000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.128, 0.55],\n        [3, 0.032, 0.35]\n      ],\n      env: { attack: 0.004, decay: 1.1, curve: 6 }\n    }\n  ]\n};\n\nexport default ping;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

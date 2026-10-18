@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSnap-TS",
+	"title": "SoundSnap",
+	"description": "A quick pull and crisp snap onto a grid or slot.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "snap.ts",
+			"target": "@components/sounds/snap.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst snap: Recipe = {\n  duration: 0.1,\n  seed: 213,\n  loudness: -20.5,\n  lowpass: 7500,\n  reverb: { mix: 0.05, decay: 0.18, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 500, to: 1400, time: 0.025, curve: 0.6 },\n      gain: -18,\n      env: { attack: 0.02, rise: 2, decay: 0.006, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.024,\n      gain: -9,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1900, q: 1.2 },\n        { type: 'lowpass', freq: 4940, q: 0.5 }\n      ],\n      env: { attack: 0.0006, decay: 0.004, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 1500, to: 1200, time: 0.006, curve: 3 },\n      at: 0.024,\n      gain: -12,\n      env: { attack: 0.001, decay: 0.02, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0.024,\n      gain: -10,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.04, curve: 6 }\n    }\n  ]\n};\n\nexport default snap;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

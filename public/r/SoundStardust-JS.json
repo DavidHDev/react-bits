@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundStardust-JS",
+	"title": "SoundStardust",
+	"description": "A few soft twinkles that settle.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "stardust.js",
+			"target": "@components/sounds/stardust.js",
+			"content": "const stardust = {\n  duration: 1.8,\n  seed: 141,\n  loudness: -18,\n  lowpass: 8000,\n  highpass: 400,\n  width: 0.7,\n  reverb: { mix: 0.35, decay: 1.8, predelay: 0.01, damp: 6500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 0.0219,\n      gain: -14.5874,\n      pan: 0.0101,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0174, decay: 0.3864, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.0798,\n      gain: -11.5649,\n      pan: 0.1228,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0178, decay: 0.5263, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.1838,\n      gain: -12.0228,\n      pan: 0.3517,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0189, decay: 0.3602, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.2851,\n      gain: -11.6225,\n      pan: -0.3872,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.013, decay: 0.3631, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 0.3713,\n      gain: -13.715,\n      pan: -0.0991,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0165, decay: 0.4476, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.5157,\n      gain: -12.2489,\n      pan: 0.4961,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0126, decay: 0.498, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 0.6233,\n      gain: -17.0964,\n      pan: -0.6669,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.02, decay: 0.3303, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.7365,\n      gain: -17.1522,\n      pan: -0.0364,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0177, decay: 0.4837, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 0.8794,\n      gain: -18.5495,\n      pan: 0.6905,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0127, decay: 0.41, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 1,\n      gain: -19.0983,\n      pan: 0.2567,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.05, 0.35]\n      ],\n      env: { attack: 0.0171, decay: 0.3607, curve: 6 }\n    }\n  ]\n};\n\nexport default stardust;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

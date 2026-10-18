@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundVanish-JS",
+	"title": "SoundVanish",
+	"description": "A soft airy fade for text disappearing.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "vanish.js",
+			"target": "@components/sounds/vanish.js",
+			"content": "const vanish = {\n  duration: 0.6,\n  seed: 338,\n  loudness: -19,\n  lowpass: 8000,\n  highpass: 300,\n  reverb: { mix: 0.2, decay: 0.8, predelay: 0.01, damp: 7000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: { type: 'bandpass', freq: { from: 1500, to: 3500, time: 0.53, curve: 2 }, q: 0.7 },\n      env: { attack: 0.08, rise: 1.2, decay: 0.45, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 880, to: 1318.51, time: 0.4, curve: 2 },\n      gain: -10,\n      env: { attack: 0.06, decay: 0.45, curve: 4 }\n    }\n  ]\n};\n\nexport default vanish;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

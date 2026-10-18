@@ -38,10 +38,11 @@ export const PRESET_OPTIONS = [
   { value: 'paper', label: 'Paper' }
 ];
 
-export const presetProps = value => {
+export const presetProps = (value, { light = false } = {}) => {
   const base = Object.fromEntries(Object.keys(DEFAULT_PROPS).map(key => [key, DEFAULT_PROPS[key]]));
   return {
     ...base,
-    ...PRESETS[value]
+    ...PRESETS[value],
+    ...(light ? { blendMode: 'multiply' } : null)
   };
 };

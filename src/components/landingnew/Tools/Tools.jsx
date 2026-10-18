@@ -10,20 +10,49 @@ import './Tools.css';
 
 const Topography = lazy(() => import('../../../content/Backgrounds/Topography/Topography'));
 const MetallicPaint = lazy(() => import('../../../content/Animations/MetallicPaint/MetallicPaint'));
+const SoundPreview = lazy(() => import('./SoundPreview'));
 
 const BLURBS = {
   'background-studio':
     'Pick an animated background, start from a preset, tune it live, then export the code, a 4K image or a looping video.',
+  'center-stage': 'Turn screenshots and recordings into polished product shots. Perfect for launch videos or demos.',
   'shape-magic':
     'Design a logo mark or style your own logo with 3D materials. Export SVG, PNG, favicons, video or React.',
   'texture-lab':
-    'Stack animated effects on a photo, video or your camera, then export an image, a video, a GIF or a shareable style.'
+    'Stack animated effects on a photo, video or your camera, then export an image, a video, a GIF or a shareable style.',
+  'sound-lab':
+    'Interface and video sounds, tune them live, then install one with a single command or download WAV, MP3 or OGG.'
 };
 
 const POSTERS = { 'background-studio': 'topography', 'shape-magic': 'metallicpaint' };
 
 const Preview = ({ id, light }) => {
-  if (POSTERS[id] && document.documentElement.hasAttribute('data-lite')) {
+  const lite = document.documentElement.hasAttribute('data-lite');
+  if (id === 'center-stage') {
+    return (
+      <img
+        className="ln-tools-shot ln-tools-shot--fit"
+        src={`/assets/images/center-stage-shot${light ? '-light' : ''}.webp`}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
+  if (id === 'sound-lab') {
+    return lite ? (
+      <img
+        className="ln-tools-shot"
+        src={`/assets/images/sound-lab-orb${light ? '-light' : ''}.webp`}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <SoundPreview />
+    );
+  }
+  if (POSTERS[id] && lite) {
     return (
       <img
         className="ln-tools-poster"
@@ -91,7 +120,7 @@ const Tools = () => {
     <section className="ln-tools-section">
       <div className="ln-tools-inner">
         <header className="ln-tools-head">
-          <h2 className="ln-tools-title">Three free tools, in your browser.</h2>
+          <h2 className="ln-tools-title">Five free tools, in your browser.</h2>
         </header>
         <div className="ln-tools-grid">
           {TOOLS.map(tool => (

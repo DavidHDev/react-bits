@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundEmber-TS",
+	"title": "SoundEmber",
+	"description": "A dim, flickering tone for low battery.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "ember.ts",
+			"target": "@components/sounds/ember.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst ember: Recipe = {\n  duration: 0.65,\n  seed: 87,\n  loudness: -19,\n  lowpass: 5000,\n  reverb: { mix: 0.12, decay: 0.5, predelay: 0.01, damp: 3500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: 440,\n      tremolo: { rate: 9, depth: 0.5 },\n      filter: { type: 'lowpass', freq: { from: 2400, to: 500, time: 0.5 }, q: 0.7 },\n      env: { attack: 0.01, decay: 0.55, curve: 3 }\n    },\n    { type: 'tone', freq: 220, gain: -9, env: { attack: 0.01, decay: 0.5, curve: 4 } }\n  ]\n};\n\nexport default ember;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

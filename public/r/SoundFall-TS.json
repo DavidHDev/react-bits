@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundFall-TS",
+	"title": "SoundFall",
+	"description": "A falling tone and air for exits.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "fall.ts",
+			"target": "@components/sounds/fall.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst fall: Recipe = {\n  duration: 2,\n  seed: 305,\n  loudness: -16.5,\n  lowpass: 7000,\n  highpass: 40,\n  reverb: { mix: 0.25, decay: 1.6, predelay: 0.01, damp: 4500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 1174.66, to: 146.83, time: 1.8, curve: 1.5 },\n      env: { attack: 0.03, decay: 1.8, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 587.33, to: 73.42, time: 1.8, curve: 1.5 },\n      gain: -10,\n      filter: { type: 'lowpass', freq: 1500, q: 0.6 },\n      env: { attack: 0.03, decay: 1.8, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -12,\n      filter: { type: 'bandpass', freq: { from: 3000, to: 400, time: 1.65, curve: 2 }, q: 0.7 },\n      env: { attack: 0.05, rise: 1, decay: 1.6, curve: 3 }\n    }\n  ]\n};\n\nexport default fall;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

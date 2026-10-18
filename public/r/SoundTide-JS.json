@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundTide-JS",
+	"title": "SoundTide",
+	"description": "A slow eight second build of air and low drone.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "tide.js",
+			"target": "@components/sounds/tide.js",
+			"content": "const tide = {\n  duration: 8.2,\n  seed: 104,\n  loudness: -15,\n  lowpass: 9000,\n  highpass: 28,\n  width: 0.8,\n  reverb: { mix: 0.3, decay: 3, predelay: 0.025, damp: 4000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: { type: 'lowpass', freq: { from: 200, to: 6000, time: 8, curve: 0.6 }, q: 0.6 },\n      env: { attack: 7.8, rise: 2.4, decay: 0.3, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 4,\n      detune: 10,\n      freq: { from: 73.42, to: 110, time: 8, curve: 0.8 },\n      gain: -8,\n      filter: { type: 'lowpass', freq: { from: 250, to: 1500, time: 8 }, q: 0.7 },\n      env: { attack: 7.6, rise: 2.2, decay: 0.35, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 36.71, to: 55, time: 8, curve: 0.8 },\n      gain: -10,\n      env: { attack: 7.5, rise: 2, decay: 0.35, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 2,\n      detune: 6,\n      freq: { from: 293.66, to: 440, time: 8, curve: 0.8 },\n      gain: -16,\n      filter: { type: 'lowpass', freq: 2500, q: 0.6 },\n      env: { attack: 7.6, rise: 2.2, decay: 0.3, curve: 3 }\n    }\n  ]\n};\n\nexport default tide;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

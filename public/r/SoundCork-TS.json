@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCork-TS",
+	"title": "SoundCork",
+	"description": "A round cork pop with a little fizz.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "cork.ts",
+			"target": "@components/sounds/cork.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst cork: Recipe = {\n  duration: 0.6,\n  seed: 341,\n  loudness: -16,\n  lowpass: 8000,\n  highpass: 60,\n  reverb: { mix: 0.12, decay: 0.5, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 900, to: 350, time: 0.012, curve: 3 },\n      env: { attack: 0.002, decay: 0.03, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -4,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 700, q: 0.6 },\n        { type: 'lowpass', freq: 1820, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.012, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'crackle',\n      at: 0.02,\n      gain: 2,\n      filter: [\n        { type: 'highpass', freq: 3000, q: 0.5 },\n        { type: 'lowpass', freq: 8000, q: 0.5 }\n      ],\n      env: { attack: 0.01, decay: 0.5, curve: 4 }\n    }\n  ]\n};\n\nexport default cork;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

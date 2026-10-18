@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundFold-TS",
+	"title": "SoundFold",
+	"description": "The matching flutter that tucks away, for collapsing.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "fold.ts",
+			"target": "@components/sounds/fold.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst fold: Recipe = {\n  duration: 0.26,\n  seed: 67,\n  loudness: -20,\n  lowpass: 5500,\n  highpass: 180,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: { type: 'bandpass', freq: { from: 1500, to: 650, time: 0.18, curve: 2 }, q: 0.8 },\n      env: { attack: 0.02, rise: 1, decay: 0.16, curve: 4 },\n      tremolo: { rate: 34, depth: 0.5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 587.33, to: 440, time: 0.14, curve: 2 },\n      gain: -12,\n      env: { attack: 0.015, decay: 0.15, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.17,\n      gain: -20,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 900, q: 0.7 },\n        { type: 'lowpass', freq: 2340, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.01, curve: 6 }\n    }\n  ]\n};\n\nexport default fold;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

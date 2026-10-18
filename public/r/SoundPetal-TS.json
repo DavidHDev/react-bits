@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPetal-TS",
+	"title": "SoundPetal",
+	"description": "Two light notes for picking a swatch or card.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "petal.ts",
+			"target": "@components/sounds/petal.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst petal: Recipe = {\n  duration: 0.2,\n  seed: 26,\n  loudness: -20,\n  lowpass: 8000,\n  reverb: { mix: 0.12, decay: 0.35, predelay: 0.01, damp: 6500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.064, 0.55],\n        [3, 0.016, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.09, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.035,\n      gain: -4,\n      partials: [\n        [1, 1, 1],\n        [2, 0.048, 0.55],\n        [3, 0.012, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.12, curve: 6 }\n    }\n  ]\n};\n\nexport default petal;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

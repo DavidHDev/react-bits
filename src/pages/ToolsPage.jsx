@@ -15,11 +15,15 @@ import '../css/site-page.css';
 const BackgroundStudio = lazy(() => import('../tools/background-studio/BackgroundStudio'));
 const ShapeMagic = lazy(() => import('../tools/shape-magic/ShapeMagic'));
 const TextureLab = lazy(() => import('../tools/texture-lab/TextureLab'));
+const CenterStage = lazy(() => import('../tools/center-stage/CenterStage'));
+const SoundLab = lazy(() => import('../tools/sound-lab/SoundLab'));
 
 const TOOL_COMPONENTS = {
   'background-studio': BackgroundStudio,
   'shape-magic': ShapeMagic,
-  'texture-lab': TextureLab
+  'texture-lab': TextureLab,
+  'center-stage': CenterStage,
+  'sound-lab': SoundLab
 };
 
 const TOOLS = BASE_TOOLS.map(tool => ({

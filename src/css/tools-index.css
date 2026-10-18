@@ -9,6 +9,9 @@
   --tl-gutter: 33px;
   min-height: 100vh;
   min-height: 100svh;
+}
+
+.pg.tl {
   padding-top: var(--tl-top);
   padding-bottom: 96px;
 }
@@ -28,7 +31,33 @@
 }
 
 .tl-head {
-  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 44px;
+  text-align: center;
+}
+
+.tl-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.tl-eyebrow svg {
+  flex: none;
+  color: #fff;
+}
+
+.tl-title {
+  text-wrap: balance;
 }
 
 .tl-rail {
@@ -41,18 +70,26 @@
 
 .tl-grid {
   display: grid;
-  flex: 1;
   column-gap: 12px;
-  row-gap: 8px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: minmax(max(320px, calc((100cqi - 24px) * 0.25)), 1fr) auto;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: minmax(140px, 1fr) auto 12px minmax(140px, 1fr) auto;
 }
 
 .tl-grid > .tl-card {
   display: grid;
-  grid-row: span 2;
+  min-width: 0;
+  grid-column: span 2;
+  grid-row: 4 / span 2;
   grid-template-rows: subgrid;
-  row-gap: 0;
+}
+
+.tl-grid > .tl-card:nth-child(-n + 2) {
+  grid-column: span 3;
+  grid-row: 1 / span 2;
+}
+
+.tl-grid > .tl-card .tl-well {
+  min-height: 0;
 }
 
 .tl-card {
@@ -79,10 +116,27 @@
   --tl-lit-light: 8, 145, 178;
 }
 
+.tl-card--center-stage {
+  --tl-deep: 112, 18, 72;
+  --tl-mid: 214, 41, 128;
+  --tl-light: 249, 168, 212;
+  --tl-lit: 244, 114, 182;
+  --tl-lit-light: 219, 39, 119;
+}
+
+.tl-card--sound-lab {
+  --tl-deep: 3, 72, 38;
+  --tl-mid: 12, 135, 71;
+  --tl-light: 92, 200, 140;
+  --tl-lit: 86, 226, 144;
+  --tl-lit-light: 10, 140, 70;
+}
+
 .tl-well {
+  --tl-occlude: #0f0c13;
   display: grid;
   min-height: 0;
-  container-type: inline-size;
+  container-type: size;
   color: rgba(255, 255, 255, 0.13);
   place-items: center;
 }
@@ -94,6 +148,7 @@
 }
 
 .tl-backdrop {
+  --tl-fade: 22%;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -102,31 +157,31 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     ),
     linear-gradient(
       to right,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     );
   -webkit-mask-composite: source-in;
@@ -134,31 +189,31 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     ),
     linear-gradient(
       to right,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     );
   mask-composite: intersect;
@@ -180,31 +235,31 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     ),
     linear-gradient(
       to right,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     );
   -webkit-mask-composite: source-in;
@@ -221,34 +276,61 @@
     linear-gradient(
       to bottom,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     ),
     linear-gradient(
       to right,
       transparent 0%,
-      rgba(0, 0, 0, 0.06) 4.4%,
-      rgba(0, 0, 0, 0.32) 8.8%,
-      rgba(0, 0, 0, 0.68) 13.2%,
-      rgba(0, 0, 0, 0.94) 17.6%,
-      #000 22%,
-      #000 78%,
-      rgba(0, 0, 0, 0.94) 82.4%,
-      rgba(0, 0, 0, 0.68) 86.8%,
-      rgba(0, 0, 0, 0.32) 91.2%,
-      rgba(0, 0, 0, 0.06) 95.6%,
+      rgba(0, 0, 0, 0.06) calc(var(--tl-fade) * 0.2),
+      rgba(0, 0, 0, 0.32) calc(var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.68) calc(var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.94) calc(var(--tl-fade) * 0.8),
+      #000 var(--tl-fade),
+      #000 calc(100% - var(--tl-fade)),
+      rgba(0, 0, 0, 0.94) calc(100% - var(--tl-fade) * 0.8),
+      rgba(0, 0, 0, 0.68) calc(100% - var(--tl-fade) * 0.6),
+      rgba(0, 0, 0, 0.32) calc(100% - var(--tl-fade) * 0.4),
+      rgba(0, 0, 0, 0.06) calc(100% - var(--tl-fade) * 0.2),
       transparent 100%
     );
   mask-composite: intersect;
+}
+
+.tl-backdrop--scene {
+  --tl-fade: 6%;
+}
+
+.tl-card--center-stage .tl-well {
+  --tl-scene: min(540px, 118cqi, max(400px, 228cqh));
+}
+
+.tl-card--center-stage .tl-lockup {
+  translate: 0 calc(var(--tl-scene) * -24 / 540);
+}
+
+.tl-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--tl-scene);
+  height: auto;
+  aspect-ratio: 540 / 320;
+  overflow: visible;
+  translate: -50% calc(-50% - 7.5%);
+}
+
+.tl-stage .tl-solid {
+  fill: var(--tl-occlude);
 }
 
 .tl-lockup {
@@ -447,18 +529,21 @@
   }
 }
 
-@media (max-width: 1320px) {
-  .tl-layout {
-    grid-template-columns: minmax(0, 1fr);
+@media (min-width: 1024px) {
+  .tl-main {
+    align-self: start;
+    min-height: calc(100svh - var(--tl-top) - 32px);
   }
 
   .tl-grid {
-    flex: none;
-    grid-template-rows: auto auto;
+    flex: 1 0 auto;
+    max-height: calc((100cqi - 24px) / 1.5 + 12px);
   }
+}
 
-  .tl-well {
-    aspect-ratio: 4 / 5;
+@media (max-width: 1320px) {
+  .tl-layout {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .tl-rail {
@@ -466,13 +551,42 @@
   }
 }
 
-@container tl-main (max-width: 719px) {
+@container tl-main (max-width: 879px) {
   .tl-grid {
-    grid-template-columns: minmax(0, 1fr);
+    flex: none;
+    max-height: none;
+    row-gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: none;
   }
 
-  .tl-well {
+  .tl-grid > .tl-card,
+  .tl-grid > .tl-card:nth-child(-n + 2) {
+    display: flex;
+    flex-direction: column;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .tl-grid > .tl-card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .tl-grid > .tl-card .tl-well {
+    aspect-ratio: 16 / 11;
+  }
+
+  .tl-grid > .tl-card:first-child .tl-well {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@container tl-main (max-width: 559px) {
+  .tl-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tl-grid > .tl-card:first-child .tl-well {
     aspect-ratio: 16 / 11;
   }
 }
@@ -504,6 +618,7 @@
 }
 
 :root[data-theme='light'] .tl-well {
+  --tl-occlude: #f7f7f8;
   color: rgba(24, 24, 27, 0.12);
 }
 
@@ -531,6 +646,18 @@
   --tl-pa: 226, 249, 252;
   --tl-pb: 178, 234, 243;
   --tl-ink: 6, 98, 112;
+}
+
+:root[data-theme='light'] .tl-card--center-stage {
+  --tl-pa: 253, 234, 245;
+  --tl-pb: 251, 204, 230;
+  --tl-ink: 157, 23, 77;
+}
+
+:root[data-theme='light'] .tl-card--sound-lab {
+  --tl-pa: 228, 251, 237;
+  --tl-pb: 180, 238, 203;
+  --tl-ink: 6, 95, 46;
 }
 
 :root[data-theme='light'] .tl-pill {
@@ -568,6 +695,14 @@
 }
 
 :root[data-theme='light'] .tl-name {
+  color: #18181b;
+}
+
+:root[data-theme='light'] .tl-eyebrow {
+  color: #52525b;
+}
+
+:root[data-theme='light'] .tl-eyebrow svg {
   color: #18181b;
 }
 

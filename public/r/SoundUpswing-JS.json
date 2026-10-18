@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundUpswing-JS",
+	"title": "SoundUpswing",
+	"description": "A half second rise for quick cuts.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "upswing.js",
+			"target": "@components/sounds/upswing.js",
+			"content": "const upswing = {\n  duration: 0.65,\n  seed: 110,\n  loudness: -16,\n  lowpass: 7500,\n  highpass: 80,\n  reverb: { mix: 0.2, decay: 0.8, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: { type: 'lowpass', freq: { from: 500, to: 6000, time: 0.55, curve: 0.7 }, q: 0.7 },\n      env: { attack: 0.5, rise: 2, decay: 0.06, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 293.66, to: 587.33, time: 0.55, curve: 0.8 },\n      gain: -10,\n      filter: { type: 'lowpass', freq: 3000, q: 0.6 },\n      env: { attack: 0.5, rise: 2, decay: 0.06, curve: 3 }\n    }\n  ]\n};\n\nexport default upswing;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

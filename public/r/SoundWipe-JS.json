@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundWipe-JS",
+	"title": "SoundWipe",
+	"description": "A clean tonal sweep for wipes and slides.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "wipe.js",
+			"target": "@components/sounds/wipe.js",
+			"content": "const wipe = {\n  duration: 0.55,\n  seed: 136,\n  loudness: -18,\n  lowpass: 7000,\n  highpass: 120,\n  reverb: { mix: 0.15, decay: 0.7, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 300, to: 1200, time: 0.5, curve: 1.5 },\n      pan: { from: -0.6, to: 0.6, time: 0.5 },\n      env: { attack: 0.2, rise: 1.4, decay: 0.3, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 600, to: 2400, time: 0.5, curve: 1.5 },\n      gain: -14,\n      pan: { from: -0.6, to: 0.6, time: 0.5 },\n      filter: { type: 'lowpass', freq: 3000, q: 0.6 },\n      env: { attack: 0.2, rise: 1.4, decay: 0.3, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -8,\n      pan: { from: -0.6, to: 0.6, time: 0.5 },\n      filter: { type: 'bandpass', freq: { from: 600, to: 2400, time: 0.5, curve: 2 }, q: 0.8 },\n      env: { attack: 0.2, rise: 1.5, decay: 0.3, curve: 4 }\n    }\n  ]\n};\n\nexport default wipe;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

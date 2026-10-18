@@ -14,6 +14,7 @@ import RefreshButton from '../../components/common/Preview/RefreshButton';
 
 import useForceRerender from '../../hooks/useForceRerender';
 import useComponentProps from '../../hooks/useComponentProps';
+import { useColorMode } from '../../components/setup/color-mode';
 import { ComponentPropsProvider } from '../../components/context/ComponentPropsContext';
 
 import Dither from '../../content/Backgrounds/Dither/Dither';
@@ -126,9 +127,10 @@ const DitherDemo = () => {
   const { props, defaultProps, updateProp, updateProps, resetProps, hasChanges } = useComponentProps(DEFAULT_PROPS);
   const { preset, ...settings } = props;
   const paletteActive = settings.palette?.length > 1;
+  const { colorMode } = useColorMode();
 
   const applyPreset = value => {
-    updateProps({ ...presetProps(value, { defaults: defaultProps }), preset: value });
+    updateProps({ ...presetProps(value, { light: colorMode === 'light', defaults: defaultProps }), preset: value });
   };
 
   return (

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDistant-TS",
+	"title": "SoundDistant",
+	"description": "A far-off boom with a long echo.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "distant.ts",
+			"target": "@components/sounds/distant.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst distant: Recipe = {\n  duration: 1.6,\n  seed: 120,\n  loudness: -15,\n  lowpass: 1200,\n  highpass: 28,\n  echo: { time: 0.34, feedback: 0.45, mix: 0.35, damp: 900 },\n  reverb: { mix: 0.45, decay: 3.5, predelay: 0.04, damp: 1500, lowcut: 120 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 70, to: 40, time: 0.72, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 1.2, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      filter: { type: 'lowpass', freq: { from: 300, to: 100, time: 0.6 }, q: 0.6 },\n      env: { attack: 0.005, decay: 0.8, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -10,\n      filter: { type: 'lowpass', freq: 700, q: 0.6 },\n      env: { attack: 0.003, decay: 0.2, curve: 5 }\n    }\n  ]\n};\n\nexport default distant;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

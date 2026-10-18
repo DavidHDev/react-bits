@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundLift-TS",
+	"title": "SoundLift",
+	"description": "A quick, airy swell for fast cuts.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "lift.ts",
+			"target": "@components/sounds/lift.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst lift: Recipe = {\n  duration: 1.35,\n  seed: 102,\n  loudness: -16,\n  lowpass: 7000,\n  highpass: 40,\n  width: 0.7,\n  reverb: { mix: 0.22, decay: 1.3, predelay: 0.01, damp: 4500 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: { type: 'lowpass', freq: { from: 500, to: 4500, time: 1.15, curve: 0.8 }, q: 0.6 },\n      env: { attack: 1.1, rise: 2, decay: 0.18, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 2,\n      detune: 6,\n      freq: { from: 329.63, to: 493.88, time: 1.1, curve: 0.7 },\n      gain: -13,\n      filter: { type: 'lowpass', freq: 2400, q: 0.6 },\n      env: { attack: 1, rise: 1.8, decay: 0.2, curve: 3 }\n    }\n  ]\n};\n\nexport default lift;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

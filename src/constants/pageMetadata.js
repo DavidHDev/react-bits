@@ -29,14 +29,15 @@ export const PAGE_METADATA = {
     intro: 'Keep up with the newest additions to React Bits.'
   },
   '/tools': {
-    title: 'Free Background, Shape and Texture Tools | React Bits',
+    title: 'Free Background, Shape, Texture, Mockup and Sound Tools | React Bits',
     heading: 'Creative tools',
     description:
-      'Create animated backgrounds, SVG shapes and image textures with free browser-based tools from React Bits.',
+      'Create animated backgrounds, SVG shapes, image textures, device mockups and interface sounds with free browser-based tools from React Bits.',
     intro:
-      'Free tools that run in your browser. Make a background, a shape or a texture, tune it live, then take it into your project.',
+      'Free tools that run in your browser. Make a background, a shape, a texture, a product shot or a sound, tune it live, then take it into your project.',
     image: '/og/tools/index.jpg',
-    imageAlt: 'Background Studio, Shape Magic and Texture Lab, free creative tools by React Bits.'
+    imageAlt:
+      'Background Studio, Shape Magic, Texture Lab, Center Stage and Sound Lab, free creative tools by React Bits.'
   },
   '/showcase': {
     title: 'React Bits - Showcase',

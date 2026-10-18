@@ -1,7 +1,20 @@
 import fs from 'node:fs';
-import { defineConfig, type RegistryItem, type RegistryItemFile } from 'jsrepo';
+import path from 'node:path';
+import { defineConfig, type Output, type RegistryItem, type RegistryItemFile } from 'jsrepo';
 import { output } from '@jsrepo/shadcn';
 import { type Category, componentMetadata, type Variant } from './src/constants/Information';
+import { SOUNDS } from './src/tools/sound-lab/sounds/catalog';
+import { fileName, registryName } from './src/tools/sound-lab/export/code';
+
+const SOUND_LANGUAGES = [
+  { variant: 'JS', extension: 'js' },
+  { variant: 'TS', extension: 'ts' }
+] as const;
+
+const soundFile = (extension: string, name: string): RegistryItemFile => ({
+  path: `src/sounds/${extension}/${name}.${extension}`,
+  target: `@components/sounds/${name}.${extension}`
+});
 
 export default defineConfig({
   registry: {
@@ -29,7 +42,7 @@ export default defineConfig({
       'components-library'
     ],
     excludeDeps: ['react'],
-    outputs: [output({ dir: 'public/r', format: true })],
+    outputs: [withLinkedDependencies(output({ dir: 'public/r', format: true }), 'public/r')],
     items: [
       ...Object.values(componentMetadata).map(component =>
         defineComponent({
@@ -40,10 +53,52 @@ export default defineConfig({
           meta: component.meta,
           variants: component.variants
         })
-      )
+      ),
+      ...defineSoundEngine(),
+      ...SOUNDS.map(sound => defineSound(sound))
     ].flat()
   }
 });
+
+function defineSoundEngine(): RegistryItem[] {
+  return SOUND_LANGUAGES.map(({ variant, extension }) => ({
+    title: 'SoundEngine',
+    name: `SoundEngine-${variant}`,
+    description: 'The tiny Web Audio engine that renders and plays React Bits sounds, with a useSound hook.',
+    type: 'registry:component',
+    categories: ['Sounds'],
+    files: [soundFile(extension, 'react-bits-sound')]
+  }));
+}
+
+function defineSound(sound: { id: string; name: string; description: string }): RegistryItem[] {
+  const title = registryName(sound);
+  return SOUND_LANGUAGES.map(({ variant, extension }) => ({
+    title,
+    name: `${title}-${variant}`,
+    description: sound.description,
+    type: 'registry:component',
+    categories: ['Sounds'],
+    registryDependencies: [`SoundEngine-${variant}`],
+    files: [soundFile(extension, fileName(sound))]
+  }));
+}
+
+function withLinkedDependencies(base: Output, dir: string): Output {
+  return {
+    ...base,
+    output: async (registry, options) => {
+      await base.output(registry, options);
+      for (const item of registry.items) {
+        if (!item.registryDependencies?.length) continue;
+        const file = path.join(options.cwd, dir, `${item.name}.json`);
+        const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+        json.registryDependencies = item.registryDependencies.map(name => `${registry.homepage}/r/${name}.json`);
+        fs.writeFileSync(file, JSON.stringify(json, null, '\t'));
+      }
+    }
+  };
+}
 
 /**
  * Define a component to be exposed from the registry. Creates the 4 different variants of the component and ensures the correct files are included.

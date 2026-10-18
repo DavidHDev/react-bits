@@ -15122,6 +15122,6836 @@
 					"path": "FlyingButton/FlyingButton.tsx"
 				}
 			]
+		},
+		{
+			"name": "SoundEngine-JS",
+			"title": "SoundEngine",
+			"description": "The tiny Web Audio engine that renders and plays React Bits sounds, with a useSound hook.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "react-bits-sound.js",
+					"target": "@components/sounds/react-bits-sound.js"
+				}
+			]
+		},
+		{
+			"name": "SoundEngine-TS",
+			"title": "SoundEngine",
+			"description": "The tiny Web Audio engine that renders and plays React Bits sounds, with a useSound hook.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "react-bits-sound.ts",
+					"target": "@components/sounds/react-bits-sound.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPebble-JS",
+			"title": "SoundPebble",
+			"description": "A soft, rounded tap for primary buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pebble.js",
+					"target": "@components/sounds/pebble.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPebble-TS",
+			"title": "SoundPebble",
+			"description": "A soft, rounded tap for primary buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pebble.ts",
+					"target": "@components/sounds/pebble.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFelt-JS",
+			"title": "SoundFelt",
+			"description": "A muted, padded press for quiet buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "felt.js",
+					"target": "@components/sounds/felt.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFelt-TS",
+			"title": "SoundFelt",
+			"description": "A muted, padded press for quiet buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "felt.ts",
+					"target": "@components/sounds/felt.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundNib-JS",
+			"title": "SoundNib",
+			"description": "A tiny, gentle tick for small controls.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nib.js",
+					"target": "@components/sounds/nib.js"
+				}
+			]
+		},
+		{
+			"name": "SoundNib-TS",
+			"title": "SoundNib",
+			"description": "A tiny, gentle tick for small controls.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nib.ts",
+					"target": "@components/sounds/nib.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDew-JS",
+			"title": "SoundDew",
+			"description": "A round, liquid pop that lifts as it lands.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dew.js",
+					"target": "@components/sounds/dew.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDew-TS",
+			"title": "SoundDew",
+			"description": "A round, liquid pop that lifts as it lands.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dew.ts",
+					"target": "@components/sounds/dew.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBead-JS",
+			"title": "SoundBead",
+			"description": "A small, glassy ping for picking an item.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bead.js",
+					"target": "@components/sounds/bead.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBead-TS",
+			"title": "SoundBead",
+			"description": "A small, glassy ping for picking an item.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bead.ts",
+					"target": "@components/sounds/bead.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundNotch-JS",
+			"title": "SoundNotch",
+			"description": "A soft detent for steppers, sliders and tabs.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "notch.js",
+					"target": "@components/sounds/notch.js"
+				}
+			]
+		},
+		{
+			"name": "SoundNotch-TS",
+			"title": "SoundNotch",
+			"description": "A soft detent for steppers, sliders and tabs.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "notch.ts",
+					"target": "@components/sounds/notch.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHalo-JS",
+			"title": "SoundHalo",
+			"description": "A warm confirm for choosing a card.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "halo.js",
+					"target": "@components/sounds/halo.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHalo-TS",
+			"title": "SoundHalo",
+			"description": "A warm confirm for choosing a card.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "halo.ts",
+					"target": "@components/sounds/halo.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundClasp-JS",
+			"title": "SoundClasp",
+			"description": "A soft two step click that turns a switch on.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "clasp.js",
+					"target": "@components/sounds/clasp.js"
+				}
+			]
+		},
+		{
+			"name": "SoundClasp-TS",
+			"title": "SoundClasp",
+			"description": "A soft two step click that turns a switch on.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "clasp.ts",
+					"target": "@components/sounds/clasp.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUnclasp-JS",
+			"title": "SoundUnclasp",
+			"description": "The matching release that turns it off.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unclasp.js",
+					"target": "@components/sounds/unclasp.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUnclasp-TS",
+			"title": "SoundUnclasp",
+			"description": "The matching release that turns it off.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unclasp.ts",
+					"target": "@components/sounds/unclasp.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCheck-JS",
+			"title": "SoundCheck",
+			"description": "A light wooden tock for checkboxes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "check.js",
+					"target": "@components/sounds/check.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCheck-TS",
+			"title": "SoundCheck",
+			"description": "A light wooden tock for checkboxes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "check.ts",
+					"target": "@components/sounds/check.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBloom-JS",
+			"title": "SoundBloom",
+			"description": "Two warm notes that rise into a success.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bloom.js",
+					"target": "@components/sounds/bloom.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBloom-TS",
+			"title": "SoundBloom",
+			"description": "Two warm notes that rise into a success.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bloom.ts",
+					"target": "@components/sounds/bloom.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCrest-JS",
+			"title": "SoundCrest",
+			"description": "A brighter four note lift for bigger wins.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "crest.js",
+					"target": "@components/sounds/crest.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCrest-TS",
+			"title": "SoundCrest",
+			"description": "A brighter four note lift for bigger wins.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "crest.ts",
+					"target": "@components/sounds/crest.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundShrug-JS",
+			"title": "SoundShrug",
+			"description": "A gentle falling pair that says not quite.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shrug.js",
+					"target": "@components/sounds/shrug.js"
+				}
+			]
+		},
+		{
+			"name": "SoundShrug-TS",
+			"title": "SoundShrug",
+			"description": "A gentle falling pair that says not quite.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shrug.ts",
+					"target": "@components/sounds/shrug.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundNudge-JS",
+			"title": "SoundNudge",
+			"description": "A soft double tap that asks for attention.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nudge.js",
+					"target": "@components/sounds/nudge.js"
+				}
+			]
+		},
+		{
+			"name": "SoundNudge-TS",
+			"title": "SoundNudge",
+			"description": "A soft double tap that asks for attention.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nudge.ts",
+					"target": "@components/sounds/nudge.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundChime-JS",
+			"title": "SoundChime",
+			"description": "Three soft bells for a new notification.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "chime.js",
+					"target": "@components/sounds/chime.js"
+				}
+			]
+		},
+		{
+			"name": "SoundChime-TS",
+			"title": "SoundChime",
+			"description": "Three soft bells for a new notification.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "chime.ts",
+					"target": "@components/sounds/chime.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundLantern-JS",
+			"title": "SoundLantern",
+			"description": "A mellow wooden pair for calm reminders.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "lantern.js",
+					"target": "@components/sounds/lantern.js"
+				}
+			]
+		},
+		{
+			"name": "SoundLantern-TS",
+			"title": "SoundLantern",
+			"description": "A mellow wooden pair for calm reminders.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "lantern.ts",
+					"target": "@components/sounds/lantern.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPing-JS",
+			"title": "SoundPing",
+			"description": "One clear bell with a quiet tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ping.js",
+					"target": "@components/sounds/ping.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPing-TS",
+			"title": "SoundPing",
+			"description": "One clear bell with a quiet tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ping.ts",
+					"target": "@components/sounds/ping.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRipple-JS",
+			"title": "SoundRipple",
+			"description": "Two round blips for an incoming message.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ripple.js",
+					"target": "@components/sounds/ripple.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRipple-TS",
+			"title": "SoundRipple",
+			"description": "Two round blips for an incoming message.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ripple.ts",
+					"target": "@components/sounds/ripple.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSwish-JS",
+			"title": "SoundSwish",
+			"description": "A short, airy swipe for sliding panels.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "swish.js",
+					"target": "@components/sounds/swish.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSwish-TS",
+			"title": "SoundSwish",
+			"description": "A short, airy swipe for sliding panels.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "swish.ts",
+					"target": "@components/sounds/swish.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBreeze-JS",
+			"title": "SoundBreeze",
+			"description": "A soft rise for opening a sheet or modal.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "breeze.js",
+					"target": "@components/sounds/breeze.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBreeze-TS",
+			"title": "SoundBreeze",
+			"description": "A soft rise for opening a sheet or modal.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "breeze.ts",
+					"target": "@components/sounds/breeze.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSweep-JS",
+			"title": "SoundSweep",
+			"description": "A falling breath for closing and dismissing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "sweep.js",
+					"target": "@components/sounds/sweep.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSweep-TS",
+			"title": "SoundSweep",
+			"description": "A falling breath for closing and dismissing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "sweep.ts",
+					"target": "@components/sounds/sweep.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGlide-JS",
+			"title": "SoundGlide",
+			"description": "A smooth, rounded slide for tab changes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glide.js",
+					"target": "@components/sounds/glide.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGlide-TS",
+			"title": "SoundGlide",
+			"description": "A smooth, rounded slide for tab changes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glide.ts",
+					"target": "@components/sounds/glide.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundKeycap-JS",
+			"title": "SoundKeycap",
+			"description": "Real laptop key presses, a different take on every keystroke.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "keycap.js",
+					"target": "@components/sounds/keycap.js"
+				}
+			]
+		},
+		{
+			"name": "SoundKeycap-TS",
+			"title": "SoundKeycap",
+			"description": "Real laptop key presses, a different take on every keystroke.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "keycap.ts",
+					"target": "@components/sounds/keycap.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundChiclet-JS",
+			"title": "SoundChiclet",
+			"description": "Light, low-profile key taps like a modern laptop.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "chiclet.js",
+					"target": "@components/sounds/chiclet.js"
+				}
+			]
+		},
+		{
+			"name": "SoundChiclet-TS",
+			"title": "SoundChiclet",
+			"description": "Light, low-profile key taps like a modern laptop.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "chiclet.ts",
+					"target": "@components/sounds/chiclet.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundThock-JS",
+			"title": "SoundThock",
+			"description": "Deeper real key presses with a rounded, muted body.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "thock.js",
+					"target": "@components/sounds/thock.js"
+				}
+			]
+		},
+		{
+			"name": "SoundThock-TS",
+			"title": "SoundThock",
+			"description": "Deeper real key presses with a rounded, muted body.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "thock.ts",
+					"target": "@components/sounds/thock.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDawn-JS",
+			"title": "SoundDawn",
+			"description": "A rising glow for power on and connect.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dawn.js",
+					"target": "@components/sounds/dawn.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDawn-TS",
+			"title": "SoundDawn",
+			"description": "A rising glow for power on and connect.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dawn.ts",
+					"target": "@components/sounds/dawn.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDusk-JS",
+			"title": "SoundDusk",
+			"description": "A falling fade for power off and disconnect.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dusk.js",
+					"target": "@components/sounds/dusk.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDusk-TS",
+			"title": "SoundDusk",
+			"description": "A falling fade for power off and disconnect.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dusk.ts",
+					"target": "@components/sounds/dusk.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSeal-JS",
+			"title": "SoundSeal",
+			"description": "A soft, settled click for save and lock.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "seal.js",
+					"target": "@components/sounds/seal.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSeal-TS",
+			"title": "SoundSeal",
+			"description": "A soft, settled click for save and lock.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "seal.ts",
+					"target": "@components/sounds/seal.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPuff-JS",
+			"title": "SoundPuff",
+			"description": "A breathy, toneless tap for minimal interfaces.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "puff.js",
+					"target": "@components/sounds/puff.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPuff-TS",
+			"title": "SoundPuff",
+			"description": "A breathy, toneless tap for minimal interfaces.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "puff.ts",
+					"target": "@components/sounds/puff.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPlush-JS",
+			"title": "SoundPlush",
+			"description": "A cushioned press that springs back, for cards and large buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "plush.js",
+					"target": "@components/sounds/plush.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPlush-TS",
+			"title": "SoundPlush",
+			"description": "A cushioned press that springs back, for cards and large buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "plush.ts",
+					"target": "@components/sounds/plush.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBoop-JS",
+			"title": "SoundBoop",
+			"description": "A playful, rubbery pop for friendly buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "boop.js",
+					"target": "@components/sounds/boop.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBoop-TS",
+			"title": "SoundBoop",
+			"description": "A playful, rubbery pop for friendly buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "boop.ts",
+					"target": "@components/sounds/boop.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTink-JS",
+			"title": "SoundTink",
+			"description": "A tiny metallic tap for links and icons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tink.js",
+					"target": "@components/sounds/tink.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTink-TS",
+			"title": "SoundTink",
+			"description": "A tiny metallic tap for links and icons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tink.ts",
+					"target": "@components/sounds/tink.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPluck-JS",
+			"title": "SoundPluck",
+			"description": "A soft string pluck for picking from a list.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pluck.js",
+					"target": "@components/sounds/pluck.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPluck-TS",
+			"title": "SoundPluck",
+			"description": "A soft string pluck for picking from a list.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pluck.ts",
+					"target": "@components/sounds/pluck.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDot-JS",
+			"title": "SoundDot",
+			"description": "A pure, minimal tone for radio buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dot.js",
+					"target": "@components/sounds/dot.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDot-TS",
+			"title": "SoundDot",
+			"description": "A pure, minimal tone for radio buttons.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dot.ts",
+					"target": "@components/sounds/dot.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPetal-JS",
+			"title": "SoundPetal",
+			"description": "Two light notes for picking a swatch or card.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "petal.js",
+					"target": "@components/sounds/petal.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPetal-TS",
+			"title": "SoundPetal",
+			"description": "Two light notes for picking a swatch or card.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "petal.ts",
+					"target": "@components/sounds/petal.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundMarble-JS",
+			"title": "SoundMarble",
+			"description": "A smooth glassy click for carousels and pickers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "marble.js",
+					"target": "@components/sounds/marble.js"
+				}
+			]
+		},
+		{
+			"name": "SoundMarble-TS",
+			"title": "SoundMarble",
+			"description": "A smooth glassy click for carousels and pickers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "marble.ts",
+					"target": "@components/sounds/marble.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDaylight-JS",
+			"title": "SoundDaylight",
+			"description": "A bright little rise for switching to light mode.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "daylight.js",
+					"target": "@components/sounds/daylight.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDaylight-TS",
+			"title": "SoundDaylight",
+			"description": "A bright little rise for switching to light mode.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "daylight.ts",
+					"target": "@components/sounds/daylight.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundNightfall-JS",
+			"title": "SoundNightfall",
+			"description": "A soft settle for switching to dark mode.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nightfall.js",
+					"target": "@components/sounds/nightfall.js"
+				}
+			]
+		},
+		{
+			"name": "SoundNightfall-TS",
+			"title": "SoundNightfall",
+			"description": "A soft settle for switching to dark mode.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nightfall.ts",
+					"target": "@components/sounds/nightfall.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRocker-JS",
+			"title": "SoundRocker",
+			"description": "A sturdy two-part click for big switches.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "rocker.js",
+					"target": "@components/sounds/rocker.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRocker-TS",
+			"title": "SoundRocker",
+			"description": "A sturdy two-part click for big switches.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "rocker.ts",
+					"target": "@components/sounds/rocker.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSpring-JS",
+			"title": "SoundSpring",
+			"description": "A playful springy wobble for fun toggles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spring.js",
+					"target": "@components/sounds/spring.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSpring-TS",
+			"title": "SoundSpring",
+			"description": "A playful springy wobble for fun toggles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spring.ts",
+					"target": "@components/sounds/spring.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSettle-JS",
+			"title": "SoundSettle",
+			"description": "A single warm note that quietly says done.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "settle.js",
+					"target": "@components/sounds/settle.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSettle-TS",
+			"title": "SoundSettle",
+			"description": "A single warm note that quietly says done.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "settle.ts",
+					"target": "@components/sounds/settle.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundShake-JS",
+			"title": "SoundShake",
+			"description": "A quick muted shake for invalid input.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shake.js",
+					"target": "@components/sounds/shake.js"
+				}
+			]
+		},
+		{
+			"name": "SoundShake-TS",
+			"title": "SoundShake",
+			"description": "A quick muted shake for invalid input.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shake.ts",
+					"target": "@components/sounds/shake.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHint-JS",
+			"title": "SoundHint",
+			"description": "A neutral, airy tone for tips and info.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "hint.js",
+					"target": "@components/sounds/hint.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHint-TS",
+			"title": "SoundHint",
+			"description": "A neutral, airy tone for tips and info.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "hint.ts",
+					"target": "@components/sounds/hint.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUndo-JS",
+			"title": "SoundUndo",
+			"description": "A soft rewind for undo and revert.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "undo.js",
+					"target": "@components/sounds/undo.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUndo-TS",
+			"title": "SoundUndo",
+			"description": "A soft rewind for undo and revert.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "undo.ts",
+					"target": "@components/sounds/undo.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundArrive-JS",
+			"title": "SoundArrive",
+			"description": "A soft vibraphone two-tone for someone joining.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "arrive.js",
+					"target": "@components/sounds/arrive.js"
+				}
+			]
+		},
+		{
+			"name": "SoundArrive-TS",
+			"title": "SoundArrive",
+			"description": "A soft vibraphone two-tone for someone joining.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "arrive.ts",
+					"target": "@components/sounds/arrive.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCue-JS",
+			"title": "SoundCue",
+			"description": "A gentle three-note rise for upcoming events.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "cue.js",
+					"target": "@components/sounds/cue.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCue-TS",
+			"title": "SoundCue",
+			"description": "A gentle three-note rise for upcoming events.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "cue.ts",
+					"target": "@components/sounds/cue.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSignal-JS",
+			"title": "SoundSignal",
+			"description": "A clear repeating pulse for time-sensitive alerts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "signal.js",
+					"target": "@components/sounds/signal.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSignal-TS",
+			"title": "SoundSignal",
+			"description": "A clear repeating pulse for time-sensitive alerts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "signal.ts",
+					"target": "@components/sounds/signal.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTine-JS",
+			"title": "SoundTine",
+			"description": "A plucked kalimba pair for friendly notifications.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tine.js",
+					"target": "@components/sounds/tine.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTine-TS",
+			"title": "SoundTine",
+			"description": "A plucked kalimba pair for friendly notifications.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tine.ts",
+					"target": "@components/sounds/tine.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFlick-JS",
+			"title": "SoundFlick",
+			"description": "A very short flick for swipe to dismiss.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "flick.js",
+					"target": "@components/sounds/flick.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFlick-TS",
+			"title": "SoundFlick",
+			"description": "A very short flick for swipe to dismiss.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "flick.ts",
+					"target": "@components/sounds/flick.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUnfold-JS",
+			"title": "SoundUnfold",
+			"description": "A soft flutter that opens up, for expanding sections.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unfold.js",
+					"target": "@components/sounds/unfold.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUnfold-TS",
+			"title": "SoundUnfold",
+			"description": "A soft flutter that opens up, for expanding sections.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unfold.ts",
+					"target": "@components/sounds/unfold.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFold-JS",
+			"title": "SoundFold",
+			"description": "The matching flutter that tucks away, for collapsing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fold.js",
+					"target": "@components/sounds/fold.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFold-TS",
+			"title": "SoundFold",
+			"description": "The matching flutter that tucks away, for collapsing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fold.ts",
+					"target": "@components/sounds/fold.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDrawer-JS",
+			"title": "SoundDrawer",
+			"description": "A sliding glide that lands with a soft stop.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "drawer.js",
+					"target": "@components/sounds/drawer.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDrawer-TS",
+			"title": "SoundDrawer",
+			"description": "A sliding glide that lands with a soft stop.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "drawer.ts",
+					"target": "@components/sounds/drawer.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundEnter-JS",
+			"title": "SoundEnter",
+			"description": "A real key press that lands with a soft confirm.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "enter.js",
+					"target": "@components/sounds/enter.js"
+				}
+			]
+		},
+		{
+			"name": "SoundEnter-TS",
+			"title": "SoundEnter",
+			"description": "A real key press that lands with a soft confirm.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "enter.ts",
+					"target": "@components/sounds/enter.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundErase-JS",
+			"title": "SoundErase",
+			"description": "A softer key with a little sweep, for delete and backspace.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "erase.js",
+					"target": "@components/sounds/erase.js"
+				}
+			]
+		},
+		{
+			"name": "SoundErase-TS",
+			"title": "SoundErase",
+			"description": "A softer key with a little sweep, for delete and backspace.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "erase.ts",
+					"target": "@components/sounds/erase.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFill-JS",
+			"title": "SoundFill",
+			"description": "A smooth rising tick for accepting a suggestion.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fill.js",
+					"target": "@components/sounds/fill.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFill-TS",
+			"title": "SoundFill",
+			"description": "A smooth rising tick for accepting a suggestion.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fill.ts",
+					"target": "@components/sounds/fill.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRelease-JS",
+			"title": "SoundRelease",
+			"description": "A soft click that opens into air, for unlock.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "release.js",
+					"target": "@components/sounds/release.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRelease-TS",
+			"title": "SoundRelease",
+			"description": "A soft click that opens into air, for unlock.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "release.ts",
+					"target": "@components/sounds/release.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPlug-JS",
+			"title": "SoundPlug",
+			"description": "A rounded click and rise for connecting a device.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "plug.js",
+					"target": "@components/sounds/plug.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPlug-TS",
+			"title": "SoundPlug",
+			"description": "A rounded click and rise for connecting a device.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "plug.ts",
+					"target": "@components/sounds/plug.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUnplug-JS",
+			"title": "SoundUnplug",
+			"description": "The matching fall and click for disconnecting.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unplug.js",
+					"target": "@components/sounds/unplug.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUnplug-TS",
+			"title": "SoundUnplug",
+			"description": "The matching fall and click for disconnecting.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unplug.ts",
+					"target": "@components/sounds/unplug.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundEmber-JS",
+			"title": "SoundEmber",
+			"description": "A dim, flickering tone for low battery.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ember.js",
+					"target": "@components/sounds/ember.js"
+				}
+			]
+		},
+		{
+			"name": "SoundEmber-TS",
+			"title": "SoundEmber",
+			"description": "A dim, flickering tone for low battery.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ember.ts",
+					"target": "@components/sounds/ember.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundAdvance-JS",
+			"title": "SoundAdvance",
+			"description": "A light step up for next and forward.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "advance.js",
+					"target": "@components/sounds/advance.js"
+				}
+			]
+		},
+		{
+			"name": "SoundAdvance-TS",
+			"title": "SoundAdvance",
+			"description": "A light step up for next and forward.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "advance.ts",
+					"target": "@components/sounds/advance.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRetreat-JS",
+			"title": "SoundRetreat",
+			"description": "A light step down for back and previous.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "retreat.js",
+					"target": "@components/sounds/retreat.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRetreat-TS",
+			"title": "SoundRetreat",
+			"description": "A light step down for back and previous.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "retreat.ts",
+					"target": "@components/sounds/retreat.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTab-JS",
+			"title": "SoundTab",
+			"description": "A crisp little flick for switching tabs.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tab.js",
+					"target": "@components/sounds/tab.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTab-TS",
+			"title": "SoundTab",
+			"description": "A crisp little flick for switching tabs.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tab.ts",
+					"target": "@components/sounds/tab.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundLeaf-JS",
+			"title": "SoundLeaf",
+			"description": "A soft paper turn for pages and steps.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "leaf.js",
+					"target": "@components/sounds/leaf.js"
+				}
+			]
+		},
+		{
+			"name": "SoundLeaf-TS",
+			"title": "SoundLeaf",
+			"description": "A soft paper turn for pages and steps.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "leaf.ts",
+					"target": "@components/sounds/leaf.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDive-JS",
+			"title": "SoundDive",
+			"description": "A quick dip for drilling into a folder.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dive.js",
+					"target": "@components/sounds/dive.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDive-TS",
+			"title": "SoundDive",
+			"description": "A quick dip for drilling into a folder.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dive.ts",
+					"target": "@components/sounds/dive.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPopover-JS",
+			"title": "SoundPopover",
+			"description": "A tiny lift for opening menus and popovers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "popover.js",
+					"target": "@components/sounds/popover.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPopover-TS",
+			"title": "SoundPopover",
+			"description": "A tiny lift for opening menus and popovers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "popover.ts",
+					"target": "@components/sounds/popover.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPickup-JS",
+			"title": "SoundPickup",
+			"description": "A soft lift as an item is picked up.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pickup.js",
+					"target": "@components/sounds/pickup.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPickup-TS",
+			"title": "SoundPickup",
+			"description": "A soft lift as an item is picked up.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pickup.ts",
+					"target": "@components/sounds/pickup.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPlace-JS",
+			"title": "SoundPlace",
+			"description": "A gentle landing as an item is placed.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "place.js",
+					"target": "@components/sounds/place.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPlace-TS",
+			"title": "SoundPlace",
+			"description": "A gentle landing as an item is placed.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "place.ts",
+					"target": "@components/sounds/place.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSnap-JS",
+			"title": "SoundSnap",
+			"description": "A quick pull and crisp snap onto a grid or slot.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "snap.js",
+					"target": "@components/sounds/snap.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSnap-TS",
+			"title": "SoundSnap",
+			"description": "A quick pull and crisp snap onto a grid or slot.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "snap.ts",
+					"target": "@components/sounds/snap.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundShuffle-JS",
+			"title": "SoundShuffle",
+			"description": "A light double slide for reordering items.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shuffle.js",
+					"target": "@components/sounds/shuffle.js"
+				}
+			]
+		},
+		{
+			"name": "SoundShuffle-TS",
+			"title": "SoundShuffle",
+			"description": "A light double slide for reordering items.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shuffle.ts",
+					"target": "@components/sounds/shuffle.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHover-JS",
+			"title": "SoundHover",
+			"description": "A faint glow when a drop target is ready.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "hover.js",
+					"target": "@components/sounds/hover.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHover-TS",
+			"title": "SoundHover",
+			"description": "A faint glow when a drop target is ready.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "hover.ts",
+					"target": "@components/sounds/hover.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRebound-JS",
+			"title": "SoundRebound",
+			"description": "A springy return when a drag is cancelled.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "rebound.js",
+					"target": "@components/sounds/rebound.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRebound-TS",
+			"title": "SoundRebound",
+			"description": "A springy return when a drag is cancelled.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "rebound.ts",
+					"target": "@components/sounds/rebound.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStack-JS",
+			"title": "SoundStack",
+			"description": "A soft cascade as items stack together.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stack.js",
+					"target": "@components/sounds/stack.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStack-TS",
+			"title": "SoundStack",
+			"description": "A soft cascade as items stack together.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stack.ts",
+					"target": "@components/sounds/stack.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundMark-JS",
+			"title": "SoundMark",
+			"description": "A soft plucked tick for each completed step.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "mark.js",
+					"target": "@components/sounds/mark.js"
+				}
+			]
+		},
+		{
+			"name": "SoundMark-TS",
+			"title": "SoundMark",
+			"description": "A soft plucked tick for each completed step.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "mark.ts",
+					"target": "@components/sounds/mark.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPulse-JS",
+			"title": "SoundPulse",
+			"description": "A calm, breathing pulse while something loads.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pulse.js",
+					"target": "@components/sounds/pulse.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPulse-TS",
+			"title": "SoundPulse",
+			"description": "A calm, breathing pulse while something loads.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pulse.ts",
+					"target": "@components/sounds/pulse.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUplink-JS",
+			"title": "SoundUplink",
+			"description": "A rising breath and bright ping when an upload finishes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "uplink.js",
+					"target": "@components/sounds/uplink.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUplink-TS",
+			"title": "SoundUplink",
+			"description": "A rising breath and bright ping when an upload finishes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "uplink.ts",
+					"target": "@components/sounds/uplink.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDownlink-JS",
+			"title": "SoundDownlink",
+			"description": "A falling breath that lands softly when a download finishes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "downlink.js",
+					"target": "@components/sounds/downlink.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDownlink-TS",
+			"title": "SoundDownlink",
+			"description": "A falling breath that lands softly when a download finishes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "downlink.ts",
+					"target": "@components/sounds/downlink.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSecond-JS",
+			"title": "SoundSecond",
+			"description": "A dry clock tick for countdowns and timers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "second.js",
+					"target": "@components/sounds/second.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSecond-TS",
+			"title": "SoundSecond",
+			"description": "A dry clock tick for countdowns and timers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "second.ts",
+					"target": "@components/sounds/second.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSummit-JS",
+			"title": "SoundSummit",
+			"description": "A quick climbing run that blooms when everything is complete.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "summit.js",
+					"target": "@components/sounds/summit.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSummit-TS",
+			"title": "SoundSummit",
+			"description": "A quick climbing run that blooms when everything is complete.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "summit.ts",
+					"target": "@components/sounds/summit.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundOrbit-JS",
+			"title": "SoundOrbit",
+			"description": "A circling shimmer for syncing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "orbit.js",
+					"target": "@components/sounds/orbit.js"
+				}
+			]
+		},
+		{
+			"name": "SoundOrbit-TS",
+			"title": "SoundOrbit",
+			"description": "A circling shimmer for syncing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "orbit.ts",
+					"target": "@components/sounds/orbit.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDispatch-JS",
+			"title": "SoundDispatch",
+			"description": "A quick airy lift for sending a message.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dispatch.js",
+					"target": "@components/sounds/dispatch.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDispatch-TS",
+			"title": "SoundDispatch",
+			"description": "A quick airy lift for sending a message.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dispatch.ts",
+					"target": "@components/sounds/dispatch.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBubble-JS",
+			"title": "SoundBubble",
+			"description": "Two round notes for a message in an open chat.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bubble.js",
+					"target": "@components/sounds/bubble.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBubble-TS",
+			"title": "SoundBubble",
+			"description": "Two round notes for a message in an open chat.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bubble.ts",
+					"target": "@components/sounds/bubble.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundEllipsis-JS",
+			"title": "SoundEllipsis",
+			"description": "Three faint dots for someone typing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ellipsis.js",
+					"target": "@components/sounds/ellipsis.js"
+				}
+			]
+		},
+		{
+			"name": "SoundEllipsis-TS",
+			"title": "SoundEllipsis",
+			"description": "Three faint dots for someone typing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ellipsis.ts",
+					"target": "@components/sounds/ellipsis.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundWink-JS",
+			"title": "SoundWink",
+			"description": "A bright little pop for adding a reaction.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wink.js",
+					"target": "@components/sounds/wink.js"
+				}
+			]
+		},
+		{
+			"name": "SoundWink-TS",
+			"title": "SoundWink",
+			"description": "A bright little pop for adding a reaction.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wink.ts",
+					"target": "@components/sounds/wink.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCallout-JS",
+			"title": "SoundCallout",
+			"description": "A clear rising pair when you are mentioned.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "callout.js",
+					"target": "@components/sounds/callout.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCallout-TS",
+			"title": "SoundCallout",
+			"description": "A clear rising pair when you are mentioned.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "callout.ts",
+					"target": "@components/sounds/callout.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundReceipt-JS",
+			"title": "SoundReceipt",
+			"description": "Two tiny ticks for delivered and read.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "receipt.js",
+					"target": "@components/sounds/receipt.js"
+				}
+			]
+		},
+		{
+			"name": "SoundReceipt-TS",
+			"title": "SoundReceipt",
+			"description": "Two tiny ticks for delivered and read.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "receipt.ts",
+					"target": "@components/sounds/receipt.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHuddle-JS",
+			"title": "SoundHuddle",
+			"description": "A warm rising chord for joining a call.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "huddle.js",
+					"target": "@components/sounds/huddle.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHuddle-TS",
+			"title": "SoundHuddle",
+			"description": "A warm rising chord for joining a call.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "huddle.ts",
+					"target": "@components/sounds/huddle.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRoll-JS",
+			"title": "SoundRoll",
+			"description": "A quick spin up for starting playback.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "roll.js",
+					"target": "@components/sounds/roll.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRoll-TS",
+			"title": "SoundRoll",
+			"description": "A quick spin up for starting playback.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "roll.ts",
+					"target": "@components/sounds/roll.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHold-JS",
+			"title": "SoundHold",
+			"description": "A soft spin down for pausing playback.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "hold.js",
+					"target": "@components/sounds/hold.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHold-TS",
+			"title": "SoundHold",
+			"description": "A soft spin down for pausing playback.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "hold.ts",
+					"target": "@components/sounds/hold.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTally-JS",
+			"title": "SoundTally",
+			"description": "A clear double beep when recording starts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tally.js",
+					"target": "@components/sounds/tally.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTally-TS",
+			"title": "SoundTally",
+			"description": "A clear double beep when recording starts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tally.ts",
+					"target": "@components/sounds/tally.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundWrap-JS",
+			"title": "SoundWrap",
+			"description": "A falling pair of beeps when recording stops.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wrap.js",
+					"target": "@components/sounds/wrap.js"
+				}
+			]
+		},
+		{
+			"name": "SoundWrap-TS",
+			"title": "SoundWrap",
+			"description": "A falling pair of beeps when recording stops.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wrap.ts",
+					"target": "@components/sounds/wrap.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundShutter-JS",
+			"title": "SoundShutter",
+			"description": "A soft mechanical shutter for photos and screenshots.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shutter.js",
+					"target": "@components/sounds/shutter.js"
+				}
+			]
+		},
+		{
+			"name": "SoundShutter-TS",
+			"title": "SoundShutter",
+			"description": "A soft mechanical shutter for photos and screenshots.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shutter.ts",
+					"target": "@components/sounds/shutter.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSkip-JS",
+			"title": "SoundSkip",
+			"description": "A quick double flick for skipping tracks.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "skip.js",
+					"target": "@components/sounds/skip.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSkip-TS",
+			"title": "SoundSkip",
+			"description": "A quick double flick for skipping tracks.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "skip.ts",
+					"target": "@components/sounds/skip.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundLevel-JS",
+			"title": "SoundLevel",
+			"description": "A tiny tuned detent for volume and value steps.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "level.js",
+					"target": "@components/sounds/level.js"
+				}
+			]
+		},
+		{
+			"name": "SoundLevel-TS",
+			"title": "SoundLevel",
+			"description": "A tiny tuned detent for volume and value steps.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "level.ts",
+					"target": "@components/sounds/level.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCoin-JS",
+			"title": "SoundCoin",
+			"description": "A bright two-note coin for rewards.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "coin.js",
+					"target": "@components/sounds/coin.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCoin-TS",
+			"title": "SoundCoin",
+			"description": "A bright two-note coin for rewards.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "coin.ts",
+					"target": "@components/sounds/coin.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGlimmer-JS",
+			"title": "SoundGlimmer",
+			"description": "A quick sparkle for small wins.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glimmer.js",
+					"target": "@components/sounds/glimmer.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGlimmer-TS",
+			"title": "SoundGlimmer",
+			"description": "A quick sparkle for small wins.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glimmer.ts",
+					"target": "@components/sounds/glimmer.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUpgrade-JS",
+			"title": "SoundUpgrade",
+			"description": "A rising power-up for leveling up.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "upgrade.js",
+					"target": "@components/sounds/upgrade.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUpgrade-TS",
+			"title": "SoundUpgrade",
+			"description": "A rising power-up for leveling up.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "upgrade.ts",
+					"target": "@components/sounds/upgrade.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundConfetti-JS",
+			"title": "SoundConfetti",
+			"description": "A soft pop and a shower of sparkles for celebrations.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "confetti.js",
+					"target": "@components/sounds/confetti.js"
+				}
+			]
+		},
+		{
+			"name": "SoundConfetti-TS",
+			"title": "SoundConfetti",
+			"description": "A soft pop and a shower of sparkles for celebrations.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "confetti.ts",
+					"target": "@components/sounds/confetti.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHeart-JS",
+			"title": "SoundHeart",
+			"description": "A warm double pulse for likes and favorites.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "heart.js",
+					"target": "@components/sounds/heart.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHeart-TS",
+			"title": "SoundHeart",
+			"description": "A warm double pulse for likes and favorites.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "heart.ts",
+					"target": "@components/sounds/heart.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStreak-JS",
+			"title": "SoundStreak",
+			"description": "A quick wooden run for keeping a streak.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "streak.js",
+					"target": "@components/sounds/streak.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStreak-TS",
+			"title": "SoundStreak",
+			"description": "A quick wooden run for keeping a streak.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "streak.ts",
+					"target": "@components/sounds/streak.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTreasure-JS",
+			"title": "SoundTreasure",
+			"description": "A warm thump that opens into a shimmering chord.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "treasure.js",
+					"target": "@components/sounds/treasure.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTreasure-TS",
+			"title": "SoundTreasure",
+			"description": "A warm thump that opens into a shimmering chord.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "treasure.ts",
+					"target": "@components/sounds/treasure.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundAscent-JS",
+			"title": "SoundAscent",
+			"description": "A soft four second rise of air and warm tone.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ascent.js",
+					"target": "@components/sounds/ascent.js"
+				}
+			]
+		},
+		{
+			"name": "SoundAscent-TS",
+			"title": "SoundAscent",
+			"description": "A soft four second rise of air and warm tone.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ascent.ts",
+					"target": "@components/sounds/ascent.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundLift-JS",
+			"title": "SoundLift",
+			"description": "A quick, airy swell for fast cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "lift.js",
+					"target": "@components/sounds/lift.js"
+				}
+			]
+		},
+		{
+			"name": "SoundLift-TS",
+			"title": "SoundLift",
+			"description": "A quick, airy swell for fast cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "lift.ts",
+					"target": "@components/sounds/lift.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGlow-JS",
+			"title": "SoundGlow",
+			"description": "A warm chord that blooms upward into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glow.js",
+					"target": "@components/sounds/glow.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGlow-TS",
+			"title": "SoundGlow",
+			"description": "A warm chord that blooms upward into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glow.ts",
+					"target": "@components/sounds/glow.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundVelvet-JS",
+			"title": "SoundVelvet",
+			"description": "A soft, round hit with a warm low tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "velvet.js",
+					"target": "@components/sounds/velvet.js"
+				}
+			]
+		},
+		{
+			"name": "SoundVelvet-TS",
+			"title": "SoundVelvet",
+			"description": "A soft, round hit with a warm low tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "velvet.ts",
+					"target": "@components/sounds/velvet.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCushion-JS",
+			"title": "SoundCushion",
+			"description": "A muffled, padded thump for gentle cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "cushion.js",
+					"target": "@components/sounds/cushion.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCushion-TS",
+			"title": "SoundCushion",
+			"description": "A muffled, padded thump for gentle cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "cushion.ts",
+					"target": "@components/sounds/cushion.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHaze-JS",
+			"title": "SoundHaze",
+			"description": "A soft low boom that fades into air.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "haze.js",
+					"target": "@components/sounds/haze.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHaze-TS",
+			"title": "SoundHaze",
+			"description": "A soft low boom that fades into air.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "haze.ts",
+					"target": "@components/sounds/haze.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGust-JS",
+			"title": "SoundGust",
+			"description": "A full, soft whoosh that passes left to right.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "gust.js",
+					"target": "@components/sounds/gust.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGust-TS",
+			"title": "SoundGust",
+			"description": "A full, soft whoosh that passes left to right.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "gust.ts",
+					"target": "@components/sounds/gust.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPass-JS",
+			"title": "SoundPass",
+			"description": "A light, quick fly by.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pass.js",
+					"target": "@components/sounds/pass.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPass-TS",
+			"title": "SoundPass",
+			"description": "A light, quick fly by.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pass.ts",
+					"target": "@components/sounds/pass.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDrift-JS",
+			"title": "SoundDrift",
+			"description": "A slow, airy pass with a gentle tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "drift.js",
+					"target": "@components/sounds/drift.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDrift-TS",
+			"title": "SoundDrift",
+			"description": "A slow, airy pass with a gentle tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "drift.ts",
+					"target": "@components/sounds/drift.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundInhale-JS",
+			"title": "SoundInhale",
+			"description": "A soft reversed swell that pulls into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "inhale.js",
+					"target": "@components/sounds/inhale.js"
+				}
+			]
+		},
+		{
+			"name": "SoundInhale-TS",
+			"title": "SoundInhale",
+			"description": "A soft reversed swell that pulls into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "inhale.ts",
+					"target": "@components/sounds/inhale.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundExhale-JS",
+			"title": "SoundExhale",
+			"description": "A gentle breath out after the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "exhale.js",
+					"target": "@components/sounds/exhale.js"
+				}
+			]
+		},
+		{
+			"name": "SoundExhale-TS",
+			"title": "SoundExhale",
+			"description": "A gentle breath out after the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "exhale.ts",
+					"target": "@components/sounds/exhale.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundShimmer-JS",
+			"title": "SoundShimmer",
+			"description": "A quiet glassy sweep between scenes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shimmer.js",
+					"target": "@components/sounds/shimmer.js"
+				}
+			]
+		},
+		{
+			"name": "SoundShimmer-TS",
+			"title": "SoundShimmer",
+			"description": "A quiet glassy sweep between scenes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "shimmer.ts",
+					"target": "@components/sounds/shimmer.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStardust-JS",
+			"title": "SoundStardust",
+			"description": "A few soft twinkles that settle.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stardust.js",
+					"target": "@components/sounds/stardust.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStardust-TS",
+			"title": "SoundStardust",
+			"description": "A few soft twinkles that settle.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stardust.ts",
+					"target": "@components/sounds/stardust.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundReveal-JS",
+			"title": "SoundReveal",
+			"description": "A soft swell into a warm chord for logo reveals.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "reveal.js",
+					"target": "@components/sounds/reveal.js"
+				}
+			]
+		},
+		{
+			"name": "SoundReveal-TS",
+			"title": "SoundReveal",
+			"description": "A soft swell into a warm chord for logo reveals.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "reveal.ts",
+					"target": "@components/sounds/reveal.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTide-JS",
+			"title": "SoundTide",
+			"description": "A slow eight second build of air and low drone.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tide.js",
+					"target": "@components/sounds/tide.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTide-TS",
+			"title": "SoundTide",
+			"description": "A slow eight second build of air and low drone.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tide.ts",
+					"target": "@components/sounds/tide.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSpiral-JS",
+			"title": "SoundSpiral",
+			"description": "An endless-feeling rise that keeps climbing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spiral.js",
+					"target": "@components/sounds/spiral.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSpiral-TS",
+			"title": "SoundSpiral",
+			"description": "An endless-feeling rise that keeps climbing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spiral.ts",
+					"target": "@components/sounds/spiral.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundThrottle-JS",
+			"title": "SoundThrottle",
+			"description": "A rising pulse that speeds up into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "throttle.js",
+					"target": "@components/sounds/throttle.js"
+				}
+			]
+		},
+		{
+			"name": "SoundThrottle-TS",
+			"title": "SoundThrottle",
+			"description": "A rising pulse that speeds up into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "throttle.ts",
+					"target": "@components/sounds/throttle.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundAurora-JS",
+			"title": "SoundAurora",
+			"description": "A bright, glittering rise of high tones.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "aurora.js",
+					"target": "@components/sounds/aurora.js"
+				}
+			]
+		},
+		{
+			"name": "SoundAurora-TS",
+			"title": "SoundAurora",
+			"description": "A bright, glittering rise of high tones.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "aurora.ts",
+					"target": "@components/sounds/aurora.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSwell-JS",
+			"title": "SoundSwell",
+			"description": "A reversed cymbal swell that pulls into the hit.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "swell.js",
+					"target": "@components/sounds/swell.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSwell-TS",
+			"title": "SoundSwell",
+			"description": "A reversed cymbal swell that pulls into the hit.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "swell.ts",
+					"target": "@components/sounds/swell.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStrain-JS",
+			"title": "SoundStrain",
+			"description": "A tense, rising string-like swell.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "strain.js",
+					"target": "@components/sounds/strain.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStrain-TS",
+			"title": "SoundStrain",
+			"description": "A tense, rising string-like swell.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "strain.ts",
+					"target": "@components/sounds/strain.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUpswing-JS",
+			"title": "SoundUpswing",
+			"description": "A half second rise for quick cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "upswing.js",
+					"target": "@components/sounds/upswing.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUpswing-TS",
+			"title": "SoundUpswing",
+			"description": "A half second rise for quick cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "upswing.ts",
+					"target": "@components/sounds/upswing.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundThunder-JS",
+			"title": "SoundThunder",
+			"description": "A deep cinematic boom with a long rumble.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "thunder.js",
+					"target": "@components/sounds/thunder.js"
+				}
+			]
+		},
+		{
+			"name": "SoundThunder-TS",
+			"title": "SoundThunder",
+			"description": "A deep cinematic boom with a long rumble.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "thunder.ts",
+					"target": "@components/sounds/thunder.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSlam-JS",
+			"title": "SoundSlam",
+			"description": "A tight, punchy hit for hard cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "slam.js",
+					"target": "@components/sounds/slam.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSlam-TS",
+			"title": "SoundSlam",
+			"description": "A tight, punchy hit for hard cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "slam.ts",
+					"target": "@components/sounds/slam.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundAnvil-JS",
+			"title": "SoundAnvil",
+			"description": "A resonant metallic hit with a ringing tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "anvil.js",
+					"target": "@components/sounds/anvil.js"
+				}
+			]
+		},
+		{
+			"name": "SoundAnvil-TS",
+			"title": "SoundAnvil",
+			"description": "A resonant metallic hit with a ringing tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "anvil.ts",
+					"target": "@components/sounds/anvil.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTimber-JS",
+			"title": "SoundTimber",
+			"description": "A dry wooden thud for warm cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "timber.js",
+					"target": "@components/sounds/timber.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTimber-TS",
+			"title": "SoundTimber",
+			"description": "A dry wooden thud for warm cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "timber.ts",
+					"target": "@components/sounds/timber.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCrystal-JS",
+			"title": "SoundCrystal",
+			"description": "A clear glassy impact with a shimmering tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "crystal.js",
+					"target": "@components/sounds/crystal.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCrystal-TS",
+			"title": "SoundCrystal",
+			"description": "A clear glassy impact with a shimmering tail.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "crystal.ts",
+					"target": "@components/sounds/crystal.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBraam-JS",
+			"title": "SoundBraam",
+			"description": "A huge low brass-like blast for trailers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "braam.js",
+					"target": "@components/sounds/braam.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBraam-TS",
+			"title": "SoundBraam",
+			"description": "A huge low brass-like blast for trailers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "braam.ts",
+					"target": "@components/sounds/braam.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDistant-JS",
+			"title": "SoundDistant",
+			"description": "A far-off boom with a long echo.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "distant.js",
+					"target": "@components/sounds/distant.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDistant-TS",
+			"title": "SoundDistant",
+			"description": "A far-off boom with a long echo.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "distant.ts",
+					"target": "@components/sounds/distant.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSwoop-JS",
+			"title": "SoundSwoop",
+			"description": "A fast, deep swoop with a tonal edge.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "swoop.js",
+					"target": "@components/sounds/swoop.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSwoop-TS",
+			"title": "SoundSwoop",
+			"description": "A fast, deep swoop with a tonal edge.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "swoop.ts",
+					"target": "@components/sounds/swoop.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundWhip-JS",
+			"title": "SoundWhip",
+			"description": "A sharp, quick whip for snappy cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "whip.js",
+					"target": "@components/sounds/whip.js"
+				}
+			]
+		},
+		{
+			"name": "SoundWhip-TS",
+			"title": "SoundWhip",
+			"description": "A sharp, quick whip for snappy cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "whip.ts",
+					"target": "@components/sounds/whip.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSpin-JS",
+			"title": "SoundSpin",
+			"description": "A whirling whoosh that circles around.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spin.js",
+					"target": "@components/sounds/spin.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSpin-TS",
+			"title": "SoundSpin",
+			"description": "A whirling whoosh that circles around.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spin.ts",
+					"target": "@components/sounds/spin.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTwin-JS",
+			"title": "SoundTwin",
+			"description": "Two quick passes, one after the other.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "twin.js",
+					"target": "@components/sounds/twin.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTwin-TS",
+			"title": "SoundTwin",
+			"description": "Two quick passes, one after the other.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "twin.ts",
+					"target": "@components/sounds/twin.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGale-JS",
+			"title": "SoundGale",
+			"description": "A heavy, wide whoosh with low weight.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "gale.js",
+					"target": "@components/sounds/gale.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGale-TS",
+			"title": "SoundGale",
+			"description": "A heavy, wide whoosh with low weight.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "gale.ts",
+					"target": "@components/sounds/gale.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSilk-JS",
+			"title": "SoundSilk",
+			"description": "A smooth, silky swish like fabric.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "silk.js",
+					"target": "@components/sounds/silk.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSilk-TS",
+			"title": "SoundSilk",
+			"description": "A smooth, silky swish like fabric.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "silk.ts",
+					"target": "@components/sounds/silk.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBackdraft-JS",
+			"title": "SoundBackdraft",
+			"description": "A reversed whoosh that sucks into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "backdraft.js",
+					"target": "@components/sounds/backdraft.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBackdraft-TS",
+			"title": "SoundBackdraft",
+			"description": "A reversed whoosh that sucks into the cut.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "backdraft.ts",
+					"target": "@components/sounds/backdraft.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundRewind-JS",
+			"title": "SoundRewind",
+			"description": "A quick tape rewind for flashbacks.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "rewind.js",
+					"target": "@components/sounds/rewind.js"
+				}
+			]
+		},
+		{
+			"name": "SoundRewind-TS",
+			"title": "SoundRewind",
+			"description": "A quick tape rewind for flashbacks.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "rewind.ts",
+					"target": "@components/sounds/rewind.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSlowdown-JS",
+			"title": "SoundSlowdown",
+			"description": "A tape stop that winds the scene down.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "slowdown.js",
+					"target": "@components/sounds/slowdown.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSlowdown-TS",
+			"title": "SoundSlowdown",
+			"description": "A tape stop that winds the scene down.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "slowdown.ts",
+					"target": "@components/sounds/slowdown.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundWipe-JS",
+			"title": "SoundWipe",
+			"description": "A clean tonal sweep for wipes and slides.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wipe.js",
+					"target": "@components/sounds/wipe.js"
+				}
+			]
+		},
+		{
+			"name": "SoundWipe-TS",
+			"title": "SoundWipe",
+			"description": "A clean tonal sweep for wipes and slides.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wipe.ts",
+					"target": "@components/sounds/wipe.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundZoom-JS",
+			"title": "SoundZoom",
+			"description": "A punchy zoom-in with a tonal rise and a landing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "zoom.js",
+					"target": "@components/sounds/zoom.js"
+				}
+			]
+		},
+		{
+			"name": "SoundZoom-TS",
+			"title": "SoundZoom",
+			"description": "A punchy zoom-in with a tonal rise and a landing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "zoom.ts",
+					"target": "@components/sounds/zoom.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDissolve-JS",
+			"title": "SoundDissolve",
+			"description": "A soft granular shimmer for fading between scenes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dissolve.js",
+					"target": "@components/sounds/dissolve.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDissolve-TS",
+			"title": "SoundDissolve",
+			"description": "A soft granular shimmer for fading between scenes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dissolve.ts",
+					"target": "@components/sounds/dissolve.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPortal-JS",
+			"title": "SoundPortal",
+			"description": "A swirling warp for magical transitions.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "portal.js",
+					"target": "@components/sounds/portal.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPortal-TS",
+			"title": "SoundPortal",
+			"description": "A swirling warp for magical transitions.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "portal.ts",
+					"target": "@components/sounds/portal.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDing-JS",
+			"title": "SoundDing",
+			"description": "A clean bell ding for highlights.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ding.js",
+					"target": "@components/sounds/ding.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDing-TS",
+			"title": "SoundDing",
+			"description": "A clean bell ding for highlights.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "ding.ts",
+					"target": "@components/sounds/ding.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSpark-JS",
+			"title": "SoundSpark",
+			"description": "A tiny electric spark for callouts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spark.js",
+					"target": "@components/sounds/spark.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSpark-TS",
+			"title": "SoundSpark",
+			"description": "A tiny electric spark for callouts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "spark.ts",
+					"target": "@components/sounds/spark.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundWand-JS",
+			"title": "SoundWand",
+			"description": "A quick magical flourish.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wand.js",
+					"target": "@components/sounds/wand.js"
+				}
+			]
+		},
+		{
+			"name": "SoundWand-TS",
+			"title": "SoundWand",
+			"description": "A quick magical flourish.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "wand.ts",
+					"target": "@components/sounds/wand.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStroke-JS",
+			"title": "SoundStroke",
+			"description": "A quick marker stroke for underlines and circles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stroke.js",
+					"target": "@components/sounds/stroke.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStroke-TS",
+			"title": "SoundStroke",
+			"description": "A quick marker stroke for underlines and circles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stroke.ts",
+					"target": "@components/sounds/stroke.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGlint-JS",
+			"title": "SoundGlint",
+			"description": "A bright glint for shiny highlights.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glint.js",
+					"target": "@components/sounds/glint.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGlint-TS",
+			"title": "SoundGlint",
+			"description": "A bright glint for shiny highlights.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "glint.ts",
+					"target": "@components/sounds/glint.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFocus-JS",
+			"title": "SoundFocus",
+			"description": "A camera focus whir and confirm beeps for emphasis.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "focus.js",
+					"target": "@components/sounds/focus.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFocus-TS",
+			"title": "SoundFocus",
+			"description": "A camera focus whir and confirm beeps for emphasis.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "focus.ts",
+					"target": "@components/sounds/focus.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPlunge-JS",
+			"title": "SoundPlunge",
+			"description": "A deep sub drop that lands heavy.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "plunge.js",
+					"target": "@components/sounds/plunge.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPlunge-TS",
+			"title": "SoundPlunge",
+			"description": "A deep sub drop that lands heavy.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "plunge.ts",
+					"target": "@components/sounds/plunge.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDescent-JS",
+			"title": "SoundDescent",
+			"description": "A falling noise sweep that settles the energy.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "descent.js",
+					"target": "@components/sounds/descent.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDescent-TS",
+			"title": "SoundDescent",
+			"description": "A falling noise sweep that settles the energy.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "descent.ts",
+					"target": "@components/sounds/descent.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSink-JS",
+			"title": "SoundSink",
+			"description": "A smooth bass slide down into silence.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "sink.js",
+					"target": "@components/sounds/sink.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSink-TS",
+			"title": "SoundSink",
+			"description": "A smooth bass slide down into silence.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "sink.ts",
+					"target": "@components/sounds/sink.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundQuake-JS",
+			"title": "SoundQuake",
+			"description": "A low rumble that drops out from under you.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "quake.js",
+					"target": "@components/sounds/quake.js"
+				}
+			]
+		},
+		{
+			"name": "SoundQuake-TS",
+			"title": "SoundQuake",
+			"description": "A low rumble that drops out from under you.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "quake.ts",
+					"target": "@components/sounds/quake.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFall-JS",
+			"title": "SoundFall",
+			"description": "A falling tone and air for exits.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fall.js",
+					"target": "@components/sounds/fall.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFall-TS",
+			"title": "SoundFall",
+			"description": "A falling tone and air for exits.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fall.ts",
+					"target": "@components/sounds/fall.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDip-JS",
+			"title": "SoundDip",
+			"description": "A quick half second drop for beat cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dip.js",
+					"target": "@components/sounds/dip.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDip-TS",
+			"title": "SoundDip",
+			"description": "A quick half second drop for beat cuts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dip.ts",
+					"target": "@components/sounds/dip.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundGravity-JS",
+			"title": "SoundGravity",
+			"description": "A heavy pitch dive with a deep landing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "gravity.js",
+					"target": "@components/sounds/gravity.js"
+				}
+			]
+		},
+		{
+			"name": "SoundGravity-TS",
+			"title": "SoundGravity",
+			"description": "A heavy pitch dive with a deep landing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "gravity.ts",
+					"target": "@components/sounds/gravity.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBitflip-JS",
+			"title": "SoundBitflip",
+			"description": "A short digital stutter.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bitflip.js",
+					"target": "@components/sounds/bitflip.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBitflip-TS",
+			"title": "SoundBitflip",
+			"description": "A short digital stutter.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "bitflip.ts",
+					"target": "@components/sounds/bitflip.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSnow-JS",
+			"title": "SoundSnow",
+			"description": "A brief burst of soft static.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "snow.js",
+					"target": "@components/sounds/snow.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSnow-TS",
+			"title": "SoundSnow",
+			"description": "A brief burst of soft static.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "snow.ts",
+					"target": "@components/sounds/snow.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundData-JS",
+			"title": "SoundData",
+			"description": "A quick chirp of digital data.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "data.js",
+					"target": "@components/sounds/data.js"
+				}
+			]
+		},
+		{
+			"name": "SoundData-TS",
+			"title": "SoundData",
+			"description": "A quick chirp of digital data.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "data.ts",
+					"target": "@components/sounds/data.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundScramble-JS",
+			"title": "SoundScramble",
+			"description": "A fast scramble of tones for tech reveals.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "scramble.js",
+					"target": "@components/sounds/scramble.js"
+				}
+			]
+		},
+		{
+			"name": "SoundScramble-TS",
+			"title": "SoundScramble",
+			"description": "A fast scramble of tones for tech reveals.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "scramble.ts",
+					"target": "@components/sounds/scramble.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTracking-JS",
+			"title": "SoundTracking",
+			"description": "A wobbly tape glitch like old VHS.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tracking.js",
+					"target": "@components/sounds/tracking.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTracking-TS",
+			"title": "SoundTracking",
+			"description": "A wobbly tape glitch like old VHS.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tracking.ts",
+					"target": "@components/sounds/tracking.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCorrupt-JS",
+			"title": "SoundCorrupt",
+			"description": "A crunchy digital error hit.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "corrupt.js",
+					"target": "@components/sounds/corrupt.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCorrupt-TS",
+			"title": "SoundCorrupt",
+			"description": "A crunchy digital error hit.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "corrupt.ts",
+					"target": "@components/sounds/corrupt.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundZap-JS",
+			"title": "SoundZap",
+			"description": "A quick electric zap.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "zap.js",
+					"target": "@components/sounds/zap.js"
+				}
+			]
+		},
+		{
+			"name": "SoundZap-TS",
+			"title": "SoundZap",
+			"description": "A quick electric zap.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "zap.ts",
+					"target": "@components/sounds/zap.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPixel-JS",
+			"title": "SoundPixel",
+			"description": "Tiny 8-bit blips for pixel graphics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pixel.js",
+					"target": "@components/sounds/pixel.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPixel-TS",
+			"title": "SoundPixel",
+			"description": "Tiny 8-bit blips for pixel graphics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "pixel.ts",
+					"target": "@components/sounds/pixel.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundNebula-JS",
+			"title": "SoundNebula",
+			"description": "A soft, airy space pad.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nebula.js",
+					"target": "@components/sounds/nebula.js"
+				}
+			]
+		},
+		{
+			"name": "SoundNebula-TS",
+			"title": "SoundNebula",
+			"description": "A soft, airy space pad.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nebula.ts",
+					"target": "@components/sounds/nebula.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCalm-JS",
+			"title": "SoundCalm",
+			"description": "A warm, quiet pad for calm scenes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "calm.js",
+					"target": "@components/sounds/calm.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCalm-TS",
+			"title": "SoundCalm",
+			"description": "A warm, quiet pad for calm scenes.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "calm.ts",
+					"target": "@components/sounds/calm.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDrizzle-JS",
+			"title": "SoundDrizzle",
+			"description": "Soft rain on glass.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "drizzle.js",
+					"target": "@components/sounds/drizzle.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDrizzle-TS",
+			"title": "SoundDrizzle",
+			"description": "Soft rain on glass.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "drizzle.ts",
+					"target": "@components/sounds/drizzle.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStudio-JS",
+			"title": "SoundStudio",
+			"description": "A quiet room tone to fill silence.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "studio.js",
+					"target": "@components/sounds/studio.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStudio-TS",
+			"title": "SoundStudio",
+			"description": "A quiet room tone to fill silence.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "studio.ts",
+					"target": "@components/sounds/studio.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHighland-JS",
+			"title": "SoundHighland",
+			"description": "A soft wind with gentle gusts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "highland.js",
+					"target": "@components/sounds/highland.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHighland-TS",
+			"title": "SoundHighland",
+			"description": "A soft wind with gentle gusts.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "highland.ts",
+					"target": "@components/sounds/highland.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDeep-JS",
+			"title": "SoundDeep",
+			"description": "A muffled underwater drone with a few bubbles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "deep.js",
+					"target": "@components/sounds/deep.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDeep-TS",
+			"title": "SoundDeep",
+			"description": "A muffled underwater drone with a few bubbles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "deep.ts",
+					"target": "@components/sounds/deep.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundNocturne-JS",
+			"title": "SoundNocturne",
+			"description": "A dark, slow drone with faint night insects.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nocturne.js",
+					"target": "@components/sounds/nocturne.js"
+				}
+			]
+		},
+		{
+			"name": "SoundNocturne-TS",
+			"title": "SoundNocturne",
+			"description": "A dark, slow drone with faint night insects.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "nocturne.ts",
+					"target": "@components/sounds/nocturne.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCaption-JS",
+			"title": "SoundCaption",
+			"description": "Real key clicks for type-on titles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "caption.js",
+					"target": "@components/sounds/caption.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCaption-TS",
+			"title": "SoundCaption",
+			"description": "Real key clicks for type-on titles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "caption.ts",
+					"target": "@components/sounds/caption.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundAppear-JS",
+			"title": "SoundAppear",
+			"description": "A soft pop for text popping in.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "appear.js",
+					"target": "@components/sounds/appear.js"
+				}
+			]
+		},
+		{
+			"name": "SoundAppear-TS",
+			"title": "SoundAppear",
+			"description": "A soft pop for text popping in.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "appear.ts",
+					"target": "@components/sounds/appear.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundTickertape-JS",
+			"title": "SoundTickertape",
+			"description": "Rapid soft ticks for letter by letter text.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tickertape.js",
+					"target": "@components/sounds/tickertape.js"
+				}
+			]
+		},
+		{
+			"name": "SoundTickertape-TS",
+			"title": "SoundTickertape",
+			"description": "Rapid soft ticks for letter by letter text.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "tickertape.ts",
+					"target": "@components/sounds/tickertape.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSlide-JS",
+			"title": "SoundSlide",
+			"description": "A short tonal slide that lands, for titles moving in.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "slide.js",
+					"target": "@components/sounds/slide.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSlide-TS",
+			"title": "SoundSlide",
+			"description": "A short tonal slide that lands, for titles moving in.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "slide.ts",
+					"target": "@components/sounds/slide.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCounter-JS",
+			"title": "SoundCounter",
+			"description": "Fast rising ticks for counting numbers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "counter.js",
+					"target": "@components/sounds/counter.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCounter-TS",
+			"title": "SoundCounter",
+			"description": "Fast rising ticks for counting numbers.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "counter.ts",
+					"target": "@components/sounds/counter.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBanner-JS",
+			"title": "SoundBanner",
+			"description": "A clean sweep and click for lower thirds.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "banner.js",
+					"target": "@components/sounds/banner.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBanner-TS",
+			"title": "SoundBanner",
+			"description": "A clean sweep and click for lower thirds.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "banner.ts",
+					"target": "@components/sounds/banner.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStamp-JS",
+			"title": "SoundStamp",
+			"description": "A firm stamp for bold kinetic text.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stamp.js",
+					"target": "@components/sounds/stamp.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStamp-TS",
+			"title": "SoundStamp",
+			"description": "A firm stamp for bold kinetic text.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stamp.ts",
+					"target": "@components/sounds/stamp.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundVanish-JS",
+			"title": "SoundVanish",
+			"description": "A soft airy fade for text disappearing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "vanish.js",
+					"target": "@components/sounds/vanish.js"
+				}
+			]
+		},
+		{
+			"name": "SoundVanish-TS",
+			"title": "SoundVanish",
+			"description": "A soft airy fade for text disappearing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "vanish.ts",
+					"target": "@components/sounds/vanish.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCork-JS",
+			"title": "SoundCork",
+			"description": "A round cork pop with a little fizz.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "cork.js",
+					"target": "@components/sounds/cork.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCork-TS",
+			"title": "SoundCork",
+			"description": "A round cork pop with a little fizz.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "cork.ts",
+					"target": "@components/sounds/cork.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFizz-JS",
+			"title": "SoundFizz",
+			"description": "A cluster of tiny bubbles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fizz.js",
+					"target": "@components/sounds/fizz.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFizz-TS",
+			"title": "SoundFizz",
+			"description": "A cluster of tiny bubbles.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "fizz.ts",
+					"target": "@components/sounds/fizz.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBlop-JS",
+			"title": "SoundBlop",
+			"description": "A round mouth pop for playful motion graphics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "blop.js",
+					"target": "@components/sounds/blop.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBlop-TS",
+			"title": "SoundBlop",
+			"description": "A round mouth pop for playful motion graphics.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "blop.ts",
+					"target": "@components/sounds/blop.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBalloon-JS",
+			"title": "SoundBalloon",
+			"description": "A soft balloon pop without the harshness.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "balloon.js",
+					"target": "@components/sounds/balloon.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBalloon-TS",
+			"title": "SoundBalloon",
+			"description": "A soft balloon pop without the harshness.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "balloon.ts",
+					"target": "@components/sounds/balloon.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSprout-JS",
+			"title": "SoundSprout",
+			"description": "A springy little pop for elements appearing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "sprout.js",
+					"target": "@components/sounds/sprout.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSprout-TS",
+			"title": "SoundSprout",
+			"description": "A springy little pop for elements appearing.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "sprout.ts",
+					"target": "@components/sounds/sprout.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSqueak-JS",
+			"title": "SoundSqueak",
+			"description": "A soft rubber squeak for cute moments.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "squeak.js",
+					"target": "@components/sounds/squeak.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSqueak-TS",
+			"title": "SoundSqueak",
+			"description": "A soft rubber squeak for cute moments.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "squeak.ts",
+					"target": "@components/sounds/squeak.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundBurble-JS",
+			"title": "SoundBurble",
+			"description": "A string of bubbles rising.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "burble.js",
+					"target": "@components/sounds/burble.js"
+				}
+			]
+		},
+		{
+			"name": "SoundBurble-TS",
+			"title": "SoundBurble",
+			"description": "A string of bubbles rising.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "burble.ts",
+					"target": "@components/sounds/burble.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHerald-JS",
+			"title": "SoundHerald",
+			"description": "A short, bright brass-like fanfare.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "herald.js",
+					"target": "@components/sounds/herald.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHerald-TS",
+			"title": "SoundHerald",
+			"description": "A short, bright brass-like fanfare.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "herald.ts",
+					"target": "@components/sounds/herald.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundEmblem-JS",
+			"title": "SoundEmblem",
+			"description": "A minimal piano-like sting for logos.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "emblem.js",
+					"target": "@components/sounds/emblem.js"
+				}
+			]
+		},
+		{
+			"name": "SoundEmblem-TS",
+			"title": "SoundEmblem",
+			"description": "A minimal piano-like sting for logos.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "emblem.ts",
+					"target": "@components/sounds/emblem.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundVerdict-JS",
+			"title": "SoundVerdict",
+			"description": "A dark, dramatic hit and chord.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "verdict.js",
+					"target": "@components/sounds/verdict.js"
+				}
+			]
+		},
+		{
+			"name": "SoundVerdict-TS",
+			"title": "SoundVerdict",
+			"description": "A dark, dramatic hit and chord.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "verdict.ts",
+					"target": "@components/sounds/verdict.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUplift-JS",
+			"title": "SoundUplift",
+			"description": "A bright, uplifting chord swell.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "uplift.js",
+					"target": "@components/sounds/uplift.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUplift-TS",
+			"title": "SoundUplift",
+			"description": "A bright, uplifting chord swell.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "uplift.ts",
+					"target": "@components/sounds/uplift.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundEnigma-JS",
+			"title": "SoundEnigma",
+			"description": "A curious, unresolved sting.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "enigma.js",
+					"target": "@components/sounds/enigma.js"
+				}
+			]
+		},
+		{
+			"name": "SoundEnigma-TS",
+			"title": "SoundEnigma",
+			"description": "A curious, unresolved sting.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "enigma.ts",
+					"target": "@components/sounds/enigma.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCircuit-JS",
+			"title": "SoundCircuit",
+			"description": "A clean electronic logo sting.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "circuit.js",
+					"target": "@components/sounds/circuit.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCircuit-TS",
+			"title": "SoundCircuit",
+			"description": "A clean electronic logo sting.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "circuit.ts",
+					"target": "@components/sounds/circuit.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundPunchline-JS",
+			"title": "SoundPunchline",
+			"description": "A playful drum sting for comedic beats.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "punchline.js",
+					"target": "@components/sounds/punchline.js"
+				}
+			]
+		},
+		{
+			"name": "SoundPunchline-TS",
+			"title": "SoundPunchline",
+			"description": "A playful drum sting for comedic beats.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "punchline.ts",
+					"target": "@components/sounds/punchline.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundFinale-JS",
+			"title": "SoundFinale",
+			"description": "A warm, resolving chord to end a video.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "finale.js",
+					"target": "@components/sounds/finale.js"
+				}
+			]
+		},
+		{
+			"name": "SoundFinale-TS",
+			"title": "SoundFinale",
+			"description": "A warm, resolving chord to end a video.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "finale.ts",
+					"target": "@components/sounds/finale.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundHeartbeat-JS",
+			"title": "SoundHeartbeat",
+			"description": "A slow, deep heartbeat for suspense.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "heartbeat.js",
+					"target": "@components/sounds/heartbeat.js"
+				}
+			]
+		},
+		{
+			"name": "SoundHeartbeat-TS",
+			"title": "SoundHeartbeat",
+			"description": "A slow, deep heartbeat for suspense.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "heartbeat.ts",
+					"target": "@components/sounds/heartbeat.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundClockwork-JS",
+			"title": "SoundClockwork",
+			"description": "A steady clock tick that builds unease.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "clockwork.js",
+					"target": "@components/sounds/clockwork.js"
+				}
+			]
+		},
+		{
+			"name": "SoundClockwork-TS",
+			"title": "SoundClockwork",
+			"description": "A steady clock tick that builds unease.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "clockwork.ts",
+					"target": "@components/sounds/clockwork.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundUnease-JS",
+			"title": "SoundUnease",
+			"description": "A low, uneasy drone.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unease.js",
+					"target": "@components/sounds/unease.js"
+				}
+			]
+		},
+		{
+			"name": "SoundUnease-TS",
+			"title": "SoundUnease",
+			"description": "A low, uneasy drone.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "unease.ts",
+					"target": "@components/sounds/unease.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundStalk-JS",
+			"title": "SoundStalk",
+			"description": "A pulsing low bass for suspense.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stalk.js",
+					"target": "@components/sounds/stalk.js"
+				}
+			]
+		},
+		{
+			"name": "SoundStalk-TS",
+			"title": "SoundStalk",
+			"description": "A pulsing low bass for suspense.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "stalk.ts",
+					"target": "@components/sounds/stalk.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSuspense-JS",
+			"title": "SoundSuspense",
+			"description": "High, trembling tones that hang in the air.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "suspense.js",
+					"target": "@components/sounds/suspense.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSuspense-TS",
+			"title": "SoundSuspense",
+			"description": "High, trembling tones that hang in the air.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "suspense.ts",
+					"target": "@components/sounds/suspense.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundDread-JS",
+			"title": "SoundDread",
+			"description": "A slow, swelling dark breath.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dread.js",
+					"target": "@components/sounds/dread.js"
+				}
+			]
+		},
+		{
+			"name": "SoundDread-TS",
+			"title": "SoundDread",
+			"description": "A slow, swelling dark breath.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "dread.ts",
+					"target": "@components/sounds/dread.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundSiren-JS",
+			"title": "SoundSiren",
+			"description": "A distant, soft siren swell.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "siren.js",
+					"target": "@components/sounds/siren.js"
+				}
+			]
+		},
+		{
+			"name": "SoundSiren-TS",
+			"title": "SoundSiren",
+			"description": "A distant, soft siren swell.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "siren.ts",
+					"target": "@components/sounds/siren.ts"
+				}
+			]
+		},
+		{
+			"name": "SoundCountdown-JS",
+			"title": "SoundCountdown",
+			"description": "Three beeps and a go.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-JS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "countdown.js",
+					"target": "@components/sounds/countdown.js"
+				}
+			]
+		},
+		{
+			"name": "SoundCountdown-TS",
+			"title": "SoundCountdown",
+			"description": "Three beeps and a go.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [
+				"SoundEngine-TS"
+			],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "countdown.ts",
+					"target": "@components/sounds/countdown.ts"
+				}
+			]
 		}
 	]
 }

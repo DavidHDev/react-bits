@@ -5,8 +5,16 @@
     <link>https://reactbits.dev/get-started/changelog</link>
     <description>Keep up with the newest additions to React Bits.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 16 Oct 2026 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://reactbits.dev/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>New: Flying Button</title>
+      <link>https://reactbits.dev/micro/flying-button</link>
+      <guid isPermaLink="false">reactbits:Micro/FlyingButton@added</guid>
+      <pubDate>Fri, 16 Oct 2026 12:00:00 GMT</pubDate>
+      <category>Micro</category>
+      <description>Button that fires its thrusters on hover, lifts off on a WebGL smoke plume and lands back in its own cloud.</description>
+    </item>
     <item>
       <title>New: Gradient ASCII</title>
       <link>https://reactbits.dev/backgrounds/gradient-ascii</link>
@@ -798,14 +806,6 @@
       <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
       <category>Backgrounds</category>
       <description>Runs up to four times faster with the same look, and adds spirals, flowing color and finer control over the rays. The burst now ignites on load, leans toward the cursor and sends a wave of light outward on click.</description>
-    </item>
-    <item>
-      <title>Updated: Shape Grid</title>
-      <link>https://reactbits.dev/backgrounds/shape-grid</link>
-      <guid isPermaLink="false">reactbits:Backgrounds/ShapeGrid@2026-10-11</guid>
-      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Backgrounds</category>
-      <description>Rebuilt with eight cell shapes, a glowing cursor trail and click ripples. The grid can now tilt into perspective and light up in rainbow colors.</description>
     </item>
   </channel>
 </rss>

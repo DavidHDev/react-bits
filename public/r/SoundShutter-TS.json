@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundShutter-TS",
+	"title": "SoundShutter",
+	"description": "A soft mechanical shutter for photos and screenshots.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "shutter.ts",
+			"target": "@components/sounds/shutter.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst shutter: Recipe = {\n  duration: 0.14,\n  seed: 245,\n  loudness: -19,\n  lowpass: 7000,\n  reverb: { mix: 0.06, decay: 0.2, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -6,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 2000, q: 0.9 },\n        { type: 'lowpass', freq: 5200, q: 0.5 }\n      ],\n      env: { attack: 0.0006, decay: 0.006, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -10,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 900, q: 0.7 },\n        { type: 'lowpass', freq: 2340, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.015, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.008,\n      gain: -22,\n      filter: { type: 'bandpass', freq: 1800, q: 1 },\n      env: { attack: 0.004, decay: 0.03, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.07,\n      gain: -8,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1600, q: 0.8 },\n        { type: 'lowpass', freq: 4160, q: 0.5 }\n      ],\n      env: { attack: 0.0006, decay: 0.006, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.07,\n      gain: -12,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 700, q: 0.8 },\n        { type: 'lowpass', freq: 1820, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.012, curve: 6 }\n    }\n  ]\n};\n\nexport default shutter;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

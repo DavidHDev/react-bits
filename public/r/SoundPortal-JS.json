@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPortal-JS",
+	"title": "SoundPortal",
+	"description": "A swirling warp for magical transitions.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "portal.js",
+			"target": "@components/sounds/portal.js",
+			"content": "const portal = {\n  duration: 1.9,\n  seed: 139,\n  loudness: -17,\n  lowpass: 3500,\n  highpass: 60,\n  width: 0.8,\n  reverb: { mix: 0.4, decay: 2.2, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: {\n        points: [\n          [0, 200],\n          [0.9, 700],\n          [1.8, 300]\n        ]\n      },\n      fm: {\n        ratio: 1.5,\n        index: {\n          points: [\n            [0, 0.5],\n            [0.9, 1.5],\n            [1.8, 0.5]\n          ]\n        }\n      },\n      vibrato: { rate: 6, depth: 40 },\n      gain: -6,\n      filter: { type: 'lowpass', freq: 3000, q: 0.6 },\n      env: { attack: 0.8, rise: 1.6, decay: 1, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 300],\n            [0.9, 1500],\n            [1.9, 400]\n          ]\n        },\n        q: 1.2\n      },\n      env: { attack: 0.9, rise: 1.5, decay: 1, curve: 4 },\n      tremolo: { rate: 9, depth: 0.5 },\n      pan: {\n        points: [\n          [0, -0.6],\n          [0.4, 0.6],\n          [0.8, -0.6],\n          [1.2, 0.6],\n          [1.6, -0.6]\n        ]\n      }\n    }\n  ]\n};\n\nexport default portal;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

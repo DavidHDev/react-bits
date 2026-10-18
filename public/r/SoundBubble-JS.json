@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundBubble-JS",
+	"title": "SoundBubble",
+	"description": "Two round notes for a message in an open chat.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "bubble.js",
+			"target": "@components/sounds/bubble.js",
+			"content": "const bubble = {\n  duration: 0.3,\n  seed: 232,\n  loudness: -19,\n  lowpass: 6500,\n  reverb: { mix: 0.1, decay: 0.35, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 566.9636, to: 659.26, time: 0.02, curve: 2 },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.07, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 849.4822, to: 987.77, time: 0.02, curve: 2 },\n      at: 0.085,\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.11, curve: 5 }\n    }\n  ]\n};\n\nexport default bubble;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

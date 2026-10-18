@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDeep-TS",
+	"title": "SoundDeep",
+	"description": "A muffled underwater drone with a few bubbles.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "deep.ts",
+			"target": "@components/sounds/deep.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst deep: Recipe = {\n  duration: 9.5,\n  seed: 326,\n  loudness: -21,\n  lowpass: 1200,\n  highpass: 30,\n  width: 0.8,\n  reverb: { mix: 0.35, decay: 2.5, predelay: 0.01, damp: 1200 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'brown',\n      filter: { type: 'lowpass', freq: 350, q: 0.6 },\n      env: { attack: 2, hold: 5.5, decay: 2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 73.42,\n      vibrato: { rate: 0.3, depth: 30 },\n      gain: -6,\n      env: { attack: 2, hold: 5.5, decay: 2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 476.9639, to: 858.535, time: 0.054, curve: 1.6 },\n      at: 2.0765,\n      gain: -7.7333,\n      pan: 0.4057,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 282.5305, to: 508.5549, time: 0.054, curve: 1.6 },\n      at: 2.9999,\n      gain: -10.4939,\n      pan: -0.4438,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 475.6521, to: 856.1738, time: 0.054, curve: 1.6 },\n      at: 4.4554,\n      gain: -7.4289,\n      pan: 0.2073,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 538.52, to: 969.336, time: 0.054, curve: 1.6 },\n      at: 5.2898,\n      gain: -9.0101,\n      pan: -0.4318,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 430.8754, to: 775.5757, time: 0.054, curve: 1.6 },\n      at: 6.6522,\n      gain: -10.8621,\n      pan: -0.0698,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 495.5835, to: 892.0503, time: 0.054, curve: 1.6 },\n      at: 7.8999,\n      gain: -11.3879,\n      pan: 0.3074,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    }\n  ]\n};\n\nexport default deep;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

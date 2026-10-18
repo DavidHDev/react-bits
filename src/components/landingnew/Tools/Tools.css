@@ -30,7 +30,21 @@
 .ln-tools-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  container-type: inline-size;
+}
+
+.ln-tools-grid > .ln-tools-card {
+  grid-column: span 2;
+}
+
+.ln-tools-grid > .ln-tools-card:nth-child(-n + 2) {
+  grid-column: span 3;
+}
+
+.ln-tools-grid > .ln-tools-card:nth-child(-n + 2) .ln-tools-well {
+  height: calc(((100cqi - 24px) / 3 - 12px) * 11 / 16);
+  aspect-ratio: auto;
 }
 
 .ln-tools-card {
@@ -49,7 +63,7 @@
 
 .ln-tools-well {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 11;
   overflow: hidden;
   border-radius: 11px;
   isolation: isolate;
@@ -124,12 +138,34 @@
   color: #71717a;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
+  .ln-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ln-tools-grid > .ln-tools-card,
+  .ln-tools-grid > .ln-tools-card:nth-child(-n + 2) {
+    grid-column: auto;
+  }
+  .ln-tools-grid > .ln-tools-card:first-child {
+    grid-column: 1 / -1;
+  }
+  .ln-tools-grid > .ln-tools-card:nth-child(-n + 2) .ln-tools-well {
+    height: auto;
+    aspect-ratio: 16 / 11;
+  }
+  .ln-tools-grid > .ln-tools-card:first-child .ln-tools-well {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 640px) {
   .ln-tools-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .ln-tools-well {
-    aspect-ratio: 16 / 10;
+  .ln-tools-well,
+  .ln-tools-grid > .ln-tools-card:nth-child(-n + 2) .ln-tools-well,
+  .ln-tools-grid > .ln-tools-card:first-child .ln-tools-well {
+    aspect-ratio: 16 / 11;
   }
 }
 
@@ -156,4 +192,25 @@
 }
 :root[data-theme='light'] .ln-tools-well > .ln-tools-poster {
   mix-blend-mode: normal;
+}
+
+.ln-tools-well > .ln-tools-shot,
+:root[data-theme='light'] .ln-tools-well > .ln-tools-shot {
+  object-fit: cover;
+  mix-blend-mode: luminosity;
+}
+
+.ln-tools-well > .ln-tools-shot--fit,
+:root[data-theme='light'] .ln-tools-well > .ln-tools-shot--fit {
+  object-fit: contain;
+}
+
+.ln-tools-orb canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+:root[data-theme='light'] .ln-tools-orb {
+  filter: grayscale(1);
 }

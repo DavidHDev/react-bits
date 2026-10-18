@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDrift-JS",
+	"title": "SoundDrift",
+	"description": "A slow, airy pass with a gentle tail.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "drift.js",
+			"target": "@components/sounds/drift.js",
+			"content": "const drift = {\n  duration: 2.3,\n  seed: 123,\n  loudness: -17,\n  lowpass: 6000,\n  highpass: 50,\n  width: 0.8,\n  reverb: { mix: 0.2, decay: 1.6, predelay: 0.01, damp: 4000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      pan: { from: -0.5, to: 0.5, time: 2.1 },\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 300],\n            [1.1, 1100],\n            [2.2, 380]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 1, rise: 1.4, decay: 1.2, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      gain: -12,\n      filter: { type: 'lowpass', freq: 260, q: 0.6 },\n      env: { attack: 1, rise: 1.4, decay: 1.1, curve: 3 }\n    }\n  ]\n};\n\nexport default drift;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

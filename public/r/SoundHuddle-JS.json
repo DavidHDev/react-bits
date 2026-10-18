@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundHuddle-JS",
+	"title": "SoundHuddle",
+	"description": "A warm rising chord for joining a call.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "huddle.js",
+			"target": "@components/sounds/huddle.js",
+			"content": "const huddle = {\n  duration: 1.4,\n  seed: 237,\n  loudness: -17.5,\n  lowpass: 6500,\n  reverb: { mix: 0.2, decay: 0.9, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 293.66,\n      at: 0,\n      gain: 0,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.4 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.8, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 440,\n      at: 0.07,\n      gain: -1.5,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.4 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.8, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0.14,\n      gain: -3,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.4 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.8, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 739.99,\n      at: 0.21,\n      gain: -4.5,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.4 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.8, curve: 5 }\n    }\n  ]\n};\n\nexport default huddle;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

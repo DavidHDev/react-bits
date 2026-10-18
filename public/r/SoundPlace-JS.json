@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPlace-JS",
+	"title": "SoundPlace",
+	"description": "A gentle landing as an item is placed.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "place.js",
+			"target": "@components/sounds/place.js",
+			"content": "const place = {\n  duration: 0.18,\n  seed: 212,\n  loudness: -19.5,\n  lowpass: 5000,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 293.66,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.08, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -14,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 700, q: 0.7 },\n        { type: 'lowpass', freq: 1820, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.015, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 440, to: 329.63, time: 0.06 },\n      gain: -12,\n      env: { attack: 0.004, decay: 0.08, curve: 5 }\n    }\n  ]\n};\n\nexport default place;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

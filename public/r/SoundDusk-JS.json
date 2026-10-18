@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDusk-JS",
+	"title": "SoundDusk",
+	"description": "A falling fade for power off and disconnect.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "dusk.js",
+			"target": "@components/sounds/dusk.js",
+			"content": "const dusk = {\n  duration: 0.85,\n  seed: 82,\n  loudness: -18,\n  lowpass: 6000,\n  reverb: { mix: 0.2, decay: 0.9, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 523.25, to: 392, time: 0.4, curve: 2 },\n      filter: { type: 'lowpass', freq: { from: 4500, to: 800, time: 0.5 }, q: 0.6 },\n      env: { attack: 0.02, decay: 0.7, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 783.99, to: 587.33, time: 0.4, curve: 2 },\n      gain: -10,\n      env: { attack: 0.02, decay: 0.55, curve: 4 }\n    }\n  ]\n};\n\nexport default dusk;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

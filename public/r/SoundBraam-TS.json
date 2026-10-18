@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundBraam-TS",
+	"title": "SoundBraam",
+	"description": "A huge low brass-like blast for trailers.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "braam.ts",
+			"target": "@components/sounds/braam.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst braam: Recipe = {\n  duration: 3,\n  seed: 119,\n  loudness: -14,\n  lowpass: 3500,\n  highpass: 28,\n  drive: 0.25,\n  width: 0.8,\n  reverb: { mix: 0.3, decay: 3, predelay: 0.02, damp: 2500, lowcut: 150 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 6,\n      detune: 14,\n      freq: 73.42,\n      gain: 0,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 300],\n            [0.25, 1500],\n            [2.4, 380]\n          ]\n        },\n        q: 1\n      },\n      env: { attack: 0.05, hold: 0.4, decay: 2.2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 4,\n      detune: 12,\n      freq: 146.83,\n      gain: -6,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 300],\n            [0.25, 1500],\n            [2.4, 380]\n          ]\n        },\n        q: 1\n      },\n      env: { attack: 0.05, hold: 0.4, decay: 2.2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 10,\n      freq: 220,\n      gain: -10,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 300],\n            [0.25, 1500],\n            [2.4, 380]\n          ]\n        },\n        q: 1\n      },\n      env: { attack: 0.05, hold: 0.4, decay: 2.2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 36.71, to: 36.71, time: 1.44, curve: 3 },\n      at: 0,\n      gain: -4,\n      env: { attack: 0.03, decay: 2.4, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -14,\n      filter: { type: 'lowpass', freq: { from: 2000, to: 300, time: 0.3 }, q: 0.6 },\n      env: { attack: 0.01, decay: 0.3, curve: 5 }\n    }\n  ]\n};\n\nexport default braam;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

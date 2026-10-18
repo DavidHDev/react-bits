@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundTimber-TS",
+	"title": "SoundTimber",
+	"description": "A dry wooden thud for warm cuts.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "timber.ts",
+			"target": "@components/sounds/timber.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst timber: Recipe = {\n  duration: 0.6,\n  seed: 117,\n  loudness: -14.5,\n  lowpass: 5000,\n  highpass: 40,\n  reverb: { mix: 0.1, decay: 0.6, predelay: 0.01, damp: 3500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 98,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.22, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 160, to: 110, time: 0.05, curve: 3 },\n      gain: -4,\n      env: { attack: 0.002, decay: 0.12, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -6,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 900, q: 0.6 },\n        { type: 'lowpass', freq: 2340, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.02, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -16,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 2400, q: 0.8 },\n        { type: 'lowpass', freq: 6240, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.006, curve: 6 }\n    }\n  ]\n};\n\nexport default timber;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

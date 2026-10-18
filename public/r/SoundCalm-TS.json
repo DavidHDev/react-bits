@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCalm-TS",
+	"title": "SoundCalm",
+	"description": "A warm, quiet pad for calm scenes.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "calm.ts",
+			"target": "@components/sounds/calm.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst calm: Recipe = {\n  duration: 9.5,\n  seed: 322,\n  loudness: -21,\n  lowpass: 2500,\n  highpass: 40,\n  width: 0.8,\n  reverb: { mix: 0.3, decay: 2.6, predelay: 0.01, damp: 3500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 3,\n      detune: 7,\n      freq: 146.83,\n      at: 0,\n      gain: -2,\n      filter: { type: 'lowpass', freq: 900, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 },\n      tremolo: { rate: 0.2, depth: 0.25 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 3,\n      detune: 7,\n      freq: 220,\n      at: 0,\n      gain: -4,\n      filter: { type: 'lowpass', freq: 900, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 },\n      tremolo: { rate: 0.2, depth: 0.25 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 3,\n      detune: 7,\n      freq: 293.66,\n      at: 0,\n      gain: -6,\n      filter: { type: 'lowpass', freq: 900, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 },\n      tremolo: { rate: 0.2, depth: 0.25 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 3,\n      detune: 7,\n      freq: 369.99,\n      at: 0,\n      gain: -8,\n      filter: { type: 'lowpass', freq: 900, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 5, decay: 2, curve: 3 },\n      tremolo: { rate: 0.2, depth: 0.25 }\n    }\n  ]\n};\n\nexport default calm;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

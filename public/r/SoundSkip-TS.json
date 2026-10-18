@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSkip-TS",
+	"title": "SoundSkip",
+	"description": "A quick double flick for skipping tracks.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "skip.ts",
+			"target": "@components/sounds/skip.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst skip: Recipe = {\n  duration: 0.16,\n  seed: 246,\n  loudness: -21,\n  lowpass: 5500,\n  highpass: 300,\n  reverb: { mix: 0.05, decay: 0.2, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: { type: 'bandpass', freq: { from: 700, to: 1400, time: 0.055, curve: 2 }, q: 1 },\n      env: { attack: 0.02, rise: 1.5, decay: 0.035, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.06,\n      gain: -1,\n      filter: { type: 'bandpass', freq: { from: 850, to: 1700, time: 0.06, curve: 2 }, q: 1 },\n      env: { attack: 0.02, rise: 1.5, decay: 0.04, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 987.77,\n      at: 0.06,\n      gain: -14,\n      env: { attack: 0.002, decay: 0.04, curve: 6 }\n    }\n  ]\n};\n\nexport default skip;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

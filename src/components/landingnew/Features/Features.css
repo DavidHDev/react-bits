@@ -194,44 +194,95 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  container-type: inline-size;
 }
 
-.ln-feat-tool-box {
-  position: absolute;
+.ln-feat-dock {
+  --dock-base: min(42px, calc((100cqi - 44px) / 5.82));
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px;
+  height: calc(var(--dock-base) * 1.6);
+  align-items: flex-end;
+  gap: 7px;
+}
+
+.ln-feat-dock-item {
+  position: relative;
+  display: grid;
+  width: calc(var(--dock-base) * var(--s, 1));
+  height: calc(var(--dock-base) * var(--s, 1));
+  flex: none;
+  border-radius: calc(var(--dock-base) * 0.31 * var(--s, 1));
   background: #1f1a27;
   box-shadow:
     var(--surface-ghost-highlight),
     0 8px 20px rgba(0, 0, 0, 0.35);
-  color: rgba(255, 255, 255, 0.5);
-  z-index: 2;
+  color: rgba(255, 255, 255, 0.55);
+  place-items: center;
+  transform: translateY(var(--lift, 0px));
+  transition: color var(--transition-fast);
 }
 
-.ln-feat-tool-box--center {
-  width: 56px;
-  height: 56px;
-  top: calc(50% - 40px);
-  left: calc(50% - 28px);
-  color: rgba(255, 255, 255, 0.6);
+.ln-feat-dock-item svg {
+  width: 43%;
+  height: 43%;
 }
 
-.ln-feat-tool-box--left {
-  width: 46px;
-  height: 46px;
-  top: calc(50% + 6px);
-  left: calc(50% - 58px);
-  transform: rotate(-12deg);
+.ln-feat-dock-item:hover,
+.ln-feat-dock-item:focus-visible {
+  color: #fff;
 }
 
-.ln-feat-tool-box--right {
-  width: 46px;
-  height: 46px;
-  top: calc(50% + 6px);
-  left: calc(50% + 12px);
-  transform: rotate(12deg);
+.ln-feat-dock-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+.ln-feat-dock-title {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  height: 28px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #2a2433;
+  box-shadow:
+    var(--surface-ghost-highlight),
+    0 6px 16px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -6px) scale(0.96);
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 260ms var(--ease-out),
+    width 320ms var(--ease-out);
+}
+
+.ln-feat-dock-title[data-on] {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.ln-feat-dock-names {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, calc(var(--n, 0) * -28px));
+  transition: transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ln-feat-dock-name {
+  height: 28px;
+  padding: 0 12px;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 28px;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════
@@ -776,17 +827,32 @@
   box-shadow: 0 4px 14px rgba(24, 24, 27, 0.08);
 }
 
-:root[data-theme='light'] .ln-feat-tool-box {
+:root[data-theme='light'] .ln-feat-dock-item {
   background: #fff;
-  color: #52525b;
   box-shadow:
     0 8px 24px rgba(24, 24, 27, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #71717a;
 }
 
-:root[data-theme='light'] .ln-feat-tool-box--left,
-:root[data-theme='light'] .ln-feat-tool-box--right {
-  color: #71717a;
+:root[data-theme='light'] .ln-feat-dock-item:hover,
+:root[data-theme='light'] .ln-feat-dock-item:focus-visible {
+  color: #18181b;
+}
+
+:root[data-theme='light'] .ln-feat-dock-item:focus-visible {
+  outline-color: #18181b;
+}
+
+:root[data-theme='light'] .ln-feat-dock-title {
+  background: #fff;
+  box-shadow:
+    0 0 0 1px rgba(24, 24, 27, 0.06),
+    0 6px 16px rgba(24, 24, 27, 0.1);
+}
+
+:root[data-theme='light'] .ln-feat-dock-name {
+  color: #18181b;
 }
 
 :root[data-theme='light'] .ln-feat-orbit-center,
@@ -898,53 +964,9 @@
   }
 }
 
-.ln-feat-float {
-  animation: ln-feat-float-center 4s ease-in-out both infinite;
-}
-
-.ln-feat-float--left {
-  animation: ln-feat-float-left 5s ease-in-out 0.6s both infinite;
-}
-
-.ln-feat-float--right {
-  animation: ln-feat-float-right 5.5s ease-in-out 1.2s both infinite;
-}
-
-@keyframes ln-feat-float-center {
-  0%,
-  100% {
-    transform: translateY(-4px);
-  }
-
-  50% {
-    transform: translateY(4px);
-  }
-}
-
-@keyframes ln-feat-float-left {
-  0%,
-  100% {
-    transform: translate(-3px, 3px);
-  }
-
-  50% {
-    transform: translate(2px, -3px);
-  }
-}
-
-@keyframes ln-feat-float-right {
-  0%,
-  100% {
-    transform: translate(3px, 3px);
-  }
-
-  50% {
-    transform: translate(-2px, -3px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .ln-feat-float {
-    animation: none;
+  .ln-feat-dock-title,
+  .ln-feat-dock-names {
+    transition: none;
   }
 }

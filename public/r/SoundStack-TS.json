@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundStack-TS",
+	"title": "SoundStack",
+	"description": "A soft cascade as items stack together.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "stack.ts",
+			"target": "@components/sounds/stack.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst stack: Recipe = {\n  duration: 0.18,\n  seed: 217,\n  loudness: -20,\n  lowpass: 6500,\n  reverb: { mix: 0.06, decay: 0.22, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.05, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0.035,\n      gain: -2,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.05, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 493.88,\n      at: 0.07,\n      gain: -4,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.05, curve: 6 }\n    }\n  ]\n};\n\nexport default stack;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

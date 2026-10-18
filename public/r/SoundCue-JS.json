@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCue-JS",
+	"title": "SoundCue",
+	"description": "A gentle three-note rise for upcoming events.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "cue.js",
+			"target": "@components/sounds/cue.js",
+			"content": "const cue = {\n  duration: 1.2,\n  seed: 56,\n  loudness: -17.5,\n  lowpass: 6500,\n  reverb: { mix: 0.18, decay: 0.9, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0,\n      gain: 0,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.25 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.5, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 739.99,\n      at: 0.11,\n      gain: -1,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.275 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.55, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.22,\n      gain: -2,\n      fm: { ratio: 1, index: { from: 1.4, to: 0.15, time: 0.4 } },\n      partials: [\n        [1, 1, 1],\n        [2, 0.12, 0.5]\n      ],\n      env: { attack: 0.003, decay: 0.8, curve: 5 }\n    }\n  ]\n};\n\nexport default cue;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundConfetti-JS",
+	"title": "SoundConfetti",
+	"description": "A soft pop and a shower of sparkles for celebrations.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "confetti.js",
+			"target": "@components/sounds/confetti.js",
+			"content": "const confetti = {\n  duration: 1.1,\n  seed: 254,\n  loudness: -17.5,\n  lowpass: 7000,\n  width: 0.8,\n  reverb: { mix: 0.25, decay: 0.9, predelay: 0.01, damp: 7000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 900, to: 300, time: 0.015, curve: 3 },\n      at: 0,\n      gain: -2,\n      env: { attack: 0.001, decay: 0.03, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -8,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1200, q: 0.6 },\n        { type: 'lowpass', freq: 3120, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.012, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.3618,\n      gain: -10.8031,\n      pan: 0.7314,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1255, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.4546,\n      gain: -14.9015,\n      pan: -0.491,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.09, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.3749,\n      gain: -15.6516,\n      pan: 0.0775,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1615, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.5967,\n      gain: -9.7022,\n      pan: 0.7824,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.0885, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 987.77,\n      at: 0.2201,\n      gain: -12.6418,\n      pan: -0.7262,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1199, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1479.98,\n      at: 0.5125,\n      gain: -15.4933,\n      pan: 0.4301,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1499, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.533,\n      gain: -12.5702,\n      pan: -0.7265,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.0703, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.2519,\n      gain: -10.0146,\n      pan: -0.5129,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.0633, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.1756,\n      gain: -12.8025,\n      pan: -0.2189,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.024, 0.4],\n        [5.4, 0.006, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.1581, curve: 6 }\n    }\n  ]\n};\n\nexport default confetti;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

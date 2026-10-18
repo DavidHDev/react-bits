@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundWhip-JS",
+	"title": "SoundWhip",
+	"description": "A sharp, quick whip for snappy cuts.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "whip.js",
+			"target": "@components/sounds/whip.js",
+			"content": "const whip = {\n  duration: 0.3,\n  seed: 125,\n  loudness: -16.5,\n  lowpass: 6500,\n  highpass: 120,\n  reverb: { mix: 0.08, decay: 0.4, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      pan: { from: -0.4, to: 0.5, time: 0.24 },\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 700],\n            [0.12, 1800],\n            [0.24, 1500]\n          ]\n        },\n        q: 0.9\n      },\n      env: { attack: 0.12, rise: 2.2, decay: 0.12, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -8,\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 300],\n            [0.12, 900],\n            [0.22, 400]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 0.12, rise: 2.2, decay: 0.1, curve: 4 }\n    }\n  ]\n};\n\nexport default whip;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

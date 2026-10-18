@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPunchline-JS",
+	"title": "SoundPunchline",
+	"description": "A playful drum sting for comedic beats.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "punchline.js",
+			"target": "@components/sounds/punchline.js",
+			"content": "const punchline = {\n  duration: 1,\n  seed: 357,\n  loudness: -16,\n  lowpass: 8000,\n  highpass: 50,\n  reverb: { mix: 0.15, decay: 0.7, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 180, to: 120, time: 0.06, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 0.15, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -12,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 900, q: 0.7 },\n        { type: 'lowpass', freq: 2340, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.01, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 130, to: 90, time: 0.08, curve: 3 },\n      at: 0.16,\n      gain: 0,\n      env: { attack: 0.004, decay: 0.2, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.16,\n      gain: -12,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 700, q: 0.7 },\n        { type: 'lowpass', freq: 1820, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.01, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'white',\n      at: 0.34,\n      gain: -10,\n      filter: [\n        { type: 'highpass', freq: 5000, q: 0.5 },\n        { type: 'lowpass', freq: 9000, q: 0.5 }\n      ],\n      env: { attack: 0.002, decay: 0.4, curve: 5 }\n    }\n  ]\n};\n\nexport default punchline;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDescent-TS",
+	"title": "SoundDescent",
+	"description": "A falling noise sweep that settles the energy.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "descent.ts",
+			"target": "@components/sounds/descent.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst descent: Recipe = {\n  duration: 2.6,\n  seed: 302,\n  loudness: -16,\n  lowpass: 8000,\n  highpass: 40,\n  width: 0.7,\n  reverb: { mix: 0.25, decay: 1.8, predelay: 0.01, damp: 4000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: { type: 'lowpass', freq: { from: 8000, to: 250, time: 2.4, curve: 2 }, q: 0.7 },\n      env: { attack: 0.05, decay: 2.4, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 587.33, to: 146.83, time: 2.2, curve: 2 },\n      gain: -12,\n      filter: { type: 'lowpass', freq: 1800, q: 0.6 },\n      env: { attack: 0.05, decay: 2.2, curve: 3 }\n    }\n  ]\n};\n\nexport default descent;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

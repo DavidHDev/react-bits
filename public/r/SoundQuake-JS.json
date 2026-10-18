@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundQuake-JS",
+	"title": "SoundQuake",
+	"description": "A low rumble that drops out from under you.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "quake.js",
+			"target": "@components/sounds/quake.js",
+			"content": "const quake = {\n  duration: 2.6,\n  seed: 304,\n  loudness: -14.5,\n  lowpass: 1200,\n  highpass: 22,\n  drive: 0.15,\n  width: 0.8,\n  reverb: { mix: 0.25, decay: 2.4, predelay: 0.01, damp: 1800 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'brown',\n      tremolo: { rate: 6, depth: 0.6 },\n      filter: { type: 'lowpass', freq: { from: 260, to: 90, time: 2.4 }, q: 0.7 },\n      env: { attack: 0.08, decay: 2.4, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 50, to: 30, time: 2, curve: 3 },\n      at: 0,\n      gain: -2,\n      env: { attack: 0.05, decay: 2.3, curve: 3 }\n    }\n  ]\n};\n\nexport default quake;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

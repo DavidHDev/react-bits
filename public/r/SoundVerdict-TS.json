@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundVerdict-TS",
+	"title": "SoundVerdict",
+	"description": "A dark, dramatic hit and chord.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "verdict.ts",
+			"target": "@components/sounds/verdict.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst verdict: Recipe = {\n  duration: 2.8,\n  seed: 353,\n  loudness: -15,\n  lowpass: 3500,\n  highpass: 30,\n  width: 0.8,\n  drive: 0.1,\n  reverb: { mix: 0.35, decay: 2.8, predelay: 0.02, damp: 3000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 70, to: 35, time: 0.6, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 1.6, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -8,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 700, q: 0.6 },\n        { type: 'lowpass', freq: 1820, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.03, curve: 6 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 10,\n      freq: 146.83,\n      at: 0,\n      gain: -4,\n      filter: { type: 'lowpass', freq: 1200, q: 0.6 },\n      env: { attack: 0.02, rise: 1, decay: 2.4, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 10,\n      freq: 174.61,\n      at: 0,\n      gain: -5.5,\n      filter: { type: 'lowpass', freq: 1200, q: 0.6 },\n      env: { attack: 0.02, rise: 1, decay: 2.4, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 10,\n      freq: 220,\n      at: 0,\n      gain: -7,\n      filter: { type: 'lowpass', freq: 1200, q: 0.6 },\n      env: { attack: 0.02, rise: 1, decay: 2.4, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 10,\n      freq: 293.66,\n      at: 0,\n      gain: -8.5,\n      filter: { type: 'lowpass', freq: 1200, q: 0.6 },\n      env: { attack: 0.02, rise: 1, decay: 2.4, curve: 4 }\n    }\n  ]\n};\n\nexport default verdict;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

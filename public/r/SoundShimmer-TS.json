@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundShimmer-TS",
+	"title": "SoundShimmer",
+	"description": "A quiet glassy sweep between scenes.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "shimmer.ts",
+			"target": "@components/sounds/shimmer.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst shimmer: Recipe = {\n  duration: 1.7,\n  seed: 133,\n  loudness: -18,\n  lowpass: 10000,\n  highpass: 300,\n  width: 0.8,\n  reverb: { mix: 0.35, decay: 2, predelay: 0.015, damp: 7000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 0.0043,\n      gain: -8,\n      pan: -0.15,\n      partials: [\n        [1, 1, 1],\n        [2, 0.06, 0.5]\n      ],\n      env: { attack: 0.03, decay: 0.9554, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.1079,\n      gain: -9.6,\n      pan: 0.23,\n      partials: [\n        [1, 1, 1],\n        [2, 0.06, 0.5]\n      ],\n      env: { attack: 0.03, decay: 0.7716, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.1843,\n      gain: -11.2,\n      pan: -0.31,\n      partials: [\n        [1, 1, 1],\n        [2, 0.06, 0.5]\n      ],\n      env: { attack: 0.03, decay: 0.7116, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1567.98,\n      at: 0.2896,\n      gain: -12.8,\n      pan: 0.39,\n      partials: [\n        [1, 1, 1],\n        [2, 0.06, 0.5]\n      ],\n      env: { attack: 0.03, decay: 0.8305, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.3725,\n      gain: -14.4,\n      pan: -0.47,\n      partials: [\n        [1, 1, 1],\n        [2, 0.06, 0.5]\n      ],\n      env: { attack: 0.03, decay: 0.8037, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 2093,\n      at: 0.4611,\n      gain: -16,\n      pan: 0.55,\n      partials: [\n        [1, 1, 1],\n        [2, 0.06, 0.5]\n      ],\n      env: { attack: 0.03, decay: 0.7717, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -30,\n      filter: [\n        { type: 'highpass', freq: 5000, q: 0.5 },\n        { type: 'lowpass', freq: 9000, q: 0.5 }\n      ],\n      env: { attack: 0.4, rise: 1.5, decay: 0.8, curve: 4 }\n    }\n  ]\n};\n\nexport default shimmer;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

@@ -60,10 +60,20 @@ export const PRESET_OPTIONS = [
   { value: 'eclipse', label: 'Eclipse' }
 ];
 
-export const presetProps = (value, { defaults = {} } = {}) => {
+export const LIGHT_SWAP = {
+  portal: { color: '#7c3aed', colorTwo: '#4f46e5' },
+  halo: { color: '#3f3f46', colorTwo: '#71717a' },
+  ripple: { color: '#0891b2', colorTwo: '#2563eb' },
+  prism: { color: '#3f3f46', colorTwo: '#52525b' },
+  gyro: { color: '#d97706', colorTwo: '#ea580c' },
+  eclipse: { color: '#3f3f46', colorTwo: '#c2410c' }
+};
+
+export const presetProps = (value, { light = false, defaults = {} } = {}) => {
   const base = Object.fromEntries(Object.keys(LOOK).map(name => [name, defaults[name]]));
   return {
     ...base,
-    ...PRESETS[value]
+    ...PRESETS[value],
+    ...(light ? LIGHT_SWAP[value] : null)
   };
 };

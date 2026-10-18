@@ -111,19 +111,21 @@ Then connect your client, for example `npx shadcn@latest mcp init --client claud
 
 ## Creative tools
 
-Three free tools for making assets with React Bits, right in the browser.
+Five free tools for making assets and sounds with React Bits, right in the browser.
 
 <a href="https://reactbits.dev/tools">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="public/assets/readme/tools-dark.webp">
     <source media="(prefers-color-scheme: light)" srcset="public/assets/readme/tools-light.webp">
-    <img src="public/assets/readme/tools-light.webp" alt="Background Studio, Shape Magic and Texture Lab" width="100%">
+    <img src="public/assets/readme/tools-light.webp" alt="Background Studio, Center Stage, Shape Magic, Texture Lab and Sound Lab" width="100%">
   </picture>
 </a>
 
 - **[Background Studio](https://reactbits.dev/tools/background-studio)**: browse every animated background, start from a preset and tune it live. Export the code, a high-resolution image or a looping MP4 or WebM video.
+- **[Center Stage](https://reactbits.dev/tools/center-stage)**: turn a screenshot or screen recording into a polished product shot on lifelike phones, laptops and browsers, with 3D tilt, depth of field, shadows and type. Perfect for launch videos or demos. Export 4K images, 4K video, GIFs or a link.
 - **[Shape Magic](https://reactbits.dev/tools/shape-magic)**: design a logo mark from shapes, patterns, text or your own SVG, then give it a 3D material like chrome, glass or neon. Export SVG, PNG, favicons, video or React.
 - **[Texture Lab](https://reactbits.dev/tools/texture-lab)**: run photos, videos or your camera through 160 one-click styles and 75+ stackable effects, from ASCII and halftone to glass and glitch. Export images, videos or GIFs.
+- **[Sound Lab](https://reactbits.dev/tools/sound-lab)**: audition 200 interface and video sounds, tune them and add effects like reverb, echo and filter, then install one with a single command or download WAV, MP3 or OGG.
 
 ## Sponsors
 

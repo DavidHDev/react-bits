@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundNightfall-TS",
+	"title": "SoundNightfall",
+	"description": "A soft settle for switching to dark mode.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "nightfall.ts",
+			"target": "@components/sounds/nightfall.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst nightfall: Recipe = {\n  duration: 0.45,\n  seed: 35,\n  loudness: -19.5,\n  lowpass: 4500,\n  reverb: { mix: 0.18, decay: 0.6, predelay: 0.01, damp: 3500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 739.99,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.04, 0.55],\n        [3, 0.01, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.16, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 493.88,\n      at: 0.07,\n      gain: -1,\n      partials: [\n        [1, 1, 1],\n        [2, 0.04, 0.55],\n        [3, 0.01, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.3, curve: 6 }\n    }\n  ]\n};\n\nexport default nightfall;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

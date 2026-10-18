@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundFocus-JS",
+	"title": "SoundFocus",
+	"description": "A camera focus whir and confirm beeps for emphasis.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "focus.js",
+			"target": "@components/sounds/focus.js",
+			"content": "const focus = {\n  duration: 0.32,\n  seed: 148,\n  loudness: -19,\n  lowpass: 8000,\n  reverb: { mix: 0.06, decay: 0.25, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -10,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 3000, q: 1.5 },\n        { type: 'lowpass', freq: 7800, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.003, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.06,\n      gain: -12,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 3000, q: 1.5 },\n        { type: 'lowpass', freq: 7800, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.003, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.12,\n      env: { attack: 0.003, hold: 0.03, decay: 0.04, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.2,\n      env: { attack: 0.003, hold: 0.03, decay: 0.06, curve: 5 }\n    }\n  ]\n};\n\nexport default focus;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

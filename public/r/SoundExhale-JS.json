@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundExhale-JS",
+	"title": "SoundExhale",
+	"description": "A gentle breath out after the cut.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "exhale.js",
+			"target": "@components/sounds/exhale.js",
+			"content": "const exhale = {\n  duration: 1.5,\n  seed: 132,\n  loudness: -17,\n  lowpass: 5500,\n  highpass: 60,\n  reverb: { mix: 0.25, decay: 1.5, predelay: 0.01, damp: 4000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: { type: 'bandpass', freq: { from: 1500, to: 420, time: 1.3, curve: 2 }, q: 0.6 },\n      env: { attack: 0.03, decay: 1.3, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 220, to: 164.81, time: 1, curve: 2 },\n      gain: -14,\n      env: { attack: 0.03, decay: 0.9, curve: 4 }\n    }\n  ]\n};\n\nexport default exhale;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

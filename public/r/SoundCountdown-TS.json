@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCountdown-TS",
+	"title": "SoundCountdown",
+	"description": "Three beeps and a go.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "countdown.ts",
+			"target": "@components/sounds/countdown.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst countdown: Recipe = {\n  duration: 2.2,\n  seed: 368,\n  loudness: -16.5,\n  lowpass: 7000,\n  reverb: { mix: 0.12, decay: 0.6, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.004, hold: 0.06, decay: 0.12, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.6,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.004, hold: 0.06, decay: 0.12, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 1.2,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.004, hold: 0.06, decay: 0.12, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 1.8,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.004, hold: 0.15, decay: 0.5, curve: 5 }\n    }\n  ]\n};\n\nexport default countdown;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

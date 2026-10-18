@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundAscent-TS",
+	"title": "SoundAscent",
+	"description": "A soft four second rise of air and warm tone.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "ascent.ts",
+			"target": "@components/sounds/ascent.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst ascent: Recipe = {\n  duration: 4.1,\n  seed: 101,\n  loudness: -15,\n  lowpass: 9000,\n  highpass: 30,\n  width: 0.7,\n  reverb: { mix: 0.25, decay: 2.2, predelay: 0.02, damp: 4000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: { type: 'lowpass', freq: { from: 300, to: 5200, time: 3.9, curve: 0.7 }, q: 0.6 },\n      env: { attack: 3.8, rise: 2.2, decay: 0.25, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      voices: 3,\n      detune: 7,\n      freq: { from: 220, to: 329.63, time: 3.9, curve: 0.7 },\n      gain: -9,\n      filter: { type: 'lowpass', freq: { from: 500, to: 2600, time: 3.9 }, q: 0.6 },\n      env: { attack: 3.7, rise: 2, decay: 0.3, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 440, to: 659.26, time: 3.9, curve: 0.7 },\n      gain: -18,\n      env: { attack: 3.6, rise: 2, decay: 0.25, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 52, to: 78, time: 3.9 },\n      gain: -15,\n      env: { attack: 3.5, rise: 2, decay: 0.3, curve: 3 }\n    }\n  ]\n};\n\nexport default ascent;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

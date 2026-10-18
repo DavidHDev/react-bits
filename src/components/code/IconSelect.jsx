@@ -26,7 +26,8 @@ const CONTENT_STYLE = {
   borderRadius: '10px',
   boxSizing: 'border-box',
   overflowX: 'hidden',
-  p: 1
+  p: 1,
+  zIndex: 1600
 };
 
 const ITEM_STYLE = {

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSuspense-TS",
+	"title": "SoundSuspense",
+	"description": "High, trembling tones that hang in the air.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "suspense.ts",
+			"target": "@components/sounds/suspense.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst suspense: Recipe = {\n  duration: 5,\n  seed: 365,\n  loudness: -18,\n  lowpass: 6000,\n  highpass: 40,\n  width: 0.9,\n  reverb: { mix: 0.35, decay: 2.6, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1318.51,\n      voices: 2,\n      detune: 6,\n      tremolo: { rate: 7, depth: 0.5 },\n      gain: 0,\n      pan: -0.3,\n      env: { attack: 2, hold: 2, decay: 1, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 1396.91,\n      voices: 2,\n      detune: 6,\n      tremolo: { rate: 7.6, depth: 0.5 },\n      gain: -2,\n      pan: 0.3,\n      env: { attack: 2, hold: 2, decay: 1, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: 73.42,\n      gain: -12,\n      filter: { type: 'lowpass', freq: 300, q: 0.6 },\n      env: { attack: 2, hold: 2, decay: 1, curve: 3 }\n    }\n  ]\n};\n\nexport default suspense;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

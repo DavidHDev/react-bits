@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCoin-TS",
+	"title": "SoundCoin",
+	"description": "A bright two-note coin for rewards.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "coin.ts",
+			"target": "@components/sounds/coin.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst coin: Recipe = {\n  duration: 0.45,\n  seed: 251,\n  loudness: -18.5,\n  lowpass: 7000,\n  reverb: { mix: 0.1, decay: 0.4, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 987.77,\n      harmonics: [1, 0, 0.18, 0, 0.06],\n      filter: { type: 'lowpass', freq: 4500, q: 0.6 },\n      env: { attack: 0.002, hold: 0.04, decay: 0.03, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.06,\n      harmonics: [1, 0, 0.18, 0, 0.06],\n      filter: { type: 'lowpass', freq: 5000, q: 0.6 },\n      env: { attack: 0.002, decay: 0.35, curve: 5 }\n    }\n  ]\n};\n\nexport default coin;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

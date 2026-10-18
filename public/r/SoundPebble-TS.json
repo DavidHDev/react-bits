@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPebble-TS",
+	"title": "SoundPebble",
+	"description": "A soft, rounded tap for primary buttons.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "pebble.ts",
+			"target": "@components/sounds/pebble.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst pebble: Recipe = {\n  duration: 0.16,\n  seed: 11,\n  loudness: -18,\n  lowpass: 7000,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 560, to: 380, time: 0.028, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.0015, decay: 0.075, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 1120, to: 820, time: 0.02, curve: 3 },\n      at: 0,\n      gain: -19,\n      env: { attack: 0.0015, decay: 0.03, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -21,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1150, q: 0.8 },\n        { type: 'lowpass', freq: 2990, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.007, curve: 6 }\n    }\n  ]\n};\n\nexport default pebble;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

@@ -60,7 +60,7 @@
   height: 220px;
   overflow: hidden;
   border-radius: 11px;
-  background: #09080b;
+  background: #0e0b13;
   isolation: isolate;
 }
 
@@ -195,7 +195,7 @@
 }
 
 :root[data-theme='light'] .ln-demo-well {
-  background: #f7f7f8;
+  background: #ffffff;
 }
 
 :root[data-theme='light'] .ln-demo-caption-meta {

@@ -61,7 +61,11 @@ const CodeOptions = ({ children }) => {
     return node?.props?.children ? node : UNSUPPORTED;
   };
 
-  const styleVariant = stylePreset === 'TW' ? 'tailwind' : 'css';
+  const styles = STYLE_ITEMS.filter(item =>
+    item === 'TW' ? buckets.JS.tailwind || buckets.TS.tailwind : buckets.JS.css || buckets.TS.css
+  );
+  const activeStyle = styles.includes(stylePreset) ? stylePreset : styles[0] || stylePreset;
+  const styleVariant = activeStyle === 'TW' ? 'tailwind' : 'css';
   const activeNode = renderContent(styleVariant);
   const activeParts = activeNode === UNSUPPORTED ? [activeNode] : Children.toArray(activeNode?.props?.children);
   const primaryContent = activeParts[0] || activeNode;
@@ -88,20 +92,22 @@ const CodeOptions = ({ children }) => {
               triggerClassName="section-header-select"
               placement="bottom-start"
             />
-            <IconSelect
-              collection={STYLE_ITEMS}
-              value={stylePreset}
-              onChange={setStylePreset}
-              iconMap={ICON_MAP}
-              labelMap={LABEL_MAP}
-              colorMap={COLOR_MAP}
-              width="125px"
-              contentWidth="154px"
-              triggerHeight={8}
-              triggerRadius="7px"
-              triggerClassName="section-header-select"
-              placement="bottom-start"
-            />
+            {styles.length > 1 && (
+              <IconSelect
+                collection={STYLE_ITEMS}
+                value={stylePreset}
+                onChange={setStylePreset}
+                iconMap={ICON_MAP}
+                labelMap={LABEL_MAP}
+                colorMap={COLOR_MAP}
+                width="125px"
+                contentWidth="154px"
+                triggerHeight={8}
+                triggerRadius="7px"
+                triggerClassName="section-header-select"
+                placement="bottom-start"
+              />
+            )}
             <CodeCopyButton codeString={activeCode} />
           </>
         }

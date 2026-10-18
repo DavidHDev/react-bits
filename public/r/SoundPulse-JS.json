@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPulse-JS",
+	"title": "SoundPulse",
+	"description": "A calm, breathing pulse while something loads.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "pulse.js",
+			"target": "@components/sounds/pulse.js",
+			"content": "const pulse = {\n  duration: 1.2,\n  seed: 222,\n  loudness: -21,\n  lowpass: 4000,\n  reverb: { mix: 0.15, decay: 0.6, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: 293.66,\n      voices: 2,\n      detune: 6,\n      filter: { type: 'lowpass', freq: 1200, q: 0.6 },\n      env: { attack: 0.45, rise: 1.5, decay: 0.6, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 440,\n      gain: -8,\n      env: { attack: 0.45, rise: 1.5, decay: 0.55, curve: 3 }\n    }\n  ]\n};\n\nexport default pulse;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

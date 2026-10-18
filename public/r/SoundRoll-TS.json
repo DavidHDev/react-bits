@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundRoll-TS",
+	"title": "SoundRoll",
+	"description": "A quick spin up for starting playback.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "roll.ts",
+			"target": "@components/sounds/roll.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst roll: Recipe = {\n  duration: 0.18,\n  seed: 241,\n  loudness: -20,\n  lowpass: 5000,\n  reverb: { mix: 0.06, decay: 0.22, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      freq: { from: 220, to: 440, time: 0.08, curve: 2 },\n      filter: { type: 'lowpass', freq: 1400, q: 0.7 },\n      env: { attack: 0.03, rise: 1.5, decay: 0.08, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -16,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1200, q: 0.8 },\n        { type: 'lowpass', freq: 3120, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.006, curve: 6 }\n    }\n  ]\n};\n\nexport default roll;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

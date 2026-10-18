@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPlunge-TS",
+	"title": "SoundPlunge",
+	"description": "A deep sub drop that lands heavy.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "plunge.ts",
+			"target": "@components/sounds/plunge.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst plunge: Recipe = {\n  duration: 2,\n  seed: 301,\n  loudness: -14,\n  lowpass: 2500,\n  highpass: 20,\n  drive: 0.12,\n  reverb: { mix: 0.2, decay: 1.8, predelay: 0.01, damp: 2500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 110, to: 32, time: 1.4, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 1.8, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      gain: -10,\n      filter: { type: 'lowpass', freq: { from: 600, to: 120, time: 1.2 }, q: 0.6 },\n      env: { attack: 0.005, decay: 1.2, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -14,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 900, q: 0.6 },\n        { type: 'lowpass', freq: 2340, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.02, curve: 6 }\n    }\n  ]\n};\n\nexport default plunge;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

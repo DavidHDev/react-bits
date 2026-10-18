@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSnow-JS",
+	"title": "SoundSnow",
+	"description": "A brief burst of soft static.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "snow.js",
+			"target": "@components/sounds/snow.js",
+			"content": "const snow = {\n  duration: 0.5,\n  seed: 312,\n  loudness: -20,\n  lowpass: 4500,\n  highpass: 500,\n  reverb: { mix: 0.05, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      tremolo: { rate: 35, depth: 0.4 },\n      filter: { type: 'bandpass', freq: 1200, q: 0.5 },\n      env: { attack: 0.01, decay: 0.45, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'crackle',\n      gain: 4,\n      filter: { type: 'highpass', freq: 1500, q: 0.5 },\n      env: { attack: 0.01, decay: 0.45, curve: 3 }\n    }\n  ]\n};\n\nexport default snow;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

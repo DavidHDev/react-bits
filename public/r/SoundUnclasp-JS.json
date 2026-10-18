@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundUnclasp-JS",
+	"title": "SoundUnclasp",
+	"description": "The matching release that turns it off.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "unclasp.js",
+			"target": "@components/sounds/unclasp.js",
+			"content": "const unclasp = {\n  duration: 0.12,\n  seed: 32,\n  loudness: -19,\n  lowpass: 7000,\n  reverb: { mix: 0.06, decay: 0.22, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 680, to: 600, time: 0.012, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.0015, decay: 0.026, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -18,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1400, q: 0.8 },\n        { type: 'lowpass', freq: 3640, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.006, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 470, to: 390, time: 0.014, curve: 3 },\n      at: 0.045,\n      gain: 0,\n      env: { attack: 0.0015, decay: 0.035, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.045,\n      gain: -17,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1000, q: 0.8 },\n        { type: 'lowpass', freq: 2600, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.006, curve: 6 }\n    }\n  ]\n};\n\nexport default unclasp;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

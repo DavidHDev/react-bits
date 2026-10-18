@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundLantern-TS",
+	"title": "SoundLantern",
+	"description": "A mellow wooden pair for calm reminders.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "lantern.ts",
+			"target": "@components/sounds/lantern.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst lantern: Recipe = {\n  duration: 0.9,\n  seed: 52,\n  loudness: -17,\n  lowpass: 6000,\n  reverb: { mix: 0.14, decay: 0.7, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 440,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.45, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0.16,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.55, curve: 6 }\n    }\n  ]\n};\n\nexport default lantern;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

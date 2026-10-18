@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundNudge-TS",
+	"title": "SoundNudge",
+	"description": "A soft double tap that asks for attention.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "nudge.ts",
+			"target": "@components/sounds/nudge.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst nudge: Recipe = {\n  duration: 0.3,\n  seed: 44,\n  loudness: -19,\n  lowpass: 6500,\n  reverb: { mix: 0.1, decay: 0.35, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.09, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0.11,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.12, curve: 6 }\n    }\n  ]\n};\n\nexport default nudge;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

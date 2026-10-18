@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundWrap-JS",
+	"title": "SoundWrap",
+	"description": "A falling pair of beeps when recording stops.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "wrap.js",
+			"target": "@components/sounds/wrap.js",
+			"content": "const wrap = {\n  duration: 0.3,\n  seed: 244,\n  loudness: -19,\n  lowpass: 7000,\n  reverb: { mix: 0.08, decay: 0.25, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 880,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.005, hold: 0.04, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0.11,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.005, hold: 0.05, decay: 0.09, curve: 5 }\n    }\n  ]\n};\n\nexport default wrap;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

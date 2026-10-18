@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDread-JS",
+	"title": "SoundDread",
+	"description": "A slow, swelling dark breath.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "dread.js",
+			"target": "@components/sounds/dread.js",
+			"content": "const dread = {\n  duration: 5,\n  seed: 366,\n  loudness: -17,\n  lowpass: 2500,\n  highpass: 30,\n  width: 0.9,\n  reverb: { mix: 0.35, decay: 2.8, predelay: 0.01, damp: 2000, lowcut: 150 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 200],\n            [2.5, 1500],\n            [5, 200]\n          ]\n        },\n        q: 0.8\n      },\n      env: { attack: 2.5, rise: 1.5, decay: 2.3, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 10,\n      freq: 73.42,\n      gain: -6,\n      filter: { type: 'lowpass', freq: 350, q: 0.7 },\n      env: { attack: 2.5, rise: 1.5, decay: 2.3, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 36.71, to: 36.71, time: 2.7, curve: 3 },\n      at: 0,\n      gain: -6,\n      env: { attack: 2.5, decay: 4.5, curve: 3 }\n    }\n  ]\n};\n\nexport default dread;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundNebula-TS",
+	"title": "SoundNebula",
+	"description": "A soft, airy space pad.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "nebula.ts",
+			"target": "@components/sounds/nebula.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst nebula: Recipe = {\n  duration: 9.5,\n  seed: 321,\n  loudness: -21,\n  lowpass: 7000,\n  highpass: 60,\n  width: 0.9,\n  reverb: { mix: 0.4, decay: 3, predelay: 0.03, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 3,\n      detune: 9,\n      freq: 293.66,\n      at: 0,\n      gain: -4,\n      filter: { type: 'lowpass', freq: 5000, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 4.5, decay: 2.5, curve: 3 },\n      vibrato: { rate: 0.2, depth: 8 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 3,\n      detune: 9,\n      freq: 440,\n      at: 0,\n      gain: -6.5,\n      filter: { type: 'lowpass', freq: 5000, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 4.5, decay: 2.5, curve: 3 },\n      vibrato: { rate: 0.27, depth: 8 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 3,\n      detune: 9,\n      freq: 659.26,\n      at: 0,\n      gain: -9,\n      filter: { type: 'lowpass', freq: 5000, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 4.5, decay: 2.5, curve: 3 },\n      vibrato: { rate: 0.34, depth: 8 }\n    },\n    {\n      type: 'tone',\n      wave: 'sine',\n      voices: 3,\n      detune: 9,\n      freq: 739.99,\n      at: 0,\n      gain: -11.5,\n      filter: { type: 'lowpass', freq: 5000, q: 0.6 },\n      env: { attack: 2.5, rise: 1.6, hold: 4.5, decay: 2.5, curve: 3 },\n      vibrato: { rate: 0.41, depth: 8 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -14,\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 2000],\n            [3, 3500],\n            [6, 2200],\n            [9.5, 3200]\n          ]\n        },\n        q: 1.2\n      },\n      env: { attack: 2.5, hold: 4.5, decay: 2.5, curve: 3 }\n    }\n  ]\n};\n\nexport default nebula;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundHaze-TS",
+	"title": "SoundHaze",
+	"description": "A soft low boom that fades into air.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "haze.ts",
+			"target": "@components/sounds/haze.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst haze: Recipe = {\n  duration: 2.8,\n  seed: 113,\n  loudness: -15,\n  lowpass: 6500,\n  highpass: 26,\n  width: 0.8,\n  reverb: { mix: 0.35, decay: 3, predelay: 0.02, damp: 3000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 64, to: 38, time: 0.8, curve: 3 },\n      env: { attack: 0.006, decay: 2.5, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 170, to: 104, time: 0.5, curve: 3 },\n      gain: 0,\n      env: { attack: 0.006, decay: 0.75, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -15,\n      filter: { type: 'lowpass', freq: { from: 700, to: 200, time: 0.3 }, q: 0.6 },\n      env: { attack: 0.005, decay: 0.35, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      gain: -8,\n      filter: { type: 'lowpass', freq: { from: 260, to: 90, time: 0.4 }, q: 0.6 },\n      env: { attack: 0.004, decay: 0.5, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -24,\n      filter: [\n        { type: 'highpass', freq: 1800, q: 0.5 },\n        { type: 'lowpass', freq: 6000, q: 0.5 }\n      ],\n      env: { attack: 0.08, decay: 2.4, curve: 4 }\n    }\n  ]\n};\n\nexport default haze;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

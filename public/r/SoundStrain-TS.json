@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundStrain-TS",
+	"title": "SoundStrain",
+	"description": "A tense, rising string-like swell.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "strain.ts",
+			"target": "@components/sounds/strain.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst strain: Recipe = {\n  duration: 4.1,\n  seed: 109,\n  loudness: -16,\n  lowpass: 4000,\n  highpass: 60,\n  width: 0.8,\n  reverb: { mix: 0.3, decay: 2, predelay: 0.01, damp: 4500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 5,\n      detune: 14,\n      freq: { from: 220, to: 293.66, time: 4, curve: 0.8 },\n      vibrato: { rate: 5.2, depth: 12 },\n      filter: { type: 'lowpass', freq: { from: 500, to: 2600, time: 4, curve: 0.7 }, q: 0.9 },\n      gain: -6,\n      env: { attack: 3.6, rise: 2, decay: 0.25, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 4,\n      detune: 12,\n      freq: { from: 329.63, to: 440, time: 4, curve: 0.8 },\n      vibrato: { rate: 5.6, depth: 14 },\n      filter: { type: 'lowpass', freq: { from: 600, to: 3000, time: 4, curve: 0.7 }, q: 0.9 },\n      gain: -9,\n      env: { attack: 3.7, rise: 2, decay: 0.25, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 880, to: 1174.66, time: 4, curve: 0.8 },\n      tremolo: { rate: 7, depth: 0.35 },\n      gain: -18,\n      env: { attack: 3.6, rise: 2, decay: 0.2, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -20,\n      filter: { type: 'bandpass', freq: { from: 800, to: 2600, time: 4 }, q: 0.7 },\n      env: { attack: 3.7, rise: 2, decay: 0.2, curve: 3 }\n    }\n  ]\n};\n\nexport default strain;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

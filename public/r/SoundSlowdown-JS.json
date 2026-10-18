@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSlowdown-JS",
+	"title": "SoundSlowdown",
+	"description": "A tape stop that winds the scene down.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "slowdown.js",
+			"target": "@components/sounds/slowdown.js",
+			"content": "const slowdown = {\n  duration: 1.15,\n  seed: 135,\n  loudness: -16,\n  lowpass: 5000,\n  highpass: 30,\n  reverb: { mix: 0.1, decay: 0.5, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 2,\n      detune: 6,\n      freq: { from: 146.83, to: 17.6196, time: 0.95, curve: 0.55 },\n      gain: -4,\n      filter: { type: 'lowpass', freq: { from: 2400, to: 200, time: 0.95 }, q: 0.7 },\n      env: { attack: 0.01, hold: 0.8, decay: 0.2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 2,\n      detune: 6,\n      freq: { from: 220, to: 26.4, time: 0.95, curve: 0.55 },\n      gain: -7,\n      filter: { type: 'lowpass', freq: { from: 2400, to: 200, time: 0.95 }, q: 0.7 },\n      env: { attack: 0.01, hold: 0.8, decay: 0.2, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 2,\n      detune: 6,\n      freq: { from: 293.66, to: 35.2392, time: 0.95, curve: 0.55 },\n      gain: -10,\n      filter: { type: 'lowpass', freq: { from: 2400, to: 200, time: 0.95 }, q: 0.7 },\n      env: { attack: 0.01, hold: 0.8, decay: 0.2, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -16,\n      filter: { type: 'lowpass', freq: { from: 3000, to: 200, time: 0.9 }, q: 0.6 },\n      env: { attack: 0.01, hold: 0.7, decay: 0.25, curve: 3 }\n    }\n  ]\n};\n\nexport default slowdown;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

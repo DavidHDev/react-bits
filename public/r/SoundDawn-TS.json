@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDawn-TS",
+	"title": "SoundDawn",
+	"description": "A rising glow for power on and connect.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "dawn.ts",
+			"target": "@components/sounds/dawn.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst dawn: Recipe = {\n  duration: 0.9,\n  seed: 81,\n  loudness: -17,\n  lowpass: 7000,\n  reverb: { mix: 0.22, decay: 1, predelay: 0.01, damp: 5500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'triangle',\n      freq: { from: 392, to: 523.25, time: 0.3, curve: 2 },\n      filter: { type: 'lowpass', freq: { from: 900, to: 4500, time: 0.35 }, q: 0.6 },\n      env: { attack: 0.12, rise: 1.4, decay: 0.6, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 587.33, to: 783.99, time: 0.3, curve: 2 },\n      gain: -9,\n      env: { attack: 0.14, rise: 1.4, decay: 0.55, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: 1046.5,\n      at: 0.18,\n      gain: -20,\n      env: { attack: 0.08, decay: 0.5, curve: 5 }\n    }\n  ]\n};\n\nexport default dawn;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

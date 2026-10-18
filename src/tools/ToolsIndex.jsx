@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
+import { ToolCaseIcon } from '@hugeicons/core-free-icons';
 import { LuArrowUpRight } from 'react-icons/lu';
 import ProCard from '../components/common/ProCard';
 import SponsorsCard from '../components/common/SponsorsCard';
@@ -16,7 +17,10 @@ const BLURBS = {
   'shape-magic':
     'Design a logo mark or style your own logo with 3D materials. Export SVG, PNG, favicons, video or React.',
   'texture-lab':
-    'Stack animated effects on a photo, video or your camera, then export an image, a video, a GIF or a shareable style.'
+    'Stack animated effects on a photo, video or your camera, then export an image, a video, a GIF or a shareable style.',
+  'center-stage': 'Turn screenshots and recordings into polished product shots. Perfect for launch videos or demos.',
+  'sound-lab':
+    'Interface and video sounds, tune them live, then install one with a single command or download WAV, MP3 or OGG.'
 };
 
 const FOLLOW = 0.16;
@@ -143,11 +147,11 @@ export default function ToolsIndex() {
       <div className="tl-layout">
         <div className="tl-main">
           <header className="tl-head">
-            <h1 className="pg-title">Creative tools</h1>
-            <p className="pg-sub">
-              Free tools that run in your browser. Make a background, a shape or a texture, tune it live, then take it
-              into your project.
+            <p className="tl-eyebrow">
+              <HugeiconsIcon icon={ToolCaseIcon} size={16} strokeWidth={1.8} />
+              Creative Tools
             </p>
+            <h1 className="pg-title tl-title">Make your product look and sound its best</h1>
           </header>
 
           <div className="tl-grid">

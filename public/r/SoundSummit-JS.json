@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSummit-JS",
+	"title": "SoundSummit",
+	"description": "A quick climbing run that blooms when everything is complete.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "summit.js",
+			"target": "@components/sounds/summit.js",
+			"content": "const summit = {\n  duration: 1.4,\n  seed: 226,\n  loudness: -17,\n  lowpass: 8500,\n  reverb: { mix: 0.2, decay: 1.1, predelay: 0.01, damp: 6500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0,\n      gain: -3,\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 0.55],\n        [3, 0.08, 0.35],\n        [4, 0.035, 0.22],\n        [5, 0.015, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.15, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0.04,\n      gain: -3,\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 0.55],\n        [3, 0.08, 0.35],\n        [4, 0.035, 0.22],\n        [5, 0.015, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.15, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 739.99,\n      at: 0.08,\n      gain: -3,\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 0.55],\n        [3, 0.08, 0.35],\n        [4, 0.035, 0.22],\n        [5, 0.015, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.15, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.12,\n      gain: -3,\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 0.55],\n        [3, 0.08, 0.35],\n        [4, 0.035, 0.22],\n        [5, 0.015, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.15, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 987.77,\n      at: 0.16,\n      gain: -3,\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 0.55],\n        [3, 0.08, 0.35],\n        [4, 0.035, 0.22],\n        [5, 0.015, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.15, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.2,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.08, 0.55],\n        [3, 0.02, 0.35]\n      ],\n      env: { attack: 0.004, decay: 1, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.21,\n      gain: -6,\n      partials: [\n        [1, 1, 1],\n        [2, 0.048, 0.55],\n        [3, 0.012, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.8, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 739.99,\n      at: 0.22,\n      gain: -8,\n      partials: [\n        [1, 1, 1],\n        [2, 0.048, 0.55],\n        [3, 0.012, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.9, curve: 6 }\n    }\n  ]\n};\n\nexport default summit;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

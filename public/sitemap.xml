@@ -498,6 +498,10 @@
     <lastmod>2026-10-08</lastmod>
   </url>
   <url>
+    <loc>https://reactbits.dev/micro/flying-button</loc>
+    <lastmod>2026-10-16</lastmod>
+  </url>
+  <url>
     <loc>https://reactbits.dev/micro/shredder</loc>
     <lastmod>2026-09-22</lastmod>
   </url>
@@ -913,9 +917,15 @@
     <loc>https://reactbits.dev/tools/background-studio</loc>
   </url>
   <url>
+    <loc>https://reactbits.dev/tools/center-stage</loc>
+  </url>
+  <url>
     <loc>https://reactbits.dev/tools/shape-magic</loc>
   </url>
   <url>
     <loc>https://reactbits.dev/tools/texture-lab</loc>
+  </url>
+  <url>
+    <loc>https://reactbits.dev/tools/sound-lab</loc>
   </url>
 </urlset>

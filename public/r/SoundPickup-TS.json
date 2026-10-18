@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPickup-TS",
+	"title": "SoundPickup",
+	"description": "A soft lift as an item is picked up.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "pickup.ts",
+			"target": "@components/sounds/pickup.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst pickup: Recipe = {\n  duration: 0.22,\n  seed: 211,\n  loudness: -20,\n  lowpass: 7000,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 659.26,\n      at: 0,\n      gain: -4,\n      partials: [\n        [1, 1, 1],\n        [2, 0.2, 0.55],\n        [3, 0.08, 0.35],\n        [4, 0.035, 0.22],\n        [5, 0.015, 0.15]\n      ],\n      env: { attack: 0.0015, decay: 0.12, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 440, to: 659.26, time: 0.08, curve: 2 },\n      gain: -10,\n      env: { attack: 0.02, decay: 0.1, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -22,\n      filter: { type: 'bandpass', freq: { from: 800, to: 1800, time: 0.09, curve: 2 }, q: 0.8 },\n      env: { attack: 0.03, rise: 1.5, decay: 0.06, curve: 4 }\n    }\n  ]\n};\n\nexport default pickup;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

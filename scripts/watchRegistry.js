@@ -12,6 +12,7 @@ const WATCHED = [
   { dir: 'src/tailwind', recursive: true },
   { dir: 'src/ts-default', recursive: true },
   { dir: 'src/ts-tailwind', recursive: true },
+  { dir: 'src/sounds', recursive: true },
   { dir: 'src/constants', recursive: false, only: 'Information.js' },
   { dir: '.', recursive: false, only: 'jsrepo.config.ts' }
 ];

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPixel-JS",
+	"title": "SoundPixel",
+	"description": "Tiny 8-bit blips for pixel graphics.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "pixel.js",
+			"target": "@components/sounds/pixel.js",
+			"content": "const pixel = {\n  duration: 0.4,\n  seed: 318,\n  loudness: -19,\n  lowpass: 6000,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      harmonics: [1, 0, 0.33, 0, 0.2],\n      freq: 523.25,\n      at: 0,\n      gain: 0,\n      env: { attack: 0.002, hold: 0.03, decay: 0.012, curve: 5 }\n    },\n    {\n      type: 'tone',\n      harmonics: [1, 0, 0.33, 0, 0.2],\n      freq: 659.26,\n      at: 0.045,\n      gain: -1,\n      env: { attack: 0.002, hold: 0.03, decay: 0.012, curve: 5 }\n    },\n    {\n      type: 'tone',\n      harmonics: [1, 0, 0.33, 0, 0.2],\n      freq: 783.99,\n      at: 0.09,\n      gain: -2,\n      env: { attack: 0.002, hold: 0.03, decay: 0.012, curve: 5 }\n    },\n    {\n      type: 'tone',\n      harmonics: [1, 0, 0.33, 0, 0.2],\n      freq: 1046.5,\n      at: 0.135,\n      gain: -3,\n      env: { attack: 0.002, hold: 0.03, decay: 0.18, curve: 5 }\n    }\n  ]\n};\n\nexport default pixel;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

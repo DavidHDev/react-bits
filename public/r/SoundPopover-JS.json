@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPopover-JS",
+	"title": "SoundPopover",
+	"description": "A tiny lift for opening menus and popovers.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "popover.js",
+			"target": "@components/sounds/popover.js",
+			"content": "const popover = {\n  duration: 0.1,\n  seed: 206,\n  loudness: -21,\n  lowpass: 7000,\n  reverb: { mix: 0.06, decay: 0.2, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 320, to: 672, time: 0.045, curve: 1.6 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.002, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -20,\n      filter: { type: 'bandpass', freq: { from: 900, to: 1800, time: 0.052, curve: 2 }, q: 0.9 },\n      env: { attack: 0.012, rise: 1.5, decay: 0.04, curve: 5 }\n    }\n  ]\n};\n\nexport default popover;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

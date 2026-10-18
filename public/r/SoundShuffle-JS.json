@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundShuffle-JS",
+	"title": "SoundShuffle",
+	"description": "A light double slide for reordering items.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "shuffle.js",
+			"target": "@components/sounds/shuffle.js",
+			"content": "const shuffle = {\n  duration: 0.2,\n  seed: 214,\n  loudness: -21,\n  lowpass: 4500,\n  highpass: 300,\n  reverb: { mix: 0.06, decay: 0.2, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: { type: 'bandpass', freq: { from: 700, to: 1100, time: 0.08, curve: 2 }, q: 0.9 },\n      env: { attack: 0.02, rise: 1.5, decay: 0.06, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.07,\n      gain: -2,\n      filter: { type: 'bandpass', freq: { from: 850, to: 1300, time: 0.09, curve: 2 }, q: 0.9 },\n      env: { attack: 0.02, rise: 1.5, decay: 0.07, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0.14,\n      gain: -18,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1100, q: 0.8 },\n        { type: 'lowpass', freq: 2860, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.008, curve: 6 }\n    }\n  ]\n};\n\nexport default shuffle;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

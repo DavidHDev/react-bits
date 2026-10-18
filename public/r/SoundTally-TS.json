@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundTally-TS",
+	"title": "SoundTally",
+	"description": "A clear double beep when recording starts.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "tally.ts",
+			"target": "@components/sounds/tally.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst tally: Recipe = {\n  duration: 0.25,\n  seed: 243,\n  loudness: -19,\n  lowpass: 7000,\n  reverb: { mix: 0.08, decay: 0.25, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.005, hold: 0.04, decay: 0.05, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.11,\n      partials: [\n        [1, 1, 1],\n        [2, 0.1, 0.6]\n      ],\n      env: { attack: 0.005, hold: 0.04, decay: 0.05, curve: 5 }\n    }\n  ]\n};\n\nexport default tally;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

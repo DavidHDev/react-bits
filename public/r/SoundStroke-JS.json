@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundStroke-JS",
+	"title": "SoundStroke",
+	"description": "A quick marker stroke for underlines and circles.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "stroke.js",
+			"target": "@components/sounds/stroke.js",
+			"content": "const stroke = {\n  duration: 0.36,\n  seed: 146,\n  loudness: -19,\n  lowpass: 6000,\n  highpass: 500,\n  reverb: { mix: 0.06, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      tremolo: { rate: 45, depth: 0.35 },\n      pan: { from: -0.3, to: 0.3, time: 0.3 },\n      filter: { type: 'bandpass', freq: { from: 1100, to: 1500, time: 0.3 }, q: 0.9 },\n      env: { attack: 0.03, hold: 0.18, decay: 0.12, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'crackle',\n      gain: 1,\n      filter: { type: 'bandpass', freq: 1800, q: 0.7 },\n      env: { attack: 0.03, hold: 0.18, decay: 0.12, curve: 4 }\n    }\n  ]\n};\n\nexport default stroke;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

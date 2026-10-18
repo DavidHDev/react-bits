@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundEllipsis-TS",
+	"title": "SoundEllipsis",
+	"description": "Three faint dots for someone typing.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "ellipsis.ts",
+			"target": "@components/sounds/ellipsis.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst ellipsis: Recipe = {\n  duration: 0.26,\n  seed: 233,\n  loudness: -23,\n  lowpass: 7000,\n  reverb: { mix: 0.1, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0,\n      gain: 0,\n      env: { attack: 0.003, decay: 0.03, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1318.51,\n      at: 0.09,\n      gain: -1.5,\n      env: { attack: 0.003, decay: 0.03, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0.18,\n      gain: -3,\n      env: { attack: 0.003, decay: 0.03, curve: 6 }\n    }\n  ]\n};\n\nexport default ellipsis;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

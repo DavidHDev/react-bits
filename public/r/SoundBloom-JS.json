@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundBloom-JS",
+	"title": "SoundBloom",
+	"description": "Two warm notes that rise into a success.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "bloom.js",
+			"target": "@components/sounds/bloom.js",
+			"content": "const bloom = {\n  duration: 0.95,\n  seed: 41,\n  loudness: -17,\n  lowpass: 7500,\n  reverb: { mix: 0.16, decay: 0.8, predelay: 0.01, damp: 5500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 587.33,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.16, 0.55],\n        [3, 0.04, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.5, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0.09,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2, 0.16, 0.55],\n        [3, 0.04, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.75, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 1760,\n      at: 0.09,\n      gain: -22,\n      partials: [\n        [1, 1, 1],\n        [2, 0.08, 0.55],\n        [3, 0.02, 0.35]\n      ],\n      env: { attack: 0.004, decay: 0.4, curve: 6 }\n    }\n  ]\n};\n\nexport default bloom;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

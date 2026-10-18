@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDot-TS",
+	"title": "SoundDot",
+	"description": "A pure, minimal tone for radio buttons.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "dot.ts",
+			"target": "@components/sounds/dot.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst dot: Recipe = {\n  duration: 0.1,\n  seed: 25,\n  loudness: -21,\n  lowpass: 7000,\n  reverb: { mix: 0.08, decay: 0.25, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 866.8, to: 880, time: 0.015 },\n      env: { attack: 0.002, decay: 0.07, curve: 5 }\n    }\n  ]\n};\n\nexport default dot;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundPass-JS",
+	"title": "SoundPass",
+	"description": "A light, quick fly by.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "pass.js",
+			"target": "@components/sounds/pass.js",
+			"content": "const pass = {\n  duration: 0.7,\n  seed: 122,\n  loudness: -17,\n  lowpass: 5500,\n  highpass: 80,\n  reverb: { mix: 0.1, decay: 0.6, predelay: 0.01, damp: 4500 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      pan: { from: -0.6, to: 0.6, time: 0.6 },\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 560],\n            [0.3, 1450],\n            [0.65, 640]\n          ]\n        },\n        q: 0.85\n      },\n      env: { attack: 0.28, rise: 1.8, decay: 0.34, curve: 4 }\n    }\n  ]\n};\n\nexport default pass;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

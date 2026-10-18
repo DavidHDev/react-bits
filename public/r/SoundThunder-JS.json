@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundThunder-JS",
+	"title": "SoundThunder",
+	"description": "A deep cinematic boom with a long rumble.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "thunder.js",
+			"target": "@components/sounds/thunder.js",
+			"content": "const thunder = {\n  duration: 3.8,\n  seed: 114,\n  loudness: -14,\n  lowpass: 3000,\n  highpass: 25,\n  drive: 0.1,\n  width: 0.8,\n  reverb: { mix: 0.35, decay: 3.5, predelay: 0.02, damp: 2000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 62, to: 30, time: 1.2, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 2.6, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 140, to: 70, time: 0.4, curve: 3 },\n      gain: -2,\n      env: { attack: 0.004, decay: 0.7, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      gain: -2,\n      tremolo: { rate: 7, depth: 0.45 },\n      filter: { type: 'lowpass', freq: { from: 500, to: 120, time: 3 }, q: 0.6 },\n      env: { attack: 0.01, decay: 3.4, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -8,\n      filter: { type: 'lowpass', freq: { from: 1800, to: 300, time: 0.3 }, q: 0.6 },\n      env: { attack: 0.003, decay: 0.25, curve: 5 }\n    }\n  ]\n};\n\nexport default thunder;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

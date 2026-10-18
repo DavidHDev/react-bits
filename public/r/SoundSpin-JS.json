@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSpin-JS",
+	"title": "SoundSpin",
+	"description": "A whirling whoosh that circles around.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "spin.js",
+			"target": "@components/sounds/spin.js",
+			"content": "const spin = {\n  duration: 1.2,\n  seed: 126,\n  loudness: -16.5,\n  lowpass: 6000,\n  highpass: 80,\n  reverb: { mix: 0.15, decay: 0.9, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 400],\n            [0.5, 1400],\n            [1.1, 500]\n          ]\n        },\n        q: 0.8\n      },\n      env: { attack: 0.5, rise: 1.5, decay: 0.6, curve: 4 },\n      tremolo: { rate: 7, depth: 0.55 },\n      pan: {\n        points: [\n          [0, -0.7],\n          [0.2, 0.7],\n          [0.4, -0.7],\n          [0.6, 0.7],\n          [0.8, -0.7],\n          [1, 0.7]\n        ]\n      }\n    },\n    {\n      type: 'tone',\n      freq: {\n        points: [\n          [0, 220],\n          [0.55, 440],\n          [1.1, 260]\n        ]\n      },\n      gain: -14,\n      tremolo: { rate: 7, depth: 0.5 },\n      env: { attack: 0.5, rise: 1.6, decay: 0.6, curve: 4 }\n    }\n  ]\n};\n\nexport default spin;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSprout-JS",
+	"title": "SoundSprout",
+	"description": "A springy little pop for elements appearing.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "sprout.js",
+			"target": "@components/sounds/sprout.js",
+			"content": "const sprout = {\n  duration: 0.3,\n  seed: 345,\n  loudness: -18,\n  lowpass: 6000,\n  reverb: { mix: 0.1, decay: 0.35, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 400, to: 840, time: 0.054, curve: 1.6 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.002, decay: 0.06, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 600, to: 900, time: 0.05, curve: 2 },\n      at: 0.04,\n      vibrato: { rate: 18, depth: 50 },\n      gain: -6,\n      env: { attack: 0.005, decay: 0.18, curve: 4 }\n    }\n  ]\n};\n\nexport default sprout;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

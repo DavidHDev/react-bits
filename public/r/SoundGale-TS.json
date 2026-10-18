@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundGale-TS",
+	"title": "SoundGale",
+	"description": "A heavy, wide whoosh with low weight.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "gale.ts",
+			"target": "@components/sounds/gale.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst gale: Recipe = {\n  duration: 1.7,\n  seed: 128,\n  loudness: -15.5,\n  lowpass: 5000,\n  highpass: 30,\n  width: 1,\n  reverb: { mix: 0.18, decay: 1.2, predelay: 0.01, damp: 3500 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      pan: { from: -0.5, to: 0.5, time: 1.5 },\n      filter: {\n        type: 'bandpass',\n        freq: {\n          points: [\n            [0, 220],\n            [0.7, 950],\n            [1.55, 260]\n          ]\n        },\n        q: 0.6\n      },\n      env: { attack: 0.7, rise: 1.5, decay: 0.85, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      gain: -2,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 150],\n            [0.7, 450],\n            [1.55, 160]\n          ]\n        },\n        q: 0.6\n      },\n      env: { attack: 0.7, rise: 1.5, decay: 0.85, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 55, to: 45, time: 0.48, curve: 3 },\n      at: 0.6,\n      gain: -10,\n      env: { attack: 0.15, decay: 0.8, curve: 5 }\n    }\n  ]\n};\n\nexport default gale;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

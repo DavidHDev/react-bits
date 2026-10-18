@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundHerald-TS",
+	"title": "SoundHerald",
+	"description": "A short, bright brass-like fanfare.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "herald.ts",
+			"target": "@components/sounds/herald.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst herald: Recipe = {\n  duration: 1.7,\n  seed: 351,\n  loudness: -16,\n  lowpass: 5000,\n  highpass: 60,\n  width: 0.7,\n  reverb: { mix: 0.25, decay: 1.4, predelay: 0.01, damp: 4500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 8,\n      freq: 587.33,\n      at: 0,\n      gain: 0,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 500],\n            [0.05, 2400],\n            [0.17, 900]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 0.025, hold: 0.08, decay: 0.08, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 8,\n      freq: 880,\n      at: 0.18,\n      gain: 0,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 500],\n            [0.05, 2400],\n            [0.17, 900]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 0.025, hold: 0.08, decay: 0.08, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 8,\n      freq: 1174.66,\n      at: 0.38,\n      gain: 0,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 500],\n            [0.05, 2400],\n            [0.9, 900]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 0.025, hold: 0.5, decay: 0.7, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 8,\n      freq: 739.99,\n      at: 0.38,\n      gain: -4,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 500],\n            [0.05, 2400],\n            [0.9, 900]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 0.025, hold: 0.5, decay: 0.7, curve: 4 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 3,\n      detune: 8,\n      freq: 440,\n      at: 0.38,\n      gain: -6,\n      filter: {\n        type: 'lowpass',\n        freq: {\n          points: [\n            [0, 500],\n            [0.05, 2400],\n            [0.9, 900]\n          ]\n        },\n        q: 0.7\n      },\n      env: { attack: 0.025, hold: 0.5, decay: 0.7, curve: 4 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 73.42, to: 73.42, time: 0.48, curve: 3 },\n      at: 0.38,\n      gain: -8,\n      env: { attack: 0.02, decay: 0.8, curve: 5 }\n    }\n  ]\n};\n\nexport default herald;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

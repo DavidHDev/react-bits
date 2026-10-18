@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundMarble-JS",
+	"title": "SoundMarble",
+	"description": "A smooth glassy click for carousels and pickers.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "marble.js",
+			"target": "@components/sounds/marble.js",
+			"content": "const marble = {\n  duration: 0.12,\n  seed: 27,\n  loudness: -20,\n  lowpass: 8500,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 7000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 1174.66,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.084, 0.4],\n        [5.4, 0.021, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.07, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 1900, to: 1500, time: 0.02, curve: 3 },\n      at: 0,\n      gain: -14,\n      env: { attack: 0.001, decay: 0.012, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -22,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 2400, q: 1.4 },\n        { type: 'lowpass', freq: 6240, q: 0.5 }\n      ],\n      env: { attack: 0.0007, decay: 0.003, curve: 6 }\n    }\n  ]\n};\n\nexport default marble;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

@@ -1,7 +1,9 @@
 import { m, AnimatePresence } from 'motion/react';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Palette, Shapes, ImageIcon } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { TOOL_ICONS } from '../../../tools/toolIcons';
+import { TOOLS } from '../../../constants/Tools';
 import {
   FiType,
   FiCircle,
@@ -78,19 +80,161 @@ const ComponentMarquee = () => (
 
 /* ─── 2. Free Tools (Floating Icon Boxes) ─── */
 
-const ToolsFloat = () => (
-  <div className="ln-feat-tools">
-    <div className="ln-feat-tool-box ln-feat-tool-box--center ln-feat-float ln-feat-float--center">
-      <Palette size={22} />
+const DOCK_BOOST = 0.42;
+const DOCK_SPREAD = 64;
+const DOCK_REACH = 90;
+const WAVE_PERIOD = 3.6;
+const WAVE_STEP = 0.24;
+const WAVE_LIFT = 9;
+
+const waveAt = (time, index) => {
+  const phase = ((((time - index * WAVE_STEP) % WAVE_PERIOD) + WAVE_PERIOD) % WAVE_PERIOD) / WAVE_PERIOD;
+  return phase < 0.42 ? Math.sin((Math.PI * phase) / 0.42) ** 2 : 0;
+};
+
+const ToolsFloat = () => {
+  const areaRef = useRef(null);
+  const namesRef = useRef(null);
+  const [active, setActive] = useState(null);
+  const [shown, setShown] = useState(0);
+  const [widths, setWidths] = useState([]);
+
+  useEffect(() => {
+    const names = namesRef.current;
+    if (!names) return undefined;
+    const measure = () => setWidths([...names.children].map(child => Math.ceil(child.getBoundingClientRect().width)));
+    measure();
+    document.fonts?.ready.then(measure);
+    return undefined;
+  }, []);
+
+  const focus = index => {
+    setActive(index);
+    setShown(index);
+  };
+
+  useEffect(() => {
+    const area = areaRef.current;
+    if (!area) return undefined;
+    const items = [...area.querySelectorAll('.ln-feat-dock-item')];
+    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const state = {
+      pointer: null,
+      centers: [],
+      scales: items.map(() => 1),
+      idle: still ? 0 : 1,
+      since: 0,
+      visible: false,
+      frame: 0,
+      last: 0
+    };
+
+    const measure = () => {
+      const box = area.getBoundingClientRect();
+      state.centers = items.map(item => {
+        const rect = item.getBoundingClientRect();
+        return { x: rect.left - box.left + rect.width / 2, y: rect.top - box.top + rect.height / 2 };
+      });
+    };
+
+    const tick = now => {
+      state.frame = 0;
+      const dt = state.last ? Math.min(0.05, (now - state.last) / 1000) : 0.016;
+      state.last = now;
+      const engaged = state.pointer !== null;
+      const restful = !engaged && !still && now - state.since > 900;
+      const targetIdle = restful ? 1 : 0;
+      state.idle += (targetIdle - state.idle) * (1 - Math.exp(-dt / (targetIdle ? 0.5 : 0.09)));
+      let busy = Math.abs(targetIdle - state.idle) > 0.002 || (!still && (state.idle > 0.002 || !engaged));
+      const time = now / 1000;
+      items.forEach((item, index) => {
+        let target = 1;
+        if (engaged && state.centers[index]) {
+          const dx = state.pointer.x - state.centers[index].x;
+          const dy = state.pointer.y - state.centers[index].y;
+          target = 1 + DOCK_BOOST * Math.exp(-((dx / DOCK_SPREAD) ** 2)) * Math.exp(-((dy / DOCK_REACH) ** 2));
+        }
+        const next = still ? target : state.scales[index] + (target - state.scales[index]) * (1 - Math.exp(-dt / 0.07));
+        if (Math.abs(next - target) > 0.001) busy = true;
+        state.scales[index] = next;
+        item.style.setProperty('--s', next.toFixed(4));
+        item.style.setProperty('--lift', `${(-WAVE_LIFT * waveAt(time, index) * state.idle).toFixed(2)}px`);
+      });
+      if (busy && state.visible && !document.hidden) state.frame = requestAnimationFrame(tick);
+    };
+
+    const wake = () => {
+      if (!state.frame && state.visible && !document.hidden) {
+        state.last = 0;
+        state.frame = requestAnimationFrame(tick);
+      }
+    };
+
+    const move = event => {
+      if (event.pointerType !== 'mouse') return;
+      const box = area.getBoundingClientRect();
+      if (state.pointer === null) measure();
+      state.pointer = { x: event.clientX - box.left, y: event.clientY - box.top };
+      wake();
+    };
+
+    const leave = () => {
+      state.pointer = null;
+      state.since = performance.now();
+      wake();
+    };
+
+    const watcher = new IntersectionObserver(entries => {
+      state.visible = entries.some(entry => entry.isIntersecting);
+      wake();
+    });
+    watcher.observe(area);
+    area.addEventListener('pointermove', move);
+    area.addEventListener('pointerleave', leave);
+    document.addEventListener('visibilitychange', wake);
+    return () => {
+      cancelAnimationFrame(state.frame);
+      watcher.disconnect();
+      area.removeEventListener('pointermove', move);
+      area.removeEventListener('pointerleave', leave);
+      document.removeEventListener('visibilitychange', wake);
+    };
+  }, []);
+
+  return (
+    <div className="ln-feat-tools" ref={areaRef} onPointerLeave={() => setActive(null)}>
+      <div
+        className="ln-feat-dock-title"
+        data-on={active === null ? undefined : ''}
+        style={{ '--n': shown, width: widths[shown] ? `${widths[shown]}px` : undefined }}
+        aria-hidden="true"
+      >
+        <span className="ln-feat-dock-names" ref={namesRef}>
+          {TOOLS.map(tool => (
+            <span key={tool.id} className="ln-feat-dock-name">
+              {tool.label}
+            </span>
+          ))}
+        </span>
+      </div>
+      <div className="ln-feat-dock">
+        {TOOLS.map((tool, index) => (
+          <Link
+            key={tool.id}
+            to={tool.path}
+            className="ln-feat-dock-item"
+            aria-label={tool.label}
+            onPointerEnter={() => focus(index)}
+            onFocus={() => focus(index)}
+            onBlur={() => setActive(null)}
+          >
+            <HugeiconsIcon icon={TOOL_ICONS[tool.id]} size={20} strokeWidth={1.6} />
+          </Link>
+        ))}
+      </div>
     </div>
-    <div className="ln-feat-tool-box ln-feat-tool-box--left ln-feat-float ln-feat-float--left">
-      <Shapes size={18} />
-    </div>
-    <div className="ln-feat-tool-box ln-feat-tool-box--right ln-feat-float ln-feat-float--right">
-      <ImageIcon size={18} />
-    </div>
-  </div>
-);
+  );
+};
 
 /* ─── 3. Category Orbits ─── */
 
@@ -433,7 +577,7 @@ const CARDS = [
   },
   {
     title: 'Visual Editors',
-    desc: 'Three free tools to play with components & create stunning assets for your work.',
+    desc: 'Five free tools to play with components & create stunning assets for your work.',
     span: 3,
     visual: <ToolsFloat />
   },

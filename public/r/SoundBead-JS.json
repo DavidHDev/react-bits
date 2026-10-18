@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundBead-JS",
+	"title": "SoundBead",
+	"description": "A small, glassy ping for picking an item.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "bead.js",
+			"target": "@components/sounds/bead.js",
+			"content": "const bead = {\n  duration: 0.22,\n  seed: 21,\n  loudness: -20,\n  lowpass: 9000,\n  reverb: { mix: 0.12, decay: 0.45, predelay: 0.01, damp: 6000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 880,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [2.76, 0.108, 0.4],\n        [5.4, 0.027, 0.22]\n      ],\n      env: { attack: 0.0025, decay: 0.17, curve: 6 }\n    }\n  ]\n};\n\nexport default bead;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

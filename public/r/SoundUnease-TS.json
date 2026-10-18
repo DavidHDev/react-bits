@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundUnease-TS",
+	"title": "SoundUnease",
+	"description": "A low, uneasy drone.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "unease.ts",
+			"target": "@components/sounds/unease.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst unease: Recipe = {\n  duration: 6,\n  seed: 363,\n  loudness: -17,\n  lowpass: 2500,\n  highpass: 30,\n  width: 0.9,\n  reverb: { mix: 0.35, decay: 3, predelay: 0.01, damp: 2500 },\n  layers: [\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 2,\n      detune: 8,\n      freq: 73.42,\n      gain: 0,\n      filter: { type: 'lowpass', freq: 300, q: 0.7 },\n      env: { attack: 3, hold: 0.5, decay: 2.5, curve: 3 }\n    },\n    {\n      type: 'tone',\n      wave: 'sawtooth',\n      voices: 2,\n      detune: 8,\n      freq: 77.78,\n      gain: -2,\n      filter: { type: 'lowpass', freq: 300, q: 0.7 },\n      env: { attack: 3, hold: 0.5, decay: 2.5, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 587.33,\n      tremolo: { rate: 4.5, depth: 0.5 },\n      gain: -18,\n      env: { attack: 3, hold: 0.5, decay: 2.5, curve: 3 }\n    },\n    {\n      type: 'tone',\n      freq: 622.25,\n      tremolo: { rate: 5.5, depth: 0.5 },\n      gain: -20,\n      env: { attack: 3, hold: 0.5, decay: 2.5, curve: 3 }\n    },\n    {\n      type: 'noise',\n      color: 'brown',\n      gain: -10,\n      filter: { type: 'lowpass', freq: 250, q: 0.6 },\n      env: { attack: 3, hold: 0.5, decay: 2.5, curve: 3 }\n    }\n  ]\n};\n\nexport default unease;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

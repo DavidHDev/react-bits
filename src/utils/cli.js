@@ -17,7 +17,7 @@ const slugToComponentName = slug => {
 export const generateCliCommands = (language, style, category, subcategory, dependencies = '') => {
   if (!category || !subcategory) return null;
 
-  const shadcnVariant = variantForShadcn(language, style);
+  const shadcnVariant = category === 'sounds' ? (language || 'JS').toUpperCase() : variantForShadcn(language, style);
 
   const componentName = slugToComponentName(subcategory);
   const baseUrl = 'https://reactbits.dev';

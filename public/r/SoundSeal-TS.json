@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundSeal-TS",
+	"title": "SoundSeal",
+	"description": "A soft, settled click for save and lock.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "seal.ts",
+			"target": "@components/sounds/seal.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst seal: Recipe = {\n  duration: 0.14,\n  seed: 83,\n  loudness: -19,\n  lowpass: 6500,\n  reverb: { mix: 0.06, decay: 0.25, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -8,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1000, q: 0.8 },\n        { type: 'lowpass', freq: 2600, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.01, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 300, to: 220, time: 0.02, curve: 3 },\n      at: 0,\n      gain: -4,\n      env: { attack: 0.0015, decay: 0.05, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: 783.99,\n      at: 0.014,\n      gain: -16,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.03, curve: 6 }\n    }\n  ]\n};\n\nexport default seal;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

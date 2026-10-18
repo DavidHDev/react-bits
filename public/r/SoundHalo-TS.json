@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundHalo-TS",
+	"title": "SoundHalo",
+	"description": "A warm confirm for choosing a card.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "halo.ts",
+			"target": "@components/sounds/halo.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst halo: Recipe = {\n  duration: 0.36,\n  seed: 23,\n  loudness: -19,\n  lowpass: 7500,\n  reverb: { mix: 0.18, decay: 0.6, predelay: 0.01, damp: 5500 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 659.26, to: 679.0378, time: 0.08 },\n      fm: { ratio: 2, index: { from: 0.35, to: 0, time: 0.12 } },\n      env: { attack: 0.006, decay: 0.26, curve: 5 }\n    },\n    {\n      type: 'tone',\n      freq: 987.77,\n      at: 0.014,\n      gain: -17,\n      env: { attack: 0.006, decay: 0.16, curve: 5 }\n    }\n  ]\n};\n\nexport default halo;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

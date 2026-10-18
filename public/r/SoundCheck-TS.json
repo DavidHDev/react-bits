@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundCheck-TS",
+	"title": "SoundCheck",
+	"description": "A light wooden tock for checkboxes.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "check.ts",
+			"target": "@components/sounds/check.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst check: Recipe = {\n  duration: 0.1,\n  seed: 33,\n  loudness: -20,\n  lowpass: 7000,\n  reverb: { mix: 0.06, decay: 0.2, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: 783.99,\n      at: 0,\n      gain: 0,\n      partials: [\n        [1, 1, 1],\n        [3.93, 0.16, 0.25],\n        [9.2, 0.025, 0.1]\n      ],\n      env: { attack: 0.002, decay: 0.055, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -20,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1600, q: 0.8 },\n        { type: 'lowpass', freq: 4160, q: 0.5 }\n      ],\n      env: { attack: 0.0008, decay: 0.004, curve: 6 }\n    }\n  ]\n};\n\nexport default check;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

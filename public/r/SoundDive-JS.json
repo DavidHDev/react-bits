@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundDive-JS",
+	"title": "SoundDive",
+	"description": "A quick dip for drilling into a folder.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "dive.js",
+			"target": "@components/sounds/dive.js",
+			"content": "const dive = {\n  duration: 0.2,\n  seed: 205,\n  loudness: -20,\n  lowpass: 7000,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 1174.66, to: 587.33, time: 0.12, curve: 2 },\n      env: { attack: 0.01, decay: 0.14, curve: 4 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -16,\n      filter: { type: 'bandpass', freq: { from: 2400, to: 900, time: 0.12, curve: 2 }, q: 0.9 },\n      env: { attack: 0.02, rise: 1.5, decay: 0.1, curve: 4 }\n    }\n  ]\n};\n\nexport default dive;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

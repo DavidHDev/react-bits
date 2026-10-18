@@ -1,8 +1,9 @@
-import { BACKGROUNDS, getDefaultProps, getDocsPath } from '../backgrounds';
+import { BACKGROUNDS, getDocsPath } from '../backgrounds';
 import { componentMetadata } from '../../../constants/Information';
 import { NEW, UPDATED } from '../../../constants/Badges';
-import { BACKGROUND_LIGHT_PROPS, STUDIO_DARK_PROPS, STUDIO_LIGHT_PROPS } from '../../../constants/backgroundThemeProps';
 import { componentNameOf } from './presets';
+
+export { themeDefaults } from './theme';
 
 export const DEFAULT_BACKGROUND = 'topography';
 
@@ -32,13 +33,6 @@ const BY_ID = new Map(CATALOG.map(entry => [entry.id, entry]));
 export const findEntry = id => BY_ID.get(id) || null;
 
 export const thumbnailFor = (entry, light) => `/assets/studio/${entry.id}-${light ? 'light' : 'dark'}.webp`;
-
-export function themeDefaults(entry, light) {
-  return {
-    ...getDefaultProps(entry),
-    ...(light ? { ...BACKGROUND_LIGHT_PROPS[entry.id], ...STUDIO_LIGHT_PROPS[entry.id] } : STUDIO_DARK_PROPS[entry.id])
-  };
-}
 
 export function loadCode(entry) {
   const key = Object.keys(CODE_MODULES).find(

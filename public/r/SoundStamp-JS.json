@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundStamp-JS",
+	"title": "SoundStamp",
+	"description": "A firm stamp for bold kinetic text.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "stamp.js",
+			"target": "@components/sounds/stamp.js",
+			"content": "const stamp = {\n  duration: 0.45,\n  seed: 337,\n  loudness: -15,\n  lowpass: 5000,\n  highpass: 40,\n  drive: 0.15,\n  reverb: { mix: 0.08, decay: 0.35, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 150, to: 90, time: 0.05, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.004, decay: 0.15, curve: 5 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -4,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 500, q: 0.6 },\n        { type: 'lowpass', freq: 1300, q: 0.5 }\n      ],\n      env: { attack: 0.001, decay: 0.04, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      gain: -8,\n      filter: { type: 'lowpass', freq: 2000, q: 0.6 },\n      env: { attack: 0.001, decay: 0.03, curve: 5 }\n    }\n  ]\n};\n\nexport default stamp;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-JS.json"
+	],
+	"dependencies": []
+}

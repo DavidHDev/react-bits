@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundUnfold-TS",
+	"title": "SoundUnfold",
+	"description": "A soft flutter that opens up, for expanding sections.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "unfold.ts",
+			"target": "@components/sounds/unfold.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst unfold: Recipe = {\n  duration: 0.28,\n  seed: 66,\n  loudness: -20,\n  lowpass: 5500,\n  highpass: 180,\n  reverb: { mix: 0.08, decay: 0.3, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: 0,\n      filter: { type: 'bandpass', freq: { from: 700, to: 1500, time: 0.2, curve: 2 }, q: 0.8 },\n      env: { attack: 0.08, rise: 1.5, decay: 0.12, curve: 4 },\n      tremolo: { rate: 38, depth: 0.5 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 440, to: 587.33, time: 0.16, curve: 2 },\n      gain: -12,\n      env: { attack: 0.06, rise: 1.4, decay: 0.12, curve: 4 }\n    }\n  ]\n};\n\nexport default unfold;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}

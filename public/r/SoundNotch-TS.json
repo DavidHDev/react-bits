@@ -1,0 +1,19 @@
+{
+	"$schema": "https://ui.shadcn.com/schema/registry-item.json",
+	"name": "SoundNotch-TS",
+	"title": "SoundNotch",
+	"description": "A soft detent for steppers, sliders and tabs.",
+	"type": "registry:component",
+	"files": [
+		{
+			"type": "registry:component",
+			"path": "notch.ts",
+			"target": "@components/sounds/notch.ts",
+			"content": "import type { Recipe } from './react-bits-sound';\n\nconst notch: Recipe = {\n  duration: 0.06,\n  seed: 22,\n  loudness: -21,\n  lowpass: 7000,\n  reverb: { mix: 0.04, decay: 0.14, predelay: 0.01, damp: 5000 },\n  layers: [\n    {\n      type: 'tone',\n      freq: { from: 920, to: 780, time: 0.006, curve: 3 },\n      at: 0,\n      gain: 0,\n      env: { attack: 0.0012, decay: 0.022, curve: 6 }\n    },\n    {\n      type: 'noise',\n      color: 'pink',\n      at: 0,\n      gain: -14,\n      punch: true,\n      filter: [\n        { type: 'bandpass', freq: 1350, q: 1 },\n        { type: 'lowpass', freq: 3510, q: 0.5 }\n      ],\n      env: { attack: 0.0012, decay: 0.006, curve: 6 }\n    },\n    {\n      type: 'tone',\n      freq: { from: 380, to: 360, time: 0.025, curve: 3 },\n      at: 0,\n      gain: -17,\n      env: { attack: 0.0015, decay: 0.02, curve: 6 }\n    }\n  ]\n};\n\nexport default notch;\n"
+		}
+	],
+	"registryDependencies": [
+		"https://reactbits.dev/r/SoundEngine-TS.json"
+	],
+	"dependencies": []
+}
