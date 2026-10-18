@@ -17,6 +17,7 @@ import { downloadBlob } from '../../background-studio/utils/download';
 import { aspectRatio, isLooping } from '../engine/scene';
 import { shotJson, shotUrl } from '../share';
 import { bitrateFor, even, renderGif, renderStill, renderVideo, shotSize, videoSupport } from '../export/exporters';
+import { clipRange } from '../media';
 import { Choice } from './Field';
 
 const TABS = [
@@ -83,10 +84,11 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
   const ratio = aspectRatio(doc.aspect);
   const moving = (doc.motion?.kind || 'none') !== 'none';
   const hasVideo = slots.some(media => media?.kind === 'video');
+  const hasLive = slots.some(media => media?.kind === 'live');
   const loopLength = moving
     ? doc.motion.duration || 6
     : hasVideo
-      ? Math.min(30, Math.max(...slots.filter(media => media?.kind === 'video').map(media => media.duration)))
+      ? Math.min(30, Math.max(...slots.filter(media => media?.kind === 'video').map(media => clipRange(media).length)))
       : 6;
   const transparent = doc.background?.kind === 'transparent';
 
@@ -439,6 +441,9 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
                 )}
                 {tab === 'image' && transparent && image.format === 'jpeg' && (
                   <p>JPEG has no transparency. Use PNG or WebP to keep it.</p>
+                )}
+                {(tab === 'video' || tab === 'gif') && hasLive && (
+                  <p>A live capture exports as a still. Record a clip to keep its motion.</p>
                 )}
                 {(tab === 'video' || tab === 'gif') && !moving && !hasVideo && (
                   <p>Pick a motion in the Motion section to animate the shot.</p>

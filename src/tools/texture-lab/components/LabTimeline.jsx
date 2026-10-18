@@ -14,7 +14,7 @@ const format = seconds => {
   return `${minutes}:${rest.toFixed(1).padStart(4, '0')}`;
 };
 
-export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay }) {
+export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay, children }) {
   const player = media.player;
   const duration = media.duration || 0;
   const [time, setTime] = useState(player.currentTime);
@@ -181,6 +181,7 @@ export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay
         />
       </div>
       <span className="lab-time lab-time--muted">{format(trim[1] - trim[0])}</span>
+      {children}
     </div>
   );
 }

@@ -64,9 +64,9 @@ export const PRO_SECTIONS = [
     countNoun: 'app UI blocks',
     categoryCountKey: 'appUiCategories',
     categoryNoun: 'categories',
-    tagline: 'Dashboards, tables, AI chat and auth, restyled from one theme panel.',
+    tagline: 'Dashboards, tables, AI chat and auth, in two styles and one theme panel.',
     description:
-      'Dashboards, data tables, AI chat, forms, overlays and auth flows. Shared theme tokens restyle every screen at once, so they land looking like your product.',
+      'Dashboards, data tables, AI chat, forms, overlays and auth flows, in two styles: precise Default and roomy, warm Sorbet. Shared theme tokens restyle every screen at once, so they land looking like your product.',
     seoTitle: 'React Bits Pro - React App UI, Dashboards & AI Interfaces',
     seoDescription:
       'Dashboards, data tables, AI chat interfaces, forms, overlays and auth flows for React apps, from React Bits Pro.',
@@ -130,7 +130,7 @@ export const PRO_FAQ = [
   },
   {
     q: 'Can I match it to my brand?',
-    a: 'Yes, and you restyle every app UI block at once. They share CSS custom properties for accent, base grey, font and radius, so a live theme panel with six presets changes all of them without editing a single file.'
+    a: 'Yes, and you restyle every app UI block at once. Pick one of two styles, Default or Sorbet, then tune accent, base grey, font and radius: the blocks share CSS custom properties, so a live theme panel with six presets changes all of them without editing a single file.'
   },
   {
     q: 'How does this work with AI?',

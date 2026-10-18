@@ -52,7 +52,7 @@ const ROWS = [
   },
   {
     label: 'App UI',
-    detail: 'Dashboards, tables, AI chat, forms and auth',
+    detail: 'Dashboards, tables, AI chat, forms and auth, in two styles',
     values: reachOf('appUi')
   },
   {

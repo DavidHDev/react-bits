@@ -388,7 +388,8 @@ function buildProSections(manifest) {
         `Pro App UI (${c.appUi ?? 0} across ${c.appUiCategories ?? 0} categories)`,
         manifest.appUi,
         'Screens and surfaces for the inside of a product rather than its marketing site. ' +
-          'Same structure as blocks: each category holds several installable variants.'
+          'Same structure as blocks: each category holds several installable variants. ' +
+          'Every variant ships in two styles: Default (`@reactbits-pro/<slug>`) and Sorbet (`@reactbits-pro/<slug>-sorbet`).'
       ),
     manifest.templates?.length && buildProTemplates(manifest),
     manifest.agentKit?.length && buildProAgentKit(manifest)

@@ -177,15 +177,17 @@
   }
 }
 
+@media (min-width: 601px) {
+  .ln-sp-card[data-start='2'] {
+    grid-column: 2 / span 2;
+  }
+
+  .ln-sp-card[data-start='3'] {
+    grid-column: 3 / span 2;
+  }
+}
+
 @media (max-width: 1100px) {
-  .ln-sp-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .ln-sp-card {
-    grid-column: auto;
-  }
-
   .ln-sp-card--diamond {
     grid-column: 1 / -1;
   }
@@ -216,6 +218,7 @@
   }
 
   .ln-sp-card {
+    grid-column: auto;
     border-radius: 14px;
   }
 

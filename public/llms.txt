@@ -581,7 +581,7 @@ Landing page and marketing sections. Each category below holds several independe
 
 ## Pro App UI (300 across 38 categories)
 
-Screens and surfaces for the inside of a product rather than its marketing site. Same structure as blocks: each category holds several installable variants. Included in the Pro tier and above.
+Screens and surfaces for the inside of a product rather than its marketing site. Same structure as blocks: each category holds several installable variants. Every variant ships in two styles: Default (`@reactbits-pro/<slug>`) and Sorbet (`@reactbits-pro/<slug>-sorbet`). Included in the Pro tier and above.
 
 - [AI Chat](https://pro.reactbits.dev/docs/app-ui/ai-chat): Chat interfaces for AI assistants. 9 variants. Category: AI & Agents.
 - [Prompt Input](https://pro.reactbits.dev/docs/app-ui/prompt-input): Prompt bars and message composers. 7 variants. Category: AI & Agents.

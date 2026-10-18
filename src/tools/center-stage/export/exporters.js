@@ -2,7 +2,7 @@ import { openExportBackdrop } from '../backdrop';
 import { Renderer } from '../engine/renderer';
 import { TextCache, prepareShot, renderShot } from '../engine/shot';
 import { normalizeDoc } from '../engine/scene';
-import { frameOf, mediaSizes } from '../media';
+import { clipRange, frameOf, mediaSizes } from '../media';
 import { loadBackgroundImage } from '../state/useThumbnails';
 
 export const even = value => Math.max(2, Math.round(value / 2) * 2);
@@ -140,9 +140,12 @@ async function openVideoSinks(slots) {
       formats: mb.ALL_FORMATS
     });
     const track = await input.getPrimaryVideoTrack();
-    const start = await track.getFirstTimestamp();
-    const duration = Math.max(0.1, (await input.computeDuration()) - start);
-    sinks.push({ slot, input, sink: new mb.VideoSampleSink(track), start, duration });
+    const first = await track.getFirstTimestamp();
+    const last = await input.computeDuration();
+    const range = media.trim ? clipRange(media) : null;
+    const start = range ? Math.max(first, range.start) : first;
+    const end = range ? Math.min(last, range.end) : last;
+    sinks.push({ slot, input, sink: new mb.VideoSampleSink(track), start, duration: Math.max(0.1, end - start) });
   }
   return sinks;
 }

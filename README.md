@@ -154,14 +154,6 @@ React Bits is supported by these sponsors. [Become a sponsor](https://reactbits.
 **Silver**
 
 <p>
-  <a href="https://shadcncraft.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcncraft.svg">
-      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/shadcncraft-lightmode.svg">
-      <img src="public/assets/sponsors/shadcncraft-lightmode.svg" alt="Shadcncraft" height="30">
-    </picture>
-  </a>
-  &nbsp;&nbsp;&nbsp;
   <a href="https://shadcnuikit.com/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/shadcnuikit.svg">

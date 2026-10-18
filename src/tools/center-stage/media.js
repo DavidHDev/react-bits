@@ -1,4 +1,4 @@
-import { isMediaFile, loadFile, loadImage, loadVideo, releaseMedia } from '../texture-lab/media';
+import { isMediaFile, loadFile, loadImage, loadVideo, releaseMedia as releaseBase } from '../texture-lab/media';
 
 export const SAMPLES = [
   { id: 'dark', label: 'Landing, dark', url: '/assets/center-stage/desktop.webp', slot: 0, role: 'desktop' },
@@ -11,7 +11,12 @@ export const BACKGROUND_IMAGES = [
   { value: 'sky-night', label: 'Night sky', url: '/assets/demo/night-sky.webp' }
 ];
 
-export { isMediaFile, releaseMedia };
+export { isMediaFile };
+
+export const releaseMedia = media => {
+  media?.release?.();
+  releaseBase(media);
+};
 
 const inferRole = media => (media.width / media.height < 0.7 && media.width <= 1600 ? 'mobile' : 'desktop');
 
@@ -30,9 +35,17 @@ export async function openUrl(url, name) {
   return loadImage(url, { name, url });
 }
 
+export function clipRange(media) {
+  const duration = media?.duration || 0;
+  const start = Math.min(Math.max(media?.trim?.start ?? 0, 0), duration);
+  const end = Math.min(Math.max(media?.trim?.end ?? duration, start), duration);
+  return { start, end, length: Math.max(0.1, end - start) };
+}
+
 export function frameOf(media) {
   if (!media) return null;
   if (media.kind === 'video') return media.player.drawable();
+  if (media.kind === 'live') return media.frame();
   return { image: media.element, width: media.width, height: media.height };
 }
 

@@ -5,6 +5,7 @@ import {
   FullScreenIcon,
   PauseIcon,
   PlayIcon,
+  ScreenShareIcon,
   Upload04Icon
 } from '@hugeicons/core-free-icons';
 import { Icon, Tip } from '../../background-studio/components/ui';
@@ -83,6 +84,9 @@ export default function Toolbar({
   canPlay,
   onUpload,
   onUploadHint,
+  canCapture,
+  capturing,
+  onCapture,
   onTogglePlay,
   onFullscreen,
   onExport
@@ -105,6 +109,25 @@ export default function Toolbar({
             <span>Upload</span>
           </button>
         </Tip>
+        {canCapture && (
+          <Tip label="Capture a website or an open tab" placement="bottom">
+            <button
+              type="button"
+              className="docs-tool lab-upload cst-capture-button"
+              aria-label="Capture a website or an open tab"
+              aria-haspopup="dialog"
+              data-state={capturing ? 'open' : undefined}
+              onClick={onCapture}
+              onPointerEnter={() => onUploadHint?.(true)}
+              onPointerLeave={() => onUploadHint?.(false)}
+              onFocus={() => onUploadHint?.(true)}
+              onBlur={() => onUploadHint?.(false)}
+            >
+              <Icon icon={ScreenShareIcon} />
+              <span>Capture</span>
+            </button>
+          </Tip>
+        )}
         <AspectMenu value={aspect} onChange={onAspect} />
       </div>
       <div className="lab-toolbar-group">

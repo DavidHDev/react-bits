@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Upload04Icon } from '@hugeicons/core-free-icons';
+import { ScreenShareIcon, Upload04Icon } from '@hugeicons/core-free-icons';
 import { Icon } from '../../background-studio/components/ui';
 import { Renderer } from '../engine/renderer';
 import { aspectRatio, isLooping, pickFocus, screenPoint } from '../engine/scene';
@@ -81,6 +81,9 @@ const StageView = forwardRef(function StageView(
     hint,
     onUpload,
     onUploadHint,
+    onCapture,
+    forwarding,
+    hud,
     highlight,
     repeat = true,
     length = 6,
@@ -112,7 +115,7 @@ const StageView = forwardRef(function StageView(
   const [dropTarget, setDropTarget] = useState(null);
   const lit = dropTarget !== null ? [dropTarget] : highlight;
 
-  live.current = { doc, slots, background, playing, onTick, lit, repeat, length, onEnded };
+  live.current = { doc, slots, background, playing, onTick, lit, repeat, length, onEnded, forwarding };
 
   useLayoutEffect(() => {
     const view = viewRef.current;
@@ -163,7 +166,7 @@ const StageView = forwardRef(function StageView(
       const state = live.current;
       if (state.playing || dirty.current) return true;
       if ((state.doc.background || {}).kind === 'reactbits') return true;
-      return state.slots.some(media => media?.kind === 'video');
+      return state.slots.some(media => media?.kind === 'video' || media?.kind === 'live');
     };
     const govern = gap => {
       if (gap > 0.25) return;
@@ -216,7 +219,7 @@ const StageView = forwardRef(function StageView(
           media.player.update();
           updated.add(media);
         }
-        const version = media.kind === 'video' ? media.player.version : 0;
+        const version = media.kind === 'video' ? media.player.version : media.kind === 'live' ? media.version : 0;
         if (record && record.media === media && record.version === version) return;
         const frame = frameOf(media);
         if (!frame) return;
@@ -344,6 +347,7 @@ const StageView = forwardRef(function StageView(
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
     const onWheel = event => {
+      if (live.current.forwarding) return;
       event.preventDefault();
       const camera = live.current.doc.camera || {};
       const factor = Math.exp(-clamp(event.deltaY, -120, 120) * (event.ctrlKey ? 0.01 : 0.0016));
@@ -453,6 +457,12 @@ const StageView = forwardRef(function StageView(
   };
 
   const transparent = doc.background?.kind === 'transparent';
+  const hintProps = {
+    onPointerEnter: () => onUploadHint?.(true),
+    onPointerLeave: () => onUploadHint?.(false),
+    onFocus: () => onUploadHint?.(true),
+    onBlur: () => onUploadHint?.(false)
+  };
 
   return (
     <div
@@ -495,20 +505,21 @@ const StageView = forwardRef(function StageView(
           <p>{failed || error}</p>
         </div>
       )}
-      {hint && !loading && !dropping && (
-        <button
-          type="button"
-          className="lab-hint"
-          onClick={onUpload}
-          onPointerEnter={() => onUploadHint?.(true)}
-          onPointerLeave={() => onUploadHint?.(false)}
-          onFocus={() => onUploadHint?.(true)}
-          onBlur={() => onUploadHint?.(false)}
-        >
-          <Icon icon={Upload04Icon} size={14} />
-          <span>Drop, paste or upload your own screenshot or recording</span>
-        </button>
+      {hint && !hud && !loading && !dropping && (
+        <div className="cst-hints">
+          <button type="button" className="lab-hint" onClick={onUpload} {...hintProps}>
+            <Icon icon={Upload04Icon} size={14} />
+            <span>Drop, paste or upload your own screenshot or recording</span>
+          </button>
+          {onCapture && (
+            <button type="button" className="lab-hint" onClick={onCapture} {...hintProps}>
+              <Icon icon={ScreenShareIcon} size={14} />
+              <span>Capture a page</span>
+            </button>
+          )}
+        </div>
       )}
+      {hud && !dropping && hud}
       {dropping && (
         <div className="lab-drop">
           <span>Drop onto a device</span>

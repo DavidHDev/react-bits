@@ -771,3 +771,460 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 560px;
 }
+
+.cst-capture-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: rgb(236, 72, 153);
+}
+
+.cst-hud[data-busy] .cst-capture-dot {
+  animation: cst-capture-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes cst-capture-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.cst-capture-spinner.bs-spinner {
+  width: 13px;
+  height: 13px;
+}
+
+.cst-slot-badge[data-live] .cst-capture-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.cst-hints {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transform: translateX(-50%);
+}
+
+.cst-hints .lab-hint {
+  position: static;
+  transform: none;
+}
+
+.cst-trim-done {
+  display: inline-flex;
+  height: 30px;
+  flex: none;
+  align-items: center;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--tool-raised);
+  box-shadow: var(--tool-raised-shadow);
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.cst-trim-done:active {
+  transform: scale(0.96);
+}
+
+.cst-trim-done:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.cst-page-form {
+  display: flex;
+  gap: 6px;
+}
+
+.cst-page-hint.lab-hint {
+  cursor: default;
+}
+
+.cst-page-hint.lab-hint:hover {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.cst-page-field.bs-search {
+  height: 40px;
+  min-width: 0;
+  flex: 1;
+}
+
+.cst-page-open.bs-export {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+
+.cst-capture-dialog.bs-dialog {
+  width: min(560px, 100%);
+}
+
+.cst-capture-dialog .bs-dialog-head {
+  gap: 10px;
+}
+
+.cst-capture-body.bs-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.cst-capture-note {
+  margin: -4px 0 0;
+  color: var(--text-dimmed);
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.cst-capture-lead {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.cst-capture-lead strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.cst-capture-primary.bs-export {
+  width: 100%;
+  height: 42px;
+  border-radius: 11px;
+}
+
+.cst-capture-options {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--bg-body);
+  box-shadow: inset 0 0 0 1px var(--inset-border);
+}
+
+.cst-capture-option {
+  display: flex;
+  height: 42px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13.5px;
+  text-align: left;
+  transition: background-color var(--dur-menu) var(--ease-out);
+}
+
+.cst-capture-option span {
+  min-width: 0;
+  flex: 1;
+}
+
+.cst-capture-option svg {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.cst-capture-option svg:last-child {
+  color: var(--text-dimmed);
+  transition: transform var(--dur-menu) var(--ease-out);
+}
+
+.cst-capture-option:hover {
+  background: var(--tool-hover);
+}
+
+.cst-capture-option:hover svg:last-child {
+  transform: translateX(2px);
+}
+
+.cst-capture-option:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.cst-snippet {
+  border-radius: 14px;
+  background: var(--bg-body);
+  box-shadow: inset 0 0 0 1px var(--inset-border);
+}
+
+.cst-snippet-bar {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 6px 0 14px;
+  color: var(--text-dimmed);
+  font-size: 12px;
+}
+
+.cst-snippet-copy {
+  display: inline-flex;
+  height: 28px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px 0 9px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--tool-track);
+  color: var(--text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition:
+    background-color var(--dur-menu) var(--ease-out),
+    color var(--dur-menu) var(--ease-out);
+}
+
+.cst-snippet-copy:hover {
+  background: var(--tool-hover);
+  color: var(--text-primary);
+}
+
+.cst-snippet-copy:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.cst-snippet-code {
+  margin: 0;
+  padding: 0 14px 15px;
+  overflow-x: auto;
+  color: var(--text-muted);
+  font:
+    500 11.5px/1.75 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  white-space: pre;
+  scrollbar-width: none;
+}
+
+.cst-code-tag {
+  color: var(--text-dimmed);
+}
+
+.cst-code-value {
+  color: var(--text-primary);
+}
+
+.cst-trust {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.cst-trust-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cst-trust-title svg {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.cst-trust-list {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cst-trust-list li {
+  position: relative;
+  padding-left: 24px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.cst-trust-list li::before {
+  position: absolute;
+  top: 0.68em;
+  left: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-dimmed);
+  content: '';
+}
+
+.cst-trust-link {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 4px;
+  margin-left: 24px;
+  color: var(--text-primary);
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cst-trust-link svg {
+  color: var(--text-dimmed);
+  transition:
+    color var(--dur-menu) var(--ease-out),
+    transform var(--dur-menu) var(--ease-out);
+}
+
+.cst-trust-link:hover svg {
+  color: var(--text-primary);
+  transform: translate(1px, -1px);
+}
+
+.cst-trust-link:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.cst-hud {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  z-index: 4;
+  display: flex;
+  max-width: calc(100% - 24px);
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 14px;
+  background: var(--menu-bg);
+  box-shadow: var(--menu-shadow);
+  transform: translateX(-50%);
+  animation: bs-rise var(--dur-menu) var(--ease-out);
+}
+
+.cst-hud-state {
+  display: inline-flex;
+  min-width: 0;
+  height: 32px;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 0 11px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cst-hud-name {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cst-hud-note {
+  min-width: 0;
+  padding: 0 8px 0 0;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cst-hud-button {
+  display: inline-flex;
+  height: 32px;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px 0 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-menu) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.cst-hud-button:hover {
+  background: var(--tool-hover);
+}
+
+.cst-hud-button:active {
+  transform: scale(0.97);
+}
+
+.cst-hud-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.cst-hud-button svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.cst-hud-icon.cst-hud-button {
+  width: 32px;
+  justify-content: center;
+  padding: 0;
+}
+
+.cst-hud-primary.bs-export {
+  height: 32px;
+  padding: 0 13px 0 11px;
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cst-hud[data-busy] .cst-capture-dot {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .cst-hud-note {
+    display: none;
+  }
+}

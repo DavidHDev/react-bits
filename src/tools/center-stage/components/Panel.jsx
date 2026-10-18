@@ -6,6 +6,8 @@ import {
   Image01Icon,
   PlusSignIcon,
   Redo02Icon,
+  ScissorIcon,
+  ScreenShareIcon,
   Undo02Icon,
   Upload04Icon,
   Video01Icon
@@ -100,7 +102,13 @@ const hoverProps = (onHighlight, setOver) => ({
   }
 });
 
-function SurfaceTile({ label, number, thumb, scroll, video, blank, peek, onUpload, onDropFile, onHighlight }) {
+const LiveBadge = () => (
+  <span className="cst-slot-badge" data-live="">
+    <i className="cst-capture-dot" />
+  </span>
+);
+
+function SurfaceTile({ label, number, thumb, scroll, video, live, blank, peek, onUpload, onDropFile, onHighlight }) {
   const [over, setOver] = useState(false);
   if (peek)
     return (
@@ -148,13 +156,27 @@ function SurfaceTile({ label, number, thumb, scroll, video, blank, peek, onUploa
             <Icon icon={Video01Icon} size={11} />
           </span>
         )}
+        {live && <LiveBadge />}
         <span className="cst-surface-number">{number}</span>
       </button>
     </Tip>
   );
 }
 
-function SlotRow({ label, media, thumb, guide, onUpload, onSample, onClear, onRemove, onDropFile, onHighlight }) {
+function SlotRow({
+  label,
+  media,
+  thumb,
+  guide,
+  onUpload,
+  onCapture,
+  onTrim,
+  onSample,
+  onClear,
+  onRemove,
+  onDropFile,
+  onHighlight
+}) {
   const [menu, setMenu] = useState(false);
   const [over, setOver] = useState(false);
   const rootRef = useRef(null);
@@ -208,6 +230,7 @@ function SlotRow({ label, media, thumb, guide, onUpload, onSample, onClear, onRe
             <Icon icon={Video01Icon} size={11} />
           </span>
         )}
+        {media?.kind === 'live' && <LiveBadge />}
       </button>
       <button
         type="button"
@@ -241,6 +264,18 @@ function SlotRow({ label, media, thumb, guide, onUpload, onSample, onClear, onRe
             <Icon icon={Upload04Icon} />
             <span>Upload image or video</span>
           </button>
+          {onCapture && (
+            <button type="button" role="menuitem" className="lab-menu-item" onClick={close(onCapture)}>
+              <Icon icon={ScreenShareIcon} />
+              <span>Capture a page</span>
+            </button>
+          )}
+          {onTrim && media?.kind === 'video' && (
+            <button type="button" role="menuitem" className="lab-menu-item" onClick={close(onTrim)}>
+              <Icon icon={ScissorIcon} />
+              <span>Trim video</span>
+            </button>
+          )}
           <span className="lab-menu-label">Samples</span>
           {SAMPLES.map(sample => (
             <button
@@ -284,6 +319,8 @@ export default function Panel({
   onSelectDevice,
   onUploadScreen,
   onUploadAll,
+  onTrimScreen,
+  onCaptureScreen,
   onSampleScreen,
   onBlankScreen,
   onFileScreen,
@@ -557,6 +594,7 @@ export default function Panel({
                       thumb={item.slot === null ? null : slotThumbs[item.slot]}
                       scroll={item.device.scroll}
                       video={item.media?.kind === 'video'}
+                      live={item.media?.kind === 'live'}
                       blank={item.device.blank}
                       peek={collapsed && position >= PER_ROW * SHOWN_ROWS}
                       onUpload={() => onUploadScreen(item.index)}
@@ -592,6 +630,8 @@ export default function Panel({
                       thumb={item.slot === null || item.device.blank ? null : slotThumbs[item.slot]}
                       guide={{ ...guide, title: item.label }}
                       onUpload={() => onUploadScreen(item.index)}
+                      onCapture={onCaptureScreen ? () => onCaptureScreen(item.index) : null}
+                      onTrim={onTrimScreen ? () => onTrimScreen(item.index) : null}
                       onSample={sample => onSampleScreen(item.index, sample)}
                       onClear={item.device.blank ? null : () => onBlankScreen(item.index)}
                       onRemove={null}

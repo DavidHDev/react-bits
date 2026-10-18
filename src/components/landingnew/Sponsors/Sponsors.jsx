@@ -25,7 +25,7 @@ const buildSponsorUrl = (url, tier) => {
   }
 };
 
-const SponsorCard = ({ sponsor, tier, label, detailed }) => {
+const SponsorCard = ({ sponsor, tier, label, detailed, start }) => {
   const imageUrl = useColorModeValue(sponsor.lightImageUrl || sponsor.imageUrl, sponsor.imageUrl);
 
   return (
@@ -34,6 +34,7 @@ const SponsorCard = ({ sponsor, tier, label, detailed }) => {
       target="_blank"
       rel="noopener noreferrer"
       className={`browse-card ln-sp-card ln-sp-card--${tier}`}
+      data-start={start}
     >
       <span className="ln-sp-well">
         <img className="ln-sp-logo" src={imageUrl} alt={sponsor.name} loading="lazy" />
@@ -60,11 +61,19 @@ const SponsorCard = ({ sponsor, tier, label, detailed }) => {
 
 export const SponsorGrid = ({ detailed = false }) => (
   <div className={`ln-sp-grid${detailed ? ' ln-sp-grid--detailed' : ''}`}>
-    {TIERS.flatMap(({ tier, label, sponsors }) =>
-      sponsors.map(sponsor => (
-        <SponsorCard key={`${tier}-${sponsor.id}`} sponsor={sponsor} tier={tier} label={label} detailed={detailed} />
-      ))
-    )}
+    {TIERS.flatMap(({ tier, label, sponsors }) => {
+      const rest = tier === 'diamond' ? 0 : sponsors.length % 3;
+      return sponsors.map((sponsor, index) => (
+        <SponsorCard
+          key={`${tier}-${sponsor.id}`}
+          sponsor={sponsor}
+          tier={tier}
+          label={label}
+          detailed={detailed}
+          start={rest && index === sponsors.length - rest ? 4 - rest : undefined}
+        />
+      ));
+    })}
   </div>
 );
 

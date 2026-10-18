@@ -46,6 +46,26 @@ export function targetSize(device) {
 
 const ratioOf = size => size[0] / size[1];
 
+const PAGE_NAMES = {
+  browser: 'browser frame',
+  window: 'window frame',
+  card: 'card',
+  phone: 'phone screen',
+  tablet: 'tablet screen',
+  laptop: 'laptop screen',
+  monitor: 'display'
+};
+
+export function pageSize(device) {
+  const { size } = targetSize(device);
+  const density = size[0] < size[1] && size[0] <= 1300 ? 3 : 2;
+  return {
+    size: [Math.round(size[0] / density), Math.round(size[1] / density)],
+    density,
+    name: PAGE_NAMES[device.type] || 'screen'
+  };
+}
+
 export const surfaceNames = devices => {
   const totals = new Map();
   devices.forEach(device => {

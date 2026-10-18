@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Track } from '../background-studio/components/ui';
+import LabTimeline from '../texture-lab/components/LabTimeline';
 import { useShot } from './state/useShot';
 import { useThumbnails } from './state/useThumbnails';
 import { DEFAULT_PRESET, PRESETS, PRESETS_BY_ID } from './presets/index';
 import {
   SAMPLES,
   carryOver,
+  clipRange,
   frameOf,
   isMediaFile,
   mediaSizes,
@@ -17,6 +19,19 @@ import {
   shrinkImage
 } from './media';
 import { decodeShot, readSharedShot } from './share';
+import {
+  RECORD_LIMIT,
+  canCapture,
+  canRecord,
+  captureProblem,
+  isQuietCancel,
+  openCapture,
+  openPage,
+  pageAddress,
+  pageHost,
+  surfaceLabel
+} from './capture';
+import { pageSize } from './guide';
 import { isLooping, slotFor, surfaceRole } from './engine/scene';
 import { PresetFilter, PresetGrid, PresetSearch, GalleryScroll } from './components/PresetGallery';
 import Panel from './components/Panel';
@@ -24,6 +39,8 @@ import Toolbar from './components/Toolbar';
 import StageView from './components/StageView';
 import Timeline from './components/Timeline';
 import ExportDialog from './components/ExportDialog';
+import CaptureDialog from './components/CaptureDialog';
+import CaptureHud from './components/CaptureHud';
 import '../background-studio/studio.css';
 import '../texture-lab/lab.css';
 import './cst.css';
@@ -48,6 +65,24 @@ const storeLoop = value => {
   return true;
 };
 const GALLERY_SIDE = 2560;
+const PAGE_KEY = 'center-stage-page';
+
+const readPage = () => {
+  try {
+    return localStorage.getItem(PAGE_KEY) || '';
+  } catch {
+    return '';
+  }
+};
+
+const storePage = value => {
+  try {
+    localStorage.setItem(PAGE_KEY, value);
+  } catch {
+    return false;
+  }
+  return true;
+};
 const DESKTOP_QUERY = '(min-width: 1024px)';
 
 const SIDE_TABS = [
@@ -118,6 +153,18 @@ export default function CenterStage({ toolSelector }) {
   const uploadTarget = useRef(null);
   const reserved = useRef(SAMPLES.length);
   const [highlight, setHighlight] = useState(null);
+  const [capture, setCaptureState] = useState(null);
+  const [trimming, setTrimming] = useState(null);
+  const [captureDialog, setCaptureDialog] = useState(null);
+  const [pageScreens, setPageScreens] = useState(0);
+  const pageRef = useRef(null);
+  const scrollRef = useRef(null);
+  const [, setTrimTick] = useState(0);
+  const [supportsCapture] = useState(canCapture);
+  const [supportsRecord] = useState(canRecord);
+  const captureRef = useRef(null);
+  const captureActions = useRef(null);
+  const arming = useRef(false);
   const slotsRef = useRef(slots);
   slotsRef.current = slots;
   const shotRef = useRef(shot);
@@ -138,7 +185,7 @@ export default function CenterStage({ toolSelector }) {
     motionKind !== 'none'
       ? doc.motion.duration || 6
       : hasVideo
-        ? Math.max(...slots.filter(media => media?.kind === 'video').map(media => media.duration))
+        ? Math.max(...slots.filter(media => media?.kind === 'video').map(media => clipRange(media).length))
         : 6;
 
   const putSlot = useCallback(async (slot, loader) => {
@@ -154,7 +201,8 @@ export default function CenterStage({ toolSelector }) {
         return next;
       });
       if (media.kind === 'video') {
-        media.player.setRange(0, media.duration);
+        const range = clipRange(media);
+        media.player.setRange(range.start, range.end);
         await media.player.play();
         setPlaying(true);
       }
@@ -213,13 +261,8 @@ export default function CenterStage({ toolSelector }) {
     return gallery ? shrinkImage(media, GALLERY_SIDE) : Object.assign(media, { role: roleOf(media) });
   };
 
-  const fillScreens = async (targets, file) => {
-    if (!isMediaFile(file)) {
-      toast.error('Drop an image or video file.');
-      return;
-    }
+  const targetSlot = targets => {
     const devices = shotRef.current.doc.devices;
-    if (!targets.length || !devices.length) return;
     const current = targets.map(index => slotFor(devices[index], sizesRef.current));
     const first = current[0];
     const alone =
@@ -227,10 +270,352 @@ export default function CenterStage({ toolSelector }) {
       isOwn(first) &&
       current.every(slot => slot === first) &&
       devices.every((device, index) => targets.includes(index) || slotFor(device, sizesRef.current) !== first);
-    const [slot] = alone ? [first] : allocate(1);
+    return alone ? first : allocate(1)[0];
+  };
+
+  const fillScreens = async (targets, file) => {
+    if (!isMediaFile(file)) {
+      toast.error('Drop an image or video file.');
+      return;
+    }
+    const devices = shotRef.current.doc.devices;
+    if (!targets.length || !devices.length) return;
+    const slot = targetSlot(targets);
     const media = await putSlot(slot, prepared(file, devices.length > 4));
     if (media) assignScreens(targets, slot);
   };
+
+  const setCapture = value => {
+    captureRef.current = value;
+    setCaptureState(value);
+  };
+
+  const freezeCapture = live => {
+    const still = live.snapshot();
+    setSlots(previous => {
+      const index = previous.indexOf(live);
+      if (index < 0) return previous;
+      const next = [...previous];
+      next[index] = still;
+      return next;
+    });
+    live.release();
+    if (captureRef.current?.media === live) setCapture(null);
+  };
+
+  const resumeCapture = live => {
+    const current = captureRef.current;
+    if (current?.media !== live || live.released) return;
+    if (live.ended) freezeCapture(live);
+    else setCapture({ media: live, status: 'live', startedAt: null, canScroll: live.canDrive(), opening: false });
+  };
+
+  const startCapture = async (targets, options) => {
+    const busy = captureRef.current?.status;
+    if (!targets.length || busy === 'recording' || busy === 'saving') return;
+    let live = null;
+    try {
+      live = await openCapture(options);
+    } catch (problem) {
+      if (!isQuietCancel(problem)) toast.error(captureProblem(problem));
+      return;
+    } finally {
+      setHighlight(null);
+    }
+    const previous = captureRef.current;
+    if (!shotRef.current.doc.devices.length || previous?.status === 'recording' || previous?.status === 'saving') {
+      live.release();
+      return;
+    }
+    const slot = targetSlot(targets);
+    if (previous && slotsRef.current[slot] !== previous.media) freezeCapture(previous.media);
+    live.role = roleOf(live);
+    live.onEnd(() => captureActions.current?.ended(live));
+    live.onResize(() => setSlots(current => (current.includes(live) ? [...current] : current)));
+    live.onHelper(() => {
+      const latest = captureRef.current;
+      if (latest?.media !== live || live.released || latest.scrolling) return;
+      setCapture({ ...latest, canScroll: live.canDrive() });
+    });
+    const media = await putSlot(slot, () => Promise.resolve(live));
+    if (!media) {
+      live.release();
+      return;
+    }
+    assignScreens(targets, slot);
+    const opening = live.opening;
+    setCapture({ media: live, status: 'live', startedAt: null, canScroll: live.canDrive(), opening: Boolean(opening) });
+    opening?.then(() => {
+      const latest = captureRef.current;
+      if (latest?.media !== live || live.released) return;
+      setCapture({
+        ...latest,
+        opening: false,
+        canScroll: latest.status === 'live' ? live.canDrive() : latest.canScroll
+      });
+    });
+  };
+
+  const followForwarding = (live, status, forwarding) =>
+    forwarding.then(ok => {
+      const latest = captureRef.current;
+      if (latest?.media === live && latest.status === status) setCapture({ ...latest, forwarding: ok });
+    });
+
+  const startRecording = async () => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'live' || arming.current) return;
+    const live = current.media;
+    const forwarding = live.forward(stageRef.current);
+    arming.current = true;
+    try {
+      const recorder = await live.record({
+        limit: RECORD_LIMIT,
+        onLimit: () => captureActions.current?.stopRecording(),
+        onFail: problem => captureActions.current?.failRecording(problem)
+      });
+      if (captureRef.current?.media !== live) {
+        recorder.cancel();
+        live.unforward();
+        return;
+      }
+      scrollRef.current = null;
+      setCapture({
+        media: live,
+        status: 'recording',
+        startedAt: recorder.started,
+        forwarding: null,
+        canScroll: live.canDrive(),
+        scrolling: false
+      });
+      followForwarding(live, 'recording', forwarding);
+    } catch (problem) {
+      live.unforward();
+      toast.error(problem?.message || 'The recording could not start.');
+    } finally {
+      arming.current = false;
+    }
+  };
+
+  const autoScroll = () => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'recording' || current.scrolling) return;
+    const scroller = current.media.scrollPage();
+    if (!scroller) return;
+    scrollRef.current = { scroller, since: current.startedAt, times: null };
+    setCapture({ ...current, scrolling: true });
+    scroller.done.then(times => {
+      if (scrollRef.current?.scroller !== scroller) return;
+      if (times) {
+        scrollRef.current.times = times;
+        setTimeout(() => captureActions.current?.stopRecording(), 700);
+        return;
+      }
+      scrollRef.current = null;
+      const latest = captureRef.current;
+      if (latest?.status === 'recording')
+        setCapture({ ...latest, scrolling: false, canScroll: latest.media.canDrive() });
+    });
+  };
+
+  const stopRecording = async () => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'recording') return;
+    const live = current.media;
+    const recorder = live.recorder;
+    const scrolled = scrollRef.current;
+    scrolled?.scroller.stop();
+    scrollRef.current = null;
+    live.unforward();
+    setCapture({ ...current, status: 'saving' });
+    let result = null;
+    try {
+      result = recorder ? await recorder.stop() : null;
+    } catch (problem) {
+      if (!live.released) toast.error(problem?.message || 'The recording could not be saved.');
+      resumeCapture(live);
+      return;
+    }
+    if (live.released) return;
+    if (!result) {
+      toast(`Nothing changed in the ${surfaceLabel(live).toLowerCase()} while recording.`);
+      resumeCapture(live);
+      return;
+    }
+    const slot = slotsRef.current.indexOf(live);
+    if (slot < 0) return;
+    const clip = await putSlot(slot, async () => {
+      const media = await openFile(result.file);
+      const times = scrolled?.times;
+      const origin = result.origin ? result.origin - performance.timeOrigin : scrolled?.since;
+      const span = times
+        ? [Math.max(0, (times.start - origin) / 1000 - 0.4), (times.end - origin) / 1000 + 0.6]
+        : [result.start, result.end];
+      const trim =
+        span[1] === null
+          ? undefined
+          : {
+              start: Math.min(span[0], media.duration),
+              end: Math.min(Math.max(span[1], span[0] + 0.5), media.duration)
+            };
+      return Object.assign(media, { role: live.role, name: `${surfaceLabel(live)} recording`, trim });
+    });
+    if (!clip) {
+      resumeCapture(live);
+      return;
+    }
+    setTrimming(slot);
+  };
+
+  const trimVideo = (slot, [start, end]) => {
+    const media = slotsRef.current[slot];
+    if (media?.kind !== 'video') return;
+    media.trim = { start, end };
+    setTrimTick(tick => tick + 1);
+  };
+
+  const failRecording = problem => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'recording') return;
+    current.media.recorder?.cancel();
+    toast.error(problem?.message || 'The recording stopped unexpectedly.');
+    resumeCapture(current.media);
+  };
+
+  const startPage = () => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'live') return;
+    const live = current.media;
+    const auto = live.canDrive();
+    const forwarding = auto ? null : live.forward(stageRef.current);
+    setPageScreens(1);
+    live.startPage({ onProgress: setPageScreens, onEnd: () => captureActions.current?.finishPage() });
+    setCapture({ media: live, status: 'paging', auto, forwarding: null, startedAt: null, canScroll: auto });
+    if (forwarding) followForwarding(live, 'paging', forwarding);
+  };
+
+  const finishPage = async () => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'paging') return;
+    const live = current.media;
+    setCapture({ ...current, status: 'building' });
+    let still = null;
+    try {
+      still = await live.finishPage();
+    } catch (problem) {
+      toast.error(problem?.message || 'The page could not be stitched.');
+    }
+    if (live.released) return;
+    if (!still) {
+      resumeCapture(live);
+      return;
+    }
+    setSlots(previous => {
+      const index = previous.indexOf(live);
+      if (index < 0) return previous;
+      const next = [...previous];
+      next[index] = still;
+      return next;
+    });
+    live.release();
+    if (captureRef.current?.media === live) setCapture(null);
+    toast(`Full page captured, ${still.screens.toFixed(1)} screens tall`);
+  };
+
+  const cancelPage = () => {
+    const current = captureRef.current;
+    if (!current || current.status !== 'paging') return;
+    current.media.cancelPage();
+    resumeCapture(current.media);
+  };
+
+  const captureEnded = live => {
+    const current = captureRef.current;
+    if (current?.media !== live) {
+      if (slotsRef.current.includes(live)) freezeCapture(live);
+      return;
+    }
+    if (current.status === 'recording') stopRecording();
+    else if (current.status === 'paging') finishPage();
+    else if (current.status === 'live') freezeCapture(live);
+  };
+
+  captureActions.current = { ended: captureEnded, stopRecording, failRecording, finishPage };
+
+  const dialogDevice = captureDialog ? doc.devices[captureDialog.targets[0]] || doc.devices[0] : null;
+  const capturePage = dialogDevice ? pageSize(dialogDevice) : null;
+
+  const openCaptureDialog = targets => {
+    const busy = captureRef.current?.status;
+    if (busy && busy !== 'live') return;
+    setCaptureDialog({ targets, step: 'url' });
+  };
+
+  const closeCaptureDialog = useCallback(() => {
+    pageRef.current?.page?.close?.();
+    pageRef.current = null;
+    setCaptureDialog(null);
+  }, []);
+
+  const openPageWindow = text => {
+    const menu = captureDialog;
+    if (!menu) return;
+    const url = pageAddress(text);
+    if (!url) {
+      toast.error('Enter a web address, like reactbits.dev');
+      return;
+    }
+    storePage(text.trim());
+    const devices = shotRef.current.doc.devices;
+    const size = pageSize(devices[menu.targets[0]] || devices[0]);
+    const host = pageHost(url);
+    pageRef.current?.page?.close?.();
+    const page = openPage(host);
+    if (!page) {
+      toast.error('Allow pop-ups for this site, then try again.');
+      return;
+    }
+    pageRef.current = { page, url, size: size.size, density: size.density, host };
+    setCaptureDialog({ ...menu, step: 'opened', host });
+  };
+
+  const sharePage = () => {
+    const menu = captureDialog;
+    if (!menu) return;
+    setCaptureDialog(null);
+    const opened = pageRef.current;
+    pageRef.current = null;
+    startCapture(menu.targets, {
+      density: opened?.density,
+      page: opened?.page,
+      host: opened?.host,
+      url: opened?.url,
+      size: opened?.size
+    });
+  };
+
+  const shareTab = () => {
+    const menu = captureDialog;
+    if (!menu) return;
+    pageRef.current?.page?.close?.();
+    pageRef.current = null;
+    setCaptureDialog(null);
+    startCapture(menu.targets);
+  };
+
+  const backToAddress = () => setCaptureDialog(current => current && { ...current, step: 'url' });
+
+  useEffect(() => {
+    if (trimming !== null && slots[trimming]?.kind !== 'video') setTrimming(null);
+  }, [slots, trimming]);
+
+  useEffect(() => {
+    const current = captureRef.current;
+    if (!current || slots.includes(current.media)) return;
+    current.media.release();
+    captureRef.current = null;
+    setCaptureState(null);
+  }, [slots]);
 
   const fillAll = async files => {
     const list = [...files].filter(isMediaFile);
@@ -306,7 +691,7 @@ export default function CenterStage({ toolSelector }) {
       if (restart) timeRef.current = 0;
       slotsRef.current.forEach(media => {
         if (media?.kind !== 'video') return;
-        if (restart) media.player.seek(0);
+        if (restart) media.player.seek(clipRange(media).start);
         if (next) media.player.play();
         else media.player.pause();
       });
@@ -319,7 +704,7 @@ export default function CenterStage({ toolSelector }) {
     setTime(0);
     slotsRef.current.forEach(media => {
       if (media?.kind !== 'video') return;
-      media.player.seek(0);
+      media.player.seek(clipRange(media).start);
       media.player.play();
     });
     setPlaying(true);
@@ -344,8 +729,9 @@ export default function CenterStage({ toolSelector }) {
     setTime(value);
     slotsRef.current.forEach(media => {
       if (media?.kind !== 'video') return;
+      const range = clipRange(media);
       media.player.pause();
-      media.player.seek(value % media.duration);
+      media.player.seek(range.start + (value % range.length));
     });
     setPlaying(false);
   };
@@ -422,6 +808,10 @@ export default function CenterStage({ toolSelector }) {
       return;
     }
     if (modifier || event.altKey || isTyping(event.target)) return;
+    if (key === 'escape' && trimming !== null) {
+      setTrimming(null);
+      return;
+    }
     if (key === ' ') {
       if (typeof event.target?.closest === 'function' && event.target.closest('button, a')) return;
       event.preventDefault();
@@ -548,6 +938,15 @@ export default function CenterStage({ toolSelector }) {
       onSelectDevice={setSelectedDevice}
       onUploadScreen={index => chooseFiles([index])}
       onUploadAll={() => chooseFiles('all')}
+      onTrimScreen={index => {
+        const slot = slotFor(shotRef.current.doc.devices[index], sizesRef.current);
+        if (slot !== null && slotsRef.current[slot]?.kind === 'video') setTrimming(slot);
+      }}
+      onCaptureScreen={
+        supportsCapture && capture?.status !== 'recording' && capture?.status !== 'saving'
+          ? index => openCaptureDialog([index])
+          : null
+      }
       onSampleScreen={sampleScreen}
       onBlankScreen={blankScreen}
       onFileScreen={(index, file) => fillScreens([index], file)}
@@ -590,6 +989,9 @@ export default function CenterStage({ toolSelector }) {
           canPlay={animated}
           onUpload={() => chooseFiles(fillTargets(selectedDevice))}
           onUploadHint={highlightUpload}
+          canCapture={supportsCapture}
+          capturing={Boolean(capture) || Boolean(captureDialog)}
+          onCapture={() => openCaptureDialog(fillTargets(selectedDevice))}
           onTogglePlay={togglePlay}
           onFullscreen={toggleFullscreen}
           onExport={() => setExporting(true)}
@@ -615,22 +1017,55 @@ export default function CenterStage({ toolSelector }) {
           hint={desktop && samplesOnly}
           onUpload={() => chooseFiles(fillTargets(selectedDevice))}
           onUploadHint={highlightUpload}
+          onCapture={supportsCapture ? () => openCaptureDialog(fillTargets(selectedDevice)) : null}
+          forwarding={Boolean(capture?.forwarding)}
+          hud={
+            capture && (
+              <CaptureHud
+                capture={capture}
+                screens={pageScreens}
+                canRecord={supportsRecord}
+                onFullPage={startPage}
+                onRecord={startRecording}
+                onDone={() => captureRef.current && freezeCapture(captureRef.current.media)}
+                onFinishPage={finishPage}
+                onCancelPage={cancelPage}
+                onStopRecording={stopRecording}
+                onAutoScroll={autoScroll}
+                onShowPage={() => captureRef.current?.media.showWindow()}
+              />
+            )
+          }
           repeat={repeat}
           length={loopLength}
           onEnded={stopAtEnd}
         />
-        {animated && (
-          <Timeline
-            time={time}
-            duration={loopLength}
-            cyclic={motionKind === 'none' || isLooping(motionKind)}
-            repeat={repeat}
+        {trimming !== null && slots[trimming]?.kind === 'video' ? (
+          <LabTimeline
+            media={slots[trimming]}
             playing={isPlaying}
+            trim={[clipRange(slots[trimming]).start, clipRange(slots[trimming]).end]}
+            onTrim={value => trimVideo(trimming, value)}
             onTogglePlay={togglePlay}
-            onReplay={replay}
-            onToggleRepeat={toggleRepeat}
-            onSeek={seek}
-          />
+          >
+            <button type="button" className="cst-trim-done" onClick={() => setTrimming(null)}>
+              Done
+            </button>
+          </LabTimeline>
+        ) : (
+          animated && (
+            <Timeline
+              time={time}
+              duration={loopLength}
+              cyclic={motionKind === 'none' || isLooping(motionKind)}
+              repeat={repeat}
+              playing={isPlaying}
+              onTogglePlay={togglePlay}
+              onReplay={replay}
+              onToggleRepeat={toggleRepeat}
+              onSeek={seek}
+            />
+          )
         )}
       </section>
 
@@ -667,6 +1102,18 @@ export default function CenterStage({ toolSelector }) {
       )}
 
       {exporting && <ExportDialog doc={doc} slots={shown} time={timeRef.current} onClose={() => setExporting(false)} />}
+      {captureDialog && capturePage && (
+        <CaptureDialog
+          dialog={captureDialog}
+          page={capturePage}
+          initialUrl={readPage()}
+          onOpen={openPageWindow}
+          onShare={sharePage}
+          onShareTab={shareTab}
+          onBack={backToAddress}
+          onClose={closeCaptureDialog}
+        />
+      )}
     </div>
   );
 }
