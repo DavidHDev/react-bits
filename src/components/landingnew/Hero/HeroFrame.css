@@ -231,17 +231,94 @@
   width: 100%;
   max-width: 1728px;
   margin: 0 auto;
-  padding: clamp(120px, 16vh, 176px) var(--lh-right) 0 var(--lh-left);
+  padding: clamp(100px, 13vh, 148px) var(--lh-right) 0 var(--lh-left);
 }
 
 .lh-top {
   display: grid;
   column-gap: 64px;
   grid-template-areas:
+    'chip chip'
     'title lede'
     'actions lede';
   grid-template-columns: minmax(0, 1fr) auto;
   animation: lh-rise 1100ms var(--ease-out) both;
+}
+.lh-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  margin-bottom: 26px;
+  padding: 0 12px 0 4px;
+  border-radius: 10px;
+  background: var(--lh-ghost);
+  box-shadow: var(--lh-ghost-highlight);
+  color: var(--lh-ink);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  grid-area: chip;
+  justify-self: start;
+  transition:
+    background var(--transition-fast),
+    transform var(--dur-press) var(--ease-out);
+}
+.lh-chip:hover {
+  background: var(--lh-ghost-hover);
+  color: var(--lh-ink);
+}
+.lh-chip:active {
+  transform: scale(0.97);
+}
+.lh-chip-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: var(--lh-primary);
+  color: var(--lh-primary-ink);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.lh-chip-roll {
+  display: inline-grid;
+  align-items: center;
+  height: 20px;
+  overflow: hidden;
+  transition: width 460ms var(--ease-out);
+}
+.lh-chip-label {
+  grid-area: 1 / 1;
+  justify-self: start;
+  line-height: 20px;
+  white-space: nowrap;
+  opacity: 0;
+  filter: blur(3px);
+  transform: translateY(10px);
+  transition:
+    opacity 360ms var(--ease-out),
+    filter 360ms var(--ease-out),
+    transform 460ms var(--ease-out);
+}
+.lh-chip-label.is-in {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+.lh-chip-label.is-out {
+  transform: translateY(-10px);
+}
+.lh-chip svg {
+  color: var(--lh-muted);
+  transition: transform 260ms var(--ease-out);
+}
+.lh-chip:hover svg {
+  transform: translateX(2px);
 }
 .lh-title {
   margin: 0;
@@ -762,10 +839,14 @@ button.lh-scrub {
   }
   .lh-top {
     grid-template-areas:
+      'chip'
       'title'
       'lede'
       'actions';
     grid-template-columns: minmax(0, 1fr);
+  }
+  .lh-chip {
+    margin-bottom: 20px;
   }
   .lh-lede {
     margin: 18px 0 0;
@@ -797,7 +878,7 @@ button.lh-scrub {
     padding-bottom: 48px;
   }
   .lh-inner {
-    padding-top: 116px;
+    padding-top: 100px;
   }
   .lh-title {
     font-size: clamp(27px, 7.4vw, 34px);
@@ -885,5 +966,9 @@ button.lh-scrub {
   .lh-window,
   .lh-art-layer {
     animation: none;
+  }
+  .lh-chip-roll,
+  .lh-chip-label {
+    transition: none;
   }
 }

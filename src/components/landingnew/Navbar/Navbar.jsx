@@ -25,7 +25,7 @@ const DOCS_MATCHES = CATEGORIES.map(category => `/${slugify(category.name)}`);
 
 const NAV_LINKS = [
   { label: 'Docs', to: '/get-started/introduction', match: DOCS_MATCHES },
-  { label: 'Tools', to: '/tools', match: '/tools' },
+  { label: 'Tools', to: '/tools', match: '/tools', tag: 'New' },
   { label: 'Pro', to: '/pro', match: '/pro' },
   { label: 'Sponsors', to: '/sponsors', match: '/sponsors' }
 ];
@@ -181,7 +181,7 @@ const Navbar = ({ showDocs }) => {
 
           <nav className="ln-navbar-links" ref={linksRef} onMouseLeave={handleLinksLeave}>
             <div className="ln-navbar-link-highlight" ref={highlightRef} />
-            {NAV_LINKS.map(({ label, to, match }) => (
+            {NAV_LINKS.map(({ label, to, match, tag }) => (
               <Link
                 key={to}
                 className={`ln-navbar-link${isActive(match) ? ' ln-navbar-link-active' : ''}`}
@@ -189,6 +189,7 @@ const Navbar = ({ showDocs }) => {
                 onMouseEnter={handleLinkHover}
               >
                 {label}
+                {tag && <span className="ln-navbar-tag">{tag}</span>}
               </Link>
             ))}
           </nav>
@@ -309,9 +310,10 @@ const Navbar = ({ showDocs }) => {
 
         {menuOpen && !showDocs && (
           <div className="ln-navbar-mobile-menu">
-            {NAV_LINKS.map(({ label, to }) => (
+            {NAV_LINKS.map(({ label, to, tag }) => (
               <Link key={to} className="ln-navbar-mobile-link" to={to} onClick={() => setMenuOpen(false)}>
                 {label}
+                {tag && <span className="ln-navbar-tag">{tag}</span>}
               </Link>
             ))}
             <a

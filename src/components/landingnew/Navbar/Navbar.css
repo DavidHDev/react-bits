@@ -138,6 +138,26 @@
   color: var(--text-primary);
 }
 
+.ln-navbar-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 17px;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  vertical-align: 1px;
+}
+
+:root[data-theme='light'] .ln-navbar-tag {
+  background: rgba(24, 24, 27, 0.07);
+}
+
 .ln-navbar-right {
   display: flex;
   align-items: center;

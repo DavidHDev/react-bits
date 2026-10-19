@@ -7,6 +7,7 @@ import useAdaptiveQuality from '../../../hooks/useAdaptiveQuality';
 import { buildStudioUrl } from '../../common/Preview/studio-url';
 import { TOTAL_COMPONENTS } from '../../../constants/Categories';
 import { LOOK, PRESET_OPTIONS, presetProps } from '../../../demo/Backgrounds/presets/GradientWaves';
+import HeroChip from './HeroChip';
 import './HeroFrame.css';
 
 const GradientWaves = lazy(() => import('../../../content/Backgrounds/GradientWaves/GradientWaves'));
@@ -626,6 +627,7 @@ const Hero = () => {
       )}
       <div className="lh-inner">
         <header className="lh-top">
+          <HeroChip />
           <h1 className="lh-title">
             Animated React components for <br />
             websites people remember.
