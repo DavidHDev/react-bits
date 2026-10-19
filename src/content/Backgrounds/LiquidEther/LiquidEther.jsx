@@ -635,6 +635,7 @@ const LiquidEther = ({
     };
     wakeRef.current = () => {
       resize();
+      render(settingsRef.current);
       wake();
     };
 
@@ -733,6 +734,7 @@ const LiquidEther = ({
 
     const resizeObserver = new ResizeObserver(() => {
       resize();
+      render(settingsRef.current);
       wake();
     });
     resizeObserver.observe(container);

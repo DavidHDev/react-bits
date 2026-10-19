@@ -382,6 +382,7 @@ class MorphEngine {
     const h = Math.max(rect.height, 1);
     this.renderer.setSize(w, h);
     this.program.uniforms.uResolution.value = [this.gl.canvas.width, this.gl.canvas.height];
+    this.renderer.render({ scene: this.mesh });
   }
 
   private syncOptions(): void {

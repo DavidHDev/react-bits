@@ -311,7 +311,8 @@ const MetaBalls = ({
     let last = 0;
     let dirty = true;
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const rect = container.getBoundingClientRect();
       const s = settingsRef.current;
       const ratio = Math.max(0.5, Math.min(s.dpr ?? window.devicePixelRatio ?? 1, 2));
@@ -322,6 +323,11 @@ const MetaBalls = ({
       canvas.height = Math.max(1, Math.round(view.height * ratio));
       gl.viewport(0, 0, canvas.width, canvas.height);
       dirty = true;
+    };
+
+    const resize = () => {
+      resizePending = true;
+      start();
     };
 
     const toWorld = (clientX: number, clientY: number) => {
@@ -567,6 +573,10 @@ const MetaBalls = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!visible) return;
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
       last = now;

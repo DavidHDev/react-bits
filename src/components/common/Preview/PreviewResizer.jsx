@@ -25,6 +25,8 @@ const PreviewResizer = ({ frame, width, onWidthChange, onResizingChange }) => {
   const drag = useRef(null);
   const hideTimer = useRef(0);
   const lastWidth = useRef(width);
+  const pendingWidth = useRef(null);
+  const resizeRaf = useRef(0);
 
   useEffect(() => {
     if (lastWidth.current === width) return undefined;
@@ -42,6 +44,7 @@ const PreviewResizer = ({ frame, width, onWidthChange, onResizingChange }) => {
   useEffect(
     () => () => {
       clearTimeout(hideTimer.current);
+      cancelAnimationFrame(resizeRaf.current);
       delete document.documentElement.dataset.previewResizing;
     },
     []
@@ -56,8 +59,18 @@ const PreviewResizer = ({ frame, width, onWidthChange, onResizingChange }) => {
     onWidthChange(rounded >= frame.fullWidth ? null : rounded);
   };
 
+  const flushWidth = () => {
+    cancelAnimationFrame(resizeRaf.current);
+    resizeRaf.current = 0;
+    if (pendingWidth.current === null) return;
+    const next = pendingWidth.current;
+    pendingWidth.current = null;
+    commit(next);
+  };
+
   const finishDrag = event => {
     if (drag.current?.id !== event.pointerId) return;
+    flushWidth();
     drag.current = null;
     setDragging(false);
     onResizingChange(false);
@@ -92,7 +105,8 @@ const PreviewResizer = ({ frame, width, onWidthChange, onResizingChange }) => {
         }}
         onPointerMove={event => {
           if (drag.current?.id !== event.pointerId) return;
-          commit(drag.current.startWidth + event.clientX - drag.current.startX);
+          pendingWidth.current = drag.current.startWidth + event.clientX - drag.current.startX;
+          if (!resizeRaf.current) resizeRaf.current = requestAnimationFrame(flushWidth);
         }}
         onPointerUp={finishDrag}
         onPointerCancel={finishDrag}

@@ -799,7 +799,9 @@ export default function CRTWarp({
       state.visible = entries.some(entry => entry.isIntersecting);
     });
     visibility.observe(container);
-    const sizes = new ResizeObserver(resize);
+    const sizes = new ResizeObserver(() => {
+      state.quiet = 0;
+    });
     sizes.observe(container);
     resize();
     window.addEventListener('pointermove', onMove, { passive: true });

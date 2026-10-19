@@ -452,7 +452,7 @@ export const Plasma = ({
       if (width * height * scale * scale > MAX_VOLUME_PIXELS) scale = Math.sqrt(MAX_VOLUME_PIXELS / (width * height));
       view.volumeWidth = Math.max(1, Math.round(width * scale));
       view.volumeHeight = Math.max(1, Math.round(height * scale));
-      if (!raf) render();
+      render();
       wake();
     };
 

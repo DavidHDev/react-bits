@@ -617,7 +617,7 @@ const SlicedWaves = ({
       state.height = height;
       canvas.width = Math.max(1, Math.round(width * ratio));
       canvas.height = Math.max(1, Math.round(height * ratio));
-      if (!raf) render(s);
+      render(s);
       wake();
     };
 

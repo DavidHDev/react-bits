@@ -566,7 +566,8 @@ const DitherVeil = ({
     const brush = { x: 0, y: 0, px: 0, py: 0 };
     const bursts: { x: number; y: number; start: number }[] = [];
 
-    const layout = () => {
+    let resizePending = false;
+    const applyLayout = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
       renderer.setSize(width, height);
@@ -576,13 +577,23 @@ const DitherVeil = ({
       const mw = Math.max(2, Math.round(width * MASK_SCALE));
       const mh = Math.max(2, Math.round(height * MASK_SCALE));
       if (mw !== masks[0].width || mh !== masks[0].height) {
-        masks.forEach(destroyMask);
+        const previous = masks;
         masks = [createMask(mw, mh), createMask(mw, mh)];
+        maskUniforms.tPrev.value = previous[0].texture;
+        maskUniforms.uStrength.value = 0;
+        maskUniforms.uFade.value = 0;
+        renderer.render({ scene: maskMesh, target: masks[0] });
+        previous.forEach(destroyMask);
       }
       if (!pointer.placed) {
         pointer.x = width / 2;
         pointer.y = height / 2;
       }
+    };
+
+    const layout = () => {
+      resizePending = true;
+      wake();
     };
 
     const updateDiffusion = (cell: number, s: Settings) => {
@@ -644,6 +655,10 @@ const DitherVeil = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyLayout();
+      }
       const s = settingsRef.current;
       if (!s) return;
       const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));

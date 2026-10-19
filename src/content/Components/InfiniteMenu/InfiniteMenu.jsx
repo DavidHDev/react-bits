@@ -761,7 +761,7 @@ const InfiniteMenu = ({
       state.height = Math.max(1, root.clientHeight);
       canvas.width = Math.round(state.width * dpr);
       canvas.height = Math.round(state.height * dpr);
-      if (!raf) render();
+      render();
       wake();
     };
 
