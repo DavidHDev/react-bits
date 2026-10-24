@@ -745,6 +745,7 @@ const FluidGlass = ({
     let time = 0;
     let idleClock = Math.random() * 20;
     let raf = 0;
+    let disposed = false;
     let last = 0;
     let tick = 0;
     let pace = 1000 / 60;
@@ -1357,6 +1358,7 @@ const FluidGlass = ({
     });
     if (document.fonts?.ready) {
       document.fonts.ready.then(() => {
+        if (disposed) return;
         textState.key = '';
         drawText();
         wake();
@@ -1370,6 +1372,7 @@ const FluidGlass = ({
     wake();
 
     return () => {
+      disposed = true;
       cancelAnimationFrame(raf);
       wakeRef.current = null;
       resizeObserver.disconnect();
