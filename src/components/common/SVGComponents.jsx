@@ -6,6 +6,44 @@ const loadGsap = () => {
   return gsapLoad;
 };
 
+let pumpkinLoad = null;
+const loadPumpkin = () => {
+  pumpkinLoad ??= import('./pumpkinMorph').then(module => module.createPumpkinMorph);
+  return pumpkinLoad;
+};
+
+const isHalloween = () => {
+  const now = new Date();
+  return now.getMonth() === 9 && now.getDate() === 31;
+};
+
+const attachPumpkinHover = (svgEl, atomEl) => {
+  let morph = null;
+  let create = null;
+  let disposed = false;
+
+  loadPumpkin().then(factory => {
+    create = factory;
+  });
+
+  const handleEnter = () => {
+    if (!morph && create && !disposed) morph = create(svgEl, atomEl);
+    morph?.enter();
+  };
+
+  const handleLeave = () => morph?.leave();
+
+  svgEl.addEventListener('mouseenter', handleEnter);
+  svgEl.addEventListener('mouseleave', handleLeave);
+
+  return () => {
+    disposed = true;
+    svgEl.removeEventListener('mouseenter', handleEnter);
+    svgEl.removeEventListener('mouseleave', handleLeave);
+    morph?.destroy();
+  };
+};
+
 export const Logo = () => {
   const svgRef = useRef(null);
   const atomRef = useRef(null);
@@ -14,6 +52,8 @@ export const Logo = () => {
     const svgEl = svgRef.current;
     const atomEl = atomRef.current;
     if (!svgEl || !atomEl) return;
+
+    if (isHalloween()) return attachPumpkinHover(svgEl, atomEl);
 
     let hovered = false;
     const animate = () =>
