@@ -578,7 +578,8 @@ const StickerPeel = ({
       image.src = src;
     };
 
-    const layout = () => {
+    let resizePending = false;
+    const applyLayout = () => {
       const s = settingsRef.current;
       view.ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
       bounds.width = Math.max(1, parent.clientWidth);
@@ -604,6 +605,11 @@ const StickerPeel = ({
         state.placed = true;
       }
       confine();
+    };
+
+    const layout = () => {
+      resizePending = true;
+      wake();
     };
 
     const reach = () => {
@@ -768,6 +774,10 @@ const StickerPeel = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyLayout();
+      }
       if (!visible || document.hidden) return;
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.001, 1 / 30) : 1 / 60;

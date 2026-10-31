@@ -288,7 +288,11 @@ const MaskedHeading: React.FC<MaskedHeadingProps> = ({
     if (!root) return undefined;
 
     let alive = true;
-    const ro = new ResizeObserver(() => sync());
+    let needsSync = false;
+    const ro = new ResizeObserver(() => {
+      needsSync = true;
+      wake();
+    });
     ro.observe(root);
     if (document.fonts?.ready) document.fonts.ready.then(() => alive && sync()).catch(() => {});
 
@@ -302,6 +306,10 @@ const MaskedHeading: React.FC<MaskedHeadingProps> = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (needsSync) {
+        needsSync = false;
+        sync();
+      }
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
       last = now;
       const s = settingsRef.current;

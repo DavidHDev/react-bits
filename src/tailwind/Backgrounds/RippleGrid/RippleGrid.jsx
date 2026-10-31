@@ -384,7 +384,7 @@ export const RippleGrid = ({
       canvas.width = Math.max(1, Math.round(width * ratio));
       canvas.height = Math.max(1, Math.round(height * ratio));
       view.ratio = canvas.width / width;
-      if (!raf) render();
+      render();
       wake();
     };
 

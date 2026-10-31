@@ -353,6 +353,7 @@ const PromptBar: React.FC<PromptBarProps> = ({
     let speed = 1;
     let pulse = 0;
     const parts: Spark[] = [];
+    let resizePending = false;
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -375,6 +376,10 @@ const PromptBar: React.FC<PromptBarProps> = ({
       });
     };
     const tick = (now: number) => {
+      if (resizePending) {
+        resizePending = false;
+        resize();
+      }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const typed = typing.current;
@@ -426,7 +431,9 @@ const PromptBar: React.FC<PromptBarProps> = ({
     };
     resize();
     for (let i = 0; i < 26; i += 1) spawn(true);
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => {
+      resizePending = true;
+    });
     ro.observe(canvas);
     raf = requestAnimationFrame(tick);
     return () => {

@@ -802,6 +802,10 @@ const LetterGlitch = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!visible || document.hidden) return;
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
@@ -886,7 +890,8 @@ const LetterGlitch = ({
       if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame);
     }
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       view.width = Math.max(1, container.clientWidth);
       view.height = Math.max(1, container.clientHeight);
@@ -895,6 +900,10 @@ const LetterGlitch = ({
       canvas.height = Math.max(1, Math.round(view.height * view.ratio));
       syncType();
       if (grid.cols) buildGrid();
+    };
+
+    const resize = () => {
+      resizePending = true;
       wake();
     };
 

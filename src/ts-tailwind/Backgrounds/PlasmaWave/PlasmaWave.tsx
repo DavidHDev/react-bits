@@ -608,7 +608,7 @@ export default function PlasmaWave({
       view.fineHeight = Math.max(1, Math.round(height * scale));
       view.coarseWidth = Math.max(1, Math.round(view.fineWidth / COARSE_RATIO));
       view.coarseHeight = Math.max(1, Math.round(view.fineHeight / COARSE_RATIO));
-      if (!raf) render();
+      render();
       wake();
     };
 

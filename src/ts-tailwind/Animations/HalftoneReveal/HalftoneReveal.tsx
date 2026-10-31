@@ -618,7 +618,8 @@ const HalftoneReveal = ({
       return [(width - w) / 2, (height - h) / 2, w, h];
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -630,13 +631,22 @@ const HalftoneReveal = ({
       const mw = Math.max(2, Math.round(width * MASK_SCALE));
       const mh = Math.max(2, Math.round(height * MASK_SCALE));
       if (mw !== masks[0].width || mh !== masks[0].height) {
-        masks.forEach(destroyMask);
+        const previous = masks;
         masks = [createMask(mw, mh), createMask(mw, mh)];
+        gl.bindFramebuffer(gl.READ_FRAMEBUFFER, previous[0].framebuffer);
+        gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, masks[0].framebuffer);
+        gl.blitFramebuffer(0, 0, previous[0].width, previous[0].height, 0, 0, mw, mh, gl.COLOR_BUFFER_BIT, gl.NEAREST);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        previous.forEach(destroyMask);
       }
       if (!pointer.placed) {
         pointer.x = width / 2;
         pointer.y = height / 2;
       }
+    };
+
+    const resize = () => {
+      resizePending = true;
       wake();
     };
 
@@ -706,6 +716,10 @@ const HalftoneReveal = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive || !visible || document.hidden) return;
       const s = settingsRef.current;
       const dt = last ? Math.min(0.05, Math.max(0, (now - last) / 1000)) : 1 / 60;

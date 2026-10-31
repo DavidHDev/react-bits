@@ -821,7 +821,8 @@ const FlexCarousel = ({
       }
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
       renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
@@ -829,11 +830,19 @@ const FlexCarousel = ({
       target.setSize(Math.max(2, Math.round(width * renderer.dpr)), Math.max(2, Math.round(height * renderer.dpr)));
       lensUniforms.tScene.value = target.texture;
       dirty = true;
+    };
+
+    const resize = () => {
+      resizePending = true;
       start();
     };
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));

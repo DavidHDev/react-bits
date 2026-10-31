@@ -578,6 +578,7 @@ const WarpText = ({
       renderer.setSize(rect.width, rect.height);
       program.uniforms.uResolution.value[0] = gl.drawingBufferWidth;
       program.uniforms.uResolution.value[1] = gl.drawingBufferHeight;
+      renderOnce();
       rasterize();
     };
 

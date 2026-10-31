@@ -365,6 +365,7 @@ const RippleDistortion = ({
     let width = 1;
     let height = 1;
 
+    let resizePending = false;
     const resize = () => {
       width = Math.max(1, mount.clientWidth);
       height = Math.max(1, mount.clientHeight);
@@ -378,7 +379,9 @@ const RippleDistortion = ({
       compositeUniforms.uTexel.value = [1 / fieldW, 1 / fieldH];
     };
 
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => {
+      resizePending = true;
+    });
     ro.observe(mount);
     resize();
 
@@ -434,6 +437,10 @@ const RippleDistortion = ({
     let previousTime = 0;
 
     const loop = (now: number) => {
+      if (resizePending) {
+        resizePending = false;
+        resize();
+      }
       raf = requestAnimationFrame(loop);
       const delta = previousTime ? Math.min(0.05, (now - previousTime) / 1000) : 0;
       previousTime = now;

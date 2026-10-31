@@ -196,6 +196,7 @@ export default function ColorBends({
       const h = container.clientHeight || 1;
       renderer.setSize(w, h, false);
       material.uniforms.uCanvas.value.set(w, h);
+      renderer.render(scene, camera);
     };
 
     handleResize();
@@ -241,7 +242,19 @@ export default function ColorBends({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [bandWidth, frequency, intensity, iterations, mouseInfluence, noise, parallax, scale, speed, transparent, warpStrength]);
+  }, [
+    bandWidth,
+    frequency,
+    intensity,
+    iterations,
+    mouseInfluence,
+    noise,
+    parallax,
+    scale,
+    speed,
+    transparent,
+    warpStrength
+  ]);
 
   useEffect(() => {
     const material = materialRef.current;

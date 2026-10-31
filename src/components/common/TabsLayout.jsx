@@ -274,6 +274,14 @@ const TabsLayout = ({ children, className }) => {
   }, []);
 
   const [activeTab, setActiveTab] = useState('preview');
+  const previewContent = useMemo(
+    () => insertCategoryPro(contentMap.PreviewTab, category),
+    [contentMap.PreviewTab, category]
+  );
+  const customizeActions = useMemo(
+    () => ({ openStudio: studioButtonProps ? handleOpenStudio : null, reset: resetProps, canReset: hasChanges }),
+    [studioButtonProps, handleOpenStudio, resetProps, hasChanges]
+  );
   const [previewWidth, setPreviewWidth] = useState(null);
   const tabsTrackRef = useRef(null);
   const sizeTrackRef = useRef(null);
@@ -505,16 +513,8 @@ const TabsLayout = ({ children, className }) => {
         style={previewWidth === null ? undefined : { '--preview-width': `${previewWidth}px` }}
       >
         {canResize && <PreviewStage frame={frame} visible={previewWidth !== null || resizing} />}
-        <CustomizeActionsContext.Provider
-          value={{
-            openStudio: studioButtonProps ? handleOpenStudio : null,
-            reset: resetProps,
-            canReset: hasChanges
-          }}
-        >
-          <PreviewStageContext.Provider value={previewStage}>
-            {insertCategoryPro(contentMap.PreviewTab, category)}
-          </PreviewStageContext.Provider>
+        <CustomizeActionsContext.Provider value={customizeActions}>
+          <PreviewStageContext.Provider value={previewStage}>{previewContent}</PreviewStageContext.Provider>
         </CustomizeActionsContext.Provider>
         {hasStageControls && frame && (
           <div

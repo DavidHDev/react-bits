@@ -330,7 +330,8 @@ const Balatro = ({
       field.energy = 0;
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const rect = container.getBoundingClientRect();
       const cssWidth = Math.max(1, rect.width);
@@ -380,6 +381,11 @@ const Balatro = ({
       field.targets = [makeTarget(fieldWidth, fieldHeight), makeTarget(fieldWidth, fieldHeight)];
     };
 
+    const resize = () => {
+      resizePending = true;
+      wake();
+    };
+
     const stir = (fromX, fromY, toX, toY, pushX, pushY, decay) => {
       if (!fieldProgram) return;
       const [read, write] = field.targets;
@@ -403,6 +409,10 @@ const Balatro = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost) return;
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);

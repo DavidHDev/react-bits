@@ -790,6 +790,7 @@ const PaperCrumple = ({
         posY.value = posY.target = clamp(posY.value, -limitY, limitY);
       }
       wake();
+      renderer.render(scene, camera);
     }
 
     function finish(instant = false) {
