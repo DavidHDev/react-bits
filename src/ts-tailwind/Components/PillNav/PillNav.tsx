@@ -229,7 +229,7 @@ const PillNav = ({
   activeHref,
   defaultActiveIndex = 0,
   onItemClick,
-  linkComponent: LinkComponent = 'a',
+  linkComponent: LinkComponentProp = 'a',
   theme = 'dark',
   layout = 'split',
   size = 'md',
@@ -250,6 +250,7 @@ const PillNav = ({
   className = '',
   style
 }: PillNavProps) => {
+  const LinkComponent = LinkComponentProp as unknown as React.FC<Record<string, unknown>>;
   const panelId = useId();
   const rootRef = useRef<HTMLElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
