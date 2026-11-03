@@ -573,7 +573,7 @@ const MaskedHeading: React.FC<MaskedHeadingProps> = ({
     return () => tweenRef.current?.kill();
   }, [reveal, trigger, duration, stagger, glyphs, renderGlyphs]);
 
-  const Tag = tag;
+  const Tag = tag as unknown as React.FC<Record<string, unknown>>;
 
   return (
     <Tag
