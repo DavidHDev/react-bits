@@ -6,6 +6,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  createElement,
   type CSSProperties,
   type ElementType,
   type MouseEvent as ReactMouseEvent,
@@ -462,11 +463,7 @@ const CardNav = ({
         </button>
       );
     }
-    return (
-      <LinkComponent href={target.href} {...props}>
-        {children}
-      </LinkComponent>
-    );
+    return createElement(LinkComponent, { href: target.href, ...props }, children);
   };
 
   const ctaButton = (target: CardNavCta, wide: boolean) =>
@@ -523,9 +520,11 @@ const CardNav = ({
           </button>
 
           {logo && (
-            <LinkComponent href={logoHref} className={LOGO} aria-label={logoAlt}>
-              {typeof logo === 'string' ? <img src={logo} alt="" draggable={false} /> : logo}
-            </LinkComponent>
+              createElement(
+              LinkComponent,
+              { href: logoHref, className: LOGO, 'aria-label': logoAlt },
+              typeof logo === 'string' ? <img src={logo} alt="" draggable={false} /> : logo
+            )
           )}
 
           {cta && !narrow && ctaButton(cta, false)}

@@ -6,6 +6,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  createElement,
   type CSSProperties,
   type ElementType,
   type FocusEvent as ReactFocusEvent,
@@ -794,11 +795,7 @@ const PillNav = ({
         </button>
       );
     }
-    return (
-      <LinkComponent href={item.href} {...props}>
-        {children}
-      </LinkComponent>
-    );
+    return createElement(LinkComponent, { href: item.href, ...props }, children);
   };
 
   const face = (item: PillNavItem) => (
@@ -822,11 +819,11 @@ const PillNav = ({
     >
       {logo && (
         <span ref={logoRef} className={[LOGO, joined ? '' : SURFACE].filter(Boolean).join(' ')}>
-          <LinkComponent href={logoHref} className={LOGO_LINK} aria-label={logoAlt} onPointerEnter={spin}>
-            <span ref={markRef} className={MARK}>
+          {createElement(LinkComponent, { href: logoHref, className: LOGO_LINK, 'aria-label': logoAlt, onPointerEnter: spin }, [
+            <span key="mark" ref={markRef} className={MARK}>
               {typeof logo === 'string' ? <img src={logo} alt="" draggable={false} /> : logo}
             </span>
-          </LinkComponent>
+          ])}
           {!joined && <span className={RIM} />}
         </span>
       )}

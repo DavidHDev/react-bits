@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, createElement } from 'react';
 import type { CSSProperties, ElementType } from 'react';
 import { gsap } from 'gsap';
 
@@ -575,21 +575,20 @@ const MaskedHeading: React.FC<MaskedHeadingProps> = ({
 
   const Tag = tag;
 
-  return (
-    <Tag
-      ref={rootRef}
-      className={`relative w-full m-0 p-0 antialiased [text-wrap:balance] ${className}`.trim()}
-      style={{
-        textAlign: align,
-        fontWeight: weight,
-        letterSpacing: `${tracking}em`,
-        lineHeight,
-        ...style
-      }}
-      {...rest}
-    >
-      <span ref={measureRef} className="text-transparent">
-        {words.map((word, i) => (
+  return createElement(Tag, {
+    ref: rootRef,
+    className: `relative w-full m-0 p-0 antialiased [text-wrap:balance] ${className}`.trim(),
+    style: {
+      textAlign: align,
+      fontWeight: weight,
+      letterSpacing: `${tracking}em`,
+      lineHeight,
+      ...style
+    },
+    ...rest
+  }, <>
+    <span ref={measureRef} className="text-transparent">
+      {words.map((word, i) => (
           <span
             key={`${word}-${i}`}
             ref={(el: HTMLSpanElement | null) => {
@@ -696,8 +695,7 @@ const MaskedHeading: React.FC<MaskedHeadingProps> = ({
           ))}
         </svg>
       ) : null}
-    </Tag>
-  );
+    </>);
 };
 
 export default MaskedHeading;
