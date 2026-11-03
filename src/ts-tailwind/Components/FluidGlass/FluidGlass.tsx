@@ -1469,6 +1469,7 @@ const FluidGlass = ({
     });
     if (document.fonts?.ready) {
       document.fonts.ready.then(() => {
+        if (wakeRef.current === null) return;
         textState.key = '';
         drawText();
         wake();
