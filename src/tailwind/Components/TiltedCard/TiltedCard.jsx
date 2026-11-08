@@ -489,6 +489,7 @@ const TiltedCard = ({
   const onKeyDown = event => {
     if (!interactive || event.target !== event.currentTarget || (event.key !== 'Enter' && event.key !== ' ')) return;
     event.preventDefault();
+    if (event.repeat) return;
     if (flippable) toggle();
     onClick?.(event);
   };

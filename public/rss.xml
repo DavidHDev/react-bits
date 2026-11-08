@@ -512,6 +512,14 @@
       <description>Keeps glyph motion and selection stable and prevents canvas flicker while resizing.</description>
     </item>
     <item>
+      <title>Updated: Tilted Card</title>
+      <link>https://reactbits.dev/components/tilted-card</link>
+      <guid isPermaLink="false">reactbits:Components/TiltedCard@2026-11-08</guid>
+      <pubDate>Sun, 08 Nov 2026 12:00:00 GMT</pubDate>
+      <category>Components</category>
+      <description>Holding Enter or Space now activates the card only once per key press.</description>
+    </item>
+    <item>
       <title>Updated: Warp Text</title>
       <link>https://reactbits.dev/text-animations/warp-text</link>
       <guid isPermaLink="false">reactbits:TextAnimations/WarpText@2026-11-08</guid>
@@ -798,14 +806,6 @@
       <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <category>Text Animations</category>
       <description>Text can now reveal by word, letter or line, rising, flipping or popping into place, and light up in an accent color as it appears. It can also play once on entering view.</description>
-    </item>
-    <item>
-      <title>Updated: Scroll Velocity</title>
-      <link>https://reactbits.dev/text-animations/scroll-velocity</link>
-      <guid isPermaLink="false">reactbits:TextAnimations/ScrollVelocity@2026-10-13</guid>
-      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
-      <category>Text Animations</category>
-      <description>Rows can lean and stretch with scroll speed, be grabbed and thrown with inertia, and alternate with outlined text. Set the text size, weight, color and spacing directly.</description>
     </item>
   </channel>
 </rss>

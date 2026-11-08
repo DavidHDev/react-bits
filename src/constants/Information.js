@@ -1835,6 +1835,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with springy motion, glare, a soft shadow and floating depth layers, and no extra dependencies. Cards now flip to a back side, work with touch and phone tilt, and come with album, gallery and ticket demos.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Holding Enter or Space now activates the card only once per key press.'
       }
     ]
   },
