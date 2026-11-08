@@ -230,12 +230,13 @@ const CardNav = ({
   defaultOpen = false,
   open: openProp,
   onOpenChange,
-  linkComponent: LinkComponent = 'a',
+  linkComponent: LinkComponentProp = 'a',
   onLinkClick,
   ariaLabel = 'Main',
   className = '',
   style
 }: CardNavProps) => {
+  const LinkComponent = LinkComponentProp as unknown as React.FC<Record<string, unknown>>;
   const contentId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
