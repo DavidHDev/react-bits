@@ -509,7 +509,7 @@ const StageView = forwardRef(function StageView(
         <div className="cst-hints">
           <button type="button" className="lab-hint" onClick={onUpload} {...hintProps}>
             <Icon icon={Upload04Icon} size={14} />
-            <span>Drop, paste or upload your own screenshot or recording</span>
+            <span>Drop, paste or upload your own screenshot, recording or JSON preset</span>
           </button>
           {onCapture && (
             <button type="button" className="lab-hint" onClick={onCapture} {...hintProps}>

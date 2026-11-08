@@ -1409,11 +1409,11 @@
     gap: 6px;
   }
 
-  .bs-export span {
+  .bs-toolbar .bs-export span {
     display: none;
   }
 
-  .bs-export {
+  .bs-toolbar .bs-export {
     width: 36px;
     padding: 0;
   }

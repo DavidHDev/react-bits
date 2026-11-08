@@ -72,15 +72,16 @@ const GIF_SIZES = [
 
 const PHASES = { loading: 'Preparing', rendering: 'Rendering' };
 
-let rememberedTab = null;
-
 const slug = name =>
   String(name || 'mark')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '') || 'mark';
 
-export default function ExportDialog({ doc, light, onClose }) {
+const chosen = (value, fallback, options) =>
+  (options ? options.some(option => option.value === value) : typeof value === typeof fallback) ? value : fallback;
+
+export default function ExportDialog({ doc, light, settings = {}, onSettings, onClose }) {
   const motion = hasMotion(doc);
   const material = materialFor(doc);
   const tabs = useMemo(
@@ -93,22 +94,35 @@ export default function ExportDialog({ doc, light, onClose }) {
     ],
     [motion]
   );
-  const [tab, setTabState] = useState(() =>
-    rememberedTab && tabs.some(item => item.value === rememberedTab) ? rememberedTab : 'image'
-  );
-  const [image, setImage] = useState({ size: 2048, background: true });
-  const [vector, setVector] = useState({ background: false });
-  const [icons, setIcons] = useState({
-    apple: doc.artboard.background.kind === 'color' ? doc.artboard.background.color1 : '#0c0b10'
-  });
-  const [video, setVideo] = useState(() => ({
-    format: 'mp4',
-    size: 1080,
-    gifSize: 480,
-    fps: 30,
-    duration: Math.min(12, Math.round(defaultDuration(doc) * 10) / 10),
-    fill: doc.artboard.background.kind === 'color' ? doc.artboard.background.color1 : light ? '#ffffff' : '#0c0b10'
+  const [tab, setTabState] = useState(() => (tabs.some(item => item.value === settings.tab) ? settings.tab : 'image'));
+  const [image, setImage] = useState(() => ({
+    size: chosen(settings.image?.size, 2048, IMAGE_SIZES),
+    background: chosen(settings.image?.background, true)
   }));
+  const [vector, setVector] = useState(() => ({ background: chosen(settings.vector?.background, false) }));
+  const [icons, setIcons] = useState(() => ({
+    apple: chosen(
+      settings.icons?.apple,
+      doc.artboard.background.kind === 'color' ? doc.artboard.background.color1 : '#0c0b10'
+    )
+  }));
+  const [video, setVideo] = useState(() => {
+    const duration = settings.video?.duration;
+    return {
+      format: chosen(settings.video?.format, 'mp4', VIDEO_FORMATS),
+      size: chosen(settings.video?.size, 1080, VIDEO_SIZES),
+      gifSize: chosen(settings.video?.gifSize, 480, GIF_SIZES),
+      fps: chosen(settings.video?.fps, 30, FRAME_RATES),
+      duration:
+        typeof duration === 'number' && duration >= 1 && duration <= 20
+          ? duration
+          : Math.min(12, Math.round(defaultDuration(doc) * 10) / 10),
+      fill: chosen(
+        settings.video?.fill,
+        doc.artboard.background.kind === 'color' ? doc.artboard.background.color1 : light ? '#ffffff' : '#0c0b10'
+      )
+    };
+  });
   const [preview, setPreview] = useState(null);
   const [svg, setSvg] = useState(null);
   const [job, setJob] = useState(null);
@@ -122,11 +136,20 @@ export default function ExportDialog({ doc, light, onClose }) {
   const snapshot = useMemo(() => doc, [doc]);
 
   const setTab = value => {
-    rememberedTab = value;
     setTabState(value);
     setResult(null);
     setError(null);
+    onSettings?.('tab', value);
   };
+
+  const choose = (group, setGroup) => patch => {
+    setGroup(value => ({ ...value, ...patch }));
+    onSettings?.(group, patch);
+  };
+  const chooseImage = choose('image', setImage);
+  const chooseVector = choose('vector', setVector);
+  const chooseIcons = choose('icons', setIcons);
+  const chooseVideo = choose('video', setVideo);
 
   useEffect(() => {
     const previous = document.activeElement;
@@ -345,13 +368,13 @@ export default function ExportDialog({ doc, light, onClose }) {
                         title="Size"
                         value={image.size}
                         options={IMAGE_SIZES}
-                        onChange={size => setImage(value => ({ ...value, size }))}
+                        onChange={size => chooseImage({ size })}
                       />
                       {doc.artboard.background.kind !== 'none' && (
                         <PreviewSwitch
                           title="Background"
                           isChecked={image.background}
-                          onChange={background => setImage(value => ({ ...value, background }))}
+                          onChange={background => chooseImage({ background })}
                         />
                       )}
                     </>
@@ -361,14 +384,14 @@ export default function ExportDialog({ doc, light, onClose }) {
                       title="Background"
                       isChecked={vector.background}
                       isDisabled={doc.artboard.background.kind === 'none'}
-                      onChange={background => setVector(value => ({ ...value, background }))}
+                      onChange={background => chooseVector({ background })}
                     />
                   )}
                   {tab === 'icons' && (
                     <PreviewColorPickerCustom
                       title="Icon background"
                       color={icons.apple}
-                      onChange={apple => setIcons(value => ({ ...value, apple }))}
+                      onChange={apple => chooseIcons({ apple })}
                     />
                   )}
                   {tab === 'video' && (
@@ -377,14 +400,14 @@ export default function ExportDialog({ doc, light, onClose }) {
                         title="Format"
                         value={video.format}
                         options={VIDEO_FORMATS}
-                        onChange={format => setVideo(value => ({ ...value, format }))}
+                        onChange={format => chooseVideo({ format })}
                       />
                       {video.format === 'gif' ? (
                         <Choice
                           title="Size"
                           value={video.gifSize}
                           options={GIF_SIZES}
-                          onChange={gifSize => setVideo(value => ({ ...value, gifSize }))}
+                          onChange={gifSize => chooseVideo({ gifSize })}
                         />
                       ) : (
                         <>
@@ -392,13 +415,13 @@ export default function ExportDialog({ doc, light, onClose }) {
                             title="Size"
                             value={video.size}
                             options={VIDEO_SIZES}
-                            onChange={size => setVideo(value => ({ ...value, size }))}
+                            onChange={size => chooseVideo({ size })}
                           />
                           <Choice
                             title="Frame rate"
                             value={video.fps}
                             options={FRAME_RATES}
-                            onChange={fps => setVideo(value => ({ ...value, fps }))}
+                            onChange={fps => chooseVideo({ fps })}
                           />
                         </>
                       )}
@@ -409,13 +432,13 @@ export default function ExportDialog({ doc, light, onClose }) {
                         step={0.1}
                         valueUnit="s"
                         value={video.duration}
-                        onChange={duration => setVideo(value => ({ ...value, duration }))}
+                        onChange={duration => chooseVideo({ duration })}
                       />
                       {doc.artboard.background.kind === 'none' && (
                         <PreviewColorPickerCustom
                           title="Background"
                           color={video.fill}
-                          onChange={fill => setVideo(value => ({ ...value, fill }))}
+                          onChange={fill => chooseVideo({ fill })}
                         />
                       )}
                     </>

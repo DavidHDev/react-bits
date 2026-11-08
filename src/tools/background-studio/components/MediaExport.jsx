@@ -7,8 +7,17 @@ import PreviewSwitch from '../../../components/common/Preview/PreviewSwitch';
 import PreviewInput from '../../../components/common/Preview/PreviewInput';
 import PreviewColorPickerCustom from '../../../components/common/Preview/PreviewColorPickerCustom';
 import { estimateVideoBytes, even, renderImage, renderVideo, videoSupport } from '../utils/render';
-import { MAX_IMAGE_SIDE, MAX_VIDEO_SIDE, SIZE_PRESETS, fitOutput, resolveLayout, sizeLabel } from '../utils/sizes';
+import {
+  MAX_IMAGE_SIDE,
+  MAX_VIDEO_SIDE,
+  SCALES,
+  SIZE_PRESETS,
+  fitOutput,
+  resolveLayout,
+  sizeLabel
+} from '../utils/sizes';
 import { canvasToBlob, downloadBlob } from '../utils/download';
+import { recall, remember } from '../utils/remember';
 import { Icon, Tip, Track } from './ui';
 
 const PAGE_FILL = { dark: '#120f17', light: '#ffffff' };
@@ -36,7 +45,7 @@ const QUALITIES = [
 
 const SIZE_OPTIONS = SIZE_PRESETS.map(preset => ({ value: preset.value, label: sizeLabel(preset) }));
 
-const remembered = {
+const DEFAULTS = {
   image: { size: 'desktop', scale: 2, format: 'png', fill: 'page', color: '#120f17', moment: 2 },
   video: {
     size: 'desktop',
@@ -51,6 +60,36 @@ const remembered = {
     start: 2
   },
   custom: { width: 1600, height: 900 }
+};
+
+const CHOICES = {
+  size: SIZE_PRESETS.map(preset => preset.value),
+  scale: SCALES,
+  fill: FILLS.map(item => item.value),
+  fps: RATES.map(item => item.value),
+  quality: QUALITIES.map(item => item.value)
+};
+
+const FORMATS = { image: IMAGE_FORMATS.map(item => item.value), video: ['mp4', 'webm'] };
+
+const LIMITS = { duration: { min: 2, max: 60 }, start: { min: 0, max: 20 }, moment: { min: 0, max: 20 } };
+
+const accepts = (kind, name, value, fallback) => {
+  if (typeof value !== typeof fallback || (typeof value === 'number' && !Number.isFinite(value))) return false;
+  const choices = name === 'format' ? FORMATS[kind] : CHOICES[name];
+  if (choices) return choices.includes(value);
+  if (LIMITS[name]) return value >= LIMITS[name].min && value <= LIMITS[name].max;
+  return typeof value !== 'number' || value >= 0;
+};
+
+const restore = kind => {
+  const saved = recall(kind) || {};
+  return Object.fromEntries(
+    Object.entries(DEFAULTS[kind]).map(([name, fallback]) => [
+      name,
+      accepts(kind, name, saved[name], fallback) ? saved[name] : fallback
+    ])
+  );
 };
 
 const formatBytes = bytes =>
@@ -81,8 +120,8 @@ const PHASES = {
 export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
   const { entry, renderProps, light } = state;
   const video = kind === 'video';
-  const [options, setOptions] = useState(() => ({ ...remembered[kind] }));
-  const [custom, setCustom] = useState(() => ({ ...remembered.custom }));
+  const [options, setOptions] = useState(() => restore(kind));
+  const [custom, setCustom] = useState(() => restore('custom'));
   const [support, setSupport] = useState(null);
   const [preview, setPreview] = useState(null);
   const [previewing, setPreviewing] = useState(false);
@@ -93,21 +132,16 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
   const previewRef = useRef(null);
   const theme = light ? 'light' : 'dark';
 
-  const set = (name, value) =>
-    setOptions(previous => {
-      const next = { ...previous, [name]: value };
-      remembered[kind] = next;
-      return next;
-    });
+  const set = (name, value) => setOptions(previous => ({ ...previous, [name]: value }));
 
   const setCustomSide = (name, raw) => {
     const value = Number(String(raw).replace(/[^0-9]/g, ''));
-    setCustom(previous => {
-      const next = { ...previous, [name]: value };
-      remembered.custom = next;
-      return next;
-    });
+    setCustom(previous => ({ ...previous, [name]: value }));
   };
+
+  useEffect(() => remember(kind, options), [kind, options]);
+
+  useEffect(() => remember('custom', custom), [custom]);
 
   const layout = useMemo(() => resolveLayout(options.size, custom, stageSize), [options.size, custom, stageSize]);
   const output = useMemo(
@@ -128,9 +162,7 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
       setSupport(result);
       setOptions(previous => {
         if (result[previous.format] || !(result.mp4 || result.webm)) return previous;
-        const next = { ...previous, format: result.mp4 ? 'mp4' : 'webm' };
-        remembered.video = next;
-        return next;
+        return { ...previous, format: result.mp4 ? 'mp4' : 'webm' };
       });
     });
     return () => {
@@ -341,7 +373,7 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
             <Choice
               title="Scale"
               value={options.scale}
-              options={[1, 2, 3].map(value => ({ value, label: `${value}x` }))}
+              options={SCALES.map(value => ({ value, label: `${value}x` }))}
               onChange={value => set('scale', value)}
             />
             <Choice title="Format" value={format} options={formats} onChange={value => set('format', value)} />
@@ -350,8 +382,7 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
               <>
                 <PreviewSlider
                   title="Length"
-                  min={2}
-                  max={60}
+                  {...LIMITS.duration}
                   step={1}
                   value={options.duration}
                   valueUnit="s"
@@ -366,8 +397,7 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
                 />
                 <PreviewSlider
                   title="Start at"
-                  min={0}
-                  max={20}
+                  {...LIMITS.start}
                   step={0.5}
                   value={options.start}
                   valueUnit="s"
@@ -395,8 +425,7 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
                 )}
                 <PreviewSlider
                   title="Capture at"
-                  min={0}
-                  max={20}
+                  {...LIMITS.moment}
                   step={0.1}
                   value={options.moment}
                   valueUnit="s"

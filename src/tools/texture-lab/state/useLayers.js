@@ -72,11 +72,11 @@ const reducer = (state, action) => {
   }
 };
 
-export function useLayers(initial = []) {
-  const [state, dispatch] = useReducer(reducer, null, () => ({
-    layers: initial,
-    selected: initial[initial.length - 1]?.id || null,
-    look: null,
+export function useLayers(initial = {}) {
+  const [state, dispatch] = useReducer(reducer, initial, ({ layers = [], look = null, selected }) => ({
+    layers,
+    selected: selected === undefined ? layers[layers.length - 1]?.id || null : selected,
+    look,
     past: [],
     future: [],
     key: null,

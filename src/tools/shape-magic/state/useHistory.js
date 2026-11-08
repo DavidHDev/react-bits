@@ -22,6 +22,13 @@ const reducer = (state, action) => {
       const value = typeof action.value === 'function' ? action.value(state.present) : action.value;
       return value === state.present ? state : { ...state, present: value, key: null };
     }
+    case 'patch':
+      return {
+        ...state,
+        past: state.past.map(doc => action.update(doc)),
+        present: action.update(state.present),
+        future: state.future.map(doc => action.update(doc))
+      };
     case 'undo': {
       if (!state.past.length) return state;
       const previous = state.past[state.past.length - 1];
@@ -53,12 +60,14 @@ export function useHistory(initial) {
   }));
   const set = useCallback((update, key) => dispatch({ type: 'set', update, key }), []);
   const replace = useCallback(value => dispatch({ type: 'replace', value }), []);
+  const patch = useCallback(update => dispatch({ type: 'patch', update }), []);
   const undo = useCallback(() => dispatch({ type: 'undo' }), []);
   const redo = useCallback(() => dispatch({ type: 'redo' }), []);
   return {
     doc: state.present,
     set,
     replace,
+    patch,
     undo,
     redo,
     canUndo: state.past.length > 0,

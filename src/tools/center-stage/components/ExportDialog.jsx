@@ -8,6 +8,7 @@ import {
   GifIcon,
   Image01Icon,
   Link04Icon,
+  Upload04Icon,
   Video01Icon
 } from '@hugeicons/core-free-icons';
 import PreviewSelect from '../../../components/common/Preview/PreviewSelect';
@@ -47,12 +48,50 @@ const SIZES = [
 ];
 
 const GIF_SIZES = [480, 640, 800, 1080];
+const VIDEO_RATES = [24, 30, 60];
+const GIF_RATES = [12, 15, 20, 25];
 
-let rememberedTab = null;
-const remembered = {
+const DEFAULTS = {
   image: { format: 'png', size: 3840, quality: 0.92 },
   video: { size: 3840, fps: 60, format: 'mp4', quality: 'high', duration: null },
   gif: { size: 800, fps: 20, duration: null }
+};
+
+const TAB_VALUES = TABS.map(item => item.value);
+const FORMAT_VALUES = IMAGE_FORMATS.map(item => item.value);
+const QUALITY_VALUES = QUALITIES.map(item => item.value);
+const SIZE_VALUES = SIZES.map(item => item.value);
+
+const pick = (value, options, fallback) => (options.includes(value) ? value : fallback);
+
+const within = (value, min, max, fallback) =>
+  typeof value === 'number' && Number.isFinite(value) ? Math.min(Math.max(value, min), max) : fallback;
+
+const restoreTab = settings => pick(settings?.tab, TAB_VALUES, 'image');
+
+const restoreOptions = settings => {
+  const image = settings?.image || {};
+  const video = settings?.video || {};
+  const gif = settings?.gif || {};
+  return {
+    image: {
+      format: pick(image.format, FORMAT_VALUES, DEFAULTS.image.format),
+      size: pick(image.size, SIZE_VALUES, DEFAULTS.image.size),
+      quality: within(image.quality, 0.5, 1, DEFAULTS.image.quality)
+    },
+    video: {
+      size: pick(video.size, SIZE_VALUES, DEFAULTS.video.size),
+      fps: pick(video.fps, VIDEO_RATES, DEFAULTS.video.fps),
+      format: pick(video.format, ['mp4', 'webm'], DEFAULTS.video.format),
+      quality: pick(video.quality, QUALITY_VALUES, DEFAULTS.video.quality),
+      duration: within(video.duration, 1, 30, DEFAULTS.video.duration)
+    },
+    gif: {
+      size: pick(gif.size, GIF_SIZES, DEFAULTS.gif.size),
+      fps: pick(gif.fps, GIF_RATES, DEFAULTS.gif.fps),
+      duration: within(gif.duration, 1, 12, DEFAULTS.gif.duration)
+    }
+  };
 };
 
 const formatBytes = bytes =>
@@ -65,14 +104,19 @@ const slug = doc =>
     .replace(/^-+|-+$/g, '')
     .slice(0, 40) || 'center-stage';
 
-export default function ExportDialog({ doc, slots, background, time: openedAt, onClose }) {
+export default function ExportDialog({
+  doc,
+  slots,
+  background,
+  time: openedAt,
+  settings,
+  onSettings,
+  onImport,
+  onClose
+}) {
   const [time] = useState(openedAt);
-  const [tab, setTabState] = useState(rememberedTab || 'image');
-  const [options, setOptions] = useState(() => ({
-    image: { ...remembered.image },
-    video: { ...remembered.video },
-    gif: { ...remembered.gif }
-  }));
+  const [tab, setTabState] = useState(() => restoreTab(settings));
+  const [options, setOptions] = useState(() => restoreOptions(settings));
   const [preview, setPreview] = useState(null);
   const [job, setJob] = useState(null);
   const [result, setResult] = useState(null);
@@ -80,6 +124,7 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
   const [support, setSupport] = useState(null);
   const jobRef = useRef(null);
   const dialogRef = useRef(null);
+  const importRef = useRef(null);
   const busy = Boolean(job);
   const ratio = aspectRatio(doc.aspect);
   const moving = (doc.motion?.kind || 'none') !== 'none';
@@ -93,18 +138,17 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
   const transparent = doc.background?.kind === 'transparent';
 
   const setTab = value => {
-    rememberedTab = value;
     setTabState(value);
     setResult(null);
     setError(null);
+    onSettings?.({ tab: value, ...options });
   };
 
-  const set = (group, name, value) =>
-    setOptions(previous => {
-      const next = { ...previous, [group]: { ...previous[group], [name]: value } };
-      remembered[group] = next[group];
-      return next;
-    });
+  const set = (group, name, value) => {
+    const next = { ...options, [group]: { ...options[group], [name]: value } };
+    setOptions(next);
+    onSettings?.({ tab, ...next });
+  };
 
   useEffect(() => {
     const previous = document.activeElement;
@@ -380,7 +424,7 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
                         <Choice
                           title="Frame rate"
                           value={video.fps}
-                          options={[24, 30, 60].map(value => ({ value, label: String(value) }))}
+                          options={VIDEO_RATES.map(value => ({ value, label: String(value) }))}
                           onChange={value => set('video', 'fps', value)}
                         />
                         <Choice
@@ -414,7 +458,7 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
                         <Choice
                           title="Frame rate"
                           value={gif.fps}
-                          options={[12, 15, 20, 25].map(value => ({ value, label: String(value) }))}
+                          options={GIF_RATES.map(value => ({ value, label: String(value) }))}
                           onChange={value => set('gif', 'fps', value)}
                         />
                         <PreviewSlider
@@ -436,7 +480,7 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
                 {tab === 'link' && (
                   <p>
                     The link keeps every setting of this shot. Screens stay on your computer, so add them again after
-                    opening it.
+                    opening it. To load a saved JSON, paste or drop it anywhere in Center Stage, or import the file.
                   </p>
                 )}
                 {tab === 'image' && transparent && image.format === 'jpeg' && (
@@ -494,6 +538,31 @@ export default function ExportDialog({ doc, slots, background, time: openedAt, o
                           <Icon icon={Download04Icon} />
                         </button>
                       </Tip>
+                      {onImport && (
+                        <>
+                          <Tip label="Import JSON" placement="top">
+                            <button
+                              type="button"
+                              className="docs-tool bs-xp-square"
+                              aria-label="Import JSON"
+                              onClick={() => importRef.current?.click()}
+                            >
+                              <Icon icon={Upload04Icon} />
+                            </button>
+                          </Tip>
+                          <input
+                            ref={importRef}
+                            type="file"
+                            accept=".json,application/json"
+                            hidden
+                            onChange={event => {
+                              const file = event.target.files?.[0];
+                              event.target.value = '';
+                              if (file) onImport(file);
+                            }}
+                          />
+                        </>
+                      )}
                       <button
                         type="button"
                         className="bs-export bs-wide-button"

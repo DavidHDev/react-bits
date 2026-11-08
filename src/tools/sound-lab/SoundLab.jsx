@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Track } from '../background-studio/components/ui';
-import { SOUNDS, SOUNDS_BY_ID } from './sounds/catalog';
+import { readSession, useSessionSave } from '../session';
+import { CATEGORIES, LIBRARIES, SOUNDS, SOUNDS_BY_ID } from './sounds/catalog';
 import { createPlayer } from './engine/player';
 import { CategoryFilter, LibraryScroll, LibrarySwitch, SoundList, SoundSearch } from './components/Library';
 import { visibleSounds } from './sounds/browse';
@@ -9,7 +10,8 @@ import Timeline from './components/Timeline';
 import Panel from './components/Panel';
 import { EFFECT_KEYS, PLAYBACK, TUNE } from './sounds/controls';
 import ExportDialog from './components/ExportDialog';
-import { readSharedSound } from './sounds/share';
+import { sanitizeExport } from './export/settings';
+import { readSharedSound, sanitizeTune } from './sounds/share';
 import '../background-studio/studio.css';
 import '../texture-lab/lab.css';
 import './snd.css';
@@ -17,6 +19,7 @@ import './snd.css';
 const WIDE_QUERY = '(min-width: 1280px)';
 const DESKTOP_QUERY = '(min-width: 1024px)';
 const STORE = 'sound-lab';
+const TEXT_LIMIT = 2000;
 
 const SIDE_TABS = [
   { value: 'sounds', label: 'Sounds' },
@@ -73,6 +76,46 @@ const withSettings = (tunes, id, settings) => {
   return next;
 };
 
+const isObject = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+
+const restoreText = value => (typeof value === 'string' ? value.slice(0, TEXT_LIMIT) : '');
+
+const restoreTunes = raw =>
+  Object.fromEntries(
+    Object.entries(isObject(raw) ? raw : {})
+      .filter(([id]) => SOUNDS_BY_ID[id])
+      .map(([id, settings]) => [id, sanitizeTune(settings)])
+      .filter(([, settings]) => Object.keys(settings).length)
+  );
+
+const restore = shared => {
+  const saved = readSession(STORE);
+  const session = isObject(saved) ? saved : null;
+  const sound = [shared?.id, session?.sound, read('sound', 'pebble')].find(id => SOUNDS_BY_ID[id]) || 'pebble';
+  const library = shared
+    ? SOUNDS_BY_ID[shared.id].library
+    : [session?.library, read('library', 'interface')].find(id => LIBRARIES.some(item => item.id === id)) ||
+      'interface';
+  const category =
+    !shared && CATEGORIES.some(item => item.id === session?.category && item.library === library)
+      ? session.category
+      : 'all';
+  const query = shared ? '' : restoreText(session?.query);
+  const tunes = restoreTunes(isObject(session?.tunes) ? session.tunes : read('tunes', {}));
+  const shown = visibleSounds(library, category, query).some(item => item.id === sound);
+  return {
+    sound,
+    library,
+    category,
+    query,
+    tunes: shared ? withSettings(tunes, shared.id, shared.tune) : tunes,
+    tab: SIDE_TABS.some(item => item.value === session?.tab) ? session.tab : 'sounds',
+    text: restoreText(session?.text),
+    exportSettings: sanitizeExport(session?.export),
+    reveal: shared ? shared.id : session && shown ? sound : null
+  };
+};
+
 export default function SoundLab({ toolSelector }) {
   const wide = useMediaQuery(WIDE_QUERY);
   const desktop = useMediaQuery(DESKTOP_QUERY);
@@ -80,25 +123,19 @@ export default function SoundLab({ toolSelector }) {
   if (!playerRef.current) playerRef.current = createPlayer();
   const player = playerRef.current;
   const [shared] = useState(readSharedSound);
-  const [reveal, setReveal] = useState(() => shared?.id || null);
-  const [library, setLibraryState] = useState(() =>
-    shared ? SOUNDS_BY_ID[shared.id].library : read('library', 'interface')
-  );
-  const [category, setCategory] = useState('all');
-  const [query, setQuery] = useState('');
-  const [selectedId, setSelectedId] = useState(() => {
-    if (shared) return shared.id;
-    const stored = read('sound', 'pebble');
-    return SOUNDS_BY_ID[stored] ? stored : 'pebble';
-  });
-  const [tunes, setTunes] = useState(() => {
-    const stored = read('tunes', {});
-    return shared ? withSettings(stored, shared.id, shared.tune) : stored;
-  });
+  const [initial] = useState(() => restore(shared));
+  const [reveal, setReveal] = useState(initial.reveal);
+  const [library, setLibraryState] = useState(initial.library);
+  const [category, setCategory] = useState(initial.category);
+  const [query, setQuery] = useState(initial.query);
+  const [selectedId, setSelectedId] = useState(initial.sound);
+  const [tunes, setTunes] = useState(initial.tunes);
   const [infos, setInfos] = useState({});
   const [loop, setLoop] = useState(() => read('loop', false));
   const [exporting, setExporting] = useState(null);
-  const [sideTab, setSideTab] = useState('sounds');
+  const [exportSettings, setExportSettings] = useState(initial.exportSettings);
+  const [sideTab, setSideTab] = useState(initial.tab);
+  const [text, setText] = useState(initial.text);
   const [playing, setPlaying] = useState(null);
   const tunesRef = useRef(tunes);
   tunesRef.current = tunes;
@@ -170,6 +207,22 @@ export default function SoundLab({ toolSelector }) {
   useEffect(() => {
     write('tunes', tunes);
   }, [tunes]);
+
+  const snapshot = useMemo(
+    () => ({
+      sound: selectedId,
+      library,
+      category,
+      query: query.slice(0, TEXT_LIMIT),
+      tunes,
+      tab: sideTab,
+      text: text.slice(0, TEXT_LIMIT),
+      export: exportSettings
+    }),
+    [selectedId, library, category, query, tunes, sideTab, text, exportSettings]
+  );
+
+  useSessionSave(STORE, snapshot);
 
   useEffect(() => {
     if (!shared) return;
@@ -325,6 +378,8 @@ export default function SoundLab({ toolSelector }) {
       <Stage
         sound={sound}
         player={player}
+        text={text}
+        onText={setText}
         onPlay={id => play(id)}
         onType={type}
         onExport={tab => setExporting(tab || 'last')}
@@ -374,6 +429,8 @@ export default function SoundLab({ toolSelector }) {
           tune={tune}
           info={infos[selectedId]}
           player={player}
+          settings={exportSettings}
+          onSettings={setExportSettings}
           onPlay={id => play(id)}
           onClose={() => setExporting(null)}
         />

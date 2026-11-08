@@ -67,3 +67,6 @@ export function decodeLook(text) {
 }
 
 export const readSharedLook = () => (window.location.hash ? decodeLook(window.location.hash) : null);
+
+export const isStyleFile = file =>
+  Boolean(file) && (file.type === 'application/json' || /\.json$/i.test(file.name || ''));

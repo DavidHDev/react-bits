@@ -5,19 +5,19 @@ import { useStudioState } from './hooks/useStudioState';
 import { useStageFrame } from './hooks/useStageFrame';
 import { sameValue, serializeValue, writeDocument } from './utils/params';
 import { canvasToBlob, downloadBlob } from './utils/download';
+import { oneOf, recall, remember } from './utils/remember';
 import BackgroundList from './components/BackgroundList';
 import StageToolbar from './components/StageToolbar';
 import Stage from './components/Stage';
 import Panel from './components/Panel';
 import Picker from './components/Picker';
 import ExportDialog from './components/ExportDialog';
+import SessionSave from './components/SessionSave';
 import './studio.css';
 
 const WIDE_QUERY = '(min-width: 1280px)';
 const DESKTOP_QUERY = '(min-width: 1024px)';
 const PAGE_FILL = { dark: '#120f17', light: '#ffffff' };
-
-let rememberedMode = 'none';
 
 const useMediaQuery = query => {
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
@@ -44,7 +44,7 @@ export default function BackgroundStudio({ toolSelector }) {
   const { entry, light } = state;
   const wide = useMediaQuery(WIDE_QUERY);
   const desktop = useMediaQuery(DESKTOP_QUERY);
-  const [mode, setModeState] = useState(rememberedMode);
+  const [mode, setModeState] = useState(() => oneOf(recall('mode'), DEMO_MODES, 'none'));
   const [narrow, setNarrow] = useState(false);
   const [exporting, setExporting] = useState(null);
   const [stageSize, setStageSize] = useState(null);
@@ -55,7 +55,7 @@ export default function BackgroundStudio({ toolSelector }) {
   const frame = useStageFrame({ entry, renderProps: state.renderProps, ready: state.ready, light, onKeyDown });
 
   const setMode = useCallback(value => {
-    rememberedMode = value;
+    remember('mode', value);
     setModeState(value);
   }, []);
 
@@ -205,6 +205,8 @@ export default function BackgroundStudio({ toolSelector }) {
       {exporting && (
         <ExportDialog initialTab={exporting} state={state} stageSize={stageSize} onClose={() => setExporting(null)} />
       )}
+
+      <SessionSave studio={state.session} />
     </div>
   );
 }

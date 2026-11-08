@@ -10,6 +10,7 @@ import { morphPhase } from './state/motion';
 import { useFillThumbs, useStaticThumbs } from './state/useThumbnails';
 import { useMarkMask } from './state/useMarkMask';
 import { useMaterialFrame } from './state/useMaterialFrame';
+import { readFile, readSaved, useShapeSession } from './state/persist';
 import {
   DEFAULT_EFFECTS,
   createDoc,
@@ -89,14 +90,6 @@ const writeSnapping = on => {
   }
 };
 
-const readFile = file =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
-
 const isLogoFile = file =>
   /^image\/(svg\+xml|png|jpeg|webp|gif)$/.test(file?.type || '') || /\.(svg|png|jpe?g|webp)$/i.test(file?.name || '');
 
@@ -104,6 +97,11 @@ const isTyping = target =>
   Boolean(target?.closest?.('input, textarea, select, [contenteditable="true"], [role="dialog"]'));
 
 const DEFAULT_MATERIAL = 'fx:thermal';
+
+const freshDoc = light => ({
+  ...createDoc(MARKS_BY_ID[DEFAULT_MARK], { light }),
+  material: { id: DEFAULT_MATERIAL, props: {}, preset: DEFAULT_MATERIAL }
+});
 
 const markFromPreset = preset => ({ ...createDoc(preset).mark, preset: preset.id });
 
@@ -122,11 +120,9 @@ export default function ShapeMagic({ toolSelector }) {
   const wide = useMediaQuery(WIDE_QUERY);
   const desktop = useMediaQuery(DESKTOP_QUERY);
   const light = useLightTheme();
-  const history = useHistory(() => ({
-    ...createDoc(MARKS_BY_ID[DEFAULT_MARK], { light }),
-    material: { id: DEFAULT_MATERIAL, props: {}, preset: DEFAULT_MATERIAL }
-  }));
-  const { doc, set, replace } = history;
+  const [session] = useState(() => readSaved(freshDoc(light)));
+  const history = useHistory(() => session.doc);
+  const { doc, set, replace, patch } = history;
   const [selection, setSelection] = useState([]);
   const [railTab, setRailTab] = useState('marks');
   const [mobileTab, setMobileTab] = useState('marks');
@@ -137,7 +133,8 @@ export default function ShapeMagic({ toolSelector }) {
   const [playing, setPlaying] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [dropping, setDropping] = useState(false);
-  const [userLogo, setUserLogo] = useState(false);
+  const [userLogo, setUserLogo] = useState(session.logo);
+  const [exportSettings, setExportSettings] = useState(session.exportSettings);
   const [snapping, setSnapping] = useState(readSnapping);
   const [focusText, setFocusText] = useState(0);
   const canvasRef = useRef(null);
@@ -154,8 +151,12 @@ export default function ShapeMagic({ toolSelector }) {
   const selectionRef = useRef(selection);
   selectionRef.current = selection;
 
+  useShapeSession({ session, doc, patch, exportSettings, logo: userLogo });
+
   useEffect(() => {
-    replace(current => (current.fill?.ink ? { ...current, fill: { ...current.fill, ...inkFill(light) } } : current));
+    replace(current =>
+      current.fill?.ink ? { ...current, fill: { ...current.fill, color1: inkFill(light).color1 } } : current
+    );
   }, [light, replace]);
 
   const materialsVisible = wide ? railTab === 'materials' : mobileTab === 'materials';
@@ -853,6 +854,15 @@ export default function ShapeMagic({ toolSelector }) {
     });
   }, []);
 
+  const chooseExport = useCallback(
+    (group, value) =>
+      setExportSettings(previous => ({
+        ...previous,
+        [group]: value && typeof value === 'object' ? { ...previous[group], ...value } : value
+      })),
+    []
+  );
+
   const canPlay = looping;
 
   const keys = useRef(null);
@@ -1094,7 +1104,15 @@ export default function ShapeMagic({ toolSelector }) {
         </section>
       )}
 
-      {exporting && <ExportDialog doc={doc} light={light} onClose={() => setExporting(false)} />}
+      {exporting && (
+        <ExportDialog
+          doc={doc}
+          light={light}
+          settings={exportSettings}
+          onSettings={chooseExport}
+          onClose={() => setExporting(false)}
+        />
+      )}
     </div>
   );
 }

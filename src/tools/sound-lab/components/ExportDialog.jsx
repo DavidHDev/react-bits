@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Cancel01Icon, Download04Icon, Link04Icon, MusicNote01Icon, SourceCodeIcon } from '@hugeicons/core-free-icons';
+import { Cancel01Icon, Download04Icon, Link04Icon } from '@hugeicons/core-free-icons';
 import { toast } from 'sonner';
 import { Icon, Track } from '../../background-studio/components/ui';
 import { downloadBlob } from '../../background-studio/utils/download';
@@ -13,43 +13,10 @@ import engineTs from '../../../sounds/ts/react-bits-sound.ts?raw';
 import engineJs from '../../../sounds/js/react-bits-sound.js?raw';
 import { canEncode, encodeAudio } from '../export/encode';
 import { soundSource, usageSource } from '../export/code';
+import { BITRATES, CHANNELS, DEPTHS, FORMATS, RATES, TABS, fitRate } from '../export/settings';
 import { shareRows, shareUrl } from '../sounds/share';
 import Orb from './Orb';
 import { formatSeconds } from '../sounds/browse';
-
-const TABS = [
-  { value: 'code', label: 'Code', icon: SourceCodeIcon },
-  { value: 'audio', label: 'Audio', icon: MusicNote01Icon },
-  { value: 'link', label: 'Link', icon: Link04Icon }
-];
-
-const FORMATS = [
-  { value: 'wav', label: 'WAV' },
-  { value: 'mp3', label: 'MP3' },
-  { value: 'ogg', label: 'OGG' }
-];
-
-const DEPTHS = [
-  { value: 16, label: '16-bit' },
-  { value: 24, label: '24-bit' },
-  { value: 32, label: '32-bit' }
-];
-
-const BITRATES = {
-  mp3: [128, 192, 320],
-  ogg: [96, 128, 160]
-};
-
-const RATES = [
-  { value: 44100, label: '44.1k', long: '44.1 kHz' },
-  { value: 48000, label: '48k', long: '48 kHz' },
-  { value: 96000, label: '96k', long: '96 kHz' }
-];
-
-const CHANNELS = [
-  { value: 2, label: 'Stereo' },
-  { value: 1, label: 'Mono' }
-];
 
 const NOTES = {
   wav: 'Lossless. 24-bit at 48 kHz is the standard for video editors and DAWs.',
@@ -70,8 +37,6 @@ const Choice = ({ title, value, options, onChange }) => (
 
 const formatBytes = bytes =>
   bytes > 1e6 ? `${(bytes / 1e6).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1e3))} KB`;
-
-let remembered = { tab: 'code', format: 'wav', depth: 24, bitrate: { mp3: 320, ogg: 160 }, rate: 48000, channels: 2 };
 
 function CodeTab({ sound, tune }) {
   const { languagePreset } = useOptions();
@@ -113,8 +78,7 @@ const OrbWell = ({ sound, info, player, onPlay }) => (
   </div>
 );
 
-function AudioTab({ sound, tune, info, player, onPlay, onBusyChange }) {
-  const [settings, setSettings] = useState(remembered);
+function AudioTab({ sound, tune, info, player, settings, onSettings, onPlay, onBusyChange }) {
   const [support, setSupport] = useState({ wav: true, mp3: true, ogg: true });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
@@ -129,14 +93,7 @@ function AudioTab({ sound, tune, info, player, onPlay, onBusyChange }) {
     };
   }, []);
 
-  const set = (key, value) =>
-    setSettings(previous => {
-      const next = { ...previous, [key]: value };
-      if (next.format === 'ogg') next.rate = 48000;
-      if (next.format === 'mp3' && next.rate === 96000) next.rate = 48000;
-      remembered = { ...remembered, ...next };
-      return next;
-    });
+  const set = (key, value) => onSettings(previous => fitRate({ ...previous, [key]: value }));
 
   const { format, depth, rate, channels } = settings;
   const bitrate = settings.bitrate[format] || 320;
@@ -272,8 +229,8 @@ function LinkTab({ sound, tune, info, player, onPlay }) {
   );
 }
 
-export default function ExportDialog({ initialTab, sound, tune, info, player, onPlay, onClose }) {
-  const [tab, setTabState] = useState(() => (initialTab && initialTab !== 'last' ? initialTab : remembered.tab));
+export default function ExportDialog({ initialTab, sound, tune, info, player, settings, onSettings, onPlay, onClose }) {
+  const [tab, setTabState] = useState(() => (initialTab && initialTab !== 'last' ? initialTab : settings.tab));
   const [busy, setBusy] = useState(false);
   const dialogRef = useRef(null);
   const closeRef = useRef(onClose);
@@ -282,7 +239,7 @@ export default function ExportDialog({ initialTab, sound, tune, info, player, on
   busyRef.current = busy;
 
   const setTab = value => {
-    remembered = { ...remembered, tab: value };
+    onSettings(previous => ({ ...previous, tab: value }));
     setTabState(value);
   };
 
@@ -343,7 +300,16 @@ export default function ExportDialog({ initialTab, sound, tune, info, player, on
           ) : tab === 'link' ? (
             <LinkTab sound={sound} tune={tune} info={info} player={player} onPlay={onPlay} />
           ) : (
-            <AudioTab sound={sound} tune={tune} info={info} player={player} onPlay={onPlay} onBusyChange={setBusy} />
+            <AudioTab
+              sound={sound}
+              tune={tune}
+              info={info}
+              player={player}
+              settings={settings}
+              onSettings={onSettings}
+              onPlay={onPlay}
+              onBusyChange={setBusy}
+            />
           )}
         </div>
       </div>

@@ -9,6 +9,7 @@ import { buildPrompt, getActiveCode } from '../../../utils/aiPrompt';
 import { getDefaultProps } from '../backgrounds';
 import { loadCode } from '../utils/catalog';
 import { sameValue } from '../utils/params';
+import { oneOf, recall, remember } from '../utils/remember';
 import { Track } from './ui';
 
 const PLACEMENTS = [
@@ -21,16 +22,14 @@ const PAGE_WRAPPER = "<div style={{ position: 'fixed', inset: 0, zIndex: -1 }}>"
 
 const noop = () => {};
 
-let rememberedPlacement = 'section';
-
 export default function CodeExport({ state }) {
   const { entry, props } = state;
   const [code, setCode] = useState(undefined);
-  const [placement, setPlacementState] = useState(rememberedPlacement);
+  const [placement, setPlacementState] = useState(() => oneOf(recall('placement'), PLACEMENTS, 'section'));
   const { languagePreset, stylePreset } = useOptions();
 
   const setPlacement = value => {
-    rememberedPlacement = value;
+    remember('placement', value);
     setPlacementState(value);
   };
 

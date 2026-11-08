@@ -480,6 +480,17 @@
   }
 }
 
+@media (max-width: 640px) {
+  .snd-export span {
+    display: none;
+  }
+
+  .snd-export.bs-export {
+    width: 36px;
+    padding: 0;
+  }
+}
+
 @container (max-width: 640px) {
   .snd-title {
     font-size: 22px;

@@ -2,8 +2,23 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Track } from '../background-studio/components/ui';
 import LabTimeline from '../texture-lab/components/LabTimeline';
+import { useSessionSave } from '../session';
 import { useShot } from './state/useShot';
 import { useThumbnails } from './state/useThumbnails';
+import {
+  TOOL,
+  dropScreen,
+  firstFree,
+  fromSession,
+  importedShot,
+  isShotFile,
+  keepScreens,
+  keepable,
+  readSaved,
+  reopenScreen,
+  screenList,
+  storeScreen
+} from './state/restore';
 import { DEFAULT_PRESET, PRESETS, PRESETS_BY_ID } from './presets/index';
 import {
   SAMPLES,
@@ -18,7 +33,7 @@ import {
   roleOf,
   shrinkImage
 } from './media';
-import { decodeShot, readSharedShot } from './share';
+import { readSharedShot } from './share';
 import {
   RECORD_LIMIT,
   canCapture,
@@ -47,6 +62,7 @@ import './cst.css';
 
 const WIDE_QUERY = '(min-width: 1280px)';
 const LOOP_KEY = 'center-stage-loop';
+const RESTORE_WAIT = 2500;
 
 const readLoop = () => {
   try {
@@ -124,8 +140,12 @@ const slotThumb = media => {
 };
 
 const initialShot = () => {
+  const saved = readSaved();
   const shared = readSharedShot();
-  return shared ? { doc: shared, preset: null } : { doc: PRESETS_BY_ID[DEFAULT_PRESET].doc, preset: DEFAULT_PRESET };
+  const shot = shared
+    ? { doc: shared, preset: null, screens: [] }
+    : saved.shot || { doc: PRESETS_BY_ID[DEFAULT_PRESET].doc, preset: DEFAULT_PRESET, screens: [] };
+  return { ...shot, exportSettings: saved.exportSettings, next: firstFree(shot.doc, shot.screens) };
 };
 
 export default function CenterStage({ toolSelector }) {
@@ -135,7 +155,7 @@ export default function CenterStage({ toolSelector }) {
   const shot = useShot(initial.doc, initial.preset);
   const { doc } = shot;
   const [slots, setSlots] = useState([null, null, null]);
-  const [loadingSlots, setLoadingSlots] = useState(new Set([0, 1, 2]));
+  const [loadingSlots, setLoadingSlots] = useState(() => new Set([0, 1, 2, ...initial.screens.map(item => item.slot)]));
   const [selectedDevice, setSelectedDevice] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [repeat, setRepeat] = useState(readLoop);
@@ -151,7 +171,9 @@ export default function CenterStage({ toolSelector }) {
   const fileRef = useRef(null);
   const searchRef = useRef(null);
   const uploadTarget = useRef(null);
-  const reserved = useRef(SAMPLES.length);
+  const reserved = useRef(initial.next);
+  const stored = useRef(new Map());
+  const [exportSettings, setExportSettings] = useState(initial.exportSettings);
   const [highlight, setHighlight] = useState(null);
   const [capture, setCaptureState] = useState(null);
   const [trimming, setTrimming] = useState(null);
@@ -188,11 +210,12 @@ export default function CenterStage({ toolSelector }) {
         ? Math.max(...slots.filter(media => media?.kind === 'video').map(media => clipRange(media).length))
         : 6;
 
-  const putSlot = useCallback(async (slot, loader) => {
+  const putSlot = useCallback(async (slot, loader, quiet = false) => {
     setLoadingSlots(previous => new Set(previous).add(slot));
     setError(null);
     try {
       const media = await loader();
+      if (!media) return null;
       setSlots(previous => {
         const next = [...previous];
         while (next.length < slot) next.push(null);
@@ -208,7 +231,7 @@ export default function CenterStage({ toolSelector }) {
       }
       return media;
     } catch (problem) {
-      toast.error(problem?.message || 'That file could not be opened.');
+      if (!quiet) toast.error(problem?.message || 'That file could not be opened.');
       return null;
     } finally {
       setLoadingSlots(previous => {
@@ -220,9 +243,49 @@ export default function CenterStage({ toolSelector }) {
   }, []);
 
   useEffect(() => {
-    SAMPLES.forEach(sample => putSlot(sample.slot, () => openSample(sample)));
+    const restoring = initial.screens.map(reopenScreen);
+    const loads = [
+      ...SAMPLES.map(sample => ({ slot: sample.slot, media: openSample(sample), quiet: false })),
+      ...initial.screens.map((item, index) => ({ slot: item.slot, media: restoring[index], quiet: true }))
+    ];
+    const ready = Promise.race([
+      Promise.allSettled(loads.map(load => load.media)),
+      new Promise(resolve => setTimeout(resolve, RESTORE_WAIT))
+    ]);
+    loads.forEach(load => putSlot(load.slot, () => ready.then(() => load.media), load.quiet));
+    Promise.allSettled(restoring).then(results => {
+      const keep = new Set(stored.current.keys());
+      results.forEach((result, index) => {
+        if (result.value) keep.add(initial.screens[index].slot);
+      });
+      keepScreens([...keep]);
+    });
     return () => slotsRef.current.forEach(releaseMedia);
-  }, [putSlot]);
+  }, [initial, putSlot]);
+
+  useEffect(() => {
+    const kept = new Set();
+    slots.forEach((media, slot) => {
+      if (!keepable(media)) return;
+      kept.add(slot);
+      if (stored.current.get(slot) === media) return;
+      stored.current.set(slot, media);
+      if (!fromSession(media)) storeScreen(slot, media, () => stored.current.get(slot) === media);
+    });
+    [...stored.current.keys()].forEach(slot => {
+      if (kept.has(slot)) return;
+      stored.current.delete(slot);
+      dropScreen(slot);
+    });
+  }, [slots]);
+
+  const pendingScreens = initial.screens.filter(item => loadingSlots.has(item.slot) && !slots[item.slot]);
+  const screensKey = JSON.stringify(screenList(slots, pendingScreens));
+  const session = useMemo(
+    () => ({ doc, preset: shot.preset, screens: JSON.parse(screensKey), exportSettings }),
+    [doc, shot.preset, screensKey, exportSettings]
+  );
+  useSessionSave(TOOL, session);
 
   const allocate = count => {
     const start = Math.max(reserved.current, slotsRef.current.length);
@@ -273,7 +336,30 @@ export default function CenterStage({ toolSelector }) {
     return alone ? first : allocate(1)[0];
   };
 
+  const applyShot = imported => {
+    const next = carryOver(imported, slotsRef.current, surfaceRole);
+    reserved.current = Math.max(reserved.current, firstFree(next, []));
+    shotRef.current.replace(next);
+  };
+
+  const importFile = async file => {
+    const imported = await file
+      .text()
+      .then(importedShot)
+      .catch(() => null);
+    if (!imported) {
+      toast.error("That file isn't a Center Stage preset");
+      return;
+    }
+    applyShot(imported);
+    toast.success('Shot imported');
+  };
+
   const fillScreens = async (targets, file) => {
+    if (isShotFile(file)) {
+      importFile(file);
+      return;
+    }
     if (!isMediaFile(file)) {
       toast.error('Drop an image or video file.');
       return;
@@ -618,6 +704,11 @@ export default function CenterStage({ toolSelector }) {
   }, [slots]);
 
   const fillAll = async files => {
+    const json = [...files].find(isShotFile);
+    if (json) {
+      importFile(json);
+      return;
+    }
     const list = [...files].filter(isMediaFile);
     if (!list.length) {
       toast.error('Drop image or video files.');
@@ -840,7 +931,8 @@ export default function CenterStage({ toolSelector }) {
   useEffect(() => {
     const down = event => keys.current?.(event);
     const paste = event => {
-      const file = [...(event.clipboardData?.files || [])].find(isMediaFile);
+      const files = [...(event.clipboardData?.files || [])];
+      const file = files.find(isMediaFile) || files.find(isShotFile);
       if (file) {
         event.preventDefault();
         fillScreens(fillTargets(selectedDevice), file);
@@ -848,10 +940,10 @@ export default function CenterStage({ toolSelector }) {
       }
       if (isTyping(event.target)) return;
       const text = event.clipboardData?.getData('text');
-      const shared = text && decodeShot(text);
+      const shared = text && importedShot(text);
       if (shared) {
         event.preventDefault();
-        shot.replace(shared);
+        applyShot(shared);
         toast.success('Shot pasted');
       }
     };
@@ -907,7 +999,7 @@ export default function CenterStage({ toolSelector }) {
     };
   });
 
-  const samplesOnly = slots.every(media => !media || media.sample);
+  const samplesOnly = !pendingScreens.length && slots.every(media => !media || media.sample);
 
   const gallery = (
     <>
@@ -962,7 +1054,7 @@ export default function CenterStage({ toolSelector }) {
       <input
         ref={fileRef}
         type="file"
-        accept="image/*,video/mp4,video/webm,video/quicktime,.mov,.m4v"
+        accept="image/*,video/mp4,video/webm,video/quicktime,.mov,.m4v,.json,application/json"
         hidden
         onChange={event => {
           const files = [...(event.target.files || [])];
@@ -1101,7 +1193,17 @@ export default function CenterStage({ toolSelector }) {
         </section>
       )}
 
-      {exporting && <ExportDialog doc={doc} slots={shown} time={timeRef.current} onClose={() => setExporting(false)} />}
+      {exporting && (
+        <ExportDialog
+          doc={doc}
+          slots={shown}
+          time={timeRef.current}
+          settings={exportSettings}
+          onSettings={setExportSettings}
+          onImport={importFile}
+          onClose={() => setExporting(false)}
+        />
+      )}
       {captureDialog && capturePage && (
         <CaptureDialog
           dialog={captureDialog}

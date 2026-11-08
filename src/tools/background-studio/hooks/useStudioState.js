@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useColorMode } from '../../../components/setup/color-mode';
+import { readSession } from '../../session';
 import { CATALOG, DEFAULT_BACKGROUND, findEntry, themeDefaults } from '../utils/catalog';
-import { readDocument, sameValue, writeDocument } from '../utils/params';
+import { readDocument, restoreDocument, sameValue, writeDocument } from '../utils/params';
 import { loadPresets } from '../utils/presets';
+import { SESSION_TOOL } from '../utils/remember';
 
 const HISTORY_LIMIT = 80;
 const COALESCE_MS = 700;
@@ -49,6 +51,26 @@ const reducer = (state, action) => {
   }
 };
 
+const restoreHistory = list =>
+  Array.isArray(list) ? list.map(item => restoreDocument(item, findEntry)).filter(Boolean) : [];
+
+const initialStore = searchParams => {
+  const store = {
+    doc: readDocument(searchParams, DEFAULT_BACKGROUND, findEntry),
+    past: [],
+    future: [],
+    key: null,
+    time: 0
+  };
+  const saved = readSession(SESSION_TOOL);
+  const doc = restoreDocument(saved?.doc, findEntry);
+  if (!doc) return store;
+  const past = restoreHistory(saved.past).slice(-HISTORY_LIMIT);
+  const linked = findEntry(searchParams.get('bg')) && searchParams.toString() !== saved.query;
+  if (linked && !sameValue(store.doc, doc)) return { ...store, past: [...past, doc].slice(-HISTORY_LIMIT) };
+  return { ...store, doc, past, future: restoreHistory(saved.future).slice(0, HISTORY_LIMIT) };
+};
+
 const usePresets = entry => {
   const [state, setState] = useState({ id: null, presets: undefined });
 
@@ -69,13 +91,7 @@ export function useStudioState() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { colorMode } = useColorMode();
   const light = colorMode === 'light';
-  const [store, dispatch] = useReducer(reducer, null, () => ({
-    doc: readDocument(searchParams, DEFAULT_BACKGROUND, findEntry),
-    past: [],
-    future: [],
-    key: null,
-    time: 0
-  }));
+  const [store, dispatch] = useReducer(reducer, searchParams, initialStore);
   const { doc } = store;
   const entry = findEntry(doc.id) || findEntry(DEFAULT_BACKGROUND);
   const presets = usePresets(entry);
@@ -164,10 +180,23 @@ export function useStudioState() {
   useEffect(() => {
     const text = searchParams.toString();
     if (text === written.current) return;
+    if (written.current !== null && !findEntry(searchParams.get('bg'))) {
+      const { doc: current } = latest.current;
+      const params = writeDocument(current, findEntry(current.id));
+      written.current = params.toString();
+      url.current.setSearchParams(params, { replace: true });
+      return;
+    }
     const incoming = readDocument(searchParams, DEFAULT_BACKGROUND, findEntry);
     if (written.current !== null) dispatch({ type: 'replace', doc: incoming });
     written.current = text;
   }, [searchParams]);
+
+  const query = searchParams.toString();
+  const session = useMemo(
+    () => ({ doc, past: store.past, future: store.future, query }),
+    [doc, store.past, store.future, query]
+  );
 
   return {
     entry,
@@ -178,6 +207,7 @@ export function useStudioState() {
     renderProps,
     ready,
     presets,
+    session,
     activePreset: doc.preset,
     changedCount: Object.keys(doc.changes).length,
     canReset: Boolean(doc.preset) || Object.keys(doc.changes).length > 0,

@@ -9,6 +9,7 @@ import {
   Image01Icon,
   Link04Icon,
   Layers01Icon,
+  Upload04Icon,
   Video01Icon
 } from '@hugeicons/core-free-icons';
 import PreviewSelect from '../../../components/common/Preview/PreviewSelect';
@@ -50,11 +51,40 @@ const QUALITIES = [
 
 const PHASES = { rendering: 'Rendering', loading: 'Preparing' };
 
-let rememberedTab = null;
-const remembered = {
+const DEFAULTS = {
+  tab: 'image',
   image: { format: 'png', size: 0, quality: 0.92 },
   video: { size: null, fps: 30, format: 'mp4', quality: 'high', audio: true, duration: 6 },
   gif: { size: 640, fps: 15, duration: 4 }
+};
+
+const CHOICES = {
+  image: { format: IMAGE_FORMATS.map(item => item.value) },
+  video: { fps: [0, 24, 30, 60], format: ['mp4', 'webm'], quality: QUALITIES.map(item => item.value) },
+  gif: { size: [360, 480, 640, 800], fps: [10, 15, 20, 25] }
+};
+
+const fits = (value, fallback, choices) => {
+  if (choices) return choices.includes(value);
+  if (typeof fallback === 'boolean') return typeof value === 'boolean';
+  return Number.isFinite(value) || (fallback === null && value === null);
+};
+
+const settle = saved => {
+  const source = saved && typeof saved === 'object' ? saved : {};
+  const group = name =>
+    Object.fromEntries(
+      Object.entries(DEFAULTS[name]).map(([key, fallback]) => {
+        const value = source[name]?.[key];
+        return [key, fits(value, fallback, CHOICES[name][key]) ? value : fallback];
+      })
+    );
+  return {
+    tab: TABS.some(item => item.value === source.tab) ? source.tab : DEFAULTS.tab,
+    image: group('image'),
+    video: group('video'),
+    gif: group('gif')
+  };
 };
 
 const formatBytes = bytes =>
@@ -87,13 +117,21 @@ const sizeOptions = (media, presets, round) => {
 
 const pickSize = (value, options, fallback) => (options.some(option => option.value === value) ? value : fallback);
 
-export default function ExportDialog({ media, layers, strength = 1, serializable, trim, clock, onClose }) {
-  const [tab, setTabState] = useState(rememberedTab || 'image');
-  const [options, setOptions] = useState(() => ({
-    image: { ...remembered.image },
-    video: { ...remembered.video },
-    gif: { ...remembered.gif }
-  }));
+export default function ExportDialog({
+  media,
+  layers,
+  strength = 1,
+  serializable,
+  trim,
+  clock: openedAt,
+  settings,
+  onSettings,
+  onImport,
+  onClose
+}) {
+  const [clock] = useState(openedAt);
+  const saved = useMemo(() => settle(settings), [settings]);
+  const tab = saved.tab;
   const [preview, setPreview] = useState(null);
   const [job, setJob] = useState(null);
   const [result, setResult] = useState(null);
@@ -101,23 +139,22 @@ export default function ExportDialog({ media, layers, strength = 1, serializable
   const [support, setSupport] = useState(null);
   const jobRef = useRef(null);
   const dialogRef = useRef(null);
+  const importRef = useRef(null);
   const busy = Boolean(job);
   const isVideo = media.kind === 'video';
   const isCamera = media.kind === 'camera';
   const snapshot = useMemo(() => layers.map(layer => ({ ...layer })), [layers]);
 
   const setTab = value => {
-    rememberedTab = value;
-    setTabState(value);
+    onSettings(previous => ({ ...settle(previous), tab: value }));
     setResult(null);
     setError(null);
   };
 
   const set = (group, name, value) =>
-    setOptions(previous => {
-      const next = { ...previous, [group]: { ...previous[group], [name]: value } };
-      remembered[group] = next[group];
-      return next;
+    onSettings(previous => {
+      const next = settle(previous);
+      return { ...next, [group]: { ...next[group], [name]: value } };
     });
 
   useEffect(() => {
@@ -156,12 +193,7 @@ export default function ExportDialog({ media, layers, strength = 1, serializable
   useEffect(() => {
     let alive = true;
     videoSupport().then(value => {
-      if (!alive) return;
-      setSupport(value);
-      setOptions(previous => {
-        if (value[previous.video.format] || !(value.mp4 || value.webm)) return previous;
-        return { ...previous, video: { ...previous.video, format: value.mp4 ? 'mp4' : 'webm' } };
-      });
+      if (alive) setSupport(value);
     });
     return () => {
       alive = false;
@@ -197,9 +229,12 @@ export default function ExportDialog({ media, layers, strength = 1, serializable
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '') || 'texture-lab';
-  const image = options.image;
-  const video = options.video;
-  const gif = options.gif;
+  const image = saved.image;
+  const video =
+    support && !support[saved.video.format] && (support.mp4 || support.webm)
+      ? { ...saved.video, format: support.mp4 ? 'mp4' : 'webm' }
+      : saved.video;
+  const gif = saved.gif;
   const imageFormat = IMAGE_FORMATS.find(item => item.value === image.format) || IMAGE_FORMATS[0];
   const imageSizes = sizeOptions(media, IMAGE_SIZES);
   const videoSizes = sizeOptions(media, VIDEO_SIZES, even);
@@ -509,7 +544,10 @@ export default function ExportDialog({ media, layers, strength = 1, serializable
 
               <div className="bs-xp-notes">
                 {tab === 'look' && (
-                  <p>Share it as a link, or keep it as a file. Paste either anywhere in Texture Lab to load it.</p>
+                  <p>
+                    Share it as a link, or keep it as a file. To load one, paste or drop it anywhere in Texture Lab, or
+                    import the file.
+                  </p>
                 )}
                 {isVideo && (tab === 'video' || tab === 'gif') && (
                   <p>
@@ -537,6 +575,17 @@ export default function ExportDialog({ media, layers, strength = 1, serializable
                     </button>
                   ) : tab === 'look' ? (
                     <>
+                      <input
+                        ref={importRef}
+                        type="file"
+                        accept=".json,application/json"
+                        hidden
+                        onChange={event => {
+                          const file = event.target.files?.[0];
+                          if (file) onImport(file);
+                          event.target.value = '';
+                        }}
+                      />
                       <Tip label="Copy JSON" placement="top">
                         <button
                           type="button"
@@ -560,6 +609,16 @@ export default function ExportDialog({ media, layers, strength = 1, serializable
                           }
                         >
                           <Icon icon={Download04Icon} />
+                        </button>
+                      </Tip>
+                      <Tip label="Import JSON" placement="top">
+                        <button
+                          type="button"
+                          className="docs-tool bs-xp-square"
+                          aria-label="Import JSON"
+                          onClick={() => importRef.current?.click()}
+                        >
+                          <Icon icon={Upload04Icon} />
                         </button>
                       </Tip>
                       <button

@@ -5,11 +5,13 @@ import Orb from './Orb';
 
 const QUIET_KEYS = new Set(['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape', 'Fn', 'OS']);
 
-function TypeField({ sound, onType }) {
+function TypeField({ sound, text, onText, onType }) {
   return (
     <label className="bs-search snd-type">
       <Icon icon={KeyboardIcon} size={16} />
       <input
+        value={text}
+        onChange={event => onText(event.target.value)}
         placeholder={`Type to hear ${sound.name}`}
         aria-label={`Type to hear ${sound.name}`}
         spellCheck={false}
@@ -17,14 +19,14 @@ function TypeField({ sound, onType }) {
         onKeyDown={event => {
           if (event.repeat || event.metaKey || event.ctrlKey || QUIET_KEYS.has(event.key)) return;
           onType(sound.id);
-          if (event.key === 'Enter') event.currentTarget.value = '';
+          if (event.key === 'Enter') onText('');
         }}
       />
     </label>
   );
 }
 
-const Stage = forwardRef(function Stage({ sound, player, onPlay, onType, onExport }, ref) {
+const Stage = forwardRef(function Stage({ sound, player, text, onText, onPlay, onType, onExport }, ref) {
   return (
     <div className="lab-stage snd-stage" ref={ref} data-library={sound.library}>
       <div className="snd-view">
@@ -46,7 +48,7 @@ const Stage = forwardRef(function Stage({ sound, player, onPlay, onType, onExpor
           </button>
         </div>
         {sound.category === 'type' ? (
-          <TypeField sound={sound} onType={onType} />
+          <TypeField sound={sound} text={text} onText={onText} onType={onType} />
         ) : (
           <button type="button" className="snd-play" onClick={() => onPlay(sound.id)}>
             Play

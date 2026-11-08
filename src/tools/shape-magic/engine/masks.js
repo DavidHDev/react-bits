@@ -29,6 +29,7 @@ export const loadField = layer => {
   if (!key) return Promise.resolve(null);
   if (resolved.has(key)) return Promise.resolve(resolved.get(key));
   if (pending.has(key)) return pending.get(key);
+  if (layer.type === 'image' && !layer.image?.src) return Promise.resolve(null);
   const job = (async () => {
     if (layer.type === 'text') {
       const text = layer.text || {};

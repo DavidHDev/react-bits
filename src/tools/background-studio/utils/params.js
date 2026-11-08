@@ -52,6 +52,42 @@ export function readDocument(searchParams, fallbackId, getBackground) {
   return { id: background.id, preset: searchParams.get('preset') || null, changes };
 }
 
+const isRecord = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+
+const isHex = value => typeof value === 'string' && HEX.test(value);
+
+function acceptValue(value, definition) {
+  switch (definition?.type) {
+    case 'number':
+      return typeof value === 'number' && Number.isFinite(value);
+    case 'boolean':
+      return typeof value === 'boolean';
+    case 'color':
+      return isHex(value);
+    case 'colorArray':
+      return Array.isArray(value) && value.length > 0 && value.every(isHex);
+    case 'rgbArray':
+      return Array.isArray(value) && value.length === 3 && value.every(Number.isFinite);
+    case 'select':
+      return Boolean(definition.options?.some(option => (option.value ?? option) === value));
+    case 'text':
+      return typeof value === 'string';
+    default:
+      return false;
+  }
+}
+
+export function restoreDocument(saved, getBackground) {
+  const background = isRecord(saved) && typeof saved.id === 'string' ? getBackground(saved.id) : null;
+  if (!background) return null;
+  const source = isRecord(saved.changes) ? saved.changes : {};
+  const changes = {};
+  (background.props || []).forEach(definition => {
+    if (acceptValue(source[definition.name], definition)) changes[definition.name] = source[definition.name];
+  });
+  return { id: background.id, preset: typeof saved.preset === 'string' && saved.preset ? saved.preset : null, changes };
+}
+
 export function writeDocument(document, background) {
   const params = new URLSearchParams();
   params.set('bg', document.id);

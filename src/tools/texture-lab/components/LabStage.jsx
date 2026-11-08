@@ -57,7 +57,9 @@ const LabStage = forwardRef(function LabStage(
       {!media && !loading && (
         <div className="lab-empty-state">
           <p className="lab-empty-title">Drop an image or video</p>
-          <p className="lab-empty-text">PNG, JPG, WebP, MP4, WebM or MOV. Everything stays in your browser.</p>
+          <p className="lab-empty-text">
+            PNG, JPG, WebP, MP4, WebM, MOV or a style JSON. Everything stays in your browser.
+          </p>
           <div className="lab-empty-actions">
             <button type="button" className="bs-export" onClick={onUpload}>
               <Icon icon={Upload04Icon} />
@@ -92,7 +94,7 @@ const LabStage = forwardRef(function LabStage(
       {hint && media && !loading && !dropping && (
         <button type="button" className="lab-hint" onClick={onUpload}>
           <Icon icon={Upload04Icon} size={14} />
-          <span>Drop, paste or upload your own photo or video</span>
+          <span>Drop, paste or upload your own photo, video or style</span>
         </button>
       )}
       {dropping && (

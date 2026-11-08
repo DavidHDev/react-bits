@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Cancel01Icon, Image01Icon, SourceCodeIcon, Video01Icon } from '@hugeicons/core-free-icons';
+import { oneOf, recall, remember } from '../utils/remember';
 import CodeExport from './CodeExport';
 import MediaExport from './MediaExport';
 import { Icon, Track } from './ui';
@@ -11,10 +12,8 @@ const TABS = [
   { value: 'video', label: 'Video', icon: Video01Icon }
 ];
 
-let rememberedTab = null;
-
 export default function ExportDialog({ initialTab, state, stageSize, onClose }) {
-  const [tab, setTabState] = useState(() => rememberedTab || initialTab);
+  const [tab, setTabState] = useState(() => oneOf(recall('tab'), TABS, initialTab));
   const [busy, setBusy] = useState(false);
   const dialogRef = useRef(null);
   const closeRef = useRef(onClose);
@@ -23,7 +22,7 @@ export default function ExportDialog({ initialTab, state, stageSize, onClose }) 
   busyRef.current = busy;
 
   const setTab = value => {
-    rememberedTab = value;
+    remember('tab', value);
     setTabState(value);
   };
 

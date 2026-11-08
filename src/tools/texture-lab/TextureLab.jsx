@@ -5,7 +5,9 @@ import { EFFECTS, EFFECT_LIST } from './effects';
 import { LOOKS, LOOKS_BY_ID } from './looks';
 import { useLayers } from './state/useLayers';
 import { useThumbnails } from './state/useThumbnails';
+import { restoreState, restoredFile, trimFor } from './state/restore';
 import {
+  SAMPLES,
   isMediaFile,
   loadFile,
   loadSample,
@@ -15,7 +17,7 @@ import {
   startCamera,
   workSize
 } from './media';
-import { decodeLook, readSharedLook } from './share';
+import { compactLayers, decodeLook, isStyleFile } from './share';
 import { EffectsGrid, GallerySearch, GalleryScroll, LooksGrid } from './components/Gallery';
 import LayersPanel from './components/LayersPanel';
 import LabToolbar from './components/LabToolbar';
@@ -24,12 +26,15 @@ import LabTimeline from './components/LabTimeline';
 import ExportDialog from './components/ExportDialog';
 import { Track } from '../background-studio/components/ui';
 import { downloadBlob } from '../background-studio/utils/download';
+import { loadFile as loadSavedFile, readSession, removeFile, saveFile, useSessionSave } from '../session';
 import '../background-studio/studio.css';
 import './lab.css';
 
 const WIDE_QUERY = '(min-width: 1280px)';
 const DESKTOP_QUERY = '(min-width: 1024px)';
-const DEFAULT_LOOK = 'soft-type';
+const SESSION = 'texture-lab';
+const MEDIA_SLOT = 'media';
+const STYLE_LIMIT = 1048576;
 const LOOK_COUNT = LOOKS.length;
 const EFFECT_COUNT = EFFECT_LIST.length;
 
@@ -65,9 +70,11 @@ const isTyping = target =>
 export default function TextureLab({ toolSelector }) {
   const wide = useMediaQuery(WIDE_QUERY);
   const desktop = useMediaQuery(DESKTOP_QUERY);
-  const stack = useLayers();
+  const [initial] = useState(() => restoreState(readSession(SESSION), window.location.hash));
+  const stack = useLayers(initial.stack);
   const { add: addLayer, applyLook, replace: replaceLayers } = stack;
   const [media, setMedia] = useState(null);
+  const [source, setSource] = useState(initial.media);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [railTab, setRailTab] = useState('looks');
@@ -77,11 +84,12 @@ export default function TextureLab({ toolSelector }) {
   const [dropping, setDropping] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [defaultSample] = useState(randomSampleVideo);
-  const [trim, setTrim] = useState([0, 0]);
+  const [trim, setTrim] = useState(initial.trim);
   const [thumbVersion, setThumbVersion] = useState(0);
   const [exporting, setExporting] = useState(false);
+  const [exportSettings, setExportSettings] = useState(initial.export);
   const [recording, setRecording] = useState(false);
-  const [strength, setStrength] = useState(1);
+  const [strength, setStrength] = useState(initial.strength);
   const [queries, setQueries] = useState({ looks: '', effects: '' });
   const searchRef = useRef(null);
   const canvasRef = useRef(null);
@@ -92,8 +100,25 @@ export default function TextureLab({ toolSelector }) {
   const dirty = useRef(true);
   const recorder = useRef(null);
   const mediaRef = useRef(null);
+  const request = useRef(0);
 
   const thumbs = useThumbnails(media, thumbVersion);
+
+  const session = useMemo(
+    () => ({
+      look: stack.look,
+      layers: compactLayers(stack.layers),
+      selected: stack.layers.findIndex(layer => layer.id === stack.selected),
+      strength,
+      trim,
+      media: source,
+      export: exportSettings,
+      share: initial.share
+    }),
+    [stack.look, stack.layers, stack.selected, strength, trim, source, exportSettings, initial.share]
+  );
+
+  useSessionSave(SESSION, session);
 
   const animated = useMemo(
     () =>
@@ -187,32 +212,50 @@ export default function TextureLab({ toolSelector }) {
     if (media?.kind === 'video') media.player.setRange(trim[0], trim[1]);
   }, [media, trim]);
 
-  const openMedia = useCallback(async loader => {
+  const openMedia = useCallback(async (loader, { trim: range, stored = false } = {}) => {
+    request.current += 1;
+    const current = request.current;
     setLoading(true);
     setError(null);
     try {
       const next = await loader();
+      if (current !== request.current) {
+        releaseMedia(next);
+        return null;
+      }
       releaseMedia(mediaRef.current);
       mediaRef.current = next;
       if (next.kind === 'image') engineRef.current?.setSource(next.element, next.width, next.height);
       if (next.kind === 'video') {
-        setTrim([0, next.duration]);
-        next.player.setRange(0, next.duration);
+        const span = trimFor(range, next.duration);
+        setTrim(span);
+        next.player.setRange(span[0], span[1]);
         await next.player.play();
+        if (mediaRef.current !== next) return null;
         setPlaying(true);
       }
       clock.current = 0;
       setMedia(next);
       setThumbVersion(version => version + 1);
+      if (next.file) {
+        if (!stored) saveFile(SESSION, MEDIA_SLOT, next.file, { name: next.file.name, type: next.file.type });
+        setSource({ kind: 'file', name: next.file.name, size: next.file.size });
+      } else if (next.sample) {
+        removeFile(SESSION, MEDIA_SLOT);
+        setSource({ kind: 'sample', id: next.sample });
+      }
+      return true;
     } catch (problem) {
+      if (current !== request.current) return null;
       setError(problem?.message || 'That file could not be opened.');
+      return false;
     } finally {
-      setLoading(false);
+      if (current === request.current) setLoading(false);
     }
   }, []);
 
   const openFile = useCallback(file => openMedia(() => loadFile(file)), [openMedia]);
-  const openSample = useCallback(sample => openMedia(() => loadSample(sample)), [openMedia]);
+  const openSample = useCallback((sample, range) => openMedia(() => loadSample(sample), { trim: range }), [openMedia]);
   const openCamera = useCallback(
     () =>
       openMedia(async () => {
@@ -225,13 +268,44 @@ export default function TextureLab({ toolSelector }) {
     [openMedia]
   );
 
+  const importStyle = useCallback(
+    async file => {
+      const text = file.size > STYLE_LIMIT ? '' : await file.text().catch(() => '');
+      const look = decodeLook(text);
+      if (!look?.length) {
+        toast.error('That file is not a Texture Lab style');
+        return;
+      }
+      replaceLayers(look);
+      toast.success('Style imported');
+    },
+    [replaceLayers]
+  );
+
   useEffect(() => {
-    const shared = readSharedLook();
-    if (shared) replaceLayers(shared);
-    else applyLook(LOOKS_BY_ID[DEFAULT_LOOK]);
-    openSample(defaultSample);
-    return () => releaseMedia(mediaRef.current);
-  }, [applyLook, defaultSample, openSample, replaceLayers]);
+    const start = request.current;
+    const saved = initial.media;
+    if (saved?.kind === 'file') {
+      loadSavedFile(SESSION, MEDIA_SLOT).then(record => {
+        if (request.current !== start) return;
+        const file = restoredFile(record, saved);
+        if (!file) {
+          openSample(defaultSample);
+          return;
+        }
+        openMedia(() => loadFile(file), { trim: initial.trim, stored: true }).then(opened => {
+          if (opened === false) openSample(defaultSample);
+        });
+      });
+    } else {
+      const sample = SAMPLES.find(item => item.id === saved?.id);
+      openSample(sample || defaultSample, sample ? initial.trim : null);
+    }
+    return () => {
+      request.current += 1;
+      releaseMedia(mediaRef.current);
+    };
+  }, [defaultSample, initial, openMedia, openSample]);
 
   const togglePlay = useCallback(() => {
     const current = live.current.media;
@@ -355,10 +429,17 @@ export default function TextureLab({ toolSelector }) {
       if (event.key.toLowerCase() === 'c') setComparing(false);
     };
     const paste = event => {
-      const file = [...(event.clipboardData?.files || [])].find(isMediaFile);
+      const files = [...(event.clipboardData?.files || [])];
+      const file = files.find(isMediaFile);
       if (file) {
         event.preventDefault();
         openFile(file);
+        return;
+      }
+      const style = files.find(isStyleFile);
+      if (style) {
+        event.preventDefault();
+        importStyle(style);
         return;
       }
       const text = event.clipboardData?.getData('text');
@@ -377,7 +458,7 @@ export default function TextureLab({ toolSelector }) {
       window.removeEventListener('keyup', up);
       window.removeEventListener('paste', paste);
     };
-  }, [openFile, replaceLayers]);
+  }, [importStyle, openFile, replaceLayers]);
 
   useEffect(() => {
     let depth = 0;
@@ -400,9 +481,12 @@ export default function TextureLab({ toolSelector }) {
       event.preventDefault();
       depth = 0;
       setDropping(false);
-      const file = [...(event.dataTransfer?.files || [])].find(isMediaFile);
+      const files = [...(event.dataTransfer?.files || [])];
+      const file = files.find(isMediaFile);
+      const style = files.find(isStyleFile);
+      if (style) importStyle(style);
       if (file) openFile(file);
-      else toast.error('Drop an image or video file.');
+      if (!file && !style) toast.error('Drop an image, video or style file.');
     };
     window.addEventListener('dragenter', enter);
     window.addEventListener('dragleave', leave);
@@ -414,7 +498,7 @@ export default function TextureLab({ toolSelector }) {
       window.removeEventListener('dragover', over);
       window.removeEventListener('drop', drop);
     };
-  }, [openFile]);
+  }, [importStyle, openFile]);
 
   const canPlay = Boolean(media) && media.kind !== 'camera' && (media.kind === 'video' || animated);
   const isPlaying = playing;
@@ -454,11 +538,12 @@ export default function TextureLab({ toolSelector }) {
       <input
         ref={fileRef}
         type="file"
-        accept="image/*,video/mp4,video/webm,video/quicktime,.mov,.m4v"
+        accept="image/*,video/mp4,video/webm,video/quicktime,.mov,.m4v,.json,application/json"
         hidden
         onChange={event => {
           const file = event.target.files?.[0];
-          if (file) openFile(file);
+          if (file && isStyleFile(file)) importStyle(file);
+          else if (file) openFile(file);
           event.target.value = '';
         }}
       />
@@ -558,6 +643,9 @@ export default function TextureLab({ toolSelector }) {
           serializable={stack.serializable}
           trim={trim}
           clock={media.kind === 'video' ? media.player.currentTime : clock.current}
+          settings={exportSettings}
+          onSettings={setExportSettings}
+          onImport={importStyle}
           onClose={() => setExporting(false)}
         />
       )}
