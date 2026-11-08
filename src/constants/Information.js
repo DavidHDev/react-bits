@@ -2960,7 +2960,8 @@ export const componentMetadata = {
     name: 'FlyingButton',
     docsUrl: 'https://reactbits.dev/micro/flying-button',
     tags: ['button', 'hover', 'webgl', 'smoke', 'fluid', 'physics', 'cursor', 'flight'],
-    added: '2026-10-16'
+    added: '2026-10-16',
+    hidden: true
   }
 };
 
