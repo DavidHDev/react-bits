@@ -16,5 +16,8 @@
 		"@react-three/fiber@^9.3.0",
 		"@react-three/drei@^10.7.4",
 		"three@^0.180.0"
+	],
+	"devDependencies": [
+		"@types/three@^0.180.0"
 	]
 }
