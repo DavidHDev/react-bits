@@ -343,7 +343,8 @@ const SideRays = ({
     let pageVisible = document.visibilityState !== 'hidden';
     let lost = false;
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const rect = container.getBoundingClientRect();
       const cssWidth = Math.max(1, rect.width);
@@ -363,6 +364,11 @@ const SideRays = ({
       size.height = cssHeight;
     };
 
+    const resize = () => {
+      resizePending = true;
+      wake();
+    };
+
     const pointerAngle = (s: Settings) => {
       let x = (pointer.x - size.width / 2) / size.height;
       let y = (size.height / 2 - pointer.y) / size.height;
@@ -374,6 +380,10 @@ const SideRays = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost) return;
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);

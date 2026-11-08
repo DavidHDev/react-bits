@@ -480,7 +480,7 @@ export const DarkVeil = ({
       }
       view.fieldWidth = Math.max(1, Math.round(width * fieldScale));
       view.fieldHeight = Math.max(1, Math.round(height * fieldScale));
-      if (!raf) render();
+      render();
       wake();
     };
 

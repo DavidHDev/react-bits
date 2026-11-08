@@ -1243,12 +1243,17 @@ const CrystalizedBall = ({
     const brush = { x: 0, y: 0, vx: 0, vy: 0 };
     const look = { x: 0, y: 0, vx: 0, vy: 0 };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
       renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
       renderer.setSize(width, height);
       sceneTarget.setSize(gl.canvas.width, gl.canvas.height);
+    };
+
+    const resize = () => {
+      resizePending = true;
       start();
     };
 
@@ -1267,6 +1272,10 @@ const CrystalizedBall = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(1 / 240, (now - last) / 1000));

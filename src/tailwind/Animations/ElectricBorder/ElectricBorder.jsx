@@ -479,7 +479,8 @@ const ElectricBorder = ({
     let pageVisible = document.visibilityState !== 'hidden';
     let lost = false;
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const width = Math.max(1, container.offsetWidth);
       const height = Math.max(1, container.offsetHeight);
@@ -496,6 +497,11 @@ const ElectricBorder = ({
       canvas.style.height = `${canvasHeight}px`;
       Object.assign(size, { width, height, ratio: pixelWidth / canvasWidth });
       path = pathOf(width, height, s.borderRadius, s.offset);
+    };
+
+    const resize = () => {
+      resizePending = true;
+      wake();
     };
 
     const spawnArc = (now, near) => {
@@ -575,6 +581,10 @@ const ElectricBorder = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost) return;
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);

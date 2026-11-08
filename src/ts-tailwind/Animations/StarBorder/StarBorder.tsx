@@ -276,12 +276,17 @@ const StarBorder = <T extends React.ElementType = 'button'>({
     let last = performance.now();
     let alive = true;
 
-    const measure = () => {
+    let resizePending = false;
+    const applyMeasure = () => {
       state.width = root.offsetWidth;
       state.height = root.offsetHeight;
       state.dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.max(1, Math.round((state.width + BLEED * 2) * state.dpr));
       canvas.height = Math.max(1, Math.round((state.height + BLEED * 2) * state.dpr));
+    };
+
+    const measure = () => {
+      resizePending = true;
       wake();
     };
 
@@ -468,6 +473,10 @@ const StarBorder = <T extends React.ElementType = 'button'>({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyMeasure();
+      }
       if (!alive) return;
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));

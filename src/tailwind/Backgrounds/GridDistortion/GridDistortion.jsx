@@ -406,10 +406,8 @@ const GridDistortion = ({
       canvas.width = Math.round(state.width * dpr);
       canvas.height = Math.round(state.height * dpr);
       layout();
-      if (!raf) {
-        compose(settingsRef.current);
-        render();
-      }
+      compose(settingsRef.current);
+      render();
       wake();
     };
 

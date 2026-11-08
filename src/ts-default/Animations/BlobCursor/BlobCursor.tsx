@@ -395,7 +395,8 @@ const BlobCursor = ({
     let restoreCursor: (() => void) | null = null;
     let calm = 0;
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       view.width = Math.max(1, root.clientWidth);
       view.height = Math.max(1, root.clientHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -415,6 +416,10 @@ const BlobCursor = ({
       frustum.far = reach * 6;
       frustum.updateProjectionMatrix();
       ground.scale.set(view.width * 1.5, view.height * 1.5, 1);
+    };
+
+    const resize = () => {
+      resizePending = true;
       start();
     };
 
@@ -867,6 +872,10 @@ const BlobCursor = ({
 
     const tick = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive) return;
       const dt = Math.min(1 / 30, Math.max(1 / 240, (now - last) / 1000));
       last = now;

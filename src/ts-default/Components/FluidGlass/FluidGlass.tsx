@@ -966,7 +966,8 @@ const FluidGlass = ({
       }
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const rect = container.getBoundingClientRect();
       const cssWidth = Math.max(1, rect.width);
@@ -997,6 +998,11 @@ const FluidGlass = ({
         body.anchorY = clamp(body.anchorY, edge, Math.max(edge, cssHeight - edge));
       }
       drawText();
+    };
+
+    const resize = () => {
+      resizePending = true;
+      wake();
     };
 
     const radius = () => {
@@ -1059,6 +1065,10 @@ const FluidGlass = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (lost) return;
       const gap = now - tick;
       tick = now;

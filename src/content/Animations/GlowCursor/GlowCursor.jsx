@@ -550,7 +550,8 @@ const GlowCursor = ({
       };
     };
 
-    const resize = () => {
+    let resizePending = false;
+    const applyResize = () => {
       const s = settingsRef.current;
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
@@ -565,6 +566,11 @@ const GlowCursor = ({
       state.height = height;
       state.ratio = ratio;
       allocate();
+    };
+
+    const resize = () => {
+      resizePending = true;
+      wake();
     };
 
     const draw = target => {
@@ -808,13 +814,17 @@ const GlowCursor = ({
 
     const frame = now => {
       raf = 0;
+      if (resizePending) {
+        resizePending = false;
+        applyResize();
+      }
       if (!alive || !visible || document.hidden) return;
       const s = settingsRef.current;
       const dt = last ? Math.min(1 / 30, (now - last) / 1000) : 1 / 60;
       last = now;
       state.time += dt;
       const wanted = Math.min(window.devicePixelRatio || 1, Math.max(0.5, s.maxDevicePixelRatio || 2));
-      if (Math.abs(wanted - state.ratio) > 0.01) resize();
+      if (Math.abs(wanted - state.ratio) > 0.01) applyResize();
       allocate();
       resolveColors(s);
       gl.bindVertexArray(vao);
