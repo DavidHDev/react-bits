@@ -5,6 +5,7 @@ import { output } from '@jsrepo/shadcn';
 import { type Category, componentMetadata, type Variant } from './src/constants/Information';
 import { SOUNDS } from './src/tools/sound-lab/sounds/catalog';
 import { fileName, registryName } from './src/tools/sound-lab/export/code';
+import { getTypeDependencies } from './src/utils/dependencies.js';
 
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')) as { devDependencies: Record<string, string> };
 
@@ -12,15 +13,6 @@ const SOUND_LANGUAGES = [
   { variant: 'JS', extension: 'js' },
   { variant: 'TS', extension: 'ts' }
 ] as const;
-
-// Packages that don't ship their own type definitions. The TS variants of a component that imports
-// one of them must also install the matching @types package, otherwise `tsc` can't resolve the module.
-const TYPES_PACKAGES: Record<string, string> = {
-  three: '@types/three',
-  '@react-three/fiber': '@types/three',
-  '@react-three/drei': '@types/three',
-  'matter-js': '@types/matter-js'
-};
 
 // devDependencies per registry item name. jsrepo's shadcn output only writes `dependencies`, so these are
 // added to the generated item JSON in withLinkedDependencies.
@@ -132,11 +124,12 @@ function typesDevDependencies(basePath: string): string[] {
     if (!/\.tsx?$/.test(file)) continue;
     const source = fs.readFileSync(`${basePath}/${file}`, 'utf8');
     for (const [, specifier] of source.matchAll(/(?:from\s+|import\s*\(\s*)['"]([^'"]+)['"]/g)) {
-      const name = specifier.startsWith('@') ? specifier.split('/').slice(0, 2).join('/') : specifier.split('/')[0];
-      if (TYPES_PACKAGES[name]) imported.add(TYPES_PACKAGES[name]);
+      imported.add(specifier);
     }
   }
-  return [...imported].sort().map(name => (pkg.devDependencies[name] ? `${name}@${pkg.devDependencies[name]}` : name));
+  return getTypeDependencies([...imported]).map(name =>
+    pkg.devDependencies[name] ? `${name}@${pkg.devDependencies[name]}` : name
+  );
 }
 
 /**

@@ -62,6 +62,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt as a smooth 3D liquid that stretches as it moves, with new looks, drips and a splashy click burst.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container. TypeScript installs now include Three.js type definitions.'
       }
     ]
   },
@@ -92,6 +96,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt from scratch. It frames what you hover with measuring brackets, with new line styles and a click pulse.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -107,6 +115,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt with springy cubes that face the cursor, spin when you sweep past and ripple on click, plus new edge styles, shading and depth.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -122,6 +134,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with layered lightning strands, sparks and a soft glow. The current races around the edge as it powers on, surges near the cursor and jolts around on click, and now works in light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -179,7 +195,13 @@ export const componentMetadata = {
     name: 'CrystalizedBall',
     docsUrl: 'https://reactbits.dev/animations/crystalized-ball',
     tags: ['webgl', 'ogl', 'orb', 'electric', 'particles', 'glow', 'interactive'],
-    added: '2026-10-06'
+    added: '2026-10-06',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Animations/ElectricLogo': {
     videoUrl: '/assets/video/electriclogo.webm',
@@ -189,7 +211,13 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/animations/electric-logo',
     tags: [],
     added: '2026-09-25',
-    updates: [{ date: '2026-09-28', note: 'Added an onRender callback for capturing live frames and reflection effects.' }]
+    updates: [
+      { date: '2026-09-28', note: 'Added an onRender callback for capturing live frames and reflection effects.' },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Animations/DitherVeil': {
     videoUrl: '/assets/video/ditherveil.webm',
@@ -198,7 +226,13 @@ export const componentMetadata = {
     name: 'DitherVeil',
     docsUrl: 'https://reactbits.dev/animations/dither-veil',
     tags: [],
-    added: '2026-09-23'
+    added: '2026-09-23',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Preserves reveal trails and prevents flicker while resizing.'
+      }
+    ]
   },
   'Animations/GlowCursor': {
     videoUrl: '/assets/video/glowcursor.webm',
@@ -212,6 +246,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Rebuilt as light that pours from the cursor and drifts softly as it fades, with a burst on click and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -287,6 +325,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt without dependencies. Blobs now cling, stretch and wobble as they merge, the cursor pushes through them, clicks splash them apart, and there are new outline, contour and lava lamp styles.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -438,6 +480,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt from scratch. The star glides evenly around any shape with a soft trail, hover laps and a click pulse.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -453,6 +499,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with a real curl, soft shadows and no extra dependencies. The edge nearest the cursor lifts, thrown stickers swing, slide and bounce, and there are gloss, matte and holographic finishes.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -498,6 +548,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with crisp, colorful particles that swirl into a ring with springy motion and streak when they move fast. Hold to charge and release to burst, plus presets, a liftoff intro and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -531,6 +585,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt so the layers never slip apart on load, with a scramble on hover, click ripples and custom characters.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -621,6 +679,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with smoother physics. Words or single letters knock each other loose as they fall, can be thrown and swept around, and fly back into place, with a new tiles style and light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'TypeScript installs now include Matter.js type definitions.'
       }
     ]
   },
@@ -906,6 +968,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Clicking now sends a shockwave through the text, and the lens can keep wandering across the words when the cursor leaves. Adds glass-like color fringing inside the lens, with smoother fringe edges in light and dark mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Keeps text visible while resizing and rebuilding its layout.'
       }
     ]
   },
@@ -921,6 +987,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Click a letter to ripple the word, play a typed, assembled or font metrics intro, and show the font’s guide lines.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Keeps glyph motion and selection stable and prevents canvas flicker while resizing.'
       }
     ]
   },
@@ -996,6 +1066,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Two new entrances, letters growing in one by one and a focus pull, plus a soft light that follows the cursor and brings back full color. Letters can also be drawn as thin strokes that the image fills as it arrives.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Fixes resize observer loops and TypeScript errors with custom heading tags.'
       }
     ]
   },
@@ -1067,6 +1141,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Rebuilt with a springy open, cards that rise, unfold or fade in, sliding link arrows, open on hover, a stacked layout for small screens and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Fixes TypeScript errors when rendering navigation links with custom components.'
       }
     ]
   },
@@ -1140,7 +1218,13 @@ export const componentMetadata = {
     name: 'FlexCarousel',
     docsUrl: 'https://reactbits.dev/components/flex-carousel',
     tags: [],
-    added: '2026-09-26'
+    added: '2026-09-26',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Components/DepthCarousel': {
     videoUrl: '/assets/video/depthcarousel.webm',
@@ -1167,7 +1251,13 @@ export const componentMetadata = {
     name: 'MorphSlider',
     docsUrl: 'https://reactbits.dev/components/morph-slider',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Components/DriftWall': {
     videoUrl: '/assets/video/driftwall.webm',
@@ -1190,6 +1280,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with crisp, smooth edges and no extra dependencies. Cards now open to the full image, respond to hover and the keyboard, and the gallery can drift, snap, fade and change shape.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1293,6 +1387,10 @@ export const componentMetadata = {
       {
         date: '2026-10-15',
         note: 'Same look with less than half the GPU work. On high refresh rate screens it also draws fewer frames while the glass is at rest.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents resize flicker and ignores font or image loads that finish after unmounting.'
       }
     ]
   },
@@ -1392,6 +1490,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Rebuilt to be lighter, with more ways to shape the tiles, autoplay, keyboard support and click to select.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1407,6 +1509,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt with no setup needed. Pass any image and the card swings with real momentum and flips on click.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'TypeScript installs now include Three.js type definitions.'
       }
     ]
   },
@@ -1452,6 +1558,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt with automatic framing, studio lighting, momentum dragging, intros and many new options. New demo models.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'TypeScript installs now include Three.js type definitions.'
       }
     ]
   },
@@ -1467,6 +1577,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Rebuilt with a smoother rising fill and rolling labels, a sliding active dot, a gliding pill option, a menu that folds in on small screens, and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Fixes TypeScript errors when rendering navigation links with custom components.'
       }
     ]
   },
@@ -1537,7 +1651,13 @@ export const componentMetadata = {
     name: 'BorderGlow',
     docsUrl: 'https://reactbits.dev/components/border-glow',
     tags: [],
-    added: '2026-03-17'
+    added: '2026-03-17',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Stops the intro sweep when disabled or unmounted and prevents overlapping sweeps when restarted.'
+      }
+    ]
   },
   'Components/LineSidebar': {
     videoUrl: '/assets/video/linesidebar.webm',
@@ -1584,6 +1704,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Rebuilt as inflated, squishy type and logos that dent, stretch and snap back with a jiggle.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1594,7 +1718,13 @@ export const componentMetadata = {
     name: 'RippleDistortion',
     docsUrl: 'https://reactbits.dev/animations/ripple-distortion',
     tags: [],
-    added: '2026-08-04'
+    added: '2026-08-04',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Animations/SwarmCursor': {
     videoUrl: '/assets/video/swarmcursor.webm',
@@ -1623,6 +1753,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Rebuilt as a print on the page in mono, duotone or full color, with dots that swell into the photo.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Preserves reveal trails and prevents flicker while resizing.'
       }
     ]
   },
@@ -1725,6 +1859,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as a satin metal card that reflects a looping video until you turn the camera on. It tilts toward the cursor, catches a sweeping light and comes in dark and light themes.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1737,7 +1875,13 @@ export const componentMetadata = {
     name: 'PatternWaves',
     docsUrl: 'https://reactbits.dev/backgrounds/pattern-waves',
     tags: ['webgl', 'ogl', 'halftone', 'pattern', 'waves', 'ascii', 'interactive', 'procedural'],
-    added: '2026-09-30'
+    added: '2026-09-30',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Backgrounds/MicroSlats': {
     videoUrl: '/assets/video/microslats.webm',
@@ -1746,7 +1890,13 @@ export const componentMetadata = {
     name: 'MicroSlats',
     docsUrl: 'https://reactbits.dev/backgrounds/micro-slats',
     tags: ['webgl', 'ogl', 'grid', 'waves', 'interactive', 'procedural'],
-    added: '2026-09-27'
+    added: '2026-09-27',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Backgrounds/ShapeWaves': {
     videoUrl: '/assets/video/shapewaves.webm',
@@ -1819,6 +1969,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt on the same swirl with crisp pixels and no extra dependencies. The cursor now stirs the paint, clicks spin up whirlpools, and an intro spins it into place.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1849,6 +2003,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt with brighter, glowing glints, a light that follows the cursor, a light theme and simpler controls, with no 3D library needed.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1859,7 +2017,13 @@ export const componentMetadata = {
     name: 'ColorBends',
     docsUrl: 'https://reactbits.dev/backgrounds/color-bends',
     tags: [],
-    added: '2025-10-27'
+    added: '2025-10-27',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container. TypeScript installs now include Three.js type definitions.'
+      }
+    ]
   },
   'Backgrounds/CRTWarp': {
     videoUrl: '/assets/video/crtwarp.webm',
@@ -1873,6 +2037,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Rebuilt as a real CRT that warms up into view, with true scanlines, phosphor masks, afterglow and bloom. The cursor bends the picture like a magnet, clicks flip the channel, and presets add amber, green and arcade looks.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1888,6 +2056,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Now reacts to the cursor, with a soft glow, any color and new shapes. Faster, and refined in light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1918,6 +2090,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt around a smooth magnifying lens that stays under the cursor and zooms closer while you hold. New dot layouts, swirl and pinch lenses, and an intro that pulls into focus.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -1993,6 +2169,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with crisp, steady streaks and round glowing heads. The light now warps in on load, bends around the cursor and stretches into warp trails while you hold.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2032,6 +2212,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'The metal now ignites from its white-hot cores, the cursor heats the filaments it passes and clicks flare them white-hot. Adds filament width, haze, rotation and position controls, more colors, crisper fine detail, a richer light mode and no dependencies.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2047,6 +2231,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Waves are now lit with soft light and shadow, rise from calm water on load, catch a light that follows the cursor and roll a swell in on click. Adds light direction, presets, a light mode and no dependencies.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2062,6 +2250,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Threads now draw in one after another, the strand under the cursor lights up while the rest recede, and clicks send light into the pinch. Adds braids, a 3D twist, traveling pulses, rotation, soft ends, more threads and colors, and a cleaner light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2107,6 +2299,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Rebuilt as waves of light sliced into glowing bars, seen in depth with a focus that follows the cursor.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2195,6 +2391,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt to be lighter. Images no longer stretch, and new modes range from crisp blocks to a liquid warp.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2225,6 +2425,10 @@ export const componentMetadata = {
       {
         date: '2026-10-08',
         note: 'Rebuilt with a real glow and a transparent background. Every part of the road and lights is now customizable.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container. TypeScript installs now include Three.js type definitions.'
       }
     ]
   },
@@ -2255,6 +2459,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Redesigned as a crisp, calm field of letters that glitch in color, now much lighter to run. The cursor scrambles nearby letters, a click tears through the rows, and fonts, spacing and character sets are all adjustable.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2270,6 +2478,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt on the same rays with a glowing source, drifting haze and crisper shafts, at a fraction of the cost. The cursor now casts a soft shadow and clicks send a wave of light down the beam.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2300,6 +2512,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with crisp, smoothly flowing lines and a soft band of light that drifts through them. Adds presets, a cursor spotlight, click ripples and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2311,7 +2527,13 @@ export const componentMetadata = {
     docsUrl: 'https://reactbits.dev/backgrounds/evil-eye',
     tags: [],
     added: '2026-03-17',
-    hidden: true
+    hidden: true,
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Responds to container size changes and prevents canvas flicker while resizing.'
+      }
+    ]
   },
   'Backgrounds/Radar': {
     videoUrl: '/assets/video/radar.webm',
@@ -2325,6 +2547,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt as a detailed radar scope with a glowing sweep, contacts that ping and fade, a sonar mode and a tilted floor view.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2340,6 +2566,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'The band now reaches toward a nearby cursor, clicks send a pulse of light along it, and it blooms in from a thin line. New presets, a tilt and a cleaner light mode, with no extra dependencies.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2355,6 +2585,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt from scratch and moved to Backgrounds, lighter and about three times faster, with crisper lines and glow. Rings can now ripple, breathe, spin or lean in 3D, react to hover and clicks, split into prism fringes, and work in light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2370,6 +2604,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as soft, glossy liquid chrome whose reflections follow the cursor, with a liquid wake and ripples on click. Adds presets, a light mode and a faster renderer.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2430,6 +2668,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt as soft folds of satin light with bright highlights, a cursor that turns them in 3D and a new light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2445,6 +2687,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Smoother, faster plasma with soft glow, white-hot cores and a cursor that stirs it, plus a new light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2475,6 +2721,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Runs up to four times faster with the same look, and adds spirals, flowing color and finer control over the rays. The burst now ignites on load, leans toward the cursor and sends a wave of light outward on click.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2490,6 +2740,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt with crisp lines, real traveling waves from the cursor and clicks, dot and cross styles, and a perspective floor.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2505,6 +2759,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt on the same folds with deeper shading, glossy satin highlights and a soft glow. The light follows the cursor, clicks ripple through the fabric, and the folds rise in on load.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2520,6 +2778,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with soft, shimmering light shafts that grow in from the corner and lean toward the cursor. Adds presets, side origins, drifting dust and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2595,6 +2857,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with smoother, glowing swirls, a sweeping intro and puffs on click. Runs several times faster and adds presets and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2625,6 +2891,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt to run about four times faster with the same look. It now ignites on load, follows the cursor, surges on click and has a soft glow, presets and more controls.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2640,6 +2910,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt with crisp pixel-art flakes in layers of depth, a soft glow, wind and cursor play, snow that can pile up, and a light mode.'
+      },
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
       }
     ]
   },
@@ -2860,7 +3134,13 @@ export const componentMetadata = {
     name: 'PromptBar',
     docsUrl: 'https://reactbits.dev/micro/prompt-bar',
     tags: ['composer', 'prompt', 'chat', 'ai', 'input', 'send', 'stop', 'menu', 'mention', 'command'],
-    added: '2026-09-18'
+    added: '2026-09-18',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container.'
+      }
+    ]
   },
   'Micro/SloshGauge': {
     videoUrl: '/assets/video/sloshgauge.webm',
@@ -2905,7 +3185,13 @@ export const componentMetadata = {
     name: 'FolderFloat',
     docsUrl: 'https://reactbits.dev/micro/folder-float',
     tags: ['folder', 'menu', 'hover', 'select', 'float', 'spring', 'files'],
-    added: '2026-09-18'
+    added: '2026-09-18',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'TypeScript installs now include Matter.js type definitions.'
+      }
+    ]
   },
   'Micro/BranchedMenu': {
     videoUrl: '/assets/video/branchedmenu.webm',
@@ -2941,7 +3227,13 @@ export const componentMetadata = {
     name: 'PaperCrumple',
     docsUrl: 'https://reactbits.dev/micro/paper-crumple',
     tags: ['paper', 'crumple', '3d', 'three', 'image', 'drag', 'hold', 'fold', 'crease'],
-    added: '2026-09-20'
+    added: '2026-09-20',
+    updates: [
+      {
+        date: '2026-11-08',
+        note: 'Prevents canvas flicker while resizing the container. TypeScript installs now include Three.js type definitions.'
+      }
+    ]
   },
   'Micro/Shredder': {
     videoUrl: '/assets/video/shredder.webm',

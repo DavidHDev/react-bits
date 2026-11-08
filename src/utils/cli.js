@@ -1,3 +1,5 @@
+import { generateDependencyCommands } from './dependencies.js';
+
 const variantForShadcn = (language, style) =>
   `${(language || 'JS').toUpperCase()}-${(style || 'CSS').toUpperCase().replace('TAILWIND', 'TW')}`;
 
@@ -40,15 +42,7 @@ export const generateCliCommands = (language, style, category, subcategory, depe
     Object.entries(prefixCommands).map(([mgr, prefix]) => [mgr, `${prefix} shadcn@latest add ${shadcnUrl}`])
   );
 
-  const depsString = typeof dependencies === 'string' ? dependencies.trim() : '';
-  const manual = depsString
-    ? {
-        pnpm: `pnpm add ${depsString}`,
-        npm: `npm install ${depsString}`,
-        yarn: `yarn add ${depsString}`,
-        bun: `bun add ${depsString}`
-      }
-    : null;
+  const manual = generateDependencyCommands(dependencies, language);
 
   return { manual, jsrepo, shadcn };
 };

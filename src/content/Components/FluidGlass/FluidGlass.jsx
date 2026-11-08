@@ -843,7 +843,7 @@ const FluidGlass = ({
         image.crossOrigin = 'anonymous';
         image.decoding = 'async';
         image.onload = () => {
-          if (media.image !== image) return;
+          if (disposed || media.image !== image) return;
           media.width = image.naturalWidth || 1;
           media.height = image.naturalHeight || 1;
           gl.bindTexture(gl.TEXTURE_2D, mediaTexture);

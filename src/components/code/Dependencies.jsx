@@ -1,22 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 import { useInstallation } from '../../hooks/useInstallation';
-
-const INSTALL_COMMANDS = {
-  npm: 'npm install',
-  pnpm: 'pnpm add',
-  yarn: 'yarn add',
-  bun: 'bun add'
-};
+import { useOptions } from '../context/OptionsContext/useOptions';
+import { generateDependencyCommands, getTypeDependencies } from '../../utils/dependencies';
 
 const Dependencies = ({ dependencyList = [] }) => {
   const { packageManager } = useInstallation();
+  const { languagePreset } = useOptions() || {};
   const [copied, setCopied] = useState(false);
   const dependencies = useMemo(
     () => [...new Set(dependencyList.map(dependency => dependency.trim()).filter(Boolean))],
     [dependencyList]
   );
-  const command = `${INSTALL_COMMANDS[packageManager] || INSTALL_COMMANDS.npm} ${dependencies.join(' ')}`;
+  const commands = generateDependencyCommands(dependencies, languagePreset);
+  const command = commands?.[packageManager] || commands?.npm || '';
+  const packageCount = dependencies.length + (languagePreset === 'TS' ? getTypeDependencies(dependencies).length : 0);
 
   useEffect(() => {
     if (!copied) return undefined;
@@ -40,12 +38,16 @@ const Dependencies = ({ dependencyList = [] }) => {
       <div className="dependencies-summary">
         <h2 id="dependencies-title">Dependencies</h2>
         <p>
-          {dependencies.length} required {dependencies.length === 1 ? 'package' : 'packages'}
+          {packageCount} required {packageCount === 1 ? 'package' : 'packages'}
         </p>
       </div>
       <div className="dependencies-command">
         <code title={command}>{command}</code>
-        <button type="button" onClick={copyCommand} aria-label={copied ? 'Install command copied' : 'Copy install command'}>
+        <button
+          type="button"
+          onClick={copyCommand}
+          aria-label={copied ? 'Install command copied' : 'Copy install command'}
+        >
           {copied ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
           <span aria-live="polite">{copied ? 'Copied' : 'Copy'}</span>
         </button>
