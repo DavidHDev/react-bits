@@ -746,6 +746,7 @@ export default {
     const cache = buffers(ctx, state, gw, gh);
     gl.bindFramebuffer(gl.FRAMEBUFFER, grid.fbo);
     gl.bindBuffer(gl.PIXEL_PACK_BUFFER, cache.pbo);
+    gl.bufferData(gl.PIXEL_PACK_BUFFER, gw * gh * 4, gl.STREAM_READ);
     gl.readPixels(0, 0, gw, gh, gl.RGBA, gl.UNSIGNED_BYTE, 0);
     const fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
     gl.flush();

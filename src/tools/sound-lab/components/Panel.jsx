@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Cancel01Icon, Copy01Icon, PlusSignIcon } from '@hugeicons/core-free-icons';
 import { RotateCcw } from 'lucide-react';
 import { toast } from 'sonner';
@@ -175,7 +175,7 @@ function Effects({ tune, onEffect }) {
   );
 }
 
-export default function Panel({ sound, tune, onTune, onEffect, onReset }) {
+function Panel({ sound, tune, onTune, onEffect, onReset }) {
   const scrollRef = useRef(null);
   const edges = useScrollEdges(scrollRef, '.snd-panel-scroll > section');
   const { languagePreset, stylePreset } = useOptions();
@@ -236,3 +236,5 @@ export default function Panel({ sound, tune, onTune, onEffect, onReset }) {
     </aside>
   );
 }
+
+export default memo(Panel);

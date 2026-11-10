@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createRenderer } from '../engine/renderer';
 import { bindMasks, loadField, maskPlan, masksReady } from '../engine/masks';
-import { isMaskLayer, ratioOf } from './doc';
+import { contentKey, isMaskLayer, ratioOf } from './doc';
 
 let shared = null;
 
@@ -35,7 +35,7 @@ export function useMarkMask(doc, enabled) {
   const [url, setUrl] = useState(null);
   const docRef = useRef(doc);
   docRef.current = doc;
-  const markKey = JSON.stringify([doc.mark, doc.artboard.ratio]);
+  const markKey = useMemo(() => contentKey([doc.mark, doc.artboard.ratio]), [doc.mark, doc.artboard.ratio]);
   const timer = useRef(0);
   useEffect(() => {
     if (!enabled) return undefined;

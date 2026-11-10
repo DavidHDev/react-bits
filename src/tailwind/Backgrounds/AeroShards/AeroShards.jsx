@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { draw, effect, frame, init, sampler, storage, surface, target, uniforms } from 'vgpu';
+import { draw, frame, init, sampler, storage, surface, target, uniforms } from 'vgpu';
 
 const ROOT = 'relative h-full w-full overflow-hidden';
 const CANVAS = 'absolute inset-0 block h-full w-full';
@@ -495,7 +495,24 @@ fn fs_edge(in: VertexOut) -> FragmentOut {
 }
 `;
 
-const LAYER_BLUR_SHADER = `
+const SCREEN_VERTEX = `
+struct ScreenOut {
+  @builtin(position) position: vec4f,
+  @location(0) uv: vec2f,
+}
+
+@vertex
+fn vs_screen(@builtin(vertex_index) index: u32) -> ScreenOut {
+  var corners = array<vec2f, 3>(vec2f(-1.0, -1.0), vec2f(3.0, -1.0), vec2f(-1.0, 3.0));
+  var coords = array<vec2f, 3>(vec2f(0.0, 1.0), vec2f(2.0, 1.0), vec2f(0.0, -1.0));
+  var out: ScreenOut;
+  out.position = vec4f(corners[index], 0.0, 1.0);
+  out.uv = coords[index];
+  return out;
+}
+`;
+
+const LAYER_BLUR_SHADER = `${SCREEN_VERTEX}
 struct Spread { texel: vec4f }
 @group(0) @binding(0) var source: texture_2d<f32>;
 @group(0) @binding(1) var linearSampler: sampler;
@@ -517,7 +534,7 @@ fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
 }
 `;
 
-const SHADOW_SHADER = `
+const SHADOW_SHADER = `${SCREEN_VERTEX}
 struct Shade {
   info: vec4f,
   more: vec4f,
@@ -554,7 +571,7 @@ fn fs_main(@builtin(position) pixel: vec4f) -> @location(0) vec4f {
 }
 `;
 
-const COMPOSITE_SHADER = `
+const COMPOSITE_SHADER = `${SCREEN_VERTEX}
 struct Blend { info: vec4f }
 @group(0) @binding(0) var source: texture_2d<f32>;
 @group(0) @binding(1) var linearSampler: sampler;
@@ -662,7 +679,7 @@ fn fs_main(in: MarkerOut) -> @location(0) vec4f {
 }
 `;
 
-const PREFILTER_SHADER = `
+const PREFILTER_SHADER = `${SCREEN_VERTEX}
 struct Bloom { texel: vec4f }
 @group(0) @binding(0) var source: texture_2d<f32>;
 @group(0) @binding(1) var linearSampler: sampler;
@@ -682,7 +699,7 @@ fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
 }
 `;
 
-const DOWNSAMPLE_SHADER = `
+const DOWNSAMPLE_SHADER = `${SCREEN_VERTEX}
 struct Bloom { texel: vec4f }
 @group(0) @binding(0) var source: texture_2d<f32>;
 @group(0) @binding(1) var linearSampler: sampler;
@@ -700,7 +717,7 @@ fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
 }
 `;
 
-const BLUR_SHADER = `
+const BLUR_SHADER = `${SCREEN_VERTEX}
 struct Bloom { texel: vec4f }
 @group(0) @binding(0) var source: texture_2d<f32>;
 @group(0) @binding(1) var linearSampler: sampler;
@@ -717,7 +734,7 @@ fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
 }
 `;
 
-const FINISH_SHADER = `
+const FINISH_SHADER = `${SCREEN_VERTEX}
 struct Finish {
   info: vec4f,
   paper: vec4f,
@@ -1072,25 +1089,20 @@ export default function AeroShards({
         marker: [0, 1, 4, CAMERA],
         surface: [7, 0, 0, 2.4]
       });
-      let markerCapacity = 0;
-      let markerBuffer = null;
-      let markerData = new Float32Array(0);
-      const markerDraw = draw(instance, {
-        shader: MARKER_SHADER,
-        vertices: 6,
-        cull: 'none',
-        depth: false,
-        blend: 'premultiplied',
-        label: 'aero-shards-markers'
-      });
-      const ensureMarkers = needed => {
-        if (needed <= markerCapacity && markerBuffer) return;
-        markerCapacity = Math.max(needed, 512);
-        markerData = new Float32Array(markerCapacity * MARKER_FLOATS);
-        markerBuffer = storage(instance, markerData.byteLength, 'read');
-        markerDraw.set({ scene: frameParams, markers: markerBuffer });
+      const channel = new MessageChannel();
+      cleanups.push(() => channel.port1.close());
+      const breathe = () =>
+        new Promise(resolve => {
+          channel.port1.onmessage = resolve;
+          channel.port2.postMessage(0);
+        });
+      const pending = [];
+      const prepare = (item, signature) => {
+        const ready = item.compile(signature);
+        ready.catch(() => {});
+        pending.push(ready);
+        return item;
       };
-      ensureMarkers(512);
       const groupSize = scale => [
         Math.max(1, Math.round(output.size[0] * scale)),
         Math.max(1, Math.round(output.size[1] * scale))
@@ -1103,58 +1115,77 @@ export default function AeroShards({
         blurred: target(instance, { size: index === 0 ? [1, 1] : groupSize(scale), format: 'rgba16float' }),
         softReady: index !== 0
       }));
-      const layerParams = DEPTHS.map(() => uniforms(instance, { view: [1, 1, 1, 0], look: [0.7, 0, 0, 0] }));
-      const spreadX = DEPTHS.map(() => uniforms(instance, { texel: [0, 0, 0, 0] }));
-      const spreadY = DEPTHS.map(() => uniforms(instance, { texel: [0, 0, 0, 0] }));
-      const mixParams = DEPTHS.map(() => uniforms(instance, { info: [1, 0, 0, 0] }));
-      const shadeParams = DEPTHS.map(() => uniforms(instance, { info: [0, 0, 0, 0], more: [0, 0, 0, 0] }));
-      const shardSolid = DEPTHS.map((_, level) =>
+      const params = groups.map(() => uniforms(instance, { view: [1, 1, 1, 0], look: [0.7, 0, 0, 0] }));
+      const shades = groups.map(() => uniforms(instance, { info: [0, 0, 0, 0], more: [0, 0, 0, 0] }));
+      const solids = [];
+      const edges = [];
+      const shadows = [];
+      for (let index = 0; index < groups.length; index += 1) {
+        const group = groups[index];
+        solids.push(
+          prepare(
+            draw(instance, {
+              shader: SHARD_SHADER,
+              entry: { fragment: 'fs_solid' },
+              vertices: 6,
+              cull: 'none',
+              depth: { write: true, compare: 'less' },
+              label: `aero-shards-solid-${index}`
+            }),
+            group.layer
+          )
+        );
+        await breathe();
+        if (disposed) return;
+        edges.push(
+          prepare(
+            draw(instance, {
+              shader: SHARD_SHADER,
+              entry: { fragment: 'fs_edge' },
+              vertices: 6,
+              cull: 'none',
+              depth: { write: false, compare: 'less' },
+              blend: 'premultiplied',
+              label: `aero-shards-edge-${index}`
+            }),
+            group.layer
+          )
+        );
+        await breathe();
+        if (disposed) return;
+        shadows.push(
+          prepare(
+            draw(instance, {
+              shader: SHADOW_SHADER,
+              label: `aero-shards-shadow-${index}`,
+              set: { source: group.layer, depthMap: group.layer.depth, shadeInfo: shades[index] }
+            }),
+            group.shaded
+          )
+        );
+      }
+      let markerCapacity = 0;
+      let markerBuffer = null;
+      let markerData = new Float32Array(0);
+      const markerDraw = prepare(
         draw(instance, {
-          shader: SHARD_SHADER,
-          entry: { fragment: 'fs_solid' },
+          shader: MARKER_SHADER,
           vertices: 6,
           cull: 'none',
-          depth: { write: true, compare: 'less' },
-          label: `aero-shards-solid-${level}`
-        })
-      );
-      const shardEdge = DEPTHS.map((_, level) =>
-        draw(instance, {
-          shader: SHARD_SHADER,
-          entry: { fragment: 'fs_edge' },
-          vertices: 6,
-          cull: 'none',
-          depth: { write: false, compare: 'less' },
+          depth: false,
           blend: 'premultiplied',
-          label: `aero-shards-edge-${level}`
-        })
+          label: 'aero-shards-markers'
+        }),
+        scene
       );
-      const layerPasses = DEPTHS.map((_, level) =>
-        groups.map((group, index) => ({
-          shadow: effect(instance, SHADOW_SHADER, {
-            label: `aero-shards-shadow-${level}-${index}`,
-            set: { source: group.layer, depthMap: group.layer.depth, shadeInfo: shadeParams[level] }
-          }),
-          blurX: effect(instance, LAYER_BLUR_SHADER, {
-            label: `aero-shards-depth-x-${level}-${index}`,
-            set: { source: group.shaded, linearSampler: linear, spreadInfo: spreadX[level] }
-          }),
-          blurY: effect(instance, LAYER_BLUR_SHADER, {
-            label: `aero-shards-depth-y-${level}-${index}`,
-            set: { source: group.temp, linearSampler: linear, spreadInfo: spreadY[level] }
-          }),
-          sharp: effect(instance, COMPOSITE_SHADER, {
-            label: `aero-shards-sharp-${level}-${index}`,
-            blend: 'premultiplied',
-            set: { source: group.shaded, linearSampler: linear, mixInfo: mixParams[level] }
-          }),
-          soft: effect(instance, COMPOSITE_SHADER, {
-            label: `aero-shards-soft-${level}-${index}`,
-            blend: 'premultiplied',
-            set: { source: group.blurred, linearSampler: linear, mixInfo: mixParams[level] }
-          })
-        }))
-      );
+      const ensureMarkers = needed => {
+        if (needed <= markerCapacity && markerBuffer) return;
+        markerCapacity = Math.max(needed, 512);
+        markerData = new Float32Array(markerCapacity * MARKER_FLOATS);
+        markerBuffer = storage(instance, markerData.byteLength, 'read');
+        markerDraw.set({ scene: frameParams, markers: markerBuffer });
+      };
+      ensureMarkers(512);
       let capacity = 0;
       let shardBuffer = null;
       let upload = new Float32Array(0);
@@ -1167,9 +1198,9 @@ export default function AeroShards({
         staging = new Float32Array(capacity * FLOATS);
         depths = new Float32Array(capacity);
         shardBuffer = storage(instance, upload.byteLength, 'read');
-        DEPTHS.forEach((_, level) => {
-          shardSolid[level].set({ scene: frameParams, shards: shardBuffer, layerInfo: layerParams[level] });
-          shardEdge[level].set({ scene: frameParams, shards: shardBuffer, layerInfo: layerParams[level] });
+        groups.forEach((_, index) => {
+          solids[index].set({ scene: frameParams, shards: shardBuffer, layerInfo: params[index] });
+          edges[index].set({ scene: frameParams, shards: shardBuffer, layerInfo: params[index] });
         });
       };
       ensureCapacity(settingsRef.current.count);
@@ -1185,54 +1216,100 @@ export default function AeroShards({
           downParams,
           horizontalParams,
           verticalParams,
-          down: effect(instance, index === 0 ? PREFILTER_SHADER : DOWNSAMPLE_SHADER, {
-            label: `aero-shards-down-${index}`,
-            set: { source, linearSampler: linear, bloom: downParams }
-          }),
-          horizontal: effect(instance, BLUR_SHADER, {
-            label: `aero-shards-blur-x-${index}`,
-            set: { source: level.main, linearSampler: linear, bloom: horizontalParams }
-          }),
-          vertical: effect(instance, BLUR_SHADER, {
-            label: `aero-shards-blur-y-${index}`,
-            set: { source: level.spare, linearSampler: linear, bloom: verticalParams }
-          })
+          down: prepare(
+            draw(instance, {
+              shader: index === 0 ? PREFILTER_SHADER : DOWNSAMPLE_SHADER,
+              label: `aero-shards-down-${index}`,
+              set: { source, linearSampler: linear, bloom: downParams }
+            }),
+            level.main
+          ),
+          horizontal: prepare(
+            draw(instance, {
+              shader: BLUR_SHADER,
+              label: `aero-shards-blur-x-${index}`,
+              set: { source: level.main, linearSampler: linear, bloom: horizontalParams }
+            }),
+            level.spare
+          ),
+          vertical: prepare(
+            draw(instance, {
+              shader: BLUR_SHADER,
+              label: `aero-shards-blur-y-${index}`,
+              set: { source: level.spare, linearSampler: linear, bloom: verticalParams }
+            }),
+            level.main
+          )
         };
       });
       const finishParams = uniforms(instance, { info: [0, 0, 0, 1], paper: [0, 0, 0, 0], mode: [0, 0, 0, 0] });
-      const finish = effect(instance, FINISH_SHADER, {
-        label: 'aero-shards-finish',
-        set: {
-          sceneTexture: scene,
-          linearSampler: linear,
-          bloom0: levels[0].main,
-          bloom1: levels[1].main,
-          bloom2: levels[2].main,
-          bloom3: levels[3].main,
-          finish: finishParams
-        }
-      });
-      await Promise.all([
-        ...shardSolid.map(item => item.compile(groups[0].layer)),
-        ...shardEdge.map(item => item.compile(groups[0].layer)),
-        ...layerPasses.flatMap(list =>
-          list.flatMap((item, index) => [
-            item.shadow.compile(groups[index].shaded),
-            item.blurX.compile(groups[index].temp),
-            item.blurY.compile(groups[index].blurred),
-            item.sharp.compile(scene),
-            item.soft.compile(scene)
-          ])
-        ),
-        markerDraw.compile(scene),
-        finish.compile({ colors: [format] }),
-        ...passes.flatMap((pass, index) => [
-          pass.down.compile(levels[index].main),
-          pass.horizontal.compile(levels[index].spare),
-          pass.vertical.compile(levels[index].main)
-        ])
-      ]);
+      const finish = prepare(
+        draw(instance, {
+          shader: FINISH_SHADER,
+          label: 'aero-shards-finish',
+          set: {
+            sceneTexture: scene,
+            linearSampler: linear,
+            bloom0: levels[0].main,
+            bloom1: levels[1].main,
+            bloom2: levels[2].main,
+            bloom3: levels[3].main,
+            finish: finishParams
+          }
+        }),
+        { colors: [format] }
+      );
+      await breathe();
       if (disposed) return;
+      const spreadX = DEPTHS.map(() => uniforms(instance, { texel: [0, 0, 0, 0] }));
+      const spreadY = DEPTHS.map(() => uniforms(instance, { texel: [0, 0, 0, 0] }));
+      const mixParams = DEPTHS.map(() => uniforms(instance, { info: [1, 0, 0, 0] }));
+      const layerPasses = [];
+      for (let level = 0; level < LEVELS; level += 1) {
+        layerPasses.push(
+          groups.map((group, index) => ({
+            blurX: prepare(
+              draw(instance, {
+                shader: LAYER_BLUR_SHADER,
+                label: `aero-shards-depth-x-${level}-${index}`,
+                set: { source: group.shaded, linearSampler: linear, spreadInfo: spreadX[level] }
+              }),
+              group.temp
+            ),
+            blurY: prepare(
+              draw(instance, {
+                shader: LAYER_BLUR_SHADER,
+                label: `aero-shards-depth-y-${level}-${index}`,
+                set: { source: group.temp, linearSampler: linear, spreadInfo: spreadY[level] }
+              }),
+              group.blurred
+            ),
+            sharp: prepare(
+              draw(instance, {
+                shader: COMPOSITE_SHADER,
+                label: `aero-shards-sharp-${level}-${index}`,
+                blend: 'premultiplied',
+                set: { source: group.shaded, linearSampler: linear, mixInfo: mixParams[level] }
+              }),
+              scene
+            ),
+            soft: prepare(
+              draw(instance, {
+                shader: COMPOSITE_SHADER,
+                label: `aero-shards-soft-${level}-${index}`,
+                blend: 'premultiplied',
+                set: { source: group.blurred, linearSampler: linear, mixInfo: mixParams[level] }
+              }),
+              scene
+            )
+          }))
+        );
+        await breathe();
+        if (disposed) return;
+      }
+      await Promise.all(pending);
+      if (disposed) return;
+      channel.port1.close();
 
       const paths = Array.from({ length: LEVELS }, () => ({
         position: new Float32Array(SAMPLES * 3),
@@ -1378,9 +1455,7 @@ export default function AeroShards({
           level.main.resize(levelSize(index));
           level.spare.resize(levelSize(index));
         });
-        layerPasses.forEach(list =>
-          list.forEach((item, index) => item.shadow.set({ depthMap: groups[index].layer.depth }))
-        );
+        groups.forEach((group, index) => shadows[index].set({ depthMap: group.layer.depth }));
         state.quiet = 0;
       };
       const sizes = new ResizeObserver(resize);
@@ -1894,8 +1969,8 @@ export default function AeroShards({
             group.blurred.resize(groupSize(group.scale));
           }
           const size = group.layer.size;
-          layerParams[level].set({
-            view: [size[0], size[1], cam.focal * (size[0] / output.size[0]), level],
+          params[groupIndex].set({
+            view: [size[0], size[1], cam.focal * (size[0] / output.size[0]), 0],
             look: [s.lightMode ? 0.5 : 0.7, 0, 0, 0]
           });
           const local = sigma * group.scale;
@@ -1904,7 +1979,7 @@ export default function AeroShards({
           mixParams[level].set({ info: [FADE[level], 0, 0, 0] });
           const step = Math.max(0.6, 1.4 * (size[0] / Math.max(container.clientWidth, 1)));
           const shadowStrength = s.material === MATERIALS.glass ? 0 : s.lightMode ? 0.32 : 0.62;
-          shadeParams[level].set({ info: [step * 0.55, step * 0.85, shadowStrength, 0], more: [0.00045, 0, 0, 0] });
+          shades[groupIndex].set({ info: [step * 0.55, step * 0.85, shadowStrength, 0], more: [0.00045, 0, 0, 0] });
           return { group, groupIndex, soft };
         });
 
@@ -1914,10 +1989,10 @@ export default function AeroShards({
             const steps = layerPasses[level][groupIndex];
             if (counts[level] > 0) {
               current.pass({ target: group.layer, clear: [0, 0, 0, 0], clearDepth: 1 }, pass => {
-                pass.draw(shardSolid[level], { instances: counts[level], firstInstance: starts[level] });
-                pass.draw(shardEdge[level], { instances: counts[level], firstInstance: starts[level] });
+                pass.draw(solids[groupIndex], { instances: counts[level], firstInstance: starts[level] });
+                pass.draw(edges[groupIndex], { instances: counts[level], firstInstance: starts[level] });
               });
-              current.pass({ target: group.shaded, clear: [0, 0, 0, 0] }, pass => pass.draw(steps.shadow));
+              current.pass({ target: group.shaded, clear: [0, 0, 0, 0] }, pass => pass.draw(shadows[groupIndex]));
               if (soft) {
                 current.pass({ target: group.temp, clear: [0, 0, 0, 0] }, pass => pass.draw(steps.blurX));
                 current.pass({ target: group.blurred, clear: [0, 0, 0, 0] }, pass => pass.draw(steps.blurY));

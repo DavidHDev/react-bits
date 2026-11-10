@@ -2,10 +2,10 @@ import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ScreenShareIcon, Upload04Icon } from '@hugeicons/core-free-icons';
 import { Icon } from '../../background-studio/components/ui';
 import { Renderer } from '../engine/renderer';
-import { aspectRatio, isLooping, pickFocus, screenPoint } from '../engine/scene';
+import { aspectRatio, isLooping, normalizeDoc, pickFocus, screenPoint, slotFor } from '../engine/scene';
 import { TextCache, prepareShot, renderShot } from '../engine/shot';
 import { clamp } from '../engine/math';
-import { frameOf, mediaSizes } from '../media';
+import { dropBitmap, frameOf, liveBitmap, mediaSizes } from '../media';
 import { loadBackgroundImage } from '../state/useThumbnails';
 import { createLiveBackdrop } from '../backdrop';
 
@@ -56,6 +56,23 @@ function outlinePath(scene, indices, width, height) {
   return parts.join('');
 }
 
+const idle = callback =>
+  typeof requestIdleCallback === 'function'
+    ? requestIdleCallback(callback, { timeout: 2000 })
+    : setTimeout(callback, 600);
+
+const slotsInUse = (doc, slots) => {
+  const sizes = mediaSizes(slots);
+  const used = new Set();
+  normalizeDoc(doc).devices.forEach(device => {
+    const slot = slotFor(device, sizes);
+    if (slot !== null && slot !== undefined) used.add(slot);
+  });
+  const bg = doc.background || {};
+  if (bg.kind === 'ambient') used.add(bg.slot ?? 0);
+  return used;
+};
+
 function paintOutline(path, canvas, scene, indices) {
   if (!path || !canvas) return;
   path.setAttribute('d', indices?.length ? outlinePath(scene, indices, canvas.clientWidth, canvas.clientHeight) : '');
@@ -100,6 +117,7 @@ const StageView = forwardRef(function StageView(
   const [quality, setQuality] = useState(1);
   const live = useRef({});
   const dirty = useRef(true);
+  const onScreen = useRef(true);
   const wake = useRef(null);
   const invalidate = () => {
     dirty.current = true;
@@ -161,12 +179,25 @@ const StageView = forwardRef(function StageView(
     let raf = 0;
     let last = performance.now();
     let reported = 0;
+    let warmed = false;
+    let usedFor = null;
+    let used = new Set();
+    let pending = false;
     const pace = { cost: 1 / 60, lag: 0, calm: 0, quality: 1 };
+    const inUse = state => {
+      if (!usedFor || usedFor.doc !== state.doc || usedFor.slots !== state.slots) {
+        used = slotsInUse(state.doc, state.slots);
+        usedFor = { doc: state.doc, slots: state.slots };
+      }
+      return used;
+    };
     const keepAlive = () => {
       const state = live.current;
-      if (state.playing || dirty.current) return true;
+      if (!onScreen.current) return false;
+      if (state.playing || dirty.current || pending) return true;
       if ((state.doc.background || {}).kind === 'reactbits') return true;
-      return state.slots.some(media => media?.kind === 'video' || media?.kind === 'live');
+      const slots = inUse(state);
+      return state.slots.some((media, slot) => slots.has(slot) && (media?.kind === 'video' || media?.kind === 'live'));
     };
     const govern = gap => {
       if (gap > 0.25) return;
@@ -205,6 +236,10 @@ const StageView = forwardRef(function StageView(
         dirty.current = true;
       }
       const updated = new Set();
+      const slots = inUse(state);
+      const fresh = [];
+      let spare = 1;
+      pending = false;
       state.slots.forEach((media, slot) => {
         const record = uploaded.current[slot];
         if (!media) {
@@ -215,17 +250,27 @@ const StageView = forwardRef(function StageView(
           }
           return;
         }
+        const shown = slots.has(slot);
         if (media.kind === 'video' && !updated.has(media)) {
           media.player.update();
           updated.add(media);
         }
         const version = media.kind === 'video' ? media.player.version : media.kind === 'live' ? media.version : 0;
-        if (record && record.media === media && record.version === version) return;
+        if (record && record.media === media && (record.version === version || !shown)) return;
+        if (!shown && spare-- <= 0) {
+          pending = true;
+          return;
+        }
         const frame = frameOf(media);
         if (!frame) return;
         renderer.setMedia(slot, frame.image, frame.width, frame.height, { mips: true });
         uploaded.current[slot] = { media, version };
-        dirty.current = true;
+        if (frame.image === liveBitmap(media)) fresh.push(media);
+        if (shown) dirty.current = true;
+      });
+      fresh.forEach(media => {
+        if (state.slots.every((other, slot) => other !== media || uploaded.current[slot]?.media === media))
+          dropBitmap(media);
       });
       const bg = state.doc.background || {};
       if (bg.kind === 'reactbits' && backdrop.current) {
@@ -279,15 +324,26 @@ const StageView = forwardRef(function StageView(
       if (!canvasEl || canvasEl.width < 4 || canvasEl.height < 4) return;
       dirty.current = false;
       try {
-        sceneRef.current = renderShot(renderer, state.doc, mediaSizes(state.slots), {
+        const scene = renderShot(renderer, state.doc, mediaSizes(state.slots), {
           width: canvasEl.width,
           height: canvasEl.height,
           time: timeRef.current,
           cache: cache.current,
-          preview: true
+          preview: true,
+          defer: true
         });
+        if (!scene.drawn) {
+          dirty.current = true;
+          return;
+        }
+        sceneRef.current = scene;
+        if (!warmed) {
+          warmed = true;
+          idle(() => renderer.warm());
+        }
       } catch (problem) {
         console.error(problem);
+        if (/^(Shader|Program) /.test(problem?.message || '')) setFailed(problem.message);
       }
       paintOutline(outlineRef.current, canvasRef.current, sceneRef.current, state.lit);
     };
@@ -297,12 +353,24 @@ const StageView = forwardRef(function StageView(
       if (keepAlive()) raf = requestAnimationFrame(tick);
     };
     wake.current = () => {
-      if (raf) return;
+      if (raf || !onScreen.current) return;
       last = performance.now();
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
+    const view = viewRef.current;
+    const observer =
+      typeof IntersectionObserver === 'undefined' || !view
+        ? null
+        : new IntersectionObserver(records => {
+            const visible = records[records.length - 1].isIntersecting;
+            if (visible === onScreen.current) return;
+            onScreen.current = visible;
+            if (visible) wake.current?.();
+          });
+    observer?.observe(view);
     return () => {
+      observer?.disconnect();
       wake.current = null;
       cancelAnimationFrame(raf);
       renderer.dispose();

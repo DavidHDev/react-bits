@@ -1,10 +1,10 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Portal, Tooltip } from '@chakra-ui/react';
 import { HugeiconsIcon } from '@hugeicons/react';
 
-export const Icon = ({ icon, size = 16 }) => (
-  <HugeiconsIcon icon={icon} size={size} strokeWidth={1.6} aria-hidden="true" />
-);
+export const Icon = memo(function Icon({ icon, size = 16 }) {
+  return <HugeiconsIcon icon={icon} size={size} strokeWidth={1.6} aria-hidden="true" />;
+});
 
 export const Tip = ({ label, hint, placement = 'top', children }) => (
   <Tooltip.Root openDelay={300} closeDelay={80} positioning={{ placement, gutter: 8 }}>
@@ -20,26 +20,38 @@ export const Tip = ({ label, hint, placement = 'top', children }) => (
   </Tooltip.Root>
 );
 
+const isPlain = label => label == null || typeof label === 'string' || typeof label === 'number';
+
+const optionsKey = options =>
+  options.every(option => isPlain(option.label))
+    ? options.map(option => `${option.value}\u0001${option.label ?? ''}\u0001${option.disabled ? 1 : 0}`).join('\u0002')
+    : options;
+
 export const Track = ({ label, value, options, onChange, iconOnly = false, className = '', placement = 'top' }) => {
   const trackRef = useRef(null);
   const [pill, setPill] = useState(null);
+  const shape = optionsKey(options);
+
+  const measure = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const active = track.querySelector('[aria-pressed="true"]');
+    setPill(previous => {
+      if (!active) return null;
+      const next = { x: active.offsetLeft, width: active.offsetWidth, ready: Boolean(previous) };
+      return previous && previous.x === next.x && previous.width === next.width ? previous : next;
+    });
+  }, []);
+
+  useLayoutEffect(() => measure(), [measure, value, shape]);
 
   useLayoutEffect(() => {
     const track = trackRef.current;
     if (!track) return undefined;
-    const measure = () => {
-      const active = track.querySelector('[aria-pressed="true"]');
-      setPill(previous => {
-        if (!active) return null;
-        const next = { x: active.offsetLeft, width: active.offsetWidth, ready: Boolean(previous) };
-        return previous && previous.x === next.x && previous.width === next.width ? previous : next;
-      });
-    };
-    measure();
     const observer = new ResizeObserver(measure);
     observer.observe(track);
     return () => observer.disconnect();
-  }, [value, options]);
+  }, [measure]);
 
   return (
     <div className={`docs-track bs-track ${className}`} role="group" aria-label={label} ref={trackRef} data-pill="">

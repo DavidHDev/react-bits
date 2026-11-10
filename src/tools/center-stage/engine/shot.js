@@ -75,7 +75,12 @@ export class TextCache {
   }
 }
 
-export function renderShot(renderer, input, media, { width, height, time = 0, seed, cache, preview = false }) {
+export function renderShot(
+  renderer,
+  input,
+  media,
+  { width, height, time = 0, seed, cache, preview = false, defer = false }
+) {
   const doc = normalizeDoc(input);
   const scene = buildScene(doc, media, { width, height, time, preview });
   const ink = autoInk(doc);
@@ -115,6 +120,6 @@ export function renderShot(renderer, input, media, { width, height, time = 0, se
     });
     if (canvas) overlay = { canvas, key };
   }
-  renderer.render(scene, { type, overlay, seed });
+  scene.drawn = renderer.render(scene, { type, overlay, seed, defer });
   return scene;
 }

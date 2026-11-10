@@ -1,7 +1,7 @@
 import { parseColor } from '../../../components/common/Preview/colorMath';
-import { FIELD_RANGE, MASK_SLOTS, MASK_TYPE, VERTEX, buildFragment } from './shader';
+import { FIELD_RANGE, MASK_SLOTS, MASK_TYPE, MAX_LAYERS, VERTEX, buildFragment } from './shader';
 import { PRIMITIVE_INDEX, primitiveSlots } from './primitives';
-import { smoothFor } from '../state/doc';
+import { contentKey, smoothFor } from '../state/doc';
 import { layoutParams, packParams } from './materialParams';
 import { createSurfaceSolver } from './surfaceGpu';
 import { solveSurface as solveSurfaceCpu } from './surface';
@@ -94,8 +94,35 @@ const UNIFORMS = [
   'uSurface',
   'uBg',
   'uBgColor1',
-  'uBgColor2'
+  'uBgColor2',
+  'uField',
+  'uBake'
 ];
+
+const FIELD_UNIT = MASK_SLOTS + 3;
+
+const SCENE_FREE = {
+  capacity: MAX_LAYERS,
+  types: [],
+  morph: false,
+  patterns: false,
+  radialCopies: false,
+  linearCopies: false
+};
+
+const sceneUse = new WeakMap();
+
+const usesScene = def => {
+  if (!def || def.kind === 'fill') return false;
+  if (!sceneUse.has(def)) sceneUse.set(def, /\bshapeAt\s*\(/.test(def.glsl));
+  return sceneUse.get(def);
+};
+
+const surfaceOf = (def, values = {}) => {
+  const surfaceParam = typeof def.surface === 'string' ? def.params.find(item => item.name === def.surface) : null;
+  const surface = typeof def.surface === 'number' ? def.surface : (values[def.surface] ?? surfaceParam?.default ?? 0.2);
+  return Number(surface) || 0.2;
+};
 
 export const encodeLayer = (layer, maskSlots = {}) => {
   const slot = maskSlots[layer.id];
@@ -126,7 +153,7 @@ const sceneArrays = capacity => ({
   )
 });
 
-export function createRenderer(canvas, { preserve = false } = {}) {
+export function createRenderer(canvas, { preserve = false, cache = false } = {}) {
   const gl = canvas.getContext('webgl2', {
     alpha: true,
     premultipliedAlpha: true,
@@ -171,6 +198,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
             outside: Boolean(def.outside),
             normals: def.normals !== false,
             reach: def.reach,
+            softTaps: Boolean(def.softTaps),
             defines: layout.defines
           }
         : null,
@@ -243,6 +271,9 @@ export function createRenderer(canvas, { preserve = false } = {}) {
   gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
   const solver = createSurfaceSolver(gl, vao);
   const anisotropy = gl.getExtension('EXT_texture_filter_anisotropic');
+  const fieldSupported = cache && Boolean(gl.getExtension('EXT_color_buffer_float'));
+  let field = null;
+  const sceneKeys = { a: null, b: null, key: '' };
 
   const emptyMask = () => {
     const texture = gl.createTexture();
@@ -286,6 +317,8 @@ export function createRenderer(canvas, { preserve = false } = {}) {
   let surfaceOn = false;
 
   const matTexture = gl.createTexture();
+  const matSize = { width: 0, height: 0 };
+  const maxAnisotropy = anisotropy ? Math.min(8, gl.getParameter(anisotropy.MAX_TEXTURE_MAX_ANISOTROPY_EXT)) : 0;
   const setMaterialTexture = source => {
     gl.bindTexture(gl.TEXTURE_2D, matTexture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT);
@@ -294,16 +327,23 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     if (!source) {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      matSize.width = 0;
+      matSize.height = 0;
       return;
     }
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, source);
+    const width = source.width;
+    const height = source.height;
+    if (width > 0 && width === matSize.width && height === matSize.height) {
+      gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, source);
+    } else {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, source);
+      matSize.width = width;
+      matSize.height = height;
+    }
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    if (anisotropy) {
-      const most = gl.getParameter(anisotropy.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-      gl.texParameterf(gl.TEXTURE_2D, anisotropy.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(8, most));
-    }
+    if (anisotropy) gl.texParameterf(gl.TEXTURE_2D, anisotropy.TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
   };
   setMaterialTexture(null);
 
@@ -315,6 +355,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     const mask = masks[slot];
     if (!mask) return;
     if (!field) {
+      if (mask.key === null && !mask.color) return;
       mask.info = [1, 1, 0, 0];
       mask.key = null;
       if (mask.color) {
@@ -450,15 +491,11 @@ export function createRenderer(canvas, { preserve = false } = {}) {
 
     const material = style.material;
     if (current.def) {
-      const def = current.def;
       const values = material?.values || {};
       const packed = packParams(current.layout, values);
       gl.uniform4fv(loc.uMatP, packed.floats);
       gl.uniform4fv(loc.uMatC, packed.colors);
-      const surfaceParam = typeof def.surface === 'string' ? def.params.find(item => item.name === def.surface) : null;
-      const surface =
-        typeof def.surface === 'number' ? def.surface : (values[def.surface] ?? surfaceParam?.default ?? 0.2);
-      gl.uniform4fv(loc.uSurface, [Number(surface) || 0.2, 0, 0, 0]);
+      gl.uniform4fv(loc.uSurface, [surfaceOf(current.def, values), 0, 0, 0]);
     }
 
     const background = style.background || { kind: 'none' };
@@ -486,20 +523,20 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   };
 
+  const sceneKey = scene => {
+    if (scene.a !== sceneKeys.a || (scene.b || null) !== sceneKeys.b) {
+      sceneKeys.a = scene.a;
+      sceneKeys.b = scene.b || null;
+      sceneKeys.key = contentKey([scene.a, scene.b || null]);
+    }
+    return `${sceneKeys.key}|${JSON.stringify(scene.maskSlots || {})}`;
+  };
+
   const solveSurface = (scene, bevel, width, height, resolution) => {
     const scale = Math.min(1, resolution / Math.max(width, height));
     const fieldW = Math.max(16, Math.round(width * scale));
     const fieldH = Math.max(16, Math.round(height * scale));
-    const key = JSON.stringify([
-      scene.a,
-      scene.b || null,
-      scene.b ? scene.morph : 0,
-      scene.maskSlots || {},
-      masks.map(mask => mask.key),
-      fieldW,
-      fieldH,
-      bevel
-    ]);
+    const key = `${sceneKey(scene)}|${scene.b ? scene.morph : 0}|${JSON.stringify(masks.map(mask => mask.key))}|${fieldW}|${fieldH}|${bevel}`;
     if (key === surface.key) return surface.ready;
     surfaceOn = false;
     const plan = solver?.prepare(fieldW, fieldH, Math.min(fieldW, fieldH) / 2);
@@ -533,6 +570,73 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     return true;
   };
 
+  const fieldTarget = (width, height, full) => {
+    if (field && field.width === width && field.height === height && field.full === full) return field;
+    if (field) {
+      gl.deleteFramebuffer(field.fbo);
+      gl.deleteTexture(field.texture);
+      field = null;
+    }
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    if (full) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, null);
+    else gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32F, width, height, 0, gl.RED, gl.FLOAT, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    const fbo = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    const complete = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    field = { texture, fbo, width, height, full, key: '', complete };
+    return field;
+  };
+
+  const usesField = scene => fieldSupported && !scene.b;
+
+  const bakeVariant = scene => ({ ...shaderVariant(scene), bake: true });
+
+  const fieldVariant = (scene, full) => (full ? bakeVariant(scene) : shaderVariant(scene));
+
+  const fullField = (def, variant) => Boolean((def && def.kind !== 'fill' && def.normals !== false) || variant.shadow);
+
+  const drawVariant = (def, scene, style) => {
+    const variant = shaderVariant(scene, style);
+    if (!usesField(scene)) return variant;
+    if (!usesScene(def)) return { ...variant, ...SCENE_FREE, cached: true };
+    return def.softTaps ? { ...variant, capacity: MAX_LAYERS, cached: true } : { ...variant, cached: true };
+  };
+
+  const bakeField = ({ scene, style, variant, width, height, unit, center }) => {
+    const def = style?.material?.def || null;
+    const shape = Boolean(def && def.kind !== 'fill');
+    const gloss = style?.gloss || {};
+    const fillKind = FILLS[(style?.fill || { kind: 'solid' }).kind] ?? 1;
+    const bevelSize = gloss.on ? Math.max(gloss.bevel ?? 0.4, 0.005) : 0;
+    const normals = shape ? def.normals !== false : variant.bevel && fillKind > 0.5 && bevelSize > 0 && !surfaceOn;
+    const target = fieldTarget(width, height, normals || variant.shadow);
+    if (!target.complete) return false;
+    const bw = shape ? surfaceOf(def, style.material.values) : bevelSize;
+    const shadow = style?.shadow || {};
+    const offset = variant.shadow ? [shadow.x ?? 0, shadow.y ?? 0.08] : [0, 0];
+    const key = `${sceneKey(scene)}|${JSON.stringify(masks.map(mask => mask.key))}|${width}|${height}|${unit}|${center}|${bw}|${normals}|${variant.shadow}|${offset}`;
+    if (key === target.key) return true;
+    target.key = '';
+    const full = normals || variant.shadow;
+    switchProgram(null, fieldVariant(scene, full));
+    applyScene(scene);
+    if (full) {
+      gl.uniform4fv(loc.uBake, [bw, normals ? 1 : 0, variant.shadow ? 1 : 0, 0]);
+      gl.uniform4fv(loc.uShadowOffset, [offset[0], offset[1], 0, 0]);
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, target.fbo);
+    frame({ width, height, unit, center, encode: full ? 0 : 2 });
+    target.key = key;
+    return true;
+  };
+
   const draw = ({ scene, style, width, height, unit, center, time = 0, surfaceResolution = 768 }) => {
     if (canvas.width !== width || canvas.height !== height) {
       canvas.width = width;
@@ -542,9 +646,17 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     surfaceOn = Boolean(
       gloss?.on && solveSurface(scene, Math.max(gloss.bevel ?? 0.4, 0.005), width, height, surfaceResolution)
     );
+    const def = style?.material?.def || null;
+    const variant = shaderVariant(scene, style);
+    const cached = usesField(scene) && bakeField({ scene, style, variant, width, height, unit, center });
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    switchProgram(style?.material?.def || null, shaderVariant(scene, style));
+    switchProgram(def, cached ? drawVariant(def, scene, style) : variant);
     applyScene(scene);
+    if (cached) {
+      gl.activeTexture(gl.TEXTURE0 + FIELD_UNIT);
+      gl.bindTexture(gl.TEXTURE_2D, field.texture);
+      gl.uniform1i(loc.uField, FIELD_UNIT);
+    }
     applyStyle(style);
     frame({ width, height, unit, center, time });
   };
@@ -607,6 +719,11 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     }
     gl.deleteTexture(matTexture);
     gl.deleteTexture(surfTexture);
+    if (field) {
+      gl.deleteFramebuffer(field.fbo);
+      gl.deleteTexture(field.texture);
+      field = null;
+    }
     solver?.dispose();
     gl.deleteBuffer(quad);
     gl.deleteVertexArray(vao);
@@ -620,13 +737,26 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     pending.clear();
   };
 
+  const sceneNeeds = (scene, style = {}) => {
+    const def = style.material?.def || null;
+    const needs = [[def, drawVariant(def, scene, style)]];
+    const full = fullField(def, shaderVariant(scene, style));
+    if (usesField(scene)) needs.push([null, fieldVariant(scene, full)]);
+    if (style.gloss?.on && (full || !usesField(scene))) needs.push([null, shaderVariant(scene)]);
+    return needs;
+  };
+
   const prepareScene = (scene, style = {}) => {
-    const variant = shaderVariant(scene, style);
-    lastVariant = variant;
-    const work = [prepareAsync(style.material?.def || null, variant)];
-    if (style.gloss?.on) work.push(prepareAsync(null, shaderVariant(scene)));
+    const needs = sceneNeeds(scene, style);
+    lastVariant = needs[0][1];
+    const work = needs.map(([def, variant]) => prepareAsync(def, variant));
+    if (style.gloss?.on && solver) work.push(solver.warm());
     return Promise.all(work);
   };
+
+  const sceneReady = (scene, style = {}) =>
+    sceneNeeds(scene, style).every(([def, variant]) => programs.has(keyOf(def, variant))) &&
+    (!style.gloss?.on || !solver || solver.ready());
 
   const prepare = def => prepareAsync(def || null);
 
@@ -641,6 +771,7 @@ export function createRenderer(canvas, { preserve = false } = {}) {
     prepare,
     prepareAsync,
     prepareScene,
+    sceneReady,
     isReady,
     dispose
   };

@@ -27,7 +27,7 @@ export const CONTROLS = {
   offsetY: { label: 'Shift Y', path: 'camera.y', type: 'number', min: -0.5, max: 0.5, step: 0.005 },
   padding: { label: 'Padding', path: 'camera.pad', type: 'number', min: 0, max: 0.6, step: 0.005 },
   depth: { label: 'Depth of field', path: 'depth.amount', type: 'number', min: 0, max: 1, step: 0.01, percent: true },
-  bgKind: { label: 'Style', path: 'background.kind', type: 'chips', options: BACKGROUND_KINDS },
+  bgKind: { label: 'Style', path: 'background.kind', type: 'chips', grid: true, options: BACKGROUND_KINDS },
   bgColor: { label: 'Background', path: 'background.colors.0', type: 'color' },
   bgColor2: { label: 'Second color', path: 'background.colors.1', type: 'color' },
   bgColor3: { label: 'Third color', path: 'background.colors.2', type: 'color' },

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PreviewSlider from '../../../components/common/Preview/PreviewSlider';
 import PreviewSelect from '../../../components/common/Preview/PreviewSelect';
 import PreviewSwitch from '../../../components/common/Preview/PreviewSwitch';
@@ -76,9 +76,9 @@ function Swatches({ title, value, options, custom, onPick, onCustom }) {
   );
 }
 
-function ChipRow({ title, value, options, onChange }) {
+function ChipRow({ title, value, options, grid, onChange }) {
   return (
-    <div className="cst-chips" role="radiogroup" aria-label={title}>
+    <div className={grid ? 'cst-chips cst-chips--grid' : 'cst-chips'} role="radiogroup" aria-label={title}>
       {options.map(option => (
         <button
           key={option.value}
@@ -95,11 +95,11 @@ function ChipRow({ title, value, options, onChange }) {
   );
 }
 
-function Chips({ title, value, options, onChange }) {
+function Chips({ title, value, options, grid, onChange }) {
   return (
     <div className="cst-chips-field">
       <span className="cst-chips-title">{title}</span>
-      <ChipRow title={title} value={value} options={options} onChange={onChange} />
+      <ChipRow title={title} value={value} options={options} grid={grid} onChange={onChange} />
     </div>
   );
 }
@@ -158,6 +158,7 @@ function BackdropLooks({ component, value, onChange }) {
   if (!options.length) return null;
   return (
     <Chips
+      grid
       title="Look"
       value={value || 'default'}
       options={[{ value: 'default', label: 'Default' }, ...options]}
@@ -168,6 +169,12 @@ function BackdropLooks({ component, value, onChange }) {
 
 function BackdropProps({ doc, onSet }) {
   const background = doc.background || {};
+  const setter = useRef(onSet);
+  setter.current = onSet;
+  const changeProp = useCallback(
+    (name, next) => setter.current(`background.props.${name}`, next, `background.props.${name}`),
+    []
+  );
   const component = background.component || DEFAULT_BACKDROP;
   const { definitions, ownBackground } = useMemo(() => backdropControls(component), [component]);
   const [resolved, setResolved] = useState(null);
@@ -198,11 +205,7 @@ function BackdropProps({ doc, onSet }) {
           onChange={next => onSet('background.colors.0', next, 'background.colors.0')}
         />
       )}
-      <PropControls
-        definitions={definitions}
-        props={resolved}
-        onChange={(name, next) => onSet(`background.props.${name}`, next, `background.props.${name}`)}
-      />
+      <PropControls definitions={definitions} props={resolved} onChange={changeProp} />
     </>
   );
 }
@@ -213,7 +216,29 @@ const format = (control, value) => {
   return `${Number(value.toFixed(decimals))}${control.unit || ''}`;
 };
 
-export default function Field({ control, doc, onSet, value: override }) {
+const inputsOf = ({ control, doc, value }) => {
+  const own = value !== undefined ? value : getPath(doc, control.path);
+  if (control.type === 'backdrop') return [own, backdropIsLight(doc.background)];
+  if (control.type === 'backdropPreset') return [own, getPath(doc, 'background.component')];
+  if (control.type === 'backdropProps') return [own, JSON.stringify(doc.background)];
+  if (control.type === 'swatches') return [own, getPath(doc, control.custom)];
+  return [own];
+};
+
+const sameControl = (a, b) => {
+  if (a === b) return true;
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every(key => Object.is(a[key], b[key]));
+};
+
+const sameField = (previous, next) => {
+  if (previous.onSet !== next.onSet || !sameControl(previous.control, next.control)) return false;
+  const before = inputsOf(previous);
+  const after = inputsOf(next);
+  return before.length === after.length && before.every((value, index) => Object.is(value, after[index]));
+};
+
+export default memo(function Field({ control, doc, onSet, value: override }) {
   const raw = override !== undefined ? override : getPath(doc, control.path);
   const value = raw === undefined || raw === null ? control.fallback : raw;
   const set = next =>
@@ -238,7 +263,7 @@ export default function Field({ control, doc, onSet, value: override }) {
     case 'choice':
       return <Choice title={control.label} value={value} options={control.options} onChange={set} />;
     case 'chips':
-      return <Chips title={control.label} value={value} options={control.options} onChange={set} />;
+      return <Chips title={control.label} value={value} options={control.options} grid={control.grid} onChange={set} />;
     case 'motion':
       return <MotionPicker value={value} options={control.options} onChange={set} />;
     case 'backdrop':
@@ -294,4 +319,4 @@ export default function Field({ control, doc, onSet, value: override }) {
     default:
       return null;
   }
-}
+}, sameField);

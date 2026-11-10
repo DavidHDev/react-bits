@@ -265,6 +265,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as real drifting smoke that stays sharp on any screen, many times faster and with no extra dependencies. Clicks release a puff, and it works on light pages too.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page while its effect starts up, and frees graphics memory when removed.'
       }
     ]
   },
@@ -359,6 +363,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt as liquid metal with reflections that bend around the edges. It now paints text as well as logos, tilts with the cursor and pours in on load.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page while its effect starts up.'
       }
     ]
   },
@@ -434,6 +442,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Smoother, crisper ribbons that move the same at any frame rate. New shapes, a rolling wave, soft edges and more control over how they follow the cursor.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page, applies setting changes without an extra redraw and frees graphics memory when removed.'
       }
     ]
   },
@@ -464,6 +476,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Strokes now flow unbroken with smoothly shifting colors, clicks burst into a real splash, and it rests when idle. New ink, smoke, lava and silk looks, a soft glow and a light theme.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page while its effect starts up, and frees graphics memory when removed.'
       }
     ]
   },
@@ -533,6 +549,10 @@ export const componentMetadata = {
       {
         date: '2026-10-09',
         note: 'Rebuilt as a waterfall of light that lands on your content, pours over its corners and can reveal your UI around the cursor.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page while its effect starts up, and frees graphics memory when removed.'
       }
     ]
   },
@@ -552,6 +572,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page while its effect starts up, and frees graphics memory when removed.'
       }
     ]
   },
@@ -1924,6 +1948,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Rebuilt as silk ribbons of thick glass shards that stream smoothly on layered depths, light up along their edges and soften into the distance. Adds a chrome finish, survey markers, a cursor that parts the shards, a light wave on click, presets and an edge fade.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Starts up several times faster without blocking the page.'
       }
     ]
   },
@@ -1992,6 +2020,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt for smooth physics that handles thousands of balls, with soft modern finishes, and you can now grab, throw and blast them apart.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Physics runs about 20% faster, and it now renders in Strict Mode.'
       }
     ]
   },
@@ -2026,6 +2058,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container. TypeScript installs now include Three.js type definitions.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Settings now update without restarting the animation, the full warp range draws, and it pauses while off screen.'
       }
     ]
   },
@@ -2273,6 +2309,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as a 3D landscape of glowing contour lines that rises from a flat map, with land that lifts under the cursor, click pulses, optional survey markers and glitches, and a light mode.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page, now renders in Strict Mode and recovers after a graphics reset.'
       }
     ]
   },
@@ -2351,7 +2391,13 @@ export const componentMetadata = {
     name: 'GradientASCII',
     docsUrl: 'https://reactbits.dev/backgrounds/gradient-ascii',
     tags: [],
-    added: '2026-10-15'
+    added: '2026-10-15',
+    updates: [
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page while its effect starts up, and now renders in Strict Mode.'
+      }
+    ]
   },
   'Backgrounds/Grainient': {
     videoUrl: '/assets/video/grainient.webm',
@@ -2593,6 +2639,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page, switches looks without stalling and frees graphics memory when removed.'
       }
     ]
   },
@@ -2710,6 +2760,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Same glowing prism, now several times faster with no extra dependencies. It tilts toward the cursor, fades in, takes custom colors, and has a cleaner light mode and a working 3D rotation.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Now renders in Strict Mode, where it used to stay blank.'
       }
     ]
   },
@@ -2846,6 +2900,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Now a background that fills its container, with the square still available. Lines swing on springs, ripple out from the cursor and spin with each click, with new field modes, arrow and compass shapes, and a 3D tilt.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page, rebuilds its grid up to four times faster and frees graphics memory when removed.'
       }
     ]
   },
@@ -2880,6 +2938,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Redrawn with crisp, finely glowing lines and no extra dependencies. The lines part smoothly around the cursor, curl when clicked, and come in dotted and dashed styles with a clean ink light mode.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Loads without freezing the page, renders in Strict Mode and frees graphics memory when removed.'
       }
     ]
   },

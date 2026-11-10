@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { highlightCode } from '../../utils/shiki';
+import { highlightCode, peekHighlight } from '../../utils/shiki';
 
 const ShikiCode = ({ code, language = 'jsx', showLineNumbers = true }) => {
   const source = String(code ?? '');
-  const [html, setHtml] = useState('');
+  const [html, setHtml] = useState(() => peekHighlight(source, language));
 
   useEffect(() => {
     let active = true;
 
-    setHtml('');
+    setHtml(peekHighlight(source, language));
     highlightCode(source, language)
       .then(result => {
         if (active) setHtml(result);

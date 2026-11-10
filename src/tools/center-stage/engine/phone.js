@@ -263,7 +263,31 @@ export class Builder {
     this.index.push(a, b, c, a, c, d);
   }
 
+  orient() {
+    const { position, normal, index } = this;
+    for (let t = 0; t < index.length; t += 3) {
+      const a = index[t] * 3;
+      const b = index[t + 1] * 3;
+      const c = index[t + 2] * 3;
+      const ux = position[b] - position[a];
+      const uy = position[b + 1] - position[a + 1];
+      const uz = position[b + 2] - position[a + 2];
+      const vx = position[c] - position[a];
+      const vy = position[c + 1] - position[a + 1];
+      const vz = position[c + 2] - position[a + 2];
+      const facing =
+        (uy * vz - uz * vy) * (normal[a] + normal[b] + normal[c]) +
+        (uz * vx - ux * vz) * (normal[a + 1] + normal[b + 1] + normal[c + 1]) +
+        (ux * vy - uy * vx) * (normal[a + 2] + normal[b + 2] + normal[c + 2]);
+      if (facing < 0) {
+        index[t] = b / 3;
+        index[t + 1] = a / 3;
+      }
+    }
+  }
+
   build() {
+    this.orient();
     const count = this.position.length / 3;
     return {
       position: new Float32Array(this.position),

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { collectLayers, drawLayers } from '../utils/compose';
 import { frameUrl } from '../utils/frame';
 
@@ -11,6 +11,7 @@ export function useStageFrame({ entry, renderProps, ready, light, onKeyDown }) {
   const [src] = useState(() => frameUrl({ theme: light ? 'light' : 'dark' }));
   const loaded = useRef(null);
   const token = useRef(0);
+  const pending = useRef(0);
   const propsRef = useRef(renderProps);
   const keyRef = useRef(onKeyDown);
   propsRef.current = renderProps;
@@ -66,6 +67,7 @@ export function useStageFrame({ entry, renderProps, ready, light, onKeyDown }) {
     if (!bridge || !ready) return;
 
     if (loaded.current === entry.id) {
+      if (pending.current) return;
       bridge.update(renderProps);
       if (entry.forceRemountOnPropChange) bridge.restart();
       return;
@@ -74,6 +76,7 @@ export function useStageFrame({ entry, renderProps, ready, light, onKeyDown }) {
     loaded.current = entry.id;
     token.current += 1;
     const current = token.current;
+    pending.current = current;
     setStatus('loading');
     setError(null);
     if (bridge.clock.paused) bridge.clock.resume();
@@ -81,8 +84,10 @@ export function useStageFrame({ entry, renderProps, ready, light, onKeyDown }) {
     bridge
       .load(entry.id, renderProps)
       .then(ok => {
-        if (!ok || current !== token.current) return;
-        bridge.update(propsRef.current);
+        if (current !== token.current) return;
+        pending.current = 0;
+        if (!ok) return;
+        if (propsRef.current !== renderProps) bridge.update(propsRef.current);
         requestAnimationFrame(() =>
           requestAnimationFrame(() => {
             if (current === token.current) setStatus(previous => (previous === 'loading' ? 'ready' : previous));
@@ -91,10 +96,13 @@ export function useStageFrame({ entry, renderProps, ready, light, onKeyDown }) {
       })
       .catch(problem => {
         if (current !== token.current) return;
+        pending.current = 0;
         setError(problem);
         setStatus('error');
       });
   }, [bridge, ready, entry, renderProps]);
+
+  const preload = useCallback(id => bridge?.preload?.(id), [bridge]);
 
   const togglePause = useCallback(() => {
     if (!bridge) return;
@@ -136,5 +144,8 @@ export function useStageFrame({ entry, renderProps, ready, light, onKeyDown }) {
     [bridge]
   );
 
-  return { iframeRef, src, bridge, status, error, paused, togglePause, restart, snapshot };
+  return useMemo(
+    () => ({ iframeRef, src, bridge, status, error, paused, togglePause, restart, snapshot, preload }),
+    [src, bridge, status, error, paused, togglePause, restart, snapshot, preload]
+  );
 }

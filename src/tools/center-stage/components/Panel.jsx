@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowDown01Icon,
   Cancel01Icon,
@@ -308,6 +308,26 @@ function SlotRow({
   );
 }
 
+function PanelScroll({ scrollRef, children }) {
+  const edges = useScrollEdges(scrollRef, '.cst-panel-scroll > section');
+  return (
+    <div className="lab-scroll-shell" data-top={edges.top ? '' : undefined} data-bottom={edges.bottom ? '' : undefined}>
+      <div className="lab-scroll lab-panel-scroll cst-panel-scroll" ref={scrollRef}>
+        {children}
+      </div>
+      <button
+        type="button"
+        className="lab-more"
+        data-hidden={edges.bottom || !edges.below ? '' : undefined}
+        tabIndex={edges.bottom || !edges.below ? -1 : 0}
+        onClick={() => scrollRef.current?.scrollBy({ top: scrollRef.current.clientHeight * 0.7, behavior: 'smooth' })}
+      >
+        {edges.below} more
+      </button>
+    </div>
+  );
+}
+
 export default function Panel({
   shot,
   preset,
@@ -336,29 +356,32 @@ export default function Panel({
   });
   const [open, setOpen] = useState(() => new Set(readStored(MORE_KEY, [])));
   const scrollRef = useRef(null);
-  const edges = useScrollEdges(scrollRef, '.cst-panel-scroll > section');
   const devices = doc.devices;
+  const shotRef = useRef(shot);
+  shotRef.current = shot;
+  const devicesRef = useRef(devices);
+  devicesRef.current = devices;
   const sameType = devices.length > 2 && devices.every(device => device.type === devices[0].type);
   const all = selectedDevice === 'all' && sameType;
   const deviceIndex = all ? 0 : devices[selectedDevice] ? selectedDevice : 0;
   const device = devices[deviceIndex];
   const names = useMemo(() => surfaceNames(devices), [devices]);
 
-  const onSet = (path, value, key) => {
-    if (path && typeof path === 'object') shot.patch(path, key);
-    else shot.set(path, value, key);
-  };
+  const onSet = useCallback((path, value, key) => {
+    if (path && typeof path === 'object') shotRef.current.patch(path, key);
+    else shotRef.current.set(path, value, key);
+  }, []);
 
-  const onSetAll = (path, value, key) => {
+  const onSetAll = useCallback((path, value, key) => {
     const entries = path && typeof path === 'object' ? Object.entries(path) : [[path, value]];
     const patch = {};
     entries.forEach(([target, next]) => {
-      devices.forEach((item, index) => {
+      devicesRef.current.forEach((item, index) => {
         patch[target.replace(/^devices\.0\./, `devices.${index}.`)] = next;
       });
     });
-    shot.patch(patch, key || (typeof path === 'string' ? `all:${path}` : undefined));
-  };
+    shotRef.current.patch(patch, key || (typeof path === 'string' ? `all:${path}` : undefined));
+  }, []);
 
   const pickTab = value => {
     setTab(value);
@@ -506,160 +529,145 @@ export default function Panel({
 
   return (
     <aside className="lab-panel cst-panel" aria-label="Shot settings">
-      <div
-        className="lab-scroll-shell"
-        data-top={edges.top ? '' : undefined}
-        data-bottom={edges.bottom ? '' : undefined}
-      >
-        <div className="lab-scroll lab-panel-scroll cst-panel-scroll" ref={scrollRef}>
-          <section className="customize-frame lab-section">
-            <Heading title={preset ? preset.name : 'Your shot'}>
-              <Tip label="Undo" hint="⌘Z">
+      <PanelScroll scrollRef={scrollRef}>
+        <section className="customize-frame lab-section">
+          <Heading title={preset ? preset.name : 'Your shot'}>
+            <Tip label="Undo" hint="⌘Z">
+              <button
+                type="button"
+                className="customize-heading-action lab-heading-icon"
+                aria-label="Undo"
+                onClick={shot.undo}
+                disabled={!shot.canUndo}
+              >
+                <Icon icon={Undo02Icon} size={15} />
+              </button>
+            </Tip>
+            <Tip label="Redo" hint="⇧⌘Z">
+              <button
+                type="button"
+                className="customize-heading-action lab-heading-icon"
+                aria-label="Redo"
+                onClick={shot.redo}
+                disabled={!shot.canRedo}
+              >
+                <Icon icon={Redo02Icon} size={15} />
+              </button>
+            </Tip>
+            {preset && (
+              <Tip label="Reset preset">
                 <button
                   type="button"
                   className="customize-heading-action lab-heading-icon"
-                  aria-label="Undo"
-                  onClick={shot.undo}
-                  disabled={!shot.canUndo}
+                  aria-label="Reset preset"
+                  onClick={onResetPreset}
                 >
-                  <Icon icon={Undo02Icon} size={15} />
+                  <RotateCcw size={14} aria-hidden="true" />
                 </button>
               </Tip>
-              <Tip label="Redo" hint="⇧⌘Z">
-                <button
-                  type="button"
-                  className="customize-heading-action lab-heading-icon"
-                  aria-label="Redo"
-                  onClick={shot.redo}
-                  disabled={!shot.canRedo}
-                >
-                  <Icon icon={Redo02Icon} size={15} />
-                </button>
-              </Tip>
-              {preset && (
-                <Tip label="Reset preset">
-                  <button
-                    type="button"
-                    className="customize-heading-action lab-heading-icon"
-                    aria-label="Reset preset"
-                    onClick={onResetPreset}
-                  >
-                    <RotateCcw size={14} aria-hidden="true" />
-                  </button>
-                </Tip>
-              )}
-            </Heading>
-            <div className="preview-options lab-options">
-              {hero.map(control => (
-                <Field key={control.key} control={control} doc={doc} onSet={onSet} />
-              ))}
-            </div>
-          </section>
-
-          <section className="customize-frame lab-section">
-            <Heading
-              title={
-                screens.length > 1 ? (
-                  <>
-                    Screens <span className="cst-count">({screens.length})</span>
-                  </>
-                ) : (
-                  'Screen'
-                )
-              }
-            >
-              {screens.length > 1 && (
-                <button
-                  type="button"
-                  className="customize-heading-action lab-add"
-                  onClick={onUploadAll}
-                  onPointerEnter={() => onHighlight(screens.map(item => item.index))}
-                  onPointerLeave={() => onHighlight(null)}
-                  onFocus={() => onHighlight(screens.map(item => item.index))}
-                  onBlur={() => onHighlight(null)}
-                >
-                  <Icon icon={Upload04Icon} size={14} />
-                  <span>Upload all</span>
-                </button>
-              )}
-            </Heading>
-            {screens.length > 4 ? (
-              <>
-                <div className="preview-options cst-surfaces">
-                  {tiles.map((item, position) => (
-                    <SurfaceTile
-                      key={item.index}
-                      label={item.label}
-                      number={item.index + 1}
-                      thumb={item.slot === null ? null : slotThumbs[item.slot]}
-                      scroll={item.device.scroll}
-                      video={item.media?.kind === 'video'}
-                      live={item.media?.kind === 'live'}
-                      blank={item.device.blank}
-                      peek={collapsed && position >= PER_ROW * SHOWN_ROWS}
-                      onUpload={() => onUploadScreen(item.index)}
-                      onDropFile={file => onFileScreen(item.index, file)}
-                      onHighlight={lit([item.index])}
-                    />
-                  ))}
-                </div>
-                {collapsible && (
-                  <button
-                    type="button"
-                    className="cst-more-toggle"
-                    aria-expanded={!collapsed}
-                    onClick={() => setAllScreens(value => !value)}
-                  >
-                    <span>{collapsed ? `Show all ${screens.length}` : 'Show fewer'}</span>
-                    <span className="cst-chevron" data-open={collapsed ? undefined : ''}>
-                      <Icon icon={ArrowDown01Icon} size={14} />
-                    </span>
-                  </button>
-                )}
-                <p className="cst-slots-hint">Click a screen to replace just that one, or use Upload all.</p>
-              </>
-            ) : (
-              <div className="preview-options cst-slots">
-                {screens.map(item => {
-                  const guide = surfaceGuide(doc, item.device, item.media);
-                  return (
-                    <SlotRow
-                      key={item.index}
-                      label={item.label}
-                      media={item.media}
-                      thumb={item.slot === null || item.device.blank ? null : slotThumbs[item.slot]}
-                      guide={{ ...guide, title: item.label }}
-                      onUpload={() => onUploadScreen(item.index)}
-                      onCapture={onCaptureScreen ? () => onCaptureScreen(item.index) : null}
-                      onTrim={onTrimScreen ? () => onTrimScreen(item.index) : null}
-                      onSample={sample => onSampleScreen(item.index, sample)}
-                      onClear={item.device.blank ? null : () => onBlankScreen(item.index)}
-                      onRemove={null}
-                      onDropFile={file => onFileScreen(item.index, file)}
-                      onHighlight={lit([item.index])}
-                    />
-                  );
-                })}
-              </div>
             )}
-          </section>
-
-          <div className="cst-tabs">
-            <Track label="Settings" value={tab} options={TABS} onChange={pickTab} className="cst-tab-track" />
+          </Heading>
+          <div className="preview-options lab-options">
+            {hero.map(control => (
+              <Field key={control.key} control={control} doc={doc} onSet={onSet} />
+            ))}
           </div>
+        </section>
 
-          {renderTab()}
+        <section className="customize-frame lab-section">
+          <Heading
+            title={
+              screens.length > 1 ? (
+                <>
+                  Screens <span className="cst-count">({screens.length})</span>
+                </>
+              ) : (
+                'Screen'
+              )
+            }
+          >
+            {screens.length > 1 && (
+              <button
+                type="button"
+                className="customize-heading-action lab-add"
+                onClick={onUploadAll}
+                onPointerEnter={() => onHighlight(screens.map(item => item.index))}
+                onPointerLeave={() => onHighlight(null)}
+                onFocus={() => onHighlight(screens.map(item => item.index))}
+                onBlur={() => onHighlight(null)}
+              >
+                <Icon icon={Upload04Icon} size={14} />
+                <span>Upload all</span>
+              </button>
+            )}
+          </Heading>
+          {screens.length > 4 ? (
+            <>
+              <div className="preview-options cst-surfaces">
+                {tiles.map((item, position) => (
+                  <SurfaceTile
+                    key={item.index}
+                    label={item.label}
+                    number={item.index + 1}
+                    thumb={item.slot === null ? null : slotThumbs[item.slot]}
+                    scroll={item.device.scroll}
+                    video={item.media?.kind === 'video'}
+                    live={item.media?.kind === 'live'}
+                    blank={item.device.blank}
+                    peek={collapsed && position >= PER_ROW * SHOWN_ROWS}
+                    onUpload={() => onUploadScreen(item.index)}
+                    onDropFile={file => onFileScreen(item.index, file)}
+                    onHighlight={lit([item.index])}
+                  />
+                ))}
+              </div>
+              {collapsible && (
+                <button
+                  type="button"
+                  className="cst-more-toggle"
+                  aria-expanded={!collapsed}
+                  onClick={() => setAllScreens(value => !value)}
+                >
+                  <span>{collapsed ? `Show all ${screens.length}` : 'Show fewer'}</span>
+                  <span className="cst-chevron" data-open={collapsed ? undefined : ''}>
+                    <Icon icon={ArrowDown01Icon} size={14} />
+                  </span>
+                </button>
+              )}
+              <p className="cst-slots-hint">Click a screen to replace just that one, or use Upload all.</p>
+            </>
+          ) : (
+            <div className="preview-options cst-slots">
+              {screens.map(item => {
+                const guide = surfaceGuide(doc, item.device, item.media);
+                return (
+                  <SlotRow
+                    key={item.index}
+                    label={item.label}
+                    media={item.media}
+                    thumb={item.slot === null || item.device.blank ? null : slotThumbs[item.slot]}
+                    guide={{ ...guide, title: item.label }}
+                    onUpload={() => onUploadScreen(item.index)}
+                    onCapture={onCaptureScreen ? () => onCaptureScreen(item.index) : null}
+                    onTrim={onTrimScreen ? () => onTrimScreen(item.index) : null}
+                    onSample={sample => onSampleScreen(item.index, sample)}
+                    onClear={item.device.blank ? null : () => onBlankScreen(item.index)}
+                    onRemove={null}
+                    onDropFile={file => onFileScreen(item.index, file)}
+                    onHighlight={lit([item.index])}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        <div className="cst-tabs">
+          <Track label="Settings" value={tab} options={TABS} onChange={pickTab} className="cst-tab-track" />
         </div>
-        <button
-          type="button"
-          className="lab-more"
-          data-hidden={edges.bottom || !edges.below ? '' : undefined}
-          tabIndex={edges.bottom || !edges.below ? -1 : 0}
-          onClick={() => scrollRef.current?.scrollBy({ top: scrollRef.current.clientHeight * 0.7, behavior: 'smooth' })}
-        >
-          {edges.below} more
-        </button>
-      </div>
+
+        {renderTab()}
+      </PanelScroll>
     </aside>
   );
 }

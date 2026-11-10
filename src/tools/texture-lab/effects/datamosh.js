@@ -216,6 +216,7 @@ export default {
   blend: 'normal',
   description: 'Corrupted video: blocks freeze and drag their pixels across the frame in melting trails.',
   animated: true,
+  temporal: true,
   animates: params => params.speed > 0 && params.intensity > 0,
   params: [
     { key: 'intensity', label: 'Intensity', type: 'number', min: 0, max: 1, step: 0.01, default: 0.7 },

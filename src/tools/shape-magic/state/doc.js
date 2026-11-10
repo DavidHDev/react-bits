@@ -178,3 +178,20 @@ export const createDoc = (preset = {}, { light = false } = {}) => ({
 });
 
 export const ratioOf = artboard => RATIOS.find(item => item.value === artboard.ratio) || RATIOS[0];
+
+const sources = new Map();
+let sourceCount = 0;
+
+const sourceToken = (name, value) => {
+  if (name !== 'src' || typeof value !== 'string') return value;
+  let token = sources.get(value);
+  if (!token) {
+    if (sources.size >= 24) sources.clear();
+    sourceCount += 1;
+    token = `src#${sourceCount}`;
+    sources.set(value, token);
+  }
+  return token;
+};
+
+export const contentKey = value => JSON.stringify(value, sourceToken);

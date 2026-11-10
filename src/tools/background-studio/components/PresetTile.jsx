@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 const PresetTile = ({ option, active, colors, onSelect }) => (
   <button type="button" className="bs-preset" aria-pressed={active} onClick={() => onSelect(option.value)}>
     {colors.length > 0 && (
@@ -11,4 +13,4 @@ const PresetTile = ({ option, active, colors, onSelect }) => (
   </button>
 );
 
-export default PresetTile;
+export default memo(PresetTile);

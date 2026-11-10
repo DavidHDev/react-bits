@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { MARK_GROUPS, MARKS } from '../presets/marks';
 import { MATERIAL_GROUPS, MATERIALS } from '../presets/materials';
 
@@ -14,16 +15,24 @@ const Empty = ({ query, kind }) => (
   </p>
 );
 
-function Tile({ name, active, onClick, children }) {
+function Tile({ name, active, onClick, onEnter, onLeave, children }) {
   return (
-    <button type="button" className="lab-tile smg-tile" aria-pressed={active} onClick={onClick} title={name}>
+    <button
+      type="button"
+      className="lab-tile smg-tile"
+      aria-pressed={active}
+      onClick={onClick}
+      onPointerEnter={onEnter}
+      onPointerLeave={onLeave}
+      title={name}
+    >
       <span className="lab-tile-media smg-tile-media">{children}</span>
       <span className="lab-tile-name">{name}</span>
     </button>
   );
 }
 
-export function MarksGrid({ thumbs, activeId, onApply, query = '' }) {
+export const MarksGrid = memo(function MarksGrid({ thumbs, activeId, onApply, onPrewarm, query = '' }) {
   const sections = MARK_GROUPS.map(group => {
     const items = MARKS.filter(
       mark => mark.group === group.id && matches(query, mark.name, group.label, mark.tags || '')
@@ -34,7 +43,14 @@ export function MarksGrid({ thumbs, activeId, onApply, query = '' }) {
         <h3 className="lab-group-title">{group.label}</h3>
         <div className="lab-grid">
           {items.map(mark => (
-            <Tile key={mark.id} name={mark.name} active={activeId === mark.id} onClick={() => onApply(mark)}>
+            <Tile
+              key={mark.id}
+              name={mark.name}
+              active={activeId === mark.id}
+              onClick={() => onApply(mark)}
+              onEnter={() => onPrewarm?.(mark)}
+              onLeave={() => onPrewarm?.(null)}
+            >
               {thumbs[`mark:${mark.id}`] ? (
                 <img src={thumbs[`mark:${mark.id}`]} alt="" draggable={false} />
               ) : (
@@ -47,9 +63,9 @@ export function MarksGrid({ thumbs, activeId, onApply, query = '' }) {
     );
   });
   return sections.some(Boolean) ? sections : <Empty query={query} kind="marks" />;
-}
+});
 
-export function MaterialsGrid({ thumbs, activeId, light, onApply, query = '' }) {
+export const MaterialsGrid = memo(function MaterialsGrid({ thumbs, activeId, light, onApply, onPrewarm, query = '' }) {
   const silhouette = thumbs.silhouette;
   const masked = silhouette ? { WebkitMaskImage: `url(${silhouette})`, maskImage: `url(${silhouette})` } : null;
   const sections = MATERIAL_GROUPS.map(group => {
@@ -95,7 +111,14 @@ export function MaterialsGrid({ thumbs, activeId, light, onApply, query = '' }) 
               );
             }
             return (
-              <Tile key={item.id} name={item.name} active={activeId === item.id} onClick={() => onApply(item)}>
+              <Tile
+                key={item.id}
+                name={item.name}
+                active={activeId === item.id}
+                onClick={() => onApply(item)}
+                onEnter={() => onPrewarm?.(item)}
+                onLeave={() => onPrewarm?.(null)}
+              >
                 {media}
               </Tile>
             );
@@ -105,4 +128,4 @@ export function MaterialsGrid({ thumbs, activeId, light, onApply, query = '' }) 
     );
   });
   return sections.some(Boolean) ? sections : <Empty query={query} kind="materials" />;
-}
+});

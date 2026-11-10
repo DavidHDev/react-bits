@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { INK, ORB_FRAG, createProgram, themeIsLight } from '../engine/velvet';
+import { INK, themeIsLight } from '../engine/velvet';
+import { createOrbRenderer } from '../engine/orb';
 
 const RATES = {
   flow: [0.42, -0.58, 0.3],
@@ -15,29 +16,7 @@ export default function Orb({ player, className = '' }) {
     if (!canvas) return undefined;
     const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
     if (!gl) return undefined;
-    const program = createProgram(gl, ORB_FRAG);
-    if (!program) return undefined;
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(0);
-    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-    gl.useProgram(program);
-    const names = [
-      'uResolution',
-      'uTime',
-      'uFlow',
-      'uTurn',
-      'uEnergy',
-      'uPulse',
-      'uBands',
-      'uLight',
-      'uInk',
-      'uTint',
-      'uIntro',
-      'uHover'
-    ];
-    const uniforms = Object.fromEntries(names.map(name => [name, gl.getUniformLocation(program, name)]));
+    const renderer = createOrbRenderer(gl);
 
     const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const maxRatio = window.matchMedia?.('(pointer: coarse)').matches ? 1.5 : 2;
@@ -51,8 +30,12 @@ export default function Orb({ player, className = '' }) {
       bands: [0, 0, 0],
       raw: [0, 0, 0],
       hover: 0,
-      start: performance.now(),
-      last: performance.now(),
+      start: 0,
+      last: 0,
+      drawn: 0,
+      dirty: true,
+      width: canvas.clientWidth,
+      height: canvas.clientHeight,
       visible: true,
       light: themeIsLight(),
       quality: 1,
@@ -62,19 +45,44 @@ export default function Orb({ player, className = '' }) {
     };
     let frame = 0;
 
+    const values = {
+      uResolution: [0, 0],
+      uTime: 0,
+      uFlow: state.flow,
+      uTurn: state.turn,
+      uEnergy: 0,
+      uPulse: 0,
+      uBands: state.bands,
+      uLight: 0,
+      uInk: INK.dark.ink,
+      uTint: INK.dark.tint,
+      uIntro: 0,
+      uHover: 0
+    };
+
     const resize = () => {
       const ratio = Math.max(0.75, Math.min(window.devicePixelRatio || 1, maxRatio) * state.quality);
-      const width = Math.max(1, Math.round(canvas.clientWidth * ratio));
-      const height = Math.max(1, Math.round(canvas.clientHeight * ratio));
-      if (canvas.width !== width || canvas.height !== height) {
+      const width = Math.max(1, Math.round(state.width * ratio));
+      const height = Math.max(1, Math.round(state.height * ratio));
+      if (values.uResolution[0] !== width || values.uResolution[1] !== height) {
         canvas.width = width;
         canvas.height = height;
+        values.uResolution[0] = width;
+        values.uResolution[1] = height;
       }
     };
 
     const draw = now => {
       frame = 0;
       if (!state.visible || document.hidden) return;
+      if (!renderer.ready()) {
+        if (!renderer.failed) frame = requestAnimationFrame(draw);
+        return;
+      }
+      if (!state.start) {
+        state.start = now;
+        state.last = now;
+      }
       const gap = Math.max(0, (now - state.last) / 1000);
       const dt = Math.min(0.05, gap);
       state.last = now;
@@ -105,25 +113,30 @@ export default function Orb({ player, className = '' }) {
         state.flow[i] += dt * RATES.flow[i] * pace;
         state.turn[i] += dt * RATES.turn[i] * pace;
       }
-      resize();
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
       const time = (now - state.start) / 1000;
+      const calm =
+        still &&
+        time > 1.2 &&
+        state.shown < 0.001 &&
+        Math.max(state.bands[0], state.bands[1], state.bands[2]) < 0.001 &&
+        Math.abs(hoverRef.current - state.hover) < 0.001;
+      if (calm && !state.dirty && now - state.drawn < 31) {
+        frame = requestAnimationFrame(draw);
+        return;
+      }
+      state.drawn = now;
+      state.dirty = false;
+      resize();
       const palette = state.light ? INK.light : INK.dark;
-      gl.uniform2f(uniforms.uResolution, canvas.width, canvas.height);
-      gl.uniform1f(uniforms.uTime, still ? 0 : time);
-      gl.uniform3f(uniforms.uFlow, ...state.flow);
-      gl.uniform3f(uniforms.uTurn, ...state.turn);
-      gl.uniform1f(uniforms.uEnergy, still ? state.shown * 0.5 : state.shown);
-      gl.uniform1f(uniforms.uPulse, still ? 0 : state.pulse);
-      gl.uniform3f(uniforms.uBands, ...state.bands);
-      gl.uniform1f(uniforms.uLight, state.light ? 1 : 0);
-      gl.uniform3f(uniforms.uInk, ...palette.ink);
-      gl.uniform3f(uniforms.uTint, ...palette.tint);
-      gl.uniform1f(uniforms.uIntro, Math.min(1, time / 1.1));
-      gl.uniform1f(uniforms.uHover, state.hover);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      values.uTime = still ? 0 : time;
+      values.uEnergy = still ? state.shown * 0.5 : state.shown;
+      values.uPulse = still ? 0 : state.pulse;
+      values.uLight = state.light ? 1 : 0;
+      values.uInk = palette.ink;
+      values.uTint = palette.tint;
+      values.uIntro = Math.min(1, time / 1.1);
+      values.uHover = state.hover;
+      renderer.draw(values, values.uResolution[0], values.uResolution[1]);
       frame = requestAnimationFrame(draw);
     };
 
@@ -139,8 +152,15 @@ export default function Orb({ player, className = '' }) {
       wake();
     });
     visibility.observe(canvas);
+    const size = new ResizeObserver(() => {
+      state.width = canvas.clientWidth;
+      state.height = canvas.clientHeight;
+      state.dirty = true;
+    });
+    size.observe(canvas);
     const theme = new MutationObserver(() => {
       state.light = themeIsLight();
+      state.dirty = true;
     });
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     document.addEventListener('visibilitychange', wake);
@@ -149,10 +169,10 @@ export default function Orb({ player, className = '' }) {
     return () => {
       cancelAnimationFrame(frame);
       visibility.disconnect();
+      size.disconnect();
       theme.disconnect();
       document.removeEventListener('visibilitychange', wake);
-      gl.deleteBuffer(buffer);
-      gl.deleteProgram(program);
+      renderer.dispose();
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [player]);

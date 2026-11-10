@@ -284,6 +284,7 @@ function atlasFor(ctx, state) {
       });
     }
   }
+  state.volatile = !state.atlas.fontReady;
   return state.atlas;
 }
 

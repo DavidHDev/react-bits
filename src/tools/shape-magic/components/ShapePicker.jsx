@@ -3,7 +3,7 @@ import { TextIcon, Upload04Icon } from '@hugeicons/core-free-icons';
 import { Icon } from '../../../tools/background-studio/components/ui';
 import { PRIMITIVES } from '../engine/primitives';
 
-export default function ShapePicker({ thumbs, onPick, onText, onLogo, onClose, placement = 'below' }) {
+export default function ShapePicker({ thumbs, onPick, onPrewarm, onText, onLogo, onClose, placement = 'below' }) {
   const rootRef = useRef(null);
 
   useEffect(() => {
@@ -32,6 +32,8 @@ export default function ShapePicker({ thumbs, onPick, onText, onLogo, onClose, p
             className="smg-picker-item"
             title={primitive.name}
             onClick={() => onPick(primitive.id)}
+            onPointerEnter={() => onPrewarm?.(primitive.id)}
+            onPointerLeave={() => onPrewarm?.(null)}
           >
             <span className="smg-picker-thumb">
               {thumbs[`shape:${primitive.id}`] && (

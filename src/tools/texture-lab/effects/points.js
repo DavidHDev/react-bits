@@ -1,4 +1,5 @@
 import { hexToRgb } from '../engine/assets';
+import { patternData } from '../engine/patterns';
 
 const POINTS = 64;
 const STYLES = { stipple: 0, pointillism: 1, mezzotint: 2 };
@@ -199,68 +200,14 @@ void main() {
   outColor = vec4(mix(uPaper, uInk, k / float(count)), 1.0);
 }`;
 
-let pointData = null;
-
-function farthestPoints(size) {
-  const n = size * size;
-  let seed = 11;
-  const random = () => {
-    seed = (seed * 16807) % 2147483647;
-    return seed / 2147483647;
-  };
-  const jx = new Float64Array(n);
-  const jy = new Float64Array(n);
-  const px = new Float64Array(n);
-  const py = new Float64Array(n);
-  for (let i = 0; i < n; i += 1) {
-    jx[i] = (random() - 0.5) * 0.8;
-    jy[i] = (random() - 0.5) * 0.8;
-    px[i] = (i % size) + 0.5 + jx[i];
-    py[i] = Math.floor(i / size) + 0.5 + jy[i];
-  }
-  const nearest = new Float64Array(n).fill(Infinity);
-  const rank = new Uint32Array(n);
-  const half = size / 2;
-  let current = Math.floor(random() * n);
-  for (let k = 0; k < n && current >= 0; k += 1) {
-    rank[current] = k;
-    nearest[current] = -1;
-    const cx = px[current];
-    const cy = py[current];
-    let best = -1;
-    let far = -1;
-    for (let i = 0; i < n; i += 1) {
-      const known = nearest[i];
-      if (known < 0) continue;
-      let dx = Math.abs(px[i] - cx);
-      let dy = Math.abs(py[i] - cy);
-      if (dx > half) dx = size - dx;
-      if (dy > half) dy = size - dy;
-      const d = dx * dx + dy * dy;
-      const value = d < known ? d : known;
-      nearest[i] = value;
-      if (value > far) {
-        far = value;
-        best = i;
-      }
-    }
-    current = best;
-  }
-  const data = new Uint8Array(n * 4);
-  for (let i = 0; i < n; i += 1) {
-    const value = Math.round(((rank[i] + 0.5) / n) * 65535);
-    data[i * 4] = value >> 8;
-    data[i * 4 + 1] = Math.round((jx[i] + 0.5) * 255);
-    data[i * 4 + 2] = Math.round((jy[i] + 0.5) * 255);
-    data[i * 4 + 3] = value & 255;
-  }
-  return data;
-}
-
 function pointTexture(engine) {
-  if (!pointData) pointData = farthestPoints(POINTS);
   return {
-    texture: engine.createTexture(POINTS, POINTS, { float: false, filter: 'nearest', wrap: 'repeat', data: pointData })
+    texture: engine.createTexture(POINTS, POINTS, {
+      float: false,
+      filter: 'nearest',
+      wrap: 'repeat',
+      data: patternData('points')
+    })
   };
 }
 

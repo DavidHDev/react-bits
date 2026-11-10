@@ -352,6 +352,7 @@ function atlasFor(ctx, state) {
       });
     }
   }
+  state.volatile = !state.atlas.fontReady;
   return state.atlas;
 }
 
@@ -362,6 +363,7 @@ export default {
   description:
     'Boxes the most striking parts of the picture like a specimen sheet, with sampled colors and small labels.',
   animated: true,
+  temporal: true,
   animates: params => params.motion > 0,
   params: [
     {

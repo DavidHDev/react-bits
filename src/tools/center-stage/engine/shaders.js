@@ -228,6 +228,10 @@ uniform float uScreenLight;
 uniform float uOpacity;
 uniform float uFlatChrome;
 uniform float uTwoSided;
+uniform vec3 uEye;
+uniform float uHalf;
+uniform float uFocal;
+uniform float uPrepass;
 out vec4 outColor;
 
 vec3 studioMaterial(vec3 base, vec3 n, vec3 v, float metal, float gloss) {
@@ -255,6 +259,22 @@ vec3 satin(vec3 base, vec3 n, vec3 v, float metal, float gloss) {
 }
 
 void main() {
+  if (uKind > 1.5 && uKind < 2.5 && uEye.z > uHalf) {
+    vec2 far = (vec2(vUv.x, 1.0 - vUv.y) - 0.5) * uBody;
+    vec2 near = uEye.xy + (far - uEye.xy) * ((uEye.z - uHalf) / (uEye.z + uHalf));
+    float inside = uSquircle > 0.5 ? sdSquircle(near, uBody * 0.5, uRadius) : sdRoundRect(near, uBody * 0.5, uRadius);
+    float reach = length(vec3(near - uEye.xy, uEye.z - uHalf)) - inside;
+    if (-inside * uFocal * (uEye.z - uHalf) > 8.0 * reach * reach) discard;
+  }
+  if (uPrepass > 0.5) {
+    if (uKind < 0.5 || (uKind > 1.5 && uKind < 3.5)) {
+      vec2 p = (vec2(vUv.x, 1.0 - vUv.y) - 0.5) * uBody;
+      float d = uSquircle > 0.5 ? sdSquircle(p, uBody * 0.5, uRadius) : sdRoundRect(p, uBody * 0.5, uRadius);
+      if (coverage(d) <= 0.0) discard;
+    }
+    outColor = vec4(0.0);
+    return;
+  }
   vec3 n = normalize(vNormal);
   vec3 v = normalize(uCamPos - vWorld);
   normalFootprint(n);
@@ -509,6 +529,39 @@ void main() {
   outColor = color;
 }`;
 
+export const DOWNSAMPLE_PAIR_FS = `
+in vec2 vUv;
+uniform sampler2D uSource;
+uniform sampler2D uSecond;
+uniform vec2 uTexel;
+uniform float uLevel;
+layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outSecond;
+vec4 downsample(sampler2D source) {
+  vec4 a = textureLod(source, vUv + vec2(-2.0, 2.0) * uTexel, uLevel);
+  vec4 b = textureLod(source, vUv + vec2(0.0, 2.0) * uTexel, uLevel);
+  vec4 c = textureLod(source, vUv + vec2(2.0, 2.0) * uTexel, uLevel);
+  vec4 d = textureLod(source, vUv + vec2(-2.0, 0.0) * uTexel, uLevel);
+  vec4 e = textureLod(source, vUv + vec2(0.0, 0.0) * uTexel, uLevel);
+  vec4 f = textureLod(source, vUv + vec2(2.0, 0.0) * uTexel, uLevel);
+  vec4 g = textureLod(source, vUv + vec2(-2.0, -2.0) * uTexel, uLevel);
+  vec4 h = textureLod(source, vUv + vec2(0.0, -2.0) * uTexel, uLevel);
+  vec4 i = textureLod(source, vUv + vec2(2.0, -2.0) * uTexel, uLevel);
+  vec4 j = textureLod(source, vUv + vec2(-1.0, 1.0) * uTexel, uLevel);
+  vec4 k = textureLod(source, vUv + vec2(1.0, 1.0) * uTexel, uLevel);
+  vec4 l = textureLod(source, vUv + vec2(-1.0, -1.0) * uTexel, uLevel);
+  vec4 m = textureLod(source, vUv + vec2(1.0, -1.0) * uTexel, uLevel);
+  vec4 color = e * 0.125;
+  color += (a + c + g + i) * 0.03125;
+  color += (b + d + f + h) * 0.0625;
+  color += (j + k + l + m) * 0.125;
+  return color;
+}
+void main() {
+  outColor = downsample(uSource);
+  outSecond = downsample(uSecond);
+}`;
+
 export const BICUBIC = `
 vec4 cubicWeights(float v) {
   vec4 n = vec4(1.0, 2.0, 3.0, 4.0) - v;
@@ -550,6 +603,32 @@ vec4 sampleBlur(sampler2D tex, vec2 uv, float lod) {
   return mix(a, b, t);
 }
 `;
+
+export const SHADOW_BAKE_FS = `
+${BICUBIC}
+in vec2 vUv;
+uniform sampler2D uShadow;
+uniform float uShadowHeightScale;
+uniform float uShadowMaxLod;
+uniform vec4 uShadowShape;
+uniform vec4 uShadowContact;
+out vec4 outColor;
+void main() {
+  vec2 suv = vUv;
+  vec4 coarse = bicubicLevel(uShadow, suv, uShadowShape.w);
+  vec4 fine = bicubicLevel(uShadow, suv, max(uShadowShape.w - 2.0, 0.0));
+  float hCoarse = coarse.r > 1e-4 ? coarse.g / coarse.r : 0.0;
+  float hFine = fine.r > 1e-4 ? fine.g / fine.r : hCoarse;
+  float height = mix(hCoarse, hFine, smoothstep(0.1, 0.8, fine.r)) / max(uShadowHeightScale, 1e-6);
+  float ambient = sampleBlur(uShadow, suv, clamp(log2(uShadowShape.z / 0.85), 0.0, uShadowMaxLod)).r;
+  vec4 tight = sampleBlur(uShadow, suv, clamp(log2(uShadowContact.x / 0.85), 0.0, uShadowMaxLod));
+  vec4 wide = sampleBlur(uShadow, suv, clamp(log2(uShadowContact.z / 0.85), 0.0, uShadowMaxLod));
+  float tightHeight = tight.r > 1e-4 ? tight.g / tight.r / max(uShadowHeightScale, 1e-6) : 1e9;
+  float wideHeight = wide.r > 1e-4 ? wide.g / wide.r / max(uShadowHeightScale, 1e-6) : 1e9;
+  float crease = tight.r * exp(-tightHeight / max(uShadowContact.y, 1e-4));
+  float contact = wide.r * exp(-wideHeight / max(uShadowContact.w, 1e-4));
+  outColor = vec4((1.0 - ambient * 0.4) * (1.0 - crease * 0.5) * (1.0 - contact * 0.35), height, 0.0, 1.0);
+}`;
 
 export const COMPOSITE_FS = `
 ${BICUBIC}
@@ -593,14 +672,6 @@ void main() {
   float lod = clamp(log2(max(sigma, 1e-3) / 0.85), 0.0, uMaxLod);
   vec4 color = sampleBlur(uColor, vUv, lod);
   outColor = color * uOpacity;
-}`;
-
-export const BLIT_FS = `
-in vec2 vUv;
-uniform sampler2D uSource;
-out vec4 outColor;
-void main() {
-  outColor = textureLod(uSource, vUv, 0.0);
 }`;
 
 export const FINAL_FS = `
@@ -682,6 +753,9 @@ uniform vec3 uShadowRegion;
 uniform vec4 uShadowShape;
 uniform vec4 uShadowContact;
 uniform float uShadowFloor;
+#ifdef BAKED
+uniform sampler2D uShadowBake;
+#endif
 uniform sampler2D uReflection;
 uniform sampler2D uReflectionDepth;
 uniform float uHasReflection;
@@ -811,15 +885,23 @@ void main() {
     bool onReceiver = uShadowFloor > 0.5 ? (tFloor > 0.0 && tFloor < 1e8) : (tWall > 0.0 && tWall < 1e8);
     vec2 suv = (vec2(dot(receiverHit, uShadowAxisU), dot(receiverHit, uShadowAxisV)) - uShadowRegion.xy) / uShadowRegion.z;
     if (onReceiver && suv.x > 0.0 && suv.y > 0.0 && suv.x < 1.0 && suv.y < 1.0) {
+#ifdef BAKED
+      vec2 baked = texture(uShadowBake, suv).rg;
+      float height = baked.g;
+#else
       vec4 coarse = bicubicLevel(uShadow, suv, uShadowShape.w);
       vec4 fine = bicubicLevel(uShadow, suv, max(uShadowShape.w - 2.0, 0.0));
       float hCoarse = coarse.r > 1e-4 ? coarse.g / coarse.r : 0.0;
       float hFine = fine.r > 1e-4 ? fine.g / fine.r : hCoarse;
       float height = mix(hCoarse, hFine, smoothstep(0.1, 0.8, fine.r)) / max(uShadowHeightScale, 1e-6);
+#endif
       float sigma = uShadowShape.x + height * uShadowShape.y;
       float airborne = 1.0 / (1.0 + height / max(uShadowContact.w * 10.0, 1e-3));
       float lod = clamp(log2(max(sigma, 0.85) / 0.85), 0.0, uShadowMaxLod);
       float direct = sampleBlur(uShadow, suv, lod).r;
+#ifdef BAKED
+      float occ = 1.0 - (1.0 - direct * 0.82 * airborne) * baked.r;
+#else
       float ambient = sampleBlur(uShadow, suv, clamp(log2(uShadowShape.z / 0.85), 0.0, uShadowMaxLod)).r;
       vec4 tight = sampleBlur(uShadow, suv, clamp(log2(uShadowContact.x / 0.85), 0.0, uShadowMaxLod));
       vec4 wide = sampleBlur(uShadow, suv, clamp(log2(uShadowContact.z / 0.85), 0.0, uShadowMaxLod));
@@ -828,6 +910,7 @@ void main() {
       float crease = tight.r * exp(-tightHeight / max(uShadowContact.y, 1e-4));
       float contact = wide.r * exp(-wideHeight / max(uShadowContact.w, 1e-4));
       float occ = 1.0 - (1.0 - direct * 0.82 * airborne) * (1.0 - ambient * 0.4) * (1.0 - crease * 0.5) * (1.0 - contact * 0.35);
+#endif
       float shade = clamp(occ * uShadowOpacity, 0.0, 0.85);
       if (uShadowFloor > 0.5 && uStudio > 0.5) shade *= onFloor;
       shadeAmount = shade;

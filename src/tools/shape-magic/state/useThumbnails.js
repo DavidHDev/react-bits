@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createRenderer } from '../engine/renderer';
 import { bindMasks, loadField, maskPlan, masksReady } from '../engine/masks';
 import { STATIC_THUMBNAILS } from '../presets/thumbnails';
 import { FILLS } from '../presets/materials';
-import { isMaskLayer } from './doc';
+import { contentKey, isMaskLayer } from './doc';
 
 const SIZE = 220;
 
@@ -19,6 +19,25 @@ const thumbRenderer = () => {
   return shared;
 };
 
+export const gpuSettled = gl =>
+  new Promise(resolve => {
+    const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+    if (!sync) {
+      resolve();
+      return;
+    }
+    gl.flush();
+    const check = () => {
+      if (!gl.isContextLost() && gl.clientWaitSync(sync, 0, 0) === gl.TIMEOUT_EXPIRED) {
+        setTimeout(check, 4);
+        return;
+      }
+      gl.deleteSync(sync);
+      resolve();
+    };
+    setTimeout(check, 0);
+  });
+
 const snap = (doc, style, size = SIZE, time = 0) => {
   const capture = captures.then(async () => {
     const { canvas, renderer } = thumbRenderer();
@@ -27,6 +46,7 @@ const snap = (doc, style, size = SIZE, time = 0) => {
     await renderer.prepareScene(scene, style);
     bindMasks(renderer, plan.keys);
     renderer.draw({ scene, style, width: size, height: size, time });
+    await gpuSettled(renderer.gl);
     return canvas.toDataURL('image/png');
   });
   captures = capture.catch(() => {});
@@ -51,7 +71,7 @@ const luminance = hex => {
 
 export function useFillThumbs(doc, light, active) {
   const [thumbs, setThumbs] = useState({});
-  const key = JSON.stringify([doc.mark, light]);
+  const key = useMemo(() => contentKey([doc.mark, light]), [doc.mark, light]);
   const docRef = useRef(doc);
   docRef.current = doc;
   const doneKey = useRef(null);

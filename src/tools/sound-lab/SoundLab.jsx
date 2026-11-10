@@ -56,6 +56,13 @@ const useMediaQuery = query => {
   return matches;
 };
 
+const afterPaint = () =>
+  new Promise(resolve => {
+    if (document.visibilityState === 'hidden') return resolve();
+    setTimeout(resolve, 1000);
+    requestAnimationFrame(() => setTimeout(resolve, 0));
+  });
+
 const isTyping = target =>
   typeof target?.closest === 'function' &&
   Boolean(target.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [role="dialog"]'));
@@ -148,9 +155,23 @@ export default function SoundLab({ toolSelector }) {
   useEffect(() => player.subscribe(entry => setPlaying(entry ? entry.id : null)), [player]);
   useEffect(() => () => player.dispose(), [player]);
 
+  const rootRef = useRef(null);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return undefined;
+    const warm = () => player.warm();
+    root.addEventListener('pointerdown', warm, { capture: true, once: true });
+    return () => root.removeEventListener('pointerdown', warm, { capture: true });
+  }, [player]);
+
   const infosRef = useRef(infos);
   infosRef.current = infos;
-  const demand = useRef({ stack: [], queued: new Set(), busy: false, alive: true });
+  const demand = useRef({ stack: [], incoming: [], queued: new Set(), busy: false, alive: true });
+  const paintedRef = useRef(null);
+  const painted = useCallback(() => {
+    if (!paintedRef.current) paintedRef.current = afterPaint();
+    return paintedRef.current;
+  }, []);
 
   useEffect(() => {
     const state = demand.current;
@@ -165,10 +186,11 @@ export default function SoundLab({ toolSelector }) {
       const state = demand.current;
       if (infosRef.current[target.id] || state.queued.has(target.id)) return;
       state.queued.add(target.id);
-      state.stack.push(target);
+      state.incoming.push(target);
       if (state.busy) return;
       state.busy = true;
       (async () => {
+        await painted();
         let batch = {};
         let count = 0;
         const flush = () => {
@@ -177,32 +199,45 @@ export default function SoundLab({ toolSelector }) {
           count = 0;
           if (state.alive && Object.keys(add).length) setInfos(previous => ({ ...previous, ...add }));
         };
-        while (state.stack.length && state.alive) {
-          const item = state.stack.pop();
-          const info = await player.inspect(item, tunesRef.current[item.id] || {}).catch(() => null);
+        const take = () => {
+          if (state.incoming.length) {
+            state.stack.push(...state.incoming.reverse());
+            state.incoming = [];
+          }
+          return state.stack.pop();
+        };
+        while ((state.stack.length || state.incoming.length) && state.alive) {
+          const item = take();
+          const tuned = tunesRef.current[item.id] || {};
+          const cached = player.known(item, tuned);
+          const info = await player.inspect(item, tuned).catch(() => null);
           if (info) {
             batch[item.id] = info;
             count += 1;
           }
-          if (count >= 4 || !state.stack.length) flush();
-          await new Promise(resolve => setTimeout(resolve, 0));
+          const more = state.stack.length || state.incoming.length;
+          if (count >= 4 || !more) flush();
+          if (!cached || !more) await new Promise(resolve => setTimeout(resolve, 0));
         }
         flush();
         state.busy = false;
       })();
     },
-    [player]
+    [player, painted]
   );
 
   useEffect(() => {
     let alive = true;
-    player.render(sound, tune).then(result => {
-      if (alive && result) setInfos(previous => ({ ...previous, [sound.id]: result.info }));
+    painted().then(() => {
+      if (!alive) return;
+      player.render(sound, tune).then(result => {
+        if (alive && result) setInfos(previous => ({ ...previous, [sound.id]: result.info }));
+      });
     });
     return () => {
       alive = false;
     };
-  }, [player, sound, tune]);
+  }, [player, sound, tune, painted]);
 
   useEffect(() => {
     write('tunes', tunes);
@@ -250,11 +285,11 @@ export default function SoundLab({ toolSelector }) {
 
   const revealed = useCallback(() => setReveal(null), []);
 
-  const setLibrary = value => {
+  const setLibrary = useCallback(value => {
     setLibraryState(value);
     setCategory('all');
     write('library', value);
-  };
+  }, []);
 
   const play = useCallback(
     (id = selectedId, offset = 0) => {
@@ -282,7 +317,7 @@ export default function SoundLab({ toolSelector }) {
         player.play(target, tunesRef.current[target.id] || {}).catch(() => null);
       }
     },
-    [player, library, query]
+    [player, library, query, setLibrary]
   );
 
   const visible = useMemo(() => visibleSounds(library, category, query), [library, category, query]);
@@ -294,29 +329,38 @@ export default function SoundLab({ toolSelector }) {
     select(next);
   };
 
-  const onTune = (key, value) =>
-    setTunes(previous =>
-      withSettings(previous, selectedId, cleanTune({ ...(previous[selectedId] || {}), [key]: value }))
-    );
+  const onTune = useCallback(
+    (key, value) =>
+      setTunes(previous =>
+        withSettings(previous, selectedId, cleanTune({ ...(previous[selectedId] || {}), [key]: value }))
+      ),
+    [selectedId]
+  );
 
-  const onReset = () =>
-    setTunes(previous => {
-      const current = previous[selectedId] || {};
-      const effects = Object.fromEntries(EFFECT_KEYS.filter(key => current[key]).map(key => [key, current[key]]));
-      return withSettings(previous, selectedId, effects);
-    });
+  const onReset = useCallback(
+    () =>
+      setTunes(previous => {
+        const current = previous[selectedId] || {};
+        const effects = Object.fromEntries(EFFECT_KEYS.filter(key => current[key]).map(key => [key, current[key]]));
+        return withSettings(previous, selectedId, effects);
+      }),
+    [selectedId]
+  );
 
-  const onEffect = (key, value) =>
-    setTunes(previous =>
-      withSettings(previous, selectedId, cleanTune({ ...(previous[selectedId] || {}), [key]: value }))
-    );
+  const onEffect = onTune;
 
-  const toggleLoop = () =>
-    setLoop(previous => {
-      write('loop', !previous);
-      if (previous) player.stop();
-      return !previous;
-    });
+  const toggleLoop = useCallback(
+    () =>
+      setLoop(previous => {
+        write('loop', !previous);
+        if (previous) player.stop();
+        return !previous;
+      }),
+    [player]
+  );
+
+  const stop = useCallback(() => player.stop(), [player]);
+  const openExport = useCallback(tab => setExporting(tab || 'last'), []);
 
   const keys = useRef(null);
   keys.current = event => {
@@ -380,24 +424,24 @@ export default function SoundLab({ toolSelector }) {
         player={player}
         text={text}
         onText={setText}
-        onPlay={id => play(id)}
+        onPlay={play}
         onType={type}
-        onExport={tab => setExporting(tab || 'last')}
+        onExport={openExport}
       />
       <Timeline
         sound={sound}
         info={infos[selectedId]}
         player={player}
         loop={loop}
-        onPlay={(id, offset) => play(id, offset)}
-        onStop={() => player.stop()}
+        onPlay={play}
+        onStop={stop}
         onToggleLoop={toggleLoop}
       />
     </section>
   );
 
   return (
-    <div className="lab snd" data-layout={wide ? 'wide' : desktop ? 'desktop' : 'compact'}>
+    <div className="lab snd" ref={rootRef} data-layout={wide ? 'wide' : desktop ? 'desktop' : 'compact'}>
       {wide && (
         <aside className="lab-rail snd-rail" aria-label="Sounds">
           {toolSelector}

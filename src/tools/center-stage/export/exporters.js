@@ -2,7 +2,7 @@ import { openExportBackdrop } from '../backdrop';
 import { Renderer } from '../engine/renderer';
 import { TextCache, prepareShot, renderShot } from '../engine/shot';
 import { normalizeDoc } from '../engine/scene';
-import { clipRange, frameOf, mediaSizes } from '../media';
+import { clipRange, decodeBitmap, elementFrame, frameOf, mediaSizes } from '../media';
 import { loadBackgroundImage } from '../state/useThumbnails';
 
 export const even = value => Math.max(2, Math.round(value / 2) * 2);
@@ -97,10 +97,13 @@ async function createStudio({ doc, slots, background, width, height }) {
       if (image) renderer.setBackgroundImage(image, image.naturalWidth, image.naturalHeight);
     }
   }
+  const bitmaps = await Promise.all(slots.map(media => (media?.kind === 'image' ? decodeBitmap(media) : null)));
   slots.forEach((media, slot) => {
     if (!media || media.kind === 'video') return;
-    const frame = frameOf(media);
+    const bitmap = bitmaps[slot];
+    const frame = bitmap ? { image: bitmap, width: media.width, height: media.height } : elementFrame(media);
     if (frame) renderer.setMedia(slot, frame.image, frame.width, frame.height);
+    bitmap?.close();
   });
   let backdrop = null;
   if (bg.kind === 'reactbits') {

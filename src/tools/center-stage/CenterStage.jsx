@@ -124,7 +124,16 @@ const isTyping = target =>
     target.closest('input, textarea, select, [contenteditable="true"], [role="slider"], [role="dialog"], [role="menu"]')
   );
 
+const slotThumbs = new WeakMap();
+
 const slotThumb = media => {
+  if (media?.kind === 'image' && slotThumbs.has(media)) return slotThumbs.get(media);
+  const url = drawSlotThumb(media);
+  if (media?.kind === 'image') slotThumbs.set(media, url);
+  return url;
+};
+
+const drawSlotThumb = media => {
   const frame = frameOf(media);
   if (!frame) return null;
   const canvas = document.createElement('canvas');
@@ -159,7 +168,7 @@ export default function CenterStage({ toolSelector }) {
   const [selectedDevice, setSelectedDevice] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [repeat, setRepeat] = useState(readLoop);
-  const [time, setTime] = useState(0);
+  const [, setTime] = useState(0);
   const [exporting, setExporting] = useState(false);
   const [dropping, setDropping] = useState(false);
   const [query, setQuery] = useState('');
@@ -167,6 +176,7 @@ export default function CenterStage({ toolSelector }) {
   const [sideTab, setSideTab] = useState('presets');
   const [error, setError] = useState(null);
   const timeRef = useRef(0);
+  const tickRef = useRef(null);
   const stageRef = useRef(null);
   const fileRef = useRef(null);
   const searchRef = useRef(null);
@@ -752,15 +762,20 @@ export default function CenterStage({ toolSelector }) {
 
   const highlightUpload = on => setHighlight(on ? fillTargets(selectedDevice) : null);
 
+  const showTime = useCallback(value => {
+    setTime(value);
+    tickRef.current?.(value);
+  }, []);
+
   const applyPreset = useCallback(
     item => {
-      shot.applyPreset(item, { map: next => carryOver(next, slotsRef.current, surfaceRole) });
+      shotRef.current.applyPreset(item, { map: next => carryOver(next, slotsRef.current, surfaceRole) });
       setSelectedDevice(0);
       timeRef.current = 0;
-      setTime(0);
+      showTime(0);
       setPlaying(true);
     },
-    [shot]
+    [showTime]
   );
 
   const stepPreset = direction => {
@@ -792,14 +807,14 @@ export default function CenterStage({ toolSelector }) {
 
   const replay = useCallback(() => {
     timeRef.current = 0;
-    setTime(0);
+    showTime(0);
     slotsRef.current.forEach(media => {
       if (media?.kind !== 'video') return;
       media.player.seek(clipRange(media).start);
       media.player.play();
     });
     setPlaying(true);
-  }, []);
+  }, [showTime]);
 
   const stopAtEnd = useCallback(() => {
     setPlaying(false);
@@ -817,7 +832,7 @@ export default function CenterStage({ toolSelector }) {
 
   const seek = value => {
     timeRef.current = value;
-    setTime(value);
+    showTime(value);
     slotsRef.current.forEach(media => {
       if (media?.kind !== 'video') return;
       const range = clipRange(media);
@@ -833,6 +848,21 @@ export default function CenterStage({ toolSelector }) {
     if (document.fullscreenElement) document.exitFullscreen?.();
     else Promise.resolve(element.requestFullscreen?.()).catch(() => toast.error('Fullscreen is not available here'));
   }, []);
+
+  const showTick = useCallback(value => tickRef.current?.(value), []);
+
+  const latest = useRef(null);
+  const actions = useMemo(
+    () => ({
+      aspect: value => shotRef.current.set('aspect', value),
+      upload: () => latest.current.chooseFiles(latest.current.fillTargets(latest.current.selectedDevice)),
+      uploadHint: on => latest.current.highlightUpload(on),
+      capture: () => latest.current.openCaptureDialog(latest.current.fillTargets(latest.current.selectedDevice)),
+      export: () => setExporting(true),
+      seek: value => latest.current.seek(value)
+    }),
+    []
+  );
 
   const onCamera = useCallback(
     (values, key) =>
@@ -1001,6 +1031,8 @@ export default function CenterStage({ toolSelector }) {
 
   const samplesOnly = !pendingScreens.length && slots.every(media => !media || media.sample);
 
+  latest.current = { chooseFiles, fillTargets, selectedDevice, openCaptureDialog, highlightUpload, seek };
+
   const gallery = (
     <>
       <PresetSearch inputRef={searchRef} value={query} onChange={setQuery} />
@@ -1076,17 +1108,17 @@ export default function CenterStage({ toolSelector }) {
       <section className="lab-main" aria-label="Stage">
         <Toolbar
           aspect={doc.aspect}
-          onAspect={value => shot.set('aspect', value)}
+          onAspect={actions.aspect}
           playing={isPlaying}
           canPlay={animated}
-          onUpload={() => chooseFiles(fillTargets(selectedDevice))}
-          onUploadHint={highlightUpload}
+          onUpload={actions.upload}
+          onUploadHint={actions.uploadHint}
           canCapture={supportsCapture}
           capturing={Boolean(capture) || Boolean(captureDialog)}
-          onCapture={() => openCaptureDialog(fillTargets(selectedDevice))}
+          onCapture={actions.capture}
           onTogglePlay={togglePlay}
           onFullscreen={toggleFullscreen}
-          onExport={() => setExporting(true)}
+          onExport={actions.export}
         />
         <StageView
           ref={stageRef}
@@ -1095,7 +1127,7 @@ export default function CenterStage({ toolSelector }) {
           playing={isPlaying}
           timeRef={timeRef}
           padding={desktop ? 40 : 0}
-          onTick={setTime}
+          onTick={showTick}
           onCamera={onCamera}
           onPick={pick}
           onDropFiles={(files, device) =>
@@ -1147,7 +1179,8 @@ export default function CenterStage({ toolSelector }) {
         ) : (
           animated && (
             <Timeline
-              time={time}
+              timeRef={timeRef}
+              tickRef={tickRef}
               duration={loopLength}
               cyclic={motionKind === 'none' || isLooping(motionKind)}
               repeat={repeat}
@@ -1155,7 +1188,7 @@ export default function CenterStage({ toolSelector }) {
               onTogglePlay={togglePlay}
               onReplay={replay}
               onToggleRepeat={toggleRepeat}
-              onSeek={seek}
+              onSeek={actions.seek}
             />
           )
         )}

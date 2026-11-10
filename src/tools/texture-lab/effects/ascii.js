@@ -499,6 +499,7 @@ export default {
       atlas = state.atlas;
       cellW = cellH * atlas.aspect;
     }
+    state.volatile = Boolean(atlas) && !atlas.fontReady;
     const columns = Math.ceil(ctx.width / cellW);
     const rows = Math.ceil(ctx.height / cellH);
     const sub = SUBCELLS[params.charset] || [1, 1];
@@ -550,7 +551,7 @@ export default {
       }
     });
     ctx.release(cells);
-    const halo = params.glow > 0 ? gaussianBlur(ctx, glyphs, Math.max(1, cellH * 0.45)) : null;
+    const halo = params.glow > 0 ? gaussianBlur(ctx, glyphs, Math.max(1, cellH * 0.45), { paired: ctx.preview }) : null;
     const output = ctx.pass('ascii-composite', COMPOSITE, {
       input,
       textures: { uGlyphs: glyphs, uHalo: halo || glyphs, uBack: back || input },

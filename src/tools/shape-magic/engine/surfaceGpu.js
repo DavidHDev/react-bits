@@ -175,7 +175,16 @@ const MIN_SIDE = 40;
 const OMEGA = 1.6;
 const SIGMA = 1.2;
 
-const compile = (gl, source, names) => {
+const PROGRAMS = {
+  init: [INIT, ['uSdf', 'uLength']],
+  upsample: [UPSAMPLE, ['uCoarse', 'uSdf']],
+  relax: [RELAX, ['uU', 'uSdf', 'uScreen', 'uOmega', 'uParity']],
+  gradient: [GRADIENT, ['uU', 'uSdf', 'uUnit']],
+  dilate: [DILATE, ['uSrc', 'uUnit']],
+  blur: [BLUR, ['uSrc', 'uDir', 'uSigma']]
+};
+
+const startCompile = (gl, source) => {
   const vs = gl.createShader(gl.VERTEX_SHADER);
   gl.shaderSource(vs, VERTEX);
   gl.compileShader(vs);
@@ -187,6 +196,10 @@ const compile = (gl, source, names) => {
   gl.attachShader(program, fs);
   gl.bindAttribLocation(program, 0, 'aPosition');
   gl.linkProgram(program);
+  return { program, vs, fs };
+};
+
+const finishCompile = (gl, { program, vs, fs }, names) => {
   const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
   const log = linked ? '' : gl.getShaderInfoLog(fs) || gl.getProgramInfoLog(program);
   gl.deleteShader(vs);
@@ -211,22 +224,57 @@ export const surfaceLevels = (width, height) => {
 
 export function createSurfaceSolver(gl, vao) {
   if (!gl.getExtension('EXT_color_buffer_float')) return null;
+  const parallel = gl.getExtension('KHR_parallel_shader_compile');
   let programs = null;
+  let started = null;
+  let warming = null;
   let levels = [];
   let finest = null;
   let size = '';
 
+  const begin = () => {
+    if (!started) started = Object.entries(PROGRAMS).map(([name, [source]]) => [name, startCompile(gl, source)]);
+    return started;
+  };
+
   const ensurePrograms = () => {
     if (programs) return programs;
-    programs = {
-      init: compile(gl, INIT, ['uSdf', 'uLength']),
-      upsample: compile(gl, UPSAMPLE, ['uCoarse', 'uSdf']),
-      relax: compile(gl, RELAX, ['uU', 'uSdf', 'uScreen', 'uOmega', 'uParity']),
-      gradient: compile(gl, GRADIENT, ['uU', 'uSdf', 'uUnit']),
-      dilate: compile(gl, DILATE, ['uSrc', 'uUnit']),
-      blur: compile(gl, BLUR, ['uSrc', 'uDir', 'uSigma'])
-    };
+    const list = begin();
+    started = null;
+    programs = Object.fromEntries(list.map(([name, record]) => [name, finishCompile(gl, record, PROGRAMS[name][1])]));
     return programs;
+  };
+
+  const warm = () => {
+    if (programs) return Promise.resolve();
+    if (warming) return warming;
+    const list = begin();
+    warming = new Promise((resolve, reject) => {
+      const check = () => {
+        if (programs || started !== list) {
+          warming = null;
+          if (programs) resolve();
+          else reject(new Error('Surface compile was cancelled.'));
+          return;
+        }
+        if (
+          parallel &&
+          !list.every(([, record]) => gl.getProgramParameter(record.program, parallel.COMPLETION_STATUS_KHR))
+        ) {
+          setTimeout(check, 16);
+          return;
+        }
+        warming = null;
+        try {
+          ensurePrograms();
+          resolve();
+        } catch (problem) {
+          reject(problem);
+        }
+      };
+      setTimeout(check, 0);
+    });
+    return warming;
   };
 
   const target = (width, height, format, filter = gl.NEAREST) => {
@@ -383,8 +431,16 @@ export function createSurfaceSolver(gl, vao) {
   const dispose = () => {
     releaseAll();
     if (programs) Object.values(programs).forEach(item => gl.deleteProgram(item.program));
+    if (started) {
+      started.forEach(([, record]) => {
+        gl.deleteProgram(record.program);
+        gl.deleteShader(record.vs);
+        gl.deleteShader(record.fs);
+      });
+    }
     programs = null;
+    started = null;
   };
 
-  return { prepare, run, dispose };
+  return { prepare, run, warm, ready: () => Boolean(programs), dispose };
 }

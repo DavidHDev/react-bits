@@ -6,6 +6,8 @@ import './MetallicPaint.css';
 const WORKING_SIZE = 512;
 const MAX_SIDE = 2048;
 const MAX_PIXELS = 2560 * 1600 * 2;
+const STRIP_PIXELS = 1 << 18;
+const RELAX_BUDGET = 1 << 21;
 
 const VERTEX = `#version 300 es
 layout(location = 0) in vec2 a_position;
@@ -333,7 +335,17 @@ const drawTextSource = async (text, fontFamily, fontWeight) => {
   return canvas;
 };
 
-const solvePoisson = (mask, width, height) => {
+const nextTask = () =>
+  new Promise(resolve => {
+    const channel = new MessageChannel();
+    channel.port1.onmessage = () => {
+      channel.port1.close();
+      resolve();
+    };
+    channel.port2.postMessage(0);
+  });
+
+const preparePoisson = (mask, width, height) => {
   const interior = [];
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
@@ -366,24 +378,33 @@ const solvePoisson = (mask, width, height) => {
       field[i] = 1.9 * ((0.01 + sum) / 4) - 0.9 * field[i];
     }
   };
+  const peak = () => {
+    let top = 0;
+    interior.forEach(i => {
+      if (field[i] > top) top = field[i];
+    });
+    return top || 1;
+  };
+  return { field, red, black, relax, peak };
+};
+
+const solvePoisson = async (mask, width, height, live) => {
+  const { field, red, black, relax, peak } = preparePoisson(mask, width, height);
+  await nextTask();
+  if (!live()) return null;
+  const batch = clamp(Math.floor(RELAX_BUDGET / Math.max(1, red.length + black.length)), 1, 8);
   for (let iteration = 0; iteration < 40; iteration++) {
     relax(red);
     relax(black);
+    if (iteration % batch === batch - 1 && iteration < 39) {
+      await nextTask();
+      if (!live()) return null;
+    }
   }
-  let peak = 0;
-  interior.forEach(i => {
-    if (field[i] > peak) peak = field[i];
-  });
-  return { field, peak: peak || 1 };
+  return { field, peak: peak() };
 };
 
-const processShape = source => {
-  const width = source.width;
-  const height = source.height;
-  const fit = WORKING_SIZE / Math.min(width, height);
-  const workW = Math.max(2, Math.round(width * fit));
-  const workH = Math.max(2, Math.round(height * fit));
-
+const readMask = (source, workW, workH) => {
   const small = document.createElement('canvas');
   small.width = workW;
   small.height = workH;
@@ -392,8 +413,10 @@ const processShape = source => {
   const smallData = smallCtx.getImageData(0, 0, workW, workH).data;
   const mask = new Uint8Array(workW * workH);
   for (let i = 0; i < mask.length; i++) mask[i] = smallData[i * 4 + 3] > 0 ? 1 : 0;
+  return { small, smallCtx, mask };
+};
 
-  const { field, peak } = solvePoisson(mask, workW, workH);
+const drawDepth = async ({ small, smallCtx, mask }, { field, peak }, workW, workH, width, height, live) => {
   const gradient = smallCtx.createImageData(workW, workH);
   for (let i = 0; i < mask.length; i++) {
     const p = i * 4;
@@ -411,22 +434,80 @@ const processShape = source => {
   const outCtx = out.getContext('2d', { willReadFrequently: true });
   outCtx.imageSmoothingEnabled = true;
   outCtx.imageSmoothingQuality = 'high';
-  outCtx.drawImage(small, 0, 0, workW, workH, 0, 0, width, height);
-  const result = outCtx.getImageData(0, 0, width, height);
-  const original = source.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, width, height).data;
-  for (let i = 0; i < result.data.length; i += 4) {
-    const alpha = original[i + 3];
-    if (alpha === 0) {
-      result.data[i] = 255;
-      result.data[i + 1] = 0;
-    } else {
-      result.data[i] = result.data[i + 3] === 0 ? 0 : result.data[i];
-      result.data[i + 1] = alpha;
-    }
-    result.data[i + 2] = 255;
-    result.data[i + 3] = 255;
+  if (width <= workW || height <= workH) {
+    outCtx.drawImage(small, 0, 0, workW, workH, 0, 0, width, height);
+    return outCtx.getImageData(0, 0, width, height);
   }
-  return result;
+  const image = outCtx.createImageData(width, height);
+  const rows = Math.max(1, Math.floor(STRIP_PIXELS / width));
+  for (let y = 0; y < height; y += rows) {
+    const strip = Math.min(rows, height - y);
+    outCtx.save();
+    outCtx.beginPath();
+    outCtx.rect(0, y, width, strip);
+    outCtx.clip();
+    outCtx.drawImage(small, 0, 0, workW, workH, 0, 0, width, height);
+    outCtx.restore();
+    image.data.set(outCtx.getImageData(0, y, width, strip).data, y * width * 4);
+    if (y + strip < height) {
+      await nextTask();
+      if (!live()) return null;
+    }
+  }
+  return image;
+};
+
+const packChannels = async (result, source, width, height, live) => {
+  const original = source.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, width, height).data;
+  const bounds = [width, height, -1, -1];
+  const rows = Math.max(1, Math.floor(STRIP_PIXELS / width));
+  for (let y = 0, i = 0; y < height; y++) {
+    if (y && y % rows === 0) {
+      await nextTask();
+      if (!live()) return null;
+    }
+    for (let x = 0; x < width; x++, i += 4) {
+      const alpha = original[i + 3];
+      if (alpha === 0) {
+        result.data[i] = 255;
+        result.data[i + 1] = 0;
+      } else {
+        result.data[i] = result.data[i + 3] === 0 ? 0 : result.data[i];
+        result.data[i + 1] = alpha;
+        if (x < bounds[0]) bounds[0] = x;
+        if (x > bounds[2]) bounds[2] = x;
+        if (y < bounds[1]) bounds[1] = y;
+        bounds[3] = y;
+      }
+      result.data[i + 2] = 255;
+      result.data[i + 3] = 255;
+    }
+  }
+  return bounds;
+};
+
+const processShape = async (source, live) => {
+  await nextTask();
+  if (!live()) return null;
+  const width = source.width;
+  const height = source.height;
+  const fit = WORKING_SIZE / Math.min(width, height);
+  const workW = Math.max(2, Math.round(width * fit));
+  const workH = Math.max(2, Math.round(height * fit));
+  const work = readMask(source, workW, workH);
+  await nextTask();
+  if (!live()) return null;
+  const solved = await solvePoisson(work.mask, workW, workH, live);
+  if (!solved) return null;
+  await nextTask();
+  if (!live()) return null;
+  const image = await drawDepth(work, solved, workW, workH, width, height, live);
+  if (!image) return null;
+  await nextTask();
+  if (!live()) return null;
+  const bounds = await packChannels(image, source, width, height, live);
+  if (!bounds) return null;
+  return { image, bounds };
 };
 
 const compile = (gl, type, source) => {
@@ -434,9 +515,7 @@ const compile = (gl, type, source) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
+  return shader;
 };
 
 export default function MetallicPaint({
@@ -493,23 +572,38 @@ export default function MetallicPaint({
     if (!container || !canvas) return undefined;
     const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
     if (!gl) return undefined;
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
     const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
     const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
     const program = gl.createProgram();
-    if (!vertex || !fragment || !program) return undefined;
+    if (!vertex || !fragment || !program) {
+      gl.deleteShader(vertex);
+      gl.deleteShader(fragment);
+      gl.deleteProgram(program);
+      return undefined;
+    }
     gl.attachShader(program, vertex);
     gl.attachShader(program, fragment);
     gl.linkProgram(program);
-    gl.deleteShader(vertex);
-    gl.deleteShader(fragment);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return undefined;
-    gl.useProgram(program);
 
     const uniforms = {};
-    const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-    for (let i = 0; i < count; i++) {
-      const info = gl.getActiveUniform(program, i);
-      if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
+    const link = () => {
+      const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+      gl.deleteShader(vertex);
+      gl.deleteShader(fragment);
+      if (!linked) return false;
+      gl.useProgram(program);
+      const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < count; i++) {
+        const info = gl.getActiveUniform(program, i);
+        if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
+      }
+      gl.uniform1i(uniforms.u_image, 0);
+      return true;
+    };
+    if (!parallel && !link()) {
+      gl.deleteProgram(program);
+      return undefined;
     }
 
     const vao = gl.createVertexArray();
@@ -528,7 +622,6 @@ export default function MetallicPaint({
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.uniform1i(uniforms.u_image, 0);
 
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     const state = {
@@ -536,9 +629,14 @@ export default function MetallicPaint({
       last: 0,
       time: 0,
       visible: true,
+      ready: !parallel,
+      queued: undefined,
       pending: false,
       hasImage: false,
       imageAspect: 1,
+      imageWidth: 1,
+      imageHeight: 1,
+      bounds: null,
       width: 0,
       height: 0,
       revealStart: -1,
@@ -569,9 +667,41 @@ export default function MetallicPaint({
       gl.viewport(0, 0, width, height);
     };
 
+    const markBox = s => {
+      const bounds = state.bounds;
+      if (!bounds || bounds[2] < bounds[0]) return null;
+      const aspect = state.imageAspect;
+      const boxHeight = Math.min(state.width / aspect, state.height) * s.scale;
+      const turn = (s.rotation * Math.PI) / 180;
+      const cos = Math.cos(turn);
+      const sin = Math.sin(turn);
+      let left = Infinity;
+      let right = -Infinity;
+      let bottom = Infinity;
+      let top = -Infinity;
+      for (let corner = 0; corner < 4; corner++) {
+        const u = (corner & 1 ? bounds[2] + 1 : bounds[0]) / state.imageWidth;
+        const v = (corner & 2 ? bounds[3] + 1 : bounds[1]) / state.imageHeight;
+        const x = (u - 0.5) * aspect;
+        const y = 0.5 - v;
+        const px = (cos * x + sin * y) * boxHeight + state.width / 2;
+        const py = (cos * y - sin * x) * boxHeight + state.height / 2;
+        left = Math.min(left, px);
+        right = Math.max(right, px);
+        bottom = Math.min(bottom, py);
+        top = Math.max(top, py);
+      }
+      const margin = 8 + (2 * boxHeight) / state.imageHeight;
+      const x0 = Math.max(0, Math.floor((left - margin) / 2) * 2);
+      const y0 = Math.max(0, Math.floor((bottom - margin) / 2) * 2);
+      const x1 = Math.min(state.width, Math.ceil((right + margin) / 2) * 2);
+      const y1 = Math.min(state.height, Math.ceil((top + margin) / 2) * 2);
+      return [x0, y0, Math.max(0, x1 - x0), Math.max(0, y1 - y0)];
+    };
+
     const draw = () => {
       const s = settingsRef.current;
-      if (state.pending || !state.hasImage) {
+      if (!state.ready || state.pending || !state.hasImage) {
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT);
         return;
@@ -594,10 +724,21 @@ export default function MetallicPaint({
       gl.uniform2f(uniforms.u_tilt, state.tiltX, state.tiltY);
       gl.uniform1f(uniforms.u_reveal, state.reveal);
       gl.uniform1f(uniforms.u_light, s.lightMode ? 1 : 0);
-      gl.clearColor(0, 0, 0, 0);
+      const solid = s.back[3] === 1;
+      const box = solid || s.back[3] === 0 ? markBox(s) : null;
+      if (box && solid) gl.clearColor(s.back[0], s.back[1], s.back[2], 1);
+      else gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
+      if (box && (box[2] === 0 || box[3] === 0)) return;
       gl.bindVertexArray(vao);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (box) {
+        gl.enable(gl.SCISSOR_TEST);
+        gl.scissor(box[0], box[1], box[2], box[3]);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        gl.disable(gl.SCISSOR_TEST);
+      } else {
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
     };
 
     const frame = now => {
@@ -645,6 +786,42 @@ export default function MetallicPaint({
       if (!state.raf && state.alive && state.visible) state.raf = requestAnimationFrame(frame);
     };
 
+    const dispose = () => {
+      state.alive = false;
+      cancelAnimationFrame(state.raf);
+      resizeObserver.disconnect();
+      visibility.disconnect();
+      canvas.removeEventListener('webglcontextlost', onLost);
+      container.removeEventListener('pointermove', onMove);
+      container.removeEventListener('pointerleave', onLeave);
+      if (engineRef.current === engine) engineRef.current = null;
+      gl.deleteShader(vertex);
+      gl.deleteShader(fragment);
+      gl.deleteTexture(texture);
+      gl.deleteBuffer(buffer);
+      gl.deleteVertexArray(vao);
+      gl.deleteProgram(program);
+    };
+
+    const poll = now => {
+      state.raf = 0;
+      if (!state.alive) return;
+      if (parallel && !gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR)) {
+        state.raf = requestAnimationFrame(poll);
+        return;
+      }
+      if (!link()) {
+        dispose();
+        return;
+      }
+      state.ready = true;
+      if (state.queued !== undefined) {
+        upload(state.queued);
+        state.queued = undefined;
+      }
+      frame(now);
+    };
+
     const onMove = event => {
       const rect = container.getBoundingClientRect();
       state.targetX = clamp(((event.clientX - rect.left) / rect.width) * 2 - 1, -1.2, 1.2);
@@ -680,36 +857,50 @@ export default function MetallicPaint({
     container.addEventListener('pointermove', onMove);
     container.addEventListener('pointerleave', onLeave);
 
-    engineRef.current = {
+    const upload = shape => {
+      state.pending = false;
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      if (shape) {
+        const data = shape.image;
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, data);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        state.imageAspect = data.width / data.height;
+        state.imageWidth = data.width;
+        state.imageHeight = data.height;
+        state.bounds = shape.bounds;
+        state.hasImage = true;
+      } else {
+        gl.texImage2D(
+          gl.TEXTURE_2D,
+          0,
+          gl.RGBA,
+          1,
+          1,
+          0,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          new Uint8Array([255, 0, 255, 255])
+        );
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        state.imageAspect = 1;
+        state.bounds = null;
+        state.hasImage = false;
+      }
+    };
+
+    const engine = {
       setPending: value => {
         state.pending = value;
+        if (value) state.queued = undefined;
         draw();
       },
-      setImage: data => {
-        state.pending = false;
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        if (data) {
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, data);
-          gl.generateMipmap(gl.TEXTURE_2D);
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-          state.imageAspect = data.width / data.height;
-          state.hasImage = true;
-        } else {
-          gl.texImage2D(
-            gl.TEXTURE_2D,
-            0,
-            gl.RGBA,
-            1,
-            1,
-            0,
-            gl.RGBA,
-            gl.UNSIGNED_BYTE,
-            new Uint8Array([255, 0, 255, 255])
-          );
-          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-          state.imageAspect = 1;
-          state.hasImage = false;
+      setImage: shape => {
+        if (!state.ready) {
+          state.queued = shape;
+          return;
         }
+        upload(shape);
         draw();
         wake();
       },
@@ -720,25 +911,14 @@ export default function MetallicPaint({
         wake();
       }
     };
+    engineRef.current = engine;
 
     resize();
     draw();
-    wake();
+    if (state.ready) wake();
+    else state.raf = requestAnimationFrame(poll);
 
-    return () => {
-      state.alive = false;
-      cancelAnimationFrame(state.raf);
-      resizeObserver.disconnect();
-      visibility.disconnect();
-      canvas.removeEventListener('webglcontextlost', onLost);
-      container.removeEventListener('pointermove', onMove);
-      container.removeEventListener('pointerleave', onLeave);
-      engineRef.current = null;
-      gl.deleteTexture(texture);
-      gl.deleteBuffer(buffer);
-      gl.deleteVertexArray(vao);
-      gl.deleteProgram(program);
-    };
+    return dispose;
   }, []);
 
   useEffect(() => {
@@ -750,10 +930,9 @@ export default function MetallicPaint({
     }
     engineRef.current?.setPending(true);
     source
-      .then(canvas => {
-        if (!active || !canvas) return;
-        const data = processShape(canvas);
-        if (active) engineRef.current?.setImage(data);
+      .then(canvas => (active && canvas ? processShape(canvas, () => active) : null))
+      .then(shape => {
+        if (active && shape) engineRef.current?.setImage(shape);
       })
       .catch(() => {
         if (active) engineRef.current?.setImage(null);

@@ -252,6 +252,7 @@ const shaderSource = (body, flags) =>
   ].join('\n');
 
 const FRAGMENTS = { glow: GLOW, compose: COMPOSE, line: LINE };
+const PASSES = ['glow', 'compose', 'line'];
 
 const MOTIONS = ['pulse', 'ripple', 'breathe'];
 const CYCLE = 3.45;
@@ -297,11 +298,6 @@ const compile = (gl, type, source) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
   return shader;
 };
 
@@ -317,10 +313,20 @@ const link = (gl, vertexSource, fragmentSource) => {
   gl.attachShader(program, vertex);
   gl.attachShader(program, fragment);
   gl.linkProgram(program);
+  return { program, vertex, fragment };
+};
+
+const resolve = (gl, job) => {
+  const { program, vertex, fragment } = job;
+  const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (!linked && !gl.isContextLost()) {
+    const broken = [vertex, fragment].filter(shader => !gl.getShaderParameter(shader, gl.COMPILE_STATUS));
+    if (broken.length) broken.forEach(shader => console.error(gl.getShaderInfoLog(shader)));
+    else console.error(gl.getProgramInfoLog(program));
+  }
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(program));
+  if (!linked) {
     gl.deleteProgram(program);
     return null;
   }
@@ -393,6 +399,7 @@ const MagicRings = ({
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
+  const releaseRef = useRef(0);
   const [generation, setGeneration] = useState(0);
 
   const light = theme === 'light';
@@ -437,6 +444,8 @@ const MagicRings = ({
     const container = containerRef.current;
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
+    cancelAnimationFrame(releaseRef.current);
+    releaseRef.current = 0;
 
     const gl = canvas.getContext('webgl2', {
       alpha: true,
@@ -447,16 +456,34 @@ const MagicRings = ({
       powerPreference: 'default'
     });
     if (!gl) return;
-    const programs = new Map();
-    const programFor = (name, flags) => {
-      const key = `${name}|${flags.join(',')}`;
-      if (!programs.has(key)) {
-        const vertex = shaderSource(name === 'line' ? STRIP : FULLSCREEN, flags);
-        programs.set(key, link(gl, vertex, shaderSource(`${COMMON}${FRAGMENTS[name]}`, flags)));
-      }
-      return programs.get(key);
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
+    const variants = new Map();
+    const linked = variant =>
+      !parallel ||
+      variant.jobs.every(job => !job || gl.getProgramParameter(job.program, parallel.COMPLETION_STATUS_KHR));
+    const settle = variant => {
+      variant.programs = variant.jobs.map(job => job && resolve(gl, job));
+      variant.jobs = [];
+      variant.pending = false;
     };
-    if (!programFor('glow', []) || !programFor('compose', []) || !programFor('line', [])) return;
+    const variantFor = flags => {
+      const key = flags.join(',');
+      let variant = variants.get(key);
+      if (!variant) {
+        const jobs = PASSES.map(name =>
+          link(
+            gl,
+            shaderSource(name === 'line' ? STRIP : FULLSCREEN, flags),
+            shaderSource(`${COMMON}${FRAGMENTS[name]}`, flags)
+          )
+        );
+        variant = { jobs, programs: [], pending: true };
+        variants.set(key, variant);
+        if (!parallel) settle(variant);
+      }
+      return variant;
+    };
+    if (!parallel && variantFor([]).programs.includes(null)) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const vao = gl.createVertexArray();
@@ -491,6 +518,23 @@ const MagicRings = ({
     let visible = true;
     let pageVisible = document.visibilityState !== 'hidden';
     let lost = false;
+    let stage = null;
+    let look = settingsRef.current;
+
+    const select = poll => {
+      const s = settingsRef.current;
+      const flags = [];
+      if (s.light) flags.push('LIGHT');
+      if (s.dispersion > 0) flags.push('PRISM');
+      if (!floatGlow) flags.push('PACKED');
+      const next = variantFor(flags);
+      if (poll && next.pending && linked(next)) settle(next);
+      if (!next.pending) {
+        stage = next;
+        look = s;
+      }
+      return next.pending;
+    };
 
     const resize = () => {
       const s = settingsRef.current;
@@ -572,7 +616,8 @@ const MagicRings = ({
     };
 
     const render = () => {
-      const s = settingsRef.current;
+      if (!stage) return;
+      const s = look;
       const count = s.ringCount;
       const hover = spring.hover;
       const still = reduced ? 0 : 1;
@@ -638,13 +683,7 @@ const MagicRings = ({
       gl.clear(gl.COLOR_BUFFER_BIT);
       if (!slots) return;
 
-      const flags = [];
-      if (s.light) flags.push('LIGHT');
-      if (s.dispersion > 0) flags.push('PRISM');
-      if (!floatGlow) flags.push('PACKED');
-      const glowProgram = programFor('glow', flags);
-      const composeProgram = programFor('compose', flags);
-      const lineProgram = programFor('line', flags);
+      const [glowProgram, composeProgram, lineProgram] = stage.programs;
       if (!glowProgram || !composeProgram || !lineProgram) return;
 
       const glowScale = (s.light ? 0.3 : 1) * (1 - s.dispersion * 0.45);
@@ -712,6 +751,12 @@ const MagicRings = ({
     const frame = now => {
       raf = 0;
       if (lost) return;
+      const waiting = select(true);
+      if (!stage) {
+        last = Math.max(last, now);
+        if (visible && pageVisible) raf = requestAnimationFrame(frame);
+        return;
+      }
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);
       last = Math.max(last, now);
@@ -744,7 +789,7 @@ const MagicRings = ({
       const settling =
         Math.abs(spring.vx) + Math.abs(spring.vy) + Math.abs(spring.hoverVelocity) > 1e-4 ||
         Math.abs((pointer.inside ? 1 : 0) - spring.hover) > 1e-3;
-      const busy = (s.speed > 0 && !reduced) || settling || bursts.length > 0 || introLive;
+      const busy = (s.speed > 0 && !reduced) || settling || bursts.length > 0 || introLive || waiting;
       if (busy && visible && pageVisible) raf = requestAnimationFrame(frame);
     };
 
@@ -753,11 +798,13 @@ const MagicRings = ({
       last = performance.now();
       raf = requestAnimationFrame(frame);
     };
-    wakeRef.current = () => {
+    const refresh = () => {
       resize();
+      select(false);
       render();
       wake();
     };
+    wakeRef.current = refresh;
 
     const locate = event => {
       const rect = container.getBoundingClientRect();
@@ -826,11 +873,7 @@ const MagicRings = ({
     canvas.addEventListener('webglcontextlost', onLost);
     canvas.addEventListener('webglcontextrestored', onRestored);
 
-    const resizeObserver = new ResizeObserver(() => {
-      resize();
-      render();
-      wake();
-    });
+    const resizeObserver = new ResizeObserver(refresh);
     resizeObserver.observe(container);
 
     const intersection = new IntersectionObserver(entries => {
@@ -846,6 +889,7 @@ const MagicRings = ({
     document.addEventListener('visibilitychange', onVisibility);
 
     resize();
+    select(false);
     wake();
 
     return () => {
@@ -865,10 +909,31 @@ const MagicRings = ({
         gl.deleteVertexArray(vao);
         gl.deleteTexture(glowTexture);
         gl.deleteFramebuffer(glowBuffer);
-        programs.forEach(entry => entry && gl.deleteProgram(entry.program));
         gl.deleteVertexArray(stripVao);
         gl.deleteBuffer(stripBuffer);
+        const release = () => {
+          if (lost || gl.isContextLost()) return;
+          variants.forEach((variant, key) => {
+            if (variant.pending && !linked(variant)) return;
+            variant.jobs.forEach(job => {
+              if (!job) return;
+              gl.deleteShader(job.vertex);
+              gl.deleteShader(job.fragment);
+              gl.deleteProgram(job.program);
+            });
+            variant.programs.forEach(entry => entry && gl.deleteProgram(entry.program));
+            variants.delete(key);
+          });
+          if (variants.size) requestAnimationFrame(release);
+        };
+        release();
       }
+      const free = () => {
+        releaseRef.current = 0;
+        if (!canvas.isConnected && !gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      };
+      if (canvas.isConnected) releaseRef.current = requestAnimationFrame(free);
+      else free();
     };
   }, [generation]);
 

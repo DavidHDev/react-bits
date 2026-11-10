@@ -321,8 +321,17 @@ const noiseBuffer = (context: BaseAudioContext, color: NoiseLayer['color'], leng
   return buffer;
 };
 
+const impulses = new Map<string, AudioBuffer>();
+
 const impulse = (context: BaseAudioContext, decay: number, predelay: number, damp: number, seed: number) => {
   const rate = context.sampleRate;
+  const key = `${rate}:${decay}:${predelay}:${damp}:${seed}`;
+  const known = impulses.get(key);
+  if (known) {
+    impulses.delete(key);
+    impulses.set(key, known);
+    return known;
+  }
   const length = Math.ceil((decay * 1.15 + predelay) * rate);
   const buffer = context.createBuffer(2, length, rate);
   const taps = [0.0071, 0.0113, 0.0167, 0.0229, 0.0311, 0.0373];
@@ -351,6 +360,8 @@ const impulse = (context: BaseAudioContext, decay: number, predelay: number, dam
     const scale = 1 / Math.sqrt(Math.max(total, 1e-12));
     for (let i = 0; i < length; i += 1) data[i] *= scale;
   }
+  impulses.set(key, buffer);
+  if (impulses.size > 8) impulses.delete(impulses.keys().next().value as string);
   return buffer;
 };
 

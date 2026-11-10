@@ -5,6 +5,7 @@ export default {
   group: 'volume',
   source: 'shaders.com',
   animated: true,
+  softTaps: true,
   outside: false,
   normals: false,
   surface: 0.1,

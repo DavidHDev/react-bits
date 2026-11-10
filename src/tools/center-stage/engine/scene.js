@@ -569,6 +569,56 @@ export function laptopParts(layout) {
   return { lid, deck, axis };
 }
 
+function depthSteps(devices, depthOf, near, far, spread) {
+  const k = ((far * near) / (far - near)) * 16777216;
+  let fewest = Infinity;
+  devices.forEach(item => {
+    const { layout, model } = item;
+    if (item.device.hidden || layout.type === 'laptop' || layout.type === 'monitor' || layout.spec) return;
+    const { body } = layout;
+    const thick = (k * body.thickness * Math.hypot(model[0], model[1], model[2])) / spread;
+    for (const x of [-body.w / 2, body.w / 2])
+      for (const y of [-body.h / 2, body.h / 2]) {
+        const depth = depthOf(transformPoint(model, [x, y, 0]));
+        if (depth > 0) fewest = Math.min(fewest, thick / (depth * depth));
+      }
+  });
+  return fewest;
+}
+
+function nearestDepth(devices, depthOf, mirrorY) {
+  let nearest = Infinity;
+  devices.forEach(item => {
+    if (item.device.hidden) return;
+    const corners = deviceBounds(item.layout);
+    const center = [0, 0, 0];
+    corners.forEach(p => {
+      center[0] += p[0] / corners.length;
+      center[1] += p[1] / corners.length;
+      center[2] += p[2] / corners.length;
+    });
+    const local = corners.map(p => [
+      center[0] + (p[0] - center[0]) * 1.25,
+      center[1] + (p[1] - center[1]) * 1.25,
+      center[2] + (p[2] - center[2]) * 1.25
+    ]);
+    if (item.device.rest) {
+      const { body } = item.layout;
+      const pad = Math.min(body.w, body.h) * 0.07 * 2.6;
+      const x = body.w / 2 + pad;
+      const y = body.h / 2 + pad;
+      const z = -body.thickness / 2 - 0.0006;
+      local.push([-x, -y, z], [x, -y, z], [-x, y, z], [x, y, z]);
+    }
+    local.forEach(p => {
+      const world = transformPoint(item.model, p);
+      nearest = Math.min(nearest, depthOf(world));
+      if (mirrorY !== null) nearest = Math.min(nearest, depthOf([world[0], 2 * mirrorY - world[1], world[2]]));
+    });
+  });
+  return nearest;
+}
+
 export function deviceBounds(layout) {
   const corners = [];
   const box = (m, w, h, t) => {
@@ -850,11 +900,8 @@ export function buildScene(input, media, { width, height, time = 0, preview = fa
   }
   const eye = add(target, scale(basis.w, distance));
   const radius = Math.max(...points.map(p => Math.hypot(...sub(p, target))), 1);
-  const near = Math.max(0.02, distance - radius * 4);
   const far = distance + radius * 8 + 40;
   const view = lookAt(eye, target, basis.v);
-  const proj = perspective(fov, aspect, near, far);
-  const viewProj = multiply(proj, view);
 
   const depthOf = p => dot(sub(eye, p), basis.w);
 
@@ -891,6 +938,15 @@ export function buildScene(input, media, { width, height, time = 0, preview = fa
     source = normalize([Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el) * 0.6 + 0.35]);
   else source = normalize([Math.sin(az) * Math.cos(el), Math.cos(az) * Math.cos(el) * 0.85, Math.sin(el)]);
   const lightDir = scale(source, -1);
+  const baseNear = Math.max(0.02, distance - radius * 4);
+  const mirrorY = receiver === 'floor' && clamp(light.reflection ?? 0, 0, 1) > 0.001 ? floorY : null;
+  const crowded = depthSteps(devices, depthOf, baseNear, far, Math.hypot(1, tanX, tanY)) < 1.5;
+  const near = crowded
+    ? Math.max(baseNear, Math.min(nearestDepth(devices, depthOf, mirrorY), distance) * 0.5)
+    : baseNear;
+  const proj = perspective(fov, aspect, near, far);
+  const viewProj = multiply(proj, view);
+  const rays = invert(multiply(perspective(fov, aspect, baseNear, far), view), true);
   const plane = receiver === 'floor' ? [0, 1, 0, floorY] : [0, 0, 1, wallZ];
   const shadow = shadowRegion(points, receiver, receiver === 'floor' ? floorY : wallZ, lightDir, size, light);
 
@@ -915,6 +971,7 @@ export function buildScene(input, media, { width, height, time = 0, preview = fa
       proj,
       viewProj,
       invViewProj: invert(viewProj),
+      rays,
       fov,
       tanX,
       tanY,

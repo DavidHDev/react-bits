@@ -45,9 +45,36 @@ const canvasOf = (width, height) => {
   return canvas;
 };
 
-const gpuCanvas = (width, height) => {
-  const canvas = canvasOf(width, height);
-  return { canvas, renderer: createRenderer(canvas, { preserve: true }) };
+const pool = [];
+
+const retire = item => {
+  item.renderer.dispose();
+  item.renderer.gl.getExtension('WEBGL_lose_context')?.loseContext();
+};
+
+export const acquireRenderer = () => {
+  const free = pool.find(item => !item.busy && !item.renderer.gl.isContextLost());
+  if (free) {
+    free.busy = true;
+    return free;
+  }
+  const canvas = canvasOf(1, 1);
+  const item = { canvas, renderer: createRenderer(canvas, { preserve: true }), busy: true, retired: false };
+  pool.push(item);
+  return item;
+};
+
+export const releaseRenderer = item => {
+  if (!item) return;
+  item.busy = false;
+  if (item.retired) retire(item);
+};
+
+export const releaseExportRenderers = () => {
+  pool.splice(0).forEach(item => {
+    item.retired = true;
+    if (!item.busy) retire(item);
+  });
 };
 
 export const drawMark = (renderer, doc, { width, height, morphT = 0, style, time = 0 }) => {
@@ -156,28 +183,28 @@ const layoutFor = (output, previewWidth) => {
 async function createComposer(doc, output, { previewWidth, background = true, signal }) {
   await prepareMasks(doc);
   guard(signal);
-  const base = gpuCanvas(output.width, output.height);
-  const mask = gpuCanvas(output.width, output.height);
   const result = canvasOf(output.width, output.height);
   const resultContext = result.getContext('2d');
   const baseStyle = background ? styleFor(doc) : { ...styleFor(doc), background: { kind: 'none' } };
   const motionMorph = doc.morph.on && Boolean(doc.morph.target);
   const kind = materialFor(doc).kind;
   const scene = { a: doc.mark, b: motionMorph ? doc.morph.target : null };
+  const base = acquireRenderer();
+  const mask = kind === 'metal' && !motionMorph ? acquireRenderer() : null;
   try {
     await base.renderer.prepareScene(scene, baseStyle);
-    if (kind === 'metal' && !motionMorph) await mask.renderer.prepareScene(scene, SILHOUETTE);
+    if (mask) await mask.renderer.prepareScene(scene, SILHOUETTE);
     guard(signal);
   } catch (problem) {
-    base.renderer.dispose();
-    mask.renderer.dispose();
+    releaseRenderer(base);
+    releaseRenderer(mask);
     throw problem;
   }
   let frame = null;
   let settings = null;
   if (kind === 'background') {
     settings = materialSettings(doc, null);
-  } else if (kind === 'metal' && !motionMorph) {
+  } else if (mask) {
     drawMark(mask.renderer, doc, { width: output.width, height: output.height, style: SILHOUETTE });
     settings = materialSettings(doc, mask.canvas.toDataURL('image/png'));
   }
@@ -208,8 +235,8 @@ async function createComposer(doc, output, { previewWidth, background = true, si
     },
     destroy() {
       frame?.destroy();
-      base.renderer.dispose();
-      mask.renderer.dispose();
+      releaseRenderer(base);
+      releaseRenderer(mask);
     }
   };
 }
@@ -240,14 +267,14 @@ export async function renderPNG(doc, { longSide = 2048, background = true, previ
 export async function renderSilhouetteBlob(doc, longSide = 1024) {
   await prepareMasks(doc);
   const output = outputSize(doc, longSide);
-  const { canvas, renderer } = gpuCanvas(output.width, output.height);
+  const item = acquireRenderer();
   try {
     const scene = { a: doc.mark, b: doc.morph.on ? doc.morph.target : null };
-    await renderer.prepareScene(scene, SILHOUETTE);
-    drawMark(renderer, doc, { width: output.width, height: output.height, style: SILHOUETTE });
-    return await toBlob(canvas);
+    await item.renderer.prepareScene(scene, SILHOUETTE);
+    drawMark(item.renderer, doc, { width: output.width, height: output.height, style: SILHOUETTE });
+    return await toBlob(item.canvas);
   } finally {
-    renderer.dispose();
+    releaseRenderer(item);
   }
 }
 
@@ -401,14 +428,17 @@ export async function renderFavicons(doc, { svg, appleBackground }) {
     ...doc,
     artboard: { ...doc.artboard, background: { ...doc.artboard.background, kind: 'color', color1: appleBackground } }
   };
-  const [p16, p32, p48, p180, p192, p512] = await Promise.all([
-    iconPng(doc, 16, { background: true }),
-    iconPng(doc, 32, { background: true }),
-    iconPng(doc, 48, { background: true }),
-    iconPng(solidDoc, 180, { background: true }),
-    iconPng(doc, 192, { background: true }),
-    iconPng(doc, 512, { background: true })
-  ]);
+  const sizes = [
+    [doc, 16],
+    [doc, 32],
+    [doc, 48],
+    [solidDoc, 180],
+    [doc, 192],
+    [doc, 512]
+  ];
+  const blobs = [];
+  for (const [source, size] of sizes) blobs.push(await iconPng(source, size, { background: true }));
+  const [p16, p32, p48, p180, p192, p512] = blobs;
   const ico = await icoFromPngs([
     { size: 16, blob: p16 },
     { size: 32, blob: p32 },

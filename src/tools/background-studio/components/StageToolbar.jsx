@@ -7,6 +7,7 @@ import {
   PlayIcon,
   RepeatIcon
 } from '@hugeicons/core-free-icons';
+import { memo } from 'react';
 import { Icon, Tip, Track } from './ui';
 
 const Action = ({ label, hint, icon, onClick, disabled }) => (
@@ -23,7 +24,7 @@ const Action = ({ label, hint, icon, onClick, disabled }) => (
   </Tip>
 );
 
-export default function StageToolbar({
+function StageToolbar({
   picker,
   mode,
   modes,
@@ -86,3 +87,5 @@ export default function StageToolbar({
     </div>
   );
 }
+
+export default memo(StageToolbar);

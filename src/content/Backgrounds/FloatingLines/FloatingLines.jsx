@@ -194,9 +194,7 @@ const compile = (gl, type, source) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
+  return shader;
 };
 
 const link = gl => {
@@ -210,6 +208,10 @@ const link = gl => {
   gl.linkProgram(program);
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
+  return program;
+};
+
+const finish = (gl, program) => {
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     gl.deleteProgram(program);
     return null;
@@ -221,6 +223,14 @@ const link = gl => {
     if (info) uniforms[info.name.replace('[0]', '')] = gl.getUniformLocation(program, info.name);
   }
   return { program, uniforms };
+};
+
+const retire = (gl, parallel, program) => {
+  if (parallel && gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR) === false) {
+    requestAnimationFrame(() => retire(gl, parallel, program));
+    return;
+  }
+  gl.deleteProgram(program);
 };
 
 const perWave = (value, waves, wave, fallback) => {
@@ -317,9 +327,11 @@ const FloatingLines = ({
     });
     if (!container || !canvas || !gl) return undefined;
 
-    const program = link(gl);
-    if (!program) return undefined;
-    const u = program.uniforms;
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
+    let linking = link(gl);
+    let program = linking && !parallel ? finish(gl, linking) : null;
+    if (!linking || (!parallel && !program)) return undefined;
+    if (program) linking = null;
 
     const buffer = gl.createBuffer();
     const vao = gl.createVertexArray();
@@ -329,20 +341,30 @@ const FloatingLines = ({
     gl.enableVertexAttribArray(0);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
-    const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+    let probe;
     const cache = new Map();
     const parse = (value, fallback) => {
       if (!value) return fallback;
       const key = String(value);
       if (cache.has(key)) return cache.get(key);
       let rgb = fallback;
-      if (probe) {
-        probe.clearRect(0, 0, 1, 1);
-        probe.fillStyle = '#000000';
-        probe.fillStyle = key;
-        probe.fillRect(0, 0, 1, 1);
-        const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
-        rgb = [r / 255, g / 255, b / 255];
+      const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(key);
+      if (hex) {
+        const digits = hex[1].length === 3 ? hex[1].replace(/./g, digit => digit + digit) : hex[1];
+        const packed = parseInt(digits, 16);
+        rgb = [(packed >> 16) / 255, ((packed >> 8) & 255) / 255, (packed & 255) / 255];
+      } else {
+        if (probe === undefined) {
+          probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+        }
+        if (probe) {
+          probe.clearRect(0, 0, 1, 1);
+          probe.fillStyle = '#000000';
+          probe.fillStyle = key;
+          probe.fillRect(0, 0, 1, 1);
+          const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+          rgb = [r / 255, g / 255, b / 255];
+        }
       }
       cache.set(key, rgb);
       return rgb;
@@ -367,6 +389,8 @@ const FloatingLines = ({
     let visible = true;
 
     const render = () => {
+      if (!program) return;
+      const u = program.uniforms;
       const s = settingsRef.current;
       const width = canvas.width;
       const height = canvas.height;
@@ -438,6 +462,16 @@ const FloatingLines = ({
     const frame = now => {
       raf = 0;
       if (!visible || document.hidden) return;
+      if (!program) {
+        if (!linking || !parallel) return;
+        if (!gl.getProgramParameter(linking, parallel.COMPLETION_STATUS_KHR)) {
+          raf = requestAnimationFrame(frame);
+          return;
+        }
+        program = finish(gl, linking);
+        linking = null;
+        if (!program) return;
+      }
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
       last = now;
@@ -569,10 +603,11 @@ const FloatingLines = ({
       window.removeEventListener('pointercancel', onPointerUp);
       document.documentElement.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
-      gl.deleteProgram(program.program);
+      if (program) gl.deleteProgram(program.program);
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      else if (linking) retire(gl, parallel, linking);
     };
   }, []);
 

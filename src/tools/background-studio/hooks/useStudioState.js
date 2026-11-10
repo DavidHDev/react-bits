@@ -4,7 +4,7 @@ import { useColorMode } from '../../../components/setup/color-mode';
 import { readSession } from '../../session';
 import { CATALOG, DEFAULT_BACKGROUND, findEntry, themeDefaults } from '../utils/catalog';
 import { readDocument, restoreDocument, sameValue, writeDocument } from '../utils/params';
-import { loadPresets } from '../utils/presets';
+import { loadPresets, peekPresets } from '../utils/presets';
 import { SESSION_TOOL } from '../utils/remember';
 
 const HISTORY_LIMIT = 80;
@@ -73,8 +73,10 @@ const initialStore = searchParams => {
 
 const usePresets = entry => {
   const [state, setState] = useState({ id: null, presets: undefined });
+  const cached = peekPresets(entry);
 
   useEffect(() => {
+    if (peekPresets(entry) !== undefined) return undefined;
     let alive = true;
     loadPresets(entry).then(presets => {
       if (alive) setState({ id: entry.id, presets });
@@ -84,6 +86,7 @@ const usePresets = entry => {
     };
   }, [entry]);
 
+  if (cached !== undefined) return cached;
   return state.id === entry.id ? state.presets : undefined;
 };
 

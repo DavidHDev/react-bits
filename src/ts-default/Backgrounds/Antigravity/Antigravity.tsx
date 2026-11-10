@@ -71,6 +71,12 @@ interface Program {
   uniforms: Record<string, WebGLUniformLocation | null>;
 }
 
+interface Linking {
+  program: WebGLProgram;
+  vertex: WebGLShader;
+  fragment: WebGLShader;
+}
+
 interface Field {
   total: number;
   width: number;
@@ -302,15 +308,10 @@ const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
   return shader;
 };
 
-const link = (gl: WebGL2RenderingContext): Program | null => {
+const link = (gl: WebGL2RenderingContext): Linking | null => {
   const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
   const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
   const program = vertex && fragment ? gl.createProgram() : null;
@@ -322,10 +323,23 @@ const link = (gl: WebGL2RenderingContext): Program | null => {
   gl.attachShader(program, vertex);
   gl.attachShader(program, fragment);
   gl.linkProgram(program);
+  return { program, vertex, fragment };
+};
+
+const finish = (gl: WebGL2RenderingContext, { program, vertex, fragment }: Linking): Program | null => {
+  const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (!linked) {
+    let compiled = true;
+    for (const shader of [vertex, fragment]) {
+      if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) continue;
+      console.error(gl.getShaderInfoLog(shader));
+      compiled = false;
+    }
+    if (compiled) console.error(gl.getProgramInfoLog(program));
+  }
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(program));
+  if (!linked) {
     gl.deleteProgram(program);
     return null;
   }
@@ -336,6 +350,16 @@ const link = (gl: WebGL2RenderingContext): Program | null => {
     if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
   }
   return { program, uniforms };
+};
+
+const retire = (gl: WebGL2RenderingContext, parallel: KHR_parallel_shader_compile | null, linking: Linking): void => {
+  if (parallel && gl.getProgramParameter(linking.program, parallel.COMPLETION_STATUS_KHR) === false) {
+    requestAnimationFrame(() => retire(gl, parallel, linking));
+    return;
+  }
+  gl.deleteShader(linking.vertex);
+  gl.deleteShader(linking.fragment);
+  gl.deleteProgram(linking.program);
 };
 
 const Antigravity = ({
@@ -422,8 +446,10 @@ const Antigravity = ({
       stencil: false,
       powerPreference: 'high-performance'
     });
-    const shader = gl ? link(gl) : null;
-    if (!gl || !shader) return;
+    const parallel = gl ? gl.getExtension('KHR_parallel_shader_compile') : null;
+    const linking = gl ? link(gl) : null;
+    let shader = gl && linking && !parallel ? finish(gl, linking) : null;
+    if (!gl || !linking || (!parallel && !shader)) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const vao = gl.createVertexArray();
@@ -660,6 +686,19 @@ const Antigravity = ({
 
     const frame = (now: number) => {
       raf = 0;
+      if (!shader) {
+        if (lost || !parallel || gl.isContextLost()) return;
+        if (!gl.getProgramParameter(linking.program, parallel.COMPLETION_STATUS_KHR)) {
+          last = Math.max(last, now);
+          if (visible && pageVisible) raf = requestAnimationFrame(frame);
+          return;
+        }
+        shader = finish(gl, linking);
+        if (!shader) {
+          lost = true;
+          return;
+        }
+      }
       if (resizePending) {
         resizePending = false;
         applyResize();
@@ -834,7 +873,8 @@ const Antigravity = ({
         gl.deleteBuffer(seedBuffer);
         gl.deleteTexture(paletteTexture);
         gl.deleteVertexArray(vao);
-        gl.deleteProgram(shader.program);
+        if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
+        else if (!lost) retire(gl, parallel, linking);
       }
     };
   }, [generation]);

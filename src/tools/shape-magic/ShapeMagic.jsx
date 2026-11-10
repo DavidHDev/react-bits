@@ -105,6 +105,74 @@ const freshDoc = light => ({
 
 const markFromPreset = preset => ({ ...createDoc(preset).mark, preset: preset.id });
 
+const sceneOf = (doc, time = 0) => {
+  const morph = doc.morph.on && doc.morph.target;
+  const plan = maskPlan([doc.mark.layers, morph ? doc.morph.target.layers : null]);
+  return {
+    plan,
+    scene: {
+      a: doc.mark,
+      b: morph ? doc.morph.target : null,
+      morph: morph ? morphPhase(time, doc.morph) : 0,
+      maskSlots: plan.slots
+    }
+  };
+};
+
+const withMark = (current, fresh, preset) => ({
+  ...current,
+  preset: preset.id,
+  name: preset.name,
+  mark: fresh.mark,
+  fill: current.material?.id === 'flat' || !current.material ? fresh.fill : current.fill,
+  effects: { ...current.effects, glow: fresh.effects.glow, gloss: fresh.effects.gloss }
+});
+
+const withMaterial = (current, item) => {
+  const family = bevelFamily(item);
+  const kept = family === bevelFamily(materialFor(current));
+  if (item.kind === 'procedural') {
+    return {
+      ...current,
+      material: { id: item.id, props: {}, preset: item.id },
+      effects: family === 'auto' && !kept ? { ...current.effects, gloss: BEVEL_ON } : current.effects
+    };
+  }
+  if (item.kind === 'flat') {
+    return {
+      ...current,
+      material: { id: 'flat', props: {}, preset: item.id },
+      fill: { ...current.fill, extent: 1, stops: 2, ink: false, ...item.fill },
+      effects: {
+        ...current.effects,
+        glow: item.effects?.glow
+          ? { ...DEFAULT_EFFECTS.glow, ...item.effects.glow }
+          : { ...current.effects.glow, on: false },
+        gloss: item.effects?.gloss
+          ? { ...DEFAULT_EFFECTS.gloss, ...item.effects.gloss }
+          : { ...current.effects.gloss, on: false }
+      }
+    };
+  }
+  if (item.kind === 'metal')
+    return { ...current, material: { id: 'metal', props: { ...item.props }, preset: item.id } };
+  return {
+    ...current,
+    material: { id: item.id, props: {}, base: current.material?.base ?? '#0c0b10', preset: item.id },
+    effects: kept ? current.effects : { ...current.effects, gloss: BEVEL_ON }
+  };
+};
+
+const HOVER_MS = 120;
+
+const shapeLayer = (type, doc) =>
+  createLayer(type, {
+    size: 0.34,
+    x: 0.5,
+    y: -0.5,
+    op: doc.mark.layers.length ? 'exclude' : 'add'
+  });
+
 const cloneLayer = (layer, patch = {}) => ({
   ...layer,
   id: nextId(),
@@ -145,6 +213,8 @@ export default function ShapeMagic({ toolSelector }) {
   const searchRef = useRef(null);
   const clockRef = useRef(0);
   const dirtyRef = useRef(true);
+  const readyRef = useRef(null);
+  const hoverRef = useRef(0);
   const captureRef = useRef(-1);
   const docRef = useRef(doc);
   docRef.current = doc;
@@ -163,7 +233,7 @@ export default function ShapeMagic({ toolSelector }) {
   const staticThumbs = useStaticThumbs(light);
   const fillThumbs = useFillThumbs(doc, light, materialsVisible && previewReady);
   const thumbs = useMemo(() => ({ ...staticThumbs, ...fillThumbs }), [staticThumbs, fillThumbs]);
-  const material = materialFor(doc);
+  const material = useMemo(() => materialFor({ material: doc.material }), [doc.material]);
   const procedural = material.kind === 'procedural' ? material.def : null;
   const morphing = doc.morph.on && Boolean(doc.morph.target);
   const textureActive = material.kind === 'background';
@@ -225,7 +295,7 @@ export default function ShapeMagic({ toolSelector }) {
     }
     if (!rendererRef.current) {
       try {
-        rendererRef.current = createRenderer(canvas);
+        rendererRef.current = createRenderer(canvas, { cache: true });
       } catch (problem) {
         toast.error(problem.message);
         return null;
@@ -235,34 +305,43 @@ export default function ShapeMagic({ toolSelector }) {
   }, []);
 
   const draw = useCallback(
-    async time => {
+    async (time, live = false) => {
       if (!artboard) return;
       const renderer = ensureRenderer();
       if (!renderer) return;
       const request = ++renderRequestRef.current;
-      const current = docRef.current;
-      const morph = current.morph.on && current.morph.target;
-      const currentPlan = maskPlan([current.mark.layers, morph ? current.morph.target.layers : null]);
-      bindMasks(renderer, currentPlan.keys);
-      const ratio = Math.min(window.devicePixelRatio || 1, proceduralFor(current)?.heavy ? 1 : 2);
-      const scene = {
-        a: current.mark,
-        b: morph ? current.morph.target : null,
-        morph: morph ? morphPhase(time, current.morph) : 0,
-        maskSlots: currentPlan.slots
-      };
-      const style = styleFor(current);
-      try {
-        await renderer.prepareScene(scene, style);
-        if (request !== renderRequestRef.current || rendererRef.current !== renderer) return;
+      const paint = (source, scene, style, plan) => {
+        bindMasks(renderer, plan.keys);
+        const ratio = Math.min(window.devicePixelRatio || 1, proceduralFor(source)?.heavy ? 1 : 2);
         renderer.draw({
           scene,
           style,
           width: Math.round(artboard.width * ratio),
           height: Math.round(artboard.height * ratio),
           time,
-          surfaceResolution: morph ? 512 : 768
+          surfaceResolution: scene.b ? 512 : 768
         });
+      };
+      const current = docRef.current;
+      const { scene, plan } = sceneOf(current, time);
+      const style = styleFor(current);
+      try {
+        const ready = renderer.sceneReady(scene, style);
+        if (live && !ready) {
+          const last = readyRef.current;
+          if (last && last.artboard === artboard && last.keys === plan.keys.join('\n')) {
+            renderer.prepareScene(scene, style).catch(() => {});
+            const previous = sceneOf(last.doc, time);
+            paint(last.doc, previous.scene, styleFor(last.doc), previous.plan);
+            return;
+          }
+        }
+        if (!ready) {
+          await renderer.prepareScene(scene, style);
+          if (request !== renderRequestRef.current || rendererRef.current !== renderer) return;
+        }
+        paint(current, scene, style, plan);
+        readyRef.current = { doc: current, artboard, keys: plan.keys.join('\n') };
         setPreviewReady(true);
       } catch (problem) {
         if (request === renderRequestRef.current && rendererRef.current === renderer) {
@@ -295,18 +374,24 @@ export default function ShapeMagic({ toolSelector }) {
     dirtyRef.current = true;
   }, [frameId]);
 
-  useEffect(() => {
-    dirtyRef.current = true;
-    if (looping) return;
-    draw(clockRef.current);
-  }, [doc, draw, maskVersion, looping]);
+  const live = looping && (playing || textureActive);
 
   useEffect(() => {
-    if (!looping) return undefined;
+    dirtyRef.current = true;
+    if (live) return;
+    draw(clockRef.current);
+  }, [doc, draw, maskVersion, live]);
+
+  useEffect(() => {
+    if (!live) return undefined;
     let raf = 0;
+    let busy = false;
+    let shown = true;
     let cancelled = false;
     let last = performance.now();
     const tick = async now => {
+      raf = 0;
+      busy = true;
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
       let dirty = dirtyRef.current;
@@ -316,15 +401,29 @@ export default function ShapeMagic({ toolSelector }) {
         if (morphing || animatedMaterial) dirty = true;
       }
       if (textureActive && pullCapture()) dirty = true;
-      if (dirty) await draw(clockRef.current);
-      if (!cancelled) raf = requestAnimationFrame(tick);
+      if (dirty) await draw(clockRef.current, true);
+      busy = false;
+      if (!cancelled && shown) raf = requestAnimationFrame(tick);
     };
+    const canvas = canvasRef.current;
+    const observer =
+      canvas && typeof IntersectionObserver === 'function'
+        ? new IntersectionObserver(entries => {
+            shown = entries[entries.length - 1].isIntersecting;
+            if (shown && !raf && !busy && !cancelled) {
+              last = performance.now();
+              raf = requestAnimationFrame(tick);
+            }
+          })
+        : null;
+    observer?.observe(canvas);
     raf = requestAnimationFrame(tick);
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
+      observer?.disconnect();
     };
-  }, [looping, playing, morphing, animatedMaterial, textureActive, draw, pullCapture]);
+  }, [live, playing, morphing, animatedMaterial, textureActive, draw, pullCapture]);
 
   useEffect(
     () => () => {
@@ -551,20 +650,46 @@ export default function ShapeMagic({ toolSelector }) {
     });
   }, []);
 
+  const prepareDoc = useCallback(
+    next => {
+      const renderer = ensureRenderer();
+      if (!renderer) return Promise.resolve();
+      return renderer.prepareScene(sceneOf(next).scene, styleFor(next));
+    },
+    [ensureRenderer]
+  );
+
+  const prewarm = useCallback(
+    make => {
+      clearTimeout(hoverRef.current);
+      if (!make) return;
+      hoverRef.current = setTimeout(() => {
+        prepareDoc(make()).catch(() => {});
+      }, HOVER_MS);
+    },
+    [prepareDoc]
+  );
+
+  useEffect(() => () => clearTimeout(hoverRef.current), []);
+
   const actions = useMemo(
     () => ({
       select: setSelection,
       selectLayer,
       updateLayer,
       updateLayers,
-      addShape: type =>
-        addLayer(
-          createLayer(type, {
-            size: 0.34,
-            x: 0.5,
-            y: -0.5,
-            op: docRef.current.mark.layers.length ? 'exclude' : 'add'
-          })
+      addShape: type => addLayer(shapeLayer(type, docRef.current)),
+      prewarmShape: type =>
+        prewarm(
+          type &&
+            (() => {
+              const current = docRef.current;
+              if (current.mark.layers.length >= MAX_LAYERS) return current;
+              return {
+                ...current,
+                mark: { ...current.mark, layers: [...current.mark.layers, shapeLayer(type, current)] }
+              };
+            })
         ),
       addText: () =>
         addLayer(createTextLayer('Mark', { size: 0.6, op: docRef.current.mark.layers.length ? 'cut' : 'add' })),
@@ -659,78 +784,49 @@ export default function ShapeMagic({ toolSelector }) {
       toggleSelectionVisibility,
       alignSelection,
       distributeSelection,
-      flipSelection
+      flipSelection,
+      prewarm
     ]
   );
 
   const applyMark = useCallback(
     preset => {
       const fresh = createDoc(preset, { light });
-      updateDoc(current => ({
-        ...current,
-        preset: preset.id,
-        name: preset.name,
-        mark: fresh.mark,
-        fill: current.material?.id === 'flat' || !current.material ? fresh.fill : current.fill,
-        effects: { ...current.effects, glow: fresh.effects.glow, gloss: fresh.effects.gloss }
-      }));
+      updateDoc(current => withMark(current, fresh, preset));
       setSelection([]);
       setUserLogo(false);
     },
     [updateDoc, light]
   );
 
+  const prewarmMark = useCallback(
+    preset => prewarm(preset && (() => withMark(docRef.current, createDoc(preset, { light }), preset))),
+    [prewarm, light]
+  );
+
   const applyMaterial = useCallback(
     async item => {
       const request = ++materialRequestRef.current;
+      const prepared = prepareDoc(withMaterial(docRef.current, item));
       if (item.kind === 'procedural') {
         try {
-          await (ensureRenderer()?.prepareAsync(item.def) ?? Promise.resolve());
+          await prepared;
         } catch (problem) {
           if (request === materialRequestRef.current) {
             toast.error(problem?.message?.slice(0, 160) || 'That material could not start.');
           }
           return;
         }
+      } else {
+        prepared.catch(() => {});
       }
       if (request !== materialRequestRef.current) return;
-      updateDoc(current => {
-        const family = bevelFamily(item);
-        const kept = family === bevelFamily(materialFor(current));
-        if (item.kind === 'procedural') {
-          return {
-            ...current,
-            material: { id: item.id, props: {}, preset: item.id },
-            effects: family === 'auto' && !kept ? { ...current.effects, gloss: BEVEL_ON } : current.effects
-          };
-        }
-        if (item.kind === 'flat') {
-          return {
-            ...current,
-            material: { id: 'flat', props: {}, preset: item.id },
-            fill: { ...current.fill, extent: 1, stops: 2, ink: false, ...item.fill },
-            effects: {
-              ...current.effects,
-              glow: item.effects?.glow
-                ? { ...DEFAULT_EFFECTS.glow, ...item.effects.glow }
-                : { ...current.effects.glow, on: false },
-              gloss: item.effects?.gloss
-                ? { ...DEFAULT_EFFECTS.gloss, ...item.effects.gloss }
-                : { ...current.effects.gloss, on: false }
-            }
-          };
-        }
-        if (item.kind === 'metal')
-          return { ...current, material: { id: 'metal', props: { ...item.props }, preset: item.id } };
-        return {
-          ...current,
-          material: { id: item.id, props: {}, base: current.material?.base ?? '#0c0b10', preset: item.id },
-          effects: kept ? current.effects : { ...current.effects, gloss: BEVEL_ON }
-        };
-      });
+      updateDoc(current => withMaterial(current, item));
     },
-    [updateDoc, ensureRenderer]
+    [updateDoc, prepareDoc]
   );
+
+  const prewarmMaterial = useCallback(item => prewarm(item && (() => withMaterial(docRef.current, item))), [prewarm]);
 
   const addLogo = useCallback(
     async file => {
@@ -965,13 +1061,20 @@ export default function ShapeMagic({ toolSelector }) {
 
   const library = tab =>
     tab === 'marks' ? (
-      <MarksGrid thumbs={thumbs} activeId={doc.preset} onApply={applyMark} query={queries.marks || ''} />
+      <MarksGrid
+        thumbs={thumbs}
+        activeId={doc.preset}
+        onApply={applyMark}
+        onPrewarm={prewarmMark}
+        query={queries.marks || ''}
+      />
     ) : (
       <MaterialsGrid
         thumbs={thumbs}
         activeId={activeMaterial}
         light={light}
         onApply={applyMaterial}
+        onPrewarm={prewarmMaterial}
         query={queries.materials || ''}
       />
     );
@@ -1041,6 +1144,7 @@ export default function ShapeMagic({ toolSelector }) {
           onTogglePlay={() => setPlaying(value => !value)}
           onUpload={() => fileRef.current?.click()}
           onAddShape={type => actions.addShape(type)}
+          onPrewarmShape={actions.prewarmShape}
           onAddText={actions.addText}
           onExport={() => setExporting(true)}
         />

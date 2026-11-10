@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, memo, useContext, useEffect, useRef } from 'react';
 import { Search01Icon } from '@hugeicons/core-free-icons';
 import { Icon } from '../../background-studio/components/ui';
 import { useScrollEdges } from '../../background-studio/hooks/useScrollEdges';
@@ -106,7 +106,14 @@ function PresetTile({ preset, thumb, active, onApply, onNeed }) {
   );
 }
 
-export function PresetGrid({ thumbs, active, onApply, onNeed, query = '', group: only = 'all' }) {
+export const PresetGrid = memo(function PresetGrid({
+  thumbs,
+  active,
+  onApply,
+  onNeed,
+  query = '',
+  group: only = 'all'
+}) {
   const sections = PRESET_GROUPS.map(group => {
     if (only !== 'all' && group.id !== only) return null;
     const presets = PRESETS.filter(
@@ -145,7 +152,7 @@ export function PresetGrid({ thumbs, active, onApply, onNeed, query = '', group:
   ) : (
     <p className="lab-empty lab-empty--search">No presets match “{query.trim()}”.</p>
   );
-}
+});
 
 export function GalleryScroll({ children }) {
   const scrollRef = useRef(null);

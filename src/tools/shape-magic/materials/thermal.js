@@ -5,6 +5,7 @@ export default {
   group: 'heat',
   source: 'shaders.com',
   animated: true,
+  softTaps: true,
   outside: true,
   normals: false,
   surface: 0.04,

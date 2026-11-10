@@ -19,11 +19,13 @@ const setTheme = theme => {
 setTheme(query.get('theme'));
 
 let loadToken = 0;
+let refreshTimers = [];
 
 const refreshSoon = () => {
   if (!clock.paused) return;
   clock.refresh();
-  [60, 180, 400].forEach(delay => setTimeout(() => clock.refresh(), delay));
+  refreshTimers.forEach(timer => clearTimeout(timer));
+  refreshTimers = [60, 180, 400].map(delay => setTimeout(() => clock.refresh(), delay));
 };
 
 const load = async (id, props = {}) => {
@@ -43,7 +45,17 @@ const load = async (id, props = {}) => {
     })
   );
   refreshSoon();
+  if (clock.manual) await clock.settle();
   return true;
+};
+
+const preload = id => {
+  const background = getBackgroundById(id);
+  if (!background) return Promise.resolve(false);
+  return background.component().then(
+    () => true,
+    () => false
+  );
 };
 
 const update = props => {
@@ -80,6 +92,7 @@ const restart = () => {
 window.__rbStudio = {
   clock,
   load,
+  preload,
   update,
   restart,
   setTheme,

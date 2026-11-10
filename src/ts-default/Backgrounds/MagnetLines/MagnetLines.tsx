@@ -90,6 +90,12 @@ interface Program {
   uniforms: Record<string, WebGLUniformLocation | null>;
 }
 
+interface Linking {
+  program: WebGLProgram;
+  vertex: WebGLShader;
+  fragment: WebGLShader;
+}
+
 interface Field {
   width: number;
   height: number;
@@ -104,6 +110,7 @@ interface Field {
   maxScale: number;
   introSpeed: number;
   bounds: number[];
+  span: number[];
   key: string;
 }
 
@@ -114,14 +121,16 @@ interface Pulse {
   life: number;
 }
 
-interface Candidate {
-  x: number;
-  y: number;
-  column: number;
-  row: number;
-  w: number;
-  distance: number;
-}
+type Visit = (
+  seen: number,
+  column: number,
+  row: number,
+  x: number,
+  y: number,
+  w: number,
+  screenX: number,
+  screenY: number
+) => void;
 
 const VERTEX = `#version 300 es
 layout(location = 0) in vec2 aCorner;
@@ -319,15 +328,10 @@ const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
   return shader;
 };
 
-const link = (gl: WebGL2RenderingContext): Program | null => {
+const link = (gl: WebGL2RenderingContext): Linking | null => {
   const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
   const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
   const program = vertex && fragment ? gl.createProgram() : null;
@@ -339,10 +343,23 @@ const link = (gl: WebGL2RenderingContext): Program | null => {
   gl.attachShader(program, vertex);
   gl.attachShader(program, fragment);
   gl.linkProgram(program);
+  return { program, vertex, fragment };
+};
+
+const finish = (gl: WebGL2RenderingContext, { program, vertex, fragment }: Linking): Program | null => {
+  const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (!linked) {
+    let compiled = true;
+    for (const shader of [vertex, fragment]) {
+      if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) continue;
+      console.error(gl.getShaderInfoLog(shader));
+      compiled = false;
+    }
+    if (compiled) console.error(gl.getProgramInfoLog(program));
+  }
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(program));
+  if (!linked) {
     gl.deleteProgram(program);
     return null;
   }
@@ -353,6 +370,16 @@ const link = (gl: WebGL2RenderingContext): Program | null => {
     if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
   }
   return { program, uniforms };
+};
+
+const retire = (gl: WebGL2RenderingContext, parallel: KHR_parallel_shader_compile | null, linking: Linking): void => {
+  if (parallel && gl.getProgramParameter(linking.program, parallel.COMPLETION_STATUS_KHR) === false) {
+    requestAnimationFrame(() => retire(gl, parallel, linking));
+    return;
+  }
+  gl.deleteShader(linking.vertex);
+  gl.deleteShader(linking.fragment);
+  gl.deleteProgram(linking.program);
 };
 
 const multiply = (a: Matrix, b: Matrix): Matrix => {
@@ -460,6 +487,33 @@ const visibleRange = (view: View, width: number, height: number, cellX: number, 
   };
 };
 
+const nearestFirst = (depths: Float64Array) => {
+  const total = depths.length;
+  let near = Infinity;
+  let far = -Infinity;
+  for (let index = 0; index < total; index++) {
+    near = Math.min(near, depths[index]);
+    far = Math.max(far, depths[index]);
+  }
+  const scale = far > near ? (total - 1) / (far - near) : 0;
+  const starts = new Uint32Array(total + 1);
+  for (let index = 0; index < total; index++) starts[Math.floor((depths[index] - near) * scale) + 1] += 1;
+  for (let index = 0; index < total; index++) starts[index + 1] += starts[index];
+  const order = new Uint32Array(total);
+  for (let index = 0; index < total; index++) order[starts[Math.floor((depths[index] - near) * scale)]++] = index;
+  for (let index = 1; index < total; index++) {
+    const item = order[index];
+    const depth = depths[item];
+    let at = index - 1;
+    while (at >= 0 && depths[order[at]] > depth) {
+      order[at + 1] = order[at];
+      at -= 1;
+    }
+    order[at + 1] = item;
+  }
+  return order;
+};
+
 const MagnetLines = ({
   spacing = 30,
   rows,
@@ -553,8 +607,10 @@ const MagnetLines = ({
       stencil: false,
       powerPreference: 'default'
     });
-    const program = gl ? link(gl) : null;
-    if (!gl || !program) return;
+    const parallel = gl ? gl.getExtension('KHR_parallel_shader_compile') : null;
+    const linking = gl ? link(gl) : null;
+    let program = gl && linking && !parallel ? finish(gl, linking) : null;
+    if (!gl || !linking || (!parallel && !program)) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -592,6 +648,7 @@ const MagnetLines = ({
       maxScale: 1,
       introSpeed: INTRO_SPEED,
       bounds: [0, 0, 0, 0],
+      span: [0, 0, 0, 0],
       key: ''
     };
     const pointer = { x: 0, y: 0, vx: 0, vy: 0, time: 0, seen: false, inside: false, away: 0 };
@@ -638,32 +695,50 @@ const MagnetLines = ({
       const range = tiled
         ? visibleRange(view, width, height, cellX, cellY)
         : { fromColumn: 0, toColumn: columnCount - 1, fromRow: 0, toRow: rowCount - 1 };
-      const origin = apply(view.forward, 0, 0);
-      const found: Candidate[] = [];
-      if (range) {
+      const m = view.forward;
+      const origin = apply(m, 0, 0);
+      const slack = 0.49 * Math.min(cellX, cellY);
+      const scan = (visit: Visit | null) => {
+        let seen = 0;
+        if (!range) return seen;
         for (let row = range.fromRow; row <= range.toRow; row++) {
           const y = (row + 0.5) * cellY - height / 2;
           for (let column = range.fromColumn; column <= range.toColumn; column++) {
             const x = (column + 0.5) * cellX - width / 2;
-            const [screenX, screenY, w] = apply(view.forward, x, y);
+            const w = m[6] * x + m[7] * y + m[8];
+            const screenX = (m[0] * x + m[1] * y + m[2]) / w;
+            const screenY = (m[3] * x + m[4] * y + m[5]) / w;
             if (tiled) {
               if (w <= 0 || w > FAR) continue;
-              const margin = (0.49 * Math.min(cellX, cellY)) / w;
+              const margin = slack / w;
               if (screenX < -margin || screenX > width + margin || screenY < -margin || screenY > height + margin)
                 continue;
             }
-            found.push({ x, y, column, row, w, distance: Math.hypot(screenX - origin[0], screenY - origin[1]) });
+            if (visit) visit(seen, column, row, x, y, w, screenX, screenY);
+            seen += 1;
           }
         }
-      }
-      if (found.length > MAX_LINES) {
-        found.sort((a, b) => a.w - b.w);
-        found.length = MAX_LINES;
+        return seen;
+      };
+
+      const available = scan(null);
+      const total = Math.min(available, MAX_LINES);
+      let slots: Int32Array | null = null;
+      if (available > MAX_LINES) {
+        const depths = new Float64Array(available);
+        scan((seen, column, row, x, y, w) => {
+          depths[seen] = w;
+        });
+        const order = nearestFirst(depths);
+        slots = new Int32Array(available).fill(-1);
+        for (let index = 0; index < total; index++) slots[order[index]] = index;
       }
 
-      const previous = new Map<number, number>();
-      for (let index = 0; index < count; index++) previous.set(cells[index * 2] * 65536 + cells[index * 2 + 1], index);
-      const total = found.length;
+      const [firstColumn, firstRow, spanColumns, spanRows] = field.span;
+      const previous = new Int32Array(spanColumns * spanRows);
+      for (let index = 0; index < count; index++) {
+        previous[(cells[index * 2 + 1] - firstRow) * spanColumns + cells[index * 2] - firstColumn] = index + 1;
+      }
       const next = {
         centers: new Float32Array(total * 2),
         cells: new Int32Array(total * 2),
@@ -680,22 +755,32 @@ const MagnetLines = ({
       let nearest = Infinity;
       let deepest = 0;
       const bounds = [Infinity, Infinity, -Infinity, -Infinity];
-      found.forEach((item, index) => {
-        next.centers[index * 2] = item.x;
-        next.centers[index * 2 + 1] = item.y;
-        next.cells[index * 2] = item.column;
-        next.cells[index * 2 + 1] = item.row;
-        next.reveal[index] = item.distance;
-        next.seeds[index] = seedFor(item.column, item.row);
-        farthest = Math.max(farthest, item.distance);
-        nearest = Math.min(nearest, item.w);
-        deepest = Math.max(deepest, item.w);
-        bounds[0] = Math.min(bounds[0], item.x);
-        bounds[1] = Math.min(bounds[1], item.y);
-        bounds[2] = Math.max(bounds[2], item.x);
-        bounds[3] = Math.max(bounds[3], item.y);
-        const old = previous.get(item.column * 65536 + item.row);
-        if (old === undefined) {
+      const span = [Infinity, Infinity, -Infinity, -Infinity];
+      scan((seen, column, row, x, y, w, screenX, screenY) => {
+        const index = slots ? slots[seen] : seen;
+        if (index < 0) return;
+        const distance = Math.hypot(screenX - origin[0], screenY - origin[1]);
+        next.centers[index * 2] = x;
+        next.centers[index * 2 + 1] = y;
+        next.cells[index * 2] = column;
+        next.cells[index * 2 + 1] = row;
+        next.reveal[index] = distance;
+        next.seeds[index] = seedFor(column, row);
+        farthest = Math.max(farthest, distance);
+        nearest = Math.min(nearest, w);
+        deepest = Math.max(deepest, w);
+        bounds[0] = Math.min(bounds[0], x);
+        bounds[1] = Math.min(bounds[1], y);
+        bounds[2] = Math.max(bounds[2], x);
+        bounds[3] = Math.max(bounds[3], y);
+        span[0] = Math.min(span[0], column);
+        span[1] = Math.min(span[1], row);
+        span[2] = Math.max(span[2], column);
+        span[3] = Math.max(span[3], row);
+        const u = column - firstColumn;
+        const v = row - firstRow;
+        const old = u >= 0 && u < spanColumns && v >= 0 && v < spanRows ? previous[v * spanColumns + u] - 1 : -1;
+        if (old < 0) {
           next.pending[index] = 1;
           return;
         }
@@ -710,6 +795,7 @@ const MagnetLines = ({
       state = new Float32Array(total * 4);
       field.introSpeed = Math.max(INTRO_SPEED, farthest / INTRO_TIME);
       field.bounds = total ? bounds : [0, 0, 0, 0];
+      field.span = total ? [span[0], span[1], span[2] - span[0] + 1, span[3] - span[1] + 1] : [0, 0, 0, 0];
       field.minScale = total ? 1 / deepest : 1;
       field.maxScale = total ? 1 / nearest : 1;
       gl.bindBuffer(gl.ARRAY_BUFFER, centerBuffer);
@@ -800,6 +886,19 @@ const MagnetLines = ({
     const frame = (now: number) => {
       raf = 0;
       if (lost) return;
+      if (!program) {
+        if (!parallel || gl.isContextLost()) return;
+        if (!gl.getProgramParameter(linking.program, parallel.COMPLETION_STATUS_KHR)) {
+          last = Math.max(last, now);
+          if (visible && pageVisible) raf = requestAnimationFrame(frame);
+          return;
+        }
+        program = finish(gl, linking);
+        if (!program) {
+          lost = true;
+          return;
+        }
+      }
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);
       last = Math.max(last, now);
@@ -1086,7 +1185,8 @@ const MagnetLines = ({
         gl.deleteBuffer(centerBuffer);
         gl.deleteBuffer(stateBuffer);
         gl.deleteVertexArray(vao);
-        gl.deleteProgram(program.program);
+        if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
+        else if (!lost) retire(gl, parallel, linking);
       }
     };
   }, [generation]);

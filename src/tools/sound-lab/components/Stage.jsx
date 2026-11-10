@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 import { Download04Icon, KeyboardIcon } from '@hugeicons/core-free-icons';
 import { Icon, Tip } from '../../background-studio/components/ui';
 import Orb from './Orb';
@@ -26,37 +26,44 @@ function TypeField({ sound, text, onText, onType }) {
   );
 }
 
-const Stage = forwardRef(function Stage({ sound, player, text, onText, onPlay, onType, onExport }, ref) {
-  return (
-    <div className="lab-stage snd-stage" ref={ref} data-library={sound.library}>
-      <div className="snd-view">
-        <header className="snd-head">
-          <div className="snd-heading">
-            <h2 className="snd-title">{sound.name}</h2>
-            <p className="snd-desc">{sound.description}</p>
-          </div>
-          <Tip label="Code or audio file" hint="E" placement="bottom">
-            <button type="button" className="bs-export snd-export" onClick={() => onExport(null)}>
-              <Icon icon={Download04Icon} />
-              <span>Export</span>
+const Stage = memo(
+  forwardRef(function Stage({ sound, player, text, onText, onPlay, onType, onExport }, ref) {
+    return (
+      <div className="lab-stage snd-stage" ref={ref} data-library={sound.library}>
+        <div className="snd-view">
+          <header className="snd-head">
+            <div className="snd-heading">
+              <h2 className="snd-title">{sound.name}</h2>
+              <p className="snd-desc">{sound.description}</p>
+            </div>
+            <Tip label="Code or audio file" hint="E" placement="bottom">
+              <button type="button" className="bs-export snd-export" onClick={() => onExport(null)}>
+                <Icon icon={Download04Icon} />
+                <span>Export</span>
+              </button>
+            </Tip>
+          </header>
+          <div className="snd-center">
+            <button
+              type="button"
+              className="snd-orb"
+              onClick={() => onPlay(sound.id)}
+              aria-label={`Play ${sound.name}`}
+            >
+              <Orb player={player} />
             </button>
-          </Tip>
-        </header>
-        <div className="snd-center">
-          <button type="button" className="snd-orb" onClick={() => onPlay(sound.id)} aria-label={`Play ${sound.name}`}>
-            <Orb player={player} />
-          </button>
+          </div>
+          {sound.category === 'type' ? (
+            <TypeField sound={sound} text={text} onText={onText} onType={onType} />
+          ) : (
+            <button type="button" className="snd-play" onClick={() => onPlay(sound.id)}>
+              Play
+            </button>
+          )}
         </div>
-        {sound.category === 'type' ? (
-          <TypeField sound={sound} text={text} onText={onText} onType={onType} />
-        ) : (
-          <button type="button" className="snd-play" onClick={() => onPlay(sound.id)}>
-            Play
-          </button>
-        )}
       </div>
-    </div>
-  );
-});
+    );
+  })
+);
 
 export default Stage;

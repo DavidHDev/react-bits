@@ -515,12 +515,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 10px 10px 12px;
+  padding: 10px 4px 4px;
   border-radius: 10px;
   background: var(--tool-track);
 }
 
 .cst-chips-title {
+  padding: 0 8px;
   color: var(--text-muted);
   font-size: 13px;
   font-weight: 500;
@@ -529,14 +530,25 @@
 .cst-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 2px;
+}
+
+.cst-chips--grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cst-chips--grid .cst-chip {
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
 }
 
 .cst-chip {
   height: 28px;
-  padding: 0 10px;
+  padding: 0 8px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--tool-muted);
   cursor: pointer;
@@ -567,18 +579,43 @@
 }
 
 .cst-motion.cst-chips-field {
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  gap: 14px 2px;
+  padding: 4px 0 0;
+  border-radius: 0;
+  background: none;
+}
+
+.cst-motion-group,
+.cst-motion .cst-chips {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  gap: 2px;
 }
 
 .cst-motion-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  row-gap: 6px;
 }
 
 .cst-motion-group .cst-chips-title {
-  color: var(--text-dimmed);
+  grid-column: 1 / -1;
+  padding-left: 12px;
+  color: color-mix(in srgb, var(--tool-muted) 70%, transparent);
   font-size: 12px;
+}
+
+.cst-motion .cst-chip {
+  min-width: 0;
+  padding: 0 7px 0 8px;
+  border-radius: 7px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.cst-motion .cst-chip:nth-child(3n + 1) {
+  padding-left: 12px;
 }
 
 .cst-repeat.lab-icon-button {

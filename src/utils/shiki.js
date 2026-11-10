@@ -1,40 +1,76 @@
-import { createHighlighterCore } from 'shiki/core';
-import { createJavaScriptRegexEngine } from 'shiki/engine/javascript';
-import { reactBitsDarkTheme, reactBitsLightTheme } from './shiki-themes';
+const LIMIT = 40;
+const cache = new Map();
+const waiting = new Map();
+let worker = null;
+let broken = typeof Worker === 'undefined';
+let count = 0;
 
-const highlighterPromise = createHighlighterCore({
-  themes: [reactBitsLightTheme, reactBitsDarkTheme],
-  langs: [
-    import('@shikijs/langs/jsx'),
-    import('@shikijs/langs/tsx'),
-    import('@shikijs/langs/css'),
-    import('@shikijs/langs/shellscript'),
-    import('@shikijs/langs/json')
-  ],
-  engine: createJavaScriptRegexEngine()
-});
+const direct = (code, language) => import('./shiki-render').then(module => module.renderCode(code, language));
 
-const LANGUAGE_ALIASES = {
-  js: 'jsx',
-  javascript: 'jsx',
-  ts: 'tsx',
-  typescript: 'tsx',
-  bash: 'shellscript',
-  sh: 'shellscript',
-  shell: 'shellscript',
-  zsh: 'shellscript'
+const fail = () => {
+  broken = true;
+  worker?.terminate();
+  worker = null;
+  waiting.forEach(job => direct(job.code, job.language).then(job.resolve, job.reject));
+  waiting.clear();
 };
 
-export const highlightCode = async (code, language = 'jsx') => {
-  const highlighter = await highlighterPromise;
-  const lang = LANGUAGE_ALIASES[language] || language || 'jsx';
+const connect = () => {
+  if (worker || broken) return worker;
+  try {
+    worker = new Worker(new URL('./shiki.worker.js', import.meta.url), { type: 'module' });
+  } catch {
+    broken = true;
+    return null;
+  }
+  worker.onmessage = event => {
+    const { id, html, error } = event.data || {};
+    const job = waiting.get(id);
+    if (!job) return;
+    waiting.delete(id);
+    if (error) job.reject(new Error(error));
+    else job.resolve(html);
+  };
+  worker.onerror = fail;
+  worker.onmessageerror = fail;
+  return worker;
+};
 
-  return highlighter.codeToHtml(String(code), {
-    lang,
-    themes: {
-      light: 'react-bits-light',
-      dark: 'react-bits-dark'
-    },
-    defaultColor: false
+const render = (code, language) => {
+  const target = connect();
+  if (!target) return direct(code, language);
+  return new Promise((resolve, reject) => {
+    count += 1;
+    waiting.set(count, { code, language, resolve, reject });
+    target.postMessage({ id: count, code, language });
   });
+};
+
+const keyOf = (code, language) => `${language}\u0000${code}`;
+
+export const peekHighlight = (code, language = 'jsx') => cache.get(keyOf(String(code), language))?.html || '';
+
+export const highlightCode = (code, language = 'jsx') => {
+  const source = String(code);
+  const key = keyOf(source, language);
+  const known = cache.get(key);
+  if (known) {
+    cache.delete(key);
+    cache.set(key, known);
+    return known.promise;
+  }
+  const entry = { html: '', promise: null };
+  entry.promise = render(source, language).then(
+    html => {
+      entry.html = html;
+      return html;
+    },
+    error => {
+      if (cache.get(key) === entry) cache.delete(key);
+      throw error;
+    }
+  );
+  cache.set(key, entry);
+  if (cache.size > LIMIT) cache.delete(cache.keys().next().value);
+  return entry.promise;
 };

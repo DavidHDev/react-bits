@@ -13,6 +13,7 @@ export function createContext(canvas, { preserve = false } = {}) {
   if (!float) gl.getExtension('EXT_color_buffer_half_float');
   const aniso = gl.getExtension('EXT_texture_filter_anisotropic');
   gl.getExtension('OES_texture_float_linear');
+  const parallel = gl.getExtension('KHR_parallel_shader_compile');
   return {
     gl,
     floatTargets: Boolean(float),
@@ -20,29 +21,27 @@ export function createContext(canvas, { preserve = false } = {}) {
     maxAniso: aniso ? gl.getParameter(aniso.MAX_TEXTURE_MAX_ANISOTROPY_EXT) : 1,
     maxTexture: gl.getParameter(gl.MAX_TEXTURE_SIZE),
     maxRenderbuffer: gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),
-    maxSamples: gl.getParameter(gl.MAX_SAMPLES)
+    maxSamples: gl.getParameter(gl.MAX_SAMPLES),
+    parallel
   };
 }
 
 const HEADER = '#version 300 es\nprecision highp float;\nprecision highp int;\n';
 
-function compile(gl, type, source, label) {
+function compile(gl, type, source) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, HEADER + source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS) && !gl.isContextLost()) {
-    const log = gl.getShaderInfoLog(shader);
-    gl.deleteShader(shader);
-    throw new Error(`Shader ${label} failed: ${log}`);
-  }
   return shader;
 }
 
 export class Program {
-  constructor(gl, vertex, fragment, label = 'program') {
+  constructor(gl, vertex, fragment, label = 'program', parallel = null) {
     this.gl = gl;
-    const vs = compile(gl, gl.VERTEX_SHADER, vertex, `${label}.vert`);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, fragment, `${label}.frag`);
+    this.label = label;
+    this.parallel = parallel;
+    const vs = compile(gl, gl.VERTEX_SHADER, vertex);
+    const fs = compile(gl, gl.FRAGMENT_SHADER, fragment);
     const program = gl.createProgram();
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
@@ -51,23 +50,64 @@ export class Program {
     gl.bindAttribLocation(program, 2, 'aUv');
     gl.bindAttribLocation(program, 3, 'aPart');
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS) && !gl.isContextLost()) {
-      throw new Error(`Program ${label} failed: ${gl.getProgramInfoLog(program)}`);
-    }
-    gl.deleteShader(vs);
-    gl.deleteShader(fs);
+    this.shaders = [vs, fs];
     this.program = program;
     this.locations = new Map();
     this.units = new Map();
+    this.values = new Map();
+  }
+
+  unchanged(name, value) {
+    const stored = this.values.get(name);
+    if (typeof value === 'number') {
+      if (Object.is(stored, value)) return true;
+      this.values.set(name, value);
+      return false;
+    }
+    const count = value.length;
+    if (stored instanceof Float64Array && stored.length === count) {
+      let i = 0;
+      while (i < count && Object.is(stored[i], value[i])) i += 1;
+      if (i === count) return true;
+      for (; i < count; i += 1) stored[i] = value[i];
+      return false;
+    }
+    this.values.set(name, Float64Array.from(value));
+    return false;
+  }
+
+  get ready() {
+    if (!this.shaders || !this.parallel) return true;
+    return Boolean(this.gl.getProgramParameter(this.program, this.parallel.COMPLETION_STATUS_KHR));
+  }
+
+  check() {
+    const shaders = this.shaders;
+    if (!shaders) return;
+    this.shaders = null;
+    const gl = this.gl;
+    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS) && !gl.isContextLost()) {
+      const failed = shaders.find(shader => !gl.getShaderParameter(shader, gl.COMPILE_STATUS));
+      const message = failed
+        ? `Shader ${this.label}.${failed === shaders[0] ? 'vert' : 'frag'} failed: ${gl.getShaderInfoLog(failed)}`
+        : `Program ${this.label} failed: ${gl.getProgramInfoLog(this.program)}`;
+      shaders.forEach(shader => gl.deleteShader(shader));
+      throw new Error(message);
+    }
+    shaders.forEach(shader => gl.deleteShader(shader));
   }
 
   use() {
+    this.check();
     this.gl.useProgram(this.program);
     return this;
   }
 
   location(name) {
-    if (!this.locations.has(name)) this.locations.set(name, this.gl.getUniformLocation(this.program, name));
+    if (!this.locations.has(name)) {
+      this.check();
+      this.locations.set(name, this.gl.getUniformLocation(this.program, name));
+    }
     return this.locations.get(name);
   }
 
@@ -75,8 +115,9 @@ export class Program {
     const gl = this.gl;
     const loc = this.location(name);
     if (loc === null) return this;
+    if (typeof value === 'boolean') return this.set(name, value ? 1 : 0);
+    if (this.unchanged(name, value)) return this;
     if (typeof value === 'number') gl.uniform1f(loc, value);
-    else if (typeof value === 'boolean') gl.uniform1f(loc, value ? 1 : 0);
     else if (value.length === 2) gl.uniform2fv(loc, value);
     else if (value.length === 3) gl.uniform3fv(loc, value);
     else if (value.length === 4) gl.uniform4fv(loc, value);
@@ -87,13 +128,13 @@ export class Program {
 
   setInt(name, value) {
     const loc = this.location(name);
-    if (loc !== null) this.gl.uniform1i(loc, value);
+    if (loc !== null && !this.unchanged(name, value)) this.gl.uniform1i(loc, value);
     return this;
   }
 
   setArray(name, values, size) {
     const loc = this.location(name);
-    if (loc === null) return this;
+    if (loc === null || this.unchanged(name, values)) return this;
     const gl = this.gl;
     if (size === 1) gl.uniform1fv(loc, values);
     else if (size === 2) gl.uniform2fv(loc, values);
@@ -118,15 +159,37 @@ export class Program {
   }
 
   dispose() {
+    if (this.shaders) this.shaders.forEach(shader => this.gl.deleteShader(shader));
+    this.shaders = null;
     this.gl.deleteProgram(this.program);
   }
 }
+
+export function lazyPrograms(gl, table, parallel = null) {
+  const made = {};
+  const programs = {};
+  Object.entries(table).forEach(([key, [vertex, fragment]]) => {
+    Object.defineProperty(programs, key, {
+      enumerable: true,
+      get: () => made[key] || (made[key] = new Program(gl, vertex, fragment, key, parallel))
+    });
+  });
+  return { programs, made };
+}
+
+const boundVao = new WeakMap();
+
+const bindVao = (gl, vao) => {
+  if (boundVao.get(gl) === vao) return;
+  boundVao.set(gl, vao);
+  gl.bindVertexArray(vao);
+};
 
 export class Mesh {
   constructor(gl, { position, normal, uv, part, index }) {
     this.gl = gl;
     this.vao = gl.createVertexArray();
-    gl.bindVertexArray(this.vao);
+    bindVao(gl, this.vao);
     this.buffers = [];
     const attribute = (slot, data, size) => {
       if (!data) return;
@@ -153,41 +216,39 @@ export class Mesh {
       this.count = position.length / 3;
       this.indexed = false;
     }
-    gl.bindVertexArray(null);
   }
 
   draw() {
     const gl = this.gl;
-    gl.bindVertexArray(this.vao);
+    bindVao(gl, this.vao);
     if (this.indexed) gl.drawElements(gl.TRIANGLES, this.count, this.indexType, 0);
     else gl.drawArrays(gl.TRIANGLES, 0, this.count);
-    gl.bindVertexArray(null);
   }
 
   dispose() {
     const gl = this.gl;
     this.buffers.forEach(buffer => gl.deleteBuffer(buffer));
+    if (boundVao.get(gl) === this.vao) bindVao(gl, null);
     gl.deleteVertexArray(this.vao);
   }
 }
 
 export function fullscreen(gl) {
   const vao = gl.createVertexArray();
-  gl.bindVertexArray(vao);
+  bindVao(gl, vao);
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0);
   gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
-  gl.bindVertexArray(null);
   return {
     draw() {
-      gl.bindVertexArray(vao);
+      bindVao(gl, vao);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      gl.bindVertexArray(null);
     },
     dispose() {
       gl.deleteBuffer(buffer);
+      if (boundVao.get(gl) === vao) bindVao(gl, null);
       gl.deleteVertexArray(vao);
     }
   };
@@ -211,6 +272,8 @@ export function createTexture(gl, { width, height, internal, levels = 1, filter,
   return texture;
 }
 
+let uploads = 0;
+
 export class ImageTexture {
   constructor(context) {
     this.context = context;
@@ -223,7 +286,8 @@ export class ImageTexture {
 
   upload(source, width, height, { mips = true } = {}) {
     const gl = this.gl;
-    if (!this.texture || this.width !== width || this.height !== height) {
+    const reuse = Boolean(this.texture) && this.width === width && this.height === height;
+    if (!reuse) {
       if (this.texture) gl.deleteTexture(this.texture);
       this.texture = gl.createTexture();
       this.width = width;
@@ -232,7 +296,8 @@ export class ImageTexture {
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+    if (reuse) gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.RGBA, gl.UNSIGNED_BYTE, source);
+    else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -251,6 +316,8 @@ export class ImageTexture {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     }
     this.source = source;
+    uploads += 1;
+    this.version = uploads;
     return this;
   }
 
@@ -327,11 +394,12 @@ export class LayerTarget {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
-  resolveColor() {
+  resolveColor(box = null) {
     const gl = this.gl;
+    const [x0, y0, x1, y1] = box || [0, 0, this.width, this.height];
     gl.bindFramebuffer(gl.READ_FRAMEBUFFER, this.msaa);
     gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, this.colorFbo);
-    gl.blitFramebuffer(0, 0, this.width, this.height, 0, 0, this.width, this.height, gl.COLOR_BUFFER_BIT, gl.NEAREST);
+    gl.blitFramebuffer(x0, y0, x1, y1, x0, y0, x1, y1, gl.COLOR_BUFFER_BIT, gl.NEAREST);
     gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
     gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
   }
@@ -359,6 +427,25 @@ export class LayerTarget {
     gl.viewport(0, 0, w, h);
   }
 
+  bindLevels(first, second, level) {
+    const gl = this.gl;
+    if (!this.pairFbos) this.pairFbos = [];
+    let entry = this.pairFbos[level];
+    if (!entry || entry.first !== first || entry.second !== second) {
+      if (entry) gl.deleteFramebuffer(entry.fbo);
+      entry = { fbo: gl.createFramebuffer(), first, second };
+      this.pairFbos[level] = entry;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, entry.fbo);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, first, level);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, second, level);
+      gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
+    } else {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, entry.fbo);
+    }
+    const [w, h] = this.levelSize(level);
+    gl.viewport(0, 0, w, h);
+  }
+
   dispose() {
     const gl = this.gl;
     gl.deleteTexture(this.color);
@@ -370,6 +457,7 @@ export class LayerTarget {
     gl.deleteFramebuffer(this.colorFbo);
     gl.deleteFramebuffer(this.depthFbo);
     gl.deleteFramebuffer(this.mipFbo);
+    (this.pairFbos || []).forEach(entry => entry && gl.deleteFramebuffer(entry.fbo));
   }
 }
 

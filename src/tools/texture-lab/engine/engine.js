@@ -68,9 +68,23 @@ export const BLEND_MODES = [
 ];
 
 const LINE_OFFSET = HEADER.split('\n').length;
+const STUB = { stub: true, program: null, uniforms: new Map() };
+
+const compileLog = (gl, shader, name) =>
+  (gl.getShaderInfoLog(shader) || '').replace(
+    /ERROR: 0:(\d+)/g,
+    (_, line) => `ERROR: ${name}:${Number(line) - LINE_OFFSET}`
+  );
+
+const isStatic = (layer, effects) => {
+  const effect = effects[layer.type];
+  if (!layer.visible || !effect || layer.mix <= 0) return true;
+  if (effect.temporal) return false;
+  return !effect.animated || (Boolean(effect.animates) && !effect.animates(layer.params));
+};
 
 export class Engine {
-  constructor(canvas, { preserve = false } = {}) {
+  constructor(canvas, { preserve = false, prefix = true, preview = false } = {}) {
     const gl = canvas.getContext('webgl2', {
       alpha: false,
       antialias: false,
@@ -85,12 +99,20 @@ export class Engine {
     this.gl = gl;
     this.floatTargets = Boolean(gl.getExtension('EXT_color_buffer_float'));
     gl.getExtension('OES_texture_float_linear');
+    this.parallel = gl.getExtension('KHR_parallel_shader_compile');
+    this.collecting = null;
     this.programs = new Map();
     this.free = [];
     this.textures = new Map();
     this.source = null;
     this.lost = false;
     this.layerState = new Map();
+    this.sourceVersion = 0;
+    this.usePrefix = prefix;
+    this.preview = preview;
+    this.prefix = null;
+    this.held = null;
+    this.lent = false;
 
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -111,23 +133,149 @@ export class Engine {
     this.lost = true;
   };
 
+  fork({ prefix = false } = {}) {
+    const child = Object.create(Engine.prototype);
+    return Object.assign(child, {
+      canvas: null,
+      parent: this,
+      gl: this.gl,
+      floatTargets: this.floatTargets,
+      parallel: this.parallel,
+      collecting: null,
+      programs: this.programs,
+      textures: this.textures,
+      buffer: this.buffer,
+      vao: this.vao,
+      vertex: this.vertex,
+      free: [],
+      source: null,
+      lost: false,
+      layerState: new Map(),
+      sourceVersion: 0,
+      usePrefix: prefix,
+      preview: false,
+      prefix: null,
+      held: null,
+      lent: false
+    });
+  }
+
+  resetStates(effects) {
+    this.layerState.forEach(state => effects[state.type]?.dispose?.(this.gl, state));
+    this.layerState.clear();
+  }
+
+  trim() {
+    this.free.forEach(target => this.disposeTarget(target));
+    this.free = [];
+    if (this.parent && this.source) {
+      if (!this.lent) this.gl.deleteTexture(this.source.texture);
+      this.source = null;
+      this.lent = false;
+    }
+  }
+
   compile(type, source, name) {
     const gl = this.gl;
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      const log = gl.getShaderInfoLog(shader) || '';
-      const fixed = log.replace(/ERROR: 0:(\d+)/g, (_, line) => `ERROR: ${name}:${Number(line) - LINE_OFFSET}`);
+      const fixed = compileLog(gl, shader, name);
       gl.deleteShader(shader);
       throw new Error(`Shader "${name}" failed to compile.\n${fixed}`);
     }
     return shader;
   }
 
+  start(body) {
+    const gl = this.gl;
+    const fragment = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragment, `${HEADER}\n${body}`);
+    gl.compileShader(fragment);
+    const program = gl.createProgram();
+    gl.attachShader(program, this.vertex);
+    gl.attachShader(program, fragment);
+    gl.bindAttribLocation(program, 0, 'aPosition');
+    gl.linkProgram(program);
+    return { pending: true, program, fragment };
+  }
+
+  link(name, entry) {
+    const gl = this.gl;
+    if (!gl.getProgramParameter(entry.program, gl.LINK_STATUS)) {
+      this.programs.delete(name);
+      if (!gl.getShaderParameter(entry.fragment, gl.COMPILE_STATUS)) {
+        const fixed = compileLog(gl, entry.fragment, name);
+        gl.deleteShader(entry.fragment);
+        gl.deleteProgram(entry.program);
+        throw new Error(`Shader "${name}" failed to compile.\n${fixed}`);
+      }
+      throw new Error(`Program "${name}" failed to link: ${gl.getProgramInfoLog(entry.program)}`);
+    }
+    const uniforms = new Map();
+    const count = gl.getProgramParameter(entry.program, gl.ACTIVE_UNIFORMS);
+    for (let index = 0; index < count; index += 1) {
+      const info = gl.getActiveUniform(entry.program, index);
+      const key = info.name.replace(/\[0\]$/, '');
+      uniforms.set(key, {
+        location: gl.getUniformLocation(entry.program, info.name),
+        type: info.type,
+        size: info.size
+      });
+    }
+    entry.uniforms = uniforms;
+    entry.pending = false;
+    return entry;
+  }
+
+  ready(names) {
+    for (const name of names) {
+      const entry = this.programs.get(name);
+      if (entry?.pending && this.parallel) {
+        if (!this.gl.getProgramParameter(entry.program, this.parallel.COMPLETION_STATUS_KHR)) return false;
+      }
+    }
+    return true;
+  }
+
+  collect(layers, effects, options) {
+    const names = new Set();
+    let failed = false;
+    this.collecting = names;
+    try {
+      this.render(layers, effects, options);
+    } catch {
+      failed = true;
+    } finally {
+      this.collecting = null;
+    }
+    layers.forEach(layer => {
+      const state = this.layerState.get(layer.id);
+      if (!state) return;
+      effects[state.type]?.dispose?.(this.gl, state);
+      this.layerState.delete(layer.id);
+    });
+    return failed ? new Set() : names;
+  }
+
+  warm(layers, effects, size) {
+    if (this.source || this.lost || this.parent) return;
+    this.source = { texture: null, width: size.width, height: size.height, mipmapped: true };
+    this.collect(layers, effects, size);
+    this.source = null;
+    if (!this.programs.has('resample')) this.programs.set('resample', this.start(RESAMPLE_SHADER));
+  }
+
   program(name, body) {
     const cached = this.programs.get(name);
-    if (cached) return cached;
+    if (cached && !cached.pending) return cached;
+    if (this.collecting) {
+      if (!cached) this.programs.set(name, this.start(body));
+      this.collecting.add(name);
+      return STUB;
+    }
+    if (cached) return this.link(name, cached);
     const gl = this.gl;
     const fragment = this.compile(gl.FRAGMENT_SHADER, `${HEADER}\n${body}`, name);
     const program = gl.createProgram();
@@ -182,6 +330,10 @@ export class Engine {
       item => item.width === w && item.height === h && item.float === float && item.filter === filter
     );
     if (index >= 0) return this.free.splice(index, 1)[0];
+    return this.createTarget(w, h, { float, filter });
+  }
+
+  createTarget(w, h, { float = true, filter = 'linear' } = {}) {
     const gl = this.gl;
     const texture = this.createTexture(w, h, { float, filter });
     const fbo = gl.createFramebuffer();
@@ -191,16 +343,27 @@ export class Engine {
     return { texture, fbo, width: w, height: h, float, filter, mipmapped: false };
   }
 
-  release(target) {
-    if (!target || !target.fbo || this.free.includes(target)) return;
+  demip(target) {
     if (target.mipmapped) {
       const gl = this.gl;
       gl.bindTexture(gl.TEXTURE_2D, target.texture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, target.filter === 'nearest' ? gl.NEAREST : gl.LINEAR);
     }
     target.mipmapped = false;
+  }
+
+  release(target) {
+    if (!target || !target.fbo || this.free.includes(target)) return;
+    this.demip(target);
     this.free.push(target);
     if (this.free.length > 24) this.disposeTarget(this.free.shift());
+  }
+
+  dropPrefix() {
+    if (!this.prefix) return;
+    const target = this.prefix.target;
+    this.prefix = null;
+    this.release(target);
   }
 
   disposeTarget(target) {
@@ -210,7 +373,7 @@ export class Engine {
   }
 
   mipmap(target) {
-    if (!target || target.mipmapped) return target;
+    if (!target || target.mipmapped || this.collecting) return target;
     const gl = this.gl;
     gl.bindTexture(gl.TEXTURE_2D, target.texture);
     gl.generateMipmap(gl.TEXTURE_2D);
@@ -219,8 +382,13 @@ export class Engine {
     return target;
   }
 
-  setSource(media, width, height) {
+  setSource(media, width, height, { bottomUp = false, owner = null } = {}) {
     const gl = this.gl;
+    this.sourceVersion += 1;
+    if (this.lent) {
+      this.source = null;
+      this.lent = false;
+    }
     if (!this.source || this.source.width !== width || this.source.height !== height) {
       if (this.source) gl.deleteTexture(this.source.texture);
       this.source = { texture: gl.createTexture(), width, height, mipmapped: false };
@@ -230,7 +398,7 @@ export class Engine {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     }
     gl.bindTexture(gl.TEXTURE_2D, this.source.texture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, !bottomUp);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, media);
@@ -239,6 +407,14 @@ export class Engine {
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
     this.source.mipmapped = true;
+    this.source.owner = owner;
+  }
+
+  borrow(source) {
+    if (this.source && !this.lent) this.gl.deleteTexture(this.source.texture);
+    this.source = source;
+    this.lent = true;
+    this.sourceVersion += 1;
   }
 
   shared(name, create) {
@@ -247,6 +423,7 @@ export class Engine {
   }
 
   draw(entry, { target = null, width, height, uniforms = {}, textures = {} }) {
+    if (entry.stub || this.collecting) return;
     const gl = this.gl;
     gl.useProgram(entry.program);
     gl.bindFramebuffer(gl.FRAMEBUFFER, target ? target.fbo : null);
@@ -292,6 +469,7 @@ export class Engine {
       time,
       frame,
       unit,
+      preview: engine.preview,
       px: value => Math.max(1, Math.round(value * unit)),
       target: (w = width, h = height, options) => engine.target(w, h, options),
       release: target => engine.release(target),
@@ -326,13 +504,14 @@ export class Engine {
       mirror = false,
       rotation = 0,
       flip = false,
-      strength = 1
+      strength = 1,
+      output = null
     } = {}
   ) {
-    if (!this.source || this.lost) return;
+    if (!this.source || this.lost || this.parent?.lost) return;
     const w = Math.max(1, Math.round(width || this.source.width));
     const h = Math.max(1, Math.round(height || this.source.height));
-    if (this.canvas.width !== w || this.canvas.height !== h) {
+    if (!output && !this.collecting && this.canvas && (this.canvas.width !== w || this.canvas.height !== h)) {
       this.canvas.width = w;
       this.canvas.height = h;
     }
@@ -342,36 +521,96 @@ export class Engine {
     const turns = ((Math.round((rotation || 0) / 90) % 4) + 4) % 4 | 0;
     const mirrored = Boolean(mirror) !== Boolean(flip);
     if (mirrored || turns || this.source.width !== w || this.source.height !== h) {
-      base = ctx.pass('resample', RESAMPLE_SHADER, {
-        input: this.source,
-        target: this.target(w, h, { float: false }),
-        uniforms: { uMirror: mirrored ? 1 : 0, uTurns: turns }
-      });
-      owned.add(base);
+      const caching = this.usePrefix && !this.collecting;
+      const held = this.held;
+      const fresh =
+        caching &&
+        held &&
+        held.version === this.sourceVersion &&
+        held.target.width === w &&
+        held.target.height === h &&
+        held.turns === turns &&
+        held.mirrored === mirrored;
+      if (fresh) base = held.target;
+      else {
+        if (caching && held) {
+          this.held = null;
+          this.release(held.target);
+        }
+        base = ctx.pass('resample', RESAMPLE_SHADER, {
+          input: this.source,
+          target: this.target(w, h, { float: false }),
+          uniforms: { uMirror: mirrored ? 1 : 0, uTurns: turns }
+        });
+        if (caching) this.held = { target: base, version: this.sourceVersion, turns, mirrored };
+        else owned.add(base);
+      }
+    } else if (this.held) {
+      this.release(this.held.target);
+      this.held = null;
     }
     let current = base;
+    let kept = null;
 
     if (!original) {
-      layers.forEach(layer => {
+      let fixed = 0;
+      if (this.usePrefix && !this.collecting) {
+        while (fixed < layers.length && isStatic(layers[fixed], effects)) fixed += 1;
+      }
+      const cache = this.prefix;
+      const reusable =
+        cache &&
+        cache.version === this.sourceVersion &&
+        cache.width === w &&
+        cache.height === h &&
+        cache.turns === turns &&
+        cache.mirrored === mirrored &&
+        cache.layers.length <= fixed &&
+        cache.layers.every((layer, index) => layer === layers[index]);
+      let start = 0;
+      if (reusable) {
+        kept = cache.target;
+        current = kept;
+        start = cache.layers.length;
+      } else if (cache) this.dropPrefix();
+      let volatile = false;
+      for (let index = start; index < layers.length; index += 1) {
+        const layer = layers[index];
         const effect = effects[layer.type];
-        if (!layer.visible || !effect || layer.mix <= 0) return;
-        if (!this.layerState.has(layer.id)) this.layerState.set(layer.id, { type: layer.type });
-        const state = this.layerState.get(layer.id);
-        const output = effect.render(ctx, current, layer.params, state);
-        if (!output || output === current) return;
-        let next = output;
-        const blend = Math.max(0, BLEND_MODES.indexOf(layer.blend || 'normal'));
-        if (layer.mix < 1 || blend > 0) {
-          next = ctx.pass('layer-mix', MIX_SHADER, {
-            input: output,
-            textures: { uBase: current },
-            uniforms: { uMix: layer.mix, uBlend: blend }
-          });
-          this.release(output);
+        if (layer.visible && effect && layer.mix > 0) {
+          if (!this.layerState.has(layer.id)) this.layerState.set(layer.id, { type: layer.type });
+          const state = this.layerState.get(layer.id);
+          const output = effect.render(ctx, current, layer.params, state);
+          if (state.volatile) volatile = true;
+          if (output && output !== current) {
+            let next = output;
+            const blend = Math.max(0, BLEND_MODES.indexOf(layer.blend || 'normal'));
+            if (layer.mix < 1 || blend > 0) {
+              next = ctx.pass('layer-mix', MIX_SHADER, {
+                input: output,
+                textures: { uBase: current },
+                uniforms: { uMix: layer.mix, uBlend: blend }
+              });
+              this.release(output);
+            }
+            if (current !== base && current !== kept) this.release(current);
+            current = next;
+          }
         }
-        if (current !== base) this.release(current);
-        current = next;
-      });
+        if (index === fixed - 1 && index >= start && !volatile && current !== base && current !== kept) {
+          if (kept) this.dropPrefix();
+          kept = current;
+          this.prefix = {
+            target: kept,
+            layers: layers.slice(0, fixed),
+            version: this.sourceVersion,
+            width: w,
+            height: h,
+            turns,
+            mirrored
+          };
+        }
+      }
     }
 
     if (this.layerState.size > layers.length) {
@@ -384,21 +623,32 @@ export class Engine {
     }
 
     this.draw(this.program('blit', BLIT_SHADER), {
-      target: null,
+      target: output,
       width: w,
       height: h,
       uniforms: { uSplit: split, uStrength: Math.min(Math.max(strength, 0), 1), uResolution: [w, h] },
       textures: { uInput: current, uOriginal: base }
     });
-    if (current !== base) this.release(current);
+    if (current !== base && current !== kept) this.release(current);
+    if (kept) this.demip(kept);
+    if (this.held) this.demip(this.held.target);
     owned.forEach(target => this.release(target));
   }
 
   dispose() {
     const gl = this.gl;
-    this.canvas.removeEventListener('webglcontextlost', this.onLost);
+    if (this.prefix) this.disposeTarget(this.prefix.target);
+    this.prefix = null;
     this.free.forEach(target => this.disposeTarget(target));
     this.free = [];
+    if (this.held) this.disposeTarget(this.held.target);
+    this.held = null;
+    if (this.parent) {
+      if (this.source && !this.lent) gl.deleteTexture(this.source.texture);
+      this.source = null;
+      return;
+    }
+    this.canvas.removeEventListener('webglcontextlost', this.onLost);
     this.programs.forEach(entry => gl.deleteProgram(entry.program));
     this.programs.clear();
     this.textures.forEach(texture => gl.deleteTexture(texture.texture || texture));

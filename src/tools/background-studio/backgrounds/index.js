@@ -2532,7 +2532,6 @@ export const BACKGROUNDS = [
     label: 'Ghost Cursor',
     component: () => import('../../../content/Animations/GhostCursor/GhostCursor.jsx'),
     installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/animations/ghost-cursor"',
-    forceRemountOnPropChange: true,
     wrapperStyle: { width: '100%', height: '100%', minHeight: '100%', position: 'relative' },
     props: [
       { name: 'color', type: 'color', default: '#B497CF', label: 'Color' },

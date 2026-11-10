@@ -231,6 +231,7 @@ const Prism = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
+  const releaseRef = useRef(0);
   const palette = Array.isArray(colors) ? colors.filter(Boolean).slice(0, 8) : [];
   const settings: Settings = {
     height: Math.max(0.1, height),
@@ -258,6 +259,7 @@ const Prism = ({
   settingsRef.current = settings;
 
   useEffect(() => {
+    window.clearTimeout(releaseRef.current);
     const container = containerRef.current;
     const canvas = canvasRef.current;
     const gl = canvas?.getContext('webgl2', {
@@ -479,7 +481,7 @@ const Prism = ({
       gl.deleteTexture(paletteTexture);
       gl.deleteVertexArray(vao);
       gl.deleteProgram(shader.program);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      releaseRef.current = window.setTimeout(() => gl.getExtension('WEBGL_lose_context')?.loseContext(), 0);
     };
   }, []);
 

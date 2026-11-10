@@ -54,6 +54,7 @@ void main() {
   q /= max(uScale, 0.0001);
   q /= 0.5 + 0.2 * dot(q, q);
   q += 0.2 * cos(t) - 7.56;
+  vec2 shift = vec2(0.2 * cos(t) - 7.56);
   vec2 toward = (uPointer - rp);
   q += toward * uMouseInfluence * 0.2;
 
@@ -61,6 +62,7 @@ void main() {
       if (j >= uIterations - 1) break;
       vec2 rr = sin(1.5 * (q.yx * uFrequency) + 2.0 * cos(q * uFrequency));
       q += (rr - q) * 0.15;
+      shift *= 0.85;
     }
 
     vec3 col = vec3(0.0);
@@ -80,6 +82,8 @@ void main() {
             float gain = 1.0 + max(uWarpStrength - 1.0, 0.0); // allow >1 to amplify displacement
             vec2 disp = (r - s) * kBelow;
             vec2 warped = s + disp * gain;
+            float spare = 1.0 - kBelow * gain;
+            if (spare != 0.0) warped -= shift * spare;
             float m1 = length(warped + sin(5.0 * warped.y * uFrequency - 3.0 * t + float(i)) / 4.0);
             float m = mix(m0, m1, kMix);
             float w = 1.0 - exp(-uBandWidth / exp(uBandWidth * m));
@@ -99,6 +103,8 @@ void main() {
             float gain = 1.0 + max(uWarpStrength - 1.0, 0.0);
             vec2 disp = (r - s) * kBelow;
             vec2 warped = s + disp * gain;
+            float spare = 1.0 - kBelow * gain;
+            if (spare != 0.0) warped -= shift * spare;
             float m1 = length(warped + sin(5.0 * warped.y * uFrequency - 3.0 * t + float(k)) / 4.0);
             float m = mix(m0, m1, kMix);
             col[k] = 1.0 - exp(-uBandWidth / exp(uBandWidth * m));
@@ -155,9 +161,25 @@ export default function ColorBends({
   const pointerTargetRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerCurrentRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerSmoothRef = useRef<number>(8);
+  const settings = {
+    speed,
+    scale,
+    frequency,
+    warpStrength,
+    mouseInfluence,
+    parallax,
+    noise,
+    iterations,
+    intensity,
+    bandWidth,
+    transparent
+  };
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   useEffect(() => {
     const container = containerRef.current!;
+    const initial = settingsRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -169,21 +191,21 @@ export default function ColorBends({
       uniforms: {
         uCanvas: { value: new THREE.Vector2(1, 1) },
         uTime: { value: 0 },
-        uSpeed: { value: speed },
+        uSpeed: { value: initial.speed },
         uRot: { value: new THREE.Vector2(1, 0) },
         uColorCount: { value: 0 },
         uColors: { value: uColorsArray },
-        uTransparent: { value: transparent ? 1 : 0 },
-        uScale: { value: scale },
-        uFrequency: { value: frequency },
-        uWarpStrength: { value: warpStrength },
+        uTransparent: { value: initial.transparent ? 1 : 0 },
+        uScale: { value: initial.scale },
+        uFrequency: { value: initial.frequency },
+        uWarpStrength: { value: initial.warpStrength },
         uPointer: { value: new THREE.Vector2(0, 0) },
-        uMouseInfluence: { value: mouseInfluence },
-        uParallax: { value: parallax },
-        uNoise: { value: noise },
-        uIterations: { value: iterations },
-        uIntensity: { value: intensity },
-        uBandWidth: { value: bandWidth }
+        uMouseInfluence: { value: initial.mouseInfluence },
+        uParallax: { value: initial.parallax },
+        uNoise: { value: initial.noise },
+        uIterations: { value: initial.iterations },
+        uIntensity: { value: initial.intensity },
+        uBandWidth: { value: initial.bandWidth }
       },
       premultipliedAlpha: true,
       transparent: true
@@ -201,7 +223,7 @@ export default function ColorBends({
     rendererRef.current = renderer;
     (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setClearColor(0x000000, transparent ? 0 : 1);
+    renderer.setClearColor(0x000000, initial.transparent ? 0 : 1);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
     renderer.domElement.style.display = 'block';
@@ -227,9 +249,17 @@ export default function ColorBends({
       (window as Window).addEventListener('resize', handleResize);
     }
 
+    let elapsed = 0;
+    let visible = true;
+    let resumed = false;
+
     const loop = () => {
-      const dt = clock.getDelta();
-      const elapsed = clock.elapsedTime;
+      rafRef.current = null;
+      if (!visible || document.hidden) return;
+      const delta = clock.getDelta();
+      const dt = resumed ? 0 : delta;
+      resumed = false;
+      elapsed += dt;
       material.uniforms.uTime.value = elapsed;
 
       const deg = (rotationRef.current % 360) + autoRotateRef.current * elapsed;
@@ -246,10 +276,31 @@ export default function ColorBends({
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(loop);
     };
+
+    const wake = () => {
+      if (rafRef.current !== null || !visible || document.hidden) return;
+      resumed = true;
+      rafRef.current = requestAnimationFrame(loop);
+    };
+
+    const handleVisibility = () => {
+      if (document.hidden) return;
+      resumed = true;
+      wake();
+    };
+
+    const visibility = new IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      wake();
+    });
+    visibility.observe(container);
+    document.addEventListener('visibilitychange', handleVisibility);
     rafRef.current = requestAnimationFrame(loop);
 
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      visibility.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
       else (window as Window).removeEventListener('resize', handleResize);
       geometry.dispose();

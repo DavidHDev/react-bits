@@ -85,6 +85,7 @@ uniform vec3 uLidar;
 uniform vec3 uMic;
 uniform vec4 uControl;
 uniform float uAntenna;
+uniform float uPrepass;
 out vec4 outColor;
 
 float sdSuper(vec2 p, vec2 halfSize, float r, float n) {
@@ -392,6 +393,10 @@ vec3 deckFace(vec3 n, vec3 v) {
 }
 
 void main() {
+  if (uPrepass > 0.5) {
+    outColor = vec4(0.0);
+    return;
+  }
   vec3 n = normalize(vNormal);
   vec3 v = normalize(uCamPos - vWorld);
   normalFootprint(n);

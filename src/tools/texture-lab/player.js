@@ -1,7 +1,28 @@
 const AHEAD = 4;
 const END_GUARD = 1 / 120;
+const FRAME_STALE = 250;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+export function watchFrames(video, onFrame) {
+  const watch = { count: 0, at: -Infinity, live: () => performance.now() - watch.at < FRAME_STALE, stop: () => {} };
+  if (typeof video.requestVideoFrameCallback !== 'function') return watch;
+  let request = 0;
+  let active = true;
+  const step = () => {
+    if (!active) return;
+    watch.count += 1;
+    watch.at = performance.now();
+    onFrame?.();
+    request = video.requestVideoFrameCallback(step);
+  };
+  request = video.requestVideoFrameCallback(step);
+  watch.stop = () => {
+    active = false;
+    video.cancelVideoFrameCallback?.(request);
+  };
+  return watch;
+}
 
 class FramePlayer {
   constructor({ input, sink, duration, width, height, rotation }) {
@@ -24,6 +45,16 @@ class FramePlayer {
     this.nextSeek = null;
     this.version = 0;
     this.disposed = false;
+    this.listeners = new Set();
+  }
+
+  onFrame(listener) {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  notify() {
+    this.listeners.forEach(listener => listener());
   }
 
   get currentTime() {
@@ -49,6 +80,7 @@ class FramePlayer {
     if (start >= this.range[1] - END_GUARD || start < this.range[0]) start = this.range[0];
     this.paused = false;
     this.restart(start);
+    this.notify();
     return Promise.resolve();
   }
 
@@ -57,6 +89,7 @@ class FramePlayer {
     this.anchorTime = this.currentTime;
     this.paused = true;
     this.stopStream();
+    this.notify();
   }
 
   seek(value) {
@@ -142,6 +175,7 @@ class FramePlayer {
     this.current?.close();
     this.current = sample;
     this.version += 1;
+    this.notify();
   }
 
   update() {
@@ -182,6 +216,7 @@ class FramePlayer {
     this.stopStream();
     this.current?.close();
     this.current = null;
+    this.listeners.clear();
     this.input.dispose?.();
   }
 }
@@ -195,6 +230,27 @@ class ElementPlayer {
     this.rotation = 0;
     this.range = [0, duration];
     this.version = 0;
+    this.listeners = new Set();
+    this.bump = () => {
+      this.version += 1;
+      this.notify();
+    };
+    video.addEventListener('seeked', this.bump);
+    this.frames = watchFrames(video, this.bump);
+    this.wanted = false;
+    this.ended = () => {
+      if (this.wanted) this.play();
+    };
+    video.addEventListener('ended', this.ended);
+  }
+
+  onFrame(listener) {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  notify() {
+    this.listeners.forEach(listener => listener());
   }
 
   get currentTime() {
@@ -217,17 +273,23 @@ class ElementPlayer {
   }
 
   play() {
+    this.wanted = true;
     if (this.video.currentTime >= this.range[1] - END_GUARD) this.video.currentTime = this.range[0];
-    return this.video.play().catch(() => {});
+    const started = this.video.play().catch(() => {});
+    this.notify();
+    return started;
   }
 
   pause() {
+    this.wanted = false;
     this.video.pause();
+    this.notify();
   }
 
   seek(value) {
     this.video.currentTime = clamp(value, this.range[0], Math.max(this.range[0], this.range[1] - END_GUARD));
     this.version += 1;
+    this.notify();
   }
 
   update() {
@@ -235,7 +297,7 @@ class ElementPlayer {
     if (video.paused) return;
     const time = video.currentTime;
     if (time >= this.range[1] - END_GUARD || time < this.range[0] - 0.05) video.currentTime = this.range[0];
-    this.version += 1;
+    if (!this.frames.live()) this.version += 1;
   }
 
   drawable() {
@@ -245,6 +307,11 @@ class ElementPlayer {
   }
 
   dispose() {
+    this.listeners.clear();
+    this.frames.stop();
+    this.wanted = false;
+    this.video.removeEventListener('ended', this.ended);
+    this.video.removeEventListener('seeked', this.bump);
     this.video.pause();
     this.video.removeAttribute('src');
     this.video.load();

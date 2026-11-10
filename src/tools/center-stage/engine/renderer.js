@@ -1,17 +1,27 @@
-import { ColorTarget, ImageTexture, LayerTarget, Mesh, Program, createContext, createTexture, fullscreen } from './gl';
+import {
+  ColorTarget,
+  ImageTexture,
+  LayerTarget,
+  Mesh,
+  createContext,
+  createTexture,
+  fullscreen,
+  lazyPrograms
+} from './gl';
 import {
   BACKGROUND_FS,
-  BLIT_FS,
   COMPOSITE_FS,
   DECAL_FS,
   DEPTH_FS,
   DEVICE_FS,
   DEVICE_VS,
   DOWNSAMPLE_FS,
+  DOWNSAMPLE_PAIR_FS,
   FINAL_FS,
   FULLSCREEN_VS,
   QUAD_DEPTH_FS,
   QUAD_FS,
+  SHADOW_BAKE_FS,
   SHADOW_FS,
   SHADOW_RESOLVE_FS,
   SHADOW_VS
@@ -21,7 +31,7 @@ import { PHONE_MM, PHONE_POINTS, phoneFrame, phoneGeometry, plateauOutline, wind
 import { CHROME_BAR, drawChrome } from './chrome';
 import { PHONE_FS, PHONE_VS } from './phoneShaders';
 import { LAPTOP, displayGeometry, drawLegends, keyboardKeys, laptopGeometry } from './hardware';
-import { laptopParts } from './scene';
+import { deviceBounds, laptopParts } from './scene';
 import {
   DEG,
   chain,
@@ -37,10 +47,88 @@ import {
   scale,
   scaling,
   sub,
+  transformPoint,
   translation
 } from './math';
 
 const IDENTITY = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+
+const PROGRAMS = {
+  device: [DEVICE_VS, DEVICE_FS],
+  phone: [PHONE_VS, PHONE_FS],
+  depth: [DEVICE_VS, DEPTH_FS],
+  quad: [DEVICE_VS, QUAD_FS],
+  quadDepth: [DEVICE_VS, QUAD_DEPTH_FS],
+  decal: [DEVICE_VS, DECAL_FS],
+  shadow: [SHADOW_VS, SHADOW_FS],
+  shadowResolve: [FULLSCREEN_VS, SHADOW_RESOLVE_FS],
+  shadowBake: [FULLSCREEN_VS, SHADOW_BAKE_FS],
+  background: [FULLSCREEN_VS, BACKGROUND_FS],
+  backgroundBaked: [FULLSCREEN_VS, `#define BAKED\n${BACKGROUND_FS}`],
+  downsample: [FULLSCREEN_VS, DOWNSAMPLE_FS],
+  downsamplePair: [FULLSCREEN_VS, DOWNSAMPLE_PAIR_FS],
+  composite: [FULLSCREEN_VS, COMPOSITE_FS],
+  final: [FULLSCREEN_VS, FINAL_FS]
+};
+
+const built = new Map();
+
+const once = (key, build) => {
+  if (!built.has(key)) {
+    built.set(key, build());
+    if (built.size > 64) built.delete(built.keys().next().value);
+  }
+  return built.get(key);
+};
+
+const sameKey = (a, b) => {
+  if (!a || a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) if (a[i] !== b[i]) return false;
+  return true;
+};
+
+const usesPhone = item => item.layout.type === 'laptop' || item.layout.type === 'monitor' || Boolean(item.layout.spec);
+
+const overlaps = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+
+const localPoint = (m, p) => {
+  const x = p[0] - m[12];
+  const y = p[1] - m[13];
+  const z = p[2] - m[14];
+  const ax = m[5] * m[10] - m[6] * m[9];
+  const ay = m[6] * m[8] - m[4] * m[10];
+  const az = m[4] * m[9] - m[5] * m[8];
+  const det = m[0] * ax + m[1] * ay + m[2] * az;
+  return [
+    (x * ax + y * ay + z * az) / det,
+    (x * (m[9] * m[2] - m[10] * m[1]) + y * (m[10] * m[0] - m[8] * m[2]) + z * (m[8] * m[1] - m[9] * m[0])) / det,
+    (x * (m[1] * m[6] - m[2] * m[5]) + y * (m[2] * m[4] - m[0] * m[6]) + z * (m[0] * m[5] - m[1] * m[4])) / det
+  ];
+};
+
+const localCorners = item => {
+  const corners = deviceBounds(item.layout);
+  const center = [0, 0, 0];
+  corners.forEach(p => {
+    center[0] += p[0] / corners.length;
+    center[1] += p[1] / corners.length;
+    center[2] += p[2] / corners.length;
+  });
+  const points = corners.map(p => [
+    center[0] + (p[0] - center[0]) * 1.06,
+    center[1] + (p[1] - center[1]) * 1.06,
+    center[2] + (p[2] - center[2]) * 1.06
+  ]);
+  if (item.device.rest) {
+    const { body } = item.layout;
+    const pad = Math.min(body.w, body.h) * 0.07 * 2.6;
+    const x = body.w / 2 + pad;
+    const y = body.h / 2 + pad;
+    const z = -body.thickness / 2 - 0.0006;
+    points.push([-x, -y, z], [x, -y, z], [-x, y, z], [x, y, z]);
+  }
+  return points;
+};
 
 const BG_KINDS = {
   solid: 0,
@@ -61,21 +149,9 @@ export class Renderer {
     this.gl = this.context.gl;
     this.samples = samples;
     const gl = this.gl;
-    this.programs = {
-      device: new Program(gl, DEVICE_VS, DEVICE_FS, 'device'),
-      phone: new Program(gl, PHONE_VS, PHONE_FS, 'phone'),
-      depth: new Program(gl, DEVICE_VS, DEPTH_FS, 'depth'),
-      quad: new Program(gl, DEVICE_VS, QUAD_FS, 'quad'),
-      quadDepth: new Program(gl, DEVICE_VS, QUAD_DEPTH_FS, 'quad-depth'),
-      decal: new Program(gl, DEVICE_VS, DECAL_FS, 'decal'),
-      shadow: new Program(gl, SHADOW_VS, SHADOW_FS, 'shadow'),
-      shadowResolve: new Program(gl, FULLSCREEN_VS, SHADOW_RESOLVE_FS, 'shadow-resolve'),
-      background: new Program(gl, FULLSCREEN_VS, BACKGROUND_FS, 'background'),
-      downsample: new Program(gl, FULLSCREEN_VS, DOWNSAMPLE_FS, 'downsample'),
-      composite: new Program(gl, FULLSCREEN_VS, COMPOSITE_FS, 'composite'),
-      blit: new Program(gl, FULLSCREEN_VS, BLIT_FS, 'blit'),
-      final: new Program(gl, FULLSCREEN_VS, FINAL_FS, 'final')
-    };
+    const { programs, made } = lazyPrograms(gl, PROGRAMS, this.context.parallel);
+    this.programs = programs;
+    this.madePrograms = made;
     this.tri = fullscreen(gl);
     this.meshes = new Map();
     this.arts = new Map();
@@ -101,6 +177,34 @@ export class Renderer {
       event.preventDefault();
       this.lost = true;
     });
+  }
+
+  warm() {
+    Object.keys(this.programs).forEach(key => this.programs[key]);
+  }
+
+  needs(scene, options = {}) {
+    const keys = ['final', 'composite'];
+    const doc = scene.doc;
+    const shadow = clamp(doc.light?.shadow ?? 0.5, 0, 1) > 0.001 && scene.devices.length > 0 && Boolean(scene.shadow);
+    if (shadow) {
+      keys.push('shadow', 'shadowResolve', 'downsample');
+      if (scene.preview && this.context.floatTargets) keys.push('shadowBake', 'backgroundBaked');
+      else keys.push('background');
+    } else keys.push('background');
+    const dof = scene.cocScale >= 0.25;
+    const reflect = clamp(doc.light?.reflection ?? 0, 0, 1) > 0.001 && scene.receiver === 'floor';
+    if (dof || reflect) keys.push('depth', 'downsamplePair');
+    const shown = scene.devices.filter(item => !item.device.hidden);
+    if (shown.some(usesPhone)) keys.push('phone');
+    if (shown.some(item => !usesPhone(item))) keys.push('device');
+    if (shown.some(item => item.device.rest)) keys.push('decal');
+    if (options.type?.canvas) keys.push(...(dof ? ['quad', 'quadDepth'] : ['quad']));
+    return keys;
+  }
+
+  ready(scene, options = {}) {
+    return this.needs(scene, options).every(key => this.programs[key].ready);
   }
 
   get maxSize() {
@@ -133,11 +237,13 @@ export class Renderer {
     }
     this.reflection?.dispose();
     this.accum?.dispose();
+    this.held?.dispose();
     this.layer = null;
     this.reflection = null;
     this.accum = null;
-    this.shadowRaw = null;
-    this.shadowMip = null;
+    this.held = null;
+    this.heldStamp = null;
+    this.seenStamp = null;
     this.size = null;
   }
 
@@ -147,8 +253,10 @@ export class Renderer {
       texture = new ImageTexture(this.context);
       this.media.set(slot, texture);
     }
-    texture.upload(source, width, height, { mips });
+    const bitmap = typeof ImageBitmap !== 'undefined' && source instanceof ImageBitmap;
+    texture.upload(source, bitmap ? source.width : width, bitmap ? source.height : height, { mips });
     texture.aspect = width / height;
+    texture.shift = bitmap ? Math.log2(width / source.width) : 0;
     return texture;
   }
 
@@ -175,7 +283,7 @@ export class Renderer {
   slabMeshes(body) {
     const key = `slab|${body.w.toFixed(4)}|${body.h.toFixed(4)}|${body.radius.toFixed(4)}|${body.squircle ? 1 : 0}|${body.thickness.toFixed(4)}`;
     return this.mesh(key, () => {
-      const geo = slabGeometry(body);
+      const geo = once(key, () => slabGeometry(body));
       return {
         front: new Mesh(this.gl, geo.front),
         back: new Mesh(this.gl, geo.back),
@@ -186,7 +294,7 @@ export class Renderer {
 
   phoneMeshes(spec) {
     return this.mesh(`handheld|${spec.id}`, () => {
-      const geo = phoneGeometry(spec);
+      const geo = once(`handheld|${spec.id}`, () => phoneGeometry(spec));
       return {
         body: new Mesh(this.gl, geo.body),
         plateau: new Mesh(this.gl, geo.plateau),
@@ -233,7 +341,7 @@ export class Renderer {
     const key = chrome.safari ? `safari|${chrome.url}` : 'status';
     const cached = this.chromes.get(key);
     if (cached) return cached;
-    const art = drawChrome(chrome);
+    const art = once(`chrome|${key}`, () => drawChrome(chrome));
     const gl = this.gl;
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -255,24 +363,31 @@ export class Renderer {
     return entry;
   }
 
-  buildMips(target, texture, levels) {
+  buildMipPair(target, first, second, levels) {
     const gl = this.gl;
-    const program = this.programs.downsample.use();
+    const program = this.programs.downsamplePair.use();
     gl.disable(gl.BLEND);
     gl.disable(gl.DEPTH_TEST);
     for (let level = 1; level < levels; level += 1) {
-      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.bindTexture(gl.TEXTURE_2D, first);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_BASE_LEVEL, level - 1);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL, level - 1);
-      target.bindLevel(texture, level);
+      gl.bindTexture(gl.TEXTURE_2D, second);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_BASE_LEVEL, level - 1);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL, level - 1);
+      target.bindLevels(first, second, level);
       const [w, h] = target.levelSize(level - 1);
       program
-        .texture('uSource', texture)
+        .texture('uSource', first)
+        .texture('uSecond', second)
         .set('uTexel', [1 / w, 1 / h])
         .set('uLevel', 0);
       this.tri.draw();
     }
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.bindTexture(gl.TEXTURE_2D, first);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_BASE_LEVEL, 0);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL, levels - 1);
+    gl.bindTexture(gl.TEXTURE_2D, second);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_BASE_LEVEL, 0);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL, levels - 1);
   }
@@ -409,9 +524,13 @@ export class Renderer {
       .set('uGrille', [1e4, 1e4, 1e4, 1e4])
       .set('uKeyboard', [0, 0, 1, 1])
       .texture('uLegend', this.blank);
+    program.set('uPrepass', extra.prepass ? 1 : 0);
+    const solid = (extra.opacity ?? 1) >= 1;
+    if (solid) this.gl.disable(this.gl.BLEND);
     meshes.body.draw();
     meshes.plateau.draw();
     meshes.details.draw();
+    if (solid) this.gl.enable(this.gl.BLEND);
     return program;
   }
 
@@ -425,12 +544,24 @@ export class Renderer {
       program
         .use()
         .set('uOpacity', extra.opacity ?? 1)
+        .set('uPrepass', extra.prepass ? 1 : 0)
         .set('uFlatChrome', ['browser', 'window', 'card'].includes(layout.type) ? 1 : 0);
     const base = extra.mirror ? multiply(extra.mirror, model) : model;
     const ppu = scene.pixelsPerUnit * (item.device.scale || 1) * (extra.artScale || 1);
+    const normal = mode !== 'shadow' ? normalMatrix(base) : null;
+    if (mode === 'color') {
+      const { camera } = scene;
+      const { body } = layout;
+      const unit = Math.hypot(base[0], base[1], base[2]);
+      const reach = scene.depthOf([base[12], base[13], base[14]]) + (Math.hypot(body.w, body.h) / 2) * unit;
+      const spread = Math.sqrt(1 + camera.tanX * camera.tanX + camera.tanY * camera.tanY);
+      const gap = ((camera.far * camera.near) / (camera.far - camera.near)) * body.thickness * unit;
+      const apart = gap > reach * reach * spread * 5e-7;
+      program.set('uEye', apart ? localPoint(base, camera.eye) : [0, 0, 0]).set('uHalf', body.thickness / 2);
+    }
     const setCommon = (partModel, kind, body, squircle) => {
       program.set('uModel', partModel);
-      if (mode !== 'shadow') program.set('uNormalMatrix', normalMatrix(partModel));
+      if (normal) program.set('uNormalMatrix', normal);
       program
         .set('uKind', kind)
         .set('uBody', [body.w, body.h])
@@ -479,14 +610,14 @@ export class Renderer {
 
   hardwareMeshes(type) {
     return this.mesh(`hardware|${type}`, () => {
-      const geo = type === 'laptop' ? laptopGeometry() : displayGeometry();
+      const geo = once(`hardware|${type}`, () => (type === 'laptop' ? laptopGeometry() : displayGeometry()));
       return Object.fromEntries(Object.entries(geo).map(([name, data]) => [name, new Mesh(this.gl, data)]));
     });
   }
 
   legendTexture() {
     if (!this.legends) {
-      const { canvas } = drawLegends(LAPTOP, 12);
+      const { canvas } = once('legends', () => drawLegends(LAPTOP, 12));
       this.legends = new ImageTexture(this.context);
       this.legends.upload(canvas, canvas.width, canvas.height, { mips: true });
     }
@@ -498,6 +629,7 @@ export class Renderer {
     const base = extra.mirror ? multiply(extra.mirror, model) : model;
     const k = PHONE_MM;
     const meshes = this.hardwareMeshes(layout.type);
+    const s = layout.spec;
     const parts = [];
     if (layout.type === 'laptop') {
       const { lid, deck, axis } = laptopParts(layout);
@@ -519,7 +651,6 @@ export class Renderer {
       });
       return program;
     }
-    const s = layout.spec;
     const hw = layout.hardware;
     const legends = layout.type === 'laptop' ? this.legendTexture().texture : this.blank;
     const program = this.programs.phone.use();
@@ -601,16 +732,21 @@ export class Renderer {
         .set('uGrille', [1e4, 1e4, 1e4, 1e4])
         .set('uGrillePitch', [1, 0.1]);
     }
+    program.set('uPrepass', extra.prepass ? 1 : 0);
+    const solid = (extra.opacity ?? 1) >= 1;
+    if (solid) this.gl.disable(this.gl.BLEND);
     parts.forEach(part => {
       program.set('uModel', part.model).set('uNormalMatrix', normalMatrix(part.model));
       part.mesh.draw();
     });
+    if (solid) this.gl.enable(this.gl.BLEND);
     return program;
   }
 
   ensureShadowMaps(size) {
     if (this.shadowMip?.width === size) return;
     this.disposeShadowMaps();
+    this.shadowState = null;
     const gl = this.gl;
     const float = this.context.floatTargets;
     const internal = float ? gl.RG16F : gl.RGBA8;
@@ -634,16 +770,90 @@ export class Renderer {
     }
     this.shadowRaw = null;
     this.shadowMip = null;
+    this.shadowBake?.dispose();
+    this.shadowBake = null;
+    this.shadowState = null;
+    this.bakeState = null;
+  }
+
+  shadowKey(scene, size, heightScale) {
+    const info = scene.shadow;
+    const key = [size, heightScale, info.offset, info.facing, info.side, ...info.origin];
+    key.push(...info.normal, ...info.axisU, ...info.axisV, ...scene.lightDir);
+    scene.devices.forEach(item => {
+      if (item.device.hidden || item.device.shadow === false || (item.opacity ?? 1) < 0.01) return;
+      const { layout } = item;
+      const { body } = layout;
+      key.push(item.index, item.opacity ?? 1, layout.type, layout.spec?.id, layout.open, body.w, body.h);
+      key.push(body.radius, body.squircle, body.thickness, ...item.model);
+    });
+    return key;
+  }
+
+  bakeShadow(info, shadow, size) {
+    const gl = this.gl;
+    const want = Math.min(
+      size,
+      Math.max(128, 2 ** Math.ceil(Math.log2((3 * info.side) / Math.max(info.contact[0], 1e-6))))
+    );
+    if (this.shadowBake?.width !== want) {
+      this.shadowBake?.dispose();
+      this.shadowBake = new ColorTarget(gl, want, want, { internal: gl.RG16F });
+      this.bakeState = null;
+    }
+    const key = [this.shadowVersion, shadow.heightScale, ...shadow.shape, ...shadow.contact];
+    if (sameKey(this.bakeState, key)) return;
+    this.bakeState = null;
+    this.shadowBake.begin();
+    gl.disable(gl.BLEND);
+    gl.disable(gl.DEPTH_TEST);
+    this.programs.shadowBake
+      .use()
+      .texture('uShadow', this.shadowMip.texture)
+      .set('uShadowHeightScale', shadow.heightScale)
+      .set('uShadowMaxLod', this.shadowMip.levels - 1)
+      .set('uShadowShape', shadow.shape)
+      .set('uShadowContact', shadow.contact);
+    this.tri.draw();
+    this.bakeState = key;
+    this.bakeVersion = (this.bakeVersion || 0) + 1;
   }
 
   renderShadows(scene, strength) {
     const info = scene.shadow;
     if (!info) return null;
-    const gl = this.gl;
     const float = this.context.floatTargets;
     const size = scene.preview ? 1024 : 2048;
     this.ensureShadowMaps(size);
     const heightScale = float ? 1 : 1 / Math.max(info.maxHeight * 1.2, 1e-3);
+    const key = this.shadowKey(scene, size, heightScale);
+    if (!sameKey(this.shadowState, key)) this.rasterShadows(scene, info, size, heightScale, key);
+    const mip = this.shadowMip;
+    const perUnit = size / info.side;
+    const heightLod = Math.log2(Math.max((scene.size * 0.16 * perUnit) / 0.85, 1));
+    const shadow = {
+      heightScale,
+      strength,
+      shape: [
+        Math.max(1.2, info.sharp * perUnit),
+        info.spread * perUnit,
+        info.ambient * perUnit,
+        Math.min(heightLod, mip.levels - 1)
+      ],
+      contact: [info.contact[0] * perUnit, info.contactHeight[0], info.contact[1] * perUnit, info.contactHeight[1]],
+      baked: false
+    };
+    if (scene.preview && float) {
+      this.bakeShadow(info, shadow, size);
+      shadow.baked = true;
+    }
+    return shadow;
+  }
+
+  rasterShadows(scene, info, size, heightScale, key) {
+    const gl = this.gl;
+    const float = this.context.floatTargets;
+    this.shadowState = null;
     this.shadowRaw.begin();
     gl.clearColor(float ? 1e4 : 1, 1, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -677,19 +887,8 @@ export class Renderer {
       .set('uTexel', [1 / (size * 2), 1 / (size * 2)]);
     this.tri.draw();
     this.buildShadowMips();
-    const perUnit = size / info.side;
-    const heightLod = Math.log2(Math.max((scene.size * 0.16 * perUnit) / 0.85, 1));
-    return {
-      heightScale,
-      strength,
-      shape: [
-        Math.max(1.2, info.sharp * perUnit),
-        info.spread * perUnit,
-        info.ambient * perUnit,
-        Math.min(heightLod, mip.levels - 1)
-      ],
-      contact: [info.contact[0] * perUnit, info.contactHeight[0], info.contact[1] * perUnit, info.contactHeight[1]]
-    };
+    this.shadowState = key;
+    this.shadowVersion = (this.shadowVersion || 0) + 1;
   }
 
   renderReflection(scene, env) {
@@ -702,7 +901,7 @@ export class Renderer {
     gl.depthFunc(gl.LEQUAL);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    this.prepareColor(scene, env, 1);
+    this.prepareColor(scene, env, 1, scene.devices);
     this.drawColorItems(scene, scene.devices, { mirror, artScale: 0.5 });
     target.resolveColor();
     target.beginDepth();
@@ -720,17 +919,32 @@ export class Renderer {
       this.drawDeviceParts(item, scene, 'depth', { mirror });
     });
     gl.disable(gl.DEPTH_TEST);
-    this.buildMips(target, target.color, target.levels);
-    this.buildMips(target, target.depth, target.levels);
+    this.buildMipPair(target, target.color, target.depth, target.levels);
   }
 
-  prepareColor(scene, env, mirrored) {
+  prepareColor(scene, env, mirrored, items) {
+    const studio = env.studio;
+    this.studio = studio;
+    const phones = items.some(usesPhone);
+    if (phones) {
+      const phone = this.programs.phone.use();
+      phone.set('uView', scene.camera.view).set('uProj', scene.camera.proj).set('uCamPos', scene.camera.eye);
+      phone
+        .setArray('uLightPos', studio.positions, 4)
+        .setArray('uLightColor', studio.colors, 4)
+        .set('uSkyTop', studio.top)
+        .set('uSkyHorizon', studio.horizon)
+        .set('uSkyGround', studio.ground)
+        .set('uExposure', studio.exposure);
+    }
+    if (phones && items.every(usesPhone)) return;
     const device = this.programs.device.use();
     Object.entries(this.lighting(scene, env)).forEach(([key, value]) => device.set(key, value));
     device
       .set('uView', scene.camera.view)
       .set('uProj', scene.camera.proj)
       .set('uMirrored', mirrored)
+      .set('uFocal', (mirrored ? this.reflection.height : scene.height) / (2 * scene.camera.tanY))
       .set('uPlane', [0, 0, 0, 0])
       .setArray('uLightPos', env.studio.positions, 4)
       .setArray('uLightColor', env.studio.colors, 4)
@@ -738,17 +952,6 @@ export class Renderer {
       .set('uSkyHorizon', env.studio.horizon)
       .set('uSkyGround', env.studio.ground)
       .set('uExposure', env.studio.exposure);
-    const phone = this.programs.phone.use();
-    phone.set('uView', scene.camera.view).set('uProj', scene.camera.proj).set('uCamPos', scene.camera.eye);
-    const studio = env.studio;
-    this.studio = studio;
-    phone
-      .setArray('uLightPos', studio.positions, 4)
-      .setArray('uLightColor', studio.colors, 4)
-      .set('uSkyTop', studio.top)
-      .set('uSkyHorizon', studio.horizon)
-      .set('uSkyGround', studio.ground)
-      .set('uExposure', studio.exposure);
   }
 
   studioFor(scene, background) {
@@ -813,9 +1016,79 @@ export class Renderer {
     };
   }
 
-  composite(target, scene, { opacity = 1, sharp = false } = {}) {
+  layerBounds(scene, items) {
+    const { width, height } = scene;
+    const vp = scene.camera.viewProj;
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    for (const item of items) {
+      if (item.device.hidden) continue;
+      for (const local of localCorners(item)) {
+        const p = transformPoint(item.model, local);
+        const w = vp[3] * p[0] + vp[7] * p[1] + vp[11] * p[2] + vp[15];
+        if (!(w > 1e-4)) return null;
+        const x = ((vp[0] * p[0] + vp[4] * p[1] + vp[8] * p[2] + vp[12]) / w) * 0.5 + 0.5;
+        const y = ((vp[1] * p[0] + vp[5] * p[1] + vp[9] * p[2] + vp[13]) / w) * 0.5 + 0.5;
+        x0 = Math.min(x0, x);
+        y0 = Math.min(y0, y);
+        x1 = Math.max(x1, x);
+        y1 = Math.max(y1, y);
+      }
+    }
+    if (!(x1 >= x0 && y1 >= y0)) return [0, 0, 0, 0];
+    return [
+      clamp(Math.floor(x0 * width) - 2, 0, width),
+      clamp(Math.floor(y0 * height) - 2, 0, height),
+      clamp(Math.ceil(x1 * width) + 2, 0, width),
+      clamp(Math.ceil(y1 * height) + 2, 0, height)
+    ];
+  }
+
+  mergeLayers(scene, order) {
+    const out = [];
+    let group = null;
+    order.forEach(entry => {
+      if (entry.kind !== 'devices') {
+        out.push(entry);
+        group = null;
+        return;
+      }
+      const box = this.layerBounds(scene, entry.items);
+      if (group && box && group.boxes.every(other => !overlaps(other, box))) {
+        group.items = [...group.items, ...entry.items];
+        group.boxes.push(box);
+        group.box = [
+          Math.min(group.box[0], box[0]),
+          Math.min(group.box[1], box[1]),
+          Math.max(group.box[2], box[2]),
+          Math.max(group.box[3], box[3])
+        ];
+        return;
+      }
+      group = box ? { ...entry, items: [...entry.items], boxes: [box], box } : null;
+      out.push(group || entry);
+    });
+    return out;
+  }
+
+  copyTarget(from, to) {
+    const gl = this.gl;
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, from.fbo);
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, to.fbo);
+    gl.blitFramebuffer(0, 0, from.width, from.height, 0, 0, to.width, to.height, gl.COLOR_BUFFER_BIT, gl.NEAREST);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+  }
+
+  composite(target, scene, { opacity = 1, sharp = false, box = null } = {}) {
     const gl = this.gl;
     this.accum.begin();
+    if (box) {
+      gl.enable(gl.SCISSOR_TEST);
+      gl.scissor(box[0], box[1], box[2] - box[0], box[3] - box[1]);
+    }
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.disable(gl.DEPTH_TEST);
@@ -834,10 +1107,12 @@ export class Renderer {
       .set('uOpacity', opacity)
       .set('uSharp', sharp || scene.cocScale < 0.25 ? 1 : 0);
     this.tri.draw();
+    if (box) gl.disable(gl.SCISSOR_TEST);
   }
 
   render(scene, options = {}) {
-    if (this.lost) return;
+    if (this.lost) return false;
+    if (options.defer && !this.ready(scene, options)) return false;
     const gl = this.gl;
     const { width, height } = scene;
     if (this.canvas.width !== width) this.canvas.width = width;
@@ -855,9 +1130,6 @@ export class Renderer {
     const shadowStrength = clamp(light.shadow ?? 0.5, 0, 1);
 
     gl.disable(gl.SCISSOR_TEST);
-    this.accum.begin();
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
 
     let shadow = null;
     if (shadowStrength > 0.001 && scene.devices.length) shadow = this.renderShadows(scene, shadowStrength);
@@ -865,12 +1137,8 @@ export class Renderer {
     if (reflect) this.renderReflection(scene, env);
 
     const layer = this.layer;
-    gl.bindFramebuffer(gl.FRAMEBUFFER, layer.mrt);
-    gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
-    gl.viewport(0, 0, width, height);
-    gl.disable(gl.BLEND);
-    gl.disable(gl.DEPTH_TEST);
-    const program = this.programs.background.use();
+    const dof = scene.cocScale >= 0.25;
+    const baked = Boolean(shadow?.baked);
     const studio = bg.kind === 'studio';
     const kind = BG_KINDS[bg.kind] ?? 0;
     const imageKinds =
@@ -895,80 +1163,114 @@ export class Renderer {
         xform = [1 / zoomIn, fy, (1 - 1 / zoomIn) / 2, (1 - fy) / 2];
       }
     }
-    const imageBlur =
+    const blurLevel =
       bg.kind === 'ambient'
         ? Math.log2(Math.max(2, width * 0.06 * (bg.blur ?? 1)))
         : (bg.blur ?? 0) > 0
           ? Math.log2(1 + width * 0.02 * bg.blur)
           : 0;
+    const imageBlur = blurLevel > 0 && image?.shift ? Math.max(1e-3, blurLevel - image.shift) : blurLevel;
     const center = scene.camera.target;
-    program
-      .set('uInvViewProj', scene.camera.invViewProj)
-      .set('uCamPos', scene.camera.eye)
-      .set('uKind', kind)
-      .set('uColorA', colors[0])
-      .set('uColorB', colors[1])
-      .set('uColorC', colors[2])
-      .set('uColorD', colors[3])
-      .set('uAngle', bg.angle ?? 90)
-      .set('uAspect', [width / Math.max(width, height), height / Math.max(width, height)])
-      .set('uStudio', studio ? 1 : 0)
-      .set('uFloorY', scene.floorY)
-      .set('uWallZ', scene.wallZ)
-      .set('uCurve', scene.size * 1.1)
-      .set('uFloorColor', colors[0])
-      .set('uWallColor', colors[1])
-      .set('uPoolCenter', [center[0], scene.floorY, center[2]])
-      .set('uPoolRadius', scene.size * (bg.pool ?? 1.1))
-      .set('uPoolStrength', bg.light ?? 0.35)
-      .set('uSpot', bg.spot ?? (bg.kind === 'spotlight' ? 0.35 : 0))
-      .set('uSpotCenter', bg.spotCenter || [0.5, 0.62])
-      .set('uSpotSize', bg.spotSize ?? 0.42)
-      .set('uVignette', transparent ? 0 : (doc.finish?.vignette ?? 0.18))
-      .texture('uImage', image?.texture || this.blank)
-      .set('uHasImage', image ? 1 : 0)
-      .set('uImageXform', xform)
-      .set('uImageBlur', imageBlur)
-      .set('uImageDim', bg.dim ?? (bg.kind === 'ambient' ? 0.45 : 0))
-      .set('uImageSaturation', bg.saturation ?? (bg.kind === 'ambient' ? 1.15 : 1))
-      .texture('uShadow', shadow ? this.shadowMip.texture : this.blank)
-      .set('uHasShadow', shadow ? 1 : 0)
-      .set('uShadowOpacity', shadowStrength)
-      .set('uShadowHeightScale', shadow ? shadow.heightScale : 1)
-      .set('uShadowMaxLod', shadow ? this.shadowMip.levels - 1 : 0)
-      .set('uShadowTint', mixRgb(hexToRgb(light.tint || '#000000'), [0, 0, 0], 0.4))
-      .set('uShadowAxisU', scene.shadow?.axisU || [1, 0, 0])
-      .set('uShadowAxisV', scene.shadow?.axisV || [0, 1, 0])
-      .set(
-        'uShadowRegion',
-        scene.shadow ? [scene.shadow.origin[0], scene.shadow.origin[1], scene.shadow.side] : [0, 0, 1]
-      )
-      .set('uShadowShape', shadow ? shadow.shape : [1, 1, 1, 1])
-      .set('uShadowContact', shadow ? shadow.contact : [1, 1, 1, 1])
-      .set('uShadowFloor', scene.receiver === 'floor' ? 1 : 0)
-      .texture('uReflection', reflect ? this.reflection.color : this.blank)
-      .texture('uReflectionDepth', reflect ? this.reflection.depth : this.blank)
-      .set('uHasReflection', reflect ? 1 : 0)
-      .set('uReflectionStrength', clamp(light.reflection ?? 0, 0, 1))
-      .set('uReflectionBlur', scene.pixelsPerUnit * 0.5 * (0.4 + (light.softness ?? 0.5)))
-      .set('uReflectionMaxLod', this.reflection.levels - 1)
-      .set('uFloat', float ? 1 : 0)
-      .set('uDepthScale', this.depthScale)
-      .set('uTime', scene.time)
-      .set('uTransparent', transparent ? 1 : 0);
-    this.tri.draw();
-    gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
-    if (scene.cocScale >= 0.25) {
-      this.buildMips(layer, layer.color, layer.levels);
-      this.buildMips(layer, layer.depth, layer.levels);
+    const values = [
+      ['uInvViewProj', scene.camera.rays],
+      ['uCamPos', scene.camera.eye],
+      ['uKind', kind],
+      ['uColorA', colors[0]],
+      ['uColorB', colors[1]],
+      ['uColorC', colors[2]],
+      ['uColorD', colors[3]],
+      ['uAngle', bg.angle ?? 90],
+      ['uAspect', [width / Math.max(width, height), height / Math.max(width, height)]],
+      ['uStudio', studio ? 1 : 0],
+      ['uFloorY', scene.floorY],
+      ['uWallZ', scene.wallZ],
+      ['uCurve', scene.size * 1.1],
+      ['uFloorColor', colors[0]],
+      ['uWallColor', colors[1]],
+      ['uPoolCenter', [center[0], scene.floorY, center[2]]],
+      ['uPoolRadius', scene.size * (bg.pool ?? 1.1)],
+      ['uPoolStrength', bg.light ?? 0.35],
+      ['uSpot', bg.spot ?? (bg.kind === 'spotlight' ? 0.35 : 0)],
+      ['uSpotCenter', bg.spotCenter || [0.5, 0.62]],
+      ['uSpotSize', bg.spotSize ?? 0.42],
+      ['uVignette', transparent ? 0 : (doc.finish?.vignette ?? 0.18)],
+      ['uHasImage', image ? 1 : 0],
+      ['uImageXform', xform],
+      ['uImageBlur', imageBlur],
+      ['uImageDim', bg.dim ?? (bg.kind === 'ambient' ? 0.45 : 0)],
+      ['uImageSaturation', bg.saturation ?? (bg.kind === 'ambient' ? 1.15 : 1)],
+      ['uHasShadow', shadow ? 1 : 0],
+      ['uShadowOpacity', shadowStrength],
+      ['uShadowHeightScale', shadow ? shadow.heightScale : 1],
+      ['uShadowMaxLod', shadow ? this.shadowMip.levels - 1 : 0],
+      ['uShadowTint', mixRgb(hexToRgb(light.tint || '#000000'), [0, 0, 0], 0.4)],
+      ['uShadowAxisU', scene.shadow?.axisU || [1, 0, 0]],
+      ['uShadowAxisV', scene.shadow?.axisV || [0, 1, 0]],
+      ['uShadowRegion', scene.shadow ? [scene.shadow.origin[0], scene.shadow.origin[1], scene.shadow.side] : [0, 0, 1]],
+      ['uShadowShape', shadow ? shadow.shape : [1, 1, 1, 1]],
+      ['uShadowContact', shadow ? shadow.contact : [1, 1, 1, 1]],
+      ['uShadowFloor', scene.receiver === 'floor' ? 1 : 0],
+      ['uHasReflection', reflect ? 1 : 0],
+      ['uReflectionStrength', clamp(light.reflection ?? 0, 0, 1)],
+      ['uReflectionBlur', scene.pixelsPerUnit * 0.5 * (0.4 + (light.softness ?? 0.5))],
+      ['uReflectionMaxLod', this.reflection.levels - 1],
+      ['uFloat', float ? 1 : 0],
+      ['uDepthScale', this.depthScale],
+      ['uTime', kind === 2 ? scene.time : 0],
+      ['uTransparent', transparent ? 1 : 0]
+    ];
+    let stamp = null;
+    if (scene.preview && !reflect) {
+      stamp = [width, height, dof ? 1 : 0, baked ? 1 : 0, scene.focusDepth, scene.cocScale];
+      stamp.push(image ? image.version : 0, shadow ? this.shadowVersion : 0, baked ? this.bakeVersion : 0);
+      for (const [, value] of values) {
+        if (Array.isArray(value)) for (const part of value) stamp.push(part);
+        else stamp.push(value);
+      }
     }
-    this.composite(layer, scene);
+    if (stamp && sameKey(this.heldStamp, stamp)) {
+      this.copyTarget(this.held, this.accum);
+    } else {
+      this.accum.begin();
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      if (dof) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, layer.mrt);
+        gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]);
+      } else {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, layer.colorFbo);
+      }
+      gl.viewport(0, 0, width, height);
+      gl.disable(gl.BLEND);
+      gl.disable(gl.DEPTH_TEST);
+      const program = (baked ? this.programs.backgroundBaked : this.programs.background).use();
+      values.forEach(([name, value]) => program.set(name, value));
+      program
+        .texture('uImage', image?.texture || this.blank)
+        .texture('uShadow', shadow ? this.shadowMip.texture : this.blank)
+        .texture('uShadowBake', baked ? this.shadowBake.texture : this.blank)
+        .texture('uReflection', reflect ? this.reflection.color : this.blank)
+        .texture('uReflectionDepth', reflect ? this.reflection.depth : this.blank);
+      this.tri.draw();
+      if (dof) {
+        gl.drawBuffers([gl.COLOR_ATTACHMENT0]);
+        this.buildMipPair(layer, layer.color, layer.depth, layer.levels);
+      }
+      this.composite(layer, scene);
+      if (stamp && sameKey(this.seenStamp, stamp)) {
+        if (!this.held) this.held = new ColorTarget(gl, width, height, { internal: float ? gl.RGBA16F : gl.RGBA8 });
+        this.copyTarget(this.accum, this.held);
+        this.heldStamp = stamp;
+      }
+      this.seenStamp = stamp;
+    }
 
     const type = options.type;
-    const order = this.layerOrder(scene, type);
+    const sorted = this.layerOrder(scene, type);
+    const order = dof ? sorted : this.mergeLayers(scene, sorted);
     order.forEach(entry => {
-      if (entry.kind === 'type') this.renderTypeLayer(scene, type, env);
-      else this.renderDeviceLayer(scene, entry.items, env);
+      if (entry.kind === 'type') this.renderTypeLayer(scene, type, dof);
+      else this.renderDeviceLayer(scene, entry.items, env, dof, entry.box);
     });
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -990,6 +1292,7 @@ export class Renderer {
       .set('uOpaque', transparent ? 0 : 1)
       .set('uBackdrop', colors[0]);
     this.tri.draw();
+    return true;
   }
 
   layerOrder(scene, type) {
@@ -1027,7 +1330,7 @@ export class Renderer {
       .sort((a, b) => b.depth - a.depth)
       .forEach(({ item, opacity }) => {
         gl.colorMask(false, false, false, false);
-        this.drawDeviceParts(item, scene, 'color', { ...extra, opacity: 1 });
+        this.drawDeviceParts(item, scene, 'color', { ...extra, opacity: 1, prepass: true });
         gl.colorMask(true, true, true, true);
         gl.depthMask(false);
         this.drawDeviceParts(item, scene, 'color', { ...extra, opacity });
@@ -1063,7 +1366,7 @@ export class Renderer {
     gl.depthMask(true);
   }
 
-  renderDeviceLayer(scene, items, env) {
+  renderDeviceLayer(scene, items, env, dof, box) {
     const gl = this.gl;
     const layer = this.layer;
     layer.beginColor();
@@ -1072,29 +1375,28 @@ export class Renderer {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     this.drawRestShadows(scene, items);
-    this.prepareColor(scene, env, 0);
+    this.prepareColor(scene, env, 0, items);
     this.drawColorItems(scene, items);
-    layer.resolveColor();
-    layer.beginDepth();
+    layer.resolveColor(dof ? null : box);
     gl.disable(gl.BLEND);
-    const depth = this.programs.depth.use();
-    depth
-      .set('uView', scene.camera.view)
-      .set('uProj', scene.camera.proj)
-      .set('uFloat', this.context.floatTargets ? 1 : 0)
-      .set('uDepthScale', this.depthScale)
-      .set('uHeightMode', 0)
-      .set('uPlane', [0, 0, 0, 0]);
-    items.forEach(item => this.drawDeviceParts(item, scene, 'depth'));
-    gl.disable(gl.DEPTH_TEST);
-    if (scene.cocScale >= 0.25) {
-      this.buildMips(layer, layer.color, layer.levels);
-      this.buildMips(layer, layer.depth, layer.levels);
+    if (dof) {
+      layer.beginDepth();
+      const depth = this.programs.depth.use();
+      depth
+        .set('uView', scene.camera.view)
+        .set('uProj', scene.camera.proj)
+        .set('uFloat', this.context.floatTargets ? 1 : 0)
+        .set('uDepthScale', this.depthScale)
+        .set('uHeightMode', 0)
+        .set('uPlane', [0, 0, 0, 0]);
+      items.forEach(item => this.drawDeviceParts(item, scene, 'depth'));
     }
-    this.composite(layer, scene);
+    gl.disable(gl.DEPTH_TEST);
+    if (dof) this.buildMipPair(layer, layer.color, layer.depth, layer.levels);
+    this.composite(layer, scene, { box: dof ? null : box });
   }
 
-  renderTypeLayer(scene, type) {
+  renderTypeLayer(scene, type, dof) {
     const gl = this.gl;
     const layer = this.layer;
     if (type.key !== this.typeKey) {
@@ -1116,22 +1418,21 @@ export class Renderer {
       .set('uOpacity', type.opacity);
     this.quadMesh.draw();
     layer.resolveColor();
-    layer.beginDepth();
     gl.disable(gl.BLEND);
-    const depth = this.programs.quadDepth.use();
-    depth
-      .set('uView', scene.camera.view)
-      .set('uProj', scene.camera.proj)
-      .set('uModel', type.model)
-      .set('uNormalMatrix', normalMatrix(type.model))
-      .set('uPlane', [0, 0, 0, 0])
-      .texture('uTexture', this.typeTexture.texture)
-      .set('uFloat', this.context.floatTargets ? 1 : 0)
-      .set('uDepthScale', this.depthScale);
-    this.quadMesh.draw();
-    if (scene.cocScale >= 0.25) {
-      this.buildMips(layer, layer.color, layer.levels);
-      this.buildMips(layer, layer.depth, layer.levels);
+    if (dof) {
+      layer.beginDepth();
+      const depth = this.programs.quadDepth.use();
+      depth
+        .set('uView', scene.camera.view)
+        .set('uProj', scene.camera.proj)
+        .set('uModel', type.model)
+        .set('uNormalMatrix', normalMatrix(type.model))
+        .set('uPlane', [0, 0, 0, 0])
+        .texture('uTexture', this.typeTexture.texture)
+        .set('uFloat', this.context.floatTargets ? 1 : 0)
+        .set('uDepthScale', this.depthScale);
+      this.quadMesh.draw();
+      this.buildMipPair(layer, layer.color, layer.depth, layer.levels);
     }
     this.composite(layer, scene);
   }
@@ -1148,7 +1449,7 @@ export class Renderer {
   dispose() {
     this.disposeTargets();
     this.disposeShadowMaps();
-    Object.values(this.programs).forEach(program => program.dispose());
+    Object.values(this.madePrograms).forEach(program => program.dispose());
     this.meshes.forEach(group => Object.values(group).forEach(mesh => mesh.dispose()));
     this.meshes.clear();
     this.arts.forEach(texture => texture?.dispose());

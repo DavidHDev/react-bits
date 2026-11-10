@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import PreviewSlider from '../../../components/common/Preview/PreviewSlider';
 import PreviewSwitch from '../../../components/common/Preview/PreviewSwitch';
 import PreviewSelect from '../../../components/common/Preview/PreviewSelect';
@@ -17,7 +18,7 @@ const hexToRgb = hex => {
   return match ? match.slice(1).map(part => parseInt(part, 16) / 255) : [0.5, 0.5, 0.5];
 };
 
-const PropControl = ({ definition, value, onChange }) => {
+const PropControl = memo(function PropControl({ definition, value, onChange }) {
   const { name, label, type } = definition;
   const set = next => onChange(name, next);
 
@@ -62,7 +63,7 @@ const PropControl = ({ definition, value, onChange }) => {
     default:
       return null;
   }
-};
+});
 
 export default function PropControls({ definitions, props, onChange }) {
   return definitions.map(definition => (

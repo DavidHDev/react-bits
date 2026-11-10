@@ -583,9 +583,7 @@ const compile = (gl, type, source) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
+  return shader;
 };
 
 const link = (gl, vertexSource, fragmentSource) => {
@@ -598,17 +596,17 @@ const link = (gl, vertexSource, fragmentSource) => {
   gl.linkProgram(program);
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    gl.deleteProgram(program);
-    return null;
-  }
-  const uniforms = {};
-  const total = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  return { program, uniforms: {} };
+};
+
+const resolve = (gl, item) => {
+  if (!gl.getProgramParameter(item.program, gl.LINK_STATUS)) return false;
+  const total = gl.getProgramParameter(item.program, gl.ACTIVE_UNIFORMS);
   for (let i = 0; i < total; i++) {
-    const info = gl.getActiveUniform(program, i);
-    if (info) uniforms[info.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(program, info.name);
+    const info = gl.getActiveUniform(item.program, i);
+    if (info) item.uniforms[info.name.replace(/\[0\]$/, '')] = gl.getUniformLocation(item.program, info.name);
   }
-  return { program, uniforms };
+  return true;
 };
 
 const toRgb = hex => {
@@ -704,6 +702,7 @@ const Topography = ({
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
+  const releaseRef = useRef(0);
   const [generation, setGeneration] = useState(0);
   const settings = {
     color,
@@ -752,16 +751,37 @@ const Topography = ({
       powerPreference: 'high-performance'
     });
     if (!container || !canvas || !gl) return undefined;
+    cancelAnimationFrame(releaseRef.current);
+    releaseRef.current = 0;
 
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
     const floatTargets = !!gl.getExtension('EXT_color_buffer_float');
     const terrain = link(gl, terrainVertex(floatTargets), terrainFragment(floatTargets));
-    const fieldProgram = floatTargets ? link(gl, FULLSCREEN, FIELD) : null;
-    const sculptProgram = floatTargets ? link(gl, FULLSCREEN, SCULPT) : null;
+    let fieldProgram = floatTargets ? link(gl, FULLSCREEN, FIELD) : null;
+    let sculptProgram = floatTargets ? link(gl, FULLSCREEN, SCULPT) : null;
     const downProgram = link(gl, FULLSCREEN, DOWNSAMPLE);
     const blurProgram = link(gl, FULLSCREEN, BLUR);
     const compositeProgram = link(gl, FULLSCREEN, COMPOSITE);
     const markerProgram = link(gl, MARKER_VERTEX, MARKER_FRAGMENT);
     if (!terrain || !downProgram || !blurProgram || !compositeProgram || !markerProgram) return undefined;
+    const current = () =>
+      [terrain, fieldProgram, sculptProgram, downProgram, blurProgram, compositeProgram, markerProgram].filter(Boolean);
+    const linked = () =>
+      !parallel || current().every(item => gl.getProgramParameter(item.program, parallel.COMPLETION_STATUS_KHR));
+    const optional = item => {
+      if (!item || resolve(gl, item)) return item;
+      gl.deleteProgram(item.program);
+      return null;
+    };
+    const settle = () => {
+      fieldProgram = optional(fieldProgram);
+      sculptProgram = optional(sculptProgram);
+      return [terrain, downProgram, blurProgram, compositeProgram, markerProgram].every(item => resolve(gl, item));
+    };
+    if (!parallel && !settle()) {
+      current().forEach(item => gl.deleteProgram(item.program));
+      return undefined;
+    }
 
     const onContextLost = event => event.preventDefault();
     const onContextRestored = () => setGeneration(value => value + 1);
@@ -808,7 +828,7 @@ const Topography = ({
 
     const source = createTarget();
     const levels = Array.from({ length: BLOOM_LEVELS }, () => [createTarget(), createTarget()]);
-    const sculpt = sculptProgram
+    let sculpt = sculptProgram
       ? [0, 1].map(() => {
           const texture = createTexture(SCULPT_SIZE, SCULPT_SIZE, gl.RG16F, gl.REPEAT);
           const framebuffer = gl.createFramebuffer();
@@ -886,6 +906,8 @@ const Topography = ({
     let last = 0;
     let visible = true;
     let quiet = 0;
+    let ready = !parallel;
+    let disposed = false;
 
     const camera = () => {
       const pitch = Math.min((state.tilt * Math.PI) / 180 + state.pitch, Math.PI / 2 - 1e-4);
@@ -1003,6 +1025,7 @@ const Topography = ({
     };
 
     const render = () => {
+      if (!ready) return;
       const s = settingsRef.current;
       const cam = camera();
       viewProjection(cam, view.width / view.height, matrix);
@@ -1281,6 +1304,26 @@ const Topography = ({
     const frame = now => {
       raf = 0;
       if (!visible || document.hidden) return;
+      if (!ready) {
+        if (gl.isContextLost()) return;
+        if (!linked()) {
+          raf = requestAnimationFrame(frame);
+          return;
+        }
+        if (!settle()) {
+          dispose();
+          return;
+        }
+        if (!sculptProgram && sculpt) {
+          sculpt.forEach(target => {
+            gl.deleteTexture(target.texture);
+            gl.deleteFramebuffer(target.framebuffer);
+          });
+          sculpt = null;
+        }
+        ready = true;
+        render();
+      }
       const s = settingsRef.current;
       if (s.dpr !== sizedDpr) resize();
       const dt = last ? clamp((now - last) / 1000, 0, 1 / 20) : 1 / 60;
@@ -1465,10 +1508,18 @@ const Topography = ({
     window.addEventListener('pointercancel', onPointerUp, { passive: true });
     document.documentElement.addEventListener('pointerleave', onPointerLeave);
     document.addEventListener('visibilitychange', onVisibility);
-    resize();
-    wakeRef.current = wake;
+    const release = () => {
+      if (gl.isContextLost()) return;
+      if (!ready && !linked()) {
+        requestAnimationFrame(release);
+        return;
+      }
+      current().forEach(item => gl.deleteProgram(item.program));
+    };
 
-    return () => {
+    const dispose = () => {
+      if (disposed) return;
+      disposed = true;
       cancelAnimationFrame(raf);
       wakeRef.current = null;
       resizeObserver.disconnect();
@@ -1495,10 +1546,20 @@ const Topography = ({
       if (field.texture) gl.deleteTexture(field.texture);
       if (field.heights) gl.deleteTexture(field.heights);
       gl.deleteFramebuffer(field.framebuffer);
-      [terrain, fieldProgram, sculptProgram, downProgram, blurProgram, compositeProgram, markerProgram].forEach(
-        program => program && gl.deleteProgram(program.program)
-      );
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      release();
+    };
+
+    resize();
+    wakeRef.current = wake;
+
+    return () => {
+      dispose();
+      const free = () => {
+        releaseRef.current = 0;
+        if (!canvas.isConnected && !gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      };
+      if (canvas.isConnected) releaseRef.current = requestAnimationFrame(free);
+      else free();
     };
   }, [generation]);
 

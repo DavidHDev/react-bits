@@ -337,6 +337,7 @@ function SplashCursor({
 }: SplashCursorProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const releaseRef = useRef(0);
   const [generation, setGeneration] = useState(0);
 
   const settings = {
@@ -371,6 +372,7 @@ function SplashCursor({
   }, [contained]);
 
   useEffect(() => {
+    window.clearTimeout(releaseRef.current);
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
     const gl = canvas.getContext('webgl2', {
@@ -384,6 +386,7 @@ function SplashCursor({
     if (!gl) return undefined;
     gl.getExtension('EXT_color_buffer_float');
     gl.getExtension('EXT_color_buffer_half_float');
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
 
     const renderable = (internal: number, format: number) => {
       const texture = gl.createTexture();
@@ -411,7 +414,6 @@ function SplashCursor({
     };
     const vertex = compile(gl.VERTEX_SHADER, VERTEX);
     const programs: Record<string, { program: WebGLProgram; uniforms: Uniforms }> = {};
-    let broken = false;
     Object.entries(SHADERS).forEach(([name, body]) => {
       const fragment = compile(gl.FRAGMENT_SHADER, HEADER + body);
       const program = gl.createProgram() as WebGLProgram;
@@ -420,16 +422,30 @@ function SplashCursor({
       gl.bindAttribLocation(program, 0, 'aPosition');
       gl.linkProgram(program);
       gl.deleteShader(fragment);
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) broken = true;
-      const uniforms: Uniforms = {};
-      const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-      for (let i = 0; i < count; i++) {
-        const info = gl.getActiveUniform(program, i);
-        if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
-      }
-      programs[name] = { program, uniforms };
+      programs[name] = { program, uniforms: {} };
     });
     gl.deleteShader(vertex);
+
+    let ready = false;
+    let broken = false;
+
+    const complete = () =>
+      !parallel ||
+      Object.values(programs).every(item => gl.getProgramParameter(item.program, parallel.COMPLETION_STATUS_KHR));
+
+    const finish = () => {
+      if (!complete()) return false;
+      Object.values(programs).forEach(item => {
+        if (!gl.getProgramParameter(item.program, gl.LINK_STATUS)) broken = true;
+        const count = gl.getProgramParameter(item.program, gl.ACTIVE_UNIFORMS);
+        for (let i = 0; i < count; i++) {
+          const info = gl.getActiveUniform(item.program, i);
+          if (info) item.uniforms[info.name] = gl.getUniformLocation(item.program, info.name);
+        }
+      });
+      ready = true;
+      return true;
+    };
 
     const buffer = gl.createBuffer();
     const vao = gl.createVertexArray();
@@ -443,6 +459,15 @@ function SplashCursor({
     let disposed = false;
     let lost = false;
 
+    const retire = () => {
+      if (gl.isContextLost()) return;
+      if (!ready && !complete()) {
+        requestAnimationFrame(retire);
+        return;
+      }
+      Object.values(programs).forEach(item => gl.deleteProgram(item.program));
+    };
+
     const release = () => {
       if (gl.isContextLost()) return;
       targets.forEach(target => {
@@ -450,11 +475,12 @@ function SplashCursor({
         gl.deleteTexture(target.texture);
       });
       targets.clear();
-      Object.values(programs).forEach(item => gl.deleteProgram(item.program));
+      retire();
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
     };
 
+    if (!parallel) finish();
     if (broken) {
       release();
       return undefined;
@@ -889,9 +915,33 @@ function SplashCursor({
       lastActivity = now;
     };
 
+    const hold = () => {
+      const now = performance.now();
+      if (introStart >= 0) introStart = now + 150;
+      last = now;
+      lastActivity = now;
+      pointers.forEach(pointer => {
+        pointer.px = pointer.x;
+        pointer.py = pointer.y;
+        pointer.moved = false;
+      });
+    };
+
     const frame = (now: number) => {
       raf = 0;
       if (disposed || lost) return;
+      if (!ready) {
+        if (gl.isContextLost()) return;
+        if (!finish()) {
+          hold();
+          raf = requestAnimationFrame(frame);
+          return;
+        }
+        if (broken) {
+          dispose();
+          return;
+        }
+      }
       const s = settingsRef.current;
       const dt = clamp((now - last) / 1000, 0, 1 / 60);
       last = now;
@@ -1003,10 +1053,8 @@ function SplashCursor({
     canvas.addEventListener('webglcontextlost', onLost);
     canvas.addEventListener('webglcontextrestored', onRestored);
 
-    resize();
-    if (introStart >= 0) wake();
-
-    return () => {
+    const dispose = () => {
+      if (disposed) return;
       disposed = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('pointermove', onPointerMove);
@@ -1019,6 +1067,16 @@ function SplashCursor({
       canvas.removeEventListener('webglcontextlost', onLost);
       canvas.removeEventListener('webglcontextrestored', onRestored);
       release();
+    };
+
+    if (ready) resize();
+    if (introStart >= 0) wake();
+
+    return () => {
+      dispose();
+      releaseRef.current = window.setTimeout(() => {
+        if (!canvas.isConnected && !gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      }, 0);
     };
   }, [generation]);
 

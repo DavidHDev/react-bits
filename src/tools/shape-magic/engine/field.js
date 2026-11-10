@@ -1,68 +1,9 @@
-const INF = 1e20;
+import { alphaToField } from './edt';
+
+export { alphaToField } from './edt';
+
 const MAX_SIDE = 896;
 const PAD = 0.14;
-
-const edt1d = (grid, offset, stride, length, f, v, z) => {
-  for (let i = 0; i < length; i++) f[i] = grid[offset + i * stride];
-  const meet = (q, r) => (f[q] + q * q - (f[r] + r * r)) / (2 * q - 2 * r);
-  let k = 0;
-  v[0] = 0;
-  z[0] = -INF;
-  z[1] = INF;
-  for (let q = 1; q < length; q++) {
-    let s = meet(q, v[k]);
-    while (s <= z[k]) {
-      k--;
-      s = meet(q, v[k]);
-    }
-    k++;
-    v[k] = q;
-    z[k] = s;
-    z[k + 1] = INF;
-  }
-  k = 0;
-  for (let q = 0; q < length; q++) {
-    while (z[k + 1] < q) k++;
-    const d = q - v[k];
-    grid[offset + q * stride] = d * d + f[v[k]];
-  }
-};
-
-const edt = (grid, width, height) => {
-  const size = Math.max(width, height);
-  const f = new Float64Array(size);
-  const v = new Uint16Array(size);
-  const z = new Float64Array(size + 1);
-  for (let x = 0; x < width; x++) edt1d(grid, x, width, height, f, v, z);
-  for (let y = 0; y < height; y++) edt1d(grid, y * width, 1, width, f, v, z);
-};
-
-export function alphaToField(alpha, width, height) {
-  const count = width * height;
-  const outer = new Float64Array(count);
-  const inner = new Float64Array(count);
-  for (let i = 0; i < count; i++) {
-    const a = alpha[i] / 255;
-    if (a >= 1) {
-      outer[i] = 0;
-      inner[i] = INF;
-    } else if (a <= 0) {
-      outer[i] = INF;
-      inner[i] = 0;
-    } else {
-      const d = 0.5 - a;
-      outer[i] = d > 0 ? d * d : 0;
-      inner[i] = d < 0 ? d * d : 0;
-    }
-  }
-  edt(outer, width, height);
-  edt(inner, width, height);
-  const long = Math.max(width, height);
-  const scale = 2 / long;
-  const data = new Float32Array(count);
-  for (let i = 0; i < count; i++) data[i] = (Math.sqrt(outer[i]) - Math.sqrt(inner[i])) * scale;
-  return { data, width, height, halfW: width / long, halfH: height / long };
-}
 
 const paddedCanvas = (contentW, contentH) => {
   const long = Math.max(contentW, contentH);
@@ -71,6 +12,53 @@ const paddedCanvas = (contentW, contentH) => {
   canvas.width = contentW + pad * 2;
   canvas.height = contentH + pad * 2;
   return { canvas, pad };
+};
+
+let worker = null;
+let jobs = 0;
+const waiting = new Map();
+
+const settleAll = () => {
+  waiting.forEach(job => {
+    try {
+      job.resolve(alphaToField(job.alpha, job.width, job.height));
+    } catch (problem) {
+      job.reject(problem);
+    }
+  });
+  waiting.clear();
+};
+
+const fieldWorker = () => {
+  if (worker !== null) return worker;
+  try {
+    worker = new Worker(new URL('./field.worker.js', import.meta.url), { type: 'module' });
+    worker.onmessage = ({ data }) => {
+      const job = waiting.get(data.id);
+      if (!job) return;
+      waiting.delete(data.id);
+      job.resolve({ data: data.data, width: data.width, height: data.height, halfW: data.halfW, halfH: data.halfH });
+    };
+    worker.onerror = event => {
+      event.preventDefault?.();
+      worker.terminate();
+      worker = false;
+      settleAll();
+    };
+  } catch {
+    worker = false;
+  }
+  return worker;
+};
+
+const computeField = (alpha, width, height) => {
+  const target = typeof Worker === 'undefined' ? false : fieldWorker();
+  if (!target) return Promise.resolve(alphaToField(alpha, width, height));
+  return new Promise((resolve, reject) => {
+    jobs += 1;
+    waiting.set(jobs, { resolve, reject, alpha, width, height });
+    target.postMessage({ id: jobs, alpha, width, height });
+  });
 };
 
 const readAlpha = canvas => {
@@ -158,7 +146,7 @@ export async function imageField(source, key) {
   const context = canvas.getContext('2d', { willReadFrequently: true });
   context.imageSmoothingQuality = 'high';
   context.drawImage(raw, box.x, box.y, box.width, box.height, pad, pad, contentW, contentH);
-  const field = alphaToField(readAlpha(canvas), canvas.width, canvas.height);
+  const field = await computeField(readAlpha(canvas), canvas.width, canvas.height);
   return { ...field, key, aspect: contentW / contentH, color: canvas };
 }
 
@@ -190,6 +178,6 @@ export async function textField({ text, font = 'Geist', weight = 700, tracking =
   context.fillStyle = '#000';
   context.textBaseline = 'alphabetic';
   context.fillText(value, pad / shrink + left, pad / shrink + ascent);
-  const field = alphaToField(readAlpha(canvas), canvas.width, canvas.height);
+  const field = await computeField(readAlpha(canvas), canvas.width, canvas.height);
   return { ...field, key, aspect: contentW / contentH };
 }

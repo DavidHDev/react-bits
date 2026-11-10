@@ -57,6 +57,7 @@ type Uniforms = Record<string, WebGLUniformLocation | null>;
 
 interface Program {
   program: WebGLProgram;
+  fragment: WebGLShader;
   uniforms: Uniforms;
 }
 
@@ -395,20 +396,13 @@ const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
   return shader;
 };
 
-const link = (gl: WebGL2RenderingContext, fragmentSource: string): Program | null => {
-  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+const link = (gl: WebGL2RenderingContext, vertex: WebGLShader | null, fragmentSource: string): Program | null => {
   const fragment = compile(gl, gl.FRAGMENT_SHADER, fragmentSource);
   const program = vertex && fragment ? gl.createProgram() : null;
   if (!vertex || !fragment || !program) {
-    if (vertex) gl.deleteShader(vertex);
     if (fragment) gl.deleteShader(fragment);
     return null;
   }
@@ -416,20 +410,23 @@ const link = (gl: WebGL2RenderingContext, fragmentSource: string): Program | nul
   gl.attachShader(program, fragment);
   gl.bindAttribLocation(program, 0, 'aPosition');
   gl.linkProgram(program);
-  gl.deleteShader(vertex);
-  gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(program));
-    gl.deleteProgram(program);
-    return null;
+  return { program, fragment, uniforms: {} };
+};
+
+const inspect = (gl: WebGL2RenderingContext, vertex: WebGLShader, item: Program) => {
+  const linked = Boolean(gl.getProgramParameter(item.program, gl.LINK_STATUS));
+  if (linked) {
+    const count = gl.getProgramParameter(item.program, gl.ACTIVE_UNIFORMS);
+    for (let index = 0; index < count; index++) {
+      const info = gl.getActiveUniform(item.program, index);
+      if (info) item.uniforms[info.name] = gl.getUniformLocation(item.program, info.name);
+    }
+  } else {
+    const failed = [vertex, item.fragment].filter(shader => !gl.getShaderParameter(shader, gl.COMPILE_STATUS));
+    if (failed.length) failed.forEach(shader => console.error(gl.getShaderInfoLog(shader)));
+    else console.error(gl.getProgramInfoLog(item.program));
   }
-  const uniforms: Uniforms = {};
-  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-  for (let index = 0; index < count; index++) {
-    const info = gl.getActiveUniform(program, index);
-    if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
-  }
-  return { program, uniforms };
+  return linked;
 };
 
 const GhostCursor = ({
@@ -461,6 +458,7 @@ const GhostCursor = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
+  const releaseRef = useRef(0);
   const [generation, setGeneration] = useState(0);
   const [touch] = useState(
     () => typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
@@ -497,6 +495,7 @@ const GhostCursor = ({
   });
 
   useEffect(() => {
+    window.clearTimeout(releaseRef.current);
     const container = containerRef.current;
     const canvas = canvasRef.current;
     const parent = container?.parentElement;
@@ -519,10 +518,38 @@ const GhostCursor = ({
       if (reposition) parent.style.position = previousPosition;
       return;
     }
-    const linked = [link(gl, SIM), link(gl, SHADE), link(gl, DOWN), link(gl, BLUR), link(gl, COMPOSITE)];
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
+    const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+    const linked = [
+      link(gl, vertex, SIM),
+      link(gl, vertex, SHADE),
+      link(gl, vertex, DOWN),
+      link(gl, vertex, BLUR),
+      link(gl, vertex, COMPOSITE)
+    ];
     const [simProgram, shadeProgram, downProgram, blurProgram, compositeProgram] = linked;
-    if (!simProgram || !shadeProgram || !downProgram || !blurProgram || !compositeProgram) {
-      for (const item of linked) if (item) gl.deleteProgram(item.program);
+    let ready = false;
+    let broken = false;
+
+    const complete = () =>
+      !parallel || linked.every(item => !item || gl.getProgramParameter(item.program, parallel.COMPLETION_STATUS_KHR));
+
+    const discard = () => {
+      if (gl.isContextLost()) return;
+      if (!ready && !complete()) {
+        requestAnimationFrame(discard);
+        return;
+      }
+      for (const item of linked) {
+        if (!item) continue;
+        gl.deleteShader(item.fragment);
+        gl.deleteProgram(item.program);
+      }
+      gl.deleteShader(vertex);
+    };
+
+    if (!vertex || !simProgram || !shadeProgram || !downProgram || !blurProgram || !compositeProgram) {
+      discard();
       if (reposition) parent.style.position = previousPosition;
       return;
     }
@@ -533,6 +560,20 @@ const GhostCursor = ({
       blur: blurProgram,
       composite: compositeProgram
     };
+
+    const finish = () => {
+      if (!complete()) return false;
+      for (const item of Object.values(programs)) if (!inspect(gl, vertex, item)) broken = true;
+      ready = true;
+      return true;
+    };
+
+    if (!parallel) finish();
+    if (broken) {
+      discard();
+      if (reposition) parent.style.position = previousPosition;
+      return;
+    }
 
     const vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
@@ -599,6 +640,7 @@ const GhostCursor = ({
     let pageVisible = document.visibilityState !== 'hidden';
     let lost = false;
     let dirty = true;
+    let disposed = false;
     let introLive = settingsRef.current.intro && !reduced && generation === 0;
     let introStart = -1;
 
@@ -733,9 +775,31 @@ const GhostCursor = ({
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
+    const hold = () => {
+      last = performance.now();
+      if (pointer.moved > -1e9) pointer.moved = last;
+      if (ghost.ready && pointer.inside) {
+        ghost.x = ghost.px = pointer.x;
+        ghost.y = ghost.py = pointer.y;
+        ghost.vx = ghost.vy = 0;
+      }
+    };
+
     const frame = (now: number) => {
       raf = 0;
       if (lost) return;
+      if (!ready) {
+        if (gl.isContextLost()) return;
+        if (!finish()) {
+          hold();
+          if (visible && pageVisible) raf = requestAnimationFrame(frame);
+          return;
+        }
+        if (broken) {
+          dispose();
+          return;
+        }
+      }
       const dt = clamp((now - last) / 1000 || 0, 0, 0.05);
       last = Math.max(last, now);
       clock += dt;
@@ -899,10 +963,9 @@ const GhostCursor = ({
     };
     document.addEventListener('visibilitychange', onVisibility);
 
-    resize();
-    if (introLive) wake();
-
-    return () => {
+    const dispose = () => {
+      if (disposed) return;
+      disposed = true;
       cancelAnimationFrame(raf);
       wakeRef.current = null;
       resizeObserver.disconnect();
@@ -920,9 +983,19 @@ const GhostCursor = ({
         }
         gl.deleteBuffer(buffer);
         gl.deleteVertexArray(vao);
-        for (const item of Object.values(programs)) gl.deleteProgram(item.program);
+        discard();
       }
       if (reposition) parent.style.position = previousPosition;
+    };
+
+    resize();
+    if (introLive) wake();
+
+    return () => {
+      dispose();
+      releaseRef.current = window.setTimeout(() => {
+        if (!canvas.isConnected && !gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      }, 0);
     };
   }, [generation]);
 

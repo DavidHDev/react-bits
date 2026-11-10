@@ -6,6 +6,11 @@ const HEAD_BUDGET = 480 * 1024 * 1024;
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const whenIdle = callback =>
+  typeof window.requestIdleCallback === 'function'
+    ? window.requestIdleCallback(callback, { timeout: 1000 })
+    : setTimeout(callback, 250);
+
 export const abortError = () => new DOMException('Export cancelled', 'AbortError');
 
 const guard = signal => {
@@ -72,7 +77,7 @@ export async function createRenderer({ layout, output, ratio, theme, seed = 1 })
       drawLayers(context, collectLayers(api.stage()), output.width, output.height, fill);
     },
     destroy() {
-      iframe.remove();
+      whenIdle(() => iframe.remove());
     }
   };
 }

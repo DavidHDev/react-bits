@@ -21,6 +21,8 @@ const variantsOf = sound =>
     1
   );
 
+const inspected = new Map();
+
 export function createPlayer() {
   let context = null;
   let master = null;
@@ -28,9 +30,9 @@ export function createPlayer() {
   let level = new Float32Array(1024);
   let spectrum = new Float32Array(512);
   const renders = new Map();
-  const inspected = new Map();
   const listeners = new Set();
   let current = null;
+  let quiet = 0;
 
   const ensure = () => {
     if (!context) {
@@ -78,19 +80,26 @@ export function createPlayer() {
     return pending;
   };
 
+  const inspectKey = (sound, tune) => `${context?.sampleRate || 48000}:${keyOf(sound.id, tune)}`;
+
   const inspect = (sound, tune = {}) => {
     const key = keyOf(sound.id, tune);
     if (renders.has(key)) return renders.get(key).then(result => result.info);
-    let pending = inspected.get(key);
+    const stored = inspectKey(sound, tune);
+    let pending = inspected.get(stored);
     if (!pending) {
       const rate = context?.sampleRate || 48000;
-      pending = renderSound(sound.recipe, shapeOf(tune), { sampleRate: rate }).then(analyze);
-      inspected.set(key, pending);
-      pending.catch(() => inspected.delete(key));
+      pending = renderSound(sound.recipe, shapeOf(tune), { sampleRate: rate })
+        .then(buffer => new Promise(resolve => setTimeout(() => resolve(buffer), 0)))
+        .then(analyze);
+      inspected.set(stored, pending);
+      pending.catch(() => inspected.delete(stored));
       if (inspected.size > 600) inspected.delete(inspected.keys().next().value);
     }
     return pending;
   };
+
+  const known = (sound, tune = {}) => renders.has(keyOf(sound.id, tune)) || inspected.has(inspectKey(sound, tune));
 
   const stop = () => {
     if (current?.source) {
@@ -138,8 +147,10 @@ export function createPlayer() {
   return {
     render,
     inspect,
+    known,
     play,
     stop,
+    warm: ensure,
     preload: (sound, tune) => render(sound, tune).catch(() => null),
     progress() {
       if (!current || !context) return null;
@@ -152,10 +163,11 @@ export function createPlayer() {
       analyser.getFloatTimeDomainData(level);
       let sum = 0;
       for (let i = 0; i < level.length; i += 1) sum += level[i] * level[i];
+      quiet = sum === 0 ? quiet + 1 : 0;
       return 1 - Math.exp(-Math.sqrt(sum / level.length) * 6);
     },
     bands(out = [0, 0, 0]) {
-      if (!analyser) return out.fill(0);
+      if (!analyser || quiet > 30) return out.fill(0);
       analyser.getFloatFrequencyData(spectrum);
       const step = context.sampleRate / analyser.fftSize;
       BANDS.forEach(([low, high], index) => {

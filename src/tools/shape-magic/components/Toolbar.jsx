@@ -105,6 +105,7 @@ export default function Toolbar({
   onTogglePlay,
   onUpload,
   onAddShape,
+  onPrewarmShape,
   onAddText,
   onExport
 }) {
@@ -133,6 +134,7 @@ export default function Toolbar({
           {picking && (
             <ShapePicker
               thumbs={thumbs}
+              onPrewarm={onPrewarmShape}
               onPick={type => {
                 setPicking(false);
                 onAddShape(type);

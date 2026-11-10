@@ -1,6 +1,6 @@
 import { Engine } from '../engine/engine';
 import { EFFECTS } from '../effects';
-import { mediaFrame } from '../media';
+import { mediaFrame, primeImage } from '../media';
 
 export const even = value => Math.max(2, Math.round(value / 2) * 2);
 
@@ -52,7 +52,7 @@ const renderFrame = (engine, layers, media, width, height, time, orient = null, 
 const uploadMedia = (engine, media) => {
   const frame = mediaFrame(media);
   if (!frame) throw new Error('The picture is not ready yet. Try again in a moment.');
-  engine.setSource(frame.image, frame.width, frame.height);
+  engine.setSource(frame.image, frame.width, frame.height, { bottomUp: frame.bottomUp });
   return frame;
 };
 
@@ -117,6 +117,7 @@ export async function renderStill({
   mime = 'image/png',
   quality = 0.92
 }) {
+  await primeImage(media);
   const { canvas, engine } = exportEngine(width, height);
   try {
     const orient = uploadMedia(engine, media);
@@ -261,6 +262,7 @@ export async function renderVideoFromStill({
   const output = new mb.Output({ format: outputFormat(mb, format), target });
   let finished = false;
   try {
+    await primeImage(media);
     const orient = uploadMedia(engine, media);
     const source = new mb.CanvasSource(canvas, {
       codec: encoding.codec,
@@ -330,6 +332,7 @@ export async function renderGif({
       const track = await input.getPrimaryVideoTrack();
       sink = new mb.VideoSampleSink(track);
     }
+    if (!sink) await primeImage(media);
     let orient = sink ? null : uploadMedia(engine, media);
     const times = Array.from({ length: total }, (_, index) => start + index / fps);
     const samples = sink ? sink.samplesAtTimestamps(times) : null;

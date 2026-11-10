@@ -5,7 +5,7 @@ import { Icon } from './ui';
 
 const finePointer = () => typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
 
-export default function Picker({ entry, light, onSelect }) {
+export default function Picker({ entry, light, onSelect, onIntent }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
   const buttonRef = useRef(null);
@@ -49,6 +49,7 @@ export default function Picker({ entry, light, onSelect }) {
             activeId={entry.id}
             light={light}
             autoFocus={finePointer()}
+            onIntent={onIntent}
             onEscape={() => setOpen(false)}
             onSelect={id => {
               onSelect(id);

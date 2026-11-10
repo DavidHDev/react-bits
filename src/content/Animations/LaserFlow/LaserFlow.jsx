@@ -395,9 +395,7 @@ const compile = (gl, type, source) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
+  return shader;
 };
 
 const link = (gl, vertexSource, fragmentSource) => {
@@ -410,9 +408,7 @@ const link = (gl, vertexSource, fragmentSource) => {
   gl.linkProgram(program);
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
-  if (gl.getProgramParameter(program, gl.LINK_STATUS)) return program;
-  gl.deleteProgram(program);
-  return null;
+  return program;
 };
 
 const locate = (gl, program, names) => {
@@ -451,6 +447,7 @@ export const LaserFlow = ({
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
+  const releaseRef = useRef(0);
   const settings = {
     surfaceRef,
     beamPosition: clamp(beamPosition, 0, 1),
@@ -491,42 +488,54 @@ export const LaserFlow = ({
       stencil: false
     });
     if (!container || !canvas || !gl) return undefined;
+    cancelAnimationFrame(releaseRef.current);
+    releaseRef.current = 0;
 
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
     const program = link(gl, VERTEX, FRAGMENT);
     if (!program) return undefined;
 
-    const uniforms = locate(gl, program, [
-      'uResolution',
-      'uDpr',
-      'uScale',
-      'uTime',
-      'uBeamX',
-      'uSurface',
-      'uRadius',
-      'uIntro',
-      'uPour',
-      'uRun',
-      'uLens',
-      'uReveal',
-      'uRevealMap',
-      'uRevealInfo',
-      'uAtmosphere',
-      'uAmount',
-      'uShape',
-      'uExtra',
-      'uTheme',
-      'uTint'
-    ]);
-
     const vao = gl.createVertexArray();
     const buffer = gl.createBuffer();
-    gl.bindVertexArray(vao);
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const positionLocation = gl.getAttribLocation(program, 'aPosition');
-    gl.enableVertexAttribArray(positionLocation);
-    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-    gl.bindVertexArray(null);
+    let uniforms = {};
+    let ready = false;
+
+    const linked = () => !parallel || gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR);
+
+    const resolveProgram = () => {
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false;
+      uniforms = locate(gl, program, [
+        'uResolution',
+        'uDpr',
+        'uScale',
+        'uTime',
+        'uBeamX',
+        'uSurface',
+        'uRadius',
+        'uIntro',
+        'uPour',
+        'uRun',
+        'uLens',
+        'uReveal',
+        'uRevealMap',
+        'uRevealInfo',
+        'uAtmosphere',
+        'uAmount',
+        'uShape',
+        'uExtra',
+        'uTheme',
+        'uTint'
+      ]);
+      gl.bindVertexArray(vao);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const positionLocation = gl.getAttribLocation(program, 'aPosition');
+      gl.enableVertexAttribArray(positionLocation);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+      gl.bindVertexArray(null);
+      ready = true;
+      return true;
+    };
 
     const revealTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, revealTexture);
@@ -664,6 +673,7 @@ export const LaserFlow = ({
     };
 
     const render = () => {
+      if (!ready) return;
       const s = settingsRef.current;
       resolveColor(s);
       const { width, height } = state;
@@ -756,6 +766,16 @@ export const LaserFlow = ({
     const frame = now => {
       raf = 0;
       if (!alive || !visible || document.hidden) return;
+      if (!ready) {
+        if (!gl.isContextLost() && !linked()) {
+          raf = requestAnimationFrame(frame);
+          return;
+        }
+        if (!resolveProgram()) {
+          dispose();
+          return;
+        }
+      }
       const s = settingsRef.current;
       const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
       last = now;
@@ -828,15 +848,18 @@ export const LaserFlow = ({
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     document.documentElement.addEventListener('pointerleave', onPointerLeave);
     document.addEventListener('visibilitychange', onVisibility);
-    resize();
-    wake();
 
-    wakeRef.current = () => {
-      if (!raf) render();
-      wake();
+    const release = () => {
+      if (gl.isContextLost()) return;
+      if (!ready && !linked()) {
+        requestAnimationFrame(release);
+        return;
+      }
+      gl.deleteProgram(program);
     };
 
-    return () => {
+    const dispose = () => {
+      if (!alive) return;
       alive = false;
       cancelAnimationFrame(raf);
       wakeRef.current = null;
@@ -848,7 +871,29 @@ export const LaserFlow = ({
       gl.deleteTexture(revealTexture);
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
-      gl.deleteProgram(program);
+      release();
+    };
+
+    wakeRef.current = () => {
+      if (!raf) render();
+      wake();
+    };
+
+    if (parallel || resolveProgram()) {
+      resize();
+      wake();
+    } else {
+      dispose();
+    }
+
+    return () => {
+      dispose();
+      const free = () => {
+        releaseRef.current = 0;
+        if (!canvas.isConnected && !gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      };
+      if (canvas.isConnected) releaseRef.current = requestAnimationFrame(free);
+      else free();
     };
   }, []);
 

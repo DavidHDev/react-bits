@@ -62,6 +62,13 @@ const hash = value => {
 const parseColor = (() => {
   let context = null;
   return (value, fallback) => {
+    const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(value);
+    if (hex) {
+      const digits = hex[1].length === 3 ? hex[1].replace(/./g, digit => digit + digit) : hex[1];
+      const packed = parseInt(digits, 16);
+      return [(packed >> 16) / 255, ((packed >> 8) & 255) / 255, (packed & 255) / 255, 1];
+    }
+    if (value === 'transparent') return [0, 0, 0, 0];
     if (typeof document === 'undefined') return fallback;
     if (!context) {
       const canvas = document.createElement('canvas');
@@ -91,9 +98,15 @@ const compile = (gl, type, source) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
+  return shader;
+};
+
+const retire = (gl, parallel, program) => {
+  if (parallel && gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR) === false) {
+    requestAnimationFrame(() => retire(gl, parallel, program));
+    return;
+  }
+  gl.deleteProgram(program);
 };
 
 const createRibbon = (index, x, y) => {
@@ -163,6 +176,7 @@ export default function Ribbons({
     if (!container || !canvas) return undefined;
     const gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: false });
     if (!gl) return undefined;
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
     const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
     const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
     const program = gl.createProgram();
@@ -172,28 +186,34 @@ export default function Ribbons({
     gl.linkProgram(program);
     gl.deleteShader(vertex);
     gl.deleteShader(fragment);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return undefined;
-    gl.useProgram(program);
 
     const uniforms = {};
-    const uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
-    for (let i = 0; i < uniformCount; i++) {
-      const info = gl.getActiveUniform(program, i);
-      if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
-    }
-
     const vao = gl.createVertexArray();
     const buffer = gl.createBuffer();
-    gl.bindVertexArray(vao);
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    const position = gl.getAttribLocation(program, 'a_position');
-    const shapeAttribute = gl.getAttribLocation(program, 'a_shape');
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, STRIDE * 4, 0);
-    gl.enableVertexAttribArray(shapeAttribute);
-    gl.vertexAttribPointer(shapeAttribute, 4, gl.FLOAT, false, STRIDE * 4, 8);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+    const prepare = () => {
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false;
+      gl.useProgram(program);
+      const uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < uniformCount; i++) {
+        const info = gl.getActiveUniform(program, i);
+        if (info) uniforms[info.name] = gl.getUniformLocation(program, info.name);
+      }
+      gl.bindVertexArray(vao);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      const position = gl.getAttribLocation(program, 'a_position');
+      const shapeAttribute = gl.getAttribLocation(program, 'a_shape');
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, STRIDE * 4, 0);
+      gl.enableVertexAttribArray(shapeAttribute);
+      gl.vertexAttribPointer(shapeAttribute, 4, gl.FLOAT, false, STRIDE * 4, 8);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      return true;
+    };
+
+    let ready = !parallel && prepare();
+    if (!parallel && !ready) return undefined;
 
     const pointX = new Float32Array(POINTS);
     const pointY = new Float32Array(POINTS);
@@ -370,6 +390,7 @@ export default function Ribbons({
     };
 
     const draw = () => {
+      if (!ready) return;
       const s = settingsRef.current;
       resize();
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -403,6 +424,18 @@ export default function Ribbons({
     const frame = now => {
       state.raf = 0;
       if (!state.alive) return;
+      if (!ready) {
+        if (!parallel) return;
+        if (!gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR)) {
+          if (state.visible) state.raf = requestAnimationFrame(frame);
+          return;
+        }
+        ready = prepare();
+        if (!ready) {
+          state.alive = false;
+          return;
+        }
+      }
       const dt = state.last ? Math.min(0.05, (now - state.last) / 1000) : 1 / 60;
       state.last = now;
       state.time += dt;
@@ -456,7 +489,7 @@ export default function Ribbons({
 
     engineRef.current = {
       redraw: () => {
-        draw();
+        if (!state.raf) draw();
         wake();
       }
     };
@@ -476,7 +509,8 @@ export default function Ribbons({
       engineRef.current = null;
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
-      gl.deleteProgram(program);
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      else retire(gl, parallel, program);
     };
   }, []);
 

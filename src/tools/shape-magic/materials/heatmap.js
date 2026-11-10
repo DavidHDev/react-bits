@@ -5,6 +5,7 @@ export default {
   group: 'heat',
   source: 'paper',
   animated: true,
+  softTaps: true,
   outside: true,
   normals: false,
   surface: 0.04,

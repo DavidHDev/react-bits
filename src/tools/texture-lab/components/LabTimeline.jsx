@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { PauseIcon, PlayIcon } from '@hugeicons/core-free-icons';
 import { Icon, Tip } from '../../background-studio/components/ui';
 
@@ -17,22 +17,58 @@ const format = seconds => {
 export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay, children }) {
   const player = media.player;
   const duration = media.duration || 0;
-  const [time, setTime] = useState(player.currentTime);
   const [active, setActive] = useState(null);
   const trackRef = useRef(null);
+  const headRef = useRef(null);
+  const timeRef = useRef(null);
   const trimRef = useRef(trim);
   const finishRef = useRef(null);
+  const syncRef = useRef(() => {});
   trimRef.current = trim;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let frame = 0;
-    const tick = () => {
-      setTime(player.currentTime);
-      frame = requestAnimationFrame(tick);
+    let shownLeft = null;
+    let shownText = null;
+    let shownValue = null;
+    const sync = () => {
+      const time = player.currentTime;
+      const left = `${(clamp(time, 0, duration) / Math.max(duration, 0.001)) * 100}%`;
+      const text = format(time);
+      const value = String(Number(time.toFixed(2)));
+      const head = headRef.current;
+      const label = timeRef.current;
+      const track = trackRef.current;
+      if (head && left !== shownLeft) head.style.left = left;
+      if (label && text !== shownText) label.textContent = text;
+      if (track && value !== shownValue) track.setAttribute('aria-valuenow', value);
+      if (track && text !== shownText) track.setAttribute('aria-valuetext', text);
+      shownLeft = left;
+      shownText = text;
+      shownValue = value;
     };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [player]);
+    const tick = () => {
+      frame = 0;
+      sync();
+      if (!player.paused) frame = requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+    syncRef.current = () => {
+      sync();
+      start();
+    };
+    sync();
+    start();
+    const stop = player.onFrame?.(start);
+    return () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      stop?.();
+      syncRef.current = () => {};
+    };
+  }, [player, duration, playing]);
 
   useEffect(() => () => finishRef.current?.(), []);
 
@@ -79,6 +115,7 @@ export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay
       if (mode === 'start') player.seek(setStart(value));
       else if (mode === 'end') player.seek(setEnd(value));
       else player.seek(clamp(value, trimRef.current[0], trimRef.current[1]));
+      syncRef.current();
     };
     apply(event.clientX);
     const move = moveEvent => {
@@ -94,6 +131,7 @@ export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay
       if (!wasPlaying) return;
       if (mode === 'end') player.seek(trimRef.current[0]);
       player.play();
+      syncRef.current();
     };
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', finish);
@@ -118,6 +156,7 @@ export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay
     if (mode === 'start') player.seek(setStart(value));
     else if (mode === 'end') player.seek(setEnd(value));
     else player.seek(clamp(value, start, end));
+    syncRef.current();
   };
 
   const pct = value => `${(clamp(value, 0, duration) / Math.max(duration, 0.001)) * 100}%`;
@@ -134,7 +173,7 @@ export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay
           <Icon icon={playing ? PauseIcon : PlayIcon} />
         </button>
       </Tip>
-      <span className="lab-time">{format(time)}</span>
+      <span className="lab-time" ref={timeRef} />
       <div
         className="lab-scrub"
         ref={trackRef}
@@ -142,15 +181,13 @@ export default function LabTimeline({ media, playing, trim, onTrim, onTogglePlay
         aria-label="Playhead"
         aria-valuemin={0}
         aria-valuemax={duration}
-        aria-valuenow={Number(time.toFixed(2))}
-        aria-valuetext={format(time)}
         tabIndex={0}
         onPointerDown={event => begin(event, 'seek')}
         onKeyDown={event => nudge(event, 'seek')}
       >
         <span className="lab-scrub-rail" />
         <span className="lab-scrub-range" style={{ left: pct(trim[0]), width: pct(trim[1] - trim[0]) }} />
-        <span className="lab-scrub-head" style={{ left: pct(time) }} />
+        <span className="lab-scrub-head" ref={headRef} />
         <span
           className="lab-trim lab-trim--start"
           style={{ left: pct(trim[0]) }}

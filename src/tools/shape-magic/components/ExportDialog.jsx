@@ -24,6 +24,7 @@ import {
   hasMotion,
   outputSize,
   renderFavicons,
+  releaseExportRenderers,
   renderGif,
   renderPNG,
   renderVideo
@@ -187,6 +188,8 @@ export default function ExportDialog({ doc, light, settings = {}, onSettings, on
       alive = false;
     };
   }, [snapshot, vector.background]);
+
+  useEffect(() => () => releaseExportRenderers(), []);
 
   useEffect(() => () => preview && URL.revokeObjectURL(preview), [preview]);
   useEffect(() => () => result?.url && URL.revokeObjectURL(result.url), [result]);

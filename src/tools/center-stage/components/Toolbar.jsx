@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import {
   ArrowDown01Icon,
   Download04Icon,
@@ -77,7 +77,7 @@ function AspectMenu({ value, onChange }) {
   );
 }
 
-export default function Toolbar({
+export default memo(function Toolbar({
   aspect,
   onAspect,
   playing,
@@ -164,4 +164,4 @@ export default function Toolbar({
       </div>
     </div>
   );
-}
+});

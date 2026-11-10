@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Engine } from './engine/engine';
+import { warmPatterns } from './engine/patterns';
+import { ensureGlyphFont } from './engine/assets';
 import { EFFECTS, EFFECT_LIST } from './effects';
 import { LOOKS, LOOKS_BY_ID } from './looks';
 import { useLayers } from './state/useLayers';
@@ -18,7 +20,8 @@ import {
   workSize
 } from './media';
 import { compactLayers, decodeLook, isStyleFile } from './share';
-import { EffectsGrid, GallerySearch, GalleryScroll, LooksGrid } from './components/Gallery';
+import { GallerySearch, GalleryScroll } from './components/Gallery';
+import { EffectsGrid, LooksGrid } from './components/Library';
 import LayersPanel from './components/LayersPanel';
 import LabToolbar from './components/LabToolbar';
 import LabStage from './components/LabStage';
@@ -35,6 +38,8 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 const SESSION = 'texture-lab';
 const MEDIA_SLOT = 'media';
 const STYLE_LIMIT = 1048576;
+const UPRIGHT = { rotation: 0, flip: false };
+const WARM_SIZE = { width: 1280, height: 720 };
 const LOOK_COUNT = LOOKS.length;
 const EFFECT_COUNT = EFFECT_LIST.length;
 
@@ -102,7 +107,8 @@ export default function TextureLab({ toolSelector }) {
   const mediaRef = useRef(null);
   const request = useRef(0);
 
-  const thumbs = useThumbnails(media, thumbVersion);
+  const library = wide ? railTab : mobileTab === 'effects' ? 'effects' : 'looks';
+  const { store: thumbs, watch } = useThumbnails(media, thumbVersion, engineRef, library);
 
   const session = useMemo(
     () => ({
@@ -132,73 +138,117 @@ export default function TextureLab({ toolSelector }) {
 
   const live = useRef({});
   live.current = { layers: stack.layers, media, comparing, playing, animated, strength };
+  const wake = useRef(() => {});
+  const owner = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return undefined;
     let engine;
     try {
-      engine = new Engine(canvas);
+      engine = new Engine(canvas, { preview: true });
     } catch (problem) {
       setError(problem.message);
       return undefined;
     }
     engineRef.current = engine;
+    const warming = setTimeout(() => engine.warm(live.current.layers, EFFECTS, WARM_SIZE), 0);
     let raf = 0;
     let last = performance.now();
     let shown = -1;
     let shownMedia = null;
+    let uploaded = -1;
+    let polled = 0;
+    let orient = UPRIGHT;
     const tick = now => {
-      raf = requestAnimationFrame(tick);
+      raf = 0;
       const state = live.current;
-      if (!state.media) return;
-      const dt = Math.min((now - last) / 1000, 0.1);
-      last = now;
       const media = state.media;
+      if (!media) return;
+      const dt = Math.min(Math.max(now - last, 0) / 1000, 0.1);
+      last = now;
       const kind = media.kind;
-      if (kind !== 'video' && (state.playing || kind === 'camera')) clock.current += dt;
-      let fresh = false;
-      if (kind === 'video') {
-        media.player.update();
-        fresh = media.player.version !== shown || shownMedia !== media;
+      const player = kind === 'video' ? media.player : null;
+      const camera = kind === 'camera';
+      if (camera || (player ? !player.paused : state.playing && state.animated)) {
+        raf = requestAnimationFrame(tick);
       }
-      const moving = kind === 'camera' || fresh || (state.playing && state.animated);
+      if (kind !== 'video' && (state.playing || camera)) clock.current += dt;
+      let stamp = 0;
+      if (player) {
+        player.update();
+        stamp = player.version;
+      } else if (camera) {
+        polled -= 1;
+        stamp = media.frames?.live() ? media.frames.count : polled;
+      }
+      const streamed = Boolean(player) || camera;
+      const fresh = streamed && (stamp !== shown || shownMedia !== media);
+      const moving = fresh || (camera ? state.animated : state.playing && state.animated);
       if (!moving && !dirty.current) return;
-      const frame = mediaFrame(media);
-      if (!frame) return;
+      const upload = streamed && (stamp !== uploaded || owner.current !== media);
+      if (!upload && owner.current !== media) return;
+      const frame = upload ? mediaFrame(media) : null;
+      if (upload && !frame) return;
       dirty.current = false;
-      if (kind === 'video') {
-        shown = media.player.version;
+      if (streamed) {
+        shown = stamp;
         shownMedia = media;
       }
       try {
-        if (kind !== 'image') engine.setSource(frame.image, frame.width, frame.height);
-        const time = kind === 'video' ? media.player.currentTime : clock.current;
+        if (upload) {
+          engine.setSource(frame.image, frame.width, frame.height);
+          owner.current = media;
+          uploaded = stamp;
+          orient = { rotation: frame.rotation, flip: frame.flip };
+        } else if (kind === 'image') orient = UPRIGHT;
+        const time = player ? player.currentTime : clock.current;
         engine.render(state.layers, EFFECTS, {
           ...workSize(media),
           time,
           frame: Math.round(time * 30),
           original: state.comparing,
           mirror: Boolean(media.mirror),
-          rotation: frame.rotation,
-          flip: frame.flip,
+          rotation: orient.rotation,
+          flip: orient.flip,
           strength: state.strength
         });
       } catch (problem) {
         console.error(problem);
       }
     };
-    raf = requestAnimationFrame(tick);
+    wake.current = () => {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(tick);
+    };
+    wake.current();
     return () => {
+      clearTimeout(warming);
       cancelAnimationFrame(raf);
+      raf = 0;
+      wake.current = () => {};
       engine.dispose();
       engineRef.current = null;
+      owner.current = null;
     };
   }, []);
 
   useEffect(() => {
     dirty.current = true;
+    wake.current();
   }, [stack.layers, comparing, media, zoom, strength]);
+
+  useEffect(() => {
+    warmPatterns();
+    ensureGlyphFont();
+  }, []);
+
+  useEffect(() => {
+    wake.current();
+  }, [playing, animated]);
+
+  useEffect(() => media?.player?.onFrame?.(() => wake.current()), [media]);
 
   const pickLook = useCallback(
     look => {
@@ -225,7 +275,11 @@ export default function TextureLab({ toolSelector }) {
       }
       releaseMedia(mediaRef.current);
       mediaRef.current = next;
-      if (next.kind === 'image') engineRef.current?.setSource(next.element, next.width, next.height);
+      if (next.kind === 'image' && engineRef.current) {
+        const frame = mediaFrame(next);
+        engineRef.current.setSource(frame.image, frame.width, frame.height, { bottomUp: frame.bottomUp, owner: next });
+        owner.current = next;
+      }
       if (next.kind === 'video') {
         const span = trimFor(range, next.duration);
         setTrim(span);
@@ -254,7 +308,7 @@ export default function TextureLab({ toolSelector }) {
     }
   }, []);
 
-  const openFile = useCallback(file => openMedia(() => loadFile(file)), [openMedia]);
+  const openFile = useCallback(file => openMedia(() => loadFile(file, { texels: true })), [openMedia]);
   const openSample = useCallback((sample, range) => openMedia(() => loadSample(sample), { trim: range }), [openMedia]);
   const openCamera = useCallback(
     () =>
@@ -293,7 +347,7 @@ export default function TextureLab({ toolSelector }) {
           openSample(defaultSample);
           return;
         }
-        openMedia(() => loadFile(file), { trim: initial.trim, stored: true }).then(opened => {
+        openMedia(() => loadFile(file, { texels: true }), { trim: initial.trim, stored: true }).then(opened => {
           if (opened === false) openSample(defaultSample);
         });
       });
@@ -503,11 +557,11 @@ export default function TextureLab({ toolSelector }) {
   const canPlay = Boolean(media) && media.kind !== 'camera' && (media.kind === 'video' || animated);
   const isPlaying = playing;
 
-  const library = tab =>
+  const gallery = tab =>
     tab === 'looks' ? (
-      <LooksGrid thumbs={thumbs} activeLook={stack.look} onApply={pickLook} query={queries.looks} />
+      <LooksGrid store={thumbs} activeLook={stack.look} onApply={pickLook} query={queries.looks} watch={watch} />
     ) : (
-      <EffectsGrid thumbs={thumbs} onAdd={addEffect} query={queries.effects} />
+      <EffectsGrid store={thumbs} onAdd={addEffect} query={queries.effects} watch={watch} />
     );
 
   const search = tab => (
@@ -553,7 +607,7 @@ export default function TextureLab({ toolSelector }) {
           {toolSelector}
           <Track label="Library" value={railTab} options={RAIL_TABS} onChange={setRailTab} className="lab-rail-tabs" />
           {search(railTab)}
-          <GalleryScroll>{library(railTab)}</GalleryScroll>
+          <GalleryScroll>{gallery(railTab)}</GalleryScroll>
         </aside>
       )}
 
@@ -611,7 +665,7 @@ export default function TextureLab({ toolSelector }) {
           ) : (
             <>
               {search(mobileTab)}
-              <GalleryScroll>{library(mobileTab)}</GalleryScroll>
+              <GalleryScroll>{gallery(mobileTab)}</GalleryScroll>
             </>
           )}
         </aside>
@@ -629,7 +683,7 @@ export default function TextureLab({ toolSelector }) {
           ) : (
             <>
               {search(mobileTab)}
-              <div className="lab-mobile-gallery">{library(mobileTab)}</div>
+              <div className="lab-mobile-gallery">{gallery(mobileTab)}</div>
             </>
           )}
         </section>

@@ -28,4 +28,4 @@ export const shaderVariant = (scene = {}, style = {}) => {
 };
 
 export const variantKey = variant =>
-  `${variant.capacity}:${variant.types.join(',')}:${[variant.morph, variant.patterns, variant.radialCopies, variant.linearCopies, variant.shadow, variant.bevel].map(Number).join('')}`;
+  `${variant.capacity}:${variant.types.join(',')}:${[variant.morph, variant.patterns, variant.radialCopies, variant.linearCopies, variant.shadow, variant.bevel].map(Number).join('')}${variant.cached ? ':c' : ''}${variant.bake ? ':b' : ''}`;

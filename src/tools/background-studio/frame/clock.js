@@ -3,6 +3,10 @@ const manual = query.get('clock') === 'manual';
 const seed = Number(query.get('seed'));
 const pixelRatio = Number(query.get('dpr'));
 
+const START = 10;
+const SETTLE_LIMIT = 4000;
+const PARALLEL = 'khr_parallel_shader_compile';
+
 const nativeRaf = window.requestAnimationFrame.bind(window);
 const nativeCaf = window.cancelAnimationFrame.bind(window);
 const nativeNow = performance.now.bind(performance);
@@ -12,20 +16,26 @@ const nativeClearTimeout = window.clearTimeout.bind(window);
 const nativeSetInterval = window.setInterval.bind(window);
 const nativeClearInterval = window.clearInterval.bind(window);
 
-const dateOffset = nativeDateNow() - nativeNow();
+const dateOffset = nativeDateNow() - (manual ? START : nativeNow());
 
 let paused = false;
 let offset = 0;
 let frozenAt = 0;
-let virtual = nativeNow();
+let virtual = manual ? START : nativeNow();
 let pending = 0;
 let frameId = 0;
 let callbacks = new Map();
-const afterFrame = new Set();
+let programs = [];
+let building = 0;
+let loading = 0;
+let waiting = 0;
+const hooks = new Map();
+const parallel = new WeakMap();
 const listeners = new Set();
 const timers = new Map();
 let timerId = 1 << 24;
 const managed = new WeakSet();
+const images = new WeakSet();
 
 const now = () => {
   if (manual) return virtual;
@@ -50,15 +60,54 @@ const run = timestamp => {
       report(error);
     }
   });
-  const hooks = [...afterFrame];
-  afterFrame.clear();
-  hooks.forEach(hook => hook(timestamp));
+  const after = [...hooks.values()];
+  hooks.clear();
+  after.forEach(hook => hook(timestamp));
+};
+
+const linked = ({ gl, program }) => {
+  if (gl.isContextLost()) return true;
+  const extension = parallel.get(gl);
+  return !extension || gl.getProgramParameter(program, extension.COMPLETION_STATUS_KHR) !== false;
+};
+
+const fetching = () =>
+  document.fonts?.status === 'loading' || Array.prototype.some.call(document.images, image => !image.complete);
+
+const compiling = () => {
+  if (programs.length) programs = programs.filter(entry => !linked(entry));
+  return programs.length > 0 || building > 0 || loading > 0 || (manual && fetching());
+};
+
+const finish = () => {
+  const list = programs;
+  programs = [];
+  list.forEach(({ gl, program }) => {
+    if (!gl.isContextLost()) gl.getProgramParameter(program, gl.LINK_STATUS);
+  });
 };
 
 const pump = () => {
   pending = 0;
   if (manual || paused) return;
+  if (programs.length) compiling();
   run(now());
+};
+
+const refreshWhenBuilt = () => {
+  if (waiting) return;
+  const until = nativeNow() + SETTLE_LIMIT;
+  const check = () => {
+    waiting = 0;
+    if (manual || !paused) return;
+    if (compiling() && nativeNow() < until) {
+      waiting = nativeRaf(check);
+      return;
+    }
+    frozenAt += 1;
+    run(frozenAt);
+  };
+  waiting = nativeRaf(check);
 };
 
 const schedule = () => {
@@ -93,6 +142,105 @@ window.cancelAnimationFrame = id => {
 performance.now = now;
 Date.now = () => Math.round(dateOffset + now());
 
+[window.WebGLRenderingContext, window.WebGL2RenderingContext].forEach(type => {
+  const proto = type?.prototype;
+  if (!proto) return;
+  const { getExtension, getSupportedExtensions, linkProgram, deleteProgram } = proto;
+  proto.getExtension = function (name) {
+    const asked = String(name).toLowerCase() === PARALLEL;
+    if (asked && manual) return null;
+    const extension = getExtension.call(this, name);
+    if (asked && extension) parallel.set(this, extension);
+    return extension;
+  };
+  if (manual) {
+    proto.getSupportedExtensions = function () {
+      const names = getSupportedExtensions.call(this);
+      return names ? names.filter(name => name.toLowerCase() !== PARALLEL) : names;
+    };
+  }
+  proto.linkProgram = function (program) {
+    linkProgram.call(this, program);
+    if (program && (manual || parallel.has(this))) programs.push({ gl: this, program });
+  };
+  proto.deleteProgram = function (program) {
+    if (programs.length) programs = programs.filter(entry => entry.program !== program);
+    deleteProgram.call(this, program);
+  };
+});
+
+const built = () => {
+  building -= 1;
+};
+
+const watchImage = image => {
+  if (images.has(image)) return;
+  images.add(image);
+  loading += 1;
+  const done = () => {
+    image.removeEventListener('load', done);
+    image.removeEventListener('error', done);
+    nativeSetTimeout(() => {
+      images.delete(image);
+      loading -= 1;
+    });
+  };
+  image.addEventListener('load', done);
+  image.addEventListener('error', done);
+};
+
+const source = manual && window.HTMLImageElement && Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+if (source?.set) {
+  Object.defineProperty(HTMLImageElement.prototype, 'src', {
+    ...source,
+    set(value) {
+      source.set.call(this, value);
+      watchImage(this);
+    }
+  });
+}
+
+const paint = () =>
+  new Promise(resolve => {
+    const timer = nativeSetTimeout(resolve, 1000);
+    nativeRaf(() => {
+      nativeClearTimeout(timer);
+      resolve();
+    });
+  });
+
+const quiet = until =>
+  new Promise(resolve => {
+    let calm = 0;
+    const check = () => {
+      calm = compiling() ? 0 : calm + 1;
+      if (calm > 2 || nativeNow() > until) resolve();
+      else nativeSetTimeout(check, 4);
+    };
+    check();
+  });
+
+[
+  [window.GPU, ['requestAdapter']],
+  [window.GPUAdapter, ['requestDevice']],
+  [window.GPUDevice, ['createRenderPipelineAsync', 'createComputePipelineAsync']]
+].forEach(([type, names]) => {
+  const proto = type?.prototype;
+  if (!proto) return;
+  names.forEach(name => {
+    const native = proto[name];
+    if (typeof native !== 'function') return;
+    proto[name] = function (...args) {
+      const result = native.apply(this, args);
+      if (result && typeof result.then === 'function') {
+        building += 1;
+        result.then(built, built);
+      }
+      return result;
+    };
+  });
+});
+
 if (manual) {
   window.setTimeout = (handler, delay, ...args) => {
     if (typeof handler !== 'function' || !(delay > 0)) return nativeSetTimeout(handler, delay, ...args);
@@ -118,14 +266,31 @@ if (manual) {
 }
 
 if (Number.isFinite(seed) && query.has('seed')) {
-  let state = seed >>> 0 || 1;
-  Math.random = () => {
-    state = (state + 0x6d2b79f5) >>> 0;
-    let t = state;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  const generator = from => {
+    let state = from >>> 0 || 1;
+    return () => {
+      state = (state + 0x6d2b79f5) >>> 0;
+      let t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return (t ^ (t >>> 14)) >>> 0;
+    };
   };
+  const random = generator(seed);
+  const entropy = generator(seed ^ 0x9e3779b9);
+  Math.random = () => random() / 4294967296;
+  const nativeValues = window.crypto?.getRandomValues?.bind(window.crypto);
+  if (nativeValues) {
+    Object.defineProperty(window.crypto, 'getRandomValues', {
+      configurable: true,
+      value: array => {
+        if (!ArrayBuffer.isView(array)) return nativeValues(array);
+        const bytes = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
+        for (let index = 0; index < bytes.length; index += 1) bytes[index] = entropy() >>> 24;
+        return array;
+      }
+    });
+  }
 }
 
 if (pixelRatio > 0) {
@@ -174,6 +339,7 @@ export const clock = {
     pending = 0;
     animations().forEach(animation => animation.pause());
     emit();
+    if (compiling()) refreshWhenBuilt();
   },
   resume() {
     if (manual || !paused) return;
@@ -186,21 +352,39 @@ export const clock = {
     emit();
   },
   refresh() {
-    if (manual || !paused) return;
+    if (manual || !paused || waiting) return;
+    if (compiling()) {
+      refreshWhenBuilt();
+      return;
+    }
     frozenAt += 1;
     run(frozenAt);
   },
+  async settle() {
+    if (manual) finish();
+    const until = nativeNow() + SETTLE_LIMIT;
+    while (compiling() && nativeNow() < until) {
+      await quiet(until);
+      if (!manual) return;
+      await paint();
+      await paint();
+    }
+  },
   step(ms) {
     if (!manual) return;
+    finish();
     const target = virtual + ms;
     fireTimers(target);
     virtual = target;
     syncAnimations(ms);
     run(virtual);
   },
-  afterFrame(hook) {
-    afterFrame.add(hook);
+  afterFrame(hook, key = hook) {
+    hooks.set(key, hook);
     schedule();
+    return () => {
+      if (hooks.get(key) === hook) hooks.delete(key);
+    };
   },
   wait(ms) {
     return new Promise(resolve => nativeSetTimeout(resolve, ms));

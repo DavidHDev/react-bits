@@ -194,8 +194,10 @@ void main() {
 const GROUNDS = { dark: [0.043, 0.039, 0.051], light: [0.949, 0.933, 0.902] };
 const MAX_ROW = 2048;
 
-function strokeProgram(gl, state) {
-  if (state.program) return state.program;
+const programs = new WeakMap();
+
+function strokeProgram(gl) {
+  if (programs.has(gl)) return programs.get(gl);
   const compile = (type, source) => {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
@@ -238,8 +240,9 @@ function strokeProgram(gl, state) {
     'uSeed'
   ];
   const uniforms = Object.fromEntries(names.map(name => [name, gl.getUniformLocation(program, name)]));
-  state.program = { program, uniforms, vao: gl.createVertexArray() };
-  return state.program;
+  const entry = { program, uniforms, vao: gl.createVertexArray() };
+  programs.set(gl, entry);
+  return entry;
 }
 
 export default {
@@ -281,7 +284,7 @@ export default {
     { key: 'drift', label: 'Drift', type: 'number', min: 0, max: 2, step: 0.01, default: 0.5 },
     { key: 'variation', label: 'Variation', type: 'number', min: 0, max: 100, step: 1, default: 0 }
   ],
-  render(ctx, input, params, state) {
+  render(ctx, input, params) {
     const gl = ctx.gl;
     const unit = ctx.unit;
     const fw = Math.max(8, Math.round(ctx.width / 4));
@@ -332,7 +335,7 @@ export default {
     ctx.release(flow);
 
     const strokes = ctx.target(ctx.width, ctx.height, { float: false });
-    const program = strokeProgram(gl, state);
+    const program = strokeProgram(gl);
     const u = program.uniforms;
     gl.bindFramebuffer(gl.FRAMEBUFFER, strokes.fbo);
     gl.viewport(0, 0, strokes.width, strokes.height);
@@ -385,12 +388,5 @@ export default {
     });
     ctx.release(strokes);
     return output;
-  },
-  dispose(gl, state) {
-    if (state.program) {
-      gl.deleteProgram(state.program.program);
-      gl.deleteVertexArray(state.program.vao);
-    }
-    state.program = null;
   }
 };

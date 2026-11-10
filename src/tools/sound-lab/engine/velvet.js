@@ -5,6 +5,14 @@ void main() {
 }
 `;
 
+export const ORB_VERT = `#version 300 es
+in vec2 position;
+uniform vec2 uExtent;
+void main() {
+  gl_Position = vec4(position * uExtent, 0.0, 1.0);
+}
+`;
+
 const COMMON = `
 const float TAU = 6.28318530718;
 
@@ -17,6 +25,16 @@ float hash(vec2 p) {
 float span(float x, float reach) {
   float a = clamp(1.0 - abs(x) / reach, 0.0, 1.0);
   return a * a * (3.0 - 2.0 * a);
+}
+
+float sheen(float slope, float th, float u) {
+  float bend = th + u * 0.9;
+  vec3 n = normalize(vec3(-slope * 0.3, -sin(bend), cos(bend)));
+  vec3 key = normalize(vec3(-0.35, 0.75, 0.6));
+  float facing = dot(n, key);
+  float grazing = 1.0 - n.z * n.z;
+  float glint = dot(n, normalize(key + vec3(0.0, 0.0, 1.0)));
+  return (0.2 + 0.55 * facing * facing + 0.5 * grazing * grazing + 0.5 * pow(glint * glint, 12.0)) * (1.0 - 0.2 * u * u);
 }
 
 vec2 ribbon(vec2 q, float k, float amp, float width, float twist, float flow, float turn, float seed, float reach, float soft) {
@@ -32,14 +50,7 @@ vec2 ribbon(vec2 q, float k, float amp, float width, float twist, float flow, fl
   float u = (q.y - c) / h;
   float cover = (1.0 - smoothstep(1.0 - soft, 1.0 + 0.5 * soft, abs(u))) * env;
   if (cover <= 0.0) return vec2(0.0);
-  float bend = th + u * 0.9;
-  vec3 n = normalize(vec3(-slope * 0.3, -sin(bend), cos(bend)));
-  vec3 key = normalize(vec3(-0.35, 0.75, 0.6));
-  float facing = dot(n, key);
-  float grazing = 1.0 - n.z * n.z;
-  float glint = dot(n, normalize(key + vec3(0.0, 0.0, 1.0)));
-  float shade = (0.2 + 0.55 * facing * facing + 0.5 * grazing * grazing + 0.5 * pow(glint * glint, 12.0)) * (1.0 - 0.2 * u * u);
-  return vec2(cover, shade);
+  return vec2(cover, sheen(slope, th, u));
 }
 
 vec3 satinLight(vec4 s) {
@@ -56,9 +67,7 @@ vec3 satinInk(vec4 s, vec3 ink, vec3 base) {
 }
 `;
 
-export const ORB_FRAG = `#version 300 es
-precision highp float;
-
+const ORB_UNIFORMS = `
 uniform vec2 uResolution;
 uniform float uTime;
 uniform vec3 uFlow;
@@ -71,18 +80,9 @@ uniform vec3 uInk;
 uniform vec3 uTint;
 uniform float uIntro;
 uniform float uHover;
+`;
 
-out vec4 fragColor;
-${COMMON}
-const float BEVEL = 0.3;
-const float PULL = 0.34;
-
-vec2 lens(vec2 dir, float r, float strength) {
-  float t = clamp((r - (1.0 - BEVEL)) / BEVEL, 0.0, 1.0);
-  float curve = 1.0 - sqrt(max(1.0 - t * t, 0.0));
-  return dir * (r - PULL * strength * curve);
-}
-
+const ORB_SCENE = `
 vec4 scene(vec2 q) {
   float e = uEnergy;
   float breath = 0.5 + 0.5 * sin(uTime * 0.7);
@@ -94,8 +94,7 @@ vec4 scene(vec2 q) {
   return vec4(light, 1.0 - (1.0 - a.x) * (1.0 - 0.7 * b.x));
 }
 
-vec4 wrap(vec2 dir) {
-  float angle = atan(dir.y, dir.x);
+vec4 ring(float angle) {
   vec4 sum = vec4(0.0);
   float total = 0.0;
   for (int k = -4; k <= 4; k++) {
@@ -105,6 +104,17 @@ vec4 wrap(vec2 dir) {
     total += w;
   }
   return sum / total;
+}
+`;
+
+const ORB_BODY = `
+const float BEVEL = 0.3;
+const float PULL = 0.34;
+
+vec2 lens(vec2 dir, float r, float strength) {
+  float t = clamp((r - (1.0 - BEVEL)) / BEVEL, 0.0, 1.0);
+  float curve = 1.0 - sqrt(max(1.0 - t * t, 0.0));
+  return dir * (r - PULL * strength * curve);
 }
 
 void main() {
@@ -127,7 +137,7 @@ void main() {
   float rr = min(r, 0.9995);
   vec2 dir = r > 1e-5 ? p / r : vec2(0.0, 1.0);
   float t = clamp((rr - (1.0 - BEVEL)) / BEVEL, 0.0, 1.0);
-  vec4 S = scene(lens(dir, rr, 1.0));
+  vec4 S = view(lens(dir, rr, 1.0));
   if (t > 0.0) {
     vec4 rim = wrap(dir) * pow(t, 1.6);
     S.rgb += rim.rgb * 1.1;
@@ -156,6 +166,102 @@ void main() {
   }
 }
 `;
+
+export const ORB_FRAG = `#version 300 es
+precision highp float;
+${ORB_UNIFORMS}
+out vec4 fragColor;
+${COMMON}${ORB_SCENE}
+vec4 view(vec2 q) {
+  return scene(q);
+}
+
+vec4 wrap(vec2 dir) {
+  return ring(atan(dir.y, dir.x));
+}
+${ORB_BODY}`;
+
+export const ORB_TABLE = 2048;
+
+export const ORB_TABLES_FRAG = `#version 300 es
+precision highp float;
+${ORB_UNIFORMS}
+out vec4 fragColor;
+${COMMON}${ORB_SCENE}
+vec2 wave(float x, float k, float amp, float flow, float seed, float reach) {
+  float env = span(x, reach);
+  float p1 = k * x + flow;
+  float p2 = 1.87 * k * x - 0.71 * flow + seed;
+  float p3 = 3.07 * k * x + 1.3 * flow + 2.0 * seed;
+  float c = amp * env * (sin(p1) + 0.34 * sin(p2) + 0.12 * sin(p3));
+  float slope = amp * env * k * (cos(p1) + 0.636 * cos(p2) + 0.368 * cos(p3));
+  return vec2(c, slope);
+}
+
+void main() {
+  if (gl_FragCoord.y > 1.0) {
+    fragColor = ring(gl_FragCoord.x * (TAU / ${ORB_TABLE}.0) - 0.5 * TAU);
+    return;
+  }
+  float x = gl_FragCoord.x * (2.0 / ${ORB_TABLE}.0) - 1.0;
+  float e = uEnergy;
+  float breath = 0.5 + 0.5 * sin(uTime * 0.7);
+  float lift = 1.0 + 2.0 * e + 1.2 * uPulse;
+  vec2 a = wave(x, 2.6, 0.18 * (0.92 + 0.12 * breath) * (lift + 1.2 * uBands.y + 0.6 * uBands.x), uFlow.x, 0.0, 1.25);
+  vec2 b = wave(x, 3.8, 0.12 * (lift + 1.5 * uBands.z), uFlow.y, 1.7, 1.2);
+  fragColor = vec4(a, b);
+}
+`;
+
+export const ORB_BAKED_FRAG = `#version 300 es
+precision highp float;
+precision highp int;
+${ORB_UNIFORMS}
+uniform highp sampler2D uTables;
+out vec4 fragColor;
+${COMMON}
+const float TABLE = ${ORB_TABLE}.0;
+
+vec4 fetch(int row, float f, bool periodic) {
+  float i = floor(f);
+  float i1 = i + 1.0;
+  if (periodic) {
+    i = mod(i, TABLE);
+    i1 = mod(i1, TABLE);
+  } else {
+    i = clamp(i, 0.0, TABLE - 1.0);
+    i1 = clamp(i1, 0.0, TABLE - 1.0);
+  }
+  return mix(texelFetch(uTables, ivec2(int(i), row), 0), texelFetch(uTables, ivec2(int(i1), row), 0), fract(f));
+}
+
+vec2 band(vec2 q, vec2 wave, float width, float twist, float turn, float reach, float soft) {
+  float x = q.x;
+  float env = span(x, reach);
+  float c = wave.x;
+  float slope = wave.y;
+  float th = twist * x + turn;
+  float h = width * (0.3 + 0.7 * env) * sqrt(1.0 + slope * slope);
+  float u = (q.y - c) / h;
+  float cover = (1.0 - smoothstep(1.0 - soft, 1.0 + 0.5 * soft, abs(u))) * env;
+  if (cover <= 0.0) return vec2(0.0);
+  return vec2(cover, sheen(slope, th, u));
+}
+
+vec4 view(vec2 q) {
+  float e = uEnergy;
+  vec4 waves = fetch(0, (q.x * 0.5 + 0.5) * TABLE - 0.5, false);
+  vec2 a = band(q, waves.xy, 0.21 * (1.0 + 0.4 * e), 1.9 + 0.8 * e, uTurn.x, 1.25, 0.2);
+  vec2 b = band(q + vec2(0.0, 0.06), waves.zw, 0.11 * (1.0 + 0.4 * e), 2.9 + e, uTurn.y, 1.2, 0.26);
+  float shine = 1.0 + 0.8 * e + 0.7 * uPulse;
+  vec3 light = (uInk * a.x * a.y + uTint * b.x * b.y * 0.55 * (1.0 - 0.6 * a.x)) * shine;
+  return vec4(light, 1.0 - (1.0 - a.x) * (1.0 - 0.7 * b.x));
+}
+
+vec4 wrap(vec2 dir) {
+  return fetch(1, (atan(dir.y, dir.x) / TAU + 0.5) * TABLE - 0.5, true);
+}
+${ORB_BODY}`;
 
 export const ART_FRAG = `#version 300 es
 precision highp float;

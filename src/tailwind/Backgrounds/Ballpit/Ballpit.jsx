@@ -264,6 +264,7 @@ const Ballpit = ({
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
+  const releaseRef = useRef(0);
   const settings = {
     count: Math.round(clamp(count, 1, 4000)),
     colors: Array.isArray(colors) && colors.length ? colors : ['#ffffff'],
@@ -291,6 +292,7 @@ const Ballpit = ({
   settingsRef.current = settings;
 
   useEffect(() => {
+    window.clearTimeout(releaseRef.current);
     const container = containerRef.current;
     const canvas = canvasRef.current;
     const gl = canvas?.getContext('webgl2', {
@@ -467,8 +469,12 @@ const Ballpit = ({
       if (s.colors.join('|') !== paletteKey) applyPalette(s);
     };
 
-    let contacts = new Float32Array(0);
+    let contactLimit = 0;
     let contactCount = 0;
+    let pairs = new Int32Array(0);
+    let normals = new Float32Array(0);
+    let targets = new Float64Array(0);
+    let impulses = new Float32Array(0);
 
     const grid = { scale: 1, x0: 0, y0: 0, z0: 0, nx: 1, ny: 1, nz: 1 };
 
@@ -499,197 +505,237 @@ const Ballpit = ({
       for (let i = 0; i < n; i++) sorted[starts[cellOf[i]]++] = i;
     };
 
-    const wall = (i, gap, nx, ny, nz, bounce, margin) => {
-      if (gap >= margin || contactCount * 8 >= contacts.length) return;
+    const wall = (i, gap, nx, ny, nz, bounce, margin, dt) => {
+      if (gap >= margin || contactCount >= contactLimit) return;
       const approach = vx[i] * nx + vy[i] * ny + vz[i] * nz;
-      const o = contactCount * 8;
-      contacts[o] = i;
-      contacts[o + 1] = -2;
-      contacts[o + 2] = nx;
-      contacts[o + 3] = ny;
-      contacts[o + 4] = nz;
-      contacts[o + 5] = gap;
-      contacts[o + 6] = approach < -1.5 ? -bounce * approach : 0;
-      contacts[o + 7] = 0;
+      const c = contactCount;
+      const near = Math.fround(gap);
+      pairs[c * 2] = i;
+      pairs[c * 2 + 1] = -2;
+      normals[c * 3] = nx;
+      normals[c * 3 + 1] = ny;
+      normals[c * 3 + 2] = nz;
+      targets[c] = near > 0 ? -near / dt : Math.fround(approach < -1.5 ? -bounce * approach : 0);
+      impulses[c] = 0;
       contactCount++;
     };
 
     const findContacts = (s, dt, shade, margin) => {
       const heldIndex = held.index;
       const { nx: gx, ny: gy, nz: gz } = grid;
+      const X = px;
+      const Y = py;
+      const Z = pz;
+      const VX = vx;
+      const VY = vy;
+      const VZ = vz;
+      const R = rad;
+      const shadeOf = occ;
+      const cells = cellOf;
+      const firsts = table;
+      const members = sorted;
+      const ends = pairs;
+      const axes = normals;
+      const goals = targets;
+      const sums = impulses;
+      const limit = contactLimit;
+      const bounce = s.bounce;
       contactCount = 0;
       for (let i = 0; i < n; i++) {
-        const c = cellOf[i];
+        const c = cells[i];
         const cx = c % gx;
         const cy = Math.floor(c / gx) % gy;
         const cz = Math.floor(c / (gx * gy));
+        const xi = X[i];
+        const yi = Y[i];
+        const zi = Z[i];
+        const ri = R[i];
+        const left = cx > 0 ? cx - 1 : cx;
+        const right = cx < gx - 1 ? cx + 2 : cx + 1;
         for (let dz = cz > 0 ? -1 : 0; dz <= (cz < gz - 1 ? 1 : 0); dz++) {
           for (let dy = cy > 0 ? -1 : 0; dy <= (cy < gy - 1 ? 1 : 0); dy++) {
             const row = ((cz + dz) * gy + cy + dy) * gx;
-            for (let dx = cx > 0 ? -1 : 0; dx <= (cx < gx - 1 ? 1 : 0); dx++) {
-              const cell = row + cx + dx;
-              for (let k = table[cell]; k < table[cell + 1]; k++) {
-                const j = sorted[k];
-                if (j <= i) continue;
-                const ddx = px[j] - px[i];
-                const ddy = py[j] - py[i];
-                const ddz = pz[j] - pz[i];
-                const d2 = ddx * ddx + ddy * ddy + ddz * ddz;
-                const sum = rad[i] + rad[j];
-                const reach = Math.max(sum + margin, shade ? sum * 1.4 : 0);
-                if (d2 >= reach * reach || d2 < 1e-12) continue;
-                const d = Math.sqrt(d2);
-                const nx = ddx / d;
-                const ny = ddy / d;
-                const nz = ddz / d;
-                if (shade) {
-                  const w = clamp(1 - (d - sum) / (sum * 0.4), 0, 1);
-                  occ[i * 4] += nx * w;
-                  occ[i * 4 + 1] += ny * w;
-                  occ[i * 4 + 2] += nz * w;
-                  occ[i * 4 + 3] += w;
-                  occ[j * 4] -= nx * w;
-                  occ[j * 4 + 1] -= ny * w;
-                  occ[j * 4 + 2] -= nz * w;
-                  occ[j * 4 + 3] += w;
-                }
-                if (d >= sum + margin || contactCount * 8 >= contacts.length) continue;
-                if (i === heldIndex && j === heldIndex) continue;
-                const approach = (vx[j] - vx[i]) * nx + (vy[j] - vy[i]) * ny + (vz[j] - vz[i]) * nz;
-                const o = contactCount * 8;
-                contacts[o] = i;
-                contacts[o + 1] = j;
-                contacts[o + 2] = nx;
-                contacts[o + 3] = ny;
-                contacts[o + 4] = nz;
-                contacts[o + 5] = d - sum;
-                contacts[o + 6] = approach < -1.5 ? -s.bounce * approach : 0;
-                contacts[o + 7] = 0;
-                contactCount++;
+            const end = firsts[row + right];
+            for (let k = firsts[row + left]; k < end; k++) {
+              const j = members[k];
+              if (j <= i) continue;
+              const ddx = X[j] - xi;
+              const ddy = Y[j] - yi;
+              const ddz = Z[j] - zi;
+              const d2 = ddx * ddx + ddy * ddy + ddz * ddz;
+              const sum = ri + R[j];
+              const reach = Math.max(sum + margin, shade ? sum * 1.4 : 0);
+              if (d2 >= reach * reach || d2 < 1e-12) continue;
+              const d = Math.sqrt(d2);
+              const nx = ddx / d;
+              const ny = ddy / d;
+              const nz = ddz / d;
+              if (shade) {
+                const w = clamp(1 - (d - sum) / (sum * 0.4), 0, 1);
+                shadeOf[i * 4] += nx * w;
+                shadeOf[i * 4 + 1] += ny * w;
+                shadeOf[i * 4 + 2] += nz * w;
+                shadeOf[i * 4 + 3] += w;
+                shadeOf[j * 4] -= nx * w;
+                shadeOf[j * 4 + 1] -= ny * w;
+                shadeOf[j * 4 + 2] -= nz * w;
+                shadeOf[j * 4 + 3] += w;
               }
+              if (d >= sum + margin || contactCount >= limit) continue;
+              if (i === heldIndex && j === heldIndex) continue;
+              const approach = (VX[j] - VX[i]) * nx + (VY[j] - VY[i]) * ny + (VZ[j] - VZ[i]) * nz;
+              const c = contactCount;
+              const near = Math.fround(d - sum);
+              ends[c * 2] = i;
+              ends[c * 2 + 1] = j;
+              axes[c * 3] = nx;
+              axes[c * 3 + 1] = ny;
+              axes[c * 3 + 2] = nz;
+              goals[c] = near > 0 ? -near / dt : Math.fround(approach < -1.5 ? -bounce * approach : 0);
+              sums[c] = 0;
+              contactCount++;
             }
           }
         }
         if (i !== heldIndex) {
-          const r = rad[i];
+          const r = ri;
           const zr = Math.max(s.depth - r, 0);
-          wall(i, px[i] + view.halfW - r, 1, 0, 0, s.wallBounce, margin);
-          wall(i, view.halfW - r - px[i], -1, 0, 0, s.wallBounce, margin);
-          wall(i, py[i] + view.halfH - r, 0, 1, 0, s.wallBounce, margin);
-          if (entered[i]) wall(i, view.halfH - r - py[i], 0, -1, 0, s.wallBounce, margin);
-          wall(i, pz[i] + zr, 0, 0, 1, s.wallBounce, margin);
-          wall(i, zr - pz[i], 0, 0, -1, s.wallBounce, margin);
+          wall(i, xi + view.halfW - r, 1, 0, 0, s.wallBounce, margin, dt);
+          wall(i, view.halfW - r - xi, -1, 0, 0, s.wallBounce, margin, dt);
+          wall(i, yi + view.halfH - r, 0, 1, 0, s.wallBounce, margin, dt);
+          if (entered[i]) wall(i, view.halfH - r - yi, 0, -1, 0, s.wallBounce, margin, dt);
+          wall(i, zi + zr, 0, 0, 1, s.wallBounce, margin, dt);
+          wall(i, zr - zi, 0, 0, -1, s.wallBounce, margin, dt);
         }
-        if (cursor.r > 0.01 && i !== heldIndex && contactCount * 8 < contacts.length) {
-          const ddx = px[i] - cursor.x;
-          const ddy = py[i] - cursor.y;
-          const ddz = pz[i] - cursor.z;
-          const sum = rad[i] + cursor.r;
+        if (cursor.r > 0.01 && i !== heldIndex && contactCount < limit) {
+          const ddx = xi - cursor.x;
+          const ddy = yi - cursor.y;
+          const ddz = zi - cursor.z;
+          const sum = ri + cursor.r;
           const d2 = ddx * ddx + ddy * ddy + ddz * ddz;
           if (d2 < (sum + margin) * (sum + margin) && d2 > 1e-12) {
             const d = Math.sqrt(d2);
             const nx = ddx / d;
             const ny = ddy / d;
             const nz = ddz / d;
-            const approach = (vx[i] - cursor.vx) * nx + (vy[i] - cursor.vy) * ny + vz[i] * nz;
-            const o = contactCount * 8;
-            contacts[o] = i;
-            contacts[o + 1] = -1;
-            contacts[o + 2] = nx;
-            contacts[o + 3] = ny;
-            contacts[o + 4] = nz;
-            contacts[o + 5] = d - sum;
-            contacts[o + 6] = approach < -1.5 ? -s.bounce * approach : 0;
-            contacts[o + 7] = 0;
+            const approach = (VX[i] - cursor.vx) * nx + (VY[i] - cursor.vy) * ny + VZ[i] * nz;
+            const c = contactCount;
+            const near = Math.fround(d - sum);
+            ends[c * 2] = i;
+            ends[c * 2 + 1] = -1;
+            axes[c * 3] = nx;
+            axes[c * 3 + 1] = ny;
+            axes[c * 3 + 2] = nz;
+            goals[c] = near > 0 ? -near / dt : Math.fround(approach < -1.5 ? -bounce * approach : 0);
+            sums[c] = 0;
             contactCount++;
           }
         }
       }
     };
 
-    const solveVelocities = dt => {
+    const solveVelocities = () => {
       const heldIndex = held.index;
       const iterations = n > 800 ? 5 : 8;
+      const VX = vx;
+      const VY = vy;
+      const VZ = vz;
+      const weights = inv;
+      const ends = pairs;
+      const axes = normals;
+      const goals = targets;
+      const sums = impulses;
+      const total = contactCount;
+      const cursorVx = cursor.vx;
+      const cursorVy = cursor.vy;
       for (let iteration = 0; iteration < iterations; iteration++) {
-        for (let c = 0; c < contactCount; c++) {
-          const o = c * 8;
-          const i = contacts[o];
-          const j = contacts[o + 1];
-          const nx = contacts[o + 2];
-          const ny = contacts[o + 3];
-          const nz = contacts[o + 4];
-          const gap = contacts[o + 5];
-          const target = gap > 0 ? -gap / dt : contacts[o + 6];
-          const before = contacts[o + 7];
+        for (let c = 0; c < total; c++) {
+          const i = ends[c * 2];
+          const j = ends[c * 2 + 1];
+          const nx = axes[c * 3];
+          const ny = axes[c * 3 + 1];
+          const nz = axes[c * 3 + 2];
+          const target = goals[c];
+          const before = sums[c];
           if (j < 0) {
             const vn =
               j === -1
-                ? (vx[i] - cursor.vx) * nx + (vy[i] - cursor.vy) * ny + vz[i] * nz
-                : vx[i] * nx + vy[i] * ny + vz[i] * nz;
+                ? (VX[i] - cursorVx) * nx + (VY[i] - cursorVy) * ny + VZ[i] * nz
+                : VX[i] * nx + VY[i] * ny + VZ[i] * nz;
             const after = Math.max(before + target - vn, 0);
             const change = after - before;
-            contacts[o + 7] = after;
-            vx[i] += change * nx;
-            vy[i] += change * ny;
-            vz[i] += change * nz;
+            sums[c] = after;
+            VX[i] += change * nx;
+            VY[i] += change * ny;
+            VZ[i] += change * nz;
             continue;
           }
-          const wi = i === heldIndex ? 0 : inv[i];
-          const wj = j === heldIndex ? 0 : inv[j];
+          const wi = i === heldIndex ? 0 : weights[i];
+          const wj = j === heldIndex ? 0 : weights[j];
           const w = wi + wj;
           if (w <= 0) continue;
-          const vn = (vx[j] - vx[i]) * nx + (vy[j] - vy[i]) * ny + (vz[j] - vz[i]) * nz;
+          const vn = (VX[j] - VX[i]) * nx + (VY[j] - VY[i]) * ny + (VZ[j] - VZ[i]) * nz;
           const after = Math.max(before + (target - vn) / w, 0);
           const change = after - before;
-          contacts[o + 7] = after;
-          vx[i] -= change * wi * nx;
-          vy[i] -= change * wi * ny;
-          vz[i] -= change * wi * nz;
-          vx[j] += change * wj * nx;
-          vy[j] += change * wj * ny;
-          vz[j] += change * wj * nz;
+          sums[c] = after;
+          VX[i] -= change * wi * nx;
+          VY[i] -= change * wi * ny;
+          VZ[i] -= change * wi * nz;
+          VX[j] += change * wj * nx;
+          VY[j] += change * wj * ny;
+          VZ[j] += change * wj * nz;
         }
       }
     };
 
     const correctPositions = () => {
       const heldIndex = held.index;
+      const X = px;
+      const Y = py;
+      const Z = pz;
+      const R = rad;
+      const weights = inv;
+      const ends = pairs;
+      const total = contactCount;
+      const cursorX = cursor.x;
+      const cursorY = cursor.y;
+      const cursorZ = cursor.z;
+      const cursorR = cursor.r;
       for (let pass = 0; pass < 2; pass++) {
-        for (let c = 0; c < contactCount; c++) {
-          const o = c * 8;
-          const i = contacts[o];
-          const j = contacts[o + 1];
+        for (let c = 0; c < total; c++) {
+          const i = ends[c * 2];
+          const j = ends[c * 2 + 1];
           if (j === -2) continue;
           if (j < 0) {
-            const ddx = px[i] - cursor.x;
-            const ddy = py[i] - cursor.y;
-            const ddz = pz[i] - cursor.z;
+            const ddx = X[i] - cursorX;
+            const ddy = Y[i] - cursorY;
+            const ddz = Z[i] - cursorZ;
             const d = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
-            const overlap = rad[i] + cursor.r - d - SLOP;
+            const overlap = R[i] + cursorR - d - SLOP;
             if (overlap <= 0 || d < 1e-6) continue;
             const k = (overlap * 0.5) / d;
-            px[i] += ddx * k;
-            py[i] += ddy * k;
-            pz[i] += ddz * k;
+            X[i] += ddx * k;
+            Y[i] += ddy * k;
+            Z[i] += ddz * k;
             continue;
           }
-          const ddx = px[j] - px[i];
-          const ddy = py[j] - py[i];
-          const ddz = pz[j] - pz[i];
+          const ddx = X[j] - X[i];
+          const ddy = Y[j] - Y[i];
+          const ddz = Z[j] - Z[i];
           const d = Math.sqrt(ddx * ddx + ddy * ddy + ddz * ddz);
-          const overlap = rad[i] + rad[j] - d - SLOP;
+          const overlap = R[i] + R[j] - d - SLOP;
           if (overlap <= 0 || d < 1e-6) continue;
-          const wi = i === heldIndex ? 0 : inv[i];
-          const wj = j === heldIndex ? 0 : inv[j];
+          const wi = i === heldIndex ? 0 : weights[i];
+          const wj = j === heldIndex ? 0 : weights[j];
           const w = wi + wj;
           if (w <= 0) continue;
           const k = (overlap * 0.3) / (d * w);
-          px[i] -= ddx * k * wi;
-          py[i] -= ddy * k * wi;
-          pz[i] -= ddz * k * wi;
-          px[j] += ddx * k * wj;
-          py[j] += ddy * k * wj;
-          pz[j] += ddz * k * wj;
+          X[i] -= ddx * k * wi;
+          Y[i] -= ddy * k * wi;
+          Z[i] -= ddz * k * wi;
+          X[j] += ddx * k * wj;
+          Y[j] += ddy * k * wj;
+          Z[j] += ddz * k * wj;
         }
       }
     };
@@ -734,7 +780,13 @@ const Ballpit = ({
       const wander = reduce ? 0 : s.drift * 2.2;
       const biggest = s.maxSize * view.fit;
       const margin = biggest * 0.3;
-      if (contacts.length < n * 96) contacts = new Float32Array(n * 96);
+      if (contactLimit < n * 12) {
+        contactLimit = n * 12;
+        pairs = new Int32Array(contactLimit * 2);
+        normals = new Float32Array(contactLimit * 3);
+        targets = new Float64Array(contactLimit);
+        impulses = new Float32Array(contactLimit);
+      }
       for (let i = 0; i < n; i++) {
         if (i === held.index) {
           const f = 1 - Math.exp(-dt / 0.02);
@@ -764,7 +816,7 @@ const Ballpit = ({
       buildGrid(biggest * (shade ? 2.8 : 2.3), s);
       if (shade) occ.fill(0, 0, n * 4);
       findContacts(s, dt, shade, margin);
-      solveVelocities(dt);
+      solveVelocities();
       for (let i = 0; i < n; i++) {
         px[i] += vx[i] * dt;
         py[i] += vy[i] * dt;
@@ -1153,7 +1205,7 @@ const Ballpit = ({
       gl.deleteBuffer(instances);
       gl.deleteVertexArray(vao);
       gl.deleteProgram(shader.program);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      releaseRef.current = window.setTimeout(() => gl.getExtension('WEBGL_lose_context')?.loseContext(), 0);
     };
   }, []);
 

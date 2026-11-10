@@ -121,6 +121,18 @@ function BackgroundPresets({ material, onSelect }) {
   );
 }
 
+function ScrollShell({ children }) {
+  const scrollRef = useRef(null);
+  const edges = useScrollEdges(scrollRef, '.preview-options > *');
+  return (
+    <div className="lab-scroll-shell" data-top={edges.top ? '' : undefined} data-bottom={edges.bottom ? '' : undefined}>
+      <div className="lab-scroll lab-panel-scroll" ref={scrollRef}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function Section({ title, actions, children, className = '' }) {
   return (
     <section className={`customize-frame lab-section ${className}`}>
@@ -730,9 +742,7 @@ function EffectControls({ effects, accent, onEffect, bevel = true, surfaceNote =
 export default function Inspector({ doc, selection, thumbs, history, actions, focusText }) {
   const [drag, setDrag] = useState(null);
   const [picking, setPicking] = useState(false);
-  const scrollRef = useRef(null);
   const textRef = useRef(null);
-  const edges = useScrollEdges(scrollRef, '.preview-options > *');
   const layers = doc.mark.layers;
   const chosen = layers.filter(layer => selection.includes(layer.id));
   const selectedIndex = chosen.length === 1 ? layers.indexOf(chosen[0]) : -1;
@@ -777,290 +787,281 @@ export default function Inspector({ doc, selection, thumbs, history, actions, fo
 
   return (
     <aside className="lab-panel smg-panel" aria-label="Mark settings">
-      <div
-        className="lab-scroll-shell"
-        data-top={edges.top ? '' : undefined}
-        data-bottom={edges.bottom ? '' : undefined}
-      >
-        <div className="lab-scroll lab-panel-scroll" ref={scrollRef}>
-          <Section
-            title="Layers"
-            actions={
-              <>
-                <HeadingButton
-                  label="Undo"
-                  hint="⌘Z"
-                  icon={Undo02Icon}
-                  onClick={history.undo}
-                  disabled={!history.canUndo}
-                />
-                <HeadingButton
-                  label="Redo"
-                  hint="⇧⌘Z"
-                  icon={Redo02Icon}
-                  onClick={history.redo}
-                  disabled={!history.canRedo}
-                />
-                <HeadingButton
-                  label="Duplicate"
-                  hint="⌘D"
-                  icon={Copy01Icon}
-                  onClick={actions.duplicateSelection}
-                  disabled={!chosen.length}
-                />
-                <HeadingButton
-                  label="Delete"
-                  hint="⌫"
-                  icon={Delete02Icon}
-                  onClick={actions.removeSelection}
-                  disabled={!chosen.length || chosen.length >= layers.length}
-                />
-              </>
-            }
-            className="smg-layers-section"
-          >
-            <div className="lab-layers smg-layers" role="listbox" aria-label="Shape layers">
-              {[...layers].reverse().map(layer => {
-                const index = layers.indexOf(layer);
-                return (
-                  <LayerRow
-                    key={layer.id}
-                    layer={layer}
-                    index={index}
-                    count={layers.length}
-                    selected={selection.includes(layer.id)}
-                    drag={drag}
-                    thumb={thumbs[`shape:${layer.type}`]}
-                    onSelect={actions.selectLayer}
-                    onToggle={actions.toggleLayer}
-                    onDragStart={startDrag}
-                  />
-                );
-              })}
-            </div>
-            <div className="smg-add-row smg-full">
-              <button
-                type="button"
-                className="docs-tool smg-add"
-                onClick={() => setPicking(value => !value)}
-                aria-expanded={picking}
-              >
-                <Icon icon={PlusSignIcon} size={15} />
-                <span>Add shape</span>
-              </button>
-              {picking && (
-                <ShapePicker
-                  thumbs={thumbs}
-                  onPick={type => {
-                    setPicking(false);
-                    actions.addShape(type);
-                  }}
-                  onText={() => {
-                    setPicking(false);
-                    actions.addText();
-                  }}
-                  onLogo={() => {
-                    setPicking(false);
-                    actions.upload();
-                  }}
-                  onClose={() => setPicking(false)}
-                />
-              )}
-            </div>
-          </Section>
-
-          {chosen.length > 1 && (
-            <Section title={`${chosen.length} layers`}>
-              <ArrangeBar count={chosen.length} actions={actions} />
-              {chosen.some(layer => layers.indexOf(layer) > 0) && (
-                <div className="smg-full">
-                  <Track
-                    label="Combine"
-                    value={commonOp}
-                    options={OPS}
-                    onChange={op => actions.setSelectionOp(op)}
-                    className="smg-ops"
-                  />
-                </div>
-              )}
-            </Section>
-          )}
-
-          {selected && (
-            <Section title={layerName(selected)}>
-              <ArrangeBar count={1} actions={actions} />
-              <LayerControls
-                layer={selected}
-                index={selectedIndex}
-                textRef={textRef}
-                onLayer={(patch, key) => actions.updateLayer(selected.id, patch, key)}
-                onParam={(name, value) =>
-                  actions.updateLayer(
-                    selected.id,
-                    layer => ({ params: { ...layer.params, [name]: value } }),
-                    `param-${name}`
-                  )
-                }
-                onText={(patch, key) =>
-                  actions.updateLayer(
-                    selected.id,
-                    layer => ({ text: { ...layer.text, ...patch } }),
-                    key ? `text-${key}` : undefined
-                  )
-                }
-                onReplaceImage={actions.upload}
+      <ScrollShell>
+        <Section
+          title="Layers"
+          actions={
+            <>
+              <HeadingButton
+                label="Undo"
+                hint="⌘Z"
+                icon={Undo02Icon}
+                onClick={history.undo}
+                disabled={!history.canUndo}
               />
-            </Section>
-          )}
-
-          {material.kind === 'flat' && (
-            <Section title="Fill">
-              <FillControls
-                fill={doc.fill}
-                onFill={actions.setFill}
-                hasLogo={layers.some(layer => layer.type === 'image')}
+              <HeadingButton
+                label="Redo"
+                hint="⇧⌘Z"
+                icon={Redo02Icon}
+                onClick={history.redo}
+                disabled={!history.canRedo}
               />
-            </Section>
-          )}
-
-          {material.kind === 'metal' && (
-            <Section title="Liquid metal">
-              <PropControls
-                definitions={METAL_DEFINITIONS}
-                props={material.props}
-                onChange={(name, value) => actions.setMaterialProp(name, value)}
+              <HeadingButton
+                label="Duplicate"
+                hint="⌘D"
+                icon={Copy01Icon}
+                onClick={actions.duplicateSelection}
+                disabled={!chosen.length}
               />
-            </Section>
-          )}
-
-          {material.kind === 'procedural' && (
-            <Section title={material.def.name}>
-              <PropControls
-                definitions={material.def.params}
-                props={{
-                  ...Object.fromEntries(material.def.params.map(item => [item.name, item.default])),
-                  ...material.props
+              <HeadingButton
+                label="Delete"
+                hint="⌫"
+                icon={Delete02Icon}
+                onClick={actions.removeSelection}
+                disabled={!chosen.length || chosen.length >= layers.length}
+              />
+            </>
+          }
+          className="smg-layers-section"
+        >
+          <div className="lab-layers smg-layers" role="listbox" aria-label="Shape layers">
+            {[...layers].reverse().map(layer => {
+              const index = layers.indexOf(layer);
+              return (
+                <LayerRow
+                  key={layer.id}
+                  layer={layer}
+                  index={index}
+                  count={layers.length}
+                  selected={selection.includes(layer.id)}
+                  drag={drag}
+                  thumb={thumbs[`shape:${layer.type}`]}
+                  onSelect={actions.selectLayer}
+                  onToggle={actions.toggleLayer}
+                  onDragStart={startDrag}
+                />
+              );
+            })}
+          </div>
+          <div className="smg-add-row smg-full">
+            <button
+              type="button"
+              className="docs-tool smg-add"
+              onClick={() => setPicking(value => !value)}
+              aria-expanded={picking}
+            >
+              <Icon icon={PlusSignIcon} size={15} />
+              <span>Add shape</span>
+            </button>
+            {picking && (
+              <ShapePicker
+                thumbs={thumbs}
+                onPrewarm={actions.prewarmShape}
+                onPick={type => {
+                  setPicking(false);
+                  actions.addShape(type);
                 }}
-                onChange={(name, value) => actions.setMaterialProp(name, value)}
+                onText={() => {
+                  setPicking(false);
+                  actions.addText();
+                }}
+                onLogo={() => {
+                  setPicking(false);
+                  actions.upload();
+                }}
+                onClose={() => setPicking(false)}
               />
-            </Section>
+            )}
+          </div>
+        </Section>
+
+        {chosen.length > 1 && (
+          <Section title={`${chosen.length} layers`}>
+            <ArrangeBar count={chosen.length} actions={actions} />
+            {chosen.some(layer => layers.indexOf(layer) > 0) && (
+              <div className="smg-full">
+                <Track
+                  label="Combine"
+                  value={commonOp}
+                  options={OPS}
+                  onChange={op => actions.setSelectionOp(op)}
+                  className="smg-ops"
+                />
+              </div>
+            )}
+          </Section>
+        )}
+
+        {selected && (
+          <Section title={layerName(selected)}>
+            <ArrangeBar count={1} actions={actions} />
+            <LayerControls
+              layer={selected}
+              index={selectedIndex}
+              textRef={textRef}
+              onLayer={(patch, key) => actions.updateLayer(selected.id, patch, key)}
+              onParam={(name, value) =>
+                actions.updateLayer(
+                  selected.id,
+                  layer => ({ params: { ...layer.params, [name]: value } }),
+                  `param-${name}`
+                )
+              }
+              onText={(patch, key) =>
+                actions.updateLayer(
+                  selected.id,
+                  layer => ({ text: { ...layer.text, ...patch } }),
+                  key ? `text-${key}` : undefined
+                )
+              }
+              onReplaceImage={actions.upload}
+            />
+          </Section>
+        )}
+
+        {material.kind === 'flat' && (
+          <Section title="Fill">
+            <FillControls
+              fill={doc.fill}
+              onFill={actions.setFill}
+              hasLogo={layers.some(layer => layer.type === 'image')}
+            />
+          </Section>
+        )}
+
+        {material.kind === 'metal' && (
+          <Section title="Liquid metal">
+            <PropControls definitions={METAL_DEFINITIONS} props={material.props} onChange={actions.setMaterialProp} />
+          </Section>
+        )}
+
+        {material.kind === 'procedural' && (
+          <Section title={material.def.name}>
+            <PropControls
+              definitions={material.def.params}
+              props={{
+                ...Object.fromEntries(material.def.params.map(item => [item.name, item.default])),
+                ...material.props
+              }}
+              onChange={actions.setMaterialProp}
+            />
+          </Section>
+        )}
+
+        {material.kind === 'background' && <BackgroundPresets material={material} onSelect={actions.applyLook} />}
+
+        {material.kind === 'background' && (
+          <Section title={material.entry.label}>
+            <PreviewColorPickerCustom
+              title="Base color"
+              color={doc.material.base ?? '#0c0b10'}
+              alpha
+              onChange={base => actions.setMaterialBase(base)}
+            />
+            <PropControls
+              definitions={material.entry.props}
+              props={backgroundValues(material)}
+              onChange={actions.setMaterialProp}
+            />
+          </Section>
+        )}
+
+        <Section title="Effects">
+          <EffectControls
+            effects={doc.effects}
+            accent={material.kind === 'flat' && doc.fill.kind !== 'logo' ? doc.fill.color1 : null}
+            onEffect={actions.setEffect}
+            bevel={material.kind !== 'metal' && !(material.kind === 'procedural' && material.def.kind !== 'fill')}
+            surfaceNote={surfaceNote(material)}
+          />
+        </Section>
+
+        <Section title="Artboard">
+          <PreviewSlider
+            title="Mark size"
+            min={0.2}
+            max={1.6}
+            step={0.005}
+            value={doc.mark.scale}
+            onChange={scale => actions.setMark({ scale }, 'mark-scale')}
+          />
+          <PreviewSlider
+            title="Mark rotation"
+            min={-180}
+            max={180}
+            step={1}
+            valueUnit="°"
+            value={doc.mark.rotation}
+            onChange={rotation => actions.setMark({ rotation }, 'mark-rotation')}
+          />
+          <PreviewSelect
+            title="Shape"
+            options={RATIOS.map(item => ({ value: item.value, label: item.label }))}
+            value={doc.artboard.ratio}
+            onChange={ratio => actions.setArtboard({ ratio })}
+          />
+          <div className="smg-full">
+            <Track
+              label="Background"
+              value={background.kind}
+              options={BACKGROUND_KINDS}
+              onChange={kind => actions.setBackground({ kind })}
+              className="smg-kinds"
+            />
+          </div>
+          {background.kind !== 'none' && (
+            <PreviewColorPickerCustom
+              title={background.kind === 'linear' ? 'Top' : 'Background color'}
+              color={background.color1}
+              alpha
+              onChange={color1 => actions.setBackground({ color1 }, 'bg-color1')}
+            />
           )}
-
-          {material.kind === 'background' && <BackgroundPresets material={material} onSelect={actions.applyLook} />}
-
-          {material.kind === 'background' && (
-            <Section title={material.entry.label}>
-              <PreviewColorPickerCustom
-                title="Base color"
-                color={doc.material.base ?? '#0c0b10'}
-                alpha
-                onChange={base => actions.setMaterialBase(base)}
-              />
-              <PropControls
-                definitions={material.entry.props}
-                props={backgroundValues(material)}
-                onChange={(name, value) => actions.setMaterialProp(name, value)}
-              />
-            </Section>
+          {background.kind === 'linear' && (
+            <PreviewColorPickerCustom
+              title="Bottom"
+              color={background.color2}
+              alpha
+              onChange={color2 => actions.setBackground({ color2 }, 'bg-color2')}
+            />
           )}
+        </Section>
 
-          <Section title="Effects">
-            <EffectControls
-              effects={doc.effects}
-              accent={material.kind === 'flat' && doc.fill.kind !== 'logo' ? doc.fill.color1 : null}
-              onEffect={actions.setEffect}
-              bevel={material.kind !== 'metal' && !(material.kind === 'procedural' && material.def.kind !== 'fill')}
-              surfaceNote={surfaceNote(material)}
-            />
-          </Section>
-
-          <Section title="Artboard">
-            <PreviewSlider
-              title="Mark size"
-              min={0.2}
-              max={1.6}
-              step={0.005}
-              value={doc.mark.scale}
-              onChange={scale => actions.setMark({ scale }, 'mark-scale')}
-            />
-            <PreviewSlider
-              title="Mark rotation"
-              min={-180}
-              max={180}
-              step={1}
-              valueUnit="°"
-              value={doc.mark.rotation}
-              onChange={rotation => actions.setMark({ rotation }, 'mark-rotation')}
-            />
-            <PreviewSelect
-              title="Shape"
-              options={RATIOS.map(item => ({ value: item.value, label: item.label }))}
-              value={doc.artboard.ratio}
-              onChange={ratio => actions.setArtboard({ ratio })}
-            />
-            <div className="smg-full">
-              <Track
-                label="Background"
-                value={background.kind}
-                options={BACKGROUND_KINDS}
-                onChange={kind => actions.setBackground({ kind })}
-                className="smg-kinds"
+        <Section title="Morph">
+          <PreviewSwitch title="Morph" isChecked={doc.morph.on} onChange={on => actions.setMorph({ on })} />
+          {doc.morph.on && material.kind === 'metal' && (
+            <p className="smg-note smg-full">Liquid metal pauses while morph plays. It returns when morph is off.</p>
+          )}
+          {doc.morph.on && (
+            <>
+              <PreviewSelect
+                title="Into"
+                options={MARKS.map(mark => ({ value: mark.id, label: mark.name }))}
+                value={doc.morph.target?.preset || ''}
+                onChange={id => actions.setMorphTarget(id)}
               />
-            </div>
-            {background.kind !== 'none' && (
-              <PreviewColorPickerCustom
-                title={background.kind === 'linear' ? 'Top' : 'Background color'}
-                color={background.color1}
-                alpha
-                onChange={color1 => actions.setBackground({ color1 }, 'bg-color1')}
+              <PreviewSlider
+                title="Morph time"
+                min={0.3}
+                max={4}
+                step={0.05}
+                valueUnit="s"
+                value={doc.morph.duration}
+                onChange={duration => actions.setMorph({ duration }, 'morph-duration')}
               />
-            )}
-            {background.kind === 'linear' && (
-              <PreviewColorPickerCustom
-                title="Bottom"
-                color={background.color2}
-                alpha
-                onChange={color2 => actions.setBackground({ color2 }, 'bg-color2')}
+              <PreviewSlider
+                title="Hold"
+                min={0}
+                max={3}
+                step={0.05}
+                valueUnit="s"
+                value={doc.morph.hold}
+                onChange={hold => actions.setMorph({ hold }, 'morph-hold')}
               />
-            )}
-          </Section>
-
-          <Section title="Morph">
-            <PreviewSwitch title="Morph" isChecked={doc.morph.on} onChange={on => actions.setMorph({ on })} />
-            {doc.morph.on && material.kind === 'metal' && (
-              <p className="smg-note smg-full">Liquid metal pauses while morph plays. It returns when morph is off.</p>
-            )}
-            {doc.morph.on && (
-              <>
-                <PreviewSelect
-                  title="Into"
-                  options={MARKS.map(mark => ({ value: mark.id, label: mark.name }))}
-                  value={doc.morph.target?.preset || ''}
-                  onChange={id => actions.setMorphTarget(id)}
-                />
-                <PreviewSlider
-                  title="Morph time"
-                  min={0.3}
-                  max={4}
-                  step={0.05}
-                  valueUnit="s"
-                  value={doc.morph.duration}
-                  onChange={duration => actions.setMorph({ duration }, 'morph-duration')}
-                />
-                <PreviewSlider
-                  title="Hold"
-                  min={0}
-                  max={3}
-                  step={0.05}
-                  valueUnit="s"
-                  value={doc.morph.hold}
-                  onChange={hold => actions.setMorph({ hold }, 'morph-hold')}
-                />
-              </>
-            )}
-          </Section>
-        </div>
-      </div>
+            </>
+          )}
+        </Section>
+      </ScrollShell>
     </aside>
   );
 }

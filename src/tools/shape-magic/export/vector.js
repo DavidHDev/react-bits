@@ -1,8 +1,7 @@
-import { createRenderer } from '../engine/renderer';
 import { bindMasks, maskPlan } from '../engine/masks';
 import { materialFor } from '../presets/materials';
 import { ratioOf } from '../state/doc';
-import { prepareMasks } from './exporters';
+import { acquireRenderer, prepareMasks, releaseRenderer } from './exporters';
 import { componentName } from './code';
 
 const loaders = import.meta.glob(['../geometry/svg.js', '../geometry/morph.js']);
@@ -53,16 +52,15 @@ export async function readMarkField(doc, longSide = 1024) {
   const ratio = ratioOf(doc.artboard);
   const width = ratio.w >= ratio.h ? longSide : Math.round((longSide * ratio.w) / ratio.h);
   const height = ratio.w >= ratio.h ? Math.round((longSide * ratio.h) / ratio.w) : longSide;
-  const canvas = document.createElement('canvas');
-  const renderer = createRenderer(canvas, { preserve: true });
+  const item = acquireRenderer();
   try {
     const plan = maskPlan([doc.mark.layers]);
     const scene = { a: doc.mark, maskSlots: plan.slots };
-    await renderer.prepareScene(scene);
-    bindMasks(renderer, plan.keys);
-    return renderer.readField({ scene, width, height });
+    await item.renderer.prepareScene(scene);
+    bindMasks(item.renderer, plan.keys);
+    return item.renderer.readField({ scene, width, height });
   } finally {
-    renderer.dispose();
+    releaseRenderer(item);
   }
 }
 

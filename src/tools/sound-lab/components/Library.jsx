@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useRef, useState } from 'react';
 import { Search01Icon } from '@hugeicons/core-free-icons';
 import { Icon, Track } from '../../background-studio/components/ui';
 import { useScrollEdges } from '../../background-studio/hooks/useScrollEdges';
@@ -8,7 +8,7 @@ import { formatSeconds, visibleSounds } from '../sounds/browse';
 import { paintArt } from '../engine/art';
 import { themeIsLight } from '../engine/velvet';
 
-export function LibrarySwitch({ value, onChange }) {
+export const LibrarySwitch = memo(function LibrarySwitch({ value, onChange }) {
   const options = LIBRARIES.map(item => ({
     value: item.id,
     label: (
@@ -20,9 +20,9 @@ export function LibrarySwitch({ value, onChange }) {
   return (
     <Track label="Library" value={value} options={options} onChange={onChange} className="lab-rail-tabs snd-library" />
   );
-}
+});
 
-export function SoundSearch({ value, onChange }) {
+export const SoundSearch = memo(function SoundSearch({ value, onChange }) {
   return (
     <label className="bs-search lab-search">
       <Icon icon={Search01Icon} size={15} />
@@ -42,15 +42,15 @@ export function SoundSearch({ value, onChange }) {
       />
     </label>
   );
-}
+});
 
-export function CategoryFilter({ library, value, onChange }) {
+export const CategoryFilter = memo(function CategoryFilter({ library, value, onChange }) {
   const options = [
     { value: 'all', label: 'All sounds' },
     ...CATEGORIES.filter(item => item.library === library).map(item => ({ value: item.id, label: item.label }))
   ];
   return <PreviewSelect title="Show" options={options} value={value} onChange={onChange} />;
-}
+});
 
 const ScrollRoot = createContext(null);
 
@@ -107,7 +107,7 @@ const useLight = () => {
   return light;
 };
 
-function SoundTile({ sound, info, light, active, playing, reveal, onPick, onNeed, onRevealed }) {
+const SoundTile = memo(function SoundTile({ sound, info, light, active, playing, reveal, onPick, onNeed, onRevealed }) {
   const tileRef = useRef(null);
   const artRef = useRef(null);
   const near = useNear(tileRef);
@@ -153,7 +153,7 @@ function SoundTile({ sound, info, light, active, playing, reveal, onPick, onNeed
       <span className="snd-tile-time">{info ? formatSeconds(info.duration) : ''}</span>
     </button>
   );
-}
+});
 
 export function SoundList({
   library,

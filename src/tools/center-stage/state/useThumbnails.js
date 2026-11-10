@@ -3,11 +3,12 @@ import { Renderer } from '../engine/renderer';
 import { TextCache, prepareShot, renderShot } from '../engine/shot';
 import { PRESETS } from '../presets/index';
 import { posterTime, surfaceRole } from '../engine/scene';
-import { BACKGROUND_IMAGES, carryOver, frameOf, mediaSizes } from '../media';
+import { BACKGROUND_IMAGES, carryOver, elementFrame, mediaSizes, previewBitmap } from '../media';
 
 const WIDTH = 400;
 const HEIGHT = 250;
-const IDLE = 2500;
+const IDLE = 30000;
+const DETAIL = 1024;
 
 const BY_ID = Object.fromEntries(PRESETS.map(preset => [preset.id, preset]));
 
@@ -33,6 +34,37 @@ export const loadBackgroundImage = value => {
 
 const toBlob = canvas => new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.86));
 
+const toUrl = blob =>
+  new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null);
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(blob);
+  });
+
+const settled = gl =>
+  new Promise(resolve => {
+    const fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
+    if (!fence) {
+      resolve();
+      return;
+    }
+    gl.flush();
+    const poll = () => {
+      if (gl.isContextLost() || gl.getSyncParameter(fence, gl.SYNC_STATUS) === gl.SIGNALED) {
+        gl.deleteSync(fence);
+        resolve();
+      } else setTimeout(poll, 4);
+    };
+    setTimeout(poll, 4);
+  });
+
+const sourceFor = async media => {
+  const own = await previewBitmap(media, DETAIL);
+  if (own) return { frame: { image: own, width: media.width, height: media.height }, own };
+  return { frame: elementFrame(media), own: null };
+};
+
 export function useThumbnails(slots, version) {
   const [thumbs, setThumbs] = useState({});
   const work = useRef({
@@ -41,8 +73,8 @@ export function useThumbnails(slots, version) {
     wanted: [],
     stack: [],
     done: new Set(),
-    urls: {},
     engine: null,
+    booting: null,
     busy: false,
     idle: 0,
     alive: true
@@ -53,28 +85,59 @@ export function useThumbnails(slots, version) {
     clearTimeout(state.idle);
     state.engine?.renderer.dispose();
     state.engine = null;
+    state.booting = null;
   }, []);
 
-  const setup = useCallback(() => {
+  const sync = useCallback(async engine => {
+    const state = work.current;
+    const slots = state.slots;
+    if (!slots || engine.slots === slots) return true;
+    const length = Math.max(slots.length, engine.uploaded.length);
+    const changed = [];
+    for (let slot = 0; slot < length; slot += 1) {
+      if (engine.uploaded[slot] !== (slots[slot] || null)) changed.push(slot);
+    }
+    const sources = await Promise.all(changed.map(slot => (slots[slot] ? sourceFor(slots[slot]) : null)));
+    if (!state.alive || state.slots !== slots || state.engine !== engine) {
+      sources.forEach(source => source?.own?.close());
+      return false;
+    }
+    changed.forEach((slot, index) => {
+      const source = sources[index];
+      const frame = source?.frame;
+      if (frame) engine.renderer.setMedia(slot, frame.image, frame.width, frame.height);
+      else engine.renderer.clearMedia(slot);
+      source?.own?.close();
+      engine.uploaded[slot] = slots[slot] || null;
+    });
+    engine.slots = slots;
+    engine.sizes = mediaSizes(slots);
+    return true;
+  }, []);
+
+  const setup = useCallback(async () => {
     const state = work.current;
     if (state.engine) return state.engine;
-    const canvas = document.createElement('canvas');
-    canvas.width = WIDTH;
-    canvas.height = HEIGHT;
-    const renderer = new Renderer(canvas, { preserve: true, samples: 4 });
-    state.slots.forEach((media, slot) => {
-      const frame = frameOf(media);
-      if (frame) renderer.setMedia(slot, frame.image, frame.width, frame.height);
-    });
-    state.engine = {
-      canvas,
-      renderer,
-      sizes: mediaSizes(state.slots),
-      cache: new TextCache(2),
-      background: null
-    };
-    return state.engine;
-  }, []);
+    if (!state.booting) {
+      const canvas = document.createElement('canvas');
+      canvas.width = WIDTH;
+      canvas.height = HEIGHT;
+      const renderer = new Renderer(canvas, { preserve: true, samples: 4 });
+      renderer.warm();
+      const engine = {
+        canvas,
+        renderer,
+        slots: null,
+        uploaded: [],
+        sizes: [],
+        cache: new TextCache(2),
+        background: null
+      };
+      state.engine = engine;
+      state.booting = sync(engine).then(ok => (ok ? engine : null));
+    }
+    return state.booting;
+  }, [sync]);
 
   const pump = useCallback(async () => {
     const state = work.current;
@@ -94,7 +157,11 @@ export function useThumbnails(slots, version) {
       const generation = state.generation;
       let url = null;
       try {
-        const engine = setup();
+        const engine = (await setup()) || null;
+        if (!engine || !(await sync(engine))) {
+          if (state.alive && generation === state.generation) state.stack.push(id);
+          continue;
+        }
         const doc = carryOver(preset.doc, state.slots, surfaceRole);
         await prepareShot(doc);
         const background = doc.background || {};
@@ -105,26 +172,29 @@ export function useThumbnails(slots, version) {
             engine.background = background.image;
           }
         }
-        if (!state.alive || generation !== state.generation) continue;
-        renderShot(engine.renderer, doc, engine.sizes, {
+        if (!state.alive || generation !== state.generation || state.engine !== engine) continue;
+        const scene = renderShot(engine.renderer, doc, engine.sizes, {
           width: WIDTH,
           height: HEIGHT,
           time: posterTime(doc, preset.poster),
           seed: 7,
-          cache: engine.cache
+          cache: engine.cache,
+          defer: true
         });
+        if (!scene.drawn) {
+          state.stack.push(id);
+          await new Promise(resolve => setTimeout(resolve, 40));
+          continue;
+        }
+        await settled(engine.renderer.gl);
+        if (!state.alive || generation !== state.generation || state.engine !== engine) continue;
         const blob = await toBlob(engine.canvas);
         if (!state.alive || generation !== state.generation) continue;
-        url = blob ? URL.createObjectURL(blob) : null;
+        url = blob ? await toUrl(blob) : null;
       } catch {
         url = null;
       }
-      if (!state.alive || generation !== state.generation) {
-        if (url) URL.revokeObjectURL(url);
-        continue;
-      }
-      if (state.urls[id]) URL.revokeObjectURL(state.urls[id]);
-      state.urls[id] = url;
+      if (!state.alive || generation !== state.generation) continue;
       state.done.add(id);
       batch[id] = url;
       if (Object.keys(batch).length >= 4) flush();
@@ -134,7 +204,7 @@ export function useThumbnails(slots, version) {
     state.busy = false;
     if (state.stack.length && state.slots) pump();
     else state.idle = setTimeout(release, IDLE);
-  }, [release, setup]);
+  }, [release, setup, sync]);
 
   useEffect(() => {
     const state = work.current;
@@ -142,9 +212,8 @@ export function useThumbnails(slots, version) {
     state.generation += 1;
     state.done = new Set();
     state.stack = [...state.wanted];
-    release();
     if (state.slots) pump();
-  }, [slots, version, pump, release]);
+  }, [slots, version, pump]);
 
   useEffect(() => {
     const state = work.current;
@@ -152,8 +221,6 @@ export function useThumbnails(slots, version) {
     return () => {
       state.alive = false;
       release();
-      Object.values(state.urls).forEach(url => url && URL.revokeObjectURL(url));
-      state.urls = {};
     };
   }, [release]);
 

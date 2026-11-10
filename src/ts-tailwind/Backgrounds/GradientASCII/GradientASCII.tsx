@@ -402,9 +402,7 @@ const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
   if (!shader) return null;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
-  if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) return shader;
-  gl.deleteShader(shader);
-  return null;
+  return shader;
 };
 
 const link = (gl: WebGL2RenderingContext, fragmentSource: string): Program | null => {
@@ -417,19 +415,19 @@ const link = (gl: WebGL2RenderingContext, fragmentSource: string): Program | nul
   gl.linkProgram(program);
   gl.deleteShader(vertex);
   gl.deleteShader(fragment);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    gl.deleteProgram(program);
-    return null;
-  }
-  const uniforms: Record<string, WebGLUniformLocation | null> = {};
-  const count = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  return { program, uniforms: {} };
+};
+
+const resolve = (gl: WebGL2RenderingContext, item: Program) => {
+  if (!gl.getProgramParameter(item.program, gl.LINK_STATUS)) return false;
+  const count = gl.getProgramParameter(item.program, gl.ACTIVE_UNIFORMS);
   for (let i = 0; i < count; i++) {
-    const info = gl.getActiveUniform(program, i);
+    const info = gl.getActiveUniform(item.program, i);
     if (!info) continue;
     const name = info.name.replace(/\[0\]$/, '');
-    uniforms[name] = gl.getUniformLocation(program, name);
+    item.uniforms[name] = gl.getUniformLocation(item.program, name);
   }
-  return { program, uniforms };
+  return true;
 };
 
 const createTarget = (gl: WebGL2RenderingContext, count: number): Target => {
@@ -563,11 +561,17 @@ const GradientASCII = ({
     });
     if (!container || !canvas || !gl) return undefined;
 
+    const parallel = gl.getExtension('KHR_parallel_shader_compile');
     const field = link(gl, FIELD);
     const halo = link(gl, HALO);
     const blur = link(gl, BLUR);
     const composite = link(gl, COMPOSITE);
     if (!field || !halo || !blur || !composite) return undefined;
+    const programs = [field, halo, blur, composite];
+    if (!parallel && !programs.every(item => resolve(gl, item))) {
+      programs.forEach(item => gl.deleteProgram(item.program));
+      return undefined;
+    }
     const vao = gl.createVertexArray();
     const fieldTarget = createTarget(gl, 2);
     const haloA = createTarget(gl, 1);
@@ -612,6 +616,19 @@ const GradientASCII = ({
     let last = 0;
     let visible = true;
     let disposed = false;
+    let ready = !parallel;
+
+    const linked = () =>
+      !parallel || programs.every(item => gl.getProgramParameter(item.program, parallel.COMPLETION_STATUS_KHR));
+
+    const release = () => {
+      if (gl.isContextLost()) return;
+      if (!ready && !linked()) {
+        requestAnimationFrame(release);
+        return;
+      }
+      programs.forEach(item => gl.deleteProgram(item.program));
+    };
 
     const syncAtlas = () => {
       const s = settingsRef.current;
@@ -673,6 +690,7 @@ const GradientASCII = ({
     };
 
     const draw = () => {
+      if (!ready) return;
       const s = settingsRef.current;
       const aspect = view.width / view.height;
       syncAtlas();
@@ -794,6 +812,17 @@ const GradientASCII = ({
     const frame = (now: number) => {
       raf = 0;
       if (disposed || !visible || document.hidden) return;
+      if (!ready) {
+        if (!gl.isContextLost() && !linked()) {
+          raf = requestAnimationFrame(frame);
+          return;
+        }
+        if (!programs.every(item => resolve(gl, item))) {
+          dispose();
+          return;
+        }
+        ready = true;
+      }
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.001, 0.05) : 1 / 60;
       last = now;
@@ -877,7 +906,8 @@ const GradientASCII = ({
     resize();
     wakeRef.current = wake;
 
-    return () => {
+    const dispose = () => {
+      if (disposed) return;
       disposed = true;
       cancelAnimationFrame(raf);
       wakeRef.current = null;
@@ -892,9 +922,15 @@ const GradientASCII = ({
       });
       if (atlas) gl.deleteTexture(atlas.texture);
       gl.deleteVertexArray(vao);
-      [field, halo, blur, composite].forEach(item => gl.deleteProgram(item.program));
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (canvas.isConnected) {
+        release();
+      } else {
+        programs.forEach(item => gl.deleteProgram(item.program));
+        gl.getExtension('WEBGL_lose_context')?.loseContext();
+      }
     };
+
+    return dispose;
   }, []);
 
   useEffect(() => {

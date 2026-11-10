@@ -95,6 +95,7 @@ export function createLiveBackdrop() {
   let theme = 'dark';
   let disposed = false;
   let request = 0;
+  let capturing = false;
 
   const ensure = (width, height) => {
     if (boot) return boot;
@@ -146,9 +147,11 @@ export function createLiveBackdrop() {
       await bridge.load(resolved.id, resolved.props);
     },
     capture() {
-      if (!api || !key) return;
+      if (!api || !key || capturing) return;
+      capturing = true;
       api.clock.afterFrame(() => {
-        const stage = api.stage();
+        capturing = false;
+        const stage = api?.stage();
         if (!stage) return;
         drawLayers(context, collectLayers(stage), canvas.width, canvas.height, fill);
         version += 1;

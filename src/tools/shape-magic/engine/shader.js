@@ -48,9 +48,26 @@ const fillHelpers = material => `
 ${material.glsl}
 `;
 
-const materialHelpers = material => `
-float shapeAt(vec2 q) {
+const fieldTap = `float shapeAt(vec2 q) {
+  vec2 f = q * uUnit + uCenter;
+  vec2 t = vec2(f.x, uResolution.y - f.y) - 0.5;
+  vec2 last = uResolution - 1.0;
+  if (t.x < 0.0 || t.y < 0.0 || t.x > last.x || t.y > last.y) return scene(q);
+  ivec2 i = ivec2(floor(t));
+  vec2 w = t - vec2(i);
+  ivec2 j = min(i + 1, ivec2(last));
+  float a = mix(texelFetch(uField, i, 0).x, texelFetch(uField, ivec2(j.x, i.y), 0).x, w.x);
+  float b = mix(texelFetch(uField, ivec2(i.x, j.y), 0).x, texelFetch(uField, j, 0).x, w.x);
+  return mix(a, b, w.y);
+}`;
+
+const materialHelpers = (material, cached) => `
+${
+  cached && material.softTaps
+    ? fieldTap
+    : `float shapeAt(vec2 q) {
   return scene(q);
+}`
 }
 
 vec4 backdropAt(vec2 q) {
@@ -84,7 +101,9 @@ export const buildFragment = (
     radialCopies = true,
     linearCopies = true,
     shadow = true,
-    bevel = true
+    bevel = true,
+    cached = false,
+    bake = false
   } = {}
 ) => `#version 300 es
 precision highp float;
@@ -138,7 +157,7 @@ uniform vec4 uBevel;
 uniform vec4 uBg;
 uniform vec4 uBgColor1;
 uniform vec4 uBgColor2;
-
+${cached ? 'uniform highp sampler2D uField;\n' : ''}${bake ? 'uniform vec4 uBake;\n' : ''}
 out vec4 outColor;
 
 mat2 rot2(float a) {
@@ -489,24 +508,10 @@ float bevelLight(vec3 N) {
   float occlusion = mix(1.0, 0.78, 1.0 - N.z);
   return mix(1.0, diffuse * occlusion, uBevel.x);
 }
-${material && material.kind !== 'fill' ? materialHelpers(material) : ''}
-void main() {
-  vec2 frag = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y);
-  vec2 p = (frag - uCenter) / uUnit;
-  float px = 1.0 / uUnit;
-  bool shadowed = ${shadow ? 'uEncode < 0.5 && uShadow.x > 0.0' : 'false'};
-#ifdef HAS_MATERIAL
-  bool beveled = ${bevel ? 'uEncode < 0.5 && MATERIAL_NORMALS' : 'false'};
-  float bw = max(uSurface.x, px);
-#else
-  bool lit = uEncode < 0.5 && uFill.x > 0.5 && uBevel.z > 0.0;
-  bool beveled = ${bevel ? 'lit && uSurfInfo.z < 0.5' : 'false'};
-  float bw = max(uBevel.z, px);
-#endif
-  float e = clamp(bw * 0.2, px * 1.5, max(bw * 0.5, px * 1.5));
-  ${
-    shadow || bevel
-      ? `vec2 points[6];
+${material && material.kind !== 'fill' ? materialHelpers(material, cached) : ''}
+${bake ? bakeMain : mainBody(material, { shadow, bevel, cached })}`;
+
+const TAPS = `vec2 points[6];
   points[0] = p;
   int count = 1;
   int shadowAt = -1;
@@ -529,12 +534,64 @@ void main() {
     if (k >= count) break;
     values[k] = scene(points[k]);
   }
-  float d = values[0];
-  float aa = clamp(length(vec2(dFdx(d), dFdy(d))), px * 0.5, px * 1.5);
-  vec2 g = glossAt >= 0
+  float d = values[0];`;
+
+const GRADIENT = `glossAt >= 0
     ? vec2(values[glossAt] - values[glossAt + 1], values[glossAt + 2] - values[glossAt + 3]) / (2.0 * e)
-    : vec2(0.0);`
-      : `float d = scene(p);
+    : vec2(0.0)`;
+
+const bakeMain = `void main() {
+  vec2 frag = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y);
+  vec2 p = (frag - uCenter) / uUnit;
+  float px = 1.0 / uUnit;
+  bool shadowed = uBake.z > 0.5;
+  bool beveled = uBake.y > 0.5;
+  float bw = max(uBake.x, px);
+  float e = clamp(bw * 0.2, px * 1.5, max(bw * 0.5, px * 1.5));
+  ${TAPS}
+  vec2 g = ${GRADIENT};
+  outColor = vec4(d, g, shadowAt >= 0 ? values[shadowAt] : 0.0);
+}`;
+
+const materialBlock = (material, quadSafe) =>
+  quadSafe
+    ? `float reach = 1.0 - smoothstep(MATERIAL_REACH * 0.55, MATERIAL_REACH, d);
+    float weight = MATERIAL_OUTSIDE ? max(reach, s.cov) : s.cov;
+    if (weight > 0.0) {
+      vec4 m = material(s);
+      float ma = clamp(m.a * weight, 0.0, 1.0);
+      col = over(col, vec4(clamp(m.rgb, 0.0, 1.0) * ma, ma));
+    }`
+    : `vec4 m = material(s);
+    float reach = 1.0 - smoothstep(MATERIAL_REACH * 0.55, MATERIAL_REACH, d);
+    float ma = clamp(MATERIAL_OUTSIDE ? m.a * max(reach, s.cov) : m.a * s.cov, 0.0, 1.0);
+    col = over(col, vec4(clamp(m.rgb, 0.0, 1.0) * ma, ma));`;
+
+const mainBody = (material, { shadow, bevel, cached }) => `void main() {
+  vec2 frag = vec2(gl_FragCoord.x, uResolution.y - gl_FragCoord.y);
+  vec2 p = (frag - uCenter) / uUnit;
+  float px = 1.0 / uUnit;
+  bool shadowed = ${shadow ? 'uEncode < 0.5 && uShadow.x > 0.0' : 'false'};
+#ifdef HAS_MATERIAL
+  bool beveled = ${bevel ? 'uEncode < 0.5 && MATERIAL_NORMALS' : 'false'};
+  float bw = max(uSurface.x, px);
+#else
+  bool lit = uEncode < 0.5 && uFill.x > 0.5 && uBevel.z > 0.0;
+  bool beveled = ${bevel ? 'lit && uSurfInfo.z < 0.5' : 'false'};
+  float bw = max(uBevel.z, px);
+#endif
+  float e = clamp(bw * 0.2, px * 1.5, max(bw * 0.5, px * 1.5));
+  ${
+    cached
+      ? `vec4 field = texelFetch(uField, ivec2(gl_FragCoord.xy), 0);
+  float d = field.x;
+  float aa = clamp(length(vec2(dFdx(d), dFdy(d))), px * 0.5, px * 1.5);
+  vec2 g = beveled ? field.yz : vec2(0.0);`
+      : shadow || bevel
+        ? `${TAPS}
+  float aa = clamp(length(vec2(dFdx(d), dFdy(d))), px * 0.5, px * 1.5);
+  vec2 g = ${GRADIENT};`
+        : `float d = scene(p);
   float aa = clamp(length(vec2(dFdx(d), dFdy(d))), px * 0.5, px * 1.5);
   vec2 g = vec2(0.0);`
   }
@@ -552,8 +609,8 @@ void main() {
 
   ${
     shadow
-      ? `if (shadowAt >= 0) {
-    float ds = values[shadowAt];
+      ? `if (${cached ? 'shadowed' : 'shadowAt >= 0'}) {
+    float ds = ${cached ? 'field.w' : 'values[shadowAt]'};
     float blur = max(uShadow.y, px);
     float a = (1.0 - smoothstep(-blur, blur, ds)) * uShadow.x;
     col = over(col, vec4(uShadowColor.rgb, 1.0) * a * uShadowColor.a);
@@ -589,10 +646,7 @@ void main() {
     s.slope = length(g);
     s.n = s.slope > 1e-5 ? g / s.slope : vec2(0.0);
     s.time = uTime;
-    vec4 m = material(s);
-    float reach = 1.0 - smoothstep(MATERIAL_REACH * 0.55, MATERIAL_REACH, d);
-    float ma = clamp(MATERIAL_OUTSIDE ? m.a * max(reach, s.cov) : m.a * s.cov, 0.0, 1.0);
-    col = over(col, vec4(clamp(m.rgb, 0.0, 1.0) * ma, ma));
+    ${material ? materialBlock(material, !/\b(dFdx|dFdy|fwidth)\b/.test(material.glsl)) : ''}
   }
 #else
   float fillCov = clamp(0.5 - d / aa, 0.0, 1.0);

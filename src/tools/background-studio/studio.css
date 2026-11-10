@@ -441,6 +441,10 @@
   animation: bs-spin 0.8s linear infinite;
 }
 
+.bs-loading .bs-spinner[data-idle] {
+  animation-play-state: paused;
+}
+
 .bs-error {
   inset: 0;
   display: flex;

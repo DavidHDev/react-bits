@@ -113,6 +113,7 @@ export default {
   blend: 'normal',
   description: 'Anything that moves leaves a soft, fading trail, like a long exposure.',
   animated: false,
+  temporal: true,
   params: [
     { key: 'length', label: 'Trail length', type: 'number', min: 0.05, max: 4, step: 0.01, default: 1 },
     { key: 'threshold', label: 'Motion threshold', type: 'number', min: 0.01, max: 0.5, step: 0.01, default: 0.06 },

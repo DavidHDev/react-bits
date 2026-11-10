@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Search01Icon } from '@hugeicons/core-free-icons';
 import { CATALOG, matchesQuery, thumbnailFor } from '../utils/catalog';
 import { useScrollEdges } from '../hooks/useScrollEdges';
 import { Icon } from './ui';
 
-const Thumb = ({ entry, light }) => {
+const Thumb = memo(function Thumb({ entry, light }) {
   const [failed, setFailed] = useState(false);
   return (
     <span className="bs-thumb" aria-hidden="true">
@@ -20,9 +20,24 @@ const Thumb = ({ entry, light }) => {
       )}
     </span>
   );
-};
+});
 
-export default function BackgroundList({ activeId, light, onSelect, autoFocus = false, onEscape }) {
+const Item = memo(function Item({ entry, active, light, onSelect }) {
+  return (
+    <button
+      type="button"
+      className="bs-item"
+      aria-current={active ? 'true' : undefined}
+      onClick={() => onSelect(entry.id)}
+    >
+      <Thumb key={`${entry.id}-${light}`} entry={entry} light={light} />
+      <span className="bs-item-label">{entry.label}</span>
+      {entry.isNew && <span className="bs-tag bs-tag--new">New</span>}
+    </button>
+  );
+});
+
+function BackgroundList({ activeId, light, onSelect, onIntent, autoFocus = false, onEscape }) {
   const [query, setQuery] = useState('');
   const listRef = useRef(null);
   const items = useMemo(() => CATALOG.filter(entry => matchesQuery(entry, query)), [query]);
@@ -42,6 +57,15 @@ export default function BackgroundList({ activeId, light, onSelect, autoFocus = 
     } else if (top < list.scrollTop + 8) list.scrollTop = Math.max(0, top - 8);
     else if (bottom > list.scrollTop + list.clientHeight - 8) list.scrollTop = bottom - list.clientHeight + 8;
   }, [activeId, items]);
+
+  const pointAt = event => {
+    if (!onIntent || event.pointerType === 'touch') return;
+    const button = event.target.closest?.('.bs-item');
+    const index = button ? Array.prototype.indexOf.call(listRef.current?.children || [], button) : -1;
+    onIntent(index >= 0 ? items[index]?.id || null : null);
+  };
+
+  const leave = () => onIntent?.(null);
 
   const onKeyDown = event => {
     if (event.key === 'Enter' && items[0]) {
@@ -77,19 +101,16 @@ export default function BackgroundList({ activeId, light, onSelect, autoFocus = 
         data-top={edges.top ? '' : undefined}
         data-bottom={edges.bottom ? '' : undefined}
       >
-        <div className="bs-list" ref={listRef}>
+        <div
+          className="bs-list"
+          ref={listRef}
+          onPointerOver={pointAt}
+          onPointerLeave={leave}
+          onFocus={pointAt}
+          onBlur={leave}
+        >
           {items.map(entry => (
-            <button
-              key={entry.id}
-              type="button"
-              className="bs-item"
-              aria-current={entry.id === activeId ? 'true' : undefined}
-              onClick={() => onSelect(entry.id)}
-            >
-              <Thumb key={`${entry.id}-${light}`} entry={entry} light={light} />
-              <span className="bs-item-label">{entry.label}</span>
-              {entry.isNew && <span className="bs-tag bs-tag--new">New</span>}
-            </button>
+            <Item key={entry.id} entry={entry} active={entry.id === activeId} light={light} onSelect={onSelect} />
           ))}
           {!items.length && <p className="bs-empty">Nothing matches “{query.trim()}”.</p>}
         </div>
@@ -97,3 +118,5 @@ export default function BackgroundList({ activeId, light, onSelect, autoFocus = 
     </div>
   );
 }
+
+export default memo(BackgroundList);

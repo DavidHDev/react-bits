@@ -68,11 +68,30 @@ function LayerRow({ layer, index, count, selected, drag, onSelect, onToggle, onD
   );
 }
 
+function PanelScroll({ children }) {
+  const scrollRef = useRef(null);
+  const edges = useScrollEdges(scrollRef, '.lab-settings .preview-options > *');
+  return (
+    <div className="lab-scroll-shell" data-top={edges.top ? '' : undefined} data-bottom={edges.bottom ? '' : undefined}>
+      <div className="lab-scroll lab-panel-scroll" ref={scrollRef}>
+        {children}
+      </div>
+      <button
+        type="button"
+        className="lab-more"
+        data-hidden={edges.bottom || !edges.below ? '' : undefined}
+        tabIndex={edges.bottom || !edges.below ? -1 : 0}
+        onClick={() => scrollRef.current?.scrollBy({ top: scrollRef.current.clientHeight * 0.7, behavior: 'smooth' })}
+      >
+        {edges.below} more
+      </button>
+    </div>
+  );
+}
+
 export default function LayersPanel({ stack, look, strength, onStrength, onResetLook, onAdd }) {
   const [drag, setDrag] = useState(null);
   const listRef = useRef(null);
-  const scrollRef = useRef(null);
-  const edges = useScrollEdges(scrollRef, '.lab-settings .preview-options > *');
   const { layers, selectedLayer } = stack;
   const effect = selectedLayer ? EFFECTS[selectedLayer.type] : null;
 
@@ -100,131 +119,116 @@ export default function LayersPanel({ stack, look, strength, onStrength, onReset
 
   return (
     <aside className="lab-panel" aria-label="Layers and settings">
-      <div
-        className="lab-scroll-shell"
-        data-top={edges.top ? '' : undefined}
-        data-bottom={edges.bottom ? '' : undefined}
-      >
-        <div className="lab-scroll lab-panel-scroll" ref={scrollRef}>
-          <LookPanel
-            look={look}
-            layers={layers}
-            strength={strength}
-            onStrength={onStrength}
-            onParam={stack.setParam}
-            onReset={onResetLook}
-          />
-          <section className="customize-frame lab-section">
-            <div className="customize-heading">
-              <h2>Layers</h2>
-              <div className="customize-heading-actions">
-                <Tip label="Undo" hint="⌘Z">
-                  <button
-                    type="button"
-                    className="customize-heading-action lab-heading-icon"
-                    aria-label="Undo"
-                    onClick={stack.undo}
-                    disabled={!stack.canUndo}
-                  >
-                    <Icon icon={Undo02Icon} size={15} />
-                  </button>
-                </Tip>
-                <Tip label="Redo" hint="⇧⌘Z">
-                  <button
-                    type="button"
-                    className="customize-heading-action lab-heading-icon"
-                    aria-label="Redo"
-                    onClick={stack.redo}
-                    disabled={!stack.canRedo}
-                  >
-                    <Icon icon={Redo02Icon} size={15} />
-                  </button>
-                </Tip>
-                <button type="button" className="customize-heading-action lab-add" onClick={onAdd}>
-                  <Icon icon={PlusSignIcon} size={14} />
-                  <span>Add</span>
+      <PanelScroll>
+        <LookPanel
+          look={look}
+          layers={layers}
+          strength={strength}
+          onStrength={onStrength}
+          onParam={stack.setParam}
+          onReset={onResetLook}
+        />
+        <section className="customize-frame lab-section">
+          <div className="customize-heading">
+            <h2>Layers</h2>
+            <div className="customize-heading-actions">
+              <Tip label="Undo" hint="⌘Z">
+                <button
+                  type="button"
+                  className="customize-heading-action lab-heading-icon"
+                  aria-label="Undo"
+                  onClick={stack.undo}
+                  disabled={!stack.canUndo}
+                >
+                  <Icon icon={Undo02Icon} size={15} />
                 </button>
+              </Tip>
+              <Tip label="Redo" hint="⇧⌘Z">
+                <button
+                  type="button"
+                  className="customize-heading-action lab-heading-icon"
+                  aria-label="Redo"
+                  onClick={stack.redo}
+                  disabled={!stack.canRedo}
+                >
+                  <Icon icon={Redo02Icon} size={15} />
+                </button>
+              </Tip>
+              <button type="button" className="customize-heading-action lab-add" onClick={onAdd}>
+                <Icon icon={PlusSignIcon} size={14} />
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+          <div className="preview-options lab-layers" role="listbox" aria-label="Effect layers" ref={listRef}>
+            {layers.length ? (
+              layers.map((layer, index) => (
+                <LayerRow
+                  key={layer.id}
+                  layer={layer}
+                  index={index}
+                  count={layers.length}
+                  selected={layer.id === stack.selected}
+                  drag={drag}
+                  onSelect={stack.select}
+                  onToggle={(id, visible) => stack.update(id, { visible })}
+                  onDragStart={startDrag}
+                />
+              ))
+            ) : (
+              <p className="lab-empty">Pick a style or add an effect to start.</p>
+            )}
+          </div>
+        </section>
+
+        {selectedLayer && effect && (
+          <section className="customize-frame lab-section lab-settings">
+            <div className="customize-heading">
+              <h2>{effect.name}</h2>
+              <div className="customize-heading-actions">
+                <Tip label="Reset settings">
+                  <button
+                    type="button"
+                    className="customize-heading-action lab-heading-icon"
+                    aria-label="Reset settings"
+                    onClick={() => stack.reset(selectedLayer.id)}
+                  >
+                    <RotateCcw size={14} aria-hidden="true" />
+                  </button>
+                </Tip>
+                <Tip label="Duplicate" hint="⌘D">
+                  <button
+                    type="button"
+                    className="customize-heading-action lab-heading-icon"
+                    aria-label="Duplicate layer"
+                    onClick={() => stack.duplicate(selectedLayer.id)}
+                  >
+                    <Icon icon={Copy01Icon} size={15} />
+                  </button>
+                </Tip>
+                <Tip label="Remove" hint="⌫">
+                  <button
+                    type="button"
+                    className="customize-heading-action lab-heading-icon"
+                    aria-label="Remove layer"
+                    onClick={() => stack.remove(selectedLayer.id)}
+                  >
+                    <Icon icon={Delete02Icon} size={15} />
+                  </button>
+                </Tip>
               </div>
             </div>
-            <div className="preview-options lab-layers" role="listbox" aria-label="Effect layers" ref={listRef}>
-              {layers.length ? (
-                layers.map((layer, index) => (
-                  <LayerRow
-                    key={layer.id}
-                    layer={layer}
-                    index={index}
-                    count={layers.length}
-                    selected={layer.id === stack.selected}
-                    drag={drag}
-                    onSelect={stack.select}
-                    onToggle={(id, visible) => stack.update(id, { visible })}
-                    onDragStart={startDrag}
-                  />
-                ))
-              ) : (
-                <p className="lab-empty">Pick a style or add an effect to start.</p>
-              )}
+            <div className="preview-options lab-options">
+              <ParamControls
+                effect={effect}
+                layer={selectedLayer}
+                onParam={(name, value) => stack.setParam(selectedLayer.id, name, value)}
+                onLayer={(patch, key) => stack.update(selectedLayer.id, patch, key)}
+              />
             </div>
           </section>
-
-          {selectedLayer && effect && (
-            <section className="customize-frame lab-section lab-settings">
-              <div className="customize-heading">
-                <h2>{effect.name}</h2>
-                <div className="customize-heading-actions">
-                  <Tip label="Reset settings">
-                    <button
-                      type="button"
-                      className="customize-heading-action lab-heading-icon"
-                      aria-label="Reset settings"
-                      onClick={() => stack.reset(selectedLayer.id)}
-                    >
-                      <RotateCcw size={14} aria-hidden="true" />
-                    </button>
-                  </Tip>
-                  <Tip label="Duplicate" hint="⌘D">
-                    <button
-                      type="button"
-                      className="customize-heading-action lab-heading-icon"
-                      aria-label="Duplicate layer"
-                      onClick={() => stack.duplicate(selectedLayer.id)}
-                    >
-                      <Icon icon={Copy01Icon} size={15} />
-                    </button>
-                  </Tip>
-                  <Tip label="Remove" hint="⌫">
-                    <button
-                      type="button"
-                      className="customize-heading-action lab-heading-icon"
-                      aria-label="Remove layer"
-                      onClick={() => stack.remove(selectedLayer.id)}
-                    >
-                      <Icon icon={Delete02Icon} size={15} />
-                    </button>
-                  </Tip>
-                </div>
-              </div>
-              <div className="preview-options lab-options">
-                <ParamControls
-                  effect={effect}
-                  layer={selectedLayer}
-                  onParam={(name, value) => stack.setParam(selectedLayer.id, name, value)}
-                  onLayer={(patch, key) => stack.update(selectedLayer.id, patch, key)}
-                />
-              </div>
-            </section>
-          )}
-        </div>
-        <button
-          type="button"
-          className="lab-more"
-          data-hidden={edges.bottom || !edges.below ? '' : undefined}
-          tabIndex={edges.bottom || !edges.below ? -1 : 0}
-          onClick={() => scrollRef.current?.scrollBy({ top: scrollRef.current.clientHeight * 0.7, behavior: 'smooth' })}
-        >
-          {edges.below} more
-        </button>
-      </div>
+        )}
+      </PanelScroll>
     </aside>
   );
 }

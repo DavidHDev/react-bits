@@ -22,6 +22,28 @@ import { Icon, Tip, Track } from './ui';
 
 const PAGE_FILL = { dark: '#120f17', light: '#ffffff' };
 const PREVIEW_BOX = { width: 560, height: 360 };
+const PREVIEW_LIMIT = 8;
+
+const previews = new Map();
+
+const recallPreview = key => {
+  const url = previews.get(key);
+  if (!url) return null;
+  previews.delete(key);
+  previews.set(key, url);
+  return url;
+};
+
+const storePreview = (key, blob) => {
+  const url = URL.createObjectURL(blob);
+  previews.set(key, url);
+  if (previews.size > PREVIEW_LIMIT) {
+    const [oldest, stale] = previews.entries().next().value;
+    previews.delete(oldest);
+    URL.revokeObjectURL(stale);
+  }
+  return url;
+};
 
 const IMAGE_FORMATS = [
   { value: 'png', label: 'PNG', mime: 'image/png' },
@@ -188,6 +210,15 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
 
   useEffect(() => {
     if (job) return undefined;
+    const key = JSON.stringify([entry.id, renderProps, theme, layout.width, layout.height, moment, fill]);
+    const known = recallPreview(key);
+    if (known) {
+      previewRef.current?.abort();
+      previewRef.current = null;
+      setPreview(known);
+      setPreviewing(false);
+      return undefined;
+    }
     const controller = new AbortController();
     const timer = setTimeout(async () => {
       previewRef.current?.abort();
@@ -206,7 +237,8 @@ export default function MediaExport({ kind, state, stageSize, onBusyChange }) {
           fill,
           signal: controller.signal
         });
-        if (!controller.signal.aborted) setPreview(canvas.toDataURL('image/png'));
+        const blob = controller.signal.aborted ? null : await canvasToBlob(canvas, 'image/png');
+        if (blob && !controller.signal.aborted) setPreview(storePreview(key, blob));
       } catch {
         if (!controller.signal.aborted) setPreview(null);
       } finally {

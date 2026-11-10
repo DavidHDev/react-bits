@@ -74,8 +74,10 @@ export function lookAt(eye, target, up) {
   return [x[0], y[0], z[0], 0, x[1], y[1], z[1], 0, x[2], y[2], z[2], 0, -dot(x, eye), -dot(y, eye), -dot(z, eye), 1];
 }
 
-export function invert(m) {
+export function invert(m, rays = false) {
   const inv = new Array(16);
+  const zy = rays ? m[7] : m[6];
+  const zx = rays ? m[3] : m[2];
   inv[0] =
     m[5] * m[10] * m[15] -
     m[5] * m[11] * m[14] -
@@ -155,9 +157,9 @@ export function invert(m) {
     m[12] * m[3] * m[5];
   inv[14] =
     -m[0] * m[5] * m[14] +
-    m[0] * m[7] * m[13] +
+    m[0] * zy * m[13] +
     m[4] * m[1] * m[14] -
-    m[4] * m[3] * m[13] -
+    m[4] * zx * m[13] -
     m[12] * m[1] * m[6] +
     m[12] * m[2] * m[5];
   inv[3] =

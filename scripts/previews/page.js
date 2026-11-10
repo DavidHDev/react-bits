@@ -68,6 +68,19 @@ export const pageScript = config => `(() => {
     rafs = rafs.filter(entry => entry[0] !== id);
   };
 
+  for (const type of [window.WebGLRenderingContext, window.WebGL2RenderingContext]) {
+    const proto = type && type.prototype;
+    if (!proto) continue;
+    const { getExtension, getSupportedExtensions } = proto;
+    proto.getExtension = function (name) {
+      return String(name).toLowerCase() === 'khr_parallel_shader_compile' ? null : getExtension.call(this, name);
+    };
+    proto.getSupportedExtensions = function () {
+      const names = getSupportedExtensions.call(this);
+      return names ? names.filter(name => name.toLowerCase() !== 'khr_parallel_shader_compile') : names;
+    };
+  }
+
   const schedule = (fn, ms, args, repeat) => {
     seq += 1;
     const id = seq;
