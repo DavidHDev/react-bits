@@ -3,12 +3,11 @@ import { Renderer } from '../engine/renderer';
 import { TextCache, prepareShot, renderShot } from '../engine/shot';
 import { PRESETS } from '../presets/index';
 import { posterTime, surfaceRole } from '../engine/scene';
-import { BACKGROUND_IMAGES, carryOver, elementFrame, mediaSizes, previewBitmap } from '../media';
+import { BACKGROUND_IMAGES, carryOver, decodeBitmap, elementFrame, mediaSizes } from '../media';
 
 const WIDTH = 400;
 const HEIGHT = 250;
 const IDLE = 30000;
-const DETAIL = 1024;
 
 const BY_ID = Object.fromEntries(PRESETS.map(preset => [preset.id, preset]));
 
@@ -60,7 +59,7 @@ const settled = gl =>
   });
 
 const sourceFor = async media => {
-  const own = await previewBitmap(media, DETAIL);
+  const own = await decodeBitmap(media);
   if (own) return { frame: { image: own, width: media.width, height: media.height }, own };
   return { frame: elementFrame(media), own: null };
 };

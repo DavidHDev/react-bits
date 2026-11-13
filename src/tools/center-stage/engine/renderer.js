@@ -256,7 +256,6 @@ export class Renderer {
     const bitmap = typeof ImageBitmap !== 'undefined' && source instanceof ImageBitmap;
     texture.upload(source, bitmap ? source.width : width, bitmap ? source.height : height, { mips });
     texture.aspect = width / height;
-    texture.shift = bitmap ? Math.log2(width / source.width) : 0;
     return texture;
   }
 
@@ -1169,7 +1168,6 @@ export class Renderer {
         : (bg.blur ?? 0) > 0
           ? Math.log2(1 + width * 0.02 * bg.blur)
           : 0;
-    const imageBlur = blurLevel > 0 && image?.shift ? Math.max(1e-3, blurLevel - image.shift) : blurLevel;
     const center = scene.camera.target;
     const values = [
       ['uInvViewProj', scene.camera.rays],
@@ -1196,7 +1194,7 @@ export class Renderer {
       ['uVignette', transparent ? 0 : (doc.finish?.vignette ?? 0.18)],
       ['uHasImage', image ? 1 : 0],
       ['uImageXform', xform],
-      ['uImageBlur', imageBlur],
+      ['uImageBlur', blurLevel],
       ['uImageDim', bg.dim ?? (bg.kind === 'ambient' ? 0.45 : 0)],
       ['uImageSaturation', bg.saturation ?? (bg.kind === 'ambient' ? 1.15 : 1)],
       ['uHasShadow', shadow ? 1 : 0],

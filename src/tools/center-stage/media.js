@@ -58,29 +58,6 @@ export async function decodeBitmap(media) {
   return bitmap;
 }
 
-export async function previewBitmap(media, short) {
-  if (!isImageElement(media) || typeof createImageBitmap !== 'function') return null;
-  let shift = 0;
-  while (Math.min(media.width, media.height) >> (shift + 1) >= short) shift += 1;
-  if (!shift) return decodeBitmap(media);
-  const width = media.width >> shift;
-  const height = media.height >> shift;
-  try {
-    const source = media.file || media.url;
-    const blob = source instanceof Blob ? source : await fetchBlob(source);
-    const bitmap = blob
-      ? await createImageBitmap(blob, { ...BITMAP, resizeWidth: width, resizeHeight: height, resizeQuality: 'medium' })
-      : null;
-    if (bitmap && (bitmap.width !== width || bitmap.height !== height)) {
-      bitmap.close?.();
-      return decodeBitmap(media);
-    }
-    return bitmap || decodeBitmap(media);
-  } catch {
-    return decodeBitmap(media);
-  }
-}
-
 export const liveBitmap = media => (media?.bitmap && media.bitmap.width > 0 ? media.bitmap : null);
 
 export const releaseMedia = media => {
