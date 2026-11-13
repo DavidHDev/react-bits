@@ -2381,6 +2381,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Crisper glowing lines and a scan head with an afterglow trail, plus lines that part around the cursor, click pings, a power-on intro and a light mode.'
+      },
+      {
+        date: '2026-11-13',
+        note: 'Fixed a blank canvas (lost WebGL context) when rendered under React StrictMode, e.g. Next.js dev mode.'
       }
     ]
   },
