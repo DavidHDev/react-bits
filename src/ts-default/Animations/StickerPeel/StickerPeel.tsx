@@ -1110,7 +1110,7 @@ const StickerPeel = ({
       gl.deleteBuffer(indexBuffer);
       gl.deleteVertexArray(vao);
       gl.deleteProgram(program.program);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 
