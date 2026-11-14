@@ -1019,6 +1019,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Keeps glyph motion and selection stable and prevents canvas flicker while resizing.'
+      },
+      {
+        date: '2026-11-10',
+        note: 'Keeps letters visible after the browser resets the canvas, such as after a graphics driver reset.'
       }
     ]
   },
