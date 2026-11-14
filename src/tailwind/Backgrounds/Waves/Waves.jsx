@@ -696,7 +696,7 @@ const Waves = ({
       gl.deleteProgram(program.program);
       gl.deleteVertexArray(vao);
       gl.deleteTexture(texture);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 

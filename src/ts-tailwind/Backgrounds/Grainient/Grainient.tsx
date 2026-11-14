@@ -665,7 +665,7 @@ const Grainient = ({
       gl.deleteVertexArray(vao);
       gl.deleteProgram(field.program);
       gl.deleteProgram(composite.program);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 

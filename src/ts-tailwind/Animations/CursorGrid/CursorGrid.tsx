@@ -638,7 +638,7 @@ const CursorGrid = ({
       gl.deleteTexture(stateTexture);
       gl.deleteVertexArray(vao);
       gl.deleteProgram(shader.program);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 

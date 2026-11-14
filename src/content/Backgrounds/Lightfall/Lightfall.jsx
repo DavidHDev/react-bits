@@ -727,7 +727,7 @@ const Lightfall = ({
       [streakProgram, downProgram, blurProgram, compositeProgram].forEach(item => gl.deleteProgram(item.program));
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
-      if (!gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected && !gl.isContextLost()) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, [generation]);
 

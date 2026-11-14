@@ -519,6 +519,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -1308,6 +1312,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -1713,6 +1721,10 @@ export const componentMetadata = {
       {
         date: '2026-10-10',
         note: 'Rebuilt with a crisp glass edge whose light glides around the rim toward the cursor, rests softly when idle and flashes on press.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -1762,6 +1774,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as a liquid swarm that flows after the cursor, curls into eddies when you stop, pours around hovered buttons and splashes on click. No extra dependencies.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -1805,6 +1821,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as a crisp, minimal grid with a soft spotlight, single cell or area highlights, tiles, dashed, dot and mark styles, clean click rings, an intro and a light mode.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -1986,6 +2006,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with smoother, richer color blending and a softer edge that never bands. It reaches gently toward the cursor, fades in on load, and can rise from the bottom or stack extra layers.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2043,6 +2067,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2100,6 +2128,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2115,6 +2147,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt on the same waves with crisp pixels and no extra dependencies. New dither patterns, retro palettes, cursor trails and click ripples, and an intro that sharpens into place.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2164,6 +2200,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Same terminal, now with phosphor glow, trails under the cursor, glitches on click, a cleaner light mode and new dot and character glyphs. Around 4x faster.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2179,6 +2219,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with no extra dependencies. Stars now glide away from the cursor, a click jumps to warp speed and it arrives from hyperspace. New star colors, flares, depth and a cleaner light mode.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2194,6 +2238,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Same blinds with satin shading that turns with the light, a soft glow, a gentle sway and a cleaner light mode. A click sends a wave of light through them, with no extra dependencies.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2213,6 +2261,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2223,7 +2275,13 @@ export const componentMetadata = {
     name: 'FluxLines',
     docsUrl: 'https://reactbits.dev/backgrounds/flux-lines',
     tags: ['webgl', 'lines', 'flow', 'glow', 'magnetic', 'interactive'],
-    added: '2026-10-11'
+    added: '2026-10-11',
+    updates: [
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
+      }
+    ]
   },
   'Backgrounds/Ferrofluid': {
     videoUrl: '/assets/video/ferrofluid.webm',
@@ -2237,6 +2295,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt as a glossy ferrofluid sea with no extra dependencies. Swells of spikes roll across it, the cursor raises a crown and clicks send out a ring of spikes.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2328,6 +2390,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Redesigned with fine glowing fibres and comet-like pulses, and no extra dependencies. The cursor steers the tunnel, a click sends a ring of light down it, and light mode draws it in ink.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2411,6 +2477,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt with richer colors, flowing waves and no extra dependencies. Drag the colors around or click to swirl them, and try stripes, rings, crisp poster edges or a satin sheen.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2426,6 +2496,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Rebuilt as a lit 3D room with crisp lines, a glossy floor and sparkling scan points, with no extra dependencies. The view shifts like a window as you move, and clicks send a ping across the walls.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2513,6 +2587,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2601,6 +2679,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2677,6 +2759,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with a crisper, more luminous ring that reaches toward the cursor and lights up where you hover. It pulses on click, powers on with an intro, and can tilt in 3D with custom colors, size and glow.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2692,6 +2778,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with the same floating motion, now crisp and far faster with thousands of particles. New shapes, glow, twinkle, bokeh, constellation lines, drifting and cursor effects.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2707,6 +2797,10 @@ export const componentMetadata = {
       {
         date: '2026-10-12',
         note: 'Same pixel clouds, now smoother and softer, with drift, shimmer, glow, an accent color, a blast intro and a cursor that lights pixels up. New shapes and a perspective floor, much faster, no dependencies.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2726,6 +2820,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2745,6 +2843,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2783,6 +2885,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2802,6 +2908,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2821,6 +2931,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2885,6 +2999,10 @@ export const componentMetadata = {
       {
         date: '2026-10-11',
         note: 'Rebuilt with perfectly smooth, crisp lines. They bend around the cursor and spring back, part in a soft ripple on click, and now come dashed, rotated or in light mode, with an intro.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2961,6 +3079,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },
@@ -2980,6 +3102,10 @@ export const componentMetadata = {
       {
         date: '2026-11-08',
         note: 'Prevents canvas flicker while resizing the container.'
+      },
+      {
+        date: '2026-11-14',
+        note: 'No longer shows a blank canvas under React StrictMode, such as in Next.js or Vite during development.'
       }
     ]
   },

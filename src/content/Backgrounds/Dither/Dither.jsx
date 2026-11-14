@@ -650,7 +650,7 @@ const Dither = ({
       gl.deleteVertexArray(vao);
       gl.deleteTexture(field);
       gl.deleteFramebuffer(framebuffer);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 

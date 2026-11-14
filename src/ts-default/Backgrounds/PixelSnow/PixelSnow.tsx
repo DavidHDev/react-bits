@@ -902,7 +902,7 @@ export default function PixelSnow({
       gl.deleteBuffer(instanceBuffer);
       gl.deleteVertexArray(quadVao);
       gl.deleteVertexArray(flakeVao);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      if (!canvas.isConnected) gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
 
