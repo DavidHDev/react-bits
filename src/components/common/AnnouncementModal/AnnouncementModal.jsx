@@ -7,11 +7,12 @@ import { PRO_NEW_COUNTS } from '../../../constants/Pro';
 import { proUrl, trackProClick } from '../../../utils/pro';
 import './AnnouncementModal.css';
 
-const STORAGE_KEY = 'rb-pro-october-2026-release-seen';
+const STORAGE_KEY = 'rb-pro-november-2026-release-seen';
 const SHOW_DELAY = 1500;
-const PROMO_VIDEO = 'https://cdn.reactbits.dev/OCTOBER_UPDATE.mp4';
+// Placeholder until the November launch video is uploaded to this path.
+const PROMO_VIDEO = 'https://cdn.reactbits.dev/NOVEMBER_UPDATE.mp4';
 
-const DISABLED = true;
+const DISABLED = false;
 
 const AnnouncementModal = () => {
   const location = useLocation();
@@ -160,7 +161,7 @@ const AnnouncementModal = () => {
                   preload="metadata"
                   width={1920}
                   height={1080}
-                  aria-label="React Bits Pro October update: new components and marketing blocks"
+                  aria-label="React Bits Pro November update: new components, marketing blocks, Agent Kit items and templates"
                 />
                 <button
                   className="announcement-modal-sound"
@@ -174,17 +175,19 @@ const AnnouncementModal = () => {
 
               <div className="announcement-modal-content">
                 <h2 id="announcement-modal-title" className="announcement-modal-title">
-                  React Bits Pro October Update
+                  React Bits Pro November Update
                 </h2>
 
                 <div id="announcement-modal-description" className="announcement-modal-description">
                   <p>
-                    <strong>{PRO_NEW_COUNTS.components} new components</strong> and{' '}
-                    <strong>{PRO_NEW_COUNTS.blocks} new marketing blocks</strong>.
+                    <strong>{PRO_NEW_COUNTS.components} new components</strong>,{' '}
+                    <strong>{PRO_NEW_COUNTS.blocks} new marketing blocks</strong>,{' '}
+                    <strong>{PRO_NEW_COUNTS.agentKit} new Agent Kit items</strong> and{' '}
+                    <strong>{PRO_NEW_COUNTS.templates} new templates</strong>.
                   </p>
                   <p>
-                    New backgrounds, text animations, galleries, cursor effects and image effects. Watch the showcase,
-                    then try the demos.
+                    Product mockups, data displays, tactile pieces and fresh backgrounds, plus new heroes, galleries and
+                    stores that stack into full pages.
                   </p>
                 </div>
 

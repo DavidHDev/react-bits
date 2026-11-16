@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import useProImpression from '../../hooks/useProImpression';
 import { PRO_COUNTS, PRO_UPSELLS } from '../../constants/Pro';
-import { proComponentPreview, proLinkProps } from '../../utils/pro';
-import ReactBitsProLogo from '../../assets/logos/react-bits-pro-logo.svg';
+import { proLinkProps } from '../../utils/pro';
+import ProCardDither from './ProCardDither';
 
 const ProCard = () => {
   const { pathname } = useLocation();
@@ -23,22 +23,26 @@ const ProCard = () => {
       className="pro-card-link"
     >
       <article className="pro-card">
-        <div className="pro-card-preview is-aurora" aria-hidden="true">
+        <div className="pro-card-preview" aria-hidden="true">
+          <ProCardDither className="pro-card-dither" />
           <img
-            className="pro-card-art pro-card-art-dark"
-            src={proComponentPreview(config.featured[0].slug).poster}
+            className="pro-card-og pro-card-og-dark"
+            src="/assets/pro-card/og-dark.webp"
             alt=""
+            width={800}
+            height={420}
             loading="lazy"
             decoding="async"
           />
           <img
-            className="pro-card-art pro-card-art-light"
-            src="/assets/pro/components/aurora-beam-light.webp"
+            className="pro-card-og pro-card-og-light"
+            src="/assets/pro-card/og-light.webp"
             alt=""
+            width={800}
+            height={420}
             loading="lazy"
             decoding="async"
           />
-          <img className="pro-card-brand" src={ReactBitsProLogo} alt="" />
         </div>
 
         <div className="pro-card-content">

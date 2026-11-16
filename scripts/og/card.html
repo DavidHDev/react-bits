@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <style>
       @font-face {
-        font-family: 'Geist Pixel';
-        src: url('/fonts/geist-pixel/GeistPixel-Line.woff2') format('woff2');
+        font-family: 'Geist';
+        src: url('/fonts/geist-sans/Geist-Variable.woff2') format('woff2');
+        font-weight: 100 900;
       }
 
       * {
@@ -18,7 +19,7 @@
         height: 630px;
         margin: 0;
         overflow: hidden;
-        background: #000;
+        background: #ffffff;
       }
 
       .card {
@@ -26,84 +27,163 @@
         width: 1200px;
         height: 630px;
         overflow: hidden;
+        background: #ffffff;
+        font-family: 'Geist', sans-serif;
+        color: #111014;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .backdrop {
+        position: absolute;
+        inset: 0;
         background: url('/base.png') 0 0 / 1200px 630px no-repeat;
+        filter: grayscale(1);
+        opacity: 0.6;
       }
 
       .logo {
         position: absolute;
-        top: 83px;
-        left: 44px;
-        width: 211px;
-        height: 42.2px;
-        background: #fff;
-        -webkit-mask: url('/logo.svg') left top / contain no-repeat;
-        mask: url('/logo.svg') left top / contain no-repeat;
+        top: 60px;
+        left: 64px;
+        width: 160px;
+        height: 32px;
+        background: #111014;
+        -webkit-mask: url('/logo.svg') left center / contain no-repeat;
+        mask: url('/logo.svg') left center / contain no-repeat;
       }
 
       .copy {
         position: absolute;
-        top: 82px;
-        left: 40px;
-        display: flex;
-        align-items: center;
-        width: 440px;
-        height: 466px;
+        left: 64px;
+        bottom: 64px;
       }
 
       .title {
         margin: 0;
-        font-family: 'Geist Pixel', monospace;
-        font-weight: 400;
-        font-size: 80px;
-        line-height: 1.02;
-        color: #fff;
-        overflow-wrap: normal;
-        text-shadow: 0 0 22px rgba(255, 255, 255, 0.28);
+        font-size: 64px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.045em;
+        white-space: nowrap;
       }
 
-      .preview {
-        position: absolute;
-        top: 82px;
-        left: 520px;
-        width: 800px;
-        height: 466px;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 26px;
-        background: rgba(7, 7, 8, 0.92);
+      .sub {
+        margin: 20px 0 0;
+        font-size: 22px;
+        line-height: 1.4;
+        letter-spacing: -0.012em;
+        color: rgba(17, 16, 20, 0.55);
+        white-space: nowrap;
       }
 
-      .preview canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
-        mix-blend-mode: screen;
-      }
-
-      .no-preview .preview {
+      .sub:empty {
         display: none;
       }
 
-      .no-preview .copy {
-        width: 1116px;
+      .hero {
+        position: absolute;
+        padding: 6px;
+        border-radius: 22px;
+        background: #f2f2f4;
+        box-shadow:
+          inset 0 1px 0 #ffffff,
+          0 2px 4px rgba(17, 16, 20, 0.06),
+          0 44px 80px -24px rgba(17, 16, 20, 0.34);
+      }
+
+      .well {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 16px;
+        background: #ffffff;
+      }
+
+      .well canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .frame {
+        position: absolute;
+        inset: -7px;
+        border: 1.5px solid #a855f7;
+        border-radius: 27px;
+      }
+
+      .handle {
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        margin: -5.5px 0 0 -5.5px;
+        background: #ffffff;
+        border: 1.5px solid #a855f7;
+        border-radius: 3px;
+      }
+
+      .no-preview .hero {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="card">
+      <div class="backdrop"></div>
       <div class="logo"></div>
+      <div class="hero">
+        <div class="well"><canvas></canvas></div>
+        <span class="frame"></span>
+        <span class="handle" style="left: -7px; top: -7px"></span>
+        <span class="handle" style="left: calc(100% + 7px); top: -7px"></span>
+        <span class="handle" style="left: -7px; top: calc(100% + 7px)"></span>
+        <span class="handle" style="left: calc(100% + 7px); top: calc(100% + 7px)"></span>
+      </div>
       <div class="copy">
         <h1 class="title"></h1>
+        <p class="sub"></p>
       </div>
-      <div class="preview"><canvas></canvas></div>
     </div>
     <script>
-      const CANVAS_WIDTH = 1200;
+      const WIDTH = 1200;
+      const HEIGHT = 630;
+      const MARGIN = 64;
+      const HERO_WIDTH = 560;
+      const HERO_TILT = 3;
+      const FRAME_OUTSET = 7;
+      const COPY_GAP = 36;
+      const CONTENT_FILL = 0.68;
+      const DENSE_SHARE = 0.5;
+      const FEATHER = 0.04;
       const LIVE_MIN_SHARE = 0.12;
       const params = new URLSearchParams(location.search);
       const title = document.querySelector('.title');
-      const preview = document.querySelector('.preview');
-      const canvas = preview.querySelector('canvas');
+      const sub = document.querySelector('.sub');
+      const copy = document.querySelector('.copy');
+      const hero = document.querySelector('.hero');
+      const well = hero.querySelector('.well');
+      const canvas = well.querySelector('canvas');
+
+      const placeHero = () => {
+        const width = HERO_WIDTH;
+        const height = Math.round(width / 1.6);
+        const angle = (HERO_TILT * Math.PI) / 180;
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const reach = (width / 2 + FRAME_OUTSET) * cos + (height / 2 + FRAME_OUTSET) * sin;
+        const centerX = WIDTH - MARGIN - reach;
+        const centerY = HEIGHT / 2;
+        Object.assign(hero.style, {
+          left: `${centerX - width / 2}px`,
+          top: `${centerY - height / 2}px`,
+          width: `${width}px`,
+          height: `${height}px`,
+          transform: `rotate(${-HERO_TILT}deg)`
+        });
+        const lowerLeft = centerX - ((width / 2 + FRAME_OUTSET) * cos - (height / 2 + FRAME_OUTSET) * sin);
+        return Math.floor(lowerLeft - MARGIN - COPY_GAP);
+      };
 
       const whenLoaded = video =>
         new Promise((resolve, reject) => {
@@ -128,25 +208,41 @@
         return values;
       };
 
-      const ringOf = (values, width, height) => {
-        const ring = [];
-        for (let x = 0; x < width; x += 1) ring.push(values[x], values[(height - 1) * width + x]);
-        for (let y = 0; y < height; y += 1) ring.push(values[y * width], values[y * width + width - 1]);
-        return ring.sort((a, b) => a - b);
+      const ringIndexes = (width, height) => {
+        const indexes = [];
+        for (let x = 0; x < width; x += 1) indexes.push(x, (height - 1) * width + x);
+        for (let y = 0; y < height; y += 1) indexes.push(y * width, y * width + width - 1);
+        return indexes;
       };
+
+      const ringOf = (values, width, height) =>
+        ringIndexes(width, height)
+          .map(index => values[index])
+          .sort((a, b) => a - b);
 
       const backgroundOf = (values, width, height) => {
         const ring = ringOf(values, width, height);
         return ring[ring.length >> 1];
       };
 
-      const edgeCoverage = (values, width, height) => {
-        const ring = ringOf(values, width, height);
-        const median = ring[ring.length >> 1];
-        return ring.filter(value => Math.abs(value - median) > 10).length / ring.length;
+      const backgroundColorOf = (context, width, height) => {
+        const { data } = context.getImageData(0, 0, width, height);
+        const channels = [[], [], []];
+        ringIndexes(width, height).forEach(index => {
+          for (let c = 0; c < 3; c += 1) channels[c].push(data[index * 4 + c]);
+        });
+        const [r, g, b] = channels.map(values => values.sort((a, b) => a - b)[values.length >> 1]);
+        return `rgb(${r}, ${g}, ${b})`;
       };
 
-      const hasFlatBackground = (values, width, height) => edgeCoverage(values, width, height) < 0.15;
+      const edgeCoverage = (values, width, height, tolerance = 10) => {
+        const ring = ringOf(values, width, height);
+        const median = ring[ring.length >> 1];
+        return ring.filter(value => Math.abs(value - median) > tolerance).length / ring.length;
+      };
+
+      const hasFlatBackground = (values, width, height, tolerance) =>
+        edgeCoverage(values, width, height, tolerance) < 0.15;
 
       const touchesEdge = (values, width, height) => {
         const background = backgroundOf(values, width, height);
@@ -196,9 +292,9 @@
         return total / a.length;
       };
 
-      const brightest = values => {
+      const strongestContrast = (values, background) => {
         const sample = [];
-        for (let i = 0; i < values.length; i += 7) sample.push(values[i]);
+        for (let i = 0; i < values.length; i += 7) sample.push(Math.abs(values[i] - background));
         sample.sort((a, b) => a - b);
         return sample[Math.floor(sample.length * 0.9995)];
       };
@@ -289,17 +385,30 @@
         return coverage(readLightness(context, probe.width, probe.height), probe.width, probe.height);
       };
 
-      const toneMap = (context, values, width, height, peak) => {
-        const image = context.getImageData(0, 0, width, height);
-        const black = Math.min(backgroundOf(values, width, height), 26) + 2;
-        const range = Math.max(85, (peak < 140 ? peak : 255) - black);
-        for (let i = 0; i < values.length; i += 1) {
-          const level = Math.min(255, 255 * Math.pow(Math.max(0, values[i] - black) / range, 0.85));
-          image.data[i * 4] = level;
-          image.data[i * 4 + 1] = level;
-          image.data[i * 4 + 2] = level;
+      const fadeStops = (gradient, band) => {
+        const steps = 8;
+        for (let i = 0; i <= steps; i += 1) {
+          const t = i / steps;
+          const alpha = t * t * t * (t * (t * 6 - 15) + 10);
+          gradient.addColorStop(band * t, `rgba(0, 0, 0, ${alpha.toFixed(4)})`);
+          gradient.addColorStop(1 - band * t, `rgba(0, 0, 0, ${alpha.toFixed(4)})`);
         }
-        context.putImageData(image, 0, 0);
+        return gradient;
+      };
+
+      const feather = source => {
+        const soft = document.createElement('canvas');
+        soft.width = source.width;
+        soft.height = source.height;
+        const context = soft.getContext('2d');
+        context.drawImage(source, 0, 0);
+        context.globalCompositeOperation = 'destination-in';
+        const band = FEATHER;
+        context.fillStyle = fadeStops(context.createLinearGradient(0, 0, soft.width, 0), band);
+        context.fillRect(0, 0, soft.width, soft.height);
+        context.fillStyle = fadeStops(context.createLinearGradient(0, 0, 0, soft.height), band);
+        context.fillRect(0, 0, soft.width, soft.height);
+        return soft;
       };
 
       const drawSource = (source, sourceWidth, sourceHeight) => {
@@ -309,40 +418,49 @@
         const fullContext = full.getContext('2d', { willReadFrequently: true });
         fullContext.drawImage(source, 0, 0);
         const values = readLightness(fullContext, sourceWidth, sourceHeight);
-        const peak = brightest(values);
         const background = backgroundOf(values, sourceWidth, sourceHeight);
-        const box = contentBox(values, sourceWidth, sourceHeight, Math.max(6, 0.12 * (peak - background)));
+        const fill = backgroundColorOf(fullContext, sourceWidth, sourceHeight);
+        const contrast = strongestContrast(values, background);
+        const box = contentBox(values, sourceWidth, sourceHeight, Math.max(6, 0.12 * contrast));
+        const solid = contentBox(values, sourceWidth, sourceHeight, Math.max(24, 0.3 * contrast));
         const edge = Math.max(3, Math.round(Math.min(sourceWidth, sourceHeight) * 0.015));
         const touches =
-          box.x <= edge ||
-          box.y <= edge ||
-          box.x + box.width >= sourceWidth - edge ||
-          box.y + box.height >= sourceHeight - edge;
-        const flat = hasFlatBackground(values, sourceWidth, sourceHeight) && !touches;
-        toneMap(fullContext, values, sourceWidth, sourceHeight, peak);
+          solid.x <= edge ||
+          solid.y <= edge ||
+          solid.x + solid.width >= sourceWidth - edge ||
+          solid.y + solid.height >= sourceHeight - edge;
+        const dense = (box.width * box.height) / (sourceWidth * sourceHeight) > DENSE_SHARE;
+        const forceCover = params.get('fit') === 'cover';
+        const flat = !forceCover && hasFlatBackground(values, sourceWidth, sourceHeight, 24) && !touches && !dense;
 
-        const rect = preview.getBoundingClientRect();
-        const width = Math.round(rect.width - 2);
-        const height = Math.round(rect.height - 2);
-        const visibleWidth = Math.min(width, CANVAS_WIDTH - rect.left - 1);
+        const ratio = window.devicePixelRatio || 1;
+        const width = Math.round(well.clientWidth * ratio);
+        const height = Math.round(well.clientHeight * ratio);
         canvas.width = width;
         canvas.height = height;
 
-        const cover = Math.max(visibleWidth / sourceWidth, height / sourceHeight);
-        const fit = Math.min((visibleWidth * 0.64) / box.width, (height * 0.64) / box.height);
-        const scale = flat ? Math.min(fit, cover * 2.5) : Math.min(Math.max(fit, cover), cover * 2);
+        const cover = Math.max(width / sourceWidth, height / sourceHeight);
+        const fit = Math.min((width * CONTENT_FILL) / box.width, (height * CONTENT_FILL) / box.height);
+        const scale = forceCover
+          ? cover
+          : flat
+            ? Math.min(fit, cover * 2.5)
+            : Math.min(Math.max(fit, cover), cover * 2);
         const centerX = box.x + box.width / 2;
         const centerY = box.y + box.height / 2;
         const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-        const idealX = visibleWidth / 2 - centerX * scale;
+        const idealX = width / 2 - centerX * scale;
         const idealY = height / 2 - centerY * scale;
-        const offsetX = flat ? idealX : clamp(idealX, Math.min(0, visibleWidth - sourceWidth * scale), 0);
+        const offsetX = flat ? idealX : clamp(idealX, Math.min(0, width - sourceWidth * scale), 0);
         const offsetY = flat ? idealY : clamp(idealY, Math.min(0, height - sourceHeight * scale), 0);
 
         const context = canvas.getContext('2d');
+        context.fillStyle = fill;
+        context.fillRect(0, 0, width, height);
         context.imageSmoothingQuality = 'high';
-        context.drawImage(full, offsetX, offsetY, sourceWidth * scale, sourceHeight * scale);
-        return { zoom: Number((scale / cover).toFixed(2)), box, flat };
+        context.drawImage(flat ? feather(full) : full, offsetX, offsetY, sourceWidth * scale, sourceHeight * scale);
+        well.style.background = fill;
+        return { zoom: Number((scale / cover).toFixed(2)), box, flat, dense, touches };
       };
 
       const loadVideo = async src => {
@@ -378,11 +496,10 @@
         return { source: 'video', coverages, time: frame.time, ...drawSource(clip, clip.videoWidth, clip.videoHeight) };
       };
 
-      const fitTitle = maxSize => {
-        const lines = () => title.offsetHeight / parseFloat(getComputedStyle(title).lineHeight);
-        let size = maxSize;
+      const fitTitle = maxWidth => {
+        let size = 64;
         title.style.fontSize = `${size}px`;
-        while (size > 40 && (title.scrollWidth > title.clientWidth + 1 || lines() > 3.05)) {
+        while (size > 40 && title.scrollWidth > maxWidth) {
           size -= 2;
           title.style.fontSize = `${size}px`;
         }
@@ -394,10 +511,13 @@
         const video = params.get('video');
         const hasPreview = Boolean(image || video);
         title.textContent = params.get('title') || '';
+        sub.textContent = params.get('sub') || '';
         document.body.classList.toggle('no-preview', !hasPreview);
-        await document.fonts.load('80px "Geist Pixel"');
+        const copyWidth = hasPreview ? placeHero() : WIDTH - MARGIN * 2;
+        copy.style.width = `${copyWidth}px`;
+        await document.fonts.load('500 64px "Geist"');
         await document.fonts.ready;
-        const fontSize = fitTitle(hasPreview ? 80 : 104);
+        const fontSize = fitTitle(copyWidth);
         const frame = hasPreview ? await renderPreview({ image, video }) : null;
         await nextFrame();
         await nextFrame();

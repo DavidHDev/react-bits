@@ -10,7 +10,7 @@ export const CATEGORY_PRO_GROUPS = {
     pitch: 'Scroll reveals, 3D type and glitch effects for headlines that need to land.'
   },
   animations: {
-    group: 'Cursor Effects',
+    group: 'Cursors',
     noun: 'cursor effects',
     pitch: 'Cursor trails and pointer effects that give a site its own feel.'
   },
@@ -51,7 +51,7 @@ export const PRO_UPSELLS = {
     eyebrow: 'More interactions in Pro',
     title: 'Turn movement into a signature.',
     description: 'Smooth cursor effects and responsive interactions, ready for real projects.',
-    path: '/docs/components?category=Cursor%20Effects',
+    path: '/docs/components?category=Cursors',
     noun: 'cursor effects',
     featured: [
       { slug: 'glass-cursor', name: 'Glass Cursor' },
@@ -86,11 +86,11 @@ export const PRO_UPSELLS = {
 };
 
 export const CATEGORY_PRO_PICKS = {
-  backgrounds: ['axial-beam', 'satin-ridges', 'interference-ribbons', 'binary-orbits'],
+  backgrounds: ['spectral-tiles', 'glass-keys', 'circuit-flash', 'ascii-stream'],
   'text-animations': ['orbital-type', 'shatter-type', 'ribbon-type', 'elastic-lettering'],
   animations: ['pigment-trail', 'chroma-halo', 'glyph-stream', 'celebration-cursor'],
-  components: ['helix-gallery', 'depth-ribbon', 'tumble-wall', 'elastic-reel'],
-  default: ['helix-gallery', 'orbital-type', 'axial-beam', 'pigment-trail']
+  components: ['browser-window', 'keycaps', 'liquid-circles', 'particle-chart'],
+  default: ['spectral-tiles', 'browser-window', 'keycaps', 'circuit-flash']
 };
 
 export const HIDDEN_TEMPLATE_SLUGS = ['ai-app-template', 'minimal-landing'];

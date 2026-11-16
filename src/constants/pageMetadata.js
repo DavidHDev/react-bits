@@ -58,7 +58,10 @@ export const PAGE_METADATA = {
     description:
       'See everything that ships with React Bits Pro: animated components, marketing blocks, app UI blocks, complete Next.js templates and an Agent Kit for AI coding tools. Lifetime or annual, full source, yours to edit.',
     intro:
-      'Animated components, marketing blocks, app UI blocks, complete Next.js templates and an Agent Kit for AI coding tools.'
+      'Animated components, marketing blocks, app UI blocks, complete Next.js templates and an Agent Kit for AI coding tools.',
+    image: '/og/pro.jpg',
+    imageAlt:
+      'React Bits Pro logo with the line “The React library for memorable UI”, surrounded by previews of Pro components, blocks and templates.'
   },
   '/favorites': {
     title: 'React Bits - Favorites',

@@ -6,6 +6,7 @@ import os from 'os';
 import path from 'path';
 import process from 'process';
 import { fileURLToPath, pathToFileURL } from 'url';
+import { TOOLS } from '../src/constants/Tools.js';
 import { getComponentCatalog } from '../src/utils/catalog.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -18,7 +19,8 @@ const FONT_DIR = path.join(ROOT, 'node_modules/geist/dist/fonts');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const WIDTH = 1200;
 const HEIGHT = 630;
-const JPEG_QUALITY = 84;
+const JPEG_QUALITY = 86;
+const CARD_SCALE = 2;
 const RENDER_TIMEOUT_MS = 20000;
 const LIVE_WIDTH = 1440;
 const LIVE_HEIGHT = 1200;
@@ -26,10 +28,57 @@ const LIVE_SCALE = 2;
 const LIVE_SETTLE_MS = 2200;
 const LIVE_TABS = 3;
 const LIVE_INSET = 2;
+const IMAGE_WAIT_MS = 8000;
+const LIVE_THEME = 'light';
+const TOOL_WIDTH = 1440;
+const TOOL_HEIGHT = 900;
+const TOOL_SETTLE_MS = 6000;
 const LIVE_STYLE = [
-  'button[aria-label="Refresh animation"], .background-demo-content, .bgc { display: none !important; }',
+  'button[aria-label="Refresh animation"], .demo-hint, .background-demo-content, .bgc { display: none !important; }',
   '.demo-container { border: 0 !important; border-radius: 0 !important; }'
 ].join(' ');
+
+const VIDEO_FIRST = new Set([
+  'card-nav',
+  'falling-text',
+  'ghost-cursor',
+  'glow-cursor',
+  'image-trail',
+  'pixel-trail',
+  'staggered-menu',
+  'swipe-toast',
+  'text-cursor',
+  'wake-slider'
+]);
+
+const CATEGORY_LINES = {
+  backgrounds: 'Free animated background for React/Next.js',
+  'text-animations': 'Free text animation for React/Next.js',
+  animations: 'Free animation for React/Next.js',
+  components: 'Free animated component for React/Next.js',
+  micro: 'Free micro-interaction for React/Next.js'
+};
+
+const TOOLS_INDEX = {
+  id: 'index',
+  path: '/tools',
+  label: 'Creative tools',
+  line: 'Free tools that run in your browser',
+  frame: { selector: '.tl-grid', pad: 20 },
+  sources: ['src/tools/ToolsIndex.jsx', 'src/pages/ToolsPage.jsx', 'src/css/tools-index.css']
+};
+
+const toolCards = () => [
+  TOOLS_INDEX,
+  ...TOOLS.map(tool => ({
+    id: tool.id,
+    path: tool.path,
+    label: tool.label,
+    line: `Free tool for ${tool.tagline.charAt(0).toLowerCase()}${tool.tagline.slice(1)}`,
+    frame: { below: '.ln-navbar' },
+    sources: [`src/tools/${tool.id}`]
+  }))
+];
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -193,15 +242,16 @@ const announcementKey = () => {
   }
 };
 
-const openPage = async (browser, endpoint, { width, height, scale }) => {
+const openPage = async (browser, endpoint, { width, height, scale, theme = null }) => {
   const { targetId } = await browser.send('Target.createTarget', { url: 'about:blank', newWindow: true });
   const page = await connect(`ws://${endpoint.host}/devtools/page/${targetId}`);
   await page.send('Page.enable');
   await page.send('Runtime.enable');
   const seen = announcementKey();
-  if (seen) {
+  const storage = [...(seen ? [[seen, 'true']] : []), ...(theme ? [['react-bits-theme', theme]] : [])];
+  if (storage.length) {
     await page.send('Page.addScriptToEvaluateOnNewDocument', {
-      source: `try { localStorage.setItem(${JSON.stringify(seen)}, 'true'); } catch {}`
+      source: `try { ${storage.map(([key, value]) => `localStorage.setItem(${JSON.stringify(key)}, ${JSON.stringify(value)});`).join(' ')} } catch {}`
     });
   }
   await page.send('Emulation.setDeviceMetricsOverride', {
@@ -210,6 +260,10 @@ const openPage = async (browser, endpoint, { width, height, scale }) => {
     deviceScaleFactor: scale,
     mobile: false
   });
+  page.dispose = async () => {
+    page.close();
+    await browser.send('Target.closeTarget', { targetId }).catch(() => {});
+  };
   return page;
 };
 
@@ -236,30 +290,40 @@ const renderCard = async (page, origin, card) => {
   renders += 1;
   const token = String(renders);
   const params = new URLSearchParams({ title: card.title, token });
+  if (card.sub) params.set('sub', card.sub);
+  if (card.fit) params.set('fit', card.fit);
   if (card.image) params.set('image', card.image);
   if (card.video) params.set('video', card.video);
   await page.send('Page.navigate', { url: `${origin}/card.html?${params}` });
   const state = await waitForCard(page, token);
-  const capture = async format => {
+  const capture = async (format, scale) => {
     const { data } = await page.send('Page.captureScreenshot', {
       format,
       ...(format === 'jpeg' ? { quality: JPEG_QUALITY } : {}),
-      clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT, scale: 1 },
+      clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT, scale },
       captureBeyondViewport: false
     });
     return Buffer.from(data, 'base64');
   };
-  const encoded = await encodeJpeg(await capture('png'));
-  return { image: encoded || (await capture('jpeg')), state };
+  const encoded = await encodeJpeg(await capture('png', 1));
+  return { image: encoded || (await capture('jpeg', 1 / CARD_SCALE)), state };
 };
 
 const encodeJpeg = async png => {
   try {
     const { default: sharp } = await import('sharp');
-    return await sharp(png).jpeg({ quality: JPEG_QUALITY, mozjpeg: true }).toBuffer();
+    return await sharp(png)
+      .resize(WIDTH, HEIGHT, { kernel: 'lanczos3' })
+      .jpeg({ quality: JPEG_QUALITY, mozjpeg: true, chromaSubsampling: '4:4:4' })
+      .toBuffer();
   } catch {
     return null;
   }
+};
+
+const lightVideo = videoUrl => {
+  const light = videoUrl.replace(/(\.[a-z0-9]+)$/i, '-light$1');
+  return fs.existsSync(path.join(PUBLIC_DIR, light)) ? light : videoUrl;
 };
 
 const isStale = (output, inputs) => {
@@ -295,6 +359,46 @@ const evaluate = async (page, expression) => {
   return result.value;
 };
 
+const waitUntil = async (page, expression, timeout = 30000) => {
+  const started = Date.now();
+  while (Date.now() - started < timeout) {
+    if (await evaluate(page, `Boolean(${expression})`).catch(() => false)) return true;
+    await sleep(150);
+  }
+  return false;
+};
+
+const captureTool = async (page, site, card) => {
+  await page.send('Page.navigate', { url: `${site}${card.path}` });
+  const ready = await waitUntil(
+    page,
+    `location.pathname === ${JSON.stringify(card.path)} && document.readyState === 'complete'`
+  );
+  if (!ready) throw new Error('page did not load');
+  await sleep(TOOL_SETTLE_MS);
+  const clip = await evaluate(
+    page,
+    `(() => {
+      const frame = ${JSON.stringify(card.frame)};
+      const target = frame.selector && document.querySelector(frame.selector);
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        return {
+          x: rect.left + scrollX - frame.pad,
+          y: rect.top + scrollY - frame.pad,
+          width: rect.width + frame.pad * 2,
+          height: rect.height + frame.pad * 2
+        };
+      }
+      const bar = frame.below && document.querySelector(frame.below);
+      const top = bar ? bar.getBoundingClientRect().bottom : 0;
+      return { x: scrollX, y: scrollY + top, width: innerWidth, height: innerHeight - top };
+    })()`
+  );
+  const { data } = await page.send('Page.captureScreenshot', { format: 'png', clip: { ...clip, scale: 1 } });
+  return Buffer.from(data, 'base64');
+};
+
 const captureLive = async (page, site, entry) => {
   await page.send('Page.navigate', { url: `${site}${entry.path}` });
   const ready = await evaluate(
@@ -321,6 +425,32 @@ const captureLive = async (page, site, entry) => {
     })()`
   );
   await sleep(LIVE_SETTLE_MS);
+  const imagesLoaded = await evaluate(
+    page,
+    `new Promise(resolve => {
+      const container = document.querySelector('.demo-container');
+      const bounds = container.getBoundingClientRect();
+      const visible = [...container.querySelectorAll('img')].filter(image => {
+        const rect = image.getBoundingClientRect();
+        return (
+          rect.width > 4 &&
+          rect.height > 4 &&
+          rect.right > bounds.left &&
+          rect.left < bounds.right &&
+          rect.bottom > bounds.top &&
+          rect.top < bounds.bottom
+        );
+      });
+      const started = performance.now();
+      const check = () => {
+        if (visible.every(image => image.complete && image.naturalWidth > 0)) resolve(true);
+        else if (performance.now() - started > ${IMAGE_WAIT_MS}) resolve(false);
+        else setTimeout(check, 100);
+      };
+      check();
+    })`
+  );
+  if (!imagesLoaded) throw new Error('images did not load');
   const box = await evaluate(
     page,
     `(() => {
@@ -355,17 +485,22 @@ const captureLive = async (page, site, entry) => {
 const report = (label, done, total, detail = '') =>
   process.stdout.write(`\r${label} ${done}/${total} ${detail}`.padEnd(80));
 
+const sourcesOf = sources =>
+  sources.flatMap(source => {
+    const target = path.join(ROOT, source);
+    return fs.existsSync(target) && fs.statSync(target).isDirectory() ? filesIn(target) : [target];
+  });
+
 const main = async () => {
   const options = parseArgs(process.argv.slice(2));
-  const catalog = getComponentCatalog().filter(
-    entry => !options.only || options.only.has(entry.slug) || options.only.has(entry.key)
-  );
-  if (!catalog.length) throw new Error('No components matched.');
+  const matches = (...keys) => !options.only || keys.some(key => options.only.has(key));
 
-  const jobs = catalog
+  const componentJobs = getComponentCatalog()
+    .filter(entry => matches(entry.slug, entry.key))
     .map(entry => {
       const [category, name] = entry.key.split('/');
-      const videoFile = entry.meta.videoUrl ? path.join(PUBLIC_DIR, entry.meta.videoUrl) : null;
+      const videoUrl = entry.meta.videoUrl ? lightVideo(entry.meta.videoUrl) : null;
+      const videoFile = videoUrl ? path.join(PUBLIC_DIR, videoUrl) : null;
       const hasVideo = Boolean(videoFile && fs.existsSync(videoFile));
       const output = path.join(options.out, entry.categorySlug, `${entry.slug}.jpg`);
       const inputs = [
@@ -377,17 +512,46 @@ const main = async () => {
         path.join(ROOT, 'src/demo', category, `${name}Demo.jsx`)
       ];
       return {
+        kind: 'component',
+        name: entry.path,
+        slug: entry.slug,
+        title: entry.name,
+        sub: CATEGORY_LINES[entry.categorySlug] ?? '',
         entry,
         hasVideo,
+        videoUrl,
+        videoFirst: hasVideo && VIDEO_FIRST.has(entry.slug),
         output,
         live: `${entry.categorySlug}--${entry.slug}.png`,
         stale: isStale(output, inputs)
       };
-    })
-    .filter(job => options.force || job.stale);
+    });
+
+  const toolJobs = toolCards()
+    .filter(card => matches('tools', card.id, `tools/${card.id}`))
+    .map(card => {
+      const output = path.join(options.out, 'tools', `${card.id}.jpg`);
+      return {
+        kind: 'tool',
+        name: card.path,
+        slug: card.id,
+        title: card.label,
+        sub: card.line,
+        fit: 'cover',
+        card,
+        hasVideo: false,
+        output,
+        live: `tools--${card.id}.png`,
+        stale: isStale(output, [BASE_IMAGE, TEMPLATE, LOGO, ...sourcesOf(card.sources)])
+      };
+    });
+
+  const all = [...componentJobs, ...(options.live ? toolJobs : [])];
+  if (!all.length) throw new Error('Nothing matched.');
+  const jobs = all.filter(job => options.force || job.stale);
 
   if (!jobs.length) {
-    console.log(`OG images: all ${catalog.length} up to date.`);
+    console.log(`OG images: all ${all.length} up to date.`);
     return;
   }
 
@@ -400,53 +564,79 @@ const main = async () => {
   const failures = [];
   let written = 0;
   let captured = 0;
+  const captures = jobs.filter(job => !job.videoFirst).length;
+
+  const store = async (job, capture) => {
+    try {
+      fs.writeFileSync(path.join(liveDir, job.live), await capture());
+      job.captured = true;
+    } catch (error) {
+      job.captureError = error.message;
+    }
+    captured += 1;
+    report('Capturing live previews', captured, captures, job.name);
+  };
 
   try {
     if (site) {
-      const queue = [...jobs];
-      const tabs = await Promise.all(
-        Array.from({ length: Math.min(LIVE_TABS, jobs.length) }, () =>
-          openPage(browser, chrome.endpoint, { width: LIVE_WIDTH, height: LIVE_HEIGHT, scale: LIVE_SCALE })
-        )
-      );
-      await Promise.all(
-        tabs.map(async tab => {
-          while (queue.length) {
-            const job = queue.shift();
-            try {
-              fs.writeFileSync(path.join(liveDir, job.live), await captureLive(tab, site.url, job.entry));
-              job.captured = true;
-            } catch (error) {
-              job.captureError = error.message;
+      const queue = jobs.filter(job => job.kind === 'component' && !job.videoFirst);
+      if (queue.length) {
+        const tabs = await Promise.all(
+          Array.from({ length: Math.min(LIVE_TABS, queue.length) }, () =>
+            openPage(browser, chrome.endpoint, {
+              width: LIVE_WIDTH,
+              height: LIVE_HEIGHT,
+              scale: LIVE_SCALE,
+              theme: LIVE_THEME
+            })
+          )
+        );
+        await Promise.all(
+          tabs.map(async tab => {
+            while (queue.length) {
+              const job = queue.shift();
+              await store(job, () => captureLive(tab, site.url, job.entry));
             }
-            captured += 1;
-            report('Capturing live previews', captured, jobs.length, job.entry.path);
-          }
-          tab.close();
-        })
-      );
+            await tab.dispose();
+          })
+        );
+      }
+      const tools = jobs.filter(job => job.kind === 'tool');
+      if (tools.length) {
+        const tab = await openPage(browser, chrome.endpoint, {
+          width: TOOL_WIDTH,
+          height: TOOL_HEIGHT,
+          scale: LIVE_SCALE,
+          theme: LIVE_THEME
+        });
+        for (const job of tools) await store(job, () => captureTool(tab, site.url, job.card));
+        await tab.dispose();
+      }
       process.stdout.write('\n');
     }
 
-    const page = await openPage(browser, chrome.endpoint, { width: WIDTH, height: HEIGHT, scale: 1 });
+    const page = await openPage(browser, chrome.endpoint, { width: WIDTH, height: HEIGHT, scale: CARD_SCALE });
     for (const job of jobs) {
       try {
+        if (job.kind === 'tool' && !job.captured) throw new Error(job.captureError || 'no capture');
         const { image, state } = await renderCard(page, origin, {
-          title: job.entry.name,
+          title: job.title,
+          sub: job.sub,
+          fit: job.fit,
           image: job.captured ? `/live/${job.live}` : null,
-          video: job.hasVideo ? job.entry.meta.videoUrl : null
+          video: job.hasVideo ? job.videoUrl : null
         });
         job.source = state.source;
-        if (options.debug) console.log(`\n${job.entry.path} ${JSON.stringify(state.frame)}`);
+        if (options.debug) console.log(`\n${job.name} ${JSON.stringify(state.frame)}`);
         fs.mkdirSync(path.dirname(job.output), { recursive: true });
         fs.writeFileSync(job.output, image);
         written += 1;
-        report('Rendering cards', written, jobs.length, job.entry.path);
+        report('Rendering cards', written, jobs.length, job.name);
       } catch (error) {
-        failures.push(`${job.entry.path}: ${error.message}`);
+        failures.push(`${job.name}: ${error.message}`);
       }
     }
-    page.close();
+    await page.dispose();
   } finally {
     browser.close();
     await chrome.close();
@@ -457,9 +647,9 @@ const main = async () => {
   }
 
   process.stdout.write('\n');
-  const fromVideo = jobs.filter(job => job.source === 'video').map(job => job.entry.slug);
+  const fromVideo = jobs.filter(job => job.source === 'video').map(job => job.slug);
   console.log(
-    `OG images: ${written} written (${written - fromVideo.length} live, ${fromVideo.length} from video), ${catalog.length - jobs.length} up to date, ${failures.length} failed.`
+    `OG images: ${written} written (${written - fromVideo.length} live, ${fromVideo.length} from video), ${all.length - jobs.length} up to date, ${failures.length} failed.`
   );
   if (fromVideo.length && site) console.log(`  From video: ${fromVideo.join(', ')}`);
   if (failures.length) {

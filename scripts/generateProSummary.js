@@ -39,13 +39,15 @@ const categories = Object.fromEntries(
     const preferred = CATEGORY_PRO_PICKS[category] || PRO_UPSELLS[category]?.featured.map(item => item.slug) || [];
     const withMedia = items.filter(item => {
       const media = componentMedia(item);
-      return item.isNew && (media.light || media.dark || media.animated || media.poster);
+      return media.light || media.dark || media.animated || media.poster;
     });
-    const featured = [...withMedia].sort((a, b) => {
-      const aIndex = preferred.indexOf(a.slug);
-      const bIndex = preferred.indexOf(b.slug);
-      return (aIndex < 0 ? preferred.length : aIndex) - (bIndex < 0 ? preferred.length : bIndex);
-    });
+    // Curated picks lead, then the latest additions, then everything else, so a
+    // category with nothing new in a release still keeps its footer.
+    const rank = item => {
+      const index = preferred.indexOf(item.slug);
+      return index >= 0 ? index : preferred.length + (item.isNew ? 0 : 1);
+    };
+    const featured = [...withMedia].sort((a, b) => rank(a) - rank(b));
     return [
       category,
       {
@@ -203,7 +205,9 @@ const summary = {
   counts: manifest.counts,
   newCounts: {
     components: manifest.components.filter(item => item.isNew).length,
-    blocks: variantsOf(manifest.blocks).filter(item => item.isNew).length
+    blocks: variantsOf(manifest.blocks).filter(item => item.isNew).length,
+    templates: manifest.templates.filter(item => item.isNew).length,
+    agentKit: manifest.agentKit.filter(item => item.isNew).length
   },
   assets: { baseUrl: manifest.assets.baseUrl },
   startingPrice: Math.min(...manifest.tiers.map(tier => tier.lifetime)),

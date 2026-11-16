@@ -10,6 +10,7 @@ import ProComparison from '../components/common/Pro/ProComparison';
 import ProPillars from '../components/common/Pro/ProPillars';
 import ColorBends from '../content/Backgrounds/ColorBends/ColorBends';
 import { PRO_COUNTS, PRO_FAQ, PRO_TESTIMONIALS, PRO_FREE_COPY } from '../constants/Pro';
+import { PAGE_METADATA } from '../constants/pageMetadata';
 import { proUrl, proLinkProps, trackProClick, proAgentKitPreview } from '../utils/pro';
 import useProManifest from '../hooks/useProManifest';
 import useProImpression from '../hooks/useProImpression';
@@ -26,12 +27,7 @@ const VIDEO_START_TIME = 0.4;
 
 const ProPage = () => {
   useScrollToTop();
-  usePageSEO({
-    title: 'React Bits Pro - Components, Blocks, App UI & Templates',
-    description:
-      'See everything that ships with React Bits Pro: animated components, marketing blocks, app UI blocks, complete Next.js templates and an Agent Kit for AI coding tools. Lifetime or annual, full source, yours to edit.',
-    path: '/pro'
-  });
+  usePageSEO({ ...PAGE_METADATA['/pro'], path: '/pro' });
 
   const [openFaq, setOpenFaq] = useState(null);
   const heroImpressionRef = useProImpression(HERO_PLACEMENT);
