@@ -19,6 +19,9 @@ public/tailwind
 public/ts/default
 public/ts/tailwind
 
+# OG card design source
+scripts/og/
+
 # Local agent instructions and working files
 skills-lock.json
 AGENTS.md
