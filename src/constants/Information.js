@@ -2454,6 +2454,15 @@ export const componentMetadata = {
       }
     ]
   },
+  'Backgrounds/HoloMosaic': {
+    videoUrl: '/assets/video/holomosaic.webm',
+    description: 'Holographic tiles that split light into sweeping color as it moves, with glitter, a flip-in intro and click waves.',
+    category: 'Backgrounds',
+    name: 'HoloMosaic',
+    docsUrl: 'https://reactbits.dev/backgrounds/holo-mosaic',
+    tags: [],
+    added: '2026-11-16'
+  },
   'Backgrounds/GradientASCII': {
     videoUrl: '/assets/video/gradientascii.webm',
     description: 'Soft gradient glows drawn in ASCII characters that scramble under the cursor.',

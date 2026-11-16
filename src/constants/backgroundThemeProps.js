@@ -26,6 +26,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   'grid-distortion': { imageSrc: '/assets/demo/day-landscape.webp' },
   'grid-motion': { theme: 'light' },
   'grid-scan': { lightMode: true, linesColor: '#d4d4d8', scanColor: '#0284c7' },
+  'holo-mosaic': { lightMode: true, color: '#ffffff', metalColor: '#6b7280', intensity: 1.4 },
   hyperspeed: { theme: 'light', roadColor: '#efeff2', lineColor: '#d0d0d7' },
   iridescence: { color: '#ffffff' },
   'letter-glitch': { lightMode: true, glitchColors: ['#18181b', '#0f9f6e'], baseColor: '#18181b' },

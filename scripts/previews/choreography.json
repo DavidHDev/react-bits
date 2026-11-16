@@ -9441,5 +9441,39 @@
       }
     ],
     "warmup": 0
+  },
+  {
+    "slug": "holo-mosaic",
+    "duration": 8.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.6,
+        "to": 4.6,
+        "points": [
+          [0.78, 0.62],
+          [0.62, 0.44],
+          [0.42, 0.5],
+          [0.34, 0.62]
+        ],
+        "ease": "inOut"
+      },
+      {
+        "type": "click",
+        "at": 5,
+        "x": 0.4,
+        "y": 0.56
+      },
+      {
+        "type": "leave",
+        "at": 5.6
+      }
+    ]
   }
 ]

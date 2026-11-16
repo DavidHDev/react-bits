@@ -7,6 +7,7 @@ import { CATEGORIES } from '../../../constants/Categories';
 const MICRO_COUNT = CATEGORIES.find(category => category.name === 'Micro')?.subcategories.length ?? 0;
 
 const ITEMS = [
+  { label: 'Holo Mosaic', to: '/backgrounds/holo-mosaic' },
   { label: 'React Bits 2.0', to: '/get-started/changelog' },
   { label: 'Center Stage', to: '/tools/center-stage' },
   { label: 'Sound Lab', to: '/tools/sound-lab' },

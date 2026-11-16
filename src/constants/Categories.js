@@ -145,6 +145,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
+      'Holo Mosaic',
       'Gradient ASCII',
       'Flux Lines',
       'Pattern Waves',

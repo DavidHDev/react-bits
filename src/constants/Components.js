@@ -235,7 +235,8 @@ const backgrounds = {
   'sliced-waves': () => import('../demo/Backgrounds/SlicedWavesDemo.jsx'),
   'acid-squares': () => import('../demo/Backgrounds/AcidSquaresDemo.jsx'),
   'scanner': () => import('../demo/Backgrounds/ScannerDemo.jsx'),
-  'gradient-ascii': () => import('../demo/Backgrounds/GradientASCIIDemo.jsx')
+  'gradient-ascii': () => import('../demo/Backgrounds/GradientASCIIDemo.jsx'),
+  'holo-mosaic': () => import('../demo/Backgrounds/HoloMosaicDemo.jsx')
 };
 
 export const componentMap = {
