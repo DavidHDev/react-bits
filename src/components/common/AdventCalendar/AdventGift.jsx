@@ -1,4 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { advAsset } from './assets';
 import './AdventCalendar.css';
 
@@ -7,6 +8,7 @@ const loadStage = () => import('./stage');
 const AdventCalendar = lazy(loadCalendar);
 
 const LOOP = 5;
+const AVOID = '.sc-card, .ln-sp-card';
 
 const readTheme = () => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
 
@@ -16,6 +18,8 @@ const whenIdle = callback => {
 };
 
 const AdventGift = () => {
+  const { pathname } = useLocation();
+  const hostRef = useRef(null);
   const mediaRef = useRef(null);
   const videoRef = useRef(null);
   const buttonRef = useRef(null);
@@ -27,6 +31,7 @@ const AdventGift = () => {
   const [away, setAway] = useState(false);
   const [back, setBack] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [tucked, setTucked] = useState(false);
   const reduce = useMemo(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false, []);
   const apple = useMemo(() => /Apple/.test(navigator.vendor || ''), []);
 
@@ -56,9 +61,47 @@ const AdventGift = () => {
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
-    if (away) el.pause();
+    if (away || tucked) el.pause();
     else el.play?.().catch(() => {});
-  }, [away, video, theme]);
+  }, [away, tucked, video, theme]);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || !('IntersectionObserver' in window)) return undefined;
+    const watched = new Set();
+    const hits = new Map();
+    let observer = null;
+    const update = entries => {
+      entries.forEach(entry => hits.set(entry.target, entry.isIntersecting));
+      setTucked([...hits.values()].some(Boolean));
+    };
+    const build = () => {
+      observer?.disconnect();
+      hits.clear();
+      const r = host.getBoundingClientRect();
+      const inset = [r.top, window.innerWidth - r.right, window.innerHeight - r.bottom, r.left];
+      const rootMargin = inset.map(v => `${Math.min(0, -Math.round(v - 10))}px`).join(' ');
+      observer = new IntersectionObserver(update, { rootMargin });
+      watched.forEach(el => el.isConnected && observer.observe(el));
+    };
+    const scan = () => {
+      document.querySelectorAll(AVOID).forEach(el => {
+        if (watched.has(el)) return;
+        watched.add(el);
+        observer.observe(el);
+      });
+    };
+    build();
+    scan();
+    const timers = [400, 1200, 3000, 6000].map(ms => window.setTimeout(scan, ms));
+    window.addEventListener('resize', build);
+    return () => {
+      timers.forEach(id => window.clearTimeout(id));
+      window.removeEventListener('resize', build);
+      observer.disconnect();
+      setTucked(false);
+    };
+  }, [pathname]);
 
   const prepare = useCallback(() => {
     if (prepareRef.current) return;
@@ -93,7 +136,18 @@ const AdventGift = () => {
     } catch {
       stageRef.current = null;
     }
-    const rect = mediaRef.current.getBoundingClientRect();
+    const media = mediaRef.current;
+    const host = hostRef.current;
+    let rect = media.getBoundingClientRect();
+    if (host.classList.contains('is-tucked')) {
+      const box = host.getBoundingClientRect();
+      const scale = host.offsetWidth ? box.width / host.offsetWidth : 1;
+      rect = {
+        left: box.left + media.offsetLeft * scale,
+        top: box.top + media.offsetTop * scale,
+        width: media.offsetWidth * scale
+      };
+    }
     const el = videoRef.current;
     const time = el && el.readyState >= 2 ? el.currentTime % LOOP : 0;
     setBusy(false);
@@ -125,7 +179,12 @@ const AdventGift = () => {
   const poster = advAsset(`gift-${theme}.webp`);
 
   return (
-    <div className={`adv-gift${away ? ' is-away' : ''}${back ? ' is-back' : ''}${busy ? ' is-busy' : ''}`}>
+    <div
+      ref={hostRef}
+      className={`adv-gift${away ? ' is-away' : ''}${back ? ' is-back' : ''}${busy ? ' is-busy' : ''}${
+        tucked && !origin ? ' is-tucked' : ''
+      }`}
+    >
       <button
         ref={buttonRef}
         type="button"
