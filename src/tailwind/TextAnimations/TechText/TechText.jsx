@@ -137,14 +137,14 @@ const TechText = ({
     const lens = { x: 0, y: 0 };
     const frame = { x1: 0, y1: 0, x2: 0, y2: 0, alpha: 0, index: -1 };
 
-    const refreshFonts = () => {
+    const invalidateLayout = () => {
       layoutKey = '';
       wakeRef.current();
     };
 
     const fontsLoaded = () => {
       fontsReady = true;
-      refreshFonts();
+      invalidateLayout();
     };
 
     const family = s => s.fontFamily || getComputedStyle(container).fontFamily || 'sans-serif';
@@ -170,6 +170,7 @@ const TechText = ({
       const w = glyph.box.x2 - glyph.box.x1 + pad * 2;
       const h = glyph.box.y2 - glyph.box.y1 + pad * 2;
       const image = document.createElement('canvas');
+      image.addEventListener('contextrestored', invalidateLayout);
       image.width = Math.max(1, Math.ceil(w * dpr));
       image.height = Math.max(1, Math.ceil(h * dpr));
       const c = image.getContext('2d');
@@ -217,7 +218,7 @@ const TechText = ({
       const wanted = fontFor(s, 64);
       if (document.fonts && wanted !== requestedFont) {
         requestedFont = wanted;
-        document.fonts.load(wanted, s.text).then(refreshFonts, refreshFonts);
+        document.fonts.load(wanted, s.text).then(invalidateLayout, invalidateLayout);
       }
 
       const probe = scratchCtx;
@@ -952,6 +953,7 @@ const TechText = ({
     container.addEventListener('pointerup', onUp, { passive: true });
     container.addEventListener('pointercancel', onUp, { passive: true });
     container.addEventListener('pointerleave', onLeave, { passive: true });
+    canvas.addEventListener('contextrestored', invalidateLayout);
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
@@ -987,6 +989,7 @@ const TechText = ({
       container.removeEventListener('pointerup', onUp);
       container.removeEventListener('pointercancel', onUp);
       container.removeEventListener('pointerleave', onLeave);
+      canvas.removeEventListener('contextrestored', invalidateLayout);
     };
   }, []);
 
