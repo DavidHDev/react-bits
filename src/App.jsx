@@ -23,6 +23,7 @@ const ToolsPage = lazy(loadTools);
 const ProPage = lazy(loadPro);
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const AnnouncementModal = lazy(() => import('./components/common/AnnouncementModal/AnnouncementModal'));
+const AdventGift = lazy(() => import('./components/common/AdventCalendar/AdventGift'));
 const ChakraScope = lazy(loadChakra);
 
 const withChakra = load => () => Promise.all([load(), loadChakra()]);
@@ -67,6 +68,11 @@ function AppContent() {
         <Suspense fallback={null}>
           <AnnouncementModal />
         </Suspense>
+        {!pathname.startsWith('/tools') && (
+          <Suspense fallback={null}>
+            <AdventGift />
+          </Suspense>
+        )}
       </Providers>
     </>
   );
