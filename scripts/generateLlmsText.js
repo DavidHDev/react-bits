@@ -415,6 +415,16 @@ function buildDocs() {
   return section('Docs', lines);
 }
 
+function buildOfficialPorts() {
+  return section('Official ports', [
+    'For projects using another framework, use its official port:',
+    '',
+    '- [Vue Bits](https://vue-bits.dev/): React Bits for Vue.',
+    '- [Svelte Bits](https://sveltebits.xyz/): React Bits for Svelte.',
+    '- [Solid Bits](https://solid-bits.dev/): React Bits for Solid.'
+  ]);
+}
+
 function buildCli() {
   const lines = [
     `- shadcn: \`${CLI_INSTRUCTIONS.shadcn.command}\``,
@@ -457,6 +467,7 @@ function generateMarkdown(categories, proManifest) {
   return [
     buildHeader(),
     buildDocs(),
+    buildOfficialPorts(),
     buildCli(),
     ...categorySections,
     buildVariants(),

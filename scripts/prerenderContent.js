@@ -59,6 +59,7 @@ const pageBody = page => {
         <h2>Built for AI workflows</h2>${paragraph('Copy for AI on every component, Copy as Markdown on every docs page, MCP through the shadcn MCP server and an llms.txt map of the whole library.')}
         <h2>Free tools</h2>${grid(TOOLS.map(tool => ({ name: tool.label, path: tool.path, description: tool.description })))}
         <h2>License</h2>${paragraph('Free for personal and commercial work under the MIT + Commons Clause license. Use the components in any app, website or product, but do not sell, sublicense or redistribute the components themselves.')}
+        <h2>Official ports</h2><p>React Bits is also available for Vue, Svelte and Solid: ${link('https://vue-bits.dev/', 'Vue Bits')}, ${link('https://sveltebits.xyz/', 'Svelte Bits')} and ${link('https://solid-bits.dev/', 'Solid Bits')}.</p>
         ${link('/get-started/installation', 'Installation guide')}`;
     case '/get-started/mcp':
       return `<h2>Registry configuration</h2><pre><code>${escapeHtml(JSON.stringify({ registries: { '@react-bits': 'https://reactbits.dev/r/{name}.json' } }, null, 2))}</code></pre>

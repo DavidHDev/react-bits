@@ -175,7 +175,7 @@ React Bits is supported by these sponsors. [Become a sponsor](https://reactbits.
 
 **Contributing.** Ideas and fixes are welcome. Browse the [open issues](https://github.com/DavidHDev/react-bits/issues), suggest something with the [feature request template](https://github.com/DavidHDev/react-bits/issues/new?template=2-feature-request.yml), and read the [contribution guide](https://github.com/DavidHDev/react-bits/blob/main/CONTRIBUTING.md) before opening a pull request.
 
-**Official ports.** React Bits is also available for [Vue](https://vue-bits.dev/) and [Svelte](https://sveltebits.xyz/).
+**Official ports.** React Bits is also available for [Vue](https://vue-bits.dev/), [Svelte](https://sveltebits.xyz/) and [Solid](https://solid-bits.dev/).
 
 **Contributors.** Thanks to everyone who has helped build React Bits.
 

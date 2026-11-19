@@ -17,6 +17,14 @@ Important notes for agents:
 - [MCP Setup](https://www.reactbits.dev/get-started/mcp): Set up a MCP server to help you with development.
 - [Pro catalogue](https://www.reactbits.dev/pro): On-domain previews of React Bits Pro: components, blocks, app UI, templates, agent kit.
 
+## Official ports
+
+For projects using another framework, use its official port:
+
+- [Vue Bits](https://vue-bits.dev/): React Bits for Vue.
+- [Svelte Bits](https://sveltebits.xyz/): React Bits for Svelte.
+- [Solid Bits](https://solid-bits.dev/): React Bits for Solid.
+
 ## CLI
 
 - shadcn: `npx shadcn@latest add https://reactbits.dev/r/<Component>-<LANG>-<STYLE>`
@@ -224,6 +232,7 @@ Notes:
 - [Grid Distortion](https://www.reactbits.dev/backgrounds/grid-distortion): Image background that breaks into a grid of blocks under the cursor and settles back into place. CLI: `GridDistortion`.
 - [Grid Motion](https://www.reactbits.dev/backgrounds/grid-motion): A tilted wall of drifting tiles that slides with the pointer and lights up where it rests. CLI: `GridMotion`.
 - [Grid Scan](https://www.reactbits.dev/backgrounds/grid-scan): A 3D grid room swept by a scanning light that follows your view. CLI: `GridScan`.
+- [Holo Mosaic](https://www.reactbits.dev/backgrounds/holo-mosaic): Holographic tiles that split light into sweeping color as it moves, with glitter, a flip-in intro and click waves. CLI: `HoloMosaic`.
 - [Hyperspeed](https://www.reactbits.dev/backgrounds/hyperspeed): Night highway of glowing light trails on a winding road that warps into hyperspace while you hold. CLI: `Hyperspeed`.
 - [Iridescence](https://www.reactbits.dev/backgrounds/iridescence): Liquid iridescent surface with shifting folds that you can stir with the cursor. CLI: `Iridescence`.
 - [Letter Glitch](https://www.reactbits.dev/backgrounds/letter-glitch): A calm field of letters that flicker, scramble and glitch in color, stirred by the cursor and torn by clicks. CLI: `LetterGlitch`.

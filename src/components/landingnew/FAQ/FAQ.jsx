@@ -47,13 +47,17 @@ const QUESTIONS = [
     a: (
       <>
         The components on this site are built for React, so they work in Next.js, Vite, Astro or Remix. Working in
-        another framework? There are official ports for Vue and Svelte:{' '}
+        another framework? There are official ports for Vue, Svelte and Solid:{' '}
         <a className="ln-faq-link" href="https://vue-bits.dev/" target="_blank" rel="noopener noreferrer">
           Vue Bits
-        </a>{' '}
-        and{' '}
+        </a>
+        ,{' '}
         <a className="ln-faq-link" href="https://sveltebits.xyz/" target="_blank" rel="noopener noreferrer">
           Svelte Bits
+        </a>{' '}
+        and{' '}
+        <a className="ln-faq-link" href="https://solid-bits.dev/" target="_blank" rel="noopener noreferrer">
+          Solid Bits
         </a>
         .
       </>

@@ -351,13 +351,17 @@ const Introduction = () => {
           lists every new component and update by month, with an RSS feed.
         </li>
         <li className="docs-list-item">
-          <strong>Vue and Svelte.</strong> Official ports live at{' '}
+          <strong>Vue, Svelte and Solid.</strong> Official ports live at{' '}
           <a className="docs-inline-link" href="https://vue-bits.dev/" target="_blank" rel="noopener noreferrer">
             Vue Bits
-          </a>{' '}
-          and{' '}
+          </a>
+          ,{' '}
           <a className="docs-inline-link" href="https://sveltebits.xyz/" target="_blank" rel="noopener noreferrer">
             Svelte Bits
+          </a>{' '}
+          and{' '}
+          <a className="docs-inline-link" href="https://solid-bits.dev/" target="_blank" rel="noopener noreferrer">
+            Solid Bits
           </a>
           .
         </li>

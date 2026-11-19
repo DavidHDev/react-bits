@@ -33,6 +33,9 @@ const Footer = ({ wide = false, lead = null }) => (
               <a href="https://sveltebits.xyz/" target="_blank" rel="noopener noreferrer">
                 Svelte Bits
               </a>
+              <a href="https://solid-bits.dev/" target="_blank" rel="noopener noreferrer">
+                Solid Bits
+              </a>
             </div>
             <div className="ln-footer-col">
               <span className="ln-footer-col-title">Product</span>
