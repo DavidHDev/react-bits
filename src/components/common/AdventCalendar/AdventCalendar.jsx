@@ -26,6 +26,37 @@ const smooth = t => {
 };
 const easeOut = t => 1 - Math.pow(1 - clamp01(t), 3);
 const pad = n => String(n).padStart(2, '0');
+const INTRO_KEY = `rb-advent-${YEAR}-intro`;
+
+const readIntro = () => {
+  try {
+    return localStorage.getItem(INTRO_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
+const writeIntro = () => {
+  try {
+    localStorage.setItem(INTRO_KEY, '1');
+  } catch {
+    return;
+  }
+};
+
+const neighbour = (layout, day, key) => {
+  const step = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[key];
+  if (!step) return null;
+  let row = layout.findIndex(cells => cells.includes(day));
+  let col = layout[row].indexOf(day);
+  for (;;) {
+    row += step[0];
+    col += step[1];
+    if (row < 0 || row >= layout.length || col < 0 || col >= layout[0].length) return null;
+    const next = layout[row][col];
+    if (next && next !== day) return next;
+  }
+};
 
 const useCountdown = target => {
   const [now, setNow] = useState(() => Date.now());
@@ -83,7 +114,7 @@ const Info = ({ today, message, theme, register }) => {
   );
 };
 
-const Door = ({ day, index, state, opened, ready, onPick, register }) => {
+const Door = ({ day, delay, state, opened, ready, onPick, onKeyDown, register }) => {
   const hero = day === DAYS;
   const label = state === 'today' ? 'Today' : hero ? 'Christmas Eve' : weekdayOf(day);
   return (
@@ -91,10 +122,11 @@ const Door = ({ day, index, state, opened, ready, onPick, register }) => {
       ref={register}
       type="button"
       className={`adv-door adv-door--${state}${hero ? ' adv-door--hero' : ''}${opened && ready ? ' is-open' : ''}`}
-      style={{ gridArea: `d${day}`, '--i': index }}
+      style={{ gridArea: `d${day}`, '--d': `${delay}ms` }}
       aria-label={state === 'locked' ? `Day ${day}, opens ${dateLabel(day)}` : `Day ${day}`}
       aria-pressed={state === 'locked' ? undefined : opened}
       onClick={() => onPick(day)}
+      onKeyDown={event => onKeyDown(event, day)}
     >
       <span className="adv-door-inside">
         <HugeiconsIcon icon={GiftIcon} size={hero ? 30 : 20} strokeWidth={1.6} />
@@ -139,6 +171,8 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
   const rafRef = useRef(0);
   const [narrow] = useState(() => window.innerWidth < 720);
   const [today] = useState(currentDay);
+  const [quick] = useState(readIntro);
+  const skipRef = useRef(false);
   const [opened, setOpened] = useState(readOpened);
   const [ready, setReady] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -250,12 +284,14 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
       }
       const dt = last ? Math.min(0.034, (now - last) / 1000) : 0;
       last = now;
-      time += dt;
+      const rush = quick && time > TIMES.fly - 0.05 && time < TIMES.pop - 0.06 ? 3.2 : 1;
+      time += dt * (skipRef.current ? 4.5 : rush);
       const t = Math.min(time, OPEN_END);
       opening.render(t);
       reveal(t, TIMES.pop, OPEN_END);
       if (time >= OPEN_END) {
         setReady(true);
+        writeIntro();
         window.setTimeout(releaseStage, 520);
         return;
       }
@@ -263,7 +299,7 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
     };
     rafRef.current = requestAnimationFrame(tick);
     return releaseStage;
-  }, [onStarted, origin, reduce, releaseStage, reveal, stageModule, theme]);
+  }, [onStarted, origin, quick, reduce, releaseStage, reveal, stageModule, theme]);
 
   useEffect(() => {
     if (ready) closeRef.current?.focus({ preventScroll: true });
@@ -273,19 +309,78 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
     if (closing) return;
     setClosing(true);
     releaseStage();
-    window.setTimeout(() => {
-      document.documentElement.classList.remove('adv-locked');
-      onClosed();
-    }, 280);
-  }, [closing, onClosed, releaseStage]);
+    const panel = panelRef.current;
+    if (panel && origin.rect && !plain) {
+      const box = panel.getBoundingClientRect();
+      const x = origin.rect.x + origin.rect.size / 2 - (box.left + box.width / 2);
+      const y = origin.rect.y + origin.rect.size * 0.56 - (box.top + box.height / 2);
+      panel.style.setProperty('--adv-exit-x', `${x.toFixed(1)}px`);
+      panel.style.setProperty('--adv-exit-y', `${y.toFixed(1)}px`);
+    }
+    if (backdropRef.current) backdropRef.current.style.opacity = '0';
+    window.setTimeout(
+      () => {
+        document.documentElement.classList.remove('adv-locked');
+        onClosed();
+      },
+      plain ? 240 : 300
+    );
+  }, [closing, onClosed, origin.rect, plain, releaseStage]);
+
+  const skip = useCallback(() => {
+    if (!ready) skipRef.current = true;
+  }, [ready]);
+
+  const dismiss = useCallback(() => {
+    if (ready) close();
+    else skip();
+  }, [close, ready, skip]);
 
   useEffect(() => {
     const onKey = event => {
-      if (event.key === 'Escape') close();
+      if (event.key === 'Escape') {
+        close();
+        return;
+      }
+      if (!ready && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        skip();
+        return;
+      }
+      if (event.key !== 'Tab' || !panelRef.current) return;
+      const focusable = [...panelRef.current.querySelectorAll('button:not([disabled])')].filter(
+        el => el.offsetParent !== null && getComputedStyle(el).visibility !== 'hidden'
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !panelRef.current.contains(document.activeElement))) {
+        event.preventDefault();
+        last.focus();
+      } else if (
+        !event.shiftKey &&
+        (document.activeElement === last || !panelRef.current.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [close]);
+  }, [close, ready, skip]);
+
+  const lead = Math.min(DAYS, Math.max(1, today));
+  const delayOf = day => Math.round(60 + 420 * (1 - Math.pow(1 - Math.abs(day - lead) / (DAYS - 1), 2)));
+
+  const moveFocus = useCallback(
+    (event, day) => {
+      const next = neighbour(layout, day, event.key);
+      if (!next) return;
+      event.preventDefault();
+      tileRefs.current[next - 1]?.focus();
+    },
+    [layout]
+  );
 
   useEffect(() => {
     if (!message) return undefined;
@@ -341,8 +436,8 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
       ref={rootRef}
       className={`adv-overlay${ready ? ' is-ready' : ''}${plain ? ' is-reduced' : ''}${closing ? ' is-leaving' : ''}`}
     >
-      <div ref={backdropRef} className="adv-backdrop" onClick={close} />
-      <div className="adv-scene" onClick={event => event.target === event.currentTarget && close()}>
+      <div ref={backdropRef} className="adv-backdrop" onClick={dismiss} />
+      <div className="adv-scene" onClick={event => event.target === event.currentTarget && dismiss()}>
         <div
           ref={panelRef}
           className={`adv-panel${narrow ? ' is-narrow' : ''}`}
@@ -391,15 +486,16 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
               }}
             >
               <Info today={today} message={message} theme={theme} register={infoRef} />
-              {days.map(({ day, state }, index) => (
+              {days.map(({ day, state }) => (
                 <Door
                   key={day}
                   day={day}
-                  index={index}
+                  delay={delayOf(day)}
                   state={state}
                   opened={opened.has(day)}
                   ready={ready}
                   onPick={pick}
+                  onKeyDown={moveFocus}
                   register={el => {
                     tileRefs.current[day - 1] = el;
                   }}

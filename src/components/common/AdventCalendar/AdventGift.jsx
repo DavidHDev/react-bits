@@ -7,7 +7,7 @@ const loadCalendar = () => import('./AdventCalendar');
 const loadStage = () => import('./stage');
 const AdventCalendar = lazy(loadCalendar);
 
-const LOOP = 5;
+const LOOP = 8;
 const AVOID = '.sc-card, .ln-sp-card';
 
 const readTheme = () => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');

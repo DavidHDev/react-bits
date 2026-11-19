@@ -69,19 +69,6 @@ void main() {
 }
 `;
 
-const SEAM_FRAG = `
-uniform vec3 uColor;
-uniform vec3 uCore;
-uniform float uOpacity;
-varying vec2 vUv;
-void main() {
-  float v = vUv.y * 0.5 + 0.5;
-  float a = (pow(v, 5.0) * 0.8 + pow(v, 24.0) * 0.6) * uOpacity;
-  vec3 c = mix(uColor, uCore, pow(v, 10.0));
-  gl_FragColor = vec4(c * a, a);
-}
-`;
-
 const makeBurst = (look, count, seed, spread) => {
   let s = seed;
   const random = () => {
@@ -152,25 +139,7 @@ export const createOpening = gift => {
   const extras = [];
   let plan = null;
 
-  const seam = new THREE.Mesh(
-    new THREE.CylinderGeometry((BOX.w / 2 + 0.004) * Math.SQRT2, (BOX.w / 2 + 0.004) * Math.SQRT2, 0.16, 4, 1, true),
-    new THREE.ShaderMaterial({
-      vertexShader: AURA_VERT,
-      fragmentShader: SEAM_FRAG,
-      uniforms: {
-        uColor: { value: new THREE.Vector3(...look.glow) },
-        uCore: { value: new THREE.Vector3(...look.core) },
-        uOpacity: { value: 0 }
-      },
-      side: THREE.DoubleSide,
-      ...premultipliedBlend
-    })
-  );
-  seam.rotation.y = Math.PI / 4;
-  seam.position.y = LID_BOTTOM - 0.08;
-  seam.renderOrder = 1;
-  gift.gift.add(seam);
-  extras.push(seam);
+  const seam = gift.seam;
 
   const flash = new THREE.Mesh(
     new THREE.PlaneGeometry(2.4, 2.4),
@@ -426,7 +395,7 @@ export const createOpening = gift => {
     const frame = frameAt(Math.min(t, TIMES.fly));
     applyFrame(frame);
     const time = plan.time + t;
-    gift.idle(time);
+    gift.idle(time, smooth(t / 0.3));
     const fly = easeInOut(t / TIMES.fly);
     root.rotation.y += TAU * fly;
     const lean = Math.sin(Math.PI * fly);
@@ -443,8 +412,9 @@ export const createOpening = gift => {
     const popped = t >= TIMES.pop;
     gift.gift.position.x = 0.008 * rattle * Math.sin(t * 73);
     if (!popped) {
-      lid.position.set(0, LID_CENTER + 0.014 * rattle * Math.abs(Math.sin(t * 34)), 0);
-      lid.rotation.set(0.035 * rattle * Math.sin(t * 47), 0, 0.035 * rattle * Math.sin(t * 41 + 1));
+      lid.position.y += 0.014 * rattle * Math.abs(Math.sin(t * 34));
+      lid.rotation.x += 0.035 * rattle * Math.sin(t * 47);
+      lid.rotation.z += 0.035 * rattle * Math.sin(t * 41 + 1);
     } else {
       const tl = (t - TIMES.pop) / 0.8;
       lid.position.set(0.35 * tl, LID_CENTER + 5.2 * tl - 1.6 * tl * tl, 0.2 * tl);

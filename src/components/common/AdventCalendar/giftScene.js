@@ -15,7 +15,9 @@ export const BODY_TOP = BOX.h / 2;
 export const LID_BOTTOM = BODY_TOP - BOX.lidOverlap;
 export const LID_TOP = LID_BOTTOM + BOX.lidH;
 export const LID_CENTER = (LID_TOP + LID_BOTTOM) / 2;
-export const LOOP_PERIOD = 5;
+export const LOOP_PERIOD = 8;
+const HOP_START = 5.2 / LOOP_PERIOD;
+const HOP_LENGTH = 2.3 / LOOP_PERIOD;
 const TAU = Math.PI * 2;
 
 const THEMES = {
@@ -483,6 +485,19 @@ void main() {
 }
 `;
 
+export const SEAM_FRAG = `
+uniform vec3 uColor;
+uniform vec3 uCore;
+uniform float uOpacity;
+varying vec2 vUv;
+void main() {
+  float v = vUv.y * 0.5 + 0.5;
+  float a = (pow(v, 5.0) * 0.8 + pow(v, 24.0) * 0.6) * uOpacity;
+  vec3 c = mix(uColor, uCore, pow(v, 10.0));
+  gl_FragColor = vec4(c * a, a);
+}
+`;
+
 export const premultipliedBlend = {
   transparent: true,
   depthWrite: false,
@@ -592,6 +607,9 @@ export const createGiftScene = ({ theme: themeName = 'dark', pixelRatio = 1, dis
   lidMesh.castShadow = true;
   lidMesh.receiveShadow = true;
   lid.add(lidMesh);
+  const lidAnchor = new THREE.Group();
+  lidAnchor.position.y = -LID_CENTER;
+  lid.add(lidAnchor);
 
   const lidArmAO = p => {
     const d2 = p.x * p.x + p.z * p.z;
@@ -612,13 +630,14 @@ export const createGiftScene = ({ theme: themeName = 'dark', pixelRatio = 1, dis
     [lidMeshArm, wallMeshArm].forEach(m => {
       m.castShadow = true;
       m.receiveShadow = true;
-      group.add(m);
     });
+    group.add(wallMeshArm);
+    lidAnchor.add(lidMeshArm);
     return { j, rest, group, lidGeometry, wallGeometry, lidMesh: lidMeshArm, wallMesh: wallMeshArm };
   });
 
   const bow = new THREE.Group();
-  gift.add(bow);
+  lidAnchor.add(bow);
   const bowSpin = new THREE.Group();
   bowSpin.rotation.y = -0.55;
   bow.add(bowSpin);
@@ -709,20 +728,84 @@ export const createGiftScene = ({ theme: themeName = 'dark', pixelRatio = 1, dis
     aura.quaternion.copy(camera.quaternion);
   };
 
-  const idle = time => {
+  const seam = new THREE.Mesh(
+    new THREE.CylinderGeometry((BOX.w / 2 + 0.004) * Math.SQRT2, (BOX.w / 2 + 0.004) * Math.SQRT2, 0.16, 4, 1, true),
+    new THREE.ShaderMaterial({
+      vertexShader: AURA_VERT,
+      fragmentShader: SEAM_FRAG,
+      uniforms: {
+        uColor: { value: new THREE.Vector3(...look.glow) },
+        uCore: { value: new THREE.Vector3(...look.core) },
+        uOpacity: { value: 0 }
+      },
+      side: THREE.DoubleSide,
+      ...premultipliedBlend
+    })
+  );
+  seam.rotation.y = Math.PI / 4;
+  seam.position.y = LID_BOTTOM - 0.08;
+  seam.renderOrder = 1;
+  gift.add(seam);
+
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  const smooth = v => {
+    const x = clamp01(v);
+    return x * x * (3 - 2 * x);
+  };
+
+  const hopPose = (phase, k) => {
+    const h = (phase - HOP_START) / HOP_LENGTH;
+    const pose = { y: 0, squash: 0, lid: 0, tilt: 0, roll: 0, glow: 0 };
+    if (h <= 0 || h >= 1 || k <= 0) return pose;
+    if (h < 0.16) pose.squash = -0.05 * smooth(h / 0.16);
+    else if (h < 0.22) pose.squash = -0.05 + 0.09 * smooth((h - 0.16) / 0.06);
+    else if (h < 0.56) pose.squash = 0.04 * (1 - smooth((h - 0.22) / 0.2));
+    else {
+      const u = (h - 0.56) / 0.44;
+      pose.squash = -0.045 * Math.exp(-5 * u) * Math.cos(9 * u);
+    }
+    const air = clamp01((h - 0.2) / 0.36);
+    pose.y = 0.11 * 4 * air * (1 - air);
+    const peek = clamp01((h - 0.24) / 0.42);
+    const lift = Math.sin(Math.PI * peek);
+    const settle = h > 0.66 ? (h - 0.66) / 0.34 : 0;
+    pose.lid =
+      0.05 * lift * lift + 0.008 * Math.exp(-6 * settle) * Math.abs(Math.sin(10 * settle)) * (settle > 0 ? 1 : 0);
+    pose.tilt = 0.09 * lift * Math.sin(Math.PI * peek * 0.8);
+    pose.roll =
+      0.045 * Math.sin(Math.PI * air) +
+      (h > 0.56 ? 0.018 * Math.exp(-5 * ((h - 0.56) / 0.44)) * Math.sin(12 * ((h - 0.56) / 0.44)) : 0);
+    pose.glow = lift;
+    Object.keys(pose).forEach(key => {
+      pose[key] *= k;
+    });
+    return pose;
+  };
+
+  const idle = (time, calm = 0) => {
     const phase = (((time / LOOP_PERIOD) % 1) + 1) % 1;
-    const s = Math.sin(phase * TAU);
-    const c = Math.cos(phase * TAU);
-    gift.position.y = 0.03 + 0.028 * s;
+    const wave = phase * TAU * 2;
+    const s = Math.sin(wave);
+    const c = Math.cos(wave);
+    const hop = hopPose(phase, 1 - calm);
+    const sy = 1 + hop.squash;
+    const sxz = 1 - hop.squash * 0.6;
+    gift.scale.set(sxz, sy, sxz);
+    gift.position.y = 0.03 + 0.028 * s + hop.y + (BOX.h / 2) * (sy - 1);
     root.rotation.y = 0.62 + 0.07 * Math.sin(phase * TAU + 0.6);
-    gift.rotation.z = 0.012 * c;
+    gift.rotation.z = 0.012 * c + hop.roll;
     gift.rotation.x = 0.01 * s;
-    const lift = gift.position.y;
+    lid.position.set(0, LID_CENTER + hop.lid, 0);
+    lid.rotation.set(hop.tilt, 0, -hop.tilt * 0.4);
+    const lift = 0.03 + 0.028 * s + hop.y;
     shadow.scale.setScalar(1 - lift * 0.6);
     shadow.material.opacity = look.shadow * (1 - lift * 2.2);
-    floor.material.uniforms.uOpacity.value = look.floorGlow * (0.9 + 0.1 * Math.sin(phase * TAU * 2));
-    sparks.material.uniforms.uPhase.value = phase;
-    aura.material.uniforms.uOpacity.value = look.auraOpacity * (0.88 + 0.12 * Math.sin(phase * TAU * 2));
+    floor.material.uniforms.uOpacity.value =
+      look.floorGlow * (0.9 + 0.1 * Math.sin(phase * TAU * 2)) * (1 + 0.25 * hop.glow) * (1 - hop.y * 2.5);
+    sparks.material.uniforms.uPhase.value = (phase * 2) % 1;
+    aura.material.uniforms.uOpacity.value =
+      look.auraOpacity * (0.88 + 0.12 * Math.sin(phase * TAU * 2)) * (1 + 0.35 * hop.glow);
+    seam.material.uniforms.uOpacity.value = hop.glow * (theme === 'light' ? 0.6 : 0.85);
   };
 
   let renderer = null;
@@ -766,6 +849,7 @@ export const createGiftScene = ({ theme: themeName = 'dark', pixelRatio = 1, dis
   const tilePaper = new THREE.MeshPhysicalMaterial(paperParams);
 
   return {
+    seam,
     bodyPaper,
     lidPaper,
     THREE,
