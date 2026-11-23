@@ -169,6 +169,14 @@ React Bits is supported by these sponsors. [Become a sponsor](https://reactbits.
       <img src="public/assets/sponsors/shadcnstudio-lightmode.svg" alt="Shadcn Studio" height="30">
     </picture>
   </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://beste.co/?utm_source=reactbits&utm_medium=sponsor&utm_campaign=silver&ref=reactbits">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="public/assets/sponsors/beste.svg">
+      <source media="(prefers-color-scheme: light)" srcset="public/assets/sponsors/beste-lightmode.svg">
+      <img src="public/assets/sponsors/beste-lightmode.svg" alt="Beste" height="30">
+    </picture>
+  </a>
 </p>
 
 ## Community

@@ -31,6 +31,13 @@ export const silverSponsors = [
     imageUrl: '/assets/sponsors/shadcnstudio.svg',
     lightImageUrl: '/assets/sponsors/shadcnstudio-lightmode.svg',
     url: 'https://shadcnstudio.com/'
+  },
+  {
+    id: 3,
+    name: 'Beste',
+    imageUrl: '/assets/sponsors/beste.svg',
+    lightImageUrl: '/assets/sponsors/beste-lightmode.svg',
+    url: 'https://beste.co/'
   }
 ];
 
