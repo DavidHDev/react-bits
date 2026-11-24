@@ -47,6 +47,7 @@ export const BACKGROUND_LIGHT_PROPS = {
   'magic-rings': { theme: 'light', color: '#7C3AED', colorTwo: '#4F46E5' },
   'magnet-lines': { lineColor: '#27272a' },
   'molten-metal': { lightMode: true, colors: ['#8b5cf6', '#c026d3'], coreColor: '#7e22ce' },
+  'neon-glyphs': { lightMode: true },
   orb: { backgroundColor: '#ffffff', hue: 275 },
   particles: { lightMode: true },
   'pixel-blast': { lightMode: true, color: '#6D28D9', accentColor: '#6D28D9' },

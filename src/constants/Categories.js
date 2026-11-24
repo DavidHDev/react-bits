@@ -45,6 +45,7 @@ export const CATEGORIES = [
   {
     name: 'Animations',
     subcategories: [
+      'Neon Logo',
       'Crystalized Ball',
       'Electric Logo',
       'Dither Veil',
@@ -145,6 +146,7 @@ export const CATEGORIES = [
   {
     name: 'Backgrounds',
     subcategories: [
+      'Neon Glyphs',
       'Holo Mosaic',
       'Gradient ASCII',
       'Flux Lines',

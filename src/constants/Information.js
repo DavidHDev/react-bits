@@ -188,6 +188,15 @@ export const componentMetadata = {
       }
     ]
   },
+  'Animations/NeonLogo': {
+    videoUrl: '/assets/video/neonlogo.webm',
+    description: 'Turns any logo or word into a neon heat map that melts open under the cursor.',
+    category: 'Animations',
+    name: 'NeonLogo',
+    docsUrl: 'https://reactbits.dev/animations/neon-logo',
+    tags: ['webgl', 'logo', 'neon', 'heat', 'glow', 'text', 'interactive'],
+    added: '2026-11-24'
+  },
   'Animations/CrystalizedBall': {
     videoUrl: '/assets/video/crystalizedball.webm',
     description: 'A glass ball with a crackling electric rim and glowing dust that swirls with the cursor.',
@@ -2457,6 +2466,15 @@ export const componentMetadata = {
         note: 'Fixed a blank canvas (lost WebGL context) when rendered under React StrictMode, e.g. Next.js dev mode.'
       }
     ]
+  },
+  'Backgrounds/NeonGlyphs': {
+    videoUrl: '/assets/video/neonglyphs.webm',
+    description: 'A deep field of glowing neon glyphs floating through a 3D plane, with bloom and a color-split edge fade.',
+    category: 'Backgrounds',
+    name: 'NeonGlyphs',
+    docsUrl: 'https://reactbits.dev/backgrounds/neon-glyphs',
+    tags: ['webgl', 'glyphs', 'neon', 'text', '3d', 'bloom', 'interactive'],
+    added: '2026-11-24'
   },
   'Backgrounds/HoloMosaic': {
     videoUrl: '/assets/video/holomosaic.webm',

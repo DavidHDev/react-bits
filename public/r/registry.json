@@ -582,6 +582,72 @@
 			]
 		},
 		{
+			"name": "NeonLogo-JS-CSS",
+			"title": "NeonLogo",
+			"description": "Turns any logo or word into a neon heat map that melts open under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "NeonLogo.css",
+					"target": "@components/NeonLogo.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "NeonLogo.jsx"
+				}
+			]
+		},
+		{
+			"name": "NeonLogo-JS-TW",
+			"title": "NeonLogo",
+			"description": "Turns any logo or word into a neon heat map that melts open under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "NeonLogo/NeonLogo.jsx"
+				}
+			]
+		},
+		{
+			"name": "NeonLogo-TS-CSS",
+			"title": "NeonLogo",
+			"description": "Turns any logo or word into a neon heat map that melts open under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "NeonLogo.css",
+					"target": "@components/NeonLogo.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "NeonLogo.tsx"
+				}
+			]
+		},
+		{
+			"name": "NeonLogo-TS-TW",
+			"title": "NeonLogo",
+			"description": "Turns any logo or word into a neon heat map that melts open under the cursor.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "NeonLogo/NeonLogo.tsx"
+				}
+			]
+		},
+		{
 			"name": "CrystalizedBall-JS-CSS",
 			"title": "CrystalizedBall",
 			"description": "A glass ball with a crackling electric rim and glowing dust that swirls with the cursor.",
@@ -10202,6 +10268,72 @@
 				{
 					"type": "registry:component",
 					"path": "Scanner/Scanner.tsx"
+				}
+			]
+		},
+		{
+			"name": "NeonGlyphs-JS-CSS",
+			"title": "NeonGlyphs",
+			"description": "A deep field of glowing neon glyphs floating through a 3D plane, with bloom and a color-split edge fade.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "NeonGlyphs.css",
+					"target": "@components/NeonGlyphs.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "NeonGlyphs.jsx"
+				}
+			]
+		},
+		{
+			"name": "NeonGlyphs-JS-TW",
+			"title": "NeonGlyphs",
+			"description": "A deep field of glowing neon glyphs floating through a 3D plane, with bloom and a color-split edge fade.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "NeonGlyphs/NeonGlyphs.jsx"
+				}
+			]
+		},
+		{
+			"name": "NeonGlyphs-TS-CSS",
+			"title": "NeonGlyphs",
+			"description": "A deep field of glowing neon glyphs floating through a 3D plane, with bloom and a color-split edge fade.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:file",
+					"path": "NeonGlyphs.css",
+					"target": "@components/NeonGlyphs.css"
+				},
+				{
+					"type": "registry:component",
+					"path": "NeonGlyphs.tsx"
+				}
+			]
+		},
+		{
+			"name": "NeonGlyphs-TS-TW",
+			"title": "NeonGlyphs",
+			"description": "A deep field of glowing neon glyphs floating through a 3D plane, with bloom and a color-split edge fade.",
+			"type": "registry:component",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"type": "registry:component",
+					"path": "NeonGlyphs/NeonGlyphs.tsx"
 				}
 			]
 		},

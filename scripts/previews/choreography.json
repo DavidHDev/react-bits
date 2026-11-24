@@ -9475,5 +9475,57 @@
         "at": 5.6
       }
     ]
+  },
+  {
+    "slug": "neon-logo",
+    "duration": 7.6,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.4,
+        "to": 4.0,
+        "points": [
+          [0.3, 0.62],
+          [0.42, 0.48],
+          [0.56, 0.44],
+          [0.66, 0.56]
+        ],
+        "ease": "inOut"
+      },
+      { "type": "click", "at": 4.4, "x": 0.6, "y": 0.5 },
+      { "type": "leave", "at": 4.9 }
+    ]
+  },
+  {
+    "slug": "neon-glyphs",
+    "duration": 8.4,
+    "warmup": 0,
+    "loop": "replay",
+    "frame": "full",
+    "cursor": "none",
+    "props": {},
+    "lightProps": {},
+    "actions": [
+      {
+        "type": "path",
+        "from": 2.8,
+        "to": 4.6,
+        "points": [
+          [0.72, 0.4],
+          [0.58, 0.32],
+          [0.44, 0.38],
+          [0.36, 0.3]
+        ],
+        "ease": "inOut"
+      },
+      { "type": "click", "at": 5.0, "x": 0.42, "y": 0.26 },
+      { "type": "leave", "at": 5.5 }
+    ]
   }
 ]

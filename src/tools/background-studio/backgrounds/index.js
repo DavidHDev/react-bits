@@ -1949,6 +1949,57 @@ export const BACKGROUNDS = [
     ]
   },
   {
+    id: 'neon-glyphs',
+    label: 'Neon Glyphs',
+    component: () => import('../../../content/Backgrounds/NeonGlyphs/NeonGlyphs.jsx'),
+    installCommand: 'npx shadcn@latest add "https://reactbits.dev/default/backgrounds/neon-glyphs"',
+    props: [
+      {
+        name: 'colors',
+        type: 'colorArray',
+        default: ['#a6f3fa', '#ea6fe0', '#6fd6f7', '#d351b6', '#5aaef0'],
+        label: 'Colors',
+        minItems: 1,
+        maxItems: 8
+      },
+      {
+        name: 'characters',
+        type: 'select',
+        default: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=<>?!',
+        options: [
+          { value: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*+=<>?!', label: 'Letters' },
+          { value: '0123456789', label: 'Digits' },
+          { value: '0123456789ABCDEF', label: 'Hex' },
+          { value: '01', label: 'Binary' },
+          { value: '#$%&*+=<>?!@/|~^', label: 'Symbols' }
+        ],
+        label: 'Characters'
+      },
+      { name: 'tilt', type: 'number', default: 25, min: -60, max: 75, step: 1, label: 'Tilt' },
+      { name: 'turn', type: 'number', default: 0, min: -60, max: 60, step: 1, label: 'Turn' },
+      { name: 'rotation', type: 'number', default: 0, min: -45, max: 45, step: 1, label: 'Rotation' },
+      { name: 'perspective', type: 'number', default: 60, min: 20, max: 100, step: 1, label: 'Perspective' },
+      { name: 'depth', type: 'number', default: 12, min: 1, max: 32, step: 1, label: 'Depth' },
+      { name: 'sway', type: 'number', default: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Sway' },
+      { name: 'cellSize', type: 'number', default: 16, min: 10, max: 36, step: 1, label: 'Cell Size' },
+      { name: 'speed', type: 'number', default: 0.15, min: 0, max: 1, step: 0.01, label: 'Speed' },
+      { name: 'density', type: 'number', default: 0.1, min: 0.02, max: 0.4, step: 0.01, label: 'Density' },
+      { name: 'trails', type: 'number', default: 0.25, min: 0, max: 1, step: 0.01, label: 'Trails' },
+      { name: 'glow', type: 'number', default: 0.75, min: 0, max: 1.5, step: 0.05, label: 'Glow' },
+      { name: 'flicker', type: 'number', default: 0.5, min: 0, max: 1, step: 0.01, label: 'Flicker' },
+      { name: 'scramble', type: 'number', default: 0.5, min: 0, max: 3, step: 0.05, label: 'Scramble' },
+      { name: 'brightness', type: 'number', default: 1, min: 0.2, max: 2, step: 0.05, label: 'Brightness' },
+      { name: 'fade', type: 'number', default: 0.75, min: 0, max: 1, step: 0.01, label: 'Fade' },
+      { name: 'aberration', type: 'number', default: 0.5, min: 0, max: 1.5, step: 0.05, label: 'Aberration' },
+      { name: 'variation', type: 'number', default: 0, min: 0, max: 20, step: 1, label: 'Variation' },
+      { name: 'opacity', type: 'number', default: 1, min: 0, max: 1, step: 0.01, label: 'Opacity' },
+      { name: 'mouseInteraction', type: 'boolean', default: true, label: 'Mouse Interaction' },
+      { name: 'burstOnClick', type: 'boolean', default: true, label: 'Burst On Click' },
+      { name: 'intro', type: 'boolean', default: true, label: 'Intro' },
+      { name: 'lightMode', type: 'boolean', default: false, label: 'Light Mode' }
+    ]
+  },
+  {
     id: 'holo-mosaic',
     label: 'Holo Mosaic',
     component: () => import('../../../content/Backgrounds/HoloMosaic/HoloMosaic.jsx'),
