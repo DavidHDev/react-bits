@@ -5,6 +5,7 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
+    "run_worker_first": ["/advent/*", "/api/advent/*"],
     "html_handling": "drop-trailing-slash",
     "not_found_handling": "404-page"
   }
