@@ -39,7 +39,8 @@ export default defineConfig({
       input: {
         index: path.resolve(__dirname, 'index.html'),
         'studio-frame': path.resolve(__dirname, 'studio-frame.html'),
-        'shape-frame': path.resolve(__dirname, 'shape-frame.html')
+        'shape-frame': path.resolve(__dirname, 'shape-frame.html'),
+        'escuela-rr': path.resolve(__dirname, 'Escuela_RR_Backoffice_pixel_reactbits.html')
       },
       onwarn(warning, warn) {
         if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client')) return;
