@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 
 import PixelCard from '../content/Components/PixelCard/PixelCard';
 import PixelTransition from '../content/Animations/PixelTransition/PixelTransition';
-import Lightning from '../content/Backgrounds/Lightning/Lightning';
+import SideRays from '../content/Backgrounds/SideRays/SideRays';
 import BrandArtwork from './BrandArtwork';
 
 import './pixel-effects.css';
@@ -66,27 +66,31 @@ if (brandHost) {
   );
 }
 
-const lightningHost = document.getElementById('rr-lightning-root');
-if (lightningHost) {
-  createRoot(lightningHost).render(
-    <Lightning
-      color="#7f91ff"
-      bolts={1}
-      spread={0.75}
-      branches={0.28}
-      angle={-8}
-      thickness={0.82}
-      glow={0.78}
-      intensity={0.72}
-      speed={0.42}
-      flicker={0.18}
-      mouseInteraction={false}
-      clickStrike={false}
+const sideRaysHost = document.getElementById('rr-siderays-root');
+if (sideRaysHost) {
+  createRoot(sideRaysHost).render(
+    <SideRays
+      rayColor1="#FFC46B"
+      rayColor2="#96c8ff"
+      origin="top-right"
+      speed={1.15}
+      intensity={1.1}
+      spread={2}
+      density={5}
+      followMouse={false}
       intro={false}
-      fade={0.85}
-      opacity={0.28}
-      dpr={1}
-      className="rr-lightning-canvas"
+      opacity={0.3}
+      maxDevicePixelRatio={1}
+      className="rr-siderays"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 0,
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        mixBlendMode: 'screen'
+      }}
     />
   );
 }

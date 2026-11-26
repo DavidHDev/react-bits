@@ -1,12 +1,16 @@
-.rr-lightning-canvas {
+.side-rays.rr-siderays {
   position: fixed !important;
-  inset: 0;
+  inset: 0 !important;
   z-index: 0;
-  display: block;
-  width: 100vw;
-  height: 100vh;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
   pointer-events: none;
   mix-blend-mode: screen;
+}
+
+.rr-siderays .side-rays__canvas {
+  pointer-events: none;
 }
 
 .pixel-brand-transition {
