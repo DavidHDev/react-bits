@@ -1,0 +1,47 @@
+.rr-lightning-canvas {
+  position: fixed !important;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.pixel-brand-transition {
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.pixel-brand-transition .pixelated-image-card__default,
+.pixel-brand-transition .pixelated-image-card__active {
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.pixel-brand-transition .pixelated-image-card__pixels {
+  border-radius: inherit;
+}
+
+.pixel-hero-effect {
+  --pixel-card-radius: 16px;
+  --pixel-card-surface: transparent;
+  --pixel-card-shadow: none;
+}
+
+.pixel-hero-effect::after {
+  display: none;
+}
+
+.pixel-hero-effect .pixel-card-canvas {
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-brand-transition {
+    animation: none;
+  }
+}

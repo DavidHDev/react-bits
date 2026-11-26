@@ -376,12 +376,118 @@ body{background-image:radial-gradient(ellipse at 82% 12%,rgba(230,161,76,.16),tr
 .pixel-logo .logo{position:absolute;inset:0}
 .pixel-logo__alt{visibility:hidden}
 .pixel-logo__pixels{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;pointer-events:none}
+/* PixelCard-inspired spotlight surfaces and a brighter arcade-night backoffice. */
+:root{color-scheme:dark;--bg:#0b1020;--card:#151d32;--ink:#eef3ff;--mut:#a7b3cd;--line:rgba(162,180,220,.2);--pri:#9aa8ff;--pri2:#c3cbff;--pris:rgba(119,132,255,.16);--ok:#8de3c0;--okbg:#163b3b;--bad:#ff9b92;--badbg:#482b39;--warn:#302b24;--shadow:0 12px 30px rgba(2,7,22,.26),inset 0 1px rgba(255,255,255,.045);--pixel-glow:rgba(143,164,255,.2)}
+html{background:var(--bg);scrollbar-color:#58648b var(--bg)}
+body{background-color:var(--bg);background-image:radial-gradient(ellipse at 82% 4%,rgba(93,87,203,.2),transparent 34rem),radial-gradient(ellipse at 15% 92%,rgba(27,153,145,.13),transparent 38rem),linear-gradient(rgba(185,198,255,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(185,198,255,.032) 1px,transparent 1px);background-size:auto,auto,22px 22px,22px 22px;background-attachment:fixed;color:var(--ink);font-family:"Segoe UI",Tahoma,sans-serif}
+h1,h2,h3{font-family:"Courier New",Consolas,monospace;letter-spacing:-.025em}
+a{color:#c3cbff}
+::selection{background:#6575ee;color:#fff}
+:focus-visible{outline:3px solid #aeb8ff;outline-offset:3px;border-radius:8px}
+.app{position:relative;z-index:1;grid-template-columns:280px minmax(0,1fr);background:transparent}
+.side{background:linear-gradient(180deg,rgba(16,24,44,.96),rgba(12,18,34,.97));border-right:1px solid var(--line);box-shadow:12px 0 36px rgba(0,0,0,.12);padding:24px 18px}
+.brand{font-family:"Courier New",Consolas,monospace;font-size:19px;letter-spacing:-.04em}
+.brand-mark{width:38px;height:38px;flex:none;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px rgba(194,203,255,.28),0 8px 26px rgba(83,101,224,.3)}
+.brand-mark .pixelated-image-card{width:38px;height:38px;padding:0;border-radius:12px}
+.sme{background:linear-gradient(135deg,rgba(31,43,71,.94),rgba(24,36,57,.8));border:1px solid var(--line);border-radius:14px;box-shadow:inset 0 1px rgba(255,255,255,.05)}
+.sme span,.sme a{color:var(--mut)}
+nav.menu{gap:5px}
+nav.menu a{border:1px solid transparent;border-radius:12px;color:#aab7d2;transition:background .18s ease,color .18s ease,transform .18s ease}
+nav.menu a:hover{background:rgba(135,151,255,.1);color:#f3f5ff;transform:translateX(2px)}
+nav.menu a[aria-current=page]{background:linear-gradient(100deg,rgba(111,126,244,.23),rgba(54,198,174,.1));color:#d7dcff;border-color:rgba(155,169,255,.27);box-shadow:inset 3px 0 #9aa8ff}
+.sidebox{background:linear-gradient(135deg,rgba(38,51,83,.92),rgba(24,75,80,.72));border:1px solid rgba(133,190,218,.35);border-radius:16px;box-shadow:var(--shadow)}
+.main{padding:28px clamp(18px,3.3vw,48px) 44px}
+.btn{border:1px solid rgba(176,189,228,.25);border-radius:11px;background:rgba(29,39,63,.9);color:var(--ink);box-shadow:0 5px 14px rgba(2,7,22,.16),inset 0 1px rgba(255,255,255,.06);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.btn:hover{border-color:rgba(169,182,255,.72);box-shadow:0 8px 22px rgba(52,69,157,.22),inset 0 1px rgba(255,255,255,.08);color:#e4e7ff;transform:translateY(-1px)}
+.btn.pri{border-color:rgba(194,202,255,.72);background:linear-gradient(120deg,#6878e8,#7058bd);color:#fff;box-shadow:0 8px 22px rgba(88,100,218,.3),inset 0 1px rgba(255,255,255,.25)}
+.btn.pri:hover{background:linear-gradient(120deg,#7888ff,#806bd0);color:#fff;box-shadow:0 10px 28px rgba(103,117,245,.38)}
+.welcome{border:1px solid rgba(159,174,255,.36);border-radius:22px;background:linear-gradient(118deg,rgba(46,50,105,.96),rgba(30,57,89,.94) 56%,rgba(23,87,86,.88));box-shadow:0 20px 50px rgba(3,8,27,.3),inset 0 1px rgba(255,255,255,.12);padding:clamp(24px,3.4vw,38px)}
+.welcome .deco{right:22px;top:50%;width:300px;height:210px;transform:translateY(-50%);border:1px solid rgba(191,203,255,.42);border-radius:18px;background-color:rgba(20,29,60,.46);background-image:repeating-linear-gradient(90deg,rgba(187,199,255,.09) 0 1px,transparent 1px 14px),repeating-linear-gradient(0deg,rgba(187,199,255,.09) 0 1px,transparent 1px 14px),linear-gradient(180deg,transparent 48%,rgba(53,155,148,.32) 48% 100%);background-size:14px 14px,14px 14px,100% 100%;background-position:0 0;opacity:.96;box-shadow:inset 0 0 0 5px rgba(13,20,43,.24),0 14px 32px rgba(6,12,35,.25)}
+.welcome .deco::before{left:38px;top:34px;width:10px;height:10px;background:#d6ddff;box-shadow:0 -22px #d6ddff,11px -11px #d6ddff,22px 0 #d6ddff,11px 11px #d6ddff,0 22px #d6ddff,-11px 11px #d6ddff,-22px 0 #d6ddff,-11px -11px #d6ddff,11px 0 #fff1a8,0 11px #fff1a8;filter:drop-shadow(0 0 8px rgba(194,203,255,.62))}
+.welcome .deco::after{right:20px;bottom:15px;width:168px;height:126px;filter:drop-shadow(8px 8px 0 rgba(5,12,33,.32));background-image:linear-gradient(#121b3b 0 0),linear-gradient(#121b3b 0 0),linear-gradient(#d6ddff 0 0),linear-gradient(#d6ddff 0 0),linear-gradient(#8596ff 0 0),linear-gradient(#8596ff 0 0),linear-gradient(#54c8ac 0 0),linear-gradient(#54c8ac 0 0),linear-gradient(#54c8ac 0 0),linear-gradient(#54c8ac 0 0),linear-gradient(#2c8e8a 0 0);background-size:12px 12px,12px 12px,12px 12px,12px 12px,48px 12px,72px 12px,108px 12px,132px 12px,156px 12px,168px 12px,168px 12px;background-position:48px 48px,108px 48px,72px 12px,84px 12px,72px 0,60px 12px,36px 24px,24px 36px,12px 48px,0 60px,0 72px}
+.welcome p,.page-h .crumb,.sec-h p,.tile span,.course small,.day p,.note,.foot{color:var(--mut)}
+.eyebrow,.page-h .crumb a{color:#d7dcff}
+.prog{background:rgba(25,34,58,.92);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow)}
+.cardx,.tile,.day,.body,.quiz,.clock,.stepx,.login,.timer,.course,.cpart{background:linear-gradient(155deg,rgba(25,35,59,.96),rgba(17,26,45,.96));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.tile,.day,.body,.quiz,.clock,.stepx,.login,.timer,.course,.cpart{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.tile:hover,.day:hover,.body:hover,.quiz:hover,.stepx:hover,.course:hover,.cpart:hover{border-color:rgba(166,181,255,.46);box-shadow:0 16px 36px rgba(3,8,25,.34),0 0 0 1px rgba(140,156,255,.08),inset 0 1px rgba(255,255,255,.08)}
+.course:hover,.cpart:hover{transform:translateY(-3px)}
+.cardx{padding:clamp(20px,2.7vw,32px)}
+.tile .ic,.day .num,.steps li::before,.av,.sx-n{border-radius:12px;box-shadow:inset 0 1px rgba(255,255,255,.11),0 5px 14px rgba(0,0,0,.16)}
+.pbar{background:rgba(165,180,219,.15);border-radius:999px}
+.pbar i{border-radius:inherit}
+.course{overflow:hidden}
+.course:hover{box-shadow:0 16px 36px rgba(3,8,25,.34),0 0 24px rgba(143,164,255,.12)}
+.thumb .badge{background:rgba(14,22,40,.88);color:#eff1ff;border:1px solid var(--line);border-radius:999px}
+.thumb .done{border-radius:9px;background:#258f78;box-shadow:0 0 16px rgba(80,219,176,.25)}
+.list li{background:rgba(12,20,38,.68);border:1px solid rgba(162,180,220,.13);border-radius:12px}
+.dot,.kind{border-radius:8px;background:#111a2e;color:var(--ink);border-color:#627093}
+.dot.on{background:#258f78;border-color:#76dfbe}
+.mhead{border:1px solid rgba(159,174,255,.4);border-radius:18px;background:linear-gradient(115deg,rgba(56,58,119,.96),rgba(24,75,84,.87));box-shadow:var(--shadow)}
+.t{border-radius:12px;box-shadow:0 0 0 1px var(--line)}
+.t th,.t td{border-color:var(--line)}
+.t thead th,.grp th{background:rgba(108,122,222,.2);color:#d6ddff}
+.steps li::before{background:rgba(108,122,222,.2);color:#d6ddff}
+.tip,.legend{background:rgba(107,83,31,.27);color:#ffe8b1;border:1px solid rgba(232,185,91,.38);border-radius:12px}
+.model,.case,.shadow,.result,.ack,.filechip,.ansx,.guide{background:rgba(13,22,40,.78);border:1px solid var(--line);border-radius:12px}
+.opt,.chip,.plist button,.copy,.scn-i,.ta,.form input,.form select,.pts input{background:#10182b;color:var(--ink);border:1px solid rgba(162,180,220,.28);border-radius:10px}
+.opt:hover,.chip:hover,.plist button:hover,.copy:hover{border-color:#9aa8ff;color:#d9deff}
+.opt.sel,.scn-i.on{border-color:#9aa8ff;background:rgba(108,122,222,.2)}
+.opt.good,.chip.good,.form .good input,.form .good select{border-color:#64caa4;background:#153d39}
+.opt.bad,.chip.bad,.form .bad input,.form .bad select{border-color:#f09088;background:#452b39}
+.chip.sel,.seg button.on{background:#6677dc;color:#fff;border-color:#aab5ff}
+.form input:focus,.form select:focus,.ta:focus{border-color:#aab5ff;background:#17223c;box-shadow:0 0 0 3px rgba(141,157,255,.13)}
+.case b,.shadow b,.whys b{color:#d4dcff}
+.sim{gap:22px}
+.clock{border-color:rgba(150,168,255,.28)}
+.toast{background:#151e33;color:var(--ink);border:1px solid #9aa8ff;border-radius:12px;box-shadow:0 12px 36px rgba(0,0,0,.4)}
+.cpart .ic{border-radius:11px;background:rgba(108,122,222,.2);color:#d6ddff}
+.timer{border-color:rgba(150,168,255,.3)}
+.drop{border-color:#627093;border-radius:12px}
+.player{border:1px solid var(--line);border-radius:12px}
+.seg{border-color:var(--line);border-radius:10px}
+.seg button{background:#10182b;color:var(--ink)}
+.seg button+button{border-color:var(--line)}
+.whys,.whys div{background:#10182b;border-color:var(--line)}
+.art{background:var(--card);border:1px solid var(--line);border-radius:14px}
+.art figcaption,.mhead2,.mrow i{background:rgba(32,43,70,.86)}
+.mhead2,.when,.mbody .sig,.whys{border-color:var(--line)}
+.mrow>span,.when,.mbody .sig{color:var(--mut)}
+.xl th,.sys-top{background:#202b46;color:var(--mut)}
+.xl td,.sysf{border-color:var(--line)}
+.xl td.hd,.sys-bar{background:#253453;color:#eef3ff}
+.xl td.in{background:#51431d;color:#fff0a8}
+.sysf{border-radius:10px}
+.sf label{color:var(--mut)}
+.sf div,.docp{background:#10182b;color:var(--ink);border-color:var(--line);border-radius:10px}
+.say{background:#153d39;color:#ceffe8;border-radius:10px}
+.note-rk{border-left:4px solid #9aa8ff}
+.guide summary,details.body>summary{color:#9ce7cb}
+.seg button,.btn,.chip,.opt,.plist button{transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+.pixel-spot{position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;opacity:0;background:radial-gradient(210px circle at var(--spot-x,50%) var(--spot-y,50%),rgba(143,164,255,.17),transparent 70%),repeating-conic-gradient(rgba(202,211,255,.055) 0% 25%,transparent 0% 50%) 0 0/14px 14px;transition:opacity .22s ease}
+.pixel-spot-active{isolation:isolate}
+.pixel-spot-active>.pixel-spot{opacity:.74}
+.welcome>.pixel-spot{background:radial-gradient(280px circle at var(--spot-x,50%) var(--spot-y,50%),rgba(160,177,255,.2),transparent 72%),repeating-conic-gradient(rgba(211,219,255,.06) 0% 25%,transparent 0% 50%) 0 0/16px 16px}
+.welcome .deco{z-index:0}
+.welcome>*:not(.deco){z-index:1}
+.welcome .deco>.pixel-card.pixel-hero-effect{position:absolute;inset:0;width:100%;height:100%;max-width:none;border-radius:inherit;background:transparent;box-shadow:none;overflow:hidden;pointer-events:auto}
+.welcome .deco>.pixel-card.pixel-hero-effect::after{border-radius:inherit;box-shadow:none}
+.welcome .deco>.pixel-card.pixel-hero-effect .pixel-card-canvas{z-index:2;opacity:.72}
+.page-h{gap:14px}
+.sec{margin-top:36px}
+.foot{opacity:.72}
+@media(max-width:900px){.side{background:rgba(14,22,40,.96);border-bottom:1px solid var(--line)}nav.menu{scrollbar-color:#58648b #0b1020}}
+@media(max-width:900px){.welcome .deco{right:8px;transform:translateY(-50%) scale(.78);transform-origin:right center}}
+@media(max-width:600px){.welcome .deco{display:none}.side{gap:10px}.main{padding-top:18px}.sec{margin-top:28px}}
+@media(prefers-reduced-motion:reduce){.tile,.day,.body,.quiz,.stepx,.course,.cpart,.btn,.pixel-spot{transition:none}.tile:hover,.day:hover,.body:hover,.quiz:hover,.stepx:hover,.course:hover,.cpart:hover,.btn:hover{transform:none}}
+@media(prefers-reduced-transparency:reduce){.side,.sme,.sidebox,.welcome,.cardx,.tile,.day,.body,.quiz,.clock,.stepx,.login,.timer,.course,.cpart{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
 </head>
 <body>
+<div id="rr-lightning-root" aria-hidden="true"></div>
 <div class="app">
  <aside class="side">
-  <div class="brand"><svg class="logo" viewBox="0 0 38 38" aria-hidden="true"><rect width="38" height="38" rx="12" fill="#5b5bd6"/><path d="M9 13h20M9 19h20M9 25h20" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="13" r="3.2" fill="#ffc9d3"/><circle cx="24" cy="19" r="3.2" fill="#b9f0d6"/><circle cx="17" cy="25" r="3.2" fill="#ffe0b8"/></svg><span>Escuela R&amp;R<small>Backoffice LAS y CAC</small></span></div>
+  <div class="brand"><div class="brand-mark" id="rr-brand-pixel" aria-hidden="true"></div><span>Escuela R&amp;R<small>Backoffice LAS y CAC</small></span></div>
   <button class="btn sm gate" id="packBtn2" type="button">Pack</button>
   <div class="sme" id="sideMe"></div>
   <nav class="menu" id="tabs"></nav>
@@ -2224,6 +2330,42 @@ route();
   root.addEventListener('pointerenter', event => request(true, event));
   root.addEventListener('pointerleave', event => request(false, event));
 })();
+
+/* PixelCard-inspired spotlight follows the pointer across reusable page surfaces. */
+(() => {
+  const selector = '.welcome,.cardx,.tile,.day,.body,.quiz,.clock,.stepx,.login,.timer,.course,.cpart,.sidebox,.sme';
+  const surfaceOf = target => target instanceof Element ? target.closest(selector) : null;
+
+  document.addEventListener('pointerover', event => {
+    if (event.pointerType === 'touch') return;
+    const surface = surfaceOf(event.target);
+    if (!surface || (event.relatedTarget instanceof Node && surface.contains(event.relatedTarget))) return;
+    if (!Array.from(surface.children).some(child => child.classList.contains('pixel-spot'))) {
+      const spot = document.createElement('span');
+      spot.className = 'pixel-spot';
+      spot.setAttribute('aria-hidden', 'true');
+      surface.prepend(spot);
+    }
+    if (getComputedStyle(surface).position === 'static') surface.style.position = 'relative';
+    surface.classList.add('pixel-spot-active');
+  });
+
+  document.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch') return;
+    const surface = surfaceOf(event.target);
+    if (!surface) return;
+    const rect = surface.getBoundingClientRect();
+    surface.style.setProperty('--spot-x', `${event.clientX - rect.left}px`);
+    surface.style.setProperty('--spot-y', `${event.clientY - rect.top}px`);
+  });
+
+  document.addEventListener('pointerout', event => {
+    const surface = surfaceOf(event.target);
+    if (!surface || (event.relatedTarget instanceof Node && surface.contains(event.relatedTarget))) return;
+    surface.classList.remove('pixel-spot-active');
+  });
+})();
 </script>
+<script type="module" src="/src/escuela-rr/main.jsx"></script>
 </body>
 </html>
