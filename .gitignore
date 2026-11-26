@@ -26,6 +26,8 @@ scripts/og/
 skills-lock.json
 AGENTS.md
 /AGENTS/
+/advent/
+.dev.vars
 .claude/
 .context/
 
