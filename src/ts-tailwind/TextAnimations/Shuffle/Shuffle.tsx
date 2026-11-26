@@ -697,7 +697,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
   const classes = `inline-block whitespace-normal break-words will-change-transform uppercase text-[4rem] leading-none ${ready ? 'visible' : 'invisible'} ${className}`;
 
   const Tag = (tag || 'p') as React.ElementType;
-  return React.createElement(Tag, { ref, className: classes, style: commonStyle }, text);
+  return React.createElement(Tag, { key: text, ref, className: classes, style: commonStyle }, text);
 };
 
 export default Shuffle;

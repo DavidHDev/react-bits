@@ -960,6 +960,10 @@ export const componentMetadata = {
       {
         date: '2026-10-13',
         note: 'Letters can now flip like cards in 3D or spin in place with motion blur, and hovering can reshuffle just the letters near the cursor. Adds text and accent colors and a motion blur for sliding letters, and up or left shuffles no longer land on random symbols.'
+      },
+      {
+        date: '2026-11-22',
+        note: 'Fixed the old text staying on screen when the text prop changes after the first render.'
       }
     ]
   },
