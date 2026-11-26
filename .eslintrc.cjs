@@ -7,7 +7,7 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended'
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'public/default', 'public/tailwind', 'public/ts', 'public/r'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'public/default', 'public/tailwind', 'public/ts', 'public/r', '/advent/'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '19.0' } },
   plugins: ['react-refresh'],

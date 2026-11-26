@@ -1,7 +1,16 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Cancel01Icon, GiftIcon, Share08Icon, SquareLock02Icon, Tick02Icon } from '@hugeicons/core-free-icons';
+import {
+  ArrowUpRight01Icon,
+  Cancel01Icon,
+  GiftIcon,
+  Settings01Icon,
+  Share08Icon,
+  SquareLock02Icon,
+  Tick02Icon
+} from '@hugeicons/core-free-icons';
 import {
   DAYS,
   LAYOUT_NARROW,
@@ -12,10 +21,13 @@ import {
   dateLabel,
   nextUnlock,
   readOpened,
+  spanOf,
   weekdayOf,
   writeOpened
 } from './days';
 import { advAsset } from './assets';
+import { fetchGift } from '../../advent/runtime';
+import { meltDoor } from './melt';
 
 const SHARE_URL = 'https://reactbits.dev/#advent';
 
@@ -114,25 +126,75 @@ const Info = ({ today, message, theme, register }) => {
   );
 };
 
-const Door = ({ day, delay, state, opened, ready, onPick, onKeyDown, register }) => {
+const Door = ({ day, delay, state, opened, title, wide, ready, theme, onPick, onKeyDown, register }) => {
   const hero = day === DAYS;
   const label = state === 'today' ? 'Today' : hero ? 'Christmas Eve' : weekdayOf(day);
+  const doorRef = useRef(null);
+  const leafRef = useRef(null);
+  const wasOpened = useRef(opened);
+  const [melted, setMelted] = useState(opened);
+
+  useEffect(() => {
+    const before = wasOpened.current;
+    wasOpened.current = opened;
+    if (!opened || before || !ready) return undefined;
+    const door = doorRef.current;
+    const leaf = leafRef.current;
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    if (!door || !leaf || reduce) {
+      setMelted(true);
+      return undefined;
+    }
+    return meltDoor(door, leaf, {
+      seed: day * 7 + 3,
+      duration: hero ? 1900 : 1500,
+      frost: theme === 'light' ? '#cdd6e6' : '#eef3ff',
+      onDone: () => setMelted(true)
+    });
+  }, [opened, ready, day, hero, theme]);
+
   return (
     <button
-      ref={register}
+      ref={el => {
+        doorRef.current = el;
+        register(el);
+      }}
       type="button"
-      className={`adv-door adv-door--${state}${hero ? ' adv-door--hero' : ''}${opened && ready ? ' is-open' : ''}`}
+      className={`adv-door adv-door--${state}${hero ? ' adv-door--hero' : ''}${wide ? ' adv-door--wide' : ''}${opened && ready ? ' is-open' : ''}${melted ? ' is-melted' : ''}`}
       style={{ gridArea: `d${day}`, '--d': `${delay}ms` }}
-      aria-label={state === 'locked' ? `Day ${day}, opens ${dateLabel(day)}` : `Day ${day}`}
+      aria-label={
+        state === 'locked'
+          ? `Day ${day}, opens ${dateLabel(day)}`
+          : opened && title
+            ? `Day ${day}: ${title.title}${title.note ? `, ${title.note}` : ''}`
+            : `Day ${day}`
+      }
       aria-pressed={state === 'locked' ? undefined : opened}
       onClick={() => onPick(day)}
       onKeyDown={event => onKeyDown(event, day)}
     >
       <span className="adv-door-inside">
-        <HugeiconsIcon icon={GiftIcon} size={hero ? 30 : 20} strokeWidth={1.6} />
-        <span className="adv-door-inside-day">Day {day}</span>
+        <span className="adv-inside-top">
+          <span className="adv-inside-num">{day}</span>
+          <span className="adv-inside-icon">
+            <span className="adv-inside-glyph">
+              <HugeiconsIcon
+                icon={Array.isArray(title?.icon) ? title.icon : GiftIcon}
+                size={hero ? 22 : 15}
+                strokeWidth={1.6}
+              />
+            </span>
+            <span className="adv-inside-arrow">
+              <HugeiconsIcon icon={ArrowUpRight01Icon} size={hero ? 24 : 16} strokeWidth={1.8} />
+            </span>
+          </span>
+        </span>
+        <span className={`adv-inside-bottom${title?.note ? ' has-note' : ''}`}>
+          <span className="adv-inside-title">{title?.short || title?.title || ''}</span>
+          {title?.note && <span className="adv-inside-note">{title.note}</span>}
+        </span>
       </span>
-      <span className="adv-door-leaf">
+      <span ref={leafRef} className="adv-door-leaf">
         <span className="adv-door-face">
           {hero && (
             <span className="adv-door-fx" aria-hidden="true">
@@ -144,9 +206,13 @@ const Door = ({ day, delay, state, opened, ready, onPick, onKeyDown, register })
           <span className="adv-door-content">
             <span className="adv-num">{day}</span>
             <span className="adv-meta">{label}</span>
-            {state === 'locked' && (
+            {state === 'locked' ? (
               <span className="adv-lock">
                 <HugeiconsIcon icon={SquareLock02Icon} size={14} strokeWidth={1.8} />
+              </span>
+            ) : (
+              <span className="adv-go">
+                <HugeiconsIcon icon={ArrowUpRight01Icon} size={hero ? 24 : 16} strokeWidth={1.8} />
               </span>
             )}
           </span>
@@ -158,7 +224,14 @@ const Door = ({ day, delay, state, opened, ready, onPick, onKeyDown, register })
   );
 };
 
-const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
+const AdventCalendar = ({
+  origin,
+  stageModule,
+  onStarted,
+  onClosed,
+  openingAnimationDisabled,
+  onOpeningAnimationChange
+}) => {
   const rootRef = useRef(null);
   const panelRef = useRef(null);
   const backdropRef = useRef(null);
@@ -166,18 +239,24 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
   const infoRef = useRef(null);
   const gridRef = useRef(null);
   const closeRef = useRef(null);
+  const settingsRef = useRef(null);
+  const settingsTriggerRef = useRef(null);
+  const switchRef = useRef(null);
   const tileRefs = useRef([]);
   const stageRef = useRef(null);
   const rafRef = useRef(0);
-  const [narrow] = useState(() => window.innerWidth < 720);
+  const [narrow] = useState(() => window.innerWidth < 860);
   const [today] = useState(currentDay);
   const [quick] = useState(readIntro);
   const skipRef = useRef(false);
   const [opened, setOpened] = useState(readOpened);
+  const [titles, setTitles] = useState({});
+  const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [closing, setClosing] = useState(false);
   const [message, setMessage] = useState('');
   const [shared, setShared] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [plain, setPlain] = useState(false);
   const reduce = useMemo(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false, []);
   const layout = narrow ? LAYOUT_NARROW : LAYOUT_WIDE;
@@ -337,8 +416,27 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
   }, [close, ready, skip]);
 
   useEffect(() => {
+    if (!settingsOpen) return undefined;
+    switchRef.current?.focus({ preventScroll: true });
+    const dismissOutside = event => {
+      if (!settingsRef.current?.contains(event.target)) setSettingsOpen(false);
+    };
+    document.addEventListener('pointerdown', dismissOutside);
+    document.addEventListener('focusin', dismissOutside);
+    return () => {
+      document.removeEventListener('pointerdown', dismissOutside);
+      document.removeEventListener('focusin', dismissOutside);
+    };
+  }, [settingsOpen]);
+
+  useEffect(() => {
     const onKey = event => {
       if (event.key === 'Escape') {
+        if (settingsOpen) {
+          setSettingsOpen(false);
+          settingsTriggerRef.current?.focus({ preventScroll: true });
+          return;
+        }
         close();
         return;
       }
@@ -367,7 +465,7 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [close, ready, skip]);
+  }, [close, ready, settingsOpen, skip]);
 
   const lead = Math.min(DAYS, Math.max(1, today));
   const delayOf = day => Math.round(60 + 420 * (1 - Math.pow(1 - Math.abs(day - lead) / (DAYS - 1), 2)));
@@ -412,6 +510,26 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
     }
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    [...opened]
+      .filter(day => day <= today && !titles[day])
+      .forEach(day => {
+        fetchGift(day, 'meta')
+          .then(meta => {
+            if (active && meta?.title)
+              setTitles(current => ({
+                ...current,
+                [day]: { title: meta.title, short: meta.short, icon: meta.icon, note: meta.tile }
+              }));
+          })
+          .catch(() => {});
+      });
+    return () => {
+      active = false;
+    };
+  }, [opened, today, titles]);
+
   const pick = day => {
     if (!ready || closing) return;
     if (day > today) {
@@ -422,10 +540,14 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
       el?.classList.add('is-shaking');
       return;
     }
+    if (opened.has(day)) {
+      close();
+      navigate(`/advent/${day}${window.location.search}`);
+      return;
+    }
     setOpened(current => {
       const next = new Set(current);
-      if (next.has(day)) next.delete(day);
-      else next.add(day);
+      next.add(day);
       writeOpened(next);
       return next;
     });
@@ -458,10 +580,43 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
               </p>
             </div>
             <div className="adv-actions">
-              <button type="button" className="adv-action" onClick={share}>
+              <button
+                type="button"
+                className="adv-action"
+                onClick={share}
+                aria-label={shared ? 'Link copied' : 'Share calendar'}
+              >
                 <HugeiconsIcon icon={shared ? Tick02Icon : Share08Icon} size={15} strokeWidth={1.8} />
                 <span>{shared ? 'Link copied' : 'Share'}</span>
               </button>
+              <div className="adv-settings" ref={settingsRef}>
+                <button
+                  ref={settingsTriggerRef}
+                  type="button"
+                  className="adv-action adv-action--icon"
+                  aria-label="Calendar settings"
+                  title="Calendar settings"
+                  aria-expanded={settingsOpen}
+                  aria-controls="adv-settings-panel"
+                  disabled={!ready}
+                  onClick={() => setSettingsOpen(open => !open)}
+                >
+                  <HugeiconsIcon icon={Settings01Icon} size={17} strokeWidth={1.8} />
+                </button>
+                <div id="adv-settings-panel" className="adv-settings-panel" hidden={!settingsOpen}>
+                  <button
+                    ref={switchRef}
+                    type="button"
+                    role="switch"
+                    aria-checked={openingAnimationDisabled}
+                    className="adv-settings-option"
+                    onClick={() => onOpeningAnimationChange(!openingAnimationDisabled)}
+                  >
+                    Disable opening animation
+                    <span className="adv-switch-track" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
               <button
                 ref={closeRef}
                 type="button"
@@ -493,7 +648,10 @@ const AdventCalendar = ({ origin, stageModule, onStarted, onClosed }) => {
                   delay={delayOf(day)}
                   state={state}
                   opened={opened.has(day)}
+                  title={titles[day]}
+                  wide={spanOf(layout, day).cols > 1}
                   ready={ready}
+                  theme={theme}
                   onPick={pick}
                   onKeyDown={moveFocus}
                   register={el => {

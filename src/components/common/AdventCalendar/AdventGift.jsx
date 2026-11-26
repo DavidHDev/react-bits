@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { advAsset } from './assets';
 import './AdventCalendar.css';
 
@@ -9,6 +9,7 @@ const AdventCalendar = lazy(loadCalendar);
 
 const LOOP = 8;
 const AVOID = '.sc-card, .ln-sp-card';
+const DISABLE_OPENING_KEY = 'rb-advent-disable-opening-animation';
 
 const readTheme = () => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
 
@@ -18,12 +19,14 @@ const whenIdle = callback => {
 };
 
 const AdventGift = () => {
-  const { pathname } = useLocation();
+  const { pathname, search, hash, state } = useLocation();
+  const navigate = useNavigate();
   const hostRef = useRef(null);
   const mediaRef = useRef(null);
   const videoRef = useRef(null);
   const buttonRef = useRef(null);
-  const stageRef = useRef(null);
+  const openingRef = useRef(null);
+  const returnFocusRef = useRef(null);
   const prepareRef = useRef(0);
   const [theme, setTheme] = useState(readTheme);
   const [video, setVideo] = useState(false);
@@ -32,6 +35,13 @@ const AdventGift = () => {
   const [back, setBack] = useState(false);
   const [busy, setBusy] = useState(false);
   const [tucked, setTucked] = useState(false);
+  const [openingAnimationDisabled, setOpeningAnimationDisabled] = useState(() => {
+    try {
+      return localStorage.getItem(DISABLE_OPENING_KEY) === '1';
+    } catch {
+      return false;
+    }
+  });
   const reduce = useMemo(() => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false, []);
   const apple = useMemo(() => /Apple/.test(navigator.vendor || ''), []);
 
@@ -56,7 +66,13 @@ const AdventGift = () => {
     };
   }, [reduce]);
 
-  useEffect(() => () => window.clearTimeout(prepareRef.current), []);
+  useEffect(
+    () => () => {
+      window.clearTimeout(prepareRef.current);
+      openingRef.current = null;
+    },
+    []
+  );
 
   useEffect(() => {
     const el = videoRef.current;
@@ -107,35 +123,53 @@ const AdventGift = () => {
     if (prepareRef.current) return;
     prepareRef.current = window.setTimeout(() => {
       loadCalendar().catch(() => {});
-      if (reduce) return;
+      if (reduce || openingAnimationDisabled) return;
       loadStage()
         .then(module => {
-          stageRef.current = module;
           module.prepareStage(readTheme());
         })
         .catch(() => {});
     }, 700);
-  }, [reduce]);
+  }, [reduce, openingAnimationDisabled]);
 
   const cancelPrepare = useCallback(() => {
     window.clearTimeout(prepareRef.current);
     prepareRef.current = 0;
   }, []);
 
-  const open = useCallback(async () => {
-    if (origin || busy) return;
+  const openInstantly = useCallback(() => {
+    openingRef.current = null;
     cancelPrepare();
-    setBusy(true);
-    try {
-      await loadCalendar();
-      if (!reduce) {
-        const module = await loadStage();
-        stageRef.current = module;
-        await module.prepareStage(readTheme(), { urgent: true }).ready;
-      }
-    } catch {
-      stageRef.current = null;
+    setBusy(false);
+    setOrigin(current => current ?? { theme: readTheme() });
+  }, [cancelPrepare]);
+
+  const openGift = async () => {
+    if (origin || openingRef.current) return;
+    returnFocusRef.current = buttonRef.current;
+    if (reduce || openingAnimationDisabled) {
+      openInstantly();
+      return;
     }
+    cancelPrepare();
+    const request = Promise.all([loadStage(), loadCalendar()]);
+    openingRef.current = request;
+    setBusy(true);
+    const theme = readTheme();
+    let stageModule;
+    try {
+      const [module] = await request;
+      if (openingRef.current !== request) return;
+      if (await module.prepareStage(theme, { urgent: true }).ready) stageModule = module;
+    } catch {
+      stageModule = null;
+    }
+    if (openingRef.current !== request) return;
+    if (!stageModule) {
+      openInstantly();
+      return;
+    }
+    openingRef.current = null;
     const media = mediaRef.current;
     const host = hostRef.current;
     let rect = media.getBoundingClientRect();
@@ -151,20 +185,24 @@ const AdventGift = () => {
     const el = videoRef.current;
     const time = el && el.readyState >= 2 ? el.currentTime % LOOP : 0;
     setBusy(false);
-    setOrigin({ rect: { x: rect.left, y: rect.top, size: rect.width }, time, theme: readTheme() });
-  }, [busy, cancelPrepare, origin, reduce]);
-
-  const openRef = useRef(open);
-  openRef.current = open;
+    setOrigin({ rect: { x: rect.left, y: rect.top, size: rect.width }, time, theme, stageModule });
+  };
 
   useEffect(() => {
-    if (window.location.hash !== '#advent') return undefined;
-    const id = window.setTimeout(() => {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      openRef.current();
-    }, 900);
-    return () => window.clearTimeout(id);
-  }, []);
+    if (hash !== '#advent') return;
+    returnFocusRef.current = document.activeElement;
+    openInstantly();
+    navigate({ pathname, search }, { replace: true, state, preventScrollReset: true });
+  }, [hash, navigate, openInstantly, pathname, search, state]);
+
+  const changeOpeningAnimation = disabled => {
+    setOpeningAnimationDisabled(disabled);
+    try {
+      localStorage.setItem(DISABLE_OPENING_KEY, disabled ? '1' : '0');
+    } catch {
+      return;
+    }
+  };
 
   const started = useCallback(() => setAway(true), []);
 
@@ -173,7 +211,11 @@ const AdventGift = () => {
     setAway(false);
     setBack(true);
     window.setTimeout(() => setBack(false), 720);
-    requestAnimationFrame(() => buttonRef.current?.focus({ preventScroll: true }));
+    requestAnimationFrame(() => {
+      const trigger = returnFocusRef.current;
+      const target = trigger?.isConnected && trigger !== document.body ? trigger : buttonRef.current;
+      target?.focus({ preventScroll: true });
+    });
   }, []);
 
   const poster = advAsset(`gift-${theme}.webp`);
@@ -189,7 +231,7 @@ const AdventGift = () => {
         ref={buttonRef}
         type="button"
         className="adv-gift-hit"
-        onClick={open}
+        onClick={openGift}
         onPointerEnter={prepare}
         onPointerLeave={cancelPrepare}
         onFocus={prepare}
@@ -224,7 +266,14 @@ const AdventGift = () => {
       </button>
       {origin && (
         <Suspense fallback={null}>
-          <AdventCalendar origin={origin} stageModule={stageRef.current} onStarted={started} onClosed={closed} />
+          <AdventCalendar
+            origin={origin}
+            stageModule={origin.stageModule}
+            openingAnimationDisabled={openingAnimationDisabled}
+            onOpeningAnimationChange={changeOpeningAnimation}
+            onStarted={started}
+            onClosed={closed}
+          />
         </Suspense>
       )}
     </div>
