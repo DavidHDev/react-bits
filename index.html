@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script id="rb-motion-script">
       // Most demos honour prefers-reduced-motion and render a still frame when it is set.
-      // Visitors can opt in to motion for this site only. When they do,
+      // Visitors can opt in to motion for this site only (see /motion-notice.js). When they do,
       // reduced-motion media queries are made to evaluate as "no-preference" in JS and CSS
       // before the app boots, so the component source shown to users stays untouched.
       (() => {
@@ -18,6 +18,11 @@
         } catch {}
         if (!reduced) return;
 
+        window.__BITS_MOTION__ = { key, forced };
+        const notice = document.createElement('script');
+        notice.src = '/motion-notice.js';
+        notice.async = true;
+        document.head.appendChild(notice);
         if (!forced) return;
 
         const hasQuery = /prefers-reduced-motion/i;
