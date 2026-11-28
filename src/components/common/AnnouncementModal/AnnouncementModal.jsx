@@ -12,7 +12,7 @@ const SHOW_DELAY = 1500;
 // Placeholder until the November launch video is uploaded to this path.
 const PROMO_VIDEO = 'https://cdn.reactbits.dev/NOVEMBER_UPDATE.mp4';
 
-const DISABLED = false;
+const DISABLED = true;
 
 const AnnouncementModal = () => {
   const location = useLocation();
