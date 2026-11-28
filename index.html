@@ -3,6 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script id="rb-motion-script">
+      // Most demos honour prefers-reduced-motion and render a still frame when it is set.
+      // Visitors can opt in to motion for this site only (see /motion-notice.js). When they do,
+      // reduced-motion media queries are made to evaluate as "no-preference" in JS and CSS
+      // before the app boots, so the component source shown to users stays untouched.
+      (() => {
+        const key = 'react-bits-motion';
+        let reduced = false;
+        let forced = false;
+        try {
+          reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          forced = localStorage.getItem(key) === 'force';
+        } catch {}
+        if (!reduced) return;
+
+        window.__BITS_MOTION__ = { key, forced };
+        const notice = document.createElement('script');
+        notice.src = '/motion-notice.js';
+        notice.async = true;
+        document.head.appendChild(notice);
+        if (!forced) return;
+
+        const hasQuery = /prefers-reduced-motion/i;
+        const rewrite = query =>
+          query
+            .replace(/\(\s*prefers-reduced-motion\s*:\s*no-preference\s*\)/gi, '(width >= 0px)')
+            .replace(/\(\s*prefers-reduced-motion(?:\s*:\s*reduce)?\s*\)/gi, '(width < 0px)');
+
+        // JS: direct checks, motion's useReducedMotion, GSAP matchMedia, Svelte's MediaQuery.
+        const matchMedia = window.matchMedia;
+        window.matchMedia = query =>
+          matchMedia.call(window, typeof query === 'string' && hasQuery.test(query) ? rewrite(query) : query);
+
+        // CSS-in-JS that injects through the CSSOM.
+        const insertRule = CSSStyleSheet.prototype.insertRule;
+        CSSStyleSheet.prototype.insertRule = function (rule, index) {
+          return insertRule.call(this, typeof rule === 'string' && hasQuery.test(rule) ? rewrite(rule) : rule, index);
+        };
+
+        // Stylesheets: <link>, <style> (incl. ones rendered inside components) and nested @media rules.
+        const patched = new WeakSet();
+        const patchMedia = media => {
+          if (media && hasQuery.test(media.mediaText)) media.mediaText = rewrite(media.mediaText);
+        };
+        const patchRules = rules => {
+          for (let i = 0; i < rules.length; i++) {
+            const rule = rules[i];
+            patchMedia(rule.media);
+            if (rule.styleSheet) patchSheet(rule.styleSheet);
+            if (rule.cssRules) patchRules(rule.cssRules);
+          }
+        };
+        const patchSheet = sheet => {
+          if (patched.has(sheet)) return;
+          let rules;
+          try {
+            rules = sheet.cssRules;
+          } catch {
+            // Still loading (retried on load) or cross-origin (never readable).
+            if (sheet.href && !sheet.href.startsWith(location.origin)) patched.add(sheet);
+            return;
+          }
+          patched.add(sheet);
+          patchMedia(sheet.media);
+          patchRules(rules);
+        };
+        const scan = () => {
+          const sheets = document.styleSheets;
+          for (let i = 0; i < sheets.length; i++) patchSheet(sheets[i]);
+        };
+        new MutationObserver(scan).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('load', event => event.target.tagName === 'LINK' && scan(), true);
+      })();
+    </script>
     <script id="rb-boot-script">
       (() => {
         const root = document.documentElement;
